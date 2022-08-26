@@ -1,0 +1,5 @@
+#pragma once
+
+enum TEXTYPE	{ TEX_SINGLE, TEX_MULTI, TEX_END };
+
+enum ID { TERRAIN, PLAYER, MONSTER, ITEM, EFFECT, BULLET, UI, END };
