@@ -1,0 +1,37 @@
+#pragma once
+#include "GameObject.h"
+
+namespace Engine
+{
+	class CTransform;
+	class CRcCol;
+}
+
+class CTestPlayer :
+	public CGameObject
+{
+private:
+	explicit CTestPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CTestPlayer();
+
+public:
+	virtual HRESULT Ready_Object(void) override;
+	virtual _int	Update_Object(const _float& fTimeDelta) override;
+	virtual void	LateUpdate_Object(void) override;
+	virtual void	Render_Obejct(void) override;
+
+private:
+	HRESULT				Add_Component(void);
+	void				Key_Input(const _float& fTimeDelta);
+
+private:
+	CRcCol*				m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	_vec3				m_vDirection;
+
+
+public:
+	static CTestPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual void	Free(void);
+};
+
