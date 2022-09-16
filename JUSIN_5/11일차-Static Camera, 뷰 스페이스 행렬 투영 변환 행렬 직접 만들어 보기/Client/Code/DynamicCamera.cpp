@@ -144,26 +144,27 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta)
 
 void CDynamicCamera::Mouse_Move(void)
 {
-	_matrix		matCamWorld;
+	_matrix matCamWorld;
 	D3DXMatrixInverse(&matCamWorld, nullptr, &m_matView);
 
-	_long		dwMouseMove = 0;
+	_long dwMouseMove = 0;
 
-	if (dwMouseMove = Engine::Get_DIMouseMove(DIMS_Y)) // 가로축 기준 회전
+	if (dwMouseMove = Engine::Get_DIMouseMove(DIMS_Y))
 	{
-		_vec3		vRight;
+		_vec3 vRight;
 		memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));
 
-		_vec3		vLook = m_vAt - m_vEye; // 카메라가 바라보는 방향
+		_vec3 vLook = m_vAt - m_vEye; // 카메라가 바라보는 방향
 
 		// 회전을 위해 vLook을 더해준다
-		_matrix		matRot;							// 0~60도를 사용하기 위한 / 10.f
+		_matrix matRot;
 		D3DXMatrixRotationAxis(&matRot, &vRight, D3DXToRadian(dwMouseMove / 10.f));
 		D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
 
 		m_vAt = m_vEye + vLook; // 마우스 회전을 먹은 vLook을 더한다
 
 	}
+
 
 	if (dwMouseMove = Engine::Get_DIMouseMove(DIMS_X))
 	{
