@@ -4,11 +4,8 @@
 
 class CMonster : public CGameObject
 {
-	typedef	struct	tagFrame
-	{
-		int		iFrameStart;
-		int		iFrameEnd;
-	}FRAME;
+protected:
+	enum STATE { IDLE, ATTACK, HIT, DIE, MOTION_END };
 
 public:
 	explicit CMonster(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -26,16 +23,16 @@ public:
 protected:
 	virtual HRESULT		Add_Component(void) PURE;
 
-
-
 protected:
-
-	FRAME		m_tFrame;
-
 	_vec3				m_vDirection;
 	_float				m_fTimeDelta;
 
-	float				m_fFrame;
+	_float				m_fFrame;
+
+	STATE				m_ePreState;
+	STATE				m_eCurState;
+
+	_float				m_fSpeed;
 
 public:
 	static CMonster*	Create(LPDIRECT3DDEVICE9 pGraphicDev) {};

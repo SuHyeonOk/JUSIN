@@ -4,7 +4,7 @@
 #include "Export_Function.h"
 
 CGreenSlime::CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev)
-	: CMonster(pGraphicDev) , m_eCurState(MOTION_END)
+	: CMonster(pGraphicDev)
 {
 }
 
@@ -22,6 +22,9 @@ HRESULT CGreenSlime::Ready_Object(void)
 	m_pTransCom->Set_Y(1.f);
 
 	m_eCurState = IDLE;
+	m_fSpeed = 10.f;
+
+
 
 	return S_OK;
 }
@@ -30,15 +33,20 @@ _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
+	m_fFrame += m_pTextureCom->Get_FrameEnd()  * fTimeDelta;
+
+	if (m_fFrame >= m_pTextureCom->Get_FrameEnd())
+		m_fFrame = 0;	
+
+	// Animation Tset
+	if (Engine::Get_DIKeyState(DIK_P) & 0X80)
+		m_eCurState = ATTACK;
+	else if (Engine::Get_DIKeyState(DIK_O) & 0X80)
+		m_eCurState = HIT;
+	else if (Engine::Get_DIKeyState(DIK_I) & 0X80)
+		m_eCurState = DIE;
+
 	Motion_Change(fTimeDelta);
-
-	m_fFrame += m_tFrame.iFrameEnd * fTimeDelta;
-
-	if (m_fFrame >= m_tFrame.iFrameEnd)
-		m_fFrame = m_tFrame.iFrameStart;	
-
-	//if (Engine::Get_DIKeyState(DIK_P) & 0X80)
-	//	m_eCurState = HIT;
 
 	Target_Follow(fTimeDelta);
 	Billboard();
@@ -50,8 +58,6 @@ _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 
 void CGreenSlime::LateUpdate_Object(void)
 {
-
-
 	Engine::CGameObject::LateUpdate_Object();
 }
 
@@ -61,7 +67,7 @@ void CGreenSlime::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	// 테두리 지우기
+
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -85,6 +91,7 @@ HRESULT CGreenSlime::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
+	// m_pTextureCom	
 	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeIDLE_Texture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeIDLE_Texture", pComponent });
@@ -97,14 +104,10 @@ HRESULT CGreenSlime::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeHIT_Texture", pComponent });
 
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeRadHIT_Texture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeRadHIT_Texture", pComponent });
-
 	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeDIE_Texture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeDIE_Texture", pComponent });
-
+	///////
 
 	return S_OK;
 }
@@ -121,13 +124,45 @@ void CGreenSlime::Target_Follow(const _float & fTimeDelta)
 
 	_float fDist = D3DXVec3Length(&(vPlayerPos - vPos));
 
-	if (fDist < 5.f)
+	if (fDist < 10.f)
 	{
 		m_eCurState = HIT;
-		m_pTransCom->Chase_Target(&vPlayerPos, 3.f, fTimeDelta);
+		m_pTransCom->Chase_Target(&vPlayerPos, m_fSpeed, fTimeDelta);
 	}
 	else
+	{
 		m_eCurState = IDLE;
+
+		m_pTransCom->Get_Info(INFO_RIGHT, &m_vDirection);
+
+		_vec3 vPos;
+		m_pTransCom->Get_Info(INFO_POS, &vPos);
+
+		D3DXVec3Normalize(&m_vDirection, &m_vDirection);
+		m_pTransCom->Move_Pos(&(m_vDirection * m_fSpeed * fTimeDelta));
+
+		
+		if (!bTest)
+		{
+			vDistance = { 5.f, 0.f, 0.f };
+			vDistance = vPos + vDistance;
+
+			bTest = true;
+		}
+
+
+		//if (vPos.x <= vDistance.x)
+		//{
+		//	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
+		//	m_pTransCom->Move_Pos(&(m_vDirection * m_fSpeed * fTimeDelta));
+		//}
+		//else if (vPos.x >= vDistance.x)
+		//{
+		//	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
+		//	m_pTransCom->Move_Pos(&(m_vDirection * -m_fSpeed * fTimeDelta));
+		//}
+
+	}
 
 }
 
@@ -177,16 +212,19 @@ void CGreenSlime::Motion_Change(const _float& fTimeDelta)
 		switch (m_eCurState)
 		{
 		case IDLE:
-			m_pTextureCom = m_mapComponent->find_if("TEXTUREIDLE");
-			
+			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeIDLE_Texture", ID_STATIC));
+			break;
 
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 4;
+		case ATTACK:
+			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeATTACK_Texture", ID_STATIC));
 			break;
 
 		case HIT:
-			m_tFrame.iFrameStart = 4;
-			m_tFrame.iFrameEnd = 11;
+			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeHIT_Texture", ID_STATIC));
+			break;
+
+		case DIE:
+			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeDIE_Texture", ID_STATIC));
 			break;
 		}
 		m_ePreState = m_eCurState;

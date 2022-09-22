@@ -10,8 +10,6 @@ namespace Engine
 
 class CGreenSlime : public CMonster
 {
-	enum STATE { IDLE, ATTACK, HIT, DIE, MOTION_END };
-
 private:
 	explicit CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CGreenSlime();
@@ -23,9 +21,7 @@ public:
 	virtual void		Render_Obejct(void)						override;
 
 private:
-	STATE		m_ePreState;
-	STATE		m_eCurState;
-	void		Motion_Change(const _float& fTimeDelta);
+	void				Motion_Change(const _float& fTimeDelta);
 
 
 	virtual HRESULT		Add_Component(void);
@@ -38,8 +34,11 @@ private:
 	CTexture*			m_pTextureCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 
-private:
+	CTransform*		pPlayerTransformCom = nullptr;
 
+private:
+	_vec3 vDistance = { 0.f, 0.f, 0.f };
+	_bool	bTest = false;
 
 public:
 	static CGreenSlime*	Create(LPDIRECT3DDEVICE9 pGraphicDev);

@@ -23,6 +23,7 @@ public:
 		m_vInfo[INFO_POS].y = fY;
 		m_vInfo[INFO_POS].z = fZ;
 	}
+	void				Set_X(const _float& fX) { m_vInfo[INFO_POS].x = fX; }
 	void				Set_Y(const _float& fY) { m_vInfo[INFO_POS].y = fY; }
 
 	void				Get_WorldMatrix(_matrix* pWorld) const { *pWorld = m_matWorld; }

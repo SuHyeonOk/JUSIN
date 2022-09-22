@@ -7,6 +7,8 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 	, m_fTimeDelta(0.f)
 	, m_fFrame(0.f)
+	, m_eCurState(MOTION_END)
+	, m_fSpeed(0.f)
 
 {
 	ZeroMemory(&m_vDirection, sizeof(_vec3));

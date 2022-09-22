@@ -5,6 +5,7 @@ USING(Engine)
 
 CTexture::CTexture(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CComponent(pGraphicDev)
+	, m_iFrameEnd(0)
 {
 }
 
@@ -12,6 +13,8 @@ CTexture::CTexture(LPDIRECT3DDEVICE9 pGraphicDev)
 Engine::CTexture::CTexture(const CTexture& rhs)
 	:CComponent(rhs)
 {
+	m_iFrameEnd = rhs.m_iFrameEnd;
+
 	_uint iSize = rhs.m_vecTexture.size();
 	m_vecTexture.reserve(iSize);
 
@@ -29,6 +32,8 @@ CTexture::~CTexture()
 HRESULT CTexture::Ready_Texture(const _tchar * pPath, TEXTUREID eType, const _uint & iCnt)
 {
 	m_vecTexture.reserve(iCnt);
+
+	m_iFrameEnd = iCnt;
 
 	IDirect3DBaseTexture9*			pTexture = nullptr;
 
@@ -70,7 +75,6 @@ void CTexture::Set_Texture(const _uint & iIndex)
 CTexture * CTexture::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar * pPath, TEXTUREID eType, const _uint & iCnt)
 {
 	CTexture *		pInstance = new CTexture(pGraphicDev);
-
 
 	if (FAILED(pInstance->Ready_Texture(pPath, eType, iCnt)))
 	{

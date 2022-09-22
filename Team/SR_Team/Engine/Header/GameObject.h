@@ -21,7 +21,7 @@ public:
 	virtual		void		LateUpdate_Object(void);
 	virtual		void		Render_Obejct(void);
 
-private:
+protected:
 	CComponent*		Find_Component(const _tchar* pComponentTag, COMPONENTID eID);
 
 protected:
