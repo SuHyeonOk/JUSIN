@@ -19,7 +19,7 @@ public:
 	void		Update_Timer(void);
 
 private:
-	LARGE_INTEGER		m_CurrentTime;
+	LARGE_INTEGER		m_CurrentTime; 
 	LARGE_INTEGER		m_OldTime;
 	LARGE_INTEGER		m_OriginTime;
 	LARGE_INTEGER		m_CpuTick;

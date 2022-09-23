@@ -45,7 +45,7 @@ public:
 
 public:
 	static CTransform*		Create(void);
-	virtual CComponent*	Clone(void);
+	virtual CComponent*		Clone(void);
 private:
 	virtual void Free(void);
 

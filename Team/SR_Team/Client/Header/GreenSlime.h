@@ -34,11 +34,11 @@ private:
 	CTexture*			m_pTextureCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 
-	CTransform*		pPlayerTransformCom = nullptr;
-
 private:
-	_vec3 vDistance = { 0.f, 0.f, 0.f };
-	_bool	bTest = false;
+	_float				m_fIdleSpeed;
+
+	_float				m_fTimeAcc;
+
 
 public:
 	static CGreenSlime*	Create(LPDIRECT3DDEVICE9 pGraphicDev);

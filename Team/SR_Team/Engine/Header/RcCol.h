@@ -16,8 +16,8 @@ public:
 
 public:
 	static CRcCol*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
-	CComponent*	Clone(void);
-	virtual void Free(void) override;
+	CComponent*		Clone(void);
+	virtual void	Free(void) override;
 
 };
 

@@ -11,7 +11,6 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_fSpeed(0.f)
 
 {
-	ZeroMemory(&m_vDirection, sizeof(_vec3));
 }
 
 

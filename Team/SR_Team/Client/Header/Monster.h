@@ -24,7 +24,6 @@ protected:
 	virtual HRESULT		Add_Component(void) PURE;
 
 protected:
-	_vec3				m_vDirection;
 	_float				m_fTimeDelta;
 
 	_float				m_fFrame;

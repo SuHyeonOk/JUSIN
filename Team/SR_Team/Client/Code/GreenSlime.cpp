@@ -5,6 +5,9 @@
 
 CGreenSlime::CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
+	, m_fIdleSpeed(0.f)
+	, m_fTimeAcc(0.f)
+
 {
 }
 
@@ -17,14 +20,13 @@ HRESULT CGreenSlime::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Pos(20.f, 0.f, 20.f);
+	m_pTransCom->Set_Pos(15.f, 0.f, 15.f);
 
 	m_pTransCom->Set_Y(1.f);
 
 	m_eCurState = IDLE;
-	m_fSpeed = 10.f;
-
-
+	m_fSpeed = 5.f;
+	m_fIdleSpeed = 3.f;
 
 	return S_OK;
 }
@@ -33,6 +35,7 @@ _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
+	// 애니메이션 변화
 	m_fFrame += m_pTextureCom->Get_FrameEnd()  * fTimeDelta;
 
 	if (m_fFrame >= m_pTextureCom->Get_FrameEnd())
@@ -127,43 +130,41 @@ void CGreenSlime::Target_Follow(const _float & fTimeDelta)
 	if (fDist < 10.f)
 	{
 		m_eCurState = HIT;
-		m_pTransCom->Chase_Target(&vPlayerPos, m_fSpeed, fTimeDelta);
+		m_pTransCom->Chase_Target(&vPlayerPos, m_fSpeed, fTimeDelta);		
 	}
 	else
 	{
 		m_eCurState = IDLE;
 
-		m_pTransCom->Get_Info(INFO_RIGHT, &m_vDirection);
-
-		_vec3 vPos;
-		m_pTransCom->Get_Info(INFO_POS, &vPos);
-
-		D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-		m_pTransCom->Move_Pos(&(m_vDirection * m_fSpeed * fTimeDelta));
-
+		// 몬스터 좌우로 이동하기
+		_vec3		vRight;
+		m_pTransCom->Get_Info(INFO_RIGHT, &vRight);
 		
-		if (!bTest)
+		m_fTimeAcc += fTimeDelta;
+		if (2.f < m_fTimeAcc)
 		{
-			vDistance = { 5.f, 0.f, 0.f };
-			vDistance = vPos + vDistance;
-
-			bTest = true;
+			m_fIdleSpeed *= -1;
+			m_fTimeAcc = 0.f;
 		}
 
+		D3DXVec3Normalize(&vRight, &vRight);
+		m_pTransCom->Move_Pos(&(vRight * m_fIdleSpeed * fTimeDelta));
 
-		//if (vPos.x <= vDistance.x)
-		//{
-		//	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-		//	m_pTransCom->Move_Pos(&(m_vDirection * m_fSpeed * fTimeDelta));
-		//}
-		//else if (vPos.x >= vDistance.x)
-		//{
-		//	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-		//	m_pTransCom->Move_Pos(&(m_vDirection * -m_fSpeed * fTimeDelta));
-		//}
+		//////
+		//_vec3		vSenter = { 15.f, 0.f, 15.f };
 
+		//_float fDist = D3DXVec3Length(&(vSenter - vPos));
+
+		// _float		fRadius = 5.f;
+
+		//if (fDist > fRadius)
+		//{
+		//	m_fIdleSpeed *= -1;
+		//}	
+
+		//D3DXVec3Normalize(&vRight, &vRight);
+		//m_pTransCom->Move_Pos(&(vRight * m_fIdleSpeed * vRight));
 	}
-
 }
 
 void CGreenSlime::Billboard()
