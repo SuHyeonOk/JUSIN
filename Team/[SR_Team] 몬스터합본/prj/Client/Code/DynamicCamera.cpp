@@ -51,7 +51,7 @@ void CDynamicCamera::Key_Input(const _float & fTimeDelta)
 	_matrix		matCamWorld;
 	D3DXMatrixInverse(&matCamWorld, nullptr, &m_matView);
 
-	if (Get_DIKeyState(DIK_W) & 0x80)
+	if (Get_DIKeyState(DIK_T) & 0x80)
 	{
 		_vec3		vLook;
 		memcpy(&vLook, &matCamWorld.m[2][0], sizeof(_vec3));
@@ -62,7 +62,7 @@ void CDynamicCamera::Key_Input(const _float & fTimeDelta)
 		m_vAt += vLength;
 	}
 
-	if (Get_DIKeyState(DIK_S) & 0x80)
+	if (Get_DIKeyState(DIK_G) & 0x80)
 	{
 		_vec3		vLook;
 		memcpy(&vLook, &matCamWorld.m[2][0], sizeof(_vec3));
@@ -73,7 +73,7 @@ void CDynamicCamera::Key_Input(const _float & fTimeDelta)
 		m_vAt -= vLength;
 	}
 
-	if (Get_DIKeyState(DIK_D) & 0x80)
+	if (Get_DIKeyState(DIK_H) & 0x80)
 	{
 		_vec3		vRight;
 		memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));
@@ -84,7 +84,7 @@ void CDynamicCamera::Key_Input(const _float & fTimeDelta)
 		m_vAt += vLength;
 	}
 
-	if (Get_DIKeyState(DIK_A) & 0x80)
+	if (Get_DIKeyState(DIK_F) & 0x80)
 	{
 		_vec3		vRight;
 		memcpy(&vRight, &matCamWorld.m[0][0], sizeof(_vec3));

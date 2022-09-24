@@ -94,7 +94,10 @@
     <Filter Include="02. GameObject\01. For_Stage\07. Monster">
       <UniqueIdentifier>{850ac9c5-0bb0-498c-bc68-cf438f3b9252}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. For_Stage\07. Monster\GreenSlime">
+    <Filter Include="02. GameObject\01. For_Stage\07. Monster\01. PickSlime">
+      <UniqueIdentifier>{b7921e32-07c2-490a-bdc4-55c24b680541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\07. Monster\00. GreenSlime">
       <UniqueIdentifier>{752fce35-ee29-4bdf-95a8-430737721987}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -180,11 +183,11 @@
     <ClInclude Include="..\Header\BulletMgr.h">
       <Filter>99. Default\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Monster.h">
-      <Filter>02. GameObject\01. For_Stage\07. Monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\GreenSlime.h">
-      <Filter>02. GameObject\01. For_Stage\07. Monster\GreenSlime</Filter>
+      <Filter>02. GameObject\01. For_Stage\07. Monster\00. GreenSlime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PinkSlime.h">
+      <Filter>02. GameObject\01. For_Stage\07. Monster\01. PickSlime</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,11 +263,11 @@
     <ClCompile Include="..\Code\BulletMgr.cpp">
       <Filter>99. Default\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>02. GameObject\01. For_Stage\07. Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\GreenSlime.cpp">
-      <Filter>02. GameObject\01. For_Stage\07. Monster\GreenSlime</Filter>
+      <Filter>02. GameObject\01. For_Stage\07. Monster\00. GreenSlime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PinkSlime.cpp">
+      <Filter>02. GameObject\01. For_Stage\07. Monster\01. PickSlime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

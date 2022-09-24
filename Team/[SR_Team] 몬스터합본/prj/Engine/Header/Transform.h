@@ -16,6 +16,7 @@ public:
 	const _matrix*	Get_WorldMatrixPointer() { return &m_matWorld; }
 	void			Move_Pos(const _vec3* const pDir) { m_vInfo[INFO_POS] += *pDir; }
 	void			Rotation(ROTATIONID eID, const _float& fAngle) { *(((_float*)&m_vAngle) + eID) += fAngle; }
+
 	void			Get_Info(INFOID eID, _vec3* pInfo) { memcpy(pInfo, &m_matWorld.m[eID][0], sizeof(_vec3)); }
 	void			Set_Info(INFOID eID, _vec3* pInfo) { memcpy(&m_matWorld.m[eID][0], pInfo, sizeof(_vec3)); }
 
@@ -23,6 +24,8 @@ public:
 	void			Set_Scale(_float fX, _float fY, _float fZ) { m_vScale = { fX, fY, fZ }; }
 	void			Get_Scale(_vec3* _vScale) { _vScale = &m_vScale; }
 	void			Set_Pos(const _float& fX, const _float& fY, const _float& fZ) { m_vInfo[INFO_POS] = { fX, fY, fZ }; }
+	void			Set_Look(const _float& fX, const _float& fY, const _float& fZ) { m_vInfo[INFO_LOOK] = { fX, fY, fZ }; }
+
 	//void			Set_WorldMatrix(_matrix mat) { m_matWorld = mat; }
 	void			Plus_PosY(_float _fY) { m_vInfo[INFO_POS].y += _fY; }
 	void            Set_Y(const _float& fY) { m_vInfo[INFO_POS].y = fY; }

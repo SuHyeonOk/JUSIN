@@ -20,14 +20,12 @@ public:
 protected:
 	virtual void	LevelUp() override;
 	virtual void	Attack() override;
-
+		
 private:
 	HRESULT		Add_Component(void);
 
 private:
 	_float		m_fFrame = 0.f;
 	_bool		m_bReady = false;
-
-
 };
 

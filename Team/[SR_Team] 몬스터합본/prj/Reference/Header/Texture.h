@@ -18,7 +18,8 @@ private:
 public:
 	HRESULT		Ready_Texture(const _tchar* pPath, TEXTUREID eType, const _uint& iCnt);
 	void		Set_Texture(const _uint& iIndex = 0);
-	_uint      Get_FrameEnd() { return m_iFrameEnd; }
+
+	_uint       Get_FrameEnd() { return m_iFrameEnd; }
 
 private:
 	vector<IDirect3DBaseTexture9*>	m_vecTexture;

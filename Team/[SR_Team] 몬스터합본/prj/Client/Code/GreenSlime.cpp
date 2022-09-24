@@ -1,10 +1,11 @@
 #include "stdafx.h"
-#include "GreenSlime.h"
+#include "..\Header\GreenSlime.h"
 
 #include "Export_Function.h"
 
 CGreenSlime::CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
+	, m_eCurState(MOTION_END)
 	, m_fIdleSpeed(0.f)
 	, m_fTimeAcc(0.f)
 
@@ -26,8 +27,8 @@ HRESULT CGreenSlime::Ready_Object(void)
 
 	m_eCurState = IDLE;
 
-	m_fSpeed = 5.f;
-	m_fIdleSpeed = 3.f;
+	m_fSpeed = 2.f;
+	m_fIdleSpeed = 1.f;
 
 	return S_OK;
 }

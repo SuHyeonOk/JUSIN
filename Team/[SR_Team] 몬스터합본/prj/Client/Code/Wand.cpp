@@ -20,7 +20,6 @@ HRESULT CWand::Ready_Object(void)
 
 	//NULL_CHECK(m_pTarget);
 
-
 	return S_OK;
 }
 
@@ -80,19 +79,10 @@ _int CWand::Update_Object(const _float & fTimeDelta)
 
 	//m_pTransCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 
-	_vec3 vAt;
-	m_pCamera->Get_At(vAt);
-	vAt += _vec3{ 0.3f, -0.3f, 0.f };
-	m_pTransCom->Set_Pos(vAt.x, vAt.y, vAt.z);
-
-	//_vec3 vEye;
-	//m_pCamera->Get_Eye(vEye);
-
-	//m_pTransCom->Set_Pos(vEye.x + vAt.x, vEye.y + vAt.y, vEye.z + vAt.z);
-
-	int q = 9;
-
-
+	// 1
+	//_vec3 vAt;
+	//m_pCamera->Get_At(vAt);
+	//m_pTransCom->Set_Pos(vAt.x, vAt.y, vAt.z );
 
 
 	//m_pTarget->Get_Info(INFO_POS, &vPos);

@@ -18,9 +18,6 @@ public:
 	virtual void			Free(void) override;
 	virtual void			Reset() override;
 
-
-
-
 private:
 	HRESULT		Add_Component(void);
 

@@ -15,12 +15,14 @@
 #include "Transform.h"
 #include "Texture.h"
 #include "Calculator.h"
+#include "Animator.h"
 //////////////////////////////////
 
 // 오브젝트////////////////////////
 #include "Camera.h"
 #include "Weapon.h"
 #include "Bullet.h"
+#include "Monster.h"
 //////////////////////////////////
 
 // 개별 기능 및 관리자들

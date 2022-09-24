@@ -1,14 +1,19 @@
 #pragma once
 #include "Monster.h"
 
+BEGIN(Engine)
 
-class CGreenSlime : public CMonster
+class CAnimator;
+
+END
+
+class CPinkSlime : public CMonster
 {
 	enum STATE { IDLE, ATTACK, HIT, DIE, MOTION_END };
 
 private:
-	explicit CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CGreenSlime();
+	explicit CPinkSlime(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CPinkSlime();
 
 public:
 	virtual HRESULT		Ready_Object(void)						override;
@@ -33,9 +38,11 @@ private:
 
 	_float				m_fTimeAcc;
 
+	// Test
+	CAnimator*			m_pAnimater = nullptr;
 
 public:
-	static CGreenSlime*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CPinkSlime*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void		Free(void);
 };
 

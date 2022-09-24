@@ -11,6 +11,9 @@
 #include "SkyBox.h"
 #include "Wand.h"
 
+// Monster
+#include "GreenSlime.h"
+#include "PinkSlime.h"
 
 class CStage : public CScene
 {
