@@ -35,21 +35,15 @@ HRESULT CPinkSlime::Ready_Object(void)
 
 _int CPinkSlime::Update_Object(const _float & fTimeDelta)
 {
+	m_eCurState = ATTACK;
 
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-	m_pAnimater->Play_Animation(fTimeDelta);
+	m_pAnumtorCom->Play_Animation(fTimeDelta);
 
-	//// 애니메이션 변화
-	//m_fFrame += m_pTextureCom->Get_FrameEnd()  * fTimeDelta;
+	Motion_Change(fTimeDelta);
 
-	//if (m_fFrame >= m_pTextureCom->Get_FrameEnd())
-	//	m_fFrame = 0;
-
-	//Motion_Change(fTimeDelta);
-
-	//Target_Follow(fTimeDelta);
-	Billboard();
+	CMonster::Billboard();
 
 	Engine::Add_RenderGroup(RENDER_ALPHA, this);
 
@@ -72,8 +66,7 @@ void CPinkSlime::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pAnimater->Set_Text();
-	//m_pTextureCom->Set_Texture((_ulong)m_fFrame);	// 텍스처 정보 세팅을 우선적으로 한다.
+	m_pAnumtorCom->Set_Texture();
 	m_pBufferCom->Render_Buffer();
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -92,78 +85,18 @@ HRESULT CPinkSlime::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
-	// m_pAnimater
-	pComponent = m_pAnimater = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
-	NULL_CHECK_RETURN(m_pAnimater, E_FAIL);
+	// m_pAnumtorCom
+	pComponent = m_pAnumtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
+	NULL_CHECK_RETURN(m_pAnumtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnimater->Add_Com(L"Proto_PinkSlimeIDLE_Texture", ID_STATIC);
-
-
-	//// m_pTextureCom	
-	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_PinkSlimeIDLE_Texture"));
-	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	//m_mapComponent[ID_STATIC].insert({ L"Proto_PinkSlimeIDLE_Texture", pComponent });
-
-	//pComponent = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_PinkSlimeATTACK_Texture"));
-	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	//m_mapComponent[ID_STATIC].insert({ L"Proto_PinkSlimeATTACK_Texture", pComponent });
-
-	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_PinkSlimeHIT_Texture"));
-	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	//m_mapComponent[ID_STATIC].insert({ L"Proto_PinkSlimeHIT_Texture", pComponent });
-
-	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_PinkSlimeDIE_Texture"));
-	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	//m_mapComponent[ID_STATIC].insert({ L"Proto_PinkSlimeDIE_Texture", pComponent });
-	///////
+	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeIDLE_Texture");
+	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeATTACK_Texture");
+	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeHIT_Texture");
+	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeDIE_Texture");
 
 	return S_OK;
 }
-
-void CPinkSlime::Target_Follow(const _float & fTimeDelta)
-{
-	// 플레이어 따라가기
-	CTransform*		pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
-	NULL_CHECK(pPlayerTransformCom);
-
-	_vec3		vPlayerPos, vPos;
-	pPlayerTransformCom->Get_Info(INFO_POS, &vPlayerPos);
-	m_pTransCom->Get_Info(INFO_POS, &vPos);
-
-	_float fDist = D3DXVec3Length(&(vPlayerPos - vPos));
-
-	if (fDist < 10.f)
-	{
-		m_eCurState = ATTACK;
-		m_pTransCom->Chase_Target(&vPlayerPos, m_fSpeed, fTimeDelta);
-	}
-	else
-	{
-		m_eCurState = IDLE;
-	}
-}
-
-void CPinkSlime::Billboard()
-{
-	// 빌보드
-	_matrix		matWorld, matView, matBill;
-	D3DXMatrixIdentity(&matBill);
-
-	m_pTransCom->Get_WorldMatrix(&matWorld);
-	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
-
-	matBill._11 = matView._11;
-	matBill._13 = matView._13;
-	matBill._31 = matView._31;
-	matBill._33 = matView._33;
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-
-	// 현재 지금 이 코드는 문제가 없지만 나중에 문제가 될 수 있음
-	m_pTransCom->Set_WorldMatrix(&(matBill * matWorld));
-}
-
 
 CPinkSlime * CPinkSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
@@ -180,7 +113,7 @@ CPinkSlime * CPinkSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CPinkSlime::Free(void)
 {
-	CGameObject::Free();
+	CMonster::Free();
 }
 
 void CPinkSlime::Motion_Change(const _float& fTimeDelta)
@@ -190,19 +123,19 @@ void CPinkSlime::Motion_Change(const _float& fTimeDelta)
 		switch (m_eCurState)
 		{
 		case IDLE:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_PinkSlimeIDLE_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeIDLE_Texture");
 			break;
 
 		case ATTACK:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_PinkSlimeATTACK_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeATTACK_Texture");
 			break;
-
+		
 		case HIT:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_PinkSlimeHIT_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeHIT_Texture");
 			break;
 
 		case DIE:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_PinkSlimeDIE_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeDIE_Texture");
 			break;
 		}
 		m_ePreState = m_eCurState;

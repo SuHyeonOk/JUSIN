@@ -17,6 +17,7 @@ CTexture::CTexture(const CTexture & rhs)
 	_uint iSize = rhs.m_vecTexture.size();
 	m_vecTexture.reserve(iSize);
 	m_vecTexture = rhs.m_vecTexture;
+
 	for (_uint i = 0; i < iSize; ++i)
 		m_vecTexture[i]->AddRef();	// 컴객체는 내부적으로 복사생성을 한다(포인터여도)
 									// 그래서 얕은 복사를 해도 문제는 없지만

@@ -163,6 +163,7 @@
     <ClInclude Include="..\Header\BulletMgr.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
     <ClInclude Include="..\Header\GreenSlime.h" />
+    <ClInclude Include="..\Header\HealthBar.h" />
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MainApp.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="..\Code\BulletMgr.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\GreenSlime.cpp" />
+    <ClCompile Include="..\Code\HealthBar.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />

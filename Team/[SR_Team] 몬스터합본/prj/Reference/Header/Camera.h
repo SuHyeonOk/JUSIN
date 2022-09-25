@@ -23,6 +23,7 @@ public:
 	void		Get_ViewMatrix(_matrix& _viewMat) { _viewMat = m_matView; }
 	void		Get_ProjectMatrix(_matrix& _ProjMat) { _ProjMat = m_matProj; }
 
+
 protected:
 	_vec3		m_vEye, m_vAt, m_vUp;
 	_float		m_fFov, m_fAspect, m_fNear, m_fFar;

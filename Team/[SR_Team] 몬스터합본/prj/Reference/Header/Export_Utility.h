@@ -23,6 +23,8 @@
 #include "Weapon.h"
 #include "Bullet.h"
 #include "Monster.h"
+
+#include "UI.h"
 //////////////////////////////////
 
 // 개별 기능 및 관리자들

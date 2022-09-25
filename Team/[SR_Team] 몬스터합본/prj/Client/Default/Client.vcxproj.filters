@@ -100,6 +100,12 @@
     <Filter Include="02. GameObject\01. For_Stage\07. Monster\00. GreenSlime">
       <UniqueIdentifier>{752fce35-ee29-4bdf-95a8-430737721987}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\99. UI">
+      <UniqueIdentifier>{b104b44e-0afd-43b5-807a-bacee4fd5c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\99. UI\00. HealthBar">
+      <UniqueIdentifier>{ca5ab04f-eda0-4ce0-8f2e-9900f57cf4d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -180,14 +186,17 @@
     <ClInclude Include="..\Header\WandBullet.h">
       <Filter>02. GameObject\01. For_Stage\06. Bullet\00. Player</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\BulletMgr.h">
-      <Filter>99. Default\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\GreenSlime.h">
       <Filter>02. GameObject\01. For_Stage\07. Monster\00. GreenSlime</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\PinkSlime.h">
       <Filter>02. GameObject\01. For_Stage\07. Monster\01. PickSlime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\HealthBar.h">
+      <Filter>02. GameObject\01. For_Stage\99. UI\00. HealthBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BulletMgr.h">
+      <Filter>02. GameObject\01. For_Stage\06. Bullet\01. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,14 +269,17 @@
     <ClCompile Include="..\Code\WandBullet.cpp">
       <Filter>02. GameObject\01. For_Stage\06. Bullet\00. Player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\BulletMgr.cpp">
-      <Filter>99. Default\소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\GreenSlime.cpp">
       <Filter>02. GameObject\01. For_Stage\07. Monster\00. GreenSlime</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\PinkSlime.cpp">
       <Filter>02. GameObject\01. For_Stage\07. Monster\01. PickSlime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HealthBar.cpp">
+      <Filter>02. GameObject\01. For_Stage\99. UI\00. HealthBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BulletMgr.cpp">
+      <Filter>02. GameObject\01. For_Stage\06. Bullet\01. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

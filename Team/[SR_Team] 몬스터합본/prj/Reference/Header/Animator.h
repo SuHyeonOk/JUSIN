@@ -19,14 +19,13 @@ private:
 public:
 	HRESULT		Ready_Animator();
 
-	HRESULT		Add_Com(const _tchar * pTectureTag, COMPONENTID eID);
-	void		Play_Animation(const _float& fTimeDelta);
-	void		Change_Animation(const _tchar * pTectureTag, COMPONENTID eID);
-	void		Set_Text();
+	HRESULT		Add_Component(const _tchar * pTectureTag);
 
-	_float		Get_Frame() { return m_fFrame; }
+	void		Play_Animation(const _float& fTimeDelta);
+	void		Change_Animation(const _tchar * pTectureTag);
+	void		Set_Texture();
 	 
-private: // Key : 오브젝트 이름, Velaue : 어떤 이미지
+private: // Key : Tag, Velaue : TextComponent
 	map<const _tchar*, CTexture*>		m_mapAnimation;
 
 public:
@@ -35,7 +34,7 @@ public:
 	virtual void			Free(void);
 
 private:
-	CTexture*				m_pTextureCom = nullptr;
+	CTexture*				m_pCurAnim = nullptr;
 
 private:
 	_float					m_fFrame;

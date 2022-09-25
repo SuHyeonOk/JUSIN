@@ -1,7 +1,6 @@
 #pragma once
 #include "Monster.h"
 
-
 class CGreenSlime : public CMonster
 {
 	enum STATE { IDLE, ATTACK, HIT, DIE, MOTION_END };
@@ -17,13 +16,10 @@ public:
 	virtual void		Render_Obejct(void)						override;
 
 private:
+	virtual HRESULT		Add_Component(void) override;
+
 	void				Motion_Change(const _float& fTimeDelta);
-
-
-	virtual HRESULT		Add_Component(void);
-
 	void				Target_Follow(const _float& fTimeDelta);
-	void				Billboard();
 
 private:
 	STATE				m_ePreState;
@@ -31,8 +27,8 @@ private:
 
 	_float				m_fIdleSpeed;
 
+	// Timer
 	_float				m_fTimeAcc;
-
 
 public:
 	static CGreenSlime*	Create(LPDIRECT3DDEVICE9 pGraphicDev);

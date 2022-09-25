@@ -15,7 +15,6 @@ CCamera::~CCamera()
 
 HRESULT CCamera::Ready_Object(void)
 {
-
 	// 뷰스페이스 변환
 	D3DXMatrixLookAtLH(&m_matView, &m_vEye, &m_vAt, &m_vUp);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);

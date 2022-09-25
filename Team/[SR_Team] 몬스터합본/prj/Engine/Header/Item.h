@@ -30,6 +30,7 @@ protected:
 	CRcTex*			m_pBufferCom	= nullptr;
 	CTexture*		m_pTextureCom	= nullptr;
 	CTransform*		m_pTransCom		= nullptr;
+
 	ITEM_STATE		m_eItemState = STATE_END;
 };
 

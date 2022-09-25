@@ -20,9 +20,6 @@ Engine::CTransform::CTransform(const CTransform& rhs)
 		memcpy(m_vInfo[i], rhs.m_vInfo[i], sizeof(_vec3));
 
 	memcpy(m_matWorld, rhs.m_matWorld, sizeof(_matrix));
-
-
-
 }
 
 CTransform::~CTransform()

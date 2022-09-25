@@ -85,6 +85,9 @@
     <Filter Include="00. Component\04. Animator">
       <UniqueIdentifier>{ed825b83-3bfa-4f00-8f37-007f061a9418}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. GameObject\99. UI">
+      <UniqueIdentifier>{3d1f42e6-be87-4c45-be91-ccfb9d0d7139}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Header\VIBuffer.h">
@@ -169,6 +172,9 @@
     <ClInclude Include="..\..\Header\Animator.h">
       <Filter>00. Component\04. Animator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\UI.h">
+      <Filter>01. GameObject\99. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -248,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Animator.cpp">
       <Filter>00. Component\04. Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UI.cpp">
+      <Filter>01. GameObject\99. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,16 +35,16 @@ HRESULT CGreenSlime::Ready_Object(void)
 
 _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 {
-
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-	// 애니메이션 변화
-	m_fFrame += m_pTextureCom->Get_FrameEnd()  * fTimeDelta;
+	m_pAnumtorCom->Play_Animation(fTimeDelta);
+	//// 애니메이션 변화
+	//m_fFrame += m_pTextureCom->Get_FrameEnd()  * fTimeDelta;
 
-	if (m_fFrame >= m_pTextureCom->Get_FrameEnd())
-		m_fFrame = 0;
+	//if (m_fFrame >= m_pTextureCom->Get_FrameEnd())
+	//	m_fFrame = 0;
 
-	// Animation Tset
+	//////// Animation Tset
 	if (Engine::Get_DIKeyState(DIK_P) & 0X80)
 		m_eCurState = ATTACK;
 	else if (Engine::Get_DIKeyState(DIK_O) & 0X80)
@@ -54,12 +54,8 @@ _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 
 	Motion_Change(fTimeDelta);
 
-	// Animation 컴포넌트에서 하려고 하는것
-	// 1. 프레임 변화 : m_fFrame, TextureEndFrame
-	// 2. 상태에 따른 버퍼컴포넌트 변경
-
 	Target_Follow(fTimeDelta);
-	Billboard();
+	CMonster::Billboard();
 
 	Engine::Add_RenderGroup(RENDER_ALPHA, this);
 
@@ -82,7 +78,8 @@ void CGreenSlime::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pTextureCom->Set_Texture((_ulong)m_fFrame);	// 텍스처 정보 세팅을 우선적으로 한다.
+	m_pAnumtorCom->Set_Texture();
+	//m_pTextureCom->Set_Texture((_ulong)m_fFrame);	// 텍스처 정보 세팅을 우선적으로 한다.
 	m_pBufferCom->Render_Buffer();
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -101,23 +98,33 @@ HRESULT CGreenSlime::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
-	// m_pTextureCom	
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeIDLE_Texture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeIDLE_Texture", pComponent });
+	// m_pAnumtorCom
+	pComponent = m_pAnumtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
+	NULL_CHECK_RETURN(m_pAnumtorCom, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	pComponent = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeATTACK_Texture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeATTACK_Texture", pComponent });
+	m_pAnumtorCom->Add_Component(L"Proto_GreenSlimeIDLE_Texture");
+	m_pAnumtorCom->Add_Component(L"Proto_GreenSlimeATTACK_Texture");
+	m_pAnumtorCom->Add_Component(L"Proto_GreenSlimeHIT_Texture");
+	m_pAnumtorCom->Add_Component(L"Proto_GreenSlimeDIE_Texture");
 
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeHIT_Texture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeHIT_Texture", pComponent });
+	//// m_pTextureCom	
+	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeIDLE_Texture"));
+	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
+	//m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeIDLE_Texture", pComponent });
 
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeDIE_Texture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeDIE_Texture", pComponent });
-	///////
+	//pComponent = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeATTACK_Texture"));
+	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
+	//m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeATTACK_Texture", pComponent });
+
+	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeHIT_Texture"));
+	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
+	//m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeHIT_Texture", pComponent });
+
+	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_GreenSlimeDIE_Texture"));
+	//NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
+	//m_mapComponent[ID_STATIC].insert({ L"Proto_GreenSlimeDIE_Texture", pComponent });
+	/////////
 
 	return S_OK;
 }
@@ -174,27 +181,6 @@ void CGreenSlime::Target_Follow(const _float & fTimeDelta)
 	}
 }
 
-void CGreenSlime::Billboard()
-{
-	// 빌보드
-	_matrix		matWorld, matView, matBill;
-	D3DXMatrixIdentity(&matBill);
-
-	m_pTransCom->Get_WorldMatrix(&matWorld);
-	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
-
-	matBill._11 = matView._11;
-	matBill._13 = matView._13;
-	matBill._31 = matView._31;
-	matBill._33 = matView._33;
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-
-	// 현재 지금 이 코드는 문제가 없지만 나중에 문제가 될 수 있음
-	m_pTransCom->Set_WorldMatrix(&(matBill * matWorld));
-}
-
-
 CGreenSlime * CGreenSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CGreenSlime *	pInstance = new CGreenSlime(pGraphicDev);
@@ -210,7 +196,7 @@ CGreenSlime * CGreenSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CGreenSlime::Free(void)
 {
-	CGameObject::Free();
+	CMonster::Free();
 }
 
 void CGreenSlime::Motion_Change(const _float& fTimeDelta)
@@ -220,19 +206,23 @@ void CGreenSlime::Motion_Change(const _float& fTimeDelta)
 		switch (m_eCurState)
 		{
 		case IDLE:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeIDLE_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_GreenSlimeIDLE_Texture");
+			//m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeIDLE_Texture", ID_STATIC));
 			break;
 
 		case ATTACK:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeATTACK_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_GreenSlimeATTACK_Texture");
+			//m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeATTACK_Texture", ID_STATIC));
 			break;
 
 		case HIT:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeHIT_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_GreenSlimeHIT_Texture");
+			//m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeHIT_Texture", ID_STATIC));
 			break;
 
 		case DIE:
-			m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeDIE_Texture", ID_STATIC));
+			m_pAnumtorCom->Change_Animation(L"Proto_GreenSlimeDIE_Texture");
+			//m_pTextureCom = static_cast<CTexture*>(Find_Component(L"Proto_GreenSlimeDIE_Texture", ID_STATIC));
 			break;
 		}
 		m_ePreState = m_eCurState;

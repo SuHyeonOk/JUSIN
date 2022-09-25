@@ -30,7 +30,7 @@ public:
 	virtual void			Free(void);
 
 private:
-	_uint               m_iFrameEnd;
+	_uint					m_iFrameEnd;
 
 };
 

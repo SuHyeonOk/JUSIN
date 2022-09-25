@@ -15,6 +15,9 @@
 #include "GreenSlime.h"
 #include "PinkSlime.h"
 
+// UI
+#include "HealthBar.h"
+
 class CStage : public CScene
 {
 private:
