@@ -16,37 +16,72 @@ HRESULT CHealthBar::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Scale(0.25f, 0.05f, 0.05f);
-	//m_pTransCom->Set_Pos(1.f, 1.f, 0.f);
+	m_pTransCom->Set_Scale(1.f, 1.f, 1.f);
+	
+	m_pTransCom->Set_Pos(0.f, 0.f, 0.f);
+
+	//_matrix matView;
+	//m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+
+
+	//D3DXMatrixOrthoLH(&m_matProj, WINCX, WINCY, 0.f, 1.f);
+
 
 	return S_OK;
 }
 
 _int CHealthBar::Update_Object(const _float & fTimeDelta)
 {
+
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
+	//D3DXMatrixOrthoOffCenterLH;
 	Engine::Add_RenderGroup(RENDER_UI, this);
 
-	// m_pCamera
-	_matrix	matproj;
-
-	D3DXMatrixOrthoLH(&matproj, WINCX, WINCY, 0, 1);
-	//D3DXMatrixOrthoOffCenterLH;
-	
 	return 0;
-
-
 }
 
 void CHealthBar::LateUpdate_Object(void)
 {
+
+	//m_pGraphicDev->GetTransform(D3DTS_VIEW, &m_matView);
+
+	D3DXMatrixIdentity(&m_matView);
+	D3DXMatrixIdentity(&m_matWorld);
+
+	// 스케일 값
+	D3DXMatrixScaling(&m_matView, 100.f, 30.f, 1.f);
+
+	// 포지션
+	m_matView._41 = -200.f;
+	m_matView._42 = -200.f;
+
+	D3DXMatrixOrthoLH(&m_matOrtho, WINCX, WINCY, 0.f, 1.f);
+
+
+
+
+	//m_pCamera = dynamic_cast<CCamera*>(Engine::Get_GameObject(L"Layer_Environment", L"StaticCamera"));
+	//if (nullptr == m_pCamera)
+	//	return;
+
 	Engine::CGameObject::LateUpdate_Object();
 }
 
 void CHealthBar::Render_Obejct(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld);
+	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
+	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_matOrtho);
+
+
+
+	//D3DXMatrixIdentity(&m_matView);
+	//m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+	//m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
+	//m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_matProj);
+
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -60,6 +95,8 @@ void CHealthBar::Render_Obejct(void)
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+
 }
 
 HRESULT CHealthBar::Add_Component(void)
@@ -78,7 +115,7 @@ HRESULT CHealthBar::Add_Component(void)
 	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_UI_HealthBar_Texture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_UI_HealthBar_Texture", pComponent });
-
+	
 	return S_OK;
 }
 

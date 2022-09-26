@@ -6,6 +6,7 @@
 CGreenSlime::CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
 	, m_eCurState(MOTION_END)
+	, m_eMonsterSize(D)
 	, m_fIdleSpeed(0.f)
 	, m_fTimeAcc(0.f)
 
@@ -21,9 +22,8 @@ HRESULT CGreenSlime::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Pos(15.f, 0.f, 15.f);
-
-	m_pTransCom->Set_Y(1.f);
+	m_pTransCom->Set_Pos(0.f, m_fScale, 15.f);
+	m_pTransCom->Set_Scale(m_fScale, m_fScale, m_fScale);
 
 	m_eCurState = IDLE;
 
@@ -44,15 +44,9 @@ _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 	//if (m_fFrame >= m_pTextureCom->Get_FrameEnd())
 	//	m_fFrame = 0;
 
-	//////// Animation Tset
-	if (Engine::Get_DIKeyState(DIK_P) & 0X80)
-		m_eCurState = ATTACK;
-	else if (Engine::Get_DIKeyState(DIK_O) & 0X80)
-		m_eCurState = HIT;
-	else if (Engine::Get_DIKeyState(DIK_I) & 0X80)
-		m_eCurState = DIE;
-
+	
 	Motion_Change(fTimeDelta);
+	Scale_Change();
 
 	Target_Follow(fTimeDelta);
 	CMonster::Billboard();
@@ -69,7 +63,16 @@ void CGreenSlime::LateUpdate_Object(void)
 
 void CGreenSlime::Render_Obejct(void)
 {
+	_matrix matView, matProj;
+	CGameObject* pObj = Engine::Get_GameObject(L"Layer_Environment", L"StaticCamera");
+	static_cast<CCamera*>(pObj)->Get_ViewMatrix(matView);
+	static_cast<CCamera*>(pObj)->Get_ProjectMatrix(matProj);
+	
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+	m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &matProj);
+
+
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -141,10 +144,29 @@ void CGreenSlime::Target_Follow(const _float & fTimeDelta)
 
 	_float fDist = D3DXVec3Length(&(vPlayerPos - vPos));
 
-	if (fDist < 10.f)
+	if (fDist < 8.f)
 	{
 		m_eCurState = HIT;
 		m_pTransCom->Chase_Target(&vPlayerPos, m_fSpeed, fTimeDelta);
+
+		/*switch (m_eMonsterSize)
+		{
+		case CGreenSlime::A:
+			m_pTransCom->Set_Y(m_fScale);
+
+			break;
+		case CGreenSlime::B:
+			m_pTransCom->Set_Y(m_fScale);
+
+			break;
+		case CGreenSlime::C:
+			m_pTransCom->Set_Y(m_fScale);
+
+			break;
+		case CGreenSlime::D:
+			m_pTransCom->Set_Y(m_fScale);
+			break;
+		}*/
 	}
 	else
 	{
@@ -180,25 +202,6 @@ void CGreenSlime::Target_Follow(const _float & fTimeDelta)
 		//m_pTransCom->Move_Pos(&(vRight * m_fIdleSpeed * vRight));
 	}
 }
-
-CGreenSlime * CGreenSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
-{
-	CGreenSlime *	pInstance = new CGreenSlime(pGraphicDev);
-
-	if (FAILED(pInstance->Ready_Object()))
-	{
-		Safe_Release(pInstance);
-		return nullptr;
-	}
-
-	return pInstance;
-}
-
-void CGreenSlime::Free(void)
-{
-	CMonster::Free();
-}
-
 void CGreenSlime::Motion_Change(const _float& fTimeDelta)
 {
 	if (m_ePreState != m_eCurState)
@@ -227,4 +230,66 @@ void CGreenSlime::Motion_Change(const _float& fTimeDelta)
 		}
 		m_ePreState = m_eCurState;
 	}
+}
+
+void CGreenSlime::Scale_Change()
+{
+	_float fSize = 0.f;
+
+	if (Engine::Get_DIKeyState(DIK_P) & 0X80)
+	{
+		m_eMonsterSize = A;
+
+		fSize = 0.9f;
+
+		m_pTransCom->Set_Scale(m_fScale * fSize, m_fScale * fSize, m_fScale * fSize);
+		m_pTransCom->Set_Y(m_fScale * fSize);
+	}
+	else if (Engine::Get_DIKeyState(DIK_O) & 0X80)
+	{
+		m_eMonsterSize = B;
+
+		fSize = 0.7f;
+
+		m_pTransCom->Set_Scale(m_fScale * fSize, m_fScale * fSize, m_fScale * fSize);
+		m_pTransCom->Set_Y(m_fScale * fSize);
+	}
+	else if (Engine::Get_DIKeyState(DIK_I) & 0X80)
+	{
+		m_eMonsterSize = C;
+
+		fSize = 0.5f;
+
+		m_pTransCom->Set_Scale(m_fScale * fSize, m_fScale * fSize, m_fScale * fSize);
+		m_pTransCom->Set_Y(m_fScale * fSize);
+	}
+	else if (Engine::Get_DIKeyState(DIK_U) & 0X80)
+	{
+		m_pTransCom->Set_Scale(2.f, 2.f, 2.f);
+		m_pTransCom->Set_Y(2.f);
+	}
+	else
+	{
+		//m_pTransCom->Set_Y(m_fScale);
+	}
+
+	
+}
+
+CGreenSlime * CGreenSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+{
+	CGreenSlime *	pInstance = new CGreenSlime(pGraphicDev);
+
+	if (FAILED(pInstance->Ready_Object()))
+	{
+		Safe_Release(pInstance);
+		return nullptr;
+	}
+
+	return pInstance;
+}
+
+void CGreenSlime::Free(void)
+{
+	CMonster::Free();
 }

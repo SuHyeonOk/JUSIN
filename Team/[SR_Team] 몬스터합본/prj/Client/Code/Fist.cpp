@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "..\Header\PinkSlime.h"
+#include "..\Header\Fist.h"
 
 #include "Export_Function.h"
 
-CPinkSlime::CPinkSlime(LPDIRECT3DDEVICE9 pGraphicDev)
+CFist::CFist(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
 	, m_eCurState(MOTION_END)
 	, m_fIdleSpeed(0.f)
@@ -13,11 +13,11 @@ CPinkSlime::CPinkSlime(LPDIRECT3DDEVICE9 pGraphicDev)
 }
 
 
-CPinkSlime::~CPinkSlime()
+CFist::~CFist()
 {
 }
 
-HRESULT CPinkSlime::Ready_Object(void)
+HRESULT CFist::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
@@ -33,7 +33,7 @@ HRESULT CPinkSlime::Ready_Object(void)
 	return S_OK;
 }
 
-_int CPinkSlime::Update_Object(const _float & fTimeDelta)
+_int CFist::Update_Object(const _float & fTimeDelta)
 {
 	//m_eCurState = ATTACK;
 
@@ -51,12 +51,12 @@ _int CPinkSlime::Update_Object(const _float & fTimeDelta)
 	return 0;
 }
 
-void CPinkSlime::LateUpdate_Object(void)
+void CFist::LateUpdate_Object(void)
 {
 	Engine::CGameObject::LateUpdate_Object();
 }
 
-void CPinkSlime::Render_Obejct(void)
+void CFist::Render_Obejct(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -74,7 +74,7 @@ void CPinkSlime::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-HRESULT CPinkSlime::Add_Component(void)
+HRESULT CFist::Add_Component(void)
 {
 	CComponent* pComponent = nullptr;
 
@@ -99,9 +99,9 @@ HRESULT CPinkSlime::Add_Component(void)
 	return S_OK;
 }
 
-CPinkSlime * CPinkSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CFist * CFist::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CPinkSlime *	pInstance = new CPinkSlime(pGraphicDev);
+	CFist *	pInstance = new CFist(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -112,12 +112,12 @@ CPinkSlime * CPinkSlime::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CPinkSlime::Free(void)
+void CFist::Free(void)
 {
 	CMonster::Free();
 }
 
-void CPinkSlime::Motion_Change(const _float& fTimeDelta)
+void CFist::Motion_Change(const _float& fTimeDelta)
 {
 	if (m_ePreState != m_eCurState)
 	{
@@ -143,7 +143,7 @@ void CPinkSlime::Motion_Change(const _float& fTimeDelta)
 	}
 }
 
-void CPinkSlime::Target_Follow(const _float & fTimeDelta)
+void CFist::Target_Follow(const _float & fTimeDelta)
 {
 	// 플레이어 따라가기
 	CTransform*		pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));

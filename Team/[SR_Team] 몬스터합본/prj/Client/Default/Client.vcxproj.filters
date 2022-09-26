@@ -106,6 +106,12 @@
     <Filter Include="02. GameObject\01. For_Stage\99. UI\00. HealthBar">
       <UniqueIdentifier>{ca5ab04f-eda0-4ce0-8f2e-9900f57cf4d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\06. Bullet\Manager">
+      <UniqueIdentifier>{a9d7b93c-b89b-40ae-8908-8808effdca45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\07. Monster\02. Fist">
+      <UniqueIdentifier>{7779773b-33a3-4a77-8c0e-79b8b9a63791}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -196,7 +202,10 @@
       <Filter>02. GameObject\01. For_Stage\99. UI\00. HealthBar</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\BulletMgr.h">
-      <Filter>02. GameObject\01. For_Stage\06. Bullet\01. Monster</Filter>
+      <Filter>02. GameObject\01. For_Stage\06. Bullet\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Fist.h">
+      <Filter>02. GameObject\01. For_Stage\07. Monster\02. Fist</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -279,7 +288,10 @@
       <Filter>02. GameObject\01. For_Stage\99. UI\00. HealthBar</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\BulletMgr.cpp">
-      <Filter>02. GameObject\01. For_Stage\06. Bullet\01. Monster</Filter>
+      <Filter>02. GameObject\01. For_Stage\06. Bullet\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Fist.cpp">
+      <Filter>02. GameObject\01. For_Stage\07. Monster\02. Fist</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

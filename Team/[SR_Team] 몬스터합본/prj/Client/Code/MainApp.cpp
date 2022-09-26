@@ -202,7 +202,6 @@ void CMainApp::Free(void)
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);
 	Safe_Release(m_pManagementClass);

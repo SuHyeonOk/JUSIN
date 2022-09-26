@@ -32,11 +32,19 @@ _int CCamera::Update_Object(const _float & fTimeDelta)
 	// 뷰스페이스 변환은 매 프레임마다 해줘야 함(카메라의 위치나 방향이 바뀌니까)
 	D3DXMatrixLookAtLH(&m_matView, &m_vEye, &m_vAt, &m_vUp);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
+
+	D3DXMatrixPerspectiveFovLH(&m_matProj, m_fFov, m_fAspect, m_fNear, m_fFar);
+	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_matProj);
+
+
+	CGameObject::Update_Object(fTimeDelta);
+
 	return 0;
 }
 
 void CCamera::LateUpdate_Object(void)
 {
+	CGameObject::LateUpdate_Object();
 }
 
 void CCamera::Free(void)

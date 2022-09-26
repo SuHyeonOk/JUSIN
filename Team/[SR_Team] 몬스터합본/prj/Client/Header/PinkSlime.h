@@ -19,6 +19,7 @@ private:
 	virtual HRESULT		Add_Component(void) override;
 
 	void				Motion_Change(const _float& fTimeDelta);
+	void				Target_Follow(const _float& fTimeDelta);
 
 private:
 	STATE				m_ePreState;

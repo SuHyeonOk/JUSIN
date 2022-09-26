@@ -20,5 +20,8 @@ public:
 	static CHealthBar*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void		Free(void);
 
+private:
+	_matrix				m_matProj, m_matView, m_matOrtho, m_matWorld;
+	
 };
 

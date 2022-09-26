@@ -4,6 +4,7 @@
 BEGIN(Engine)
 class CLayer;
 END
+
 class CBulletMgr
 {
 	DECLARE_SINGLETON(CBulletMgr)

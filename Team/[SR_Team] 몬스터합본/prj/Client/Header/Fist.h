@@ -1,14 +1,13 @@
 #pragma once
 #include "Monster.h"
 
-class CGreenSlime : public CMonster
+class CFist : public CMonster
 {
 	enum STATE { IDLE, ATTACK, HIT, DIE, MOTION_END };
-	enum MONSTERSIZE {A, B, C, D };
 
 private:
-	explicit CGreenSlime(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CGreenSlime();
+	explicit CFist(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CFist();
 
 public:
 	virtual HRESULT		Ready_Object(void)						override;
@@ -22,22 +21,16 @@ private:
 	void				Motion_Change(const _float& fTimeDelta);
 	void				Target_Follow(const _float& fTimeDelta);
 
-	void				Scale_Change();
-
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 
-	MONSTERSIZE			m_eMonsterSize;
-
 	_float				m_fIdleSpeed;
-	_float				m_fScale = 2.f;
 
-	// Timer
 	_float				m_fTimeAcc;
 
 public:
-	static CGreenSlime*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CFist*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void		Free(void);
 };
 
