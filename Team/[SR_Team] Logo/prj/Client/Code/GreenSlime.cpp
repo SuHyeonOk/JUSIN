@@ -211,8 +211,11 @@ void CGreenSlime::Scale_Change()
 	pPlayerTransformCom->Get_Info(INFO_LOOK, &vPlayerLook);
 	m_pTransCom->Get_Info(INFO_LOOK, &vLook);
 
+	_vec3 vAxis;
+	D3DXVec3Cross(&vAxis, &vLook, &vPlayerLook);
+
 	//vResult = pPlayerTransformCom - m_pTransCom;
-	// 플레이어 - 몬스터 = 몬스터가 플레이어를 바라보는 방향 을 구해서 
+	// 플레이어 - 몬스터 = 몬스터가 플레이어를 바라보는 방향 을 구해서
 
 
 	//_float fDist = D3DXVec3Length(&(vPlayerLook - vLook));
