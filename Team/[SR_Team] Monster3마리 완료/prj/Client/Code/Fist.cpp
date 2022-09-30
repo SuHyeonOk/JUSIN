@@ -8,6 +8,7 @@
 
 CFist::CFist(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CMonster(pGraphicDev)
+	, m_ePreState(MOTION_END)
 	, m_eCurState(MOTION_END)
 	, m_fTimeAcc(0.f)
 	, m_fIdleTimeAcc(0.f)

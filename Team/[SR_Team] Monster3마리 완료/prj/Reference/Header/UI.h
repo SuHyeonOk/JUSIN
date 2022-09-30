@@ -1,13 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
-#define QUICKSLOT_ONE_X			-128.f;
-#define QUICKSLOT_TWO_X			-64.f;
-#define QUICKSLOT_THREE_X		0.f;
-#define QUICKSLOT_FOUR_X		64.f;
-#define QUICKSLOT_FIVE_X		128.f;
+#define QUICKSLOT_POS_X			0.f;
+#define QUICKSLOT_POS_Y			160.f;
+#define QUICKSLOT_SCALE_X		160.f;
+#define QUICKSLOT_SCALE_Y		32.f;
 
-#define QUICKSLOT_Y				267.f;
+
 
 BEGIN(Engine)
 
@@ -37,6 +36,10 @@ protected:
 	CTransform*		m_pTransCom		= nullptr;
 
 	CCamera*		m_pCamera		= nullptr;
+
+protected:
+	_float			m_fScaleX, m_fScaleY = 0.f;
+	_float			m_fPosX, m_fPosY = 0.f;
 
 };
 

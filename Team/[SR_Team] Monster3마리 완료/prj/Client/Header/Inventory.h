@@ -1,11 +1,11 @@
 #pragma once
 #include "UI.h"
 
-class CQuickSlot_Four : public CUI
+class CInventory : public CUI
 {
 private:
-	explicit CQuickSlot_Four(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CQuickSlot_Four();
+	explicit CInventory(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CInventory();
 
 public:
 	virtual HRESULT		Ready_Object(void)						override;
@@ -17,11 +17,13 @@ private:
 	virtual HRESULT		Add_Component(void);
 
 public:
-	static CQuickSlot_Four*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CInventory*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void		Free(void);
 
 private:
 	_matrix				m_matView, m_matWorld;
-	
+
+private:
+	_float					m_fTempPosX, m_fTempPosY = 2022.f;	
 };
 

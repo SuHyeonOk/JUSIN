@@ -1,50 +1,66 @@
 #include "stdafx.h"
-#include "..\Header\QuickSlot_Four.h"
+#include "..\Header\Inventory.h"
 
 #include "Export_Function.h"
 
-CQuickSlot_Four::CQuickSlot_Four(LPDIRECT3DDEVICE9 pGraphicDev)
+CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CUI(pGraphicDev)
 {
 }
 
-CQuickSlot_Four::~CQuickSlot_Four()
+CInventory::~CInventory()
 {
 }
 
-HRESULT CQuickSlot_Four::Ready_Object(void)
+HRESULT CInventory::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
 	D3DXMatrixIdentity(&m_matView);
 	D3DXMatrixIdentity(&m_matWorld);
 
+	m_fScaleX = 192.f;
+	m_fScaleY = 96.f;
+
+	m_fPosX = 64;
+	m_fPosY = WINCY / 4;
+
 	// 스케일 값
-	D3DXMatrixScaling(&m_matView, 32.f, 32.f, 1.f);
+	D3DXMatrixScaling(&m_matView, m_fScaleX, m_fScaleY, 1.f);
 
 	// 포지션
-	m_matView._41 = QUICKSLOT_FOUR_X;
-	m_matView._42 = QUICKSLOT_Y;
-
+	m_matView._41 = m_fTempPosX;
+	m_matView._42 = m_fTempPosY;
 
 	return S_OK;
 }
 
-_int CQuickSlot_Four::Update_Object(const _float & fTimeDelta)
+_int CInventory::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
 	Engine::Add_RenderGroup(RENDER_UI, this);
 
+	if (Engine::Get_DIKeyState(DIK_TAB) & 0X80) 
+	{
+		m_matView._41 = m_fPosX;
+		m_matView._42 = m_fPosY;
+	}
+	else
+	{
+		m_matView._41 = m_fTempPosX;
+		m_matView._42 = m_fTempPosY;
+	}
+
 	return 0;
 }
 
-void CQuickSlot_Four::LateUpdate_Object(void)
+void CInventory::LateUpdate_Object(void)
 {
 	Engine::CGameObject::LateUpdate_Object();
 }
 
-void CQuickSlot_Four::Render_Obejct(void)
+void CInventory::Render_Obejct(void)
 {
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld);
@@ -65,7 +81,7 @@ void CQuickSlot_Four::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-HRESULT CQuickSlot_Four::Add_Component(void)
+HRESULT CInventory::Add_Component(void)
 {
 	CComponent* pComponent = nullptr;
 
@@ -78,16 +94,16 @@ HRESULT CQuickSlot_Four::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
 	// m_pTextureCom	
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_UI_QuickSlot4_Texture"));
+	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_UI_Inventory_Texture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_UI_QuickSlot4_Texture", pComponent });
+	m_mapComponent[ID_STATIC].insert({ L"Proto_UI_Inventory_Texture", pComponent });
 	
 	return S_OK;
 }
 
-CQuickSlot_Four * CQuickSlot_Four::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CInventory * CInventory::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CQuickSlot_Four *	pInstance = new CQuickSlot_Four(pGraphicDev);
+	CInventory *	pInstance = new CInventory(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -98,7 +114,7 @@ CQuickSlot_Four * CQuickSlot_Four::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CQuickSlot_Four::Free(void)
+void CInventory::Free(void)
 {
 	CUI::Free();
 }

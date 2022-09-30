@@ -10,6 +10,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_fAccel(0.01f)
 	, m_fJSpeed0(0.3f)
 	, m_fJSpeed(0.3f)
+	, m_fShakeSpeed(0.02f)
 {
 }
 
@@ -32,7 +33,7 @@ _int CPlayer::Update_Object(const _float & fTimeDelta)
 	
 	Engine::CGameObject::Update_Object(fTimeDelta);
 	
-
+	//Shake(fTimeDelta);
 	
 	Add_RenderGroup(RENDER_NONALPHA, this); // TestPlayer를 렌더그룹에 포함
 	return 0;
@@ -118,12 +119,17 @@ void CPlayer::Key_Input(const _float & fTimeDelta)
 		D3DXVec3Normalize(&m_vDirection, &m_vDirection);
 		m_pTransCom->Move_Pos(&(m_vDirection * m_fSpeed * fTimeDelta));
 	}
-
-
+	
 	if (Engine::Get_DIKeyState(DIK_SPACE) & 0x80)
 	{
 		if(!m_bJump)
 			m_bJump = true;
+	}
+
+	if (Engine::Get_DIKeyState(DIK_B) & 0x80)
+	{
+		if (!m_bShake)
+			m_bShake = true;
 	}
 
 }
@@ -154,10 +160,7 @@ void CPlayer::Mouse_Move(void)
 		//m_pTransCom->Set_WorldMatrix(matWorld);
 
 		//m_pTransCom->Get_Info(INFO_LOOK, &m_vDirection);
-
 	}
-
-
 }
 
 void CPlayer::Mouse_Click(const _float& fTimeDelta)
@@ -236,6 +239,50 @@ _float CPlayer::Get_Height()
 	NULL_CHECK_RETURN(pTerrainTexCom, 0.f);
 
 	return m_pCalculatorCom->HeightOnTerrain(&vPos, pTerrainTexCom->Get_VtxPos(), VTXCNTX, VTXCNTZ) + 1 * m_fScale;
+}
+
+void CPlayer::Shake(const _float & fTimeDelta)
+{
+	if (!m_bShake)
+		return;
+
+	_float fPosY, fPosYd = 0.f;
+	_vec3 vPos;
+	m_pTransCom->Get_Info(INFO_POS, &vPos);
+	fPosY = vPos.y;
+
+	//if (0.1f < m_fShakeTimeAcc)
+	//{
+	//	_vec3 vPos;
+	//	m_pTransCom->Get_Info(INFO_POS, &vPos);
+	//	m_fPosY = vPos.y;
+
+	//	vPos.y += 0.2;
+	//	m_pTransCom->Set_Y(vPos.y + 1.2f);
+	//}
+	//if (0.12f < m_fShakeTimeAcc)
+	//{
+	//	//m_fPosY -= 0.2;
+	//	m_fPosY *= 1;
+	//	m_pTransCom->Set_Y(m_fPosY );
+	//	m_fShakeTimeAcc = 0.f;
+	//}
+	
+	
+	m_fShakeTimeAcc += fTimeDelta;
+	m_pTransCom->Set_Y(m_fPosY + m_fShakeSpeed);
+	if (0.1f < m_fShakeTimeAcc)
+	{
+		m_fShakeSpeed *= -1.f;
+		m_fShakeTimeAcc = 0.f;
+	}
+
+	m_fNoShakeTimeAcc += fTimeDelta;
+	if (0.5f < m_fNoShakeTimeAcc)
+	{
+		m_bShake = false;
+		m_fNoShakeTimeAcc = 0.f;
+	}
 }
 
 CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

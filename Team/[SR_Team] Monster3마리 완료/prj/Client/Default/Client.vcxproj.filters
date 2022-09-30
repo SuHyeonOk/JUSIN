@@ -127,23 +127,14 @@
     <Filter Include="02. GameObject\01. For_Stage\99. UI\01. QuickSlot">
       <UniqueIdentifier>{c472677d-a1f8-45b9-9d30-d170c6fcbad7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. For_Stage\99. UI\01. QuickSlot\00. QuickSlot_One">
-      <UniqueIdentifier>{cfd06579-07ef-42f5-9fcf-6f04850e5a48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. For_Stage\99. UI\01. QuickSlot\01. QuickSlot_Two">
-      <UniqueIdentifier>{9f7f1374-6c41-4fbc-af4d-f838b31b3be7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. For_Stage\99. UI\01. QuickSlot\03. QuickSlot_Four">
-      <UniqueIdentifier>{7eb55783-1a13-4082-a3fb-edc281033814}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. For_Stage\99. UI\01. QuickSlot\04. QuickSlot_Five">
-      <UniqueIdentifier>{61931d72-cce5-4398-a3c8-c3348b9d98dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. For_Stage\99. UI\01. QuickSlot\02. QuickSlot_Three">
-      <UniqueIdentifier>{5a7b672f-b875-4ead-85a6-0f9ea7f90ea1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97. Header">
       <UniqueIdentifier>{5d9cf808-d2e8-46cc-9da9-8f7a46f798c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\99. UI\03. EquipWindow">
+      <UniqueIdentifier>{4481093c-1157-4d3e-8edd-b97a217afd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\99. UI\02. Inventory">
+      <UniqueIdentifier>{3e055b54-e9f0-48d4-b875-6a3dddc8c3e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,23 +243,17 @@
     <ClInclude Include="..\Header\BlueBat.h">
       <Filter>02. GameObject\01. For_Stage\07. Monster\03. BlueBat</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\QuickSlot_One.h">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\00. QuickSlot_One</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\QuickSlot_Two.h">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\01. QuickSlot_Two</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\QuickSlot_Three.h">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\02. QuickSlot_Three</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\QuickSlot_Four.h">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\03. QuickSlot_Four</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\QuickSlot_Five.h">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\04. QuickSlot_Five</Filter>
-    </ClInclude>
     <ClInclude Include="Client_Define.h">
       <Filter>97. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\QuickSlot.h">
+      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EquipWindow.h">
+      <Filter>02. GameObject\01. For_Stage\99. UI\03. EquipWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Inventory.h">
+      <Filter>02. GameObject\01. For_Stage\99. UI\02. Inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -368,20 +353,14 @@
     <ClCompile Include="..\Code\BlueBat.cpp">
       <Filter>02. GameObject\01. For_Stage\07. Monster\03. BlueBat</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\QuickSlot_One.cpp">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\00. QuickSlot_One</Filter>
+    <ClCompile Include="..\Code\QuickSlot.cpp">
+      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\QuickSlot_Two.cpp">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\01. QuickSlot_Two</Filter>
+    <ClCompile Include="..\Code\EquipWindow.cpp">
+      <Filter>02. GameObject\01. For_Stage\99. UI\03. EquipWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\QuickSlot_Three.cpp">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\02. QuickSlot_Three</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\QuickSlot_Four.cpp">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\03. QuickSlot_Four</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\QuickSlot_Five.cpp">
-      <Filter>02. GameObject\01. For_Stage\99. UI\01. QuickSlot\04. QuickSlot_Five</Filter>
+    <ClCompile Include="..\Code\Inventory.cpp">
+      <Filter>02. GameObject\01. For_Stage\99. UI\02. Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

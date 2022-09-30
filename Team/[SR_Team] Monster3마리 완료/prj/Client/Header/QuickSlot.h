@@ -1,11 +1,11 @@
 #pragma once
 #include "UI.h"
 
-class CQuickSlot_Two : public CUI
+class CQuickSlot : public CUI
 {
 private:
-	explicit CQuickSlot_Two(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CQuickSlot_Two();
+	explicit CQuickSlot(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CQuickSlot();
 
 public:
 	virtual HRESULT		Ready_Object(void)						override;
@@ -17,7 +17,7 @@ private:
 	virtual HRESULT		Add_Component(void);
 
 public:
-	static CQuickSlot_Two*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CQuickSlot*	Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void		Free(void);
 
 private:

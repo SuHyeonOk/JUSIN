@@ -43,6 +43,11 @@ void CStaticCamera::LateUpdate_Object(void)
 	CCamera::LateUpdate_Object();
 }
 
+void CStaticCamera::ShakeY(const _float & fTimeDelta)
+{
+
+}
+
 void CStaticCamera::Key_Input(const _float & fTimeDelta)
 {
 	if (Get_DIKeyState(DIK_W) & 0x80)	// 플레이어를 향해 줌인
@@ -96,7 +101,7 @@ void CStaticCamera::Target_Renewal(void)
 	pPlayerTransform->Get_Info(INFO_LOOK, &vLook);
 	D3DXVec3Normalize(&vLook, &vLook);
 
-	m_vEye = vPos +0.3f * vLook;
+	m_vEye = vPos + 0.3f * vLook;
 	m_vAt = vPos + vLook;
 
 

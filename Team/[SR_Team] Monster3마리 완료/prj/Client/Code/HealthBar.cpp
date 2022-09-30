@@ -16,19 +16,21 @@ HRESULT CHealthBar::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Scale(1.f, 1.f, 1.f);
-	
-	m_pTransCom->Set_Pos(0.f, 0.f, 0.f);
-
 	D3DXMatrixIdentity(&m_matView);
 	D3DXMatrixIdentity(&m_matWorld);
 
+	m_fScaleX = 120.f;
+	m_fScaleY = 30.f;
+
+	m_fPosX = WINCX / -2.5;
+	m_fPosY = WINCY / -2.5;
+
 	// 스케일 값
-	D3DXMatrixScaling(&m_matView, 100.f, 25.f, 1.f);
+	D3DXMatrixScaling(&m_matView, m_fScaleX, m_fScaleY, 1.f);
 
 	// 포지션
-	m_matView._41 = -250.f;
-	m_matView._42 = -250.f;
+	m_matView._41 = m_fPosX;
+	m_matView._42 = m_fPosY;
 
 	//D3DXMatrixOrthoLH(&m_matOrtho, WINCX, WINCY, 0.f, 1.f);
 

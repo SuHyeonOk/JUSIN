@@ -1,36 +1,41 @@
 #include "stdafx.h"
-#include "..\Header\QuickSlot_Three.h"
+#include "..\Header\QuickSlot.h"
 
 #include "Export_Function.h"
 
-CQuickSlot_Three::CQuickSlot_Three(LPDIRECT3DDEVICE9 pGraphicDev)
+CQuickSlot::CQuickSlot(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CUI(pGraphicDev)
 {
 }
 
-CQuickSlot_Three::~CQuickSlot_Three()
+CQuickSlot::~CQuickSlot()
 {
 }
 
-HRESULT CQuickSlot_Three::Ready_Object(void)
+HRESULT CQuickSlot::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
 	D3DXMatrixIdentity(&m_matView);
 	D3DXMatrixIdentity(&m_matWorld);
 
+	m_fScaleX = 160.f;
+	m_fScaleY = 32.f;
+
+	m_fPosX = 0.f;
+	m_fPosY = (WINCY / 2) - 32;
+
 	// 스케일 값
-	D3DXMatrixScaling(&m_matView, 32.f, 32.f, 1.f);
+	D3DXMatrixScaling(&m_matView, 160.f, 32.f, 1.f);
 
 	// 포지션
-	m_matView._41 = QUICKSLOT_THREE_X;
-	m_matView._42 = QUICKSLOT_Y;
-
+	m_matView._41 = m_fPosX;
+	m_matView._42 = m_fPosY;
 
 	return S_OK;
 }
 
-_int CQuickSlot_Three::Update_Object(const _float & fTimeDelta)
+_int CQuickSlot::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
@@ -39,12 +44,12 @@ _int CQuickSlot_Three::Update_Object(const _float & fTimeDelta)
 	return 0;
 }
 
-void CQuickSlot_Three::LateUpdate_Object(void)
+void CQuickSlot::LateUpdate_Object(void)
 {
 	Engine::CGameObject::LateUpdate_Object();
 }
 
-void CQuickSlot_Three::Render_Obejct(void)
+void CQuickSlot::Render_Obejct(void)
 {
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld);
@@ -65,7 +70,7 @@ void CQuickSlot_Three::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-HRESULT CQuickSlot_Three::Add_Component(void)
+HRESULT CQuickSlot::Add_Component(void)
 {
 	CComponent* pComponent = nullptr;
 
@@ -78,16 +83,16 @@ HRESULT CQuickSlot_Three::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
 	// m_pTextureCom	
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_UI_QuickSlot3_Texture"));
+	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Engine::Clone_Proto(L"Proto_UI_QuickSlot_Texture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_UI_QuickSlot3_Texture", pComponent });
+	m_mapComponent[ID_STATIC].insert({ L"Proto_UI_QuickSlot_Texture", pComponent });
 	
 	return S_OK;
 }
 
-CQuickSlot_Three * CQuickSlot_Three::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CQuickSlot * CQuickSlot::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CQuickSlot_Three *	pInstance = new CQuickSlot_Three(pGraphicDev);
+	CQuickSlot *	pInstance = new CQuickSlot(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -98,7 +103,7 @@ CQuickSlot_Three * CQuickSlot_Three::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CQuickSlot_Three::Free(void)
+void CQuickSlot::Free(void)
 {
 	CUI::Free();
 }

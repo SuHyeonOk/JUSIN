@@ -145,30 +145,20 @@ HRESULT CStage::Ready_Layer_UI(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_HealthBar", pGameObject), E_FAIL);
 
-	// UI_QuickSlot_One
-	pGameObject = CQuickSlot_One::Create(m_pGraphicDev);
+	// UI_QuickSlot
+	pGameObject = CQuickSlot::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_QuickSlot_One", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_QuickSlot", pGameObject), E_FAIL);
 
-	// UI_QuickSlot_Two
-	pGameObject = CQuickSlot_Two::Create(m_pGraphicDev);
+	// UI_Inventory
+	pGameObject = CInventory::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_QuickSlot_Two", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_Inventory", pGameObject), E_FAIL);
 
-	// UI_QuickSlot_Three
-	pGameObject = CQuickSlot_Three::Create(m_pGraphicDev);
+	// UI_EquipWindow
+	pGameObject = CEquipWindow::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_QuickSlot_Three", pGameObject), E_FAIL);
-
-	// UI_QuickSlot_Four
-	pGameObject = CQuickSlot_Four::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_QuickSlot_Four", pGameObject), E_FAIL);
-
-	// UI_QuickSlot_Five
-	pGameObject = CQuickSlot_Five::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_QuickSlot_Five", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI_EquipWindow", pGameObject), E_FAIL);
 
 	m_mapLayer.insert({ pLayerTag, pLayer });
 

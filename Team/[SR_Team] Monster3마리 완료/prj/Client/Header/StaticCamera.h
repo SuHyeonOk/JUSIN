@@ -18,9 +18,12 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object(void) override;
 
-
+public:
+	void		ShakeY(const _float& fTimeDelta);
+	
 private:
 	void		Key_Input(const _float& fTimeDelta);
+
 private:
 	void		Target_Renewal(void);
 

@@ -19,11 +19,9 @@
 
 // UI
 #include "HealthBar.h"
-#include "QuickSlot_One.h"
-#include "QuickSlot_Two.h"
-#include "QuickSlot_Three.h"
-#include "QuickSlot_Four.h"
-#include "QuickSlot_Five.h"
+#include "QuickSlot.h"
+#include "Inventory.h"
+#include "EquipWindow.h"
 
 class CStage : public CScene
 {

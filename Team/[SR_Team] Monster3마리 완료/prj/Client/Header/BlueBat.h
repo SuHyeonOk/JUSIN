@@ -25,16 +25,27 @@ private:
 
 	void				Motion_Change(const _float& fTimeDelta);
 
-	void				Jump_Skill(const _float& fTimeDelta);
+	void				Jump(const _float& fTimeDelta);
 	//float				Get_Height();
 
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 
-	_float				m_fHeight = 1.f;
+	_bool				m_bIdle = false;
 
-	_float				m_fTimeAcc = 0.f;
+	// 점프 관련 변수
+	_bool				m_bJump = false;
+	_float				m_fHeight = 1.f;
+	_float				m_fJSpeed ; 		// 점프 속도
+	_float				m_fJSpeed0; 		// 점프 초기 속도
+	_float				m_fAccel;			// 중력가속도
+
+	//Timer
+	_float				m_fTimeAcc;
+	_float				m_fJumpTimeAcc;
+	_float				m_fIdleTimeAcc = 0.f;
+	_float				m_fSkillTimeAcc = 0.f;
 
 
 	// 점프 관련 변수

@@ -3,14 +3,19 @@
 
 #include "Export_Function.h"
 
+#include "Player.h"
+
 CBlueBat::CBlueBat(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
+	, m_ePreState(MOTION_END)
 	, m_eCurState(MOTION_END)
 	, m_fTimeAcc(0.f)
-
+	, m_fJumpTimeAcc(0.f)
+	, m_fAccel(0.01f)
+	, m_fJSpeed0(0.2f)
+	, m_fJSpeed(0.2f)
 {
 }
-
 
 CBlueBat::~CBlueBat()
 {
@@ -33,13 +38,16 @@ HRESULT CBlueBat::Ready_Object(void)
 _int CBlueBat::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
-	Engine::Add_RenderGroup(RENDER_ALPHA, this);
 
 	m_pAnumtorCom->Play_Animation(fTimeDelta);
-	
-	Target_Follow(fTimeDelta);
-	Motion_Change(fTimeDelta);
 
+	Motion_Change(fTimeDelta);
+	Target_Follow(fTimeDelta);
+
+	//Jump(fTimeDelta);
+
+	Engine::Add_RenderGroup(RENDER_ALPHA, this);
+	
 	return 0;
 }
 
@@ -104,33 +112,70 @@ void CBlueBat::Target_Follow(const _float & fTimeDelta)
 
 	_float fDist = D3DXVec3Length(&(vPlayerPos - vPos));
 
-	if (fDist < 8.f)
-	{
-		m_eCurState = ATTACK;
-		m_pTransCom->Chase_Target(&vPlayerPos, m_fAttack_Speed, fTimeDelta);
-	}
-	else
+	if (fDist < 10.f && fDist > 3.5f)
 	{
 		m_eCurState = IDLE;
 
-		// 몬스터 좌우로 이동하기
-		_vec3		vRight;
-		m_pTransCom->Get_Info(INFO_RIGHT, &vRight);
-
-		m_fTimeAcc += fTimeDelta;
-		if (2.f < m_fTimeAcc)
+		m_pTransCom->Chase_Target(&vPlayerPos, m_fAttack_Speed, fTimeDelta);
+		m_pTransCom->Set_Y(1.f);
+	}
+	else if (fDist <= 3.5f && fDist > 1.f)
+	{
+		m_fSkillTimeAcc += fTimeDelta;
+		if (2.f < m_fSkillTimeAcc)
 		{
-			m_fIdle_Speed *= -1;
-			m_fTimeAcc = 0.f;
+			m_bIdle = true;
+		}
+		if (2.1f < m_fSkillTimeAcc)
+		{
+			m_bIdle = false;
+			m_fSkillTimeAcc = 0;
 		}
 
-		D3DXVec3Normalize(&vRight, &vRight);
-		m_pTransCom->Move_Pos(&(vRight * m_fIdle_Speed * fTimeDelta));
+		if (m_bIdle == true)
+			m_bJump = true;
+
+		Jump(fTimeDelta);
 	}
 }
 
-void CBlueBat::Jump_Skill(const _float & fTimeDelta)
+void CBlueBat::Jump(const _float & fTimeDelta)
 {
+	if (m_bJump)
+	{
+		_vec3 vPos;
+		m_pTransCom->Get_Info(INFO_POS, &vPos);
+
+		if (m_fJumpTimeAcc > 0.3f && m_fHeight >= vPos.y)
+		{	
+			m_bJump = false;
+			m_fJumpTimeAcc = 0.f;
+			m_pTransCom->Set_Pos(vPos.x, m_fHeight, vPos.z);
+			m_fJSpeed = m_fJSpeed0;
+		}
+		else
+		{
+			m_eCurState = ATTACK;
+
+			m_fJSpeed -= m_fAccel;
+			m_pTransCom->Plus_PosY(m_fJSpeed);
+			m_fJumpTimeAcc += 0.01f;
+		}
+	}
+	else
+	{
+		m_fIdleTimeAcc += fTimeDelta;
+		if (m_fIdleTimeAcc > 0.55f)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"Layer_GameLogic", L"Player"));
+			NULL_CHECK(pPlayer);
+
+			//pPlayer->Set_Shake(true);
+
+			m_eCurState = IDLE;
+			m_fIdleTimeAcc = 0.f;
+		}
+	}
 }
 
 void CBlueBat::Motion_Change(const _float& fTimeDelta)
