@@ -3,7 +3,7 @@
 
 #include "Export_Function.h"
 
-#include "Player.h"
+#include "StaticCamera.h"
 
 CBlueBat::CBlueBat(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
@@ -39,12 +39,10 @@ _int CBlueBat::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-	m_pAnumtorCom->Play_Animation(fTimeDelta);
+	m_pAnimtorCom->Play_Animation(fTimeDelta);
 
 	Motion_Change(fTimeDelta);
 	Target_Follow(fTimeDelta);
-
-	//Jump(fTimeDelta);
 
 	Engine::Add_RenderGroup(RENDER_ALPHA, this);
 	
@@ -68,7 +66,7 @@ void CBlueBat::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pAnumtorCom->Set_Texture();
+	m_pAnimtorCom->Set_Texture();
 	m_pBufferCom->Render_Buffer();
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -87,15 +85,15 @@ HRESULT CBlueBat::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
-	// m_pAnumtorCom
-	pComponent = m_pAnumtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
-	NULL_CHECK_RETURN(m_pAnumtorCom, E_FAIL);
+	// m_pAnimtorCom
+	pComponent = m_pAnimtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
+	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnumtorCom->Add_Component(L"Proto_BlueBatIDLE_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_BlueBatATTACK_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_BlueBatHIT_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_BlueBatDIE_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_BlueBatIDLE_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_BlueBatATTACK_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_BlueBatHIT_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_BlueBatDIE_Texture");
 
 	return S_OK;
 }
@@ -112,15 +110,17 @@ void CBlueBat::Target_Follow(const _float & fTimeDelta)
 
 	_float fDist = D3DXVec3Length(&(vPlayerPos - vPos));
 
-	if (fDist < 10.f && fDist > 3.5f)
+	if (fDist < 10.f && fDist > 4.f) // 플레이어를 향해 걸어간다
 	{
 		m_eCurState = IDLE;
 
 		m_pTransCom->Chase_Target(&vPlayerPos, m_fAttack_Speed, fTimeDelta);
 		m_pTransCom->Set_Y(1.f);
 	}
-	else if (fDist <= 3.5f && fDist > 1.f)
+	else if (fDist < 4.f && fDist > 1.f) // 공격을 시작한다
 	{
+		fDist *= 1;
+
 		m_fSkillTimeAcc += fTimeDelta;
 		if (2.f < m_fSkillTimeAcc)
 		{
@@ -160,6 +160,13 @@ void CBlueBat::Jump(const _float & fTimeDelta)
 			m_fJSpeed -= m_fAccel;
 			m_pTransCom->Plus_PosY(m_fJSpeed);
 			m_fJumpTimeAcc += 0.01f;
+
+			if (m_pAnimtorCom->Get_Currentframe() >= 7.f && m_pAnimtorCom->Get_Currentframe() < 8.f)
+			{
+				CStaticCamera* pStaticCamera = dynamic_cast<CStaticCamera*>(Engine::Get_GameObject(L"Layer_Environment", L"StaticCamera"));
+				NULL_CHECK(pStaticCamera);
+				pStaticCamera->Set_ShakeY();
+			}
 		}
 	}
 	else
@@ -167,11 +174,6 @@ void CBlueBat::Jump(const _float & fTimeDelta)
 		m_fIdleTimeAcc += fTimeDelta;
 		if (m_fIdleTimeAcc > 0.55f)
 		{
-			CPlayer* pPlayer = dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"Layer_GameLogic", L"Player"));
-			NULL_CHECK(pPlayer);
-
-			//pPlayer->Set_Shake(true);
-
 			m_eCurState = IDLE;
 			m_fIdleTimeAcc = 0.f;
 		}
@@ -185,19 +187,19 @@ void CBlueBat::Motion_Change(const _float& fTimeDelta)
 		switch (m_eCurState)
 		{
 		case IDLE:
-			m_pAnumtorCom->Change_Animation(L"Proto_BlueBatIDLE_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_BlueBatIDLE_Texture");
 			break;
 
 		case ATTACK:
-			m_pAnumtorCom->Change_Animation(L"Proto_BlueBatATTACK_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_BlueBatATTACK_Texture");
 			break;
 
 		case HIT:
-			m_pAnumtorCom->Change_Animation(L"Proto_BlueBatHIT_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_BlueBatHIT_Texture");
 			break;
 
 		case DIE:
-			m_pAnumtorCom->Change_Animation(L"Proto_BlueBatDIE_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_BlueBatDIE_Texture");
 			break;
 		}
 		m_ePreState = m_eCurState;

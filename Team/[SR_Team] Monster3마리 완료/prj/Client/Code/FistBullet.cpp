@@ -38,12 +38,12 @@ HRESULT CFistBullet::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
-	// m_pAnumtorCom
-	pComponent = m_pAnumtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
-	NULL_CHECK_RETURN(m_pAnumtorCom, E_FAIL);
+	// m_pAnimtorCom
+	pComponent = m_pAnimtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
+	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnumtorCom->Add_Component(L"Proto_FistGreenEffect_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_FistGreenEffect_Texture");
 
 	return S_OK;
 }
@@ -55,7 +55,7 @@ _int CFistBullet::Update_Object(const _float & fTimeDelta)
 
 	int iResult = CGameObject::Update_Object(fTimeDelta);
 
-	m_pAnumtorCom->Play_Animation(fTimeDelta);
+	m_pAnimtorCom->Play_Animation(fTimeDelta);
 
 	if (!m_bReady)
 	{
@@ -116,7 +116,7 @@ void CFistBullet::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pAnumtorCom->Set_Texture();
+	m_pAnimtorCom->Set_Texture();
 
 	m_pBufferCom->Render_Buffer();
 

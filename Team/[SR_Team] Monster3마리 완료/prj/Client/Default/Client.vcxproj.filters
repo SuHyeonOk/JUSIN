@@ -136,6 +136,9 @@
     <Filter Include="02. GameObject\01. For_Stage\99. UI\02. Inventory">
       <UniqueIdentifier>{3e055b54-e9f0-48d4-b875-6a3dddc8c3e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\99. UI\00. HealthBar\00. HPGauge">
+      <UniqueIdentifier>{f37d7669-1242-49ff-b8d2-7cb06fb91c20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -255,6 +258,9 @@
     <ClInclude Include="..\Header\Inventory.h">
       <Filter>02. GameObject\01. For_Stage\99. UI\02. Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\HPGauge.h">
+      <Filter>02. GameObject\01. For_Stage\99. UI\00. HealthBar\00. HPGauge</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -361,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp">
       <Filter>02. GameObject\01. For_Stage\99. UI\02. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HPGauge.cpp">
+      <Filter>02. GameObject\01. For_Stage\99. UI\00. HealthBar\00. HPGauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

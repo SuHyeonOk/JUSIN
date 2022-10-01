@@ -32,7 +32,7 @@ private:
 
 private:
 	CRcTex*					m_pBufferCom = nullptr;
-	CAnimator*				m_pAnumtorCom = nullptr;
+	CAnimator*				m_pAnimtorCom = nullptr;
 
 private:
 	_float		m_fFrame = 0.f;

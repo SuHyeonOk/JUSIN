@@ -39,7 +39,7 @@ _int CPinkSlime::Update_Object(const _float & fTimeDelta)
 
 	m_pTransCom->Set_Y(m_fHeight);
 
-	m_pAnumtorCom->Play_Animation(fTimeDelta);
+	m_pAnimtorCom->Play_Animation(fTimeDelta);
 
 	Motion_Change(fTimeDelta);
 	Target_Follow(fTimeDelta);
@@ -64,7 +64,7 @@ void CPinkSlime::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pAnumtorCom->Set_Texture();
+	m_pAnimtorCom->Set_Texture();
 	m_pBufferCom->Render_Buffer();
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -83,15 +83,15 @@ HRESULT CPinkSlime::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
-	// m_pAnumtorCom
-	pComponent = m_pAnumtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
-	NULL_CHECK_RETURN(m_pAnumtorCom, E_FAIL);
+	// m_pAnimtorCom
+	pComponent = m_pAnimtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
+	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeIDLE_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeATTACK_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeHIT_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_PinkSlimeDIE_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_PinkSlimeIDLE_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_PinkSlimeATTACK_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_PinkSlimeHIT_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_PinkSlimeDIE_Texture");
 
 	return S_OK;
 }
@@ -177,19 +177,19 @@ void CPinkSlime::Motion_Change(const _float& fTimeDelta)
 		switch (m_eCurState)
 		{
 		case IDLE:
-			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeIDLE_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_PinkSlimeIDLE_Texture");
 			break;
 
 		case ATTACK:
-			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeATTACK_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_PinkSlimeATTACK_Texture");
 			break;
 		
 		case HIT:
-			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeHIT_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_PinkSlimeHIT_Texture");
 			break;
 
 		case DIE:
-			m_pAnumtorCom->Change_Animation(L"Proto_PinkSlimeDIE_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_PinkSlimeDIE_Texture");
 			break;
 		}
 		m_ePreState = m_eCurState;

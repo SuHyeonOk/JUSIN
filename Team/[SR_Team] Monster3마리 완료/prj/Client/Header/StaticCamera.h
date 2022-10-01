@@ -19,18 +19,26 @@ public:
 	virtual void LateUpdate_Object(void) override;
 
 public:
-	void		ShakeY(const _float& fTimeDelta);
+	void		Set_ShakeY() { m_bShakeY = true; }
 	
 private:
 	void		Key_Input(const _float& fTimeDelta);
 
-private:
 	void		Target_Renewal(void);
+	void		ShakeY(const _float& fTimeDelta);
 
 private:
 	_float		m_fDistance = 10.f;
 	_float		m_fSpeed = 10.f;
 	_float		m_fAngle = 0.f;
+
+	// ShakeY와 관련된 변수
+	_bool		m_bShakeY = false;
+	_float		m_fPosY;
+	_float		m_fShakeYSpeed;
+
+	_float		m_fShakeYTimeAcc;
+	_float		m_fNoShakeYTimeAcc;
 
 public:
 	static CStaticCamera*		Create(LPDIRECT3DDEVICE9 pGraphicDev,
@@ -44,6 +52,5 @@ public:
 
 private:
 	virtual void Free(void) override;
-
 };
 

@@ -170,6 +170,7 @@
     <ClInclude Include="..\Header\FontStart.h" />
     <ClInclude Include="..\Header\GreenSlime.h" />
     <ClInclude Include="..\Header\HealthBar.h" />
+    <ClInclude Include="..\Header\HPGauge.h" />
     <ClInclude Include="..\Header\Inventory.h" />
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\Logo.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="..\Code\FontStart.cpp" />
     <ClCompile Include="..\Code\GreenSlime.cpp" />
     <ClCompile Include="..\Code\HealthBar.cpp" />
+    <ClCompile Include="..\Code\HPGauge.cpp" />
     <ClCompile Include="..\Code\Inventory.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />

@@ -41,7 +41,7 @@ _int CFist::Update_Object(const _float & fTimeDelta)
 	Engine::Add_RenderGroup(RENDER_ALPHA, this);
 
 	m_pTransCom->Set_Y(1.f);
-	m_pAnumtorCom->Play_Animation(fTimeDelta);
+	m_pAnimtorCom->Play_Animation(fTimeDelta);
 
 	Motion_Change(fTimeDelta);
 	Attack_Distance(fTimeDelta);
@@ -67,7 +67,7 @@ void CFist::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0x00);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pAnumtorCom->Set_Texture();
+	m_pAnimtorCom->Set_Texture();
 	m_pBufferCom->Render_Buffer();
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -86,15 +86,15 @@ HRESULT CFist::Add_Component(void)
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
-	// m_pAnumtorCom
-	pComponent = m_pAnumtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
-	NULL_CHECK_RETURN(m_pAnumtorCom, E_FAIL);
+	// m_pAnimtorCom
+	pComponent = m_pAnimtorCom = dynamic_cast<CAnimator*>(Engine::Clone_Proto(L"Proto_AnimatorCom"));
+	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnumtorCom->Add_Component(L"Proto_FistIDLE_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_FistATTACK_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_FistHIT_Texture");
-	m_pAnumtorCom->Add_Component(L"Proto_FistDIE_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_FistIDLE_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_FistATTACK_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_FistHIT_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_FistDIE_Texture");
 
 	return S_OK;
 }
@@ -149,19 +149,19 @@ void CFist::Motion_Change(const _float & fTimeDelta)
 		switch (m_eCurState)
 		{
 		case IDLE:
-			m_pAnumtorCom->Change_Animation(L"Proto_FistIDLE_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_FistIDLE_Texture");
 			break;
 
 		case ATTACK:
-			m_pAnumtorCom->Change_Animation(L"Proto_FistATTACK_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_FistATTACK_Texture");
 			break;
 		
 		case HIT:
-			m_pAnumtorCom->Change_Animation(L"Proto_FistHIT_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_FistHIT_Texture");
 			break;
 
 		case DIE:
-			m_pAnumtorCom->Change_Animation(L"Proto_FistDIE_Texture");
+			m_pAnimtorCom->Change_Animation(L"Proto_FistDIE_Texture");
 			break;
 		}
 		m_ePreState = m_eCurState;

@@ -36,8 +36,8 @@ public:
 protected:
 	CRcTex*				m_pBufferCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
-	CAnimator*			m_pAnumtorCom = nullptr;
+	CTransform*			m_pTransCom = nullptr; 
+	CAnimator*			m_pAnimtorCom = nullptr;
 };
 
 END

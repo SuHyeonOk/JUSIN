@@ -18,8 +18,10 @@ public:
 
 public:
 	void		Get_Eye(_vec3& pEye) { pEye = m_vEye; }
-	void		Get_At(_vec3& pAt) { pAt = m_vAt; }
-	void		Get_Up(_vec3& pUp) { pUp = m_vUp; }
+	void		Get_At(_vec3& pAt)	 { pAt = m_vAt; }
+	void		Get_Up(_vec3& pUp)	 { pUp = m_vUp; }
+
+	void		Set_Eye(_float& pEye) { m_vEye.y = pEye; }
 
 	void		Get_ViewMatrix(_matrix& _viewMat) { _viewMat = m_matView; }
 	void		Get_ProjectMatrix(_matrix& _ProjMat) { _ProjMat = m_matProj; }

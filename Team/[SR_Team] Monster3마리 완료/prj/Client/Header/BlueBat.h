@@ -34,6 +34,8 @@ private:
 
 	_bool				m_bIdle = false;
 
+	_int m_iFrame = 0.f;
+
 	// 점프 관련 변수
 	_bool				m_bJump = false;
 	_float				m_fHeight = 1.f;
@@ -46,6 +48,7 @@ private:
 	_float				m_fJumpTimeAcc;
 	_float				m_fIdleTimeAcc = 0.f;
 	_float				m_fSkillTimeAcc = 0.f;
+	_float				m_CameraShakeTimeAcc = 0.f;
 
 
 	// 점프 관련 변수

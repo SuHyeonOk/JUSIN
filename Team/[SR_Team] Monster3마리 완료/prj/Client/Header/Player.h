@@ -31,18 +31,6 @@ private:
 	void				Jump(const _float& fTimeDelta);
 	_float				Get_Height();
 
-	// OK
-	void				Shake(const _float& fTimeDelta);
-
-public:
-	void				Set_Shake(_bool _bShake) {m_bShake = _bShake;}
-
-	_bool				m_bShake = false;
-	_float				m_fPosX, m_fPosY, m_fPosZ = 1.f;
-	_float				m_fShakeTimeAcc = 0.f;
-	_float				m_fNoShakeTimeAcc = 0.f;
-
-
 private:
 	CRcTex*				m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
@@ -59,8 +47,6 @@ private:
 	_float				m_fJSpeed0; 	// 점프 초기 속도
 	_float				m_fAccel;		// 중력가속도
 	_float				m_fJTimeDelta	= 0.f; 
-
-	_float				m_fShakeSpeed;
 
 	// 마우스 입력 관련 변수
 	_float				m_fLBClick = 0.f;

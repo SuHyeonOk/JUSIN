@@ -5,6 +5,10 @@
 
 CStaticCamera::CStaticCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CCamera(pGraphicDev)
+	, m_fPosY(1.f)
+	, m_fShakeYSpeed(0.02f)
+	, m_fShakeYTimeAcc(0.f)
+	, m_fNoShakeYTimeAcc(0.f)
 {
 }
 
@@ -31,7 +35,7 @@ HRESULT CStaticCamera::Ready_Object(const _vec3 * pEye, const _vec3 * pAt, const
 _int CStaticCamera::Update_Object(const _float & fTimeDelta)
 {
 	//Key_Input(fTimeDelta);
-
+	ShakeY(fTimeDelta);
 	Target_Renewal();
 	
 	_int iExit = CCamera::Update_Object(fTimeDelta);
@@ -45,7 +49,24 @@ void CStaticCamera::LateUpdate_Object(void)
 
 void CStaticCamera::ShakeY(const _float & fTimeDelta)
 {
+	if (!m_bShakeY)
+		return;
 
+	m_fShakeYTimeAcc += fTimeDelta;
+	m_fPosY += m_fShakeYSpeed;
+	Set_Eye(m_fPosY);
+	if (0.1f < m_fShakeYTimeAcc)
+	{
+		m_fShakeYSpeed *= -1.f;
+		m_fShakeYTimeAcc = 0.f;
+	}
+
+	m_fNoShakeYTimeAcc += fTimeDelta;
+	if (0.5f < m_fNoShakeYTimeAcc)
+	{
+		m_bShakeY = false;
+		m_fNoShakeYTimeAcc = 0.f;
+	}
 }
 
 void CStaticCamera::Key_Input(const _float & fTimeDelta)
@@ -90,6 +111,8 @@ void CStaticCamera::Target_Renewal(void)
 	m_vAt = pPlayerTransCom->m_vInfo[INFO_POS]; // 카메라가 바라보는 위치m_vAt은 플레이어의 위치좌표
 	*/
 
+	if (m_bShakeY)
+		return;
 
 	CTransform*   pPlayerTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
 	NULL_CHECK(pPlayerTransform);
@@ -103,9 +126,6 @@ void CStaticCamera::Target_Renewal(void)
 
 	m_vEye = vPos + 0.3f * vLook;
 	m_vAt = vPos + vLook;
-
-
-
 }
 
 CStaticCamera * CStaticCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec3 * pEye, const _vec3 * pAt, const _vec3 * pUp, const _float & fFov, const _float & fAspect, const _float & fNear, const _float & fFar)

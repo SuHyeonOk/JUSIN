@@ -24,6 +24,8 @@ public:
 	void		Play_Animation(const _float& fTimeDelta);
 	void		Change_Animation(const _tchar * pTectureTag);
 	void		Set_Texture();
+
+	const _float&	Get_Currentframe() { return m_fFrame; }
 	 
 private: // Key : Tag, Velaue : TextComponent
 	map<const _tchar*, CTexture*>		m_mapAnimation;

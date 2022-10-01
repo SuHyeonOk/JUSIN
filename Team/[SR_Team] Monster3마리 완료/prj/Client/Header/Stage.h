@@ -19,6 +19,7 @@
 
 // UI
 #include "HealthBar.h"
+#include "HPGauge.h"
 #include "QuickSlot.h"
 #include "Inventory.h"
 #include "EquipWindow.h"
