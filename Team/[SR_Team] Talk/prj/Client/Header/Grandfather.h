@@ -1,11 +1,11 @@
 #pragma once
 #include "NPC.h"
 
-class CDog : public CNPC
+class CGrandfather : public CNPC
 {
 private:
-	explicit CDog(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CDog();
+	explicit CGrandfather(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CGrandfather();
 
 public:
 	virtual HRESULT		Ready_Object(void)						override;
@@ -18,13 +18,11 @@ private:
 	void				OnText(const _float& fTimeDelta);
 
 public:
-	static CDog*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual void		Free(void);
+	static CGrandfather*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual void				Free(void);
 
 private:
 	vector<wstring>		m_vecDialogue;
-	_int iCount = 0;
-	_bool		m_bTalk = false;
 
 private:
 	// Timer

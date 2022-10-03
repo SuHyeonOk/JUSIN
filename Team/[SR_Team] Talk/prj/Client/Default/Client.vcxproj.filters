@@ -166,6 +166,9 @@
     <Filter Include="02. GameObject\01. For_Stage\99. UI\Manager">
       <UniqueIdentifier>{0efa2c62-0f6e-4769-a56d-22f4b9feb662}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. For_Stage\07. Monster\04. BrownBat">
+      <UniqueIdentifier>{87e81a62-cbfb-43ae-a680-8be770415b23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -295,7 +298,25 @@
       <Filter>02. GameObject\01. For_Stage\99. UI\04. TalkWindow</Filter>
     </ClInclude>
     <ClInclude Include="UIMgr.h">
-      <Filter>99. Default\헤더 파일</Filter>
+      <Filter>02. GameObject\01. For_Stage\99. UI\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Grandfather.h">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\01. Grandfather</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GuitarMan.h">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\02. GuitarMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\HoodMan.h">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\03. HoodMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SmileMan.h">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\04. SmileMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\WinkMan.h">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\05. WinkMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BrownBat.h">
+      <Filter>02. GameObject\01. For_Stage\07. Monster\04. BrownBat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -414,7 +435,25 @@
       <Filter>02. GameObject\01. For_Stage\99. UI\04. TalkWindow</Filter>
     </ClCompile>
     <ClCompile Include="UIMgr.cpp">
-      <Filter>99. Default\소스 파일</Filter>
+      <Filter>02. GameObject\01. For_Stage\99. UI\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Grandfather.cpp">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\01. Grandfather</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GuitarMan.cpp">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\02. GuitarMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HoodMan.cpp">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\03. HoodMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SmileMan.cpp">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\04. SmileMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\WinkMan.cpp">
+      <Filter>02. GameObject\01. For_Stage\08. NPC\05. WinkMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BrownBat.cpp">
+      <Filter>02. GameObject\01. For_Stage\07. Monster\04. BrownBat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

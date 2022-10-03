@@ -9,11 +9,14 @@ CBlueBat::CBlueBat(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CMonster(pGraphicDev)
 	, m_ePreState(MOTION_END)
 	, m_eCurState(MOTION_END)
+	, m_bIdle(false)
+	, m_fJSpeed(0.2f)
+	, m_fJSpeed0(0.2f)
+	, m_fAccel(0.01f)
 	, m_fTimeAcc(0.f)
 	, m_fJumpTimeAcc(0.f)
-	, m_fAccel(0.01f)
-	, m_fJSpeed0(0.2f)
-	, m_fJSpeed(0.2f)
+	, m_fIdleTimeAcc(0.f)
+	, m_fSkillTimeAcc(0.f)
 {
 }
 
@@ -25,7 +28,7 @@ HRESULT CBlueBat::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Pos(0.f, 1.f, 10.f);
+	m_pTransCom->Set_Pos(10.f, 1.f, 10.f);
 
 	m_eCurState = IDLE;
 
@@ -42,7 +45,8 @@ _int CBlueBat::Update_Object(const _float & fTimeDelta)
 	m_pAnimtorCom->Play_Animation(fTimeDelta);
 
 	Motion_Change(fTimeDelta);
-	Target_Follow(fTimeDelta);
+	//Target_Follow(fTimeDelta);
+	KnockBack(fTimeDelta);
 
 	Engine::Add_RenderGroup(RENDER_ALPHA, this);
 	
@@ -110,7 +114,7 @@ void CBlueBat::Target_Follow(const _float & fTimeDelta)
 
 	_float fDist = D3DXVec3Length(&(vPlayerPos - vPos));
 
-	if (fDist < 8.f && fDist > 4.f) // 플레이어를 향해 걸어간다
+	if (fDist < 7.f && fDist > 4.f) // 플레이어를 향해 걸어간다
 	{
 		m_eCurState = IDLE;
 
@@ -119,8 +123,6 @@ void CBlueBat::Target_Follow(const _float & fTimeDelta)
 	}
 	else if (fDist < 4.f && fDist > 1.f) // 공격을 시작한다
 	{
-		fDist *= 1;
-
 		m_fSkillTimeAcc += fTimeDelta;
 		if (2.f < m_fSkillTimeAcc)
 		{
@@ -176,6 +178,33 @@ void CBlueBat::Jump(const _float & fTimeDelta)
 		{
 			m_eCurState = IDLE;
 			m_fIdleTimeAcc = 0.f;
+		}
+	}
+}
+
+void CBlueBat::KnockBack(const _float& fTimeDelta)
+{
+	if(Engine::Get_DIKeyState(DIK_V) && 0x08)
+	{
+		CTransform*		pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
+		NULL_CHECK(pPlayerTransformCom);
+
+		_vec3 vPos, vTargetPos;
+		m_pTransCom->Get_Info(INFO_POS, &vPos);
+		pPlayerTransformCom->Get_Info(INFO_POS, &vTargetPos);
+
+		if (m_fBTimeDelta > 0.3f && m_fHeight >= vPos.y)
+		{
+			m_fBTimeDelta = 0.f;
+			//m_pTransCom->Set_Pos(vPos.x, m_fHeight, vPos.z + 0.5f);
+			m_pTransCom->Set_Pos(-vTargetPos.x, -vTargetPos.y, -vTargetPos.z);
+			m_fBSpeed = m_fBSpeed0;
+		}
+		else
+		{
+			m_fBSpeed -= m_fBAccel;
+			m_pTransCom->Plus_PosY(m_fBSpeed);
+			m_fBTimeDelta += 0.1f;
 		}
 	}
 }

@@ -16,6 +16,15 @@
 #include "PinkSlime.h"
 #include "Fist.h"
 #include "BlueBat.h"
+#include  "BrownBat.h"
+
+// NPC
+#include "Dog.h"
+#include "Grandfather.h"
+#include "GuitarMan.h"
+#include "HoodMan.h"
+#include "SmileMan.h"
+#include "WinkMan.h"
 
 // UI
 #include "HealthBar.h"
@@ -23,13 +32,9 @@
 #include "QuickSlot.h"
 #include "Inventory.h"
 #include "EquipWindow.h"
-
-// NPC
-#include "TalkWindow.h"
-#include "Dog.h"
-
-// 폰트 테스트
+// Font
 #include "HPGauge.h"
+#include "TalkWindow.h"
 
 class CStage : public CScene
 {

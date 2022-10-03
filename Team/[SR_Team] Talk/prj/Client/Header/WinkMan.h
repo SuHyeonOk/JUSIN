@@ -1,11 +1,11 @@
 #pragma once
 #include "NPC.h"
 
-class CDog : public CNPC
+class CWinkMan : public CNPC
 {
 private:
-	explicit CDog(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CDog();
+	explicit CWinkMan(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CWinkMan();
 
 public:
 	virtual HRESULT		Ready_Object(void)						override;
@@ -18,7 +18,7 @@ private:
 	void				OnText(const _float& fTimeDelta);
 
 public:
-	static CDog*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CWinkMan*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void		Free(void);
 
 private:

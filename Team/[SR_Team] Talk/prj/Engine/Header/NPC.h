@@ -23,7 +23,6 @@ public:
 protected:
 	virtual HRESULT		Add_Component(void) PURE;
 	virtual void		Billboard();
-	virtual void		OnText() PURE;
 
 public:
 	virtual void		Free(void);

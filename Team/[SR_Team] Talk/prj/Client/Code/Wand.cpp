@@ -49,7 +49,6 @@ HRESULT CWand::Add_Component(void)
 
 _int CWand::Update_Object(const _float & fTimeDelta)
 {
-
 	if (!m_bReady)
 	{
 		m_pCamera = dynamic_cast<CCamera*>(Engine::Get_GameObject(L"Layer_Environment", L"StaticCamera"));
@@ -100,6 +99,15 @@ _int CWand::Update_Object(const _float & fTimeDelta)
 
 	int iResult = CGameObject::Update_Object(fTimeDelta);
 
+	
+
+
+	Add_RenderGroup(RENDER_ALPHA, this);
+	return iResult;
+}
+
+void CWand::LateUpdate_Object(void)
+{
 	_matrix		matWorld, matView, matBill;
 	D3DXMatrixIdentity(&matBill);
 
@@ -117,20 +125,10 @@ _int CWand::Update_Object(const _float & fTimeDelta)
 	matBill._32 = matView._32;
 	matBill._33 = matView._33;
 
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-
 	// 현재 지금 이 코드는 문제가 없지만 나중에 문제가 될 수 있음
-	
+	D3DXMatrixInverse(&matBill, 0, &matBill);
 	m_pTransCom->Set_WorldMatrix(&(matBill * matWorld));
 
-
-	Add_RenderGroup(RENDER_ALPHA, this);
-	return iResult;
-}
-
-void CWand::LateUpdate_Object(void)
-{
 	CGameObject::LateUpdate_Object();
 }
 

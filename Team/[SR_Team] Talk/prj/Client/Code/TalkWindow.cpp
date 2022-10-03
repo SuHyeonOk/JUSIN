@@ -7,7 +7,6 @@ CTalkWindow::CTalkWindow(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CUI(pGraphicDev)
 	, m_iTextCount(0)
 {
-	ZeroMemory(m_szNPCText, sizeof(m_szNPCText));
 }
 
 CTalkWindow::~CTalkWindow()
@@ -44,41 +43,29 @@ _int CTalkWindow::Update_Object(const _float & fTimeDelta)
 	Engine::Add_RenderGroup(RENDER_UI, this);
 
 	if (!m_bText)
-	{
-		swprintf_s(m_szNPCText, L"");
-		
-		m_matView._41 = m_fTempPosX;
-		m_matView._42 = m_fTempPosY;
-
 		return 0;
-	}
-
-	if (Engine::Get_DIKeyState(DIK_T) & 0X80) // 茄 锅父 喘府档废 秦具窃
+	else
 	{
-		TextSetting();
-		m_iTextCount++;
-		
 		m_matView._41 = m_fPosX;
 		m_matView._42 = m_fPosY;
 	}
-	if (Engine::Get_DIKeyState(DIK_RETURN) & 0X80)
-	{
-		m_bText = false;
-		swprintf_s(m_szNPCText, L"");
 
-		m_matView._41 = m_fTempPosX;
-		m_matView._42 = m_fTempPosY;
-	}
 	return 0;
 }
 
 void CTalkWindow::LateUpdate_Object(void)
 {
+	if (!m_bText)
+		return;
+
 	Engine::CGameObject::LateUpdate_Object();
 }
 
 void CTalkWindow::Render_Obejct(void)
 {
+	if (!m_bText)
+		return;
+
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
 
@@ -96,7 +83,14 @@ void CTalkWindow::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
-	Render_Font(L"Font_Jinji", m_szNPCText, &_vec2(270, 250), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	if (m_iTextCount < m_vecDialogue.size())
+		Render_Font(L"Font_Jinji", m_vecDialogue[m_iTextCount].c_str(), &_vec2(270, 250), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	else
+	{
+		m_bText = false;
+		m_iTextCount = 0;
+		m_vecDialogue.clear();
+	}
 }
 
 HRESULT CTalkWindow::Add_Component(void)
@@ -117,31 +111,6 @@ HRESULT CTalkWindow::Add_Component(void)
 	m_mapComponent[ID_STATIC].insert({ L"Proto_TalkWindow_Texture", pComponent });
 	
 	return S_OK;
-}
-
-void CTalkWindow::TextSetting()
-{
-	if (!m_bText)
-		return;
-
-	switch (m_iTextCount)
-	{
-	case 0:
-		swprintf_s(m_szNPCText, L"港..");
-		break;
-	case 1:
-		swprintf_s(m_szNPCText, L"港..港..");
-		break;
-	case 3:
-		swprintf_s(m_szNPCText, L"港..港..港..");
-		break;
-	case 4:
-		swprintf_s(m_szNPCText, L"啃!");
-		break;
-	default:
-		swprintf_s(m_szNPCText, L"...");
-		break;
-	}	
 }
 
 CTalkWindow * CTalkWindow::Create(LPDIRECT3DDEVICE9 pGraphicDev)

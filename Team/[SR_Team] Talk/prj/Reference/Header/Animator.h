@@ -21,7 +21,7 @@ public:
 
 	HRESULT		Add_Component(const _tchar * pTectureTag);
 
-	void		Play_Animation(const _float& fTimeDelta);
+	void		Play_Animation(const _float& fTimeDelta, const _float & fTimeSpeed = 1);
 	void		Change_Animation(const _tchar * pTectureTag);
 	void		Set_Texture();
 

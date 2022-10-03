@@ -27,9 +27,9 @@ HRESULT CAnimator::Ready_Animator()
 	return S_OK;
 }
 
-void CAnimator::Play_Animation(const _float & fTimeDelta)
+void CAnimator::Play_Animation(const _float & fTimeDelta, const _float & fTimeSpeed)
 {
-	m_fFrame += m_pCurAnim->Get_FrameEnd() * fTimeDelta;
+	m_fFrame += m_pCurAnim->Get_FrameEnd() * fTimeDelta * fTimeSpeed;
 
 	if (m_fFrame >= m_pCurAnim->Get_FrameEnd())
 		m_fFrame = 0;

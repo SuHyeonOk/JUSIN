@@ -1,46 +1,40 @@
 #include "stdafx.h"
-#include "..\Header\Dog.h"
+#include "..\Header\WinkMan.h"
 
 #include "Export_Function.h"
 
 #include "TalkWindow.h"
 
-CDog::CDog(LPDIRECT3DDEVICE9 pGraphicDev)
+CWinkMan::CWinkMan(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CNPC(pGraphicDev)
 {
 }
 
 
-CDog::~CDog()
+CWinkMan::~CWinkMan()
 {
 }
 
-HRESULT CDog::Ready_Object(void)
+HRESULT CWinkMan::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Pos(0.f, 1.f, 3.f);
+	m_pTransCom->Set_Pos(25.f, 1.f, 3.f);
 
 	// ´ÙÀÌ¾ó·Î±× Å×½ºÆ® (¡Ø¸Þ¸ð¸® ´©¼ö ÁÖÀÇ)
 	wstring str = L"";
 	m_vecDialogue.push_back(str);
 
-	str = L"¸Û...";
+	str = L" ÀÌºÁ!!";
 	m_vecDialogue.push_back(str);
 
-	str = L"¸Û...¸Û...";
-	m_vecDialogue.push_back(str);
-
-	str = L"¸Û...¸Û...¸Û...";
-	m_vecDialogue.push_back(str);
-
-	str = L"¿Ð!";
+	str = L" ³»°¡ ³ª Ã³·³ ¸ÚÀÖ´Â °ÍÀ» \n ¸¹ÀÌ °¡Áö°í ÀÖ´Âµ¥ \n ÇÑ ¹ø º¼·¡?";
 	m_vecDialogue.push_back(str);
 
 	return S_OK;
 }
 
-_int CDog::Update_Object(const _float & fTimeDelta)
+_int CWinkMan::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 	Engine::Add_RenderGroup(RENDER_ALPHA, this);
@@ -53,13 +47,13 @@ _int CDog::Update_Object(const _float & fTimeDelta)
 	return 0;
 }
 
-void CDog::LateUpdate_Object(void)
+void CWinkMan::LateUpdate_Object(void)
 {
 	CNPC::Billboard();
 	Engine::CGameObject::LateUpdate_Object();
 }
 
-void CDog::Render_Obejct(void)
+void CWinkMan::Render_Obejct(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -77,7 +71,7 @@ void CDog::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-HRESULT CDog::Add_Component(void)
+HRESULT CWinkMan::Add_Component(void)
 {
 	CComponent* pComponent = nullptr;
 
@@ -94,12 +88,12 @@ HRESULT CDog::Add_Component(void)
 	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnimtorCom->Add_Component(L"Proto_NPC_Dog_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_NPC_WinkMan_Texture");
 
 	return S_OK;
 }
 
-void CDog::OnText(const _float& fTimeDelta)
+void CWinkMan::OnText(const _float& fTimeDelta)
 {
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
 	NULL_CHECK(pPlayerTransformCom);
@@ -133,9 +127,9 @@ void CDog::OnText(const _float& fTimeDelta)
 	//}
 }
 
-CDog * CDog::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CWinkMan * CWinkMan::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CDog *	pInstance = new CDog(pGraphicDev);
+	CWinkMan *	pInstance = new CWinkMan(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -146,7 +140,7 @@ CDog * CDog::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CDog::Free(void)
+void CWinkMan::Free(void)
 {
 	CNPC::Free();
 }

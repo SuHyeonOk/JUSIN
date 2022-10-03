@@ -24,6 +24,6 @@ private:
 	_matrix				m_matView, m_matWorld;
 
 private:
-	_float					m_fTempPosX, m_fTempPosY = 2022.f;	
+	_float				m_fTempPosX, m_fTempPosY = 2022.f;	
 };
 

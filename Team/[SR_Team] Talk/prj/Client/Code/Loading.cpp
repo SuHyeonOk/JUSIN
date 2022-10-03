@@ -73,14 +73,23 @@ _uint CLoading::Loading_ForStage(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BlueBatHIT_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Monster/BlueBat/Hit/BlueBat%d.png", TEX_NORMAL, 8)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BlueBatDIE_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Monster/BlueBat/Die/BlueBat%d.png", TEX_NORMAL, 3)), E_FAIL);
 	
+	// BrownBat_Texture 
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BrownBatIDLE_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Monster/BrownBat/Idle/BrownBat%d.png", TEX_NORMAL, 4)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BrownBatATTACK_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Monster/BrownBat/Attack/BrownBat%d.png", TEX_NORMAL, 4)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BrownBatHIT_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Monster/BrownBat/Hit/BrownBat%d.png", TEX_NORMAL, 6)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BrownBatDIE_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Monster/BrownBat/Die/BrownBat%d.png", TEX_NORMAL, 2)), E_FAIL);
+
 	////////////NPC
 	// NPC_TalkWindow
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TalkWindow_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/TalkWindow/TalkWindow.png", TEX_NORMAL, 1)), E_FAIL);
 
-	// NPC_Dog
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_Dog_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/Dog/Dog%d.png", TEX_NORMAL, 31)), E_FAIL);
-
-
+	// NPC_Dog, Grandfather, GuitarMan, HoodMan, SmileMan, WinkMan
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_Dog_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/Dog/Dog%d.png", TEX_NORMAL, 33)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_Grandfather_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/Grandfather/Grandfather%d.png", TEX_NORMAL, 5)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_GuitarMan_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/GuitarMan/GuitarMan%d.png", TEX_NORMAL, 22)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_HoodMan_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/HoodMan/HoodMan%d.png", TEX_NORMAL, 21)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_SmileMan_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/SmileMan/SmileMan%d.png", TEX_NORMAL, 13)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_NPC_WinkMan_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/NPC/WinkMan/WinkMan%d.png", TEX_NORMAL, 17)), E_FAIL);
 
 	/////////////UI
 	// UI_HP
