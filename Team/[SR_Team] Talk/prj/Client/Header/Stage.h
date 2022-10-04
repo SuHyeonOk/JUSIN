@@ -17,6 +17,8 @@
 #include "Fist.h"
 #include "BlueBat.h"
 #include  "BrownBat.h"
+// Boss
+#include "SongBoss.h"
 
 // NPC
 #include "Dog.h"

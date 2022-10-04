@@ -126,6 +126,11 @@ void CPinkSlime::Scale_Change()
 
 	if (Engine::Get_DIKeyState(DIK_P) & 0X80)
 	{
+		// TODO : 분리 되며 생성되는 PinkSlime
+		//CLayer*   pLayer = Engine::Get_Layer(L"Layer_GameLogic");
+		//pLayer->Add_GameObject(L"Fist", pGameObject);
+
+
 		fSize = 0.9f;
 
 		m_pTransCom->Set_Scale(m_fScale * fSize, m_fScale * fSize, m_fScale * fSize);

@@ -15,7 +15,7 @@ public:
 
 private:
 	virtual HRESULT		Add_Component(void) override;
-	void				OnText(const _float& fTimeDelta);
+	virtual void		OnText(const _float& fTimeDelta) override;
 
 public:
 	static CGrandfather*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

@@ -7,6 +7,8 @@
 
 #include "WandBullet.h"
 #include "FistBullet.h"
+#include "SongBossBullet.h"
+#include "SongBossFloor.h"
 
 IMPLEMENT_SINGLETON(CBulletMgr)
 
@@ -19,6 +21,8 @@ CBulletMgr::CBulletMgr()
 
 	m_MaxIdx[BULLET_WAND] = 20;
 	m_MaxIdx[BULLET_M_FIST] = 5;
+	m_MaxIdx[BULLET_SONGBOSS] = 5;
+	m_MaxIdx[FLOOR_SONGBOSS] = 10;
 }
 
 
@@ -41,7 +45,11 @@ CBulletMgr::~CBulletMgr()
 HRESULT CBulletMgr::Ready_Proto(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	// Loading ¾À¿¡ ³ÖÀ» bullet ¿øº» ÄÄÆ÷³ÍÆ®
+	// Fist
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_FistGreenEffect_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/Fist_GreenEffect/GreenEffect%d.png", TEX_NORMAL, 15)), E_FAIL);
+	// SongBoss
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MusicNote_Bullet_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/SongBoss_Bullet/SongBoss%d.png", TEX_NORMAL, 8)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MusicNote_Floor_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/SongBoss_Floor/Floor.png", TEX_NORMAL, 1)), E_FAIL);
 
 	return S_OK;
 }
@@ -90,6 +98,45 @@ HRESULT CBulletMgr::Ready_Clone(CLayer* pLayer, LPDIRECT3DDEVICE9 pGraphicDev)
 
 		m_vecObjPool[BULLET_M_FIST].push_back(pGameObject);
 	}
+
+	// SongBoss_bullet
+	objTags = nullptr;
+	objTags = new wstring[m_MaxIdx[BULLET_SONGBOSS]];
+	m_vecObjTags[BULLET_SONGBOSS].push_back(objTags);
+
+	for (int i = 0; i < m_MaxIdx[BULLET_SONGBOSS]; ++i)
+	{
+		pGameObject = CSongBossBullet::Create(pGraphicDev);
+		NULL_CHECK_RETURN(pGameObject, E_FAIL);
+
+		objTags[i] = L"SongBoss_Bullet";
+		wchar_t index[10];
+		_itow_s(i, index, 10);
+		objTags[i] += index;
+		FAILED_CHECK_RETURN(pLayer->Add_GameObject(objTags[i].c_str(), pGameObject), E_FAIL);
+
+		m_vecObjPool[BULLET_SONGBOSS].push_back(pGameObject);
+	}
+
+	// SongBoss_Floor
+	objTags = nullptr;
+	objTags = new wstring[m_MaxIdx[FLOOR_SONGBOSS]];
+	m_vecObjTags[FLOOR_SONGBOSS].push_back(objTags);
+
+	for (int i = 0; i < m_MaxIdx[FLOOR_SONGBOSS]; ++i)
+	{
+		pGameObject = CSongBossFloor::Create(pGraphicDev);
+		NULL_CHECK_RETURN(pGameObject, E_FAIL);
+
+		objTags[i] = L"SongBoss_Floor";
+		wchar_t index[10];
+		_itow_s(i, index, 10);
+		objTags[i] += index;
+		FAILED_CHECK_RETURN(pLayer->Add_GameObject(objTags[i].c_str(), pGameObject), E_FAIL);
+
+		m_vecObjPool[FLOOR_SONGBOSS].push_back(pGameObject);
+	}
+
 	return S_OK;
 }
 

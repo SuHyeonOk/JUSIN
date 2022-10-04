@@ -42,10 +42,11 @@ private:
 	_float				m_fAccel;			// 중력가속도
 
 	// 넉백 관련 변수
+	_bool				m_bKnockBack = false;
 	_float				m_fBSpeed = 0.1f;
 	_float				m_fBSpeed0 = 0.1f;
 	_float				m_fBAccel = 0.01f;
-
+	_float				m_fKnockBackSpeed;
 
 	//Timer
 	_float				m_fTimeAcc;

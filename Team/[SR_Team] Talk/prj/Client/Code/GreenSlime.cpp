@@ -46,6 +46,18 @@ _int CGreenSlime::Update_Object(const _float & fTimeDelta)
 	Target_Follow(fTimeDelta);
 	Motion_Change(fTimeDelta);
 
+	if (Engine::Get_DIKeyState(DIK_O) && 0x08)
+	{
+		if (!m_bJump)
+			m_bJump = true;
+	}
+
+	_float fJumpSpeed = 0.2f;
+	m_bJump = true;
+	// Test
+	m_pTransCom->Jump(m_bJump, 1.f, fJumpSpeed, 0.2f, 0.01f, fTimeDelta);
+
+
 	return 0;
 }
 

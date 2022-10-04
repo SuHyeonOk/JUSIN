@@ -1,30 +1,35 @@
 #include "stdafx.h"
-#include "..\Header\FistBullet.h"
+#include "..\Header\SongBossFloor.h"
 
 #include "Export_Function.h"	
 
-CFistBullet::CFistBullet(LPDIRECT3DDEVICE9 pGraphicDev)
+CSongBossFloor::CSongBossFloor(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CBullet(pGraphicDev)
+	, m_fSpeed(0.f)
 {
 }
 
-CFistBullet::CFistBullet(const CFistBullet & rhs)
+CSongBossFloor::CSongBossFloor(const CSongBossFloor & rhs)
 	:CBullet(rhs)
 {
 }
 
-CFistBullet::~CFistBullet()
+CSongBossFloor::~CSongBossFloor()
 {
 }
 
-HRESULT CFistBullet::Ready_Object(void)
+HRESULT CSongBossFloor::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	m_pTransCom->Set_Scale(0.5f, 0.5f, 0.5f);
+
+	m_pTransCom->Set_Scale(0.3f, 0.3f, 0.3f);
+
+	m_fSpeed = 5.f;
+
 	return S_OK;
 }
 
-HRESULT CFistBullet::Add_Component(void)
+HRESULT CSongBossFloor::Add_Component(void)
 {
 	CComponent*		pComponent = nullptr;
 
@@ -43,66 +48,74 @@ HRESULT CFistBullet::Add_Component(void)
 	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnimtorCom->Add_Component(L"Proto_FistGreenEffect_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_MusicNote_Floor_Texture");
 
 	return S_OK;
 }
 
-_int CFistBullet::Update_Object(const _float & fTimeDelta)
+_int CSongBossFloor::Update_Object(const _float & fTimeDelta)
 {
 	if (!m_bFire)
 		return 0;
 
 	int iResult = CGameObject::Update_Object(fTimeDelta);
-
 	m_pAnimtorCom->Play_Animation(fTimeDelta);
+	Add_RenderGroup(RENDER_ALPHA, this);
 
 	if (!m_bReady)
 	{
-		CTransform*		pFist = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Fist", L"Proto_TransformCom", ID_DYNAMIC));
+		CTransform*		pFist = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"SongBoss", L"Proto_TransformCom", ID_DYNAMIC));
 		NULL_CHECK_RETURN(pFist, -1);
 
-		CTransform*		pPlayer = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
-		NULL_CHECK_RETURN(pPlayer, -1);
-
 		pFist->Get_Info(INFO_POS, &vPos);
-		m_pTransCom->Set_Pos(vPos.x + 2.f, vPos.y, vPos.z);
-
-		pPlayer->Get_Info(INFO_POS, &m_vPlayerPos);
-		m_vPlayerPos.y -= 0.01f;
+		m_pTransCom->Set_Pos(vPos.x, vPos.y, vPos.z); // 블렛의 시작 위치
 
 		m_bReady = true;
 	}
+	CTransform*		pPlayer = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
+	NULL_CHECK_RETURN(pPlayer, -1);
+	pPlayer->Get_Info(INFO_POS, &m_vPlayerPos); // 플레이어의 좌표를 받아와서
+
+	// 몬스터와 플레이어의 거리를 구하고
 
 	_vec3	vDir;
 	vDir = m_vPlayerPos - vPos;
 	D3DXVec3Normalize(&vDir, &vDir);
 	vDir *= m_fSpeed * fTimeDelta;
 
+	// 플레이어의 위치까지 간다
 	m_pTransCom->Move_Pos(&vDir);
 
-	Add_RenderGroup(RENDER_ALPHA, this);
+	_vec3 vTest, vTest2;
+	m_pTransCom->Get_Info(INFO_POS, &vTest);
+	pPlayer->Get_Info(INFO_POS, &vTest2);
+
+	if (vTest < vTest2)
+	{
+		m_pTransCom->Set_Pos(vTest2.x + 2.f, vTest2.y , vTest2.z);
+	}
+
 	
 	m_fLifeTime += fTimeDelta;
 	return iResult;
 }
 
-void CFistBullet::LateUpdate_Object(void)
+void CSongBossFloor::LateUpdate_Object(void)
 {
 	Billboard();
 
 	if (!m_bFire)
 		return;
 
-	if (10.f < m_fLifeTime)
-	{
-		Reset();
-	}
+	//if (10.f < m_fLifeTime)
+	//{
+	//	Reset();
+	//}
 
 	CGameObject::LateUpdate_Object();
 }
 
-void CFistBullet::Render_Obejct(void)
+void CSongBossFloor::Render_Obejct(void)
 {
 	if (!m_bFire)
 		return;
@@ -120,7 +133,7 @@ void CFistBullet::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-void CFistBullet::Billboard()
+void CSongBossFloor::Billboard()
 {
 	// 빌보드
 	_matrix		matWorld, matView, matBill;
@@ -148,9 +161,9 @@ void CFistBullet::Billboard()
 	m_pTransCom->Set_WorldMatrix(&(matScale * matBill * matScaleInv *  matWorld));
 }
 
-CFistBullet * CFistBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CSongBossFloor * CSongBossFloor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CFistBullet*		pInstance = new CFistBullet(pGraphicDev);
+	CSongBossFloor*		pInstance = new CSongBossFloor(pGraphicDev);
 	if (FAILED(pInstance->Ready_Object()))
 	{
 		Safe_Release(pInstance);
@@ -160,12 +173,12 @@ CFistBullet * CFistBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CFistBullet::Free(void)
+void CSongBossFloor::Free(void)
 {
 	CGameObject::Free();
 }
 
-void CFistBullet::Reset()
+void CSongBossFloor::Reset()
 {
 	m_bFire = false;
 	m_bDead = false;

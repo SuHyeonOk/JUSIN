@@ -1,30 +1,35 @@
 #include "stdafx.h"
-#include "..\Header\FistBullet.h"
+#include "..\Header\SongBossBullet.h"
 
 #include "Export_Function.h"	
 
-CFistBullet::CFistBullet(LPDIRECT3DDEVICE9 pGraphicDev)
+CSongBossBullet::CSongBossBullet(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CBullet(pGraphicDev)
+	, m_fSpeed(0.f)
 {
 }
 
-CFistBullet::CFistBullet(const CFistBullet & rhs)
+CSongBossBullet::CSongBossBullet(const CSongBossBullet & rhs)
 	:CBullet(rhs)
 {
 }
 
-CFistBullet::~CFistBullet()
+CSongBossBullet::~CSongBossBullet()
 {
 }
 
-HRESULT CFistBullet::Ready_Object(void)
+HRESULT CSongBossBullet::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+
 	m_pTransCom->Set_Scale(0.5f, 0.5f, 0.5f);
+
+	m_fSpeed = 5.f;
+
 	return S_OK;
 }
 
-HRESULT CFistBullet::Add_Component(void)
+HRESULT CSongBossBullet::Add_Component(void)
 {
 	CComponent*		pComponent = nullptr;
 
@@ -43,12 +48,12 @@ HRESULT CFistBullet::Add_Component(void)
 	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnimtorCom->Add_Component(L"Proto_FistGreenEffect_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_MusicNote_Bullet_Texture");
 
 	return S_OK;
 }
 
-_int CFistBullet::Update_Object(const _float & fTimeDelta)
+_int CSongBossBullet::Update_Object(const _float & fTimeDelta)
 {
 	if (!m_bFire)
 		return 0;
@@ -59,14 +64,14 @@ _int CFistBullet::Update_Object(const _float & fTimeDelta)
 
 	if (!m_bReady)
 	{
-		CTransform*		pFist = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Fist", L"Proto_TransformCom", ID_DYNAMIC));
+		CTransform*		pFist = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"SongBoss", L"Proto_TransformCom", ID_DYNAMIC));
 		NULL_CHECK_RETURN(pFist, -1);
 
 		CTransform*		pPlayer = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
 		NULL_CHECK_RETURN(pPlayer, -1);
 
 		pFist->Get_Info(INFO_POS, &vPos);
-		m_pTransCom->Set_Pos(vPos.x + 2.f, vPos.y, vPos.z);
+		m_pTransCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 
 		pPlayer->Get_Info(INFO_POS, &m_vPlayerPos);
 		m_vPlayerPos.y -= 0.01f;
@@ -87,14 +92,14 @@ _int CFistBullet::Update_Object(const _float & fTimeDelta)
 	return iResult;
 }
 
-void CFistBullet::LateUpdate_Object(void)
+void CSongBossBullet::LateUpdate_Object(void)
 {
 	Billboard();
 
 	if (!m_bFire)
 		return;
 
-	if (10.f < m_fLifeTime)
+	if (3.f < m_fLifeTime)
 	{
 		Reset();
 	}
@@ -102,7 +107,7 @@ void CFistBullet::LateUpdate_Object(void)
 	CGameObject::LateUpdate_Object();
 }
 
-void CFistBullet::Render_Obejct(void)
+void CSongBossBullet::Render_Obejct(void)
 {
 	if (!m_bFire)
 		return;
@@ -120,7 +125,7 @@ void CFistBullet::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-void CFistBullet::Billboard()
+void CSongBossBullet::Billboard()
 {
 	// ºôº¸µå
 	_matrix		matWorld, matView, matBill;
@@ -148,9 +153,9 @@ void CFistBullet::Billboard()
 	m_pTransCom->Set_WorldMatrix(&(matScale * matBill * matScaleInv *  matWorld));
 }
 
-CFistBullet * CFistBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CSongBossBullet * CSongBossBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CFistBullet*		pInstance = new CFistBullet(pGraphicDev);
+	CSongBossBullet*		pInstance = new CSongBossBullet(pGraphicDev);
 	if (FAILED(pInstance->Ready_Object()))
 	{
 		Safe_Release(pInstance);
@@ -160,12 +165,12 @@ CFistBullet * CFistBullet::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CFistBullet::Free(void)
+void CSongBossBullet::Free(void)
 {
 	CGameObject::Free();
 }
 
-void CFistBullet::Reset()
+void CSongBossBullet::Reset()
 {
 	m_bFire = false;
 	m_bDead = false;

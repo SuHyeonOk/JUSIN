@@ -1,3 +1,4 @@
+#include "Export_Utility.h"
 
 // client와 engine 프로젝트가 서로 컴파일 하는 시점이 달라
 // 싱글톤임에도 불구하고 아주 가~끔 객체가 따로 생성되는 경우가 있음.
@@ -36,6 +37,11 @@ CComponent*				Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, con
 CGameObject*			Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag)
 {
 	return CManagement::GetInstance()->Get_GameObject(pLayerTag, pObjTag);
+}
+
+CLayer*					Get_Layer(const _tchar* pLayerTag)
+{
+	return CManagement::GetInstance()->Get_Layer(pLayerTag);
 }
 
 inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent)

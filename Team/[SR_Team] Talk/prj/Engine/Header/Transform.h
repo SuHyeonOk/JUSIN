@@ -37,6 +37,15 @@ public:
 	void				Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
 	void				ChangeHeight_Target(const _vec3* pTargetPos, const _float& fSTest, const _float& fSpeed, const _float& fTimeDelta);
 	const _matrix*		Compute_LookAtTarget(const _vec3* pTargetPos);
+	// KnockBack
+	void				KnockBack_Target(_vec3* pTargetLook, const _float& fSpeed, const _float& fTimeDelta);
+	// Jump
+	void				Jump(_bool& bJump,
+							 const _float& fHeight,
+							 _float& fJumpSpeed,
+							 const _float& fInitialJumpSpeed,
+							 const _float& fAccel,
+							 _float fTimeDelta);
 
 public:
 	HRESULT			Ready_Transform(void);
@@ -47,6 +56,13 @@ public:
 	_vec3		m_vScale;
 	_vec3		m_vAngle;
 	_matrix		m_matWorld;
+
+private:
+	_bool		m_bJump = false;
+	_float		m_fHeight = 0.f;
+	_float		m_fJumpSpeed = 0.f;
+	_float		m_fInitialJumpSpeed = 0.f;
+	_float		m_fAccel = 0.f;	
 
 public:
 	static CTransform*	Create(void);

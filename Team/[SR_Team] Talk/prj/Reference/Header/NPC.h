@@ -23,6 +23,8 @@ public:
 protected:
 	virtual HRESULT		Add_Component(void) PURE;
 	virtual void		Billboard();
+	virtual void		OnText(const _float& fTimeDelta) {};
+
 
 public:
 	virtual void		Free(void);

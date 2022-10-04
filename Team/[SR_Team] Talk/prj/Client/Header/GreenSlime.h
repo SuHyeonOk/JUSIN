@@ -25,6 +25,9 @@ private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 
+	// JumpTest
+	_bool				m_bJump = false;
+
 	// Timer
 	_float				m_fTimeAcc;
 

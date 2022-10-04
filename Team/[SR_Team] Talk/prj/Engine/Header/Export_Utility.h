@@ -44,10 +44,12 @@ inline _int		Update_Scene(const _float& fTimeDelta);
 inline void		LateUpdate_Scene(void);
 inline void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev);
 inline 	CComponent*				Get_Component(const _tchar* pLayerTag,
-	const _tchar* pObjTag,
-	const _tchar* pComponentTag,
-	COMPONENTID eID);
+											  const _tchar* pObjTag,
+											  const _tchar* pComponentTag,
+											  COMPONENTID eID);
 inline 	CGameObject*			Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag);
+inline	CLayer*					Get_Layer(const _tchar* pLayerTag);
+
 
 // ProtoMgr
 inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent);
