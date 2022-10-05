@@ -9,7 +9,6 @@ CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 }
 
-
 CUI::~CUI()
 {
 }
@@ -18,13 +17,13 @@ HRESULT CUI::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	D3DXMatrixOrthoLH(&m_ProjMatrix, WINCX, WINCY, 0.f, 1.f);
+	// 직교 투영 행렬을 만들기 위한 함수	
+	(&m_ProjMatrix, WINCX, WINCY, 0.f, 1.f);
 
 	m_fX = 100.0f;
 	m_fY = 100.f;
 	m_fSizeX = 200.0f;
 	m_fSizeY = 200.f;
-
 
 	return S_OK;
 }
@@ -34,7 +33,6 @@ _int CUI::Update_Object(const _float & fTimeDelta)
 	m_pTransCom->Set_Scale(m_fSizeX, m_fSizeY, 1.f);
 	m_pTransCom->Set_Pos(m_fX - WINCX * 0.5f, -m_fY + WINCY * 0.5f, 0.f);
 
-
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
 	Add_RenderGroup(RENDER_UI, this);
@@ -42,14 +40,14 @@ _int CUI::Update_Object(const _float & fTimeDelta)
 	return 0;
 }
 
-void CUI::LateUpdate_Object(void)
+void CUI::LateUpdate_Object(void) 
 {
+	// 마우스와의 충돌 가능
 	RECT		rcUI = { m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f };
 
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-
 
 	if (PtInRect(&rcUI, ptMouse))
 	{
@@ -62,12 +60,13 @@ void CUI::Render_Obejct(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 
-
+	// 이전 뷰 행렬을 저장하고
 	_matrix		OldViewMatrix, OldProjMatrix;
 
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &OldViewMatrix);
 	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &OldProjMatrix);
 	
+	// 직교투영을 위해 뷰 행렬을 변화했다가
 	_matrix		ViewMatrix;
 
 	ViewMatrix = *D3DXMatrixIdentity(&ViewMatrix);
@@ -77,6 +76,7 @@ void CUI::Render_Obejct(void)
 	m_pTextureCom->Set_Texture(0);	// 텍스처 정보 세팅을 우선적으로 한다.
 	m_pBufferCom->Render_Buffer();
 
+	// 다시 원래의 뷰 행렬을 넣어준다
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &OldViewMatrix);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &OldProjMatrix);
 }

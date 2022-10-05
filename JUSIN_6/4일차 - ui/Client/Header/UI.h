@@ -29,9 +29,9 @@ private:
 	CTransform*			m_pTransCom = nullptr;	
 	CTexture*			m_pTextureCom = nullptr;	
 
-private: /* 직교투영행렬. */
-	_matrix				m_ProjMatrix;
-	_float				m_fX, m_fY, m_fSizeX, m_fSizeY;
+private:
+	_matrix				m_ProjMatrix; // 직교 투영 행렬
+	_float				m_fX, m_fY, m_fSizeX, m_fSizeY; // UI의 크기조절을 위한 변수
 
 public:
 	static CUI*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
