@@ -66,7 +66,7 @@ _int CFistBullet::Update_Object(const _float & fTimeDelta)
 		NULL_CHECK_RETURN(pPlayer, -1);
 
 		pFist->Get_Info(INFO_POS, &vPos);
-		m_pTransCom->Set_Pos(vPos.x + 2.f, vPos.y, vPos.z);
+		m_pTransCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 
 		pPlayer->Get_Info(INFO_POS, &m_vPlayerPos);
 		m_vPlayerPos.y -= 0.01f;

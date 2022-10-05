@@ -8,7 +8,8 @@
 #include "WandBullet.h"
 #include "FistBullet.h"
 #include "SongBossBullet.h"
-#include "SongBossFloor.h"
+#include "SongBosStun.h"
+#include "SongBosFloor.h"
 
 IMPLEMENT_SINGLETON(CBulletMgr)
 
@@ -22,7 +23,8 @@ CBulletMgr::CBulletMgr()
 	m_MaxIdx[BULLET_WAND] = 20;
 	m_MaxIdx[BULLET_M_FIST] = 5;
 	m_MaxIdx[BULLET_SONGBOSS] = 5;
-	m_MaxIdx[FLOOR_SONGBOSS] = 10;
+	m_MaxIdx[STUN_SONGBOSS] = 4; // 선언위치 변경 X
+	m_MaxIdx[FLOOR_SONGBOSS] = 5; // 선언위치 변경 X
 }
 
 
@@ -49,6 +51,7 @@ HRESULT CBulletMgr::Ready_Proto(LPDIRECT3DDEVICE9 pGraphicDev)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_FistGreenEffect_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/Fist_GreenEffect/GreenEffect%d.png", TEX_NORMAL, 15)), E_FAIL);
 	// SongBoss
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MusicNote_Bullet_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/SongBoss_Bullet/SongBoss%d.png", TEX_NORMAL, 8)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MusicNote_Stun_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/SongBoss_Stun/Stun.png", TEX_NORMAL, 1)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MusicNote_Floor_Texture", CTexture::Create(pGraphicDev, L"../Bin/Resource/Texture/Monster/Monster_Effect/SongBoss_Floor/Floor.png", TEX_NORMAL, 1)), E_FAIL);
 
 	return S_OK;
@@ -118,6 +121,25 @@ HRESULT CBulletMgr::Ready_Clone(CLayer* pLayer, LPDIRECT3DDEVICE9 pGraphicDev)
 		m_vecObjPool[BULLET_SONGBOSS].push_back(pGameObject);
 	}
 
+	// SongBoss_Stun
+	objTags = nullptr;
+	objTags = new wstring[m_MaxIdx[STUN_SONGBOSS]];
+	m_vecObjTags[STUN_SONGBOSS].push_back(objTags);
+
+	for (int i = 0; i < m_MaxIdx[STUN_SONGBOSS]; ++i)
+	{
+		pGameObject = CSongBosStun::Create(pGraphicDev, i);
+		NULL_CHECK_RETURN(pGameObject, E_FAIL);
+
+		objTags[i] = L"SongBoss_Stun";
+		wchar_t index[10];
+		_itow_s(i, index, 10);
+		objTags[i] += index;
+		FAILED_CHECK_RETURN(pLayer->Add_GameObject(objTags[i].c_str(), pGameObject), E_FAIL);
+
+		m_vecObjPool[STUN_SONGBOSS].push_back(pGameObject);
+	}
+
 	// SongBoss_Floor
 	objTags = nullptr;
 	objTags = new wstring[m_MaxIdx[FLOOR_SONGBOSS]];
@@ -125,7 +147,7 @@ HRESULT CBulletMgr::Ready_Clone(CLayer* pLayer, LPDIRECT3DDEVICE9 pGraphicDev)
 
 	for (int i = 0; i < m_MaxIdx[FLOOR_SONGBOSS]; ++i)
 	{
-		pGameObject = CSongBossFloor::Create(pGraphicDev);
+		pGameObject = CSongBosFloor::Create(pGraphicDev, i);
 		NULL_CHECK_RETURN(pGameObject, E_FAIL);
 
 		objTags[i] = L"SongBoss_Floor";

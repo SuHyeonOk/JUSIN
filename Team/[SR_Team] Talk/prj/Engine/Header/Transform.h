@@ -25,6 +25,8 @@ public:
 	void			Get_Scale(_vec3* _vScale) { _vScale = &m_vScale; }
 	void			Set_Pos(const _float& fX, const _float& fY, const _float& fZ) { m_vInfo[INFO_POS] = { fX, fY, fZ }; }
 	void			Set_Look(const _float& fX, const _float& fY, const _float& fZ) { m_vInfo[INFO_LOOK] = { fX, fY, fZ }; }
+	void			Set_Up(const _float& fX, const _float& fY, const _float& fZ) { m_vInfo[INFO_UP] = { fX, fY, fZ }; }
+	void			Set_Right(const _float& fX, const _float& fY, const _float& fZ) { m_vInfo[INFO_RIGHT] = { fX, fY, fZ }; }
 
 	//void			Set_WorldMatrix(_matrix mat) { m_matWorld = mat; }
 	void			Plus_PosY(_float _fY) { m_vInfo[INFO_POS].y += _fY; }

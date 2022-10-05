@@ -4,7 +4,7 @@
 class CSongBoss : public CMonster
 {
 	enum STATE { IDLE, MOVE, ATTACK, HIT, DIE, MOTION_END };
-	enum SKILL { SKILL_BULLET, SKILL_FLOOR, SKILL_END };
+	enum SKILL { SKILL_BULLET, SKILL_STUN, SKILL_FLOOR, SKILL_END };
 
 private:
 	explicit CSongBoss(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -21,6 +21,7 @@ private:
 	
 	void				SKill_Update(const _float & fTimeDelta);
 	void				SKillBullet_Update(const _float& fTimeDelta);
+	void				SKillStun_Update(const _float& fTimeDelta);
 	void				SKillFloor_Update(const _float& fTimeDelta);
 
 	void				Motion_Change(const _float& fTimeDelta);

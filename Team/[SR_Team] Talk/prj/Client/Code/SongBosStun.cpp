@@ -1,35 +1,33 @@
 #include "stdafx.h"
-#include "..\Header\SongBossFloor.h"
+#include "..\Header\SongBosStun.h"
 
 #include "Export_Function.h"	
 
-CSongBossFloor::CSongBossFloor(LPDIRECT3DDEVICE9 pGraphicDev)
+CSongBosStun::CSongBosStun(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CBullet(pGraphicDev)
-	, m_fSpeed(0.f)
 {
 }
 
-CSongBossFloor::CSongBossFloor(const CSongBossFloor & rhs)
+CSongBosStun::CSongBosStun(const CSongBosStun & rhs)
 	:CBullet(rhs)
 {
 }
 
-CSongBossFloor::~CSongBossFloor()
+CSongBosStun::~CSongBosStun()
 {
 }
 
-HRESULT CSongBossFloor::Ready_Object(void)
+HRESULT CSongBosStun::Ready_Object(_int iBulletCount)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Scale(0.3f, 0.3f, 0.3f);
+	m_pTransCom->Set_Scale(0.2f, 0.2f, 0.2f);
 
-	m_fSpeed = 5.f;
-
+	m_iBulletCount = iBulletCount;
 	return S_OK;
 }
 
-HRESULT CSongBossFloor::Add_Component(void)
+HRESULT CSongBosStun::Add_Component(void)
 {
 	CComponent*		pComponent = nullptr;
 
@@ -48,12 +46,12 @@ HRESULT CSongBossFloor::Add_Component(void)
 	NULL_CHECK_RETURN(m_pAnimtorCom, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_AnimatorCom", pComponent });
 
-	m_pAnimtorCom->Add_Component(L"Proto_MusicNote_Floor_Texture");
+	m_pAnimtorCom->Add_Component(L"Proto_MusicNote_Stun_Texture");
 
 	return S_OK;
 }
 
-_int CSongBossFloor::Update_Object(const _float & fTimeDelta)
+_int CSongBosStun::Update_Object(const _float & fTimeDelta)
 {
 	if (!m_bFire)
 		return 0;
@@ -62,45 +60,27 @@ _int CSongBossFloor::Update_Object(const _float & fTimeDelta)
 	m_pAnimtorCom->Play_Animation(fTimeDelta);
 	Add_RenderGroup(RENDER_ALPHA, this);
 
-	if (!m_bReady)
-	{
-		CTransform*		pFist = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"SongBoss", L"Proto_TransformCom", ID_DYNAMIC));
-		NULL_CHECK_RETURN(pFist, -1);
-
-		pFist->Get_Info(INFO_POS, &vPos);
-		m_pTransCom->Set_Pos(vPos.x, vPos.y, vPos.z); // 블렛의 시작 위치
-
-		m_bReady = true;
-	}
+	// 플레이어 주변으로 생기는 음표
 	CTransform*		pPlayer = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
 	NULL_CHECK_RETURN(pPlayer, -1);
 	pPlayer->Get_Info(INFO_POS, &m_vPlayerPos); // 플레이어의 좌표를 받아와서
 
-	// 몬스터와 플레이어의 거리를 구하고
+	_float fNotePos = 0.5f;
 
-	_vec3	vDir;
-	vDir = m_vPlayerPos - vPos;
-	D3DXVec3Normalize(&vDir, &vDir);
-	vDir *= m_fSpeed * fTimeDelta;
-
-	// 플레이어의 위치까지 간다
-	m_pTransCom->Move_Pos(&vDir);
-
-	_vec3 vTest, vTest2;
-	m_pTransCom->Get_Info(INFO_POS, &vTest);
-	pPlayer->Get_Info(INFO_POS, &vTest2);
-
-	if (vTest < vTest2)
-	{
-		m_pTransCom->Set_Pos(vTest2.x + 2.f, vTest2.y , vTest2.z);
-	}
-
+	if(m_iBulletCount == 0)
+		m_pTransCom->Set_Pos(m_vPlayerPos.x + fNotePos, m_vPlayerPos.y - 0.03, m_vPlayerPos.z + fNotePos);
+	else if (m_iBulletCount == 1)
+		m_pTransCom->Set_Pos(m_vPlayerPos.x + fNotePos, m_vPlayerPos.y - 0.03, m_vPlayerPos.z - fNotePos);
+	else if (m_iBulletCount == 2)
+		m_pTransCom->Set_Pos(m_vPlayerPos.x - fNotePos, m_vPlayerPos.y - 0.03, m_vPlayerPos.z - fNotePos);
+	else if (m_iBulletCount == 3)
+		m_pTransCom->Set_Pos(m_vPlayerPos.x - fNotePos, m_vPlayerPos.y - 0.03, m_vPlayerPos.z + fNotePos);
 	
 	m_fLifeTime += fTimeDelta;
 	return iResult;
 }
 
-void CSongBossFloor::LateUpdate_Object(void)
+void CSongBosStun::LateUpdate_Object(void)
 {
 	Billboard();
 
@@ -115,7 +95,7 @@ void CSongBossFloor::LateUpdate_Object(void)
 	CGameObject::LateUpdate_Object();
 }
 
-void CSongBossFloor::Render_Obejct(void)
+void CSongBosStun::Render_Obejct(void)
 {
 	if (!m_bFire)
 		return;
@@ -133,7 +113,7 @@ void CSongBossFloor::Render_Obejct(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-void CSongBossFloor::Billboard()
+void CSongBosStun::Billboard()
 {
 	// 빌보드
 	_matrix		matWorld, matView, matBill;
@@ -161,10 +141,10 @@ void CSongBossFloor::Billboard()
 	m_pTransCom->Set_WorldMatrix(&(matScale * matBill * matScaleInv *  matWorld));
 }
 
-CSongBossFloor * CSongBossFloor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CSongBosStun * CSongBosStun::Create(LPDIRECT3DDEVICE9 pGraphicDev, _int iBulletCount)
 {
-	CSongBossFloor*		pInstance = new CSongBossFloor(pGraphicDev);
-	if (FAILED(pInstance->Ready_Object()))
+	CSongBosStun*		pInstance = new CSongBosStun(pGraphicDev);
+	if (FAILED(pInstance->Ready_Object(iBulletCount)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
@@ -173,12 +153,12 @@ CSongBossFloor * CSongBossFloor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CSongBossFloor::Free(void)
+void CSongBosStun::Free(void)
 {
 	CGameObject::Free();
 }
 
-void CSongBossFloor::Reset()
+void CSongBosStun::Reset()
 {
 	m_bFire = false;
 	m_bDead = false;

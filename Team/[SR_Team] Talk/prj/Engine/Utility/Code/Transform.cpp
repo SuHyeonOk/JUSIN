@@ -72,13 +72,8 @@ const _matrix* Engine::CTransform::Compute_LookAtTarget(const _vec3* pTargetPos)
 
 void CTransform::KnockBack_Target(_vec3 * pTargetLook, const _float & fSpeed, const _float & fTimeDelta)
 {
-
-
-
 	D3DXVec3Normalize(pTargetLook, pTargetLook);
 	m_vInfo[INFO_POS] += *pTargetLook * fSpeed * fTimeDelta;
-
-
 }
 
 void CTransform::Jump(_bool & bJump, const _float & fHeight, _float & fJumpSpeed, const _float & fInitialJumpSpeed, const _float & fAccel, _float fTimeDelta)
@@ -144,6 +139,8 @@ _int CTransform::Update_Component(const _float & fTimeDelta)
 			D3DXVec3TransformNormal(&m_vInfo[i], &m_vInfo[i], &matRot[j]);
 		}
 	}
+
+	// 이동은 각 객체에서 설정
 
 	// 월드행렬에 변경값 반영
 	for (_uint i = 0; i < INFO_END; ++i)
