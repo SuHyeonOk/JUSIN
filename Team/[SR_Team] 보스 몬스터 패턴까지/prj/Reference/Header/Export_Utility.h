@@ -23,6 +23,7 @@
 #include "Weapon.h"
 #include "Bullet.h"
 #include "Monster.h"
+#include "NPC.h"
 
 #include "UI.h"
 //////////////////////////////////
