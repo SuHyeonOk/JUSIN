@@ -35,7 +35,6 @@ void CBox::AnimationEvent(const string& strEvent)
 			pEmerald->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], fPower);
 		}
 
-
 		for (_int i = 0; i < 5; ++i)
 		{
 			iRandNum = rand() % 4;
@@ -49,8 +48,6 @@ void CBox::AnimationEvent(const string& strEvent)
 
 void CBox::InitFunction()
 {
-	
-
 	m_fCreateItem[0] = [this](const _vec3& vPos) {
 		CApple* pApple = CItemFactory::Create<CApple>("Apple", L"Apple", vPos, IS_DROP);
 		pApple->SetVelocity(vPos, 15.f);

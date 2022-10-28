@@ -28,8 +28,8 @@ _int CEndermanTrail::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 
 	m_fLife -= fTimeDelta;
-	if (m_fLife < 0.f) return OBJ_DEAD;
-
+	if (m_fLife < 0.f) 
+		return OBJ_DEAD;
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	return OBJ_NOEVENT;

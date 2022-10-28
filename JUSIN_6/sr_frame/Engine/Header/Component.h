@@ -20,7 +20,7 @@ public:
 protected:
 	LPDIRECT3DDEVICE9		m_pGraphicDev;
 	_bool					m_bClone;
-
+	
 public:
 	virtual CComponent*	Clone(void)PURE;
 	virtual void		Free(void);
