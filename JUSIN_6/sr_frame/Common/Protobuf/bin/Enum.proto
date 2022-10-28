@@ -1,0 +1,38 @@
+syntax = "proto3";
+package Protocol;
+
+enum PlayerSkin
+{
+	PLAYER_TYPE_STEVE = 0;
+	PLAYER_TYPE_PRIDE = 1;
+	PLAYER_TYPE_ESHE = 2;
+	PLAYER_TYPE_COPPER = 3;
+}
+
+enum EquipType
+{
+	MELEE = 0;
+	RANGE = 1;
+	LEGACY = 2;
+}
+
+enum SatonPattern
+{
+	MoveTo = 0;
+	HAMMER = 1;
+	GRAB = 2;
+	BIRD = 3;
+	SYMBOL = 4; // gimmic
+	FASCINATE = 5; // gimmic
+	DRAWMOON = 6; // gimmic
+}
+
+enum KoukuPattern
+{
+	KOUKU_MoveTo = 0;
+	KOUKU_SYMBOL_ON = 1;
+	KOUKU_SYMBOL_OFF = 2;
+	KOUKU_HAMMER = 3;
+	KOUKU_HORROR = 4;
+	KOUKU_BASIC = 5;
+}

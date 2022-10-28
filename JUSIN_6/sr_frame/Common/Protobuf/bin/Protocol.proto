@@ -1,0 +1,309 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+import "Struct.proto";
+
+message C_LOGIN
+{
+}
+
+// to client
+message S_LOGIN 
+{
+	bool success = 1;
+	uint32 playerID = 2; // id from server
+}
+
+message C_ENTER_GAME
+{
+	Player player = 1;
+	PlayerSkin playerSkin = 2;
+}
+
+// to broadcast, client
+message S_ENTER_GAME
+{
+	bool success = 1;
+	Player player = 2;
+	PlayerSkin playerSkin = 3;
+}
+
+message S_OTHER_PLAYER
+{
+	repeated Player player = 1;
+	repeated PlayerSkin playerSkin = 2;
+}
+
+message C_PLAYER_INPUT
+{
+	Player player = 1;
+	uint32 inputBit = 2; // space, 1 ,2, 3(legacy), wasd ml, mr
+}
+
+// to broadcast, client
+message S_PLAYER_INPUT
+{
+	bool success = 1;
+	Player player = 2;
+	uint32 inputBit = 3; // space, 1 ,2, 3(legacy), wasd ml, mr
+}
+
+message C_PLAYER_WORLD
+{
+	Player player = 1;
+	Matrix matWorld = 2;
+}
+
+message S_PLAYER_WORLD
+{
+	bool success = 1;
+	Player player = 2;
+	Matrix matWorld = 3;
+}
+
+message C_PLAYER_YAW_ACTION
+{
+	Player player = 1;
+	float yaw = 2;
+	uint32 actionBit = 3; // roll, melee attack
+}
+
+message S_PLAYER_YAW_ACTION
+{
+	bool success = 1;
+	Player player = 2;
+	float yaw = 3;
+	uint32 actionBit = 4;
+}
+
+message C_PLAYER_ACTION
+{
+	Player player = 1;
+	uint32 actionBit = 2; // potion, legacy 1,2,3
+}
+message S_PLAYER_ACTION
+{
+	bool success = 1;
+	Player player = 2;
+	uint32 actionBit = 3; // potion, legacy 1,2,3
+}
+
+message C_PLAYER_ARROW
+{
+	Player player = 1;
+	float yaw = 2;
+	Vec3 vLookAt = 3;
+	uint32 actionBit = 4;  // arrow type
+}
+
+message S_PLAYER_ARROW
+{
+	bool success = 1;
+	Player player = 2;
+	float yaw = 3;
+	Vec3 vLookAt = 4;
+	uint32 actionBit = 5;  // arrow type
+}
+
+message C_PLAYER_EQUIP
+{
+	Player player = 1;
+	EquipState state = 2;
+}
+
+message S_PLAYER_EQUIP
+{
+	bool success = 1;
+	Player player = 2;
+	EquipState state = 3;
+}
+
+message S_ALL_PLAYER_ENTER
+{
+	bool success = 1;
+}
+
+message C_PLAYER_DEAD
+{
+	Player player = 1;
+}
+
+message S_PLAYER_DEAD
+{
+	bool success = 1;
+	Player player = 2;
+}
+
+message C_PLAYER_RESPANW
+{
+	Player player = 1;
+}
+
+message S_PLAYER_RESPAWN
+{
+	bool success = 1;
+	Player player = 2;
+}
+
+message C_PLAYER_MOVE_STAGE
+{
+	string loadingTag = 1;
+	string stageTag = 2;
+}
+
+message S_PLAYER_MOVE_STAGE
+{
+	bool success = 1;
+	string loadingTag = 2;
+	string stageTag = 3;
+}
+
+message C_PLAYER_MOVE_STAGE_FINISH
+{
+	Player player = 1;
+	PlayerSkin playerSkin = 2;
+}
+
+message S_PLAYER_MOVE_STAGE_FINISH
+{
+	Player player = 1;
+	PlayerSkin playerSkin = 2;
+}
+
+// test
+
+message C_SPAWN_MONSTER
+{
+	uint32 id = 1;
+	string factory = 2;
+	Matrix matrix = 3;
+}
+
+message S_SPAWN_MONSTER
+{
+	bool success = 1;
+	uint32 id = 2; // monter id
+	string factory = 3;
+	Matrix matrix = 4;
+}
+
+message C_MONSTER_SET_TARGET
+{
+	bool bAttack = 1;
+	uint32 monsterID = 2;
+	uint32 playerID = 3;
+}
+
+message S_MONSTER_SET_TARGET
+{
+	bool success = 1;
+	bool bAttack = 2;
+	uint32 monsterID = 3;
+	uint32 playerID = 4;
+}
+
+message C_MONSTER_WORLD
+{
+	uint32 monsterID = 1;
+	Matrix matWorld = 2;
+}
+
+message S_MONSTER_WORLD
+{
+	bool success = 1;
+	uint32 monsterID = 2;
+	Matrix matWorld = 3;
+}
+
+
+// boss
+message C_BOSS_SPAWN
+{
+	string factory = 1;
+	Matrix matrix = 3;
+}
+
+message S_BOSS_SPAWN
+{
+	bool success = 1;
+	string factory = 2;
+	Matrix matrix = 3;
+}
+
+message C_BOSS_WORLD
+{
+	string objKey = 1;
+	Matrix matWorld = 2;
+	uint32 iHP = 3;
+}
+
+message S_BOSS_WORLD
+{
+	bool success = 1;
+	string objKey = 2;
+	Matrix matWorld = 3;
+	uint32 iHP = 4;
+}
+
+// saton(big)
+message C_SATON_ATTACK
+{
+	SatonPattern pattern = 1;
+	Vec3 targetPos = 2;
+}
+
+message S_SATON_ATTACK
+{
+	bool success = 1;
+	SatonPattern pattern = 2;
+	Vec3 targetPos = 3;
+	Vec3 BossPos = 4;
+}
+
+// kouku(small)
+message C_KOUKU_ATTACK
+{
+	KoukuPattern pattern = 1;
+	Vec3 targetPos = 2;
+}
+
+message S_KOUKU_ATTACK
+{
+	bool success = 1;
+	KoukuPattern pattern = 2;
+	Vec3 targetPos = 3;
+}
+
+message C_KOUKU_COUNTER
+{
+	Player player = 1;
+}
+
+message S_KOUKU_COUNTER
+{
+	bool success = 1;
+}
+
+
+message C_DEBUG_PKT
+{
+	string debugLog = 1;
+}
+
+message C_KOUKU_DAMAGE
+{
+	Player player = 1;
+	uint32 damage = 2;
+}
+
+message C_KOUKU_RESULT
+{
+	
+}
+
+message S_KOUKU_RESULT
+{
+	bool success = 1;
+	repeated PlayerResult result = 2;
+}

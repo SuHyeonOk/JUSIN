@@ -1,0 +1,1025 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00. MainApp">
+      <UniqueIdentifier>{380f988b-e1a6-42ae-8be7-9321e4e4e749}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Default">
+      <UniqueIdentifier>{33f7b172-f900-4736-bf56-92f7a74c02d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Default\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. Scene">
+      <UniqueIdentifier>{51abecec-9fb8-4a32-b8b8-3291df53ea13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\01. Stage">
+      <UniqueIdentifier>{89694268-cdb2-4de5-8f07-5d50beb56bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject">
+      <UniqueIdentifier>{92c612f7-c35f-43df-8932-e63aa606626c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Player">
+      <UniqueIdentifier>{67ae8269-0e3e-4e1d-bb00-6cef0314eebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Default\imgui">
+      <UniqueIdentifier>{e06b8dfa-b98a-4518-9ae4-e940ab6027e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Camera">
+      <UniqueIdentifier>{936d88fe-dcbd-4320-814e-d7ba12a732ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool">
+      <UniqueIdentifier>{50f4077e-3ed9-4674-ba98-1dfac0acb172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\03. SkeletalCube">
+      <UniqueIdentifier>{0604fd92-5ba3-4721-a47c-07829de8ecab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Default\imgui\FileDialog">
+      <UniqueIdentifier>{08a19095-3aa1-42d0-9a82-d854e4e8eb94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mgr">
+      <UniqueIdentifier>{f7f725b8-8ee0-47e0-8719-2e0d9e5c1f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{1b64abcb-a7b9-4030-b6c5-c3e564bc440b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\04. MapCube">
+      <UniqueIdentifier>{ca29e199-0f6d-4818-ae09-7431ccba8a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{581ccd6e-210e-44c4-adac-31cb57593560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\ToolScene">
+      <UniqueIdentifier>{021ed417-4fe4-4be3-8588-73a43c18ad17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{5c61c5e2-69c8-4019-8fef-662f80fc6b31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Object">
+      <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\05. Effect">
+      <UniqueIdentifier>{7425b919-b28f-45e4-b86a-38d983e757b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\06. Inventory">
+      <UniqueIdentifier>{fcce4791-e493-43f9-b897-5adda5582bb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\05. UI">
+      <UniqueIdentifier>{ccd7142e-0ace-4ebb-a0fa-ab4858a4884e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Default\fmod">
+      <UniqueIdentifier>{ecdc1d57-d2d0-4795-b9a5-0995be8f09e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Particle">
+      <UniqueIdentifier>{a097aa65-4bb2-4da6-803b-331fe7896605}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Monster">
+      <UniqueIdentifier>{2d1d49c7-b7ce-4a7f-b76d-a9638914b221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Monster\00. Kuoku">
+      <UniqueIdentifier>{2a4825f2-e93f-43ea-a990-9ed99883c6ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Monster\01. Saton">
+      <UniqueIdentifier>{a617b281-bde0-4df9-9deb-bffb1f38c9b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{42fb0a63-e782-4979-b687-946596b8bea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item">
+      <UniqueIdentifier>{e2226c9a-f276-4c87-aff3-ea3e2b871f4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Equip">
+      <UniqueIdentifier>{bac7e08f-da62-4ef5-94fd-1b468d27a049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Consume">
+      <UniqueIdentifier>{668c2bd9-3d07-49be-853c-076e93334e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Rune">
+      <UniqueIdentifier>{d16df8c3-d21e-4ee4-87a9-cb5f352ce375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Weapon">
+      <UniqueIdentifier>{3871ea02-a479-440a-9475-0722e825632c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Header\MainApp.h">
+      <Filter>00. MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Terrain.h">
+      <Filter>02. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Stage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Loading.h">
+      <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx9.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\DynamicCamera.h">
+      <Filter>02. GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StaticCamera.h">
+      <Filter>02. GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGradient.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImSequencer.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImZoomSlider.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphEditor.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImCurveEdit.h">
+      <Filter>99. Default\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ImGuiMgr.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TestCube.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SkeletalCube.h">
+      <Filter>02. GameObject\03. SkeletalCube</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiFileDialogConfig.h">
+      <Filter>99. Default\imgui\FileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiFileDialog.h">
+      <Filter>99. Default\imgui\FileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ImSequencerImpl.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="stb\stb_image.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Player.h">
+      <Filter>02. GameObject\00. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\AnimationTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TerrainCubeMap.h">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Controller.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\AbstFactory.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StatComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GeomancerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ZombieController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Geomancer.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Zombie.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Creeper.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CreeperController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Skeleton.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SkeletonController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enchanter.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EnchanterController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCubeController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCube.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosityController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosity.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GeomancerWall.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ObjectStoreMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SphereEffect.h">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Inventory.h">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Dynamite.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Box.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Item.h">
+      <Filter>01. Scene\07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Arrow.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EquipItem.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Emerald.h">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Box.h" />
+    <ClInclude Include="..\Header\Dynamite.h" />
+    <ClInclude Include="..\Header\Inventory.h" />
+    <ClInclude Include="..\Header\SphereEffect.h" />
+    <ClInclude Include="..\Header\UITool.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Sword.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Axe.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ConsumeItem.h">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Apple.h">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ArrowBundle.h">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Bread.h">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Posion.h">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ArrowCubeMgr.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="BootsOfSwiftness.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\FireworksArrow.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ShockPowder.h">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\UI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\HPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CoolTimeUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ArrowCubeMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CameraTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BatchTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CamAnimation.h" />
+    <ClInclude Include="..\Header\CameraTool.h" />
+    <ClInclude Include="..\Header\SoundMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CamAnimation.h" />
+    <ClInclude Include="..\Header\CameraTool.h" />
+    <ClInclude Include="..\Header\InventoryUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Birds.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BirdsBrown.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\DamageFontMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Kouku.h">
+      <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\KoukuController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SatonController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Saton.h">
+      <Filter>02. GameObject\01. Monster\01. Saton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Trigger.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerStartPos.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Rune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="LightningRune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Sword.h">
+      <Filter>02. GameObject\07. Item\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Weapon.h">
+      <Filter>01. Scene\07. Item\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Glaive.h">
+      <Filter>01. Scene\07. Item\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Crossbow.h">
+      <Filter>01. Scene\07. Item\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Axe.h">
+      <Filter>02. GameObject\07. Item\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerStartPos.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CamAnimation.h">
+      <Filter>02. GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StormRune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StunRune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PowerRune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MultiShotRune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\LaserShotRune.h">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ItemTexUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SatonCircle.h" />
+    <ClInclude Include="..\Header\NetStage.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ClientServiceMgr.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RemoteInventory.h">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BossHPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EndermanController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enderman.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ItemTexUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ClearUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\LeaperController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Leaper.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Logo.h">
+      <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ClientServiceMgr.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Struct.pb.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ServerPacketHandler.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Protocol.pb.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enum.pb.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EditBox.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BossHPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RemoteInventory.h">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\Cat_Attack.h" />
+    <ClInclude Include="..\Header\Cat.h" />
+    <ClInclude Include="..\Header\Cat2.h" />
+    <ClInclude Include="..\Header\KoukuHpUI.h" />
+    <ClInclude Include="..\Header\NetStartStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\KoukuLoading.h">
+      <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BossStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BossStage.h" />
+    <ClInclude Include="..\Header\SkyBox.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StartStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapTable.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Portrait.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SkeletalGhostTrail.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EndermanTrail.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Cat_Idle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>99. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Loading.cpp">
+      <Filter>01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Stage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Terrain.cpp">
+      <Filter>02. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx9.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StaticCamera.cpp">
+      <Filter>02. GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DynamicCamera.cpp">
+      <Filter>02. GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImSequencer.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphEditor.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImCurveEdit.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGradient.cpp">
+      <Filter>99. Default\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ImGuiMgr.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TestCube.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletalCube.cpp">
+      <Filter>02. GameObject\03. SkeletalCube</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiFileDialog.cpp">
+      <Filter>99. Default\imgui\FileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ImSequencerImpl.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Player.cpp">
+      <Filter>02. GameObject\00. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainApp.cpp">
+      <Filter>00. MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\AnimationTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainCubeMap.cpp">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Controller.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\AbstFactory.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StatComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GeomancerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ZombieController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Geomancer.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Zombie.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Creeper.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CreeperController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Skeleton.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletonController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enchanter.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EnchanterController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCubeController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCube.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosity.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\GeomancerWall.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SphereEffect.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Inventory.cpp">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Box.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Dynamite.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Item.cpp">
+      <Filter>01. Scene\07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EquipItem.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Emerald.cpp">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Box.cpp" />
+    <ClCompile Include="..\Code\Dynamite.cpp" />
+    <ClCompile Include="..\Code\Inventory.cpp" />
+    <ClCompile Include="..\Code\SphereEffect.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Axe.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EquipItem.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Glaive.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Crossbow.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ConsumeItem.cpp">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Apple.cpp">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowBundle.cpp">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Bread.cpp">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Posion.cpp">
+      <Filter>01. Scene\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="BootsOfSwiftness.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FireworksArrow.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ShockPowder.cpp">
+      <Filter>01. Scene\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CoolTimeUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BatchTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CameraTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CamAnimation.cpp" />
+    <ClCompile Include="..\Code\CameraTool.cpp" />
+    <ClCompile Include="..\Code\SoundMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CamAnimation.cpp" />
+    <ClCompile Include="..\Code\CameraTool.cpp" />
+    <ClCompile Include="..\Code\InventoryUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Birds.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BirdsBrown.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DamageFontMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Kouku.cpp">
+      <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\KoukuController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SatonController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Saton.cpp">
+      <Filter>02. GameObject\01. Monster\01. Saton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Trigger.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerStartPos.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Rune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="LightningRune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Weapon.cpp">
+      <Filter>01. Scene\07. Item\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Glaive.cpp">
+      <Filter>02. GameObject\07. Item\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Crossbow.cpp">
+      <Filter>02. GameObject\07. Item\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Axe.cpp">
+      <Filter>02. GameObject\07. Item\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerStartPos.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CamAnimation.cpp">
+      <Filter>02. GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StormRune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StunRune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PowerRune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\LaserShotRune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MultiShotRune.cpp">
+      <Filter>01. Scene\07. Item\Rune</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ItemTexUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
+    <ClCompile Include="..\Code\NetStage.cpp" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RemoteInventory.cpp">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndermanController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enderman.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ItemTexUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ClearUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\LeaperController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Leaper.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Logo.cpp">
+      <Filter>01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ClientServiceMgr.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enum.pb.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Struct.pb.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ServerPacketHandler.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Protocol.pb.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EditBox.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RemoteInventory.cpp">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\Cat_Attack.cpp" />
+    <ClCompile Include="..\Code\Cat2.cpp" />
+    <ClCompile Include="..\Code\KoukuHpUI.cpp" />
+    <ClCompile Include="Cat.cpp" />
+    <ClCompile Include="..\Code\NetStartStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\KoukuLoading.cpp">
+      <Filter>01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossStage.cpp" />
+    <ClCompile Include="..\Code\SkyBox.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StartStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTable.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Portrait.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletalGhostTrail.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndermanTrail.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cat_Idle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>99. Default\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>99. Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="Client.ico">
+      <Filter>99. Default\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>99. Default</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_GhostTrail.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\UVAnimation.fx" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,49 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+
+message Player
+{
+	uint64 id = 1; // id
+	string name = 2; // name
+}
+
+message EquipState
+{
+	EquipType type = 1;
+	string name = 2; // factory tag
+	string rune = 3;
+	uint32 legacySlot = 4;
+}
+
+message Vec3
+{
+	float x = 1;
+	float y = 2;
+	float z = 3;
+}
+
+message Vec4
+{
+	float x = 1;
+	float y = 2;
+	float z = 3;
+	float w = 4;
+}
+
+message Matrix
+{
+	Vec4 vRight = 1;
+	Vec4 vUp = 2;
+	Vec4 vLook = 3;
+	Vec4 vPos = 4;
+}
+
+message PlayerResult
+{
+	Player player = 1;
+	PlayerSkin skin = 2;
+	uint32 damage = 3;
+	uint32 counter = 4;
+}

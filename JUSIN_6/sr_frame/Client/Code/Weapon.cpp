@@ -1,0 +1,66 @@
+#include "stdafx.h"
+#include "..\Header\Weapon.h"
+#include "Rune.h"
+#include "Inventory.h"
+CWeapon::CWeapon(LPDIRECT3DDEVICE9 pGraphicDev): CEquipItem(pGraphicDev)
+, m_pInventory(nullptr) , m_pRune(nullptr)
+{
+}
+
+CWeapon::~CWeapon()
+{
+}
+
+HRESULT CWeapon::Ready_Object()
+{
+	// m_pInventory = Get_GameObject<CInventory>(LAYER_GAMEOBJ, L"Inventory");
+	return S_OK;
+}
+
+_int CWeapon::Update_Object(const _float & fTimeDelta)
+{
+	CEquipItem::Update_Object(fTimeDelta);
+
+	
+
+	return OBJ_NOEVENT;
+}
+
+bool CWeapon::SetRune(CRune* pRune)
+{
+	if (pRune == nullptr) // ·é ÇØÁ¦
+	{
+		if (m_pRune)
+			m_pRune->UnEquipRune(this);
+		//Safe_Release(m_pRune);
+		m_pRune = nullptr;
+		return true;
+	}
+
+	// ·é ÀåÂø
+
+	if (pRune->GetTargetTypeMask() & m_eType) // ÀåÂø °¡´ÉÇÑÁö È®ÀÎ
+	{
+		// ÀåÂø °¡´É
+		if (m_pRune) // ±âÁ¸ ·éÀÌ ÀÌ¹Ì ÀÖ´Ù¸é ÇØÁ¦
+		{
+			m_pRune->UnEquipRune(this);
+			//Safe_Release(m_pRune);
+			m_pRune = nullptr;
+		}
+
+		// ±×´ÙÀ½ ÀåÂø
+		m_pRune = pRune;
+		m_pRune->EquipRune(this);
+		//m_pRune->AddRef();
+		return true;
+	}
+
+	// ÀåÂø ºÒ°¡
+	return false;
+}
+
+void CWeapon::Free()
+{
+	CEquipItem::Free();
+}
