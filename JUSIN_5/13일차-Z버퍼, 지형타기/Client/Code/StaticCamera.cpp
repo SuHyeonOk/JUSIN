@@ -101,12 +101,15 @@ void CStaticCamera::Target_Renewal(void)
 	m_vEye *= m_fDistance;	// ¹æÇâ º¤ÅÍ
 
 	_vec3		vRight;
-	memcpy(&vRight, &pPlayerTransform->m_matWorld.m[0][0], sizeof(_vec3));
+	_matrix matWorld = *pPlayerTransform->Get_WorldMatrixPointer();
+	memcpy(&vRight, &matWorld.m[0][0], sizeof(_vec3));
 
 	_matrix		matRot;
 	D3DXMatrixRotationAxis(&matRot, &vRight, m_fAngle);
 	D3DXVec3TransformNormal(&m_vEye, &m_vEye, &matRot);
 
-	m_vEye += pPlayerTransform->m_vInfo[INFO_POS];
-	m_vAt = pPlayerTransform->m_vInfo[INFO_POS];
+	_vec3 vPos;
+	pPlayerTransform->Get_Info(INFO_POS, &vPos);
+	m_vEye += vPos;
+	m_vAt = vPos;
 }
