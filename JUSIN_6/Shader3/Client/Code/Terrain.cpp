@@ -50,6 +50,7 @@ void CTerrain::Render_Obejct(void)
 
 	_matrix			WorldMatrix, ViewMatrix, ViewMatrixInv, ProjMatrix;
 
+	// 월드 행렬 전치해서 던지기
 	m_pTransCom->Get_WorldMatrix(&WorldMatrix);
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &ViewMatrix);
 	D3DXMatrixInverse(&ViewMatrixInv, nullptr, &ViewMatrix);
@@ -58,6 +59,7 @@ void CTerrain::Render_Obejct(void)
 	m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMatrix, &WorldMatrix), sizeof(_matrix));
 	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
 	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_matrix));
+
 	m_pShaderCom->Set_RawValue("g_vCamPosition", (_vec3*)&ViewMatrixInv.m[3][0], sizeof(_vec3));
 
 	m_pTextureCom->Set_Texture(m_pShaderCom, "g_DefaultTexture", 0);
