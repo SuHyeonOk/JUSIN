@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{28bcf1ca-5f1c-4e07-a540-09ad25771349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Default">
+      <UniqueIdentifier>{0ab56a2a-3fff-43ca-9fb6-c65344be4997}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp">
+      <UniqueIdentifier>{612d8d26-b016-4e58-8379-cd50509c1691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels">
+      <UniqueIdentifier>{b4f73262-606c-417f-8f5a-dbe51f83d2d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\00.Loading">
+      <UniqueIdentifier>{85ea47b1-9b2d-4a32-8f1a-1a8be50ae20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\01.Logo">
+      <UniqueIdentifier>{26344aaf-cba4-47a2-b6b2-b717d86a6fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\02.GamePlay">
+      <UniqueIdentifier>{22df0cdb-5b80-4341-b095-9cf9d96f954c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\00.Loading\Loader">
+      <UniqueIdentifier>{971af4d9-cc6e-45cd-8547-bdea84e24691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects">
+      <UniqueIdentifier>{e41e8875-419b-4b63-9229-2273345ad05a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\BackGround">
+      <UniqueIdentifier>{4802a01c-abcc-4482-81b4-37cfe572eb1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Default\ImGui">
+      <UniqueIdentifier>{30e69e47-92ab-40b6-92c4-a7042bda5afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97. Tool">
+      <UniqueIdentifier>{25826ad2-0217-493a-98db-8cb2c2b49430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97. Tool\ImGuiManager">
+      <UniqueIdentifier>{9d56630a-6957-404a-a836-731621cca7b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>98.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>98.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>98.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>98.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\MainApp.h">
+      <Filter>00.MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Client_Defines.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_Logo.h">
+      <Filter>01.Levels\01.Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_Loading.h">
+      <Filter>01.Levels\00.Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_GamePlay.h">
+      <Filter>01.Levels\02.GamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loader.h">
+      <Filter>01.Levels\00.Loading\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BackGround.h">
+      <Filter>02.GameObjects\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\GraphEditor.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imconfig.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImCurveEdit.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImGradient.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_dx11.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_win32.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_internal.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImGuiFileDialog.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImGuiFileDialogConfig.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImGuizmo.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImSequencer.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_rectpack.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_textedit.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_truetype.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImZoomSlider.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\dirent.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ImGui_Manager.h">
+      <Filter>97. Tool\ImGuiManager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>98.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>98.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\MainApp.cpp">
+      <Filter>00.MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Logo.cpp">
+      <Filter>01.Levels\01.Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Loading.cpp">
+      <Filter>01.Levels\00.Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_GamePlay.cpp">
+      <Filter>01.Levels\02.GamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loader.cpp">
+      <Filter>01.Levels\00.Loading\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BackGround.cpp">
+      <Filter>02.GameObjects\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\ImCurveEdit.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\ImGradient.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_demo.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_draw.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_dx11.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_win32.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_tables.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_widgets.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\ImGuiFileDialog.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\ImSequencer.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\GraphEditor.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ImGui_Manager.cpp">
+      <Filter>97. Tool\ImGuiManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>98.Default</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>98.Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>98.Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
