@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 
@@ -17,14 +17,15 @@ public:
 	virtual HRESULT Render();
 
 protected:
-	/* ÇÒ´çÇÏ°íÀÚÇÏ´Â ¹öÆÛÀÇ ¼Ó¼ºÀ» Á¤ÀÇÇÑ´Ù. */
+	/* í• ë‹¹í•˜ê³ ìí•˜ëŠ” ë²„í¼ì˜ ì†ì„±ì„ ì •ì˜í•œë‹¤. */
 	D3D11_BUFFER_DESC			m_BufferDesc;
 
-	/* ÇÒ´ç½Ã¿¡ Ã¤¿ö³Ö°íÀÚÇÏ´Â µ¥ÀÌÅÍµé. */
+	/* í• ë‹¹ì‹œì— ì±„ì›Œë„£ê³ ìí•˜ëŠ” ë°ì´í„°ë“¤. */
 	D3D11_SUBRESOURCE_DATA		m_SubResourceData;
 
-	_uint						m_iStride = 0; /* Á¤Á¡ÇÏ³ªÀÇ ¹ÙÀÌÆ® Å©±â. */
-	_uint						m_iNumVertices = 0;
+	// CVIBuffer
+	_uint						m_iStride = 0; /* ì •ì í•˜ë‚˜ì˜ ë°”ì´íŠ¸ í¬ê¸°. */
+	_uint						m_iNumVertices = 0; //ï»¿ ì •ì  ê°œìˆ˜
 	_uint						m_iNumPrimitive = 0;
 	_uint						m_iIndicesSizePerPrimitive = 0;
 	_uint						m_iNumIndicesPerPrimitive = 0;
@@ -34,12 +35,12 @@ protected:
 	D3D11_PRIMITIVE_TOPOLOGY	m_eTopology;
 
 
-protected: /* ¹öÅØ½º ¹öÆÛ */
+protected: /* ë²„í…ìŠ¤ ë²„í¼ */
 	ID3D11Buffer*				m_pVB = nullptr;
 	
 
 
-protected: /* ÀÎµ¦½º ¹öÆÛ */
+protected: /* ì¸ë±ìŠ¤ ë²„í¼ */
 	ID3D11Buffer*				m_pIB = nullptr;
 	
 

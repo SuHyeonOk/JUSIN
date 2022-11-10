@@ -23,8 +23,8 @@ namespace Engine
 
 	typedef struct tagVertexPositionTexture
 	{
-		XMFLOAT3		vPosition;
-		XMFLOAT2		vTexUV;
+		XMFLOAT3		vPosition;	// 정점 위치
+		XMFLOAT2		vTexUV;		// UV 좌표 
 	}VTXTEX;
 
 }
