@@ -24,7 +24,6 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 	m_BufferDesc.ByteWidth = ;
 	m_BufferDesc.ByteWidth = ;*/
 
-
 	ZeroMemory(&m_SubResourceData, sizeof m_SubResourceData);
 
 	//m_SubResourceData.pSysMem = ;
