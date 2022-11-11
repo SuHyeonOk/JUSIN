@@ -37,7 +37,7 @@ void CImGui_Manager::Ready_Imgui()
 	// GameInstance 얻어오기
 	m_pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(m_pGameInstance);
-	
+
 	// 사용하려는 플랫폼과 렌더러(장치) 세팅
 	ImGui_ImplWin32_Init(g_hWnd);
 	ImGui_ImplDX11_Init(m_pGameInstance->Get_Device(), m_pGameInstance->Get_Context());
@@ -51,7 +51,7 @@ void CImGui_Manager::Ready_Imgui()
 }
 
 void CImGui_Manager::Tick_Imgui()
-{ 
+{
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -76,47 +76,58 @@ void CImGui_Manager::Render_Imgui()
 
 void CImGui_Manager::Info_Tool()
 {
-	// TODO : int형 변수 하나를 텍스처 파일에 저장하기
-
 	static _int		iHp = 0;
 
 	ImGui::SliderInt("input HP", &iHp, 0, 100);
 	ImGui::Text("HP : %d", iHp);
 
-	if (ImGui::Button("Open"))
+	//if (ImGui::Button("Open"))
+	//{
+	//	ofstream ofs;
+	//	ofs.open("../../Data/Info.txt");
+
+	//	ofs << iHp << endl;
+
+
+	//	//std::ifstream ifs;
+	//	//ifs.open("../../Data/Info__.txt");
+
+
+	//}
+
+	if (ImGui::Button("DataAdd"))
 	{
-		ofstream ofs;
-		ofs.open("../../Data/Info.txt");
 
-		ofs << iHp << endl;
-
-
-		//std::ifstream ifs;
-		//ifs.open("../../Data/Info.txt");
 	}
+
 	if (ImGui::Button("Save"))
 	{
-		ofstream ofs("../../Data/Info.txt");
-		if (ofs.fail())
+		wofstream ofs;
+		ofs.open("../../Data/Info.txt", ios::out | ios::app);
+
+		if (!ofs.fail())
+		{
+			ofs << iHp << endl;
+			ofs.close();
+		}
+		else
 		{
 			MSG_BOX("Data File Error!");
 			return;
 		}
-		
-		list<_float3>			m_MonsterPos;
-		// TODO
 
 
-		ofs << iHp << endl;
+		WinExec("notepad.exe ../../Data/Info.txt", SW_SHOW);
 
 		return;
 	}
 
-	if (ImGui::Button("Save"))
-	{
 
-		ImGuiFileDialog::Instance()->OpenDialog("Test", "Test Test", nullptr, ".", 1, nullptr, ImGuiFileDialogFlags_None);
-	}
+	//if (ImGui::Button("Save"))
+	//{
+
+	//	ImGuiFileDialog::Instance()->OpenDialog("Test", "Test Test", nullptr, ".", 1, nullptr, ImGuiFileDialogFlags_None);
+	//}
 
 
 
@@ -161,7 +172,7 @@ void CImGui_Manager::Info_Tool()
 	//	ImGui::ShowDemoWindow(&show_demo_window);
 	//else
 	//	ImGui::ShowAboutWindow(&show_demo_window);
-		
+
 
 	//ImGui::ShowDebugLogWindow(&show_demo_window); // MousePos값알 수 있던데 '-'
 
