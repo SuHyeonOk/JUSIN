@@ -4,7 +4,7 @@
 /* 클라이언트와 엔진의 소통을 위해 만들어진 클래스. */
 
 #include "Base.h"
-#include "Input_Device.h"
+
 #include "Component_Manager.h"
 
 BEGIN(Engine)
@@ -28,11 +28,17 @@ public: /* For.Graphic_Device */
 	HRESULT Present();
 
 public: /* For.Input_Device */
-	bool		MouseKeyPress(CInput_Device::MOUSEKEYSTATE byMouseID);
+	_bool		Key_Down(_uchar eKeyID);
+	_bool		Key_Up(_uchar eKeyID);
+	_bool		Key_Pressing(_uchar eKeyID);
+
+	_bool		Mouse_Down(MOUSEKEYSTATE eMouseKeyID);
+	_bool		Mouse_Up(MOUSEKEYSTATE eMouseKeyID);
+	_bool		Mouse_Pressing(MOUSEKEYSTATE eMouseKeyID);
 
 	_byte		Get_DIKeyState(_ubyte byKeyID);
-	_byte		Get_DIMouseState(CInput_Device::MOUSEKEYSTATE byMouseID);
-	_long		Get_DIMouseMove(CInput_Device::MOUSEMOVESTATE eMoveState);
+	_byte		Get_DIMouseState(MOUSEKEYSTATE byMouseID);
+	_long		Get_DIMouseMove(MOUSEMOVESTATE eMoveState);
 
 public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pNewLevel);	

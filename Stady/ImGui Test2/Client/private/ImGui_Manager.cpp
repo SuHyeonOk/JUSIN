@@ -81,11 +81,29 @@ void CImGui_Manager::Info_Tool()
 	ImGui::SliderInt("input HP", &iHp, 0, 100);
 	ImGui::Text("HP : %d", iHp);
 
-	enum MOUSEKEYSTATE { DIM_LB, DIM_RB, DIM_MB, DIM_END };
-	if (m_pGameInstance->Get_DIMouseState(CInput_Device::MOUSEKEYSTATE(DIM_LB)) & 0x8000)
+	if (m_pGameInstance->Key_Down(DIK_SPACE))
 	{
 		iHp += 1;
 	}
+	if (m_pGameInstance->Key_Down(DIK_W))
+	{
+		iHp -= 1;
+	}
+
+	if (m_pGameInstance->Mouse_Down(DIMK_LBUTTON))
+	{
+		iHp += 1;
+	}
+	if (m_pGameInstance->Mouse_Up(DIMK_RBUTTON))
+	{
+		iHp -= 1;
+	}
+	if (m_pGameInstance->Mouse_Pressing(DIMK_WHEEL))
+	{
+		iHp = 0;
+	}
+
+
 
 	if (ImGui::Button("DataAdd"))
 	{
@@ -113,14 +131,6 @@ void CImGui_Manager::Info_Tool()
 
 		return;
 	}
-
-
-	//if (ImGui::Button("Save"))
-	//{
-
-	//	ImGuiFileDialog::Instance()->OpenDialog("Test", "Test Test", nullptr, ".", 1, nullptr, ImGuiFileDialogFlags_None);
-	//}
-
 
 
 	//static _bool bCheckbox = false;

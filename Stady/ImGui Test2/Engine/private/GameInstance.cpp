@@ -2,7 +2,7 @@
 #include "Graphic_Device.h"
 #include "Level_Manager.h"
 #include "Object_Manager.h"
-
+#include "Input_Device.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -108,7 +108,6 @@ HRESULT CGameInstance::Clear_Graphic_Device(const _float4 * pColor)
 	return hr;
 }
 
-
 HRESULT CGameInstance::Present()
 {
 	if (nullptr == m_pGraphic_Device)
@@ -117,17 +116,52 @@ HRESULT CGameInstance::Present()
 	return m_pGraphic_Device->Present();
 }
 
-bool CGameInstance::MouseKeyPress(CInput_Device::MOUSEKEYSTATE byMouseID)
+_bool CGameInstance::Key_Down(_uchar eKeyID)
 {
-	if (byMouseID == DIM_LB)
-	{
-		return  m_MouseLeftState == KEY_STATE::PRESS;
-	}
-	else if (byMouseID == DIM_RB)
-	{
-		return m_MouseRightState == KEY_STATE::PRESS;
-	}
-	return false;
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Key_Down(eKeyID);
+}
+
+_bool CGameInstance::Key_Up(_uchar eKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Key_Up(eKeyID);
+}
+
+_bool CGameInstance::Key_Pressing(_uchar eKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Key_Pressing(eKeyID);
+}
+
+_bool CGameInstance::Mouse_Down(MOUSEKEYSTATE eMouseKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Mouse_Down(eMouseKeyID);
+}
+
+_bool CGameInstance::Mouse_Up(MOUSEKEYSTATE eMouseKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Mouse_Up(eMouseKeyID);
+}
+
+_bool CGameInstance::Mouse_Pressing(MOUSEKEYSTATE eMouseKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Mouse_Pressing(eMouseKeyID);
 }
 
 _byte CGameInstance::Get_DIKeyState(_ubyte byKeyID)
@@ -138,7 +172,7 @@ _byte CGameInstance::Get_DIKeyState(_ubyte byKeyID)
 	return m_pInput_Device->Get_DIKeyState(byKeyID);
 }
 
-_byte CGameInstance::Get_DIMouseState(CInput_Device::MOUSEKEYSTATE byMouseID)
+_byte CGameInstance::Get_DIMouseState(MOUSEKEYSTATE byMouseID)
 {
 	if (nullptr == m_pInput_Device)
 		return 0;
@@ -146,7 +180,7 @@ _byte CGameInstance::Get_DIMouseState(CInput_Device::MOUSEKEYSTATE byMouseID)
 	return m_pInput_Device->Get_DIMouseState(byMouseID);
 }
 
-_long CGameInstance::Get_DIMouseMove(CInput_Device::MOUSEMOVESTATE eMoveState)
+_long CGameInstance::Get_DIMouseMove(MOUSEMOVESTATE eMoveState)
 {
 	if (nullptr == m_pInput_Device)
 		return 0;

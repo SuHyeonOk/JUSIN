@@ -2,10 +2,15 @@
 
 namespace Engine
 {
+	enum MOUSEKEYSTATE { DIMK_LBUTTON, DIMK_RBUTTON, DIMK_WHEEL, DIMK_X, DIMK_END };
+	enum MOUSEMOVESTATE { DIMM_X, DIMM_Y, DIMM_WHEEL, DIMM_END };
+
+	typedef		unsigned char			_uchar;
+	typedef		signed char				_char;
+	typedef		wchar_t					_tchar;
+
 	typedef		signed char				_byte;
 	typedef		unsigned char			_ubyte;
-
-	typedef		wchar_t					_tchar;
 
 	typedef		signed short			_short;
 	typedef		unsigned short			_ushort;
