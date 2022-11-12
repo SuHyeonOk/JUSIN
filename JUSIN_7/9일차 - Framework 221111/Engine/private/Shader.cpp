@@ -19,7 +19,8 @@ CShader::CShader(const CShader & rhs)
 
 }
 
-HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElements, const _uint iNumElements)
+HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, 
+	const D3D11_INPUT_ELEMENT_DESC* pElements, const _uint iNumElements)
 {
 	_uint			iHlslFlag = 0;
 
@@ -27,31 +28,40 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 	iHlslFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
 	iHlslFlag = D3DCOMPILE_OPTIMIZATION_LEVEL1;
-
 #endif
-	if (FAILED(D3DX11CompileEffectFromFile(pShaderFilePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, iHlslFlag, 0, m_pDevice, &m_pEffect, nullptr)))
+	
+	if (FAILED(D3DX11CompileEffectFromFile(pShaderFilePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, 
+		iHlslFlag, 0, m_pDevice, &m_pEffect, nullptr)))
 		return E_FAIL;	
 
+	// CShader::Initialize_Prototype()
 	ID3DX11EffectTechnique*	pTechnique = m_pEffect->GetTechniqueByIndex(0);
 
 	D3DX11_TECHNIQUE_DESC	TechniqueDesc;
+	// GetDesc() -> Technique의 정보를 얻어오는 함수
 	pTechnique->GetDesc(&TechniqueDesc);
 
+	// TechniqueDesc.Passes -> Technique안에 pass의 개수
 	m_iNumPasses = TechniqueDesc.Passes;
 
+	// CShader::Initialize_Prototype()
 	for (_uint i = 0; i < m_iNumPasses; ++i)
 	{	
+		// pass의 개수 만큼 디바이스 객체를 통해서 InputLayout 을 만들어 주자.
+		// m_pDevice->CreateInputLayout()
 		ID3D11InputLayout*		pInputLayout = nullptr;
-
+		
+		// pTechnique을 통해 특정 인덱스에 해당하는 pass의 정보를 얻어온다.
 		ID3DX11EffectPass*		pPass = pTechnique->GetPassByIndex(i);
+
 		if (nullptr == pPass)
 			return E_FAIL;
 
 		D3DX11_PASS_DESC		PassDesc;
 		pPass->GetDesc(&PassDesc);
 
-		
-		/* D3D11_INPUT_ELEMENT_DESC	: 정점의 멤버변수 하나를 표현하기위한 데이터. */
+		/* 1인자 pElements을 위한 구조체
+		D3D11_INPUT_ELEMENT_DESC : 정점의 멤버변수 하나를 표현하기위한 데이터. */
 		/*
 		LPCSTR SemanticName;
 		UINT SemanticIndex;
@@ -62,9 +72,11 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 		UINT InstanceDataStepRate;
 		*/	
 
-		if (FAILED(m_pDevice->CreateInputLayout(pElements, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout)))
+		if (FAILED(m_pDevice->CreateInputLayout(pElements, iNumElements, 
+			PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout)))
 			return E_FAIL;
 
+		// CShader::Initialize_Prototype()
 		m_InputLayouts.push_back(pInputLayout);
 	}	
 

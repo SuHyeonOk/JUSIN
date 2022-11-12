@@ -29,7 +29,7 @@ namespace Engine
 
 	typedef struct ENGINE_DLL tagVertexPositionTexture_Declaration
 	{
-		static const unsigned int		iNumElements = 2;
+		static const unsigned int			iNumElements = 2;
 		static D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];			
 	}VTXTEX_DECLARATION;
 

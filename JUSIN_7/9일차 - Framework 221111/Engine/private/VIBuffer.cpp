@@ -58,14 +58,13 @@ HRESULT CVIBuffer::Render()
 	_uint					iOffsets[] = {
 		0, 
 	};
-
+	
 	m_pContext->IASetVertexBuffers(0, m_iNumVertexBuffers, pVertexBuffers, iStrides, iOffsets);
 
 	/* 인덱스버퍼를 장치에 바인딩한다.(단일로 바인딩한다.)  */
 	m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);	
 
 	m_pContext->IASetPrimitiveTopology(m_eTopology);
-
 
 
  	m_pContext->DrawIndexed(m_iNumIndices, 0, 0);
