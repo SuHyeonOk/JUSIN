@@ -27,6 +27,9 @@ public:
 	void	Info_Tool();
 
 private:
+	class CMonster_Tool*	m_pMonsterTool = nullptr;
+
+private:
 	CGameInstance*			m_pGameInstance = nullptr;
 
 protected:

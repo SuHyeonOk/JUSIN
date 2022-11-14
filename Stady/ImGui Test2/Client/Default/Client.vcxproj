@@ -177,6 +177,7 @@
     <ClInclude Include="..\public\Level_Logo.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\public\Monster_Tool.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="ImGui\dirent.h" />
     <ClInclude Include="ImGui\GraphEditor.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="..\private\Level_Logo.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\private\Monster_Tool.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ImGui\GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

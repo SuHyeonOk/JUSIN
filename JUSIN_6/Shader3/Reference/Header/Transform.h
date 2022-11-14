@@ -36,7 +36,7 @@ public:
 	HRESULT				Ready_Transform(void);
 	virtual _int		Update_Component(const _float& fTimeDelta);
 
-public:
+public: // ? privete°¡ ¸Â´Ù
 	_vec3			m_vInfo[INFO_END];
 	_vec3			m_vScale;
 	_vec3			m_vAngle;

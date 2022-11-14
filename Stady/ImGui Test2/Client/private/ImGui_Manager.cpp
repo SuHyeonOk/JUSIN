@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "..\public\ImGui_Manager.h"
 
-#include <fstream>
-#include "../Default/ImGui/ImGuiFileDialog.h"
+#include "Monster_Tool.h"
 
 IMPLEMENT_SINGLETON(CImGui_Manager)
 
@@ -48,6 +47,10 @@ void CImGui_Manager::Ready_Imgui()
 
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pDeviceContext);
+
+	// Tool 추가
+	m_pMonsterTool = new CMonster_Tool();
+	Safe_AddRef(m_pMonsterTool);
 }
 
 void CImGui_Manager::Tick_Imgui()
@@ -57,7 +60,8 @@ void CImGui_Manager::Tick_Imgui()
 	ImGui::NewFrame();
 
 	ImGui::Begin("Info Tool");
-	Info_Tool();
+	m_pMonsterTool->Tick_Monster_Tool();
+	//Info_Tool();
 	ImGui::End(); // 창에 필요한 기능을 다 넣었다면 End로 닫기
 }
 
@@ -76,63 +80,6 @@ void CImGui_Manager::Render_Imgui()
 
 void CImGui_Manager::Info_Tool()
 {
-	static _int		iHp = 0;
-
-	ImGui::SliderInt("input HP", &iHp, 0, 100);
-	ImGui::Text("HP : %d", iHp);
-
-	if (m_pGameInstance->Key_Down(DIK_SPACE))
-	{
-		iHp += 1;
-	}
-	if (m_pGameInstance->Key_Down(DIK_W))
-	{
-		iHp -= 1;
-	}
-
-	if (m_pGameInstance->Mouse_Down(DIMK_LBUTTON))
-	{
-		iHp += 1;
-	}
-	if (m_pGameInstance->Mouse_Up(DIMK_RBUTTON))
-	{
-		iHp -= 1;
-	}
-	if (m_pGameInstance->Mouse_Pressing(DIMK_WHEEL))
-	{
-		iHp = 0;
-	}
-
-
-
-	if (ImGui::Button("DataAdd"))
-	{
-
-	}
-
-	if (ImGui::Button("Save"))
-	{
-		wofstream ofs;
-		ofs.open("../../Data/Info.txt", ios::out | ios::app);
-
-		if (!ofs.fail())
-		{
-			ofs << iHp << endl;
-			ofs.close();
-		}
-		else
-		{
-			MSG_BOX("Data File Error!");
-			return;
-		}
-
-
-		WinExec("notepad.exe ../../Data/Info.txt", SW_SHOW);
-
-		return;
-	}
-
-
 	//static _bool bCheckbox = false;
 	//static _float fSliderFloat = 0.f;
 	//static _float fColorEdit3 = 0.f;
@@ -183,6 +130,9 @@ void CImGui_Manager::Info_Tool()
 
 void CImGui_Manager::Free()
 {
+	// Tool
+	Safe_Release(m_pMonsterTool);
+
 	// 멤버변수 Release
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);

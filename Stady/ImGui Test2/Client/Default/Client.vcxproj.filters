@@ -135,6 +135,9 @@
     <ClInclude Include="..\public\ImGui_Manager.h">
       <Filter>96. Tool\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Monster_Tool.h">
+      <Filter>96. Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ImGui_Manager.cpp">
       <Filter>96. Tool\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Tool.cpp">
+      <Filter>96. Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -49,14 +49,15 @@ void CBackGround::Render_Obejct(void)
 	// m_pTextureCom->Set_Texture(0);	// 텍스처 정보 세팅을 우선적으로 한다.
 
 	_matrix		IdentityMatrix = *D3DXMatrixIdentity(&IdentityMatrix);
-
+	
 	if (FAILED(m_pShaderCom->Set_RawValue("g_WorldMatrix", &IdentityMatrix, sizeof(_matrix))))
 		return ;
 	if (FAILED(m_pShaderCom->Set_RawValue("g_ViewMatrix", &IdentityMatrix, sizeof(_matrix))))
 		return ;
 	if (FAILED(m_pShaderCom->Set_RawValue("g_ProjMatrix", &IdentityMatrix, sizeof(_matrix))))
 		return ;
-
+	
+	// 텍스처를 셰이더에 넘겨준다.
 	m_pTextureCom->Set_Texture(m_pShaderCom, "g_DefaultTexture", 0);
 
 	// m_pShaderCom->Set_Texture("g_DefaultTexture", m_pTextureCom->Set_Texture())
