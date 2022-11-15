@@ -25,6 +25,7 @@ namespace Engine
 	typedef		XMFLOAT3				_float3;
 	typedef		XMFLOAT4				_float4;
 	typedef		XMVECTOR				_vector;
+
 	typedef		FXMVECTOR				_fvector;
 	typedef		CXMVECTOR				_cvector;
 	typedef		HXMVECTOR				_hvector;
