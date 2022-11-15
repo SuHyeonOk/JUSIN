@@ -31,6 +31,5 @@ public:
 public:
 	CListBox m_ListBox;
 
-
 	list<IMGPATH*>		m_PathList;
 };

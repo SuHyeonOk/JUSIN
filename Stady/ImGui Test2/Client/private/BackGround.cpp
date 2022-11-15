@@ -20,6 +20,17 @@ HRESULT CBackGround::Initialize_Prototype()
 	return S_OK;
 }
 
+void CBackGround::FileTest(list<MINFOTEX*>& fPathList)
+{
+	MINFOTEX*		pImgPath = new MINFOTEX;
+	pImgPath->wstrName = L"Silme";
+	pImgPath->iHp = 10;
+	pImgPath->fPos = { 1.f, 2.f, 3.f };
+	
+	fPathList.push_back(pImgPath);
+	delete(pImgPath);
+}
+
 HRESULT CBackGround::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))

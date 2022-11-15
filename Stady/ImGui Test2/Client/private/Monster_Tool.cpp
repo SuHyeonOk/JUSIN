@@ -16,29 +16,43 @@ void CMonster_Tool::Tick_Monster_Tool()
 	ImGui::SliderInt("input HP", &iHp, 0, 100);
 	ImGui::Text("HP : %d", iHp);
 
-	if (ImGui::Button("DataAdd"))
+	static char buf[32] = u8"NIHONGO";
+	if (ImGui::TreeNode("UTF-8 Text"))
 	{
-
+		ImGui::InputText("UTF-8 input", buf, IM_ARRAYSIZE(buf));
+		ImGui::TreePop();
 	}
+
 
 	if (ImGui::Button("Save"))
 	{
-		wofstream ofs;
-		ofs.open("../../Data/Info.txt", ios::out | ios::app);
+		ofstream ofs("../../Data/Info.txt", ios::app);
 
-		if (!ofs.fail())
-		{
-			ofs << iHp << endl;
-			ofs.close();
-		}
-		else
+		if (!ofs)//(ofs.fail())
 		{
 			MSG_BOX("Data File Error!");
 			return;
 		}
 
+		ofs << iHp << endl;
+		ofs.close();
+		//WinExec("notepad.exe ../../Data/Info.txt", SW_SHOW);
 
-		WinExec("notepad.exe ../../Data/Info.txt", SW_SHOW);
+		return;
+	}
+
+	if (ImGui::Button("Load"))
+	{
+		ifstream ofs("../../Data/Info.txt");
+
+		if (!ofs)//(ofs.eof() == false)
+		{
+			MSG_BOX("Data File Load Error!");
+			return;
+		}
+
+		ofs >> iHp;
+		ofs.close();
 
 		return;
 	}
