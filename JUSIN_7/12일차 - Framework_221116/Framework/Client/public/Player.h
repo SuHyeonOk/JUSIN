@@ -8,18 +8,18 @@ class CShader;
 class CTexture;
 class CRenderer;
 class CTransform;
-class CVIBuffer_Terrain;
+class CVIBuffer_Rect;
 class CGameInstance;
 END
 
 BEGIN(Client)
 
-class CTerrain final : public CGameObject
+class CPlayer final : public CGameObject
 {
 private:
-	CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CTerrain(const CTerrain& rhs);
-	virtual ~CTerrain() = default;
+	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CPlayer(const CPlayer& rhs);
+	virtual ~CPlayer() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -33,7 +33,7 @@ private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
-	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;	
+	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 
 private:
@@ -43,7 +43,7 @@ private:
 	void	Key_Input(_double TimeDelta);
 
 public:
-	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };

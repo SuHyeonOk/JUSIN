@@ -2,6 +2,8 @@
 #include "..\public\Loader.h"
 #include "GameInstance.h"
 #include "BackGround.h"
+
+#include "Player.h"
 #include "Terrain.h"
 
 
@@ -94,9 +96,15 @@ HRESULT CLoader::Loading_ForGamePlay()
 	Safe_AddRef(pGameInstance);
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+
 	/* For.Prototype_Component_Texture_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile2.jpg"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Player */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Player"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Player/Player.jpg")))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
@@ -116,9 +124,15 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 	
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Player */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

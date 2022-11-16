@@ -18,6 +18,8 @@ HRESULT CTerrain::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
+
+
 	
 	return S_OK;
 }
@@ -30,6 +32,7 @@ HRESULT CTerrain::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;	
 	
+	m_pGameInstance = GET_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
@@ -37,6 +40,8 @@ HRESULT CTerrain::Initialize(void * pArg)
 void CTerrain::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	//Key_Input(TimeDelta);
 }
 
 void CTerrain::Late_Tick(_double TimeDelta)
@@ -111,7 +116,7 @@ HRESULT CTerrain::SetUp_ShaderResources()
 
 	_float4x4			ViewMatrix, ProjMatrix;
 	
-	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(0.f, 20.f, -30.f, 1.f), XMVectorSet(0.f ,0.f, 0.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
+	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(0.f, 20.f, -30.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
 	XMStoreFloat4x4(&ProjMatrix, XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), g_iWinSizeX / (_float)g_iWinSizeY, 0.2f, 300.f));
 
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &ViewMatrix)))
@@ -122,6 +127,35 @@ HRESULT CTerrain::SetUp_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CTerrain::Key_Input(_double TimeDelta)
+{
+	if(m_pGameInstance->Key_Pressing(DIK_UP) && m_pGameInstance->Key_Pressing(DIK_RIGHT))
+	{
+		m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 45.f);
+		//m_pTransformCom->Go_Backward(0.001);
+	}
+	else
+	{
+		if (m_pGameInstance->Key_Pressing(DIK_UP))
+		{
+			m_pTransformCom->Go_Backward(0.01);
+		}
+		if (m_pGameInstance->Key_Pressing(DIK_DOWN))
+		{
+			m_pTransformCom->Go_Straight(0.01);
+		}
+		if (m_pGameInstance->Key_Pressing(DIK_LEFT))
+		{
+			m_pTransformCom->Go_Right(0.01);
+		}
+		if (m_pGameInstance->Key_Pressing(DIK_RIGHT))
+		{
+			m_pTransformCom->Go_Left(0.01);
+		}
+	}
+
 }
 
 CTerrain * CTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -151,6 +185,8 @@ CGameObject * CTerrain::Clone(void * pArg)
 void CTerrain::Free()
 {
 	__super::Free();
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pTransformCom);

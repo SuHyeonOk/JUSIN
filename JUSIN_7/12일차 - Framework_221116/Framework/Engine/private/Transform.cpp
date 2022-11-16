@@ -88,14 +88,14 @@ void CTransform::Go_Left(_double TimeDelta)
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
-
+ 
 void CTransform::Go_Right(_double TimeDelta)
 {
 	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
 	_vector	vRight = Get_State(CTransform::STATE_RIGHT);
 
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
-	vPosition += XMVector3Normalize(vRight) * m_TransformDesc.fSpeedPerSec * TimeDelta;
+	vPosition += XMVector3Normalize(vRight) * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
@@ -117,9 +117,9 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
 {
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
 
-	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f);
-	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * Get_Scaled().x;
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * Get_Scaled().y;
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * Get_Scaled().z;
 
 	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
 	Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
@@ -148,7 +148,7 @@ void CTransform::Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit)
 
 	if(fDistance > fLimit)
 	{
-		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * TimeDelta;	
+		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;	
 		Set_State(CTransform::STATE_TRANSLATION, vPosition);
 	}
 }

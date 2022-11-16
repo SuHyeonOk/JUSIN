@@ -23,7 +23,7 @@ private:
 
 	/* 바인딩작업. 기능실행 (정점버퍼를 SetStreamSource(), SetIndices(), SetTransform(), SetTexture() */
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
-
+	
 	IDXGISwapChain*			m_pSwapChain = nullptr;	
 
 	// ID3D11ShaderResourceView*

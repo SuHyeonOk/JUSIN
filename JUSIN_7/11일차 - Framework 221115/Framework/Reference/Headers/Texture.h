@@ -12,13 +12,12 @@ protected:
 	CTexture(const CTexture& rhs);
 	virtual ~CTexture() = default;
 
-public:
+public: // CTexture
 	virtual HRESULT Initialize_Prototype(const _tchar* pTextureFilePath, _uint iNumTextures);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName, _uint iTextureIndex = 0);
-
 
 private:
 	_uint										m_iNumTextures = 0;
@@ -26,10 +25,11 @@ private:
 	typedef vector<ID3D11ShaderResourceView*>	TEXTURES;
 
 public:
-	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTextureFilePath, _uint iNumTextures = 1);
+	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, 
+		const _tchar* pTextureFilePath, _uint iNumTextures = 1);
+
 	virtual CComponent* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
-
 };
 
 END
