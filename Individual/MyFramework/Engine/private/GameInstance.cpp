@@ -102,28 +102,6 @@ void CGameInstance::Clear_Level(_uint iLevelIndex)
 
 }
 
-ID3D11Device * CGameInstance::Get_Device()
-{
-	if (nullptr == m_pGraphic_Device)
-	{
-		MSG_BOX("Failed to Created : Device");
-		return nullptr;
-	}
-
-	return m_pGraphic_Device->Get_Device();
-}
-
-ID3D11DeviceContext * CGameInstance::Get_Context()
-{
-	if (nullptr == m_pGraphic_Device)
-	{
-		MSG_BOX("Failed to Created : Device");
-		return nullptr;
-	}
-
-	return m_pGraphic_Device->Get_Context();
-}
-
 HRESULT CGameInstance::Clear_Graphic_Device(const _float4 * pColor)
 {
 	if (nullptr == m_pGraphic_Device)

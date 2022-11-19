@@ -11,11 +11,6 @@ class CGraphic_Device final : public CBase
 public:
 	CGraphic_Device();
 	virtual ~CGraphic_Device() = default;
-
-public:
-	ID3D11Device*			Get_Device() { return m_pDevice; }
-	ID3D11DeviceContext*	Get_Context() { return m_pDeviceContext; }
-
 public:
 	HRESULT Ready_Graphic_Device(HWND hWnd, GRAPHIC_DESC::WINMODE WinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut);
 	HRESULT Clear_BackBuffer_View(_float4 vClearColor);
