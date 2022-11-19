@@ -40,6 +40,15 @@
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{4c626d09-478b-44e4-a4c0-07f7b1063670}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98.Default\ImGui">
+      <UniqueIdentifier>{6a599e6c-1fee-45be-bc2b-179724ceab37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. ImGui">
+      <UniqueIdentifier>{72c3b2a9-a74e-4f6b-b433-f2491364634a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. ImGui\Manager">
+      <UniqueIdentifier>{05fc13d0-3ec5-4146-a0d5-636e8471144b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,6 +93,63 @@
     <ClInclude Include="..\public\Camera_Dynamic.h">
       <Filter>02.GameObjects\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="ImGui\ImGuiFileDialog.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGuiFileDialogConfig.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGuizmo.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImSequencer.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImZoomSlider.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\dirent.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\GraphEditor.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImCurveEdit.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGradient.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx11.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>98.Default\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ImGui_Manager.h">
+      <Filter>96. ImGui\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Tool.h">
+      <Filter>96. ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -115,6 +181,48 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_Dynamic.cpp">
       <Filter>02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGuiFileDialog.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImSequencer.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\GraphEditor.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImCurveEdit.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGradient.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>98.Default\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ImGui_Manager.cpp">
+      <Filter>96. ImGui\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Tool.cpp">
+      <Filter>96. ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

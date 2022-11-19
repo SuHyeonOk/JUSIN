@@ -32,6 +32,8 @@ public: /* For.GameInstance */
 	void Clear_Level(_uint iLevelIndex);
 
 public: /* For.Graphic_Device */
+	ID3D11Device*			Get_Device();
+	ID3D11DeviceContext*	Get_Context();
 	HRESULT Clear_Graphic_Device(const _float4* pColor);
 	HRESULT Present();
 

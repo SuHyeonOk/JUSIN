@@ -5,6 +5,10 @@
 #include "Level_Loading.h"
 #include "Camera_Dynamic.h"
 
+#if defined(USE_IMGUI)
+#include "ImGui_Manager.h"
+#endif
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
 {
@@ -19,9 +23,6 @@ CMainApp::CMainApp()
 	m_pContext->PSSetSamplers();*/
 
 	
-
-	/*
-	*/
 }
 
 HRESULT CMainApp::Initialize()
@@ -50,6 +51,11 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
+//#if defined (USE_IMGUI)
+//	// ImGui_Manager 초기화
+//	CImGui_Manager::GetInstance()->Ready_Imgui();
+//#endif
+
 	return S_OK;
 }
 
@@ -57,6 +63,11 @@ void CMainApp::Tick(_double TimeDelta)
 {
 	if (nullptr == m_pGameInstance)
 		return;
+
+//#if defined (USE_IMGUI)
+//	// ImGui_Manager 업데이트
+//	CImGui_Manager::GetInstance()->Tick_Imgui();
+//#endif
 
 	m_pGameInstance->Tick_Engine(TimeDelta);
 }
@@ -74,6 +85,11 @@ HRESULT CMainApp::Render()
 	m_pGameInstance->Render_Level();
 
 	m_pGameInstance->Present();
+
+//#if defined(USE_IMGUI)
+//	// ImGui_Manager 렌더링
+//	CImGui_Manager::GetInstance()->Render_Imgui();
+//#endif
 
 	return S_OK;
 }
@@ -150,6 +166,11 @@ void CMainApp::Free()
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pDevice);
+
+//#if defined(USE_IMGUI)
+//	// ImGui_Manager Free
+//	CImGui_Manager::GetInstance()->DestroyInstance();
+//#endif
 
 	CGameInstance::Release_Engine();
 }

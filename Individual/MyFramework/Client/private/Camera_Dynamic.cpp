@@ -70,14 +70,15 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 		m_pTransformCom->Go_Right(TimeDelta);
 	}
 
-	if (!pGameInstance->Mouse_Pressing(CInput_Device::DIM_LB))
+	//if (!pGameInstance->Mouse_Pressing(CInput_Device::DIM_LB))
 	{
 		_long			MouseMove = 0;
 		_float			fSensitivity = 0.05f;
 
 		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
 		{
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
+			MouseMove;
+ 			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
 		}
 
 		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y))
