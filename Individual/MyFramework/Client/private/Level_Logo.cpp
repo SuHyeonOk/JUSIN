@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "..\public\Level_Logo.h"
 
-#include "Level_Loading.h"
 #include "GameInstance.h"
+
+#include "Level_Loading.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -31,18 +32,22 @@ void CLevel_Logo::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (GetKeyState(VK_SPACE) & 0x8000)
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_F1))
 	{
-		CGameInstance*		pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_IMGUI))))
 			return;
-
-		Safe_Release(pGameInstance);
-
 	}
 
+	if (pGameInstance->Key_Down(DIK_SPACE))
+	{
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+			return;
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Logo::Render()

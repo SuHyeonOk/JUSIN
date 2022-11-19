@@ -105,7 +105,7 @@ HRESULT CTerrain::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
 	return S_OK;

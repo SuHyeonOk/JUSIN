@@ -49,6 +49,9 @@
     <Filter Include="96. ImGui\Manager">
       <UniqueIdentifier>{05fc13d0-3ec5-4146-a0d5-636e8471144b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96. ImGui\Level">
+      <UniqueIdentifier>{309fd481-60b6-4401-a13e-3c95ac36277e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -150,6 +153,9 @@
     <ClInclude Include="..\public\Monster_Tool.h">
       <Filter>96. ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_ImGui.h">
+      <Filter>96. ImGui\Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -223,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Monster_Tool.cpp">
       <Filter>96. ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_ImGui.cpp">
+      <Filter>96. ImGui\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

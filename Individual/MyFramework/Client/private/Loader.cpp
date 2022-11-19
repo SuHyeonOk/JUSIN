@@ -21,9 +21,14 @@ _uint APIENTRY LoadingThread(void* pArg)
 
 	switch (pLoader->Get_NextLevelID())
 	{
+	case LEVEL_IMGUI:
+		pLoader->Loading_ForImGui();
+		break;
+
 	case LEVEL_LOGO:
 		pLoader->Loading_ForLogo();
 		break;
+
 	case LEVEL_GAMEPLAY:
 		pLoader->Loading_ForGamePlay();
 		break;
@@ -48,6 +53,46 @@ HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 	return S_OK;
 }
 
+HRESULT CLoader::Loading_ForImGui()
+{
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+	/* For.Prototype_Component_Texture_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Garden_Rooms_Floor_Tile_D.dds")))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
+	/* For.Prototype_Component_VIBuffer_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
+	/* For.Prototype_Component_Shader_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Terrain"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+	/* For.Prototype_GameObject_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
+
+	m_isFinished = true;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 /* 로고를 위한 원형을 생성한다. */
 HRESULT CLoader::Loading_ForLogo()
 {
@@ -57,7 +102,7 @@ HRESULT CLoader::Loading_ForLogo()
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));	
 
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/AT_title.dds")))))
 		return E_FAIL;		
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
@@ -96,10 +141,8 @@ HRESULT CLoader::Loading_ForGamePlay()
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
 	/* For.Prototype_Component_Texture_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile%d.dds"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Garden_Rooms_Floor_Tile_D.dds")))))
 		return E_FAIL;
-
-
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
 	/* For.Prototype_Component_VIBuffer_Terrain */
@@ -107,9 +150,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
-
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
-
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 	/* For.Prototype_Component_Shader_Terrain */
@@ -117,13 +158,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
 		return E_FAIL;
 
-
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 

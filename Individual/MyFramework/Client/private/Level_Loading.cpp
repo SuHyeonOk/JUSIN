@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "..\public\Level_Loading.h"
 
-#include "Loader.h"
 #include "GameInstance.h"
+#include "Loader.h"
+
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
+#include "Level_ImGui.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -52,6 +54,10 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 
 			switch (m_eNextLevelID)
 			{
+			case LEVEL_IMGUI:
+				pLevel = CLevel_ImGui::Create(m_pDevice, m_pContext);
+				break;
+
 			case LEVEL_LOGO:
 				pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 				break;
