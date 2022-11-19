@@ -45,7 +45,6 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pInput_Device->Ready_Input_Device(hInst, GraphicDesc.hWnd)))
 		return E_FAIL;
 
-
 	// CGameInstance::Initialize_Engine(
 	/* +1개로 예약하는 이유 : 엔진에서 Level_Static을 추가로 제공하기 위해서. */
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevels + 1)))

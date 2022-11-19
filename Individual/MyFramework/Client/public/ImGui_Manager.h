@@ -24,7 +24,7 @@ public: /* MainApp 에서 돌아가야 할 기본적인 함수들 */
 	void	Render_Imgui();
 
 public:
-	void	Info_Tool();
+	void	Monster_Tool();
 
 private:
 	class CMonster_Tool*	m_pMonsterTool = nullptr;

@@ -2,10 +2,7 @@
 #include "..\public\Level_ImGui.h"
 
 #include "GameInstance.h"
-
-#if defined(USE_IMGUI)
 #include "ImGui_Manager.h"
-#endif
 
 CLevel_ImGui::CLevel_ImGui(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -32,6 +29,7 @@ void CLevel_ImGui::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CImGui_Manager::GetInstance()->Monster_Tool();
 }
 
 void CLevel_ImGui::Late_Tick(_double TimeDelta)
@@ -41,15 +39,12 @@ void CLevel_ImGui::Late_Tick(_double TimeDelta)
 
 HRESULT CLevel_ImGui::Render()
 {
-//#if defined(USE_IMGUI)
-//	// ImGui_Manager ·»´õ¸µ
-//	CImGui_Manager::GetInstance()->Render_Imgui();
-//#endif
-
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	SetWindowText(g_hWnd, TEXT("Level : IMGUI"));
+
+
 
 	return S_OK;
 }
@@ -94,8 +89,4 @@ void CLevel_ImGui::Free()
 {
 	__super::Free();
 
-//#if defined(USE_IMGUI)
-//	// ImGui_Manager Free
-//	CImGui_Manager::GetInstance()->DestroyInstance();
-//#endif
 }

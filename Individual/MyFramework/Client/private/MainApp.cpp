@@ -14,15 +14,9 @@ CMainApp::CMainApp()
 {
 	Safe_AddRef(m_pGameInstance);
 
-
-
 	/*D3D11_SAMPLER_DESC		SamplerDesc;
-
 	m_pDevice->CreateSamplerState();
-
-	m_pContext->PSSetSamplers();*/
-
-	
+	m_pContext->PSSetSamplers();*/	
 }
 
 HRESULT CMainApp::Initialize()
@@ -51,10 +45,10 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
-//#if defined (USE_IMGUI)
-//	// ImGui_Manager 초기화
-//	CImGui_Manager::GetInstance()->Ready_Imgui();
-//#endif
+#if defined (USE_IMGUI)
+	// ImGui_Manager 초기화
+	CImGui_Manager::GetInstance()->Ready_Imgui();
+#endif
 
 	return S_OK;
 }
@@ -64,10 +58,10 @@ void CMainApp::Tick(_double TimeDelta)
 	if (nullptr == m_pGameInstance)
 		return;
 
-//#if defined (USE_IMGUI)
-//	// ImGui_Manager 업데이트
-//	CImGui_Manager::GetInstance()->Tick_Imgui();
-//#endif
+#if defined (USE_IMGUI)
+	// ImGui_Manager 업데이트
+	CImGui_Manager::GetInstance()->Tick_Imgui();
+#endif
 
 	m_pGameInstance->Tick_Engine(TimeDelta);
 }
@@ -86,10 +80,10 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Present();
 
-//#if defined(USE_IMGUI)
-//	// ImGui_Manager 렌더링
-//	CImGui_Manager::GetInstance()->Render_Imgui();
-//#endif
+#if defined(USE_IMGUI)
+	// ImGui_Manager 렌더링
+	CImGui_Manager::GetInstance()->Render_Imgui();
+#endif
 
 	return S_OK;
 }
@@ -162,15 +156,15 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
+#if defined(USE_IMGUI)
+	// ImGui_Manager Free
+	CImGui_Manager::GetInstance()->DestroyInstance();
+#endif
+
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pDevice);
-
-//#if defined(USE_IMGUI)
-//	// ImGui_Manager Free
-//	CImGui_Manager::GetInstance()->DestroyInstance();
-//#endif
 
 	CGameInstance::Release_Engine();
 }
