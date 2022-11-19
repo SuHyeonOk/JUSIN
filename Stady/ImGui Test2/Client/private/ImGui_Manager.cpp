@@ -63,6 +63,10 @@ void CImGui_Manager::Tick_Imgui()
 	m_pMonsterTool->Tick_Monster_Tool();
 	//Info_Tool();
 	ImGui::End(); // 창에 필요한 기능을 다 넣었다면 End로 닫기
+
+	if (m_pGameInstance->Key_Pressing(DIK_G)) {
+		int a = 0;
+	}
 }
 
 void CImGui_Manager::Render_Imgui()
