@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "..\public\Loader.h"
+
 #include "GameInstance.h"
+
 #include "BackGround.h"
 #include "Terrain.h"
-
+#include "Player.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -144,6 +146,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Garden_Rooms_Floor_Tile_D.dds")))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_Player */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Player"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Player/Finn_Face_Blinks_D.dds")))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
 	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
@@ -151,6 +158,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
+
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 	/* For.Prototype_Component_Shader_Terrain */
@@ -162,6 +170,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Player */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

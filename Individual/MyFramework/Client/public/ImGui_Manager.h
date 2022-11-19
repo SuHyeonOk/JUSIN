@@ -3,8 +3,6 @@
 #include "Base.h"
 #include "Client_Defines.h"
 
-#if defined(USE_IMGUI)
-
 #include "../Default/ImGui/imgui.h"
 #include "../Default/ImGui/imgui_impl_dx11.h"
 #include "../Default/ImGui/imgui_impl_win32.h"
@@ -27,7 +25,7 @@ public:
 	void	Monster_Tool();
 
 private:
-	class CMonster_Tool*	m_pMonsterTool = nullptr;
+	class CTool_Monster*	m_pToolMonster = nullptr;
 
 private:
 	CGameInstance*			m_pGameInstance = nullptr;
@@ -39,5 +37,3 @@ protected:
 public:
 	virtual void Free() override;
 };
-
-#endif

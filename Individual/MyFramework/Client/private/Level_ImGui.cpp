@@ -29,7 +29,7 @@ void CLevel_Tool::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CImGui_Manager::GetInstance()->Monster_Tool();
+	//CImGui_Manager::GetInstance()->Monster_Tool();
 }
 
 void CLevel_Tool::Late_Tick(_double TimeDelta)
@@ -43,6 +43,8 @@ HRESULT CLevel_Tool::Render()
 		return E_FAIL;
 
 	SetWindowText(g_hWnd, TEXT("Level : IMGUI"));
+
+
 
 	return S_OK;
 }

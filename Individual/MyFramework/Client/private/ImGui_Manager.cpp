@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "..\public\ImGui_Manager.h"
 
-#if defined(USE_IMGUI)
-#include "Monster_Tool.h"
+#include "Tool_Monster.h"
 
 IMPLEMENT_SINGLETON(CImGui_Manager)
 
@@ -50,7 +49,7 @@ void CImGui_Manager::Ready_Imgui()
 	Safe_AddRef(m_pDeviceContext);
 
 	// Tool 추가
-	m_pMonsterTool = new CMonster_Tool();
+	m_pToolMonster = new CTool_Monster();
 }
 
 void CImGui_Manager::Tick_Imgui()
@@ -62,7 +61,7 @@ void CImGui_Manager::Tick_Imgui()
 
 void CImGui_Manager::Render_Imgui()
 {
-//	ImGui::EndFrame();
+	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -75,13 +74,13 @@ void CImGui_Manager::Render_Imgui()
 
 void CImGui_Manager::Monster_Tool()
 {
-	m_pMonsterTool->Tick_Monster_Tool();
+	m_pToolMonster->Tick_Monster_Tool();
 }
 
 void CImGui_Manager::Free()
 {
 	// Tool	
-	Safe_Release(m_pMonsterTool);
+	Safe_Release(m_pToolMonster);
 
 	// 멤버변수 Release
 	Safe_Release(m_pGameInstance);
@@ -93,5 +92,3 @@ void CImGui_Manager::Free()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 }
-
-#endif

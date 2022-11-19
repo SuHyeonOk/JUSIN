@@ -128,7 +128,6 @@ HRESULT CGraphic_Device::Ready_SwapChain(HWND hWnd, GRAPHIC_DESC::WINMODE eWinMo
 	return S_OK;
 }
 
-
 HRESULT CGraphic_Device::Ready_BackBufferRenderTargetView()
 {
 	if (nullptr == m_pDevice)

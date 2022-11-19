@@ -52,6 +52,9 @@
     <Filter Include="96. ImGui\Level">
       <UniqueIdentifier>{309fd481-60b6-4401-a13e-3c95ac36277e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player">
+      <UniqueIdentifier>{34b22e7a-4aa3-400a-9210-2d75da58ffc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -150,11 +153,14 @@
     <ClInclude Include="..\public\ImGui_Manager.h">
       <Filter>96. ImGui\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Monster_Tool.h">
-      <Filter>96. ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Level_Tool.h">
       <Filter>96. ImGui\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Tool_Monster.h">
+      <Filter>96. ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player.h">
+      <Filter>02.GameObjects\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,11 +233,14 @@
     <ClCompile Include="..\private\ImGui_Manager.cpp">
       <Filter>96. ImGui\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Monster_Tool.cpp">
-      <Filter>96. ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Level_Tool.cpp">
       <Filter>96. ImGui\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Tool_Monster.cpp">
+      <Filter>96. ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player.cpp">
+      <Filter>02.GameObjects\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

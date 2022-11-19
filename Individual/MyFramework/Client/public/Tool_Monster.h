@@ -9,7 +9,7 @@ BEGIN(Engine)
 class CGmaeInstance;
 END
 
-class CMonster_Tool final : public CBase
+class CTool_Monster final : public CBase
 {
 public:
 	typedef struct tagMonsterInfoTexture
@@ -21,8 +21,8 @@ public:
 	}MINFOTEX;
 
 public:
-	CMonster_Tool();
-	virtual ~CMonster_Tool() = default;
+	CTool_Monster();
+	virtual ~CTool_Monster() = default;
 
 public:
 	void	Tick_Monster_Tool();

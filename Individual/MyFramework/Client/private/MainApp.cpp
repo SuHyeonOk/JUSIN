@@ -2,12 +2,12 @@
 #include "..\public\MainApp.h"
 
 #include "GameInstance.h"
+
 #include "Level_Loading.h"
 #include "Camera_Dynamic.h"
 
-#if defined(USE_IMGUI)
 #include "ImGui_Manager.h"
-#endif
+
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())

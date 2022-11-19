@@ -179,8 +179,9 @@
     <ClInclude Include="..\public\Level_Tool.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
-    <ClInclude Include="..\public\Monster_Tool.h" />
+    <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\public\Tool_Monster.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="ImGui\dirent.h" />
     <ClInclude Include="ImGui\GraphEditor.h" />
@@ -213,8 +214,9 @@
     <ClCompile Include="..\private\Level_Tool.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
-    <ClCompile Include="..\private\Monster_Tool.cpp" />
+    <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\private\Tool_Monster.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ImGui\GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

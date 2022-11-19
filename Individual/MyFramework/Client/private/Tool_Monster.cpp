@@ -1,14 +1,14 @@
 #include "stdafx.h"
-#include "..\public\Monster_Tool.h"
+#include "..\public\Tool_Monster.h"
 
 #include <fstream>
 #include "../Default/ImGui/ImGuiFileDialog.h"
 
-CMonster_Tool::CMonster_Tool()
+CTool_Monster::CTool_Monster()
 {
 }
 
-void CMonster_Tool::Tick_Monster_Tool()
+void CTool_Monster::Tick_Monster_Tool()
 {
 	ImGui::Begin("Monster Tool");
 
@@ -109,6 +109,6 @@ void CMonster_Tool::Tick_Monster_Tool()
 	ImGui::End(); // 창에 필요한 기능을 다 넣었다면 End로 닫기
 }
 
-void CMonster_Tool::Free()
+void CTool_Monster::Free()
 {
 }
