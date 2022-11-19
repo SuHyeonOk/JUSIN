@@ -174,9 +174,9 @@
     <ClInclude Include="..\public\Client_Defines.h" />
     <ClInclude Include="..\public\ImGui_Manager.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
-    <ClInclude Include="..\public\Level_ImGui.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
+    <ClInclude Include="..\public\Level_Tool.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Monster_Tool.h" />
@@ -208,9 +208,9 @@
     <ClCompile Include="..\private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\ImGui_Manager.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
-    <ClCompile Include="..\private\Level_ImGui.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
+    <ClCompile Include="..\private\Level_Tool.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Monster_Tool.cpp" />

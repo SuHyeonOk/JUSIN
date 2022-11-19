@@ -4,7 +4,6 @@
 #include <fstream>
 #include "../Default/ImGui/ImGuiFileDialog.h"
 
-
 CMonster_Tool::CMonster_Tool()
 {
 }

@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "..\public\Level_ImGui.h"
+#include "..\public\Level_Tool.h"
 
 #include "GameInstance.h"
 #include "ImGui_Manager.h"
 
-CLevel_ImGui::CLevel_ImGui(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
 
 }
 
-HRESULT CLevel_ImGui::Initialize()
+HRESULT CLevel_Tool::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -25,19 +25,19 @@ HRESULT CLevel_ImGui::Initialize()
 	return S_OK;
 }
 
-void CLevel_ImGui::Tick(_double TimeDelta)
+void CLevel_Tool::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 	CImGui_Manager::GetInstance()->Monster_Tool();
 }
 
-void CLevel_ImGui::Late_Tick(_double TimeDelta)
+void CLevel_Tool::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 }
 
-HRESULT CLevel_ImGui::Render()
+HRESULT CLevel_Tool::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -49,7 +49,7 @@ HRESULT CLevel_ImGui::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_ImGui::Ready_Layer_BackGround(const _tchar * pLayerTag)
+HRESULT CLevel_Tool::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -61,7 +61,7 @@ HRESULT CLevel_ImGui::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_ImGui::Ready_Layer_Camera(const _tchar * pLayerTag)
+HRESULT CLevel_Tool::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -73,19 +73,19 @@ HRESULT CLevel_ImGui::Ready_Layer_Camera(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-CLevel_ImGui * CLevel_ImGui::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CLevel_Tool * CLevel_Tool::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CLevel_ImGui*		pInstance = new CLevel_ImGui(pDevice, pContext);
+	CLevel_Tool*		pInstance = new CLevel_Tool(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX("Failed to Created : CLevel_ImGui");
+		MSG_BOX("Failed to Created : CLevel_Tool");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CLevel_ImGui::Free()
+void CLevel_Tool::Free()
 {
 	__super::Free();
 

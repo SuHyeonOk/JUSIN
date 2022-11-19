@@ -21,8 +21,8 @@ _uint APIENTRY LoadingThread(void* pArg)
 
 	switch (pLoader->Get_NextLevelID())
 	{
-	case LEVEL_IMGUI:
-		pLoader->Loading_ForImGui();
+	case LEVEL_TOOL:
+		pLoader->Loading_ForTool();
 		break;
 
 	case LEVEL_LOGO:
@@ -53,7 +53,7 @@ HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 	return S_OK;
 }
 
-HRESULT CLoader::Loading_ForImGui()
+HRESULT CLoader::Loading_ForTool()
 {
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
