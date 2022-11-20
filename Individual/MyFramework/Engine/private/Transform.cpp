@@ -52,6 +52,7 @@ HRESULT CTransform::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
 		memcpy(&m_TransformDesc, pArg, sizeof(TRANSFORMDESC));
+	 
 
 	return S_OK;
 }

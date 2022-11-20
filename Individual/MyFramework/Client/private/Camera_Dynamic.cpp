@@ -50,42 +50,42 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_W))
-	{
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}	
+	//if (pGameInstance->Key_Pressing(DIK_W))
+	//{
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+	//}	
 
-	if(pGameInstance->Key_Pressing(DIK_S))
-	{
-		m_pTransformCom->Go_Backward(TimeDelta);
-	}
-	
-	if (pGameInstance->Key_Pressing(DIK_A))
-	{
-		m_pTransformCom->Go_Left(TimeDelta);
-	}
+	//if(pGameInstance->Key_Pressing(DIK_S))
+	//{
+	//	m_pTransformCom->Go_Backward(TimeDelta);
+	//}
+	//
+	//if (pGameInstance->Key_Pressing(DIK_A))
+	//{
+	//	m_pTransformCom->Go_Left(TimeDelta);
+	//}
 
-	if (pGameInstance->Key_Pressing(DIK_D))
-	{
-		m_pTransformCom->Go_Right(TimeDelta);
-	}
+	//if (pGameInstance->Key_Pressing(DIK_D))
+	//{
+	//	m_pTransformCom->Go_Right(TimeDelta);
+	//}
 
-	//if (!pGameInstance->Mouse_Pressing(CInput_Device::DIM_LB))
-	{
-		_long			MouseMove = 0;
-		_float			fSensitivity = 0.05f;
+	////if (!pGameInstance->Mouse_Pressing(CInput_Device::DIM_LB))
+	//{
+	//	_long			MouseMove = 0;
+	//	_float			fSensitivity = 0.05f;
 
-		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
-		{
-			MouseMove;
- 			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
-		}
+	//	if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
+	//	{
+	//		MouseMove;
+ //			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
+	//	}
 
-		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y))
-		{
-			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), TimeDelta * MouseMove * fSensitivity);
-		}
-	}
+	//	if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y))
+	//	{
+	//		m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), TimeDelta * MouseMove * fSensitivity);
+	//	}
+	//}
 
 	RELEASE_INSTANCE(CGameInstance);
 

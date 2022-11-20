@@ -1,5 +1,6 @@
 	#include "stdafx.h"
 #include "..\public\Player.h"
+
 #include "GameInstance.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -27,15 +28,14 @@ HRESULT CPlayer::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 10.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = 90.0f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(100.0f);
 
-	if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
-		return E_FAIL;	
-	
+		return E_FAIL;		
 
 	return S_OK;
 }
@@ -43,6 +43,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 void CPlayer::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	Key_Input(TimeDelta);
 }
 
 void CPlayer::Late_Tick(_double TimeDelta)
@@ -114,6 +116,65 @@ HRESULT CPlayer::SetUp_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CPlayer::Key_Input(_double TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Pressing(DIK_UP))
+	{
+		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 0.f);
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_UP) && pGameInstance->Key_Pressing(DIK_RIGHT))
+	{
+		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 45.f);
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * 45.f * 0.05f);
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	{
+		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 90.f);
+		m_pTransformCom->Go_Right(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_RIGHT) && pGameInstance->Key_Pressing(DIK_DOWN))
+	{
+		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 135.f);
+		//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * -90.f * 0.05f);
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	{
+		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 180.f);
+		m_pTransformCom->Go_Backward(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_DOWN) && pGameInstance->Key_Pressing(DIK_LEFT))
+	{
+		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 225.f);
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_LEFT))
+	{
+		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 270.f);
+		m_pTransformCom->Go_Left(TimeDelta);
+	}
+	if (pGameInstance->Key_Pressing(DIK_LEFT) && pGameInstance->Key_Pressing(DIK_UP))
+	{
+		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 315.f);
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+
+	//_long			MouseMove = 0;
+	//_float			fSensitivity = 0.05f;
+
+	//if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
+	//{
+	//	MouseMove;
+	//	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
+	//}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

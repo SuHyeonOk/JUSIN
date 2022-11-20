@@ -16,10 +16,10 @@ public:
 	typedef struct tagTransformDesc
 	{
 		/* 초당 움직여야하는 속도. */
-		float		fSpeedPerSec = 0.f;
+		float		fSpeedPerSec;
 
 		/* 초당 회전해야하는 속도. */
-		float		fRotationPerSec = 0.f;
+		float		fRotationPerSec;
 	}TRANSFORMDESC;
 
 protected:

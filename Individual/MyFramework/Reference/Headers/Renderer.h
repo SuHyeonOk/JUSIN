@@ -33,8 +33,7 @@ private:
 	HRESULT Render_NonLight();
 	HRESULT Render_AlphaBlend();
 	HRESULT Render_UI();
-
-
+	
 public:
 	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CRenderer* Clone(void* pArg = nullptr) override;

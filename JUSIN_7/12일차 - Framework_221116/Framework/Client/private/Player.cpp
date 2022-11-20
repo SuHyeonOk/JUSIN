@@ -35,6 +35,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pTransformCom->Set_Scaled(_float3(5.f, 5.f, 5.f));
 
+	m_pGameInstance = GET_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
@@ -42,7 +44,7 @@ void CPlayer::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//Key_Input(TimeDelta);
+	Key_Input(TimeDelta);
 }
 
 void CPlayer::Late_Tick(_double TimeDelta)
@@ -102,10 +104,6 @@ HRESULT CPlayer::SetUp_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"), TEXT("Com_Tranform"),
 		(CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-	
-	m_pGameInstance = GET_INSTANCE(CGameInstance);
-
-	_int a = 0;
 
 	return S_OK;
 }
