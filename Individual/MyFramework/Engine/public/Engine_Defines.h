@@ -21,7 +21,7 @@ using namespace DirectX;
 #include <unordered_map>
 #include <algorithm>
 using namespace std;
-
+#include <iostream> // 디버그창 띄우려고
 
 #include "Engine_Macro.h"
 #include "Engine_Typedef.h"

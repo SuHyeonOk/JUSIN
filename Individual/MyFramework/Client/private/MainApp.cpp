@@ -45,6 +45,16 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
+#ifdef _DEBUG
+	if (::AllocConsole() == TRUE) {
+		FILE* nfp[3];
+		freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
+		freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
+		freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
+		std::ios::sync_with_stdio();
+	}
+#endif
+
 #if defined (USE_IMGUI)
 	// ImGui_Manager ÃÊ±âÈ­
 	CImGui_Manager::GetInstance()->Ready_Imgui();
@@ -167,4 +177,8 @@ void CMainApp::Free()
 	Safe_Release(m_pDevice);
 
 	CGameInstance::Release_Engine();
+
+#ifdef _DEBUG
+	FreeConsole();
+#endif
 }

@@ -29,7 +29,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(100.0f);
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -124,55 +124,88 @@ void CPlayer::Key_Input(_double TimeDelta)
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
-		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 0.f);
+		m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 0.f);
 		m_pTransformCom->Go_Straight(TimeDelta);
+
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+		{
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), TimeDelta * 25.f);
+			//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 0.5f);
+			m_pTransformCom->Go_Straight(TimeDelta / 2);
+		}
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+		{
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_UP), TimeDelta * -25.f);
+			//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), -0.5f);
+			m_pTransformCom->Go_Straight(TimeDelta / 2);
+		}
 	}
-	if (pGameInstance->Key_Pressing(DIK_UP) && pGameInstance->Key_Pressing(DIK_RIGHT))
-	{
-		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 45.f);
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * 45.f * 0.05f);
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}
+	//if (pGameInstance->Key_Pressing(DIK_DOWN))
+	//{
+	//	m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), -1.f);
+	//	m_pTransformCom->Go_Backward(TimeDelta);
+	//}
+
+	//if (pGameInstance->Key_Pressing(DIK_UP) && pGameInstance->Key_Pressing(DIK_RIGHT))
+	//{
+	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 45.f);
+	//	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * 1.f);
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+	//}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
-		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 90.f);
+		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), -80.f);
+		//m_pTransformCom->Go_Straight(TimeDelta);
 		m_pTransformCom->Go_Right(TimeDelta);
 	}
-	if (pGameInstance->Key_Pressing(DIK_RIGHT) && pGameInstance->Key_Pressing(DIK_DOWN))
-	{
-		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 135.f);
-		//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * -90.f * 0.05f);
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}
+	//if (pGameInstance->Key_Pressing(DIK_RIGHT) && pGameInstance->Key_Pressing(DIK_DOWN))
+	//{
+	//	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 135.f);
+	//	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * -90.f * 0.05f);
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+	//}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
 		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 180.f);
 		m_pTransformCom->Go_Backward(TimeDelta);
 	}
-	if (pGameInstance->Key_Pressing(DIK_DOWN) && pGameInstance->Key_Pressing(DIK_LEFT))
-	{
-		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 225.f);
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}
+	//if (pGameInstance->Key_Pressing(DIK_DOWN) && pGameInstance->Key_Pressing(DIK_LEFT))
+	//{
+	//	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 225.f);
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+	//}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
-		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 270.f);
+		//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 1.f), 80.f);
+		//m_pTransformCom->Go_Straight(TimeDelta);
 		m_pTransformCom->Go_Left(TimeDelta);
 	}
-	if (pGameInstance->Key_Pressing(DIK_LEFT) && pGameInstance->Key_Pressing(DIK_UP))
-	{
-		//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), 315.f);
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}
+	//if (pGameInstance->Key_Pressing(DIK_LEFT) && pGameInstance->Key_Pressing(DIK_UP))
+	//{
+	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), -45.f);
+	//	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * -1.f);
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+	//}
 
 	//_long			MouseMove = 0;
 	//_float			fSensitivity = 0.05f;
 
 	//if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
 	//{
-	//	MouseMove;
 	//	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
 	//}
+
+#ifdef _DEBUG
+	_vector a = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	a.m128_f32[0];
+	//cout << MouseMove << " / " << a.m128_f32[0] << endl;
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_LB))
+		cout << "////////////////////////" << endl;
+
+	//cout << a.x << " / " << a.y << " / " << a.z << endl;
+#endif
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -209,5 +242,4 @@ void CPlayer::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
-
 }
