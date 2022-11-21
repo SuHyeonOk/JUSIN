@@ -79,6 +79,12 @@
     <Filter Include="01.Utility\05.Timers\Manager">
       <UniqueIdentifier>{f2290bb7-e946-4481-a5de-7c3af6307df7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\06. Lights">
+      <UniqueIdentifier>{a4cdca69-fa21-4bad-b88b-7c26a101a307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06. Lights\Manager">
+      <UniqueIdentifier>{61663c02-6385-4a9b-b137-267b6c078f2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -162,6 +168,12 @@
     <ClInclude Include="..\public\Input_Device.h">
       <Filter>00.System\00.Device\Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Light.h">
+      <Filter>01.Utility\06. Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Light_Manager.h">
+      <Filter>01.Utility\06. Lights\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -232,6 +244,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Input_Device.cpp">
       <Filter>00.System\00.Device\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Light_Manager.cpp">
+      <Filter>01.Utility\06. Lights\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Light.cpp">
+      <Filter>01.Utility\06. Lights</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

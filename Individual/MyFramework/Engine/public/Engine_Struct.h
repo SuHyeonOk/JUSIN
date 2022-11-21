@@ -11,15 +11,26 @@ namespace Engine
 		HWND			hWnd;		
 	}GRAPHIC_DESC;
 
+	/* 방향성 광원, 점광원은 계산할 방향벡터가 필요하다. */
 	typedef struct tagLightDesc // 빛 정보
 	{
-		XMFLOAT4			vDiffuse;
+		enum TYPE { TYPE_DIRECTIONAL, TYPE_POINT, TYPE_END };
+		TYPE				eType; 
+
+		bool				isEnable;
+
+		// 방향성 광원
+		XMFLOAT4			vDirection;
+
+		// 점 광원
+		XMFLOAT4			vPosition;
+		float				fRange;
+
+		XMFLOAT4			vDiffuse;	// Lighst 의 Diffuse
+		XMFLOAT4			vAmbient;	// Lighst 의 최소 밝기 (반사광)
+		XMFLOAT4			vSpecular;	// Lighst 의 반사
 	}LIGHTDESC;
 
-	typedef struct tagMtrlDesc // 머리리얼 정보
-	{
-		XMFLOAT4			vDiffuse;
-	}MTRLDESC;
 
 	typedef struct tagFaceIndices16
 	{

@@ -8,7 +8,6 @@
 #include "Component_Manager.h"
 #include "PipeLine.h"
 
-
 BEGIN(Engine)
 
 class ENGINE_DLL CGameInstance final : public CBase
@@ -73,6 +72,9 @@ public: /* For.Timer_Manager */
 	HRESULT		Ready_Timer(const _tchar* pTimerTag);
 	void		Update_Timer(const _tchar* pTimerTag);
 
+public: /* For.Light_Manager */
+	const		LIGHTDESC* Get_LightDesc(_uint iIndex);
+	HRESULT		Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);
 
 private:
 	static _uint					m_iStaticLevelIndex;
@@ -85,6 +87,7 @@ private:
 	class CComponent_Manager*		m_pComponent_Manager = nullptr;
 	class CPipeLine*				m_pPipeLine = nullptr;
 	class CTimer_Manager*			m_pTimer_Manager = nullptr;
+	class CLight_Manager*			m_pLight_Manager = nullptr;
 
 public:
 	static void Release_Engine();

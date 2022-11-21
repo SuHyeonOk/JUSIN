@@ -66,9 +66,9 @@ void CTool_Monster::Tick_Monster_Tool()
 			//getline(ofs, tmp);
 			//pos.push_back(tmp);
 
-			_float aa;
-			fopen(ofs, aa);
-			pos.push_back(ofs);
+			//_float aa;
+			//fopen(ofs, aa);
+			//pos.push_back(ofs);
 		}
 
 		//ofs >> fPos[0] >> "|" >> ;
