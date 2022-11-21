@@ -4,7 +4,6 @@
 #include "BackGround.h"
 #include "Terrain.h"
 
-
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
 	, m_pContext(pContext)

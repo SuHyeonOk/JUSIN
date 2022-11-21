@@ -59,7 +59,7 @@ HRESULT CLevel_GamePlay::Ready_Lights(const _tchar * pLayerTag)
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.0f, 0.f);	// 오른쪽, 아래, 먼쪽
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);		// 빛색상(흰색)
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);		// Light Ambient
-	LightDesc.vSpecular = _float4(1.f, 0.f, 0.f, 1.f);		// 반사
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);		// 반사
 
 	// 위의 구조체 정보대로 조명 추가 완료
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
