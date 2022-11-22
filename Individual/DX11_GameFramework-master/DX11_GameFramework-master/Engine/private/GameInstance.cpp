@@ -138,6 +138,54 @@ HRESULT CGameInstance::Update_SwapChain(HWND hWnd, _uint iWinCX, _uint iWinCY, _
 	return m_pGraphic_Device->Update_SwapChain(hWnd, iWinCX, iWinCY, bIsFullScreen, bNeedUpdate);
 }
 
+_bool CGameInstance::Key_Down(_uchar eKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Key_Down(eKeyID);
+}
+
+_bool CGameInstance::Key_Up(_uchar eKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Key_Up(eKeyID);
+}
+
+_bool CGameInstance::Key_Pressing(_uchar eKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Key_Pressing(eKeyID);
+}
+
+_bool CGameInstance::Mouse_Down(CInput_Device::MOUSEKEYSTATE eMouseKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Mouse_Down(eMouseKeyID);
+}
+
+_bool CGameInstance::Mouse_Up(CInput_Device::MOUSEKEYSTATE eMouseKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Mouse_Up(eMouseKeyID);
+}
+
+_bool CGameInstance::Mouse_Pressing(CInput_Device::MOUSEKEYSTATE eMouseKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 0;
+
+	return m_pInput_Device->Mouse_Pressing(eMouseKeyID);
+}
+
 _byte CGameInstance::Get_DIKeyState(_ubyte byKeyID)
 {
 	if (nullptr == m_pInput_Device)

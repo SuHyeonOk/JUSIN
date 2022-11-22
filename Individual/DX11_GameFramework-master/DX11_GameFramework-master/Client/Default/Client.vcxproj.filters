@@ -40,6 +40,12 @@
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{b9ad9fc5-4efa-4624-ba10-b57dc2aed216}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player">
+      <UniqueIdentifier>{0eb338fd-ab12-4ef8-9e1d-24a22809f2f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\99. Tool">
+      <UniqueIdentifier>{8f2cc244-962e-4458-b62f-2b25a7835dd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,6 +90,12 @@
     <ClInclude Include="..\public\Camera_Dynamic.h">
       <Filter>02.GameObjects\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Player.h">
+      <Filter>02.GameObjects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_Tool.h">
+      <Filter>01.Levels\99. Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -115,6 +127,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_Dynamic.cpp">
       <Filter>02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player.cpp">
+      <Filter>02.GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Tool.cpp">
+      <Filter>01.Levels\99. Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

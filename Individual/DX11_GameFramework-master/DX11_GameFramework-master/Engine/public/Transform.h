@@ -71,8 +71,15 @@ public:
 	/*void LookAt(const CTransform* pTarget);*/
 	void LookAt(_fvector vTargetPos);
 
+	/* LookAt 함수의 경우에 포인트가 하늘에 있다면, 오브젝트가 위로 기울여서 바라보게 된다.
+	비행 슈팅 게임의 경우에 상관없지만, 지금처럼 바닥을 타고 다니는 오브젝트에게 이런 LookAt 함수를 사용하면 어색하게 된다.
+	그래서 바라보는 포인트가 하늘에 있든 말든 위로 기울이지 않고 바라만 보게 하는 함수이다.
+	예로 플레이어의 원점이 발바닥에 있다고 한다면, 몬스터가 플레이어를 바라볼 때 LookAt을 사용하면 약간 기울여서 발바닥을 보게 된다.*/
+	void LookAtForLandObject(_fvector vTargetPos);
+
 	/* 추적한다 .*/
 	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f);
+
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);

@@ -193,11 +193,12 @@ void CTransform::Turn(_fvector vAxis, _double TimeDelta)
 
 void CTransform::Rotation(_fvector vAxis, _float fRadian)
 {
+	_float3		vScale = Get_Scaled();
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
 
-	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f);
-	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScale.x;
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScale.y;
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;
 
 	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
 	Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
@@ -217,6 +218,22 @@ void CTransform::LookAt(_fvector vTargetPos)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
+void CTransform::LookAtForLandObject(_fvector vTargetPos)
+{
+	_float3 vSclae = Get_Scaled();
+	_vector vPosition = Get_State(CTransform::STATE_TRANSLATION);
+
+	_vector vLook = vTargetPos - vPosition;
+	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	_vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+
+	vLook = XMVector3Cross(vRight, vUp);
+
+	Set_State(CTransform::STATE_RIGHT, XMVector3Normalize(vRight) * vSclae.x);
+	Set_State(CTransform::STATE_UP, XMVector3Normalize(vUp) * vSclae.y);
+	Set_State(CTransform::STATE_LOOK, XMVector3Normalize(vLook) * vSclae.z);
+}
+
 void CTransform::Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit)
 {
 	_vector		vPosition = Get_State(CTransform::STATE_TRANSLATION);
@@ -224,9 +241,9 @@ void CTransform::Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit)
 
 	_float		fDistance = XMVectorGetX(XMVector3Length(vDir));
 
-	if(fDistance > fLimit)
+	if (fDistance > fLimit)
 	{
-		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * TimeDelta;	
+		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * TimeDelta;
 		Set_State(CTransform::STATE_TRANSLATION, vPosition);
 	}
 }

@@ -39,6 +39,14 @@ public: /* For.Graphic_Device */
 	HRESULT Update_SwapChain(HWND hWnd, _uint iWinCX, _uint iWinCY, _bool bIsFullScreen, _bool bNeedUpdate);
 
 public: /* For.Input_Device */
+	_bool		Key_Down(_uchar eKeyID);
+	_bool		Key_Up(_uchar eKeyID);
+	_bool		Key_Pressing(_uchar eKeyID);
+
+	_bool		Mouse_Down(CInput_Device::MOUSEKEYSTATE eMouseKeyID);
+	_bool		Mouse_Up(CInput_Device::MOUSEKEYSTATE eMouseKeyID);
+	_bool		Mouse_Pressing(CInput_Device::MOUSEKEYSTATE eMouseKeyID);
+
 	_byte		Get_DIKeyState(_ubyte byKeyID);
 	_byte		Get_DIMouseState(CInput_Device::MOUSEKEYSTATE byMouseID);
 	_long		Get_DIMouseMove(CInput_Device::MOUSEMOVESTATE eMoveState);

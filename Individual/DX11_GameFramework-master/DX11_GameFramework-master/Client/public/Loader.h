@@ -33,6 +33,7 @@ public:
 public:
 	HRESULT Initialize(LEVEL eNextLevelID);
 
+	HRESULT	Loading_Tool();
 	HRESULT Loading_ForLogo();
 	HRESULT Loading_ForGamePlay();
 

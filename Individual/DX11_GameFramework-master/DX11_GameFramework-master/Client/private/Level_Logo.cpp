@@ -39,17 +39,23 @@ void CLevel_Logo::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (GetKeyState(VK_SPACE) & 0x8000)
-	{
-		CGameInstance*		pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
+
+	if (pGameInstance->Key_Down(DIK_F1))
+	{
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TOOL))))
+			return;
+	}
+
+	if (pGameInstance->Key_Down(DIK_SPACE))
+	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
 			return;
-
-		Safe_Release(pGameInstance);
-
 	}
+
+	Safe_Release(pGameInstance);
 
 }
 

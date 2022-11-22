@@ -34,7 +34,7 @@ void CTool_Monster::Tick_Monster_Tool()
 	{
 		ofstream ofs;
 		ofs.open("../../Data/Info.txt", ios::app);
-
+		
 		if (!ofs)//(ofs.fail())
 		{
 			MSG_BOX("Data File Save Error!");

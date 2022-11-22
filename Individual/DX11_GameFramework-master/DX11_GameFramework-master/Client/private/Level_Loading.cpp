@@ -3,6 +3,8 @@
 
 #include "Loader.h"
 #include "GameInstance.h"
+
+#include "Level_Tool.h"
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
 
@@ -46,12 +48,16 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 
 	if (true == m_pLoader->isFinished())
 	{
-		if (GetKeyState(VK_RETURN) & 0x8000)
+		if(pGameInstance->Key_Down(DIK_RETURN))
 		{
 			CLevel*		pLevel = nullptr;
 
 			switch (m_eNextLevelID)
 			{
+			case LEVEL_TOOL:
+				pLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
+				break;
+
 			case LEVEL_LOGO:
 				pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 				break;
