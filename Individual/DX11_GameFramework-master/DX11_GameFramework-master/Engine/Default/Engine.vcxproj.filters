@@ -103,6 +103,9 @@
     <Filter Include="01.Utility\06.Light\Manager">
       <UniqueIdentifier>{7e5e67e5-4e43-4186-a768-f51c1bb9184a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\77. Picking">
+      <UniqueIdentifier>{da175690-3d23-4715-9074-b6e7d6c36736}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -261,6 +264,9 @@
     <ClInclude Include="..\public\Input_Device.h">
       <Filter>00.System\00.Device\Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Picking.h">
+      <Filter>01.Utility\77. Picking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -394,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Input_Device.cpp">
       <Filter>00.System\00.Device\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Picking.cpp">
+      <Filter>01.Utility\77. Picking</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

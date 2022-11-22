@@ -86,11 +86,10 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 	vPoint.z = 0.f;
 
 	// 투영 -> 뷰 스페이스
-	_matrix		matProj;
-
-	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
-	D3DXMatrixInverse(&matProj, nullptr, &matProj);
-	D3DXVec3TransformCoord(&vPoint, &vPoint, &matProj);
+	_matrix		matProj; // 위치
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);	// 투영 행렬 얻어오기
+	D3DXMatrixInverse(&matProj, nullptr, &matProj);				// 역행렬로 만들기
+	D3DXVec3TransformCoord(&vPoint, &vPoint, &matProj);			// 곱하기
 
 	_vec3	vRayDir, vRayPos;		// 뷰 스페이스 영역에 있는 상태
 
@@ -98,7 +97,6 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 	vRayDir = vPoint - vRayPos;	
 
 	// 뷰 스페이스 -> 월드
-
 	_matrix		matView;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
 	D3DXMatrixInverse(&matView, nullptr, &matView);
@@ -106,13 +104,15 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 	D3DXVec3TransformNormal(&vRayDir, &vRayDir, &matView);
 
 	// 월드 -> 로컬
-	_matrix		matWorld;
-	
+	_matrix		matWorld;	
 	pTerrainTransformCom->Get_WorldMatrix(&matWorld);
 	D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
 	D3DXVec3TransformCoord(&vRayPos, &vRayPos, &matWorld);
 	D3DXVec3TransformNormal(&vRayDir, &vRayDir, &matWorld);
 
+	// 터레인에서 삼각형을 얻어와서 작업
+	// 지금 작업은 정점의 맵과, 높이 맵이 같기 때문에 가능하다.
+	// 즉, 픽셀의 개수 == 버텍스의 개수
 	const _vec3*	pTerrainVtx = pTerrainBufferCom->Get_VtxPos();
 
 	_ulong		dwVtxCntX = pTerrainBufferCom->Get_VtxCntX();
@@ -136,7 +136,7 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 				&pTerrainVtx[dwVtxIdx[0]], 
 				&pTerrainVtx[dwVtxIdx[2]], 
 				&vRayPos, &vRayDir, 
-				&fU, &fV, &fDist))
+				&fU, &fV, &fDist)) // output
 			{
 				return _vec3(pTerrainVtx[dwVtxIdx[1]].x + (pTerrainVtx[dwVtxIdx[0]].x - pTerrainVtx[dwVtxIdx[1]].x) * fU, 
 							0.f,
