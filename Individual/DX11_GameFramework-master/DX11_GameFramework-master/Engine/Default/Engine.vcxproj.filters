@@ -94,9 +94,6 @@
     <Filter Include="01.Utility\02.GameObject\Camera">
       <UniqueIdentifier>{1bafbce5-d14b-4b43-b74c-ef41bcba5562}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\60.FSM">
-      <UniqueIdentifier>{3d143b25-3ee1-48bc-aabf-7084d9bb13ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\06.Light">
       <UniqueIdentifier>{3804fb99-c927-4cff-a56e-8a01fd8dc063}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,9 @@
     </Filter>
     <Filter Include="01.Utility\77. Picking">
       <UniqueIdentifier>{da175690-3d23-4715-9074-b6e7d6c36736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\77.FSM">
+      <UniqueIdentifier>{3d143b25-3ee1-48bc-aabf-7084d9bb13ce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -253,7 +253,7 @@
       <Filter>01.Utility\02.GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\public\FSMComponent.h">
-      <Filter>01.Utility\03.Components\60.FSM</Filter>
+      <Filter>01.Utility\03.Components\77.FSM</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Light.h">
       <Filter>01.Utility\06.Light</Filter>
@@ -390,7 +390,7 @@
       <Filter>01.Utility\02.GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\private\FSMComponent.cpp">
-      <Filter>01.Utility\03.Components\60.FSM</Filter>
+      <Filter>01.Utility\03.Components\77.FSM</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Light.cpp">
       <Filter>01.Utility\06.Light</Filter>

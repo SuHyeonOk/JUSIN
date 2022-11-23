@@ -22,6 +22,7 @@ CGameInstance::CGameInstance()
 	, m_pLight_Manager(CLight_Manager::GetInstance())
 
 	, m_pImgui_Manager(CImgui_Manager::GetInstance())
+	, m_pPicking(CPicking::GetInstance())
 {
 	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pComponent_Manager);
@@ -31,6 +32,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pGraphic_Device);
 
 	Safe_AddRef(m_pImgui_Manager);
+	Safe_AddRef(m_pPicking);
 }
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, const GRAPHIC_DESC& GraphicDesc, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppContextOut)
@@ -55,7 +57,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	/* 입력 디바이스 초기화. */
 	if (FAILED(m_pInput_Device->Ready_Input_Device(hInst, GraphicDesc.hWnd)))
 		return E_FAIL;
-	
+
+	if (FAILED(m_pPicking->Initialize(GraphicDesc.hWnd, GraphicDesc.eWindowMode, GraphicDesc.iViewportSizeX, GraphicDesc.iViewportSizeY, *ppDeviceOut, *ppContextOut)))
+		return E_FAIL;
 	
 	/* +1개로 예약하는 이유 : 엔진에서 Level_Static을 추가로 제공하기 위해서. */
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevels + 1)))
@@ -94,6 +98,7 @@ void CGameInstance::Tick_Engine(_double TimeDelta)
 	m_pLevel_Manager->Tick(TimeDelta);
 
 	m_pPipeLine->Tick();
+	m_pPicking->Tick();
 
 	m_pObject_Manager->Late_Tick(TimeDelta);
 	m_pLevel_Manager->Late_Tick(TimeDelta);
@@ -383,6 +388,8 @@ void CGameInstance::Release_Engine()
 
 	CLevel_Manager::GetInstance()->DestroyInstance();
 
+	CPicking::GetInstance()->DestroyInstance();
+
 	CInput_Device::GetInstance()->DestroyInstance();
 
 	CPipeLine::GetInstance()->DestroyInstance();
@@ -400,6 +407,7 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pPicking);
 	Safe_Release(m_pImgui_Manager);
 
 	Safe_Release(m_pLight_Manager);

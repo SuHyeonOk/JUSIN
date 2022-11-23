@@ -14,6 +14,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Players(TEXT("Layer_Players"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
@@ -46,6 +49,18 @@ HRESULT CLevel_GamePlay::Render()
 		return E_FAIL;
 
 	SetWindowText(g_hWnd, TEXT("Level : GAMEPLAY"));
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Players(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }

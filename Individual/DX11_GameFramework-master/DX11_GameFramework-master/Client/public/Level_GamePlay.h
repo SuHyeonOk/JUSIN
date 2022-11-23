@@ -18,6 +18,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	HRESULT Ready_Layer_Players(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Player(const _tchar* pLayerTag);
 	HRESULT Ready_Lights();
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);

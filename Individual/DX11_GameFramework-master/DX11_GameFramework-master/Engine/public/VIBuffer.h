@@ -33,6 +33,7 @@ protected:
 	DXGI_FORMAT					m_eIndexFormat;
 	D3D11_PRIMITIVE_TOPOLOGY	m_eTopology;
 
+	_float3*		m_pVerticesPos = nullptr;
 
 protected: /* 버텍스 버퍼 */
 	ID3D11Buffer*				m_pVB = nullptr;

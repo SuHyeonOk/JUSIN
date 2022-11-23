@@ -140,7 +140,7 @@ void CTransform::Go_Straight(_double TimeDelta)
 	_vector	vLook = Get_State(CTransform::STATE_LOOK);
 
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
-	vPosition += XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * TimeDelta;
+	vPosition += XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
@@ -151,7 +151,7 @@ void CTransform::Go_Backward(_double TimeDelta)
 	_vector	vLook = Get_State(CTransform::STATE_LOOK);
 
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
-	vPosition -= XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * TimeDelta;
+	vPosition -= XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
@@ -162,7 +162,7 @@ void CTransform::Go_Left(_double TimeDelta)
 	_vector	vRight = Get_State(CTransform::STATE_RIGHT);
 
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
-	vPosition -= XMVector3Normalize(vRight) * m_TransformDesc.fSpeedPerSec * TimeDelta;
+	vPosition -= XMVector3Normalize(vRight) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
@@ -173,14 +173,14 @@ void CTransform::Go_Right(_double TimeDelta)
 	_vector	vRight = Get_State(CTransform::STATE_RIGHT);
 
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
-	vPosition += XMVector3Normalize(vRight) * m_TransformDesc.fSpeedPerSec * TimeDelta;
+	vPosition += XMVector3Normalize(vRight) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
 
 void CTransform::Turn(_fvector vAxis, _double TimeDelta)
 {
-	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * TimeDelta);
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * _float(TimeDelta));
 
 	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
 	_vector		vUp = Get_State(CTransform::STATE_UP);
@@ -243,7 +243,7 @@ void CTransform::Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit)
 
 	if (fDistance > fLimit)
 	{
-		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * TimeDelta;
+		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
 		Set_State(CTransform::STATE_TRANSLATION, vPosition);
 	}
 }

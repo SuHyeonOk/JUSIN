@@ -25,6 +25,7 @@ using namespace DirectX;
 #include <algorithm>
 #include <functional>
 using namespace std;
+#include <iostream> // shTest
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"

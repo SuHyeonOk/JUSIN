@@ -7,6 +7,7 @@
 #include "Input_Device.h"
 #include "Component_Manager.h"
 #include "PipeLine.h"
+#include "Picking.h"
 
 BEGIN(Engine)
 
@@ -101,6 +102,7 @@ private:
 	class CLight_Manager*			m_pLight_Manager = nullptr;
 
 	class CImgui_Manager*			m_pImgui_Manager = nullptr;
+	class CPicking*					m_pPicking = nullptr;
 
 public:
 	static void Release_Engine();
