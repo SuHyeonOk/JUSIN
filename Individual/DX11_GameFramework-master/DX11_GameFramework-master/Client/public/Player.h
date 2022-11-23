@@ -28,6 +28,9 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	virtual void Imgui_RenderProperty() override;
+
+private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;

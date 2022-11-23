@@ -1,6 +1,7 @@
 	#include "stdafx.h"
 #include "..\public\Player.h"
 
+#include "ImGuizmo.h"
 #include "GameInstance.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -68,6 +69,11 @@ HRESULT CPlayer::Render()
 	m_pVIBufferCom->Render();
 
 	return S_OK;
+}
+
+void CPlayer::Imgui_RenderProperty()
+{
+	ImGui::Text("Test");
 }
 
 HRESULT CPlayer::SetUp_Components()

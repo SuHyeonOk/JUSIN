@@ -32,7 +32,7 @@ public: /* imgui */
 	void Imgui_RenderComponentProperties();
 
 	// 이 오브젝트에서 보여줄 데이터를 imgui로 작성한다.
-	virtual void Imgui_RenderProperty(){}
+	virtual void Imgui_RenderProperty() {};
 
 protected:
 	ID3D11Device*			m_pDevice = nullptr;
