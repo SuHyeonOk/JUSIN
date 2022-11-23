@@ -22,7 +22,7 @@ protected:
 	ID3D11Device*				m_pDevice = nullptr;
 	ID3D11DeviceContext*		m_pContext = nullptr;
 
-protected:
+protected: // CComponent
 	_bool						m_isCloned = false;
 
 public:
