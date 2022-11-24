@@ -77,16 +77,19 @@ public: /* For.Timer_Manager */
 	void		Update_Timer(const _tchar* pTimerTag);
 
 public: /* For.Light_Manager */ 
-	const LIGHTDESC* Get_LightDesc(_uint iIndex);
-	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);
+	const LIGHTDESC*	Get_LightDesc(_uint iIndex);
+	HRESULT				Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);
 
 
 public: // for imgui manager
-	void Render_ImGui();
-	void Render_Update_ImGui();
-	void Add_ImguiTabObject(class CImguiObject* ImguiObject);
-	void Add_ImguiWindowObject(class CImguiObject* ImguiObject);
-	void Clear_ImguiObjects();
+	void		Render_ImGui();
+	void		Render_Update_ImGui();
+	void		Add_ImguiTabObject(class CImguiObject* ImguiObject);
+	void		Add_ImguiWindowObject(class CImguiObject* ImguiObject);
+	void		Clear_ImguiObjects();
+
+public: // For.Picking
+	_float4		Get_MousePos();
 
 private:
 	static _uint					m_iStaticLevelIndex;

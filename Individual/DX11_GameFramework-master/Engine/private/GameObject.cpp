@@ -32,11 +32,9 @@ HRESULT CGameObject::Initialize(void * pArg)
 
 	if (nullptr != pArg)	
 		GameObjectDesc = *(GAMEOBJECTDESC*)pArg;	
-	else
-	{
-		if (FAILED(Add_Component(CGameInstance::Get_StaticLevelIndex(), CGameInstance::m_pPrototypeTransformTag, m_pTransformComTag, (CComponent**)&m_pTransformCom, &GameObjectDesc.TransformDesc)))
-			return E_FAIL;
-	}
+
+	if (FAILED(Add_Component(CGameInstance::Get_StaticLevelIndex(), CGameInstance::m_pPrototypeTransformTag, m_pTransformComTag, (CComponent**)&m_pTransformCom, &GameObjectDesc.TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

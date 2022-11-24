@@ -38,6 +38,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;		
 
+
+
 	return S_OK;
 }
 
@@ -46,6 +48,32 @@ void CPlayer::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	Key_Input(TimeDelta);
+	
+	// TimerSample
+	//m_dTimeAcc += TimeDelta;
+	//if (1.f < m_dTimeAcc)
+	//{
+
+	//	m_dTimeAcc = 0;
+	//}
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_LB))
+	{
+		_float4		f4MousePos, f4PlayerPos;
+		_vector		vPlayerPos;
+		vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		cout << "PlayerPos : " << f4PlayerPos.x << "|" << f4PlayerPos.y << "|" << f4PlayerPos.z << "|" << f4PlayerPos.w << endl;
+
+		f4MousePos = pGameInstance->Get_MousePos();
+		m_pTransformCom->Set_Pos(XMVectorSet(f4MousePos.x, f4MousePos.y, f4MousePos.z, f4MousePos.w));
+		int a = 0;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CPlayer::Late_Tick(_double TimeDelta)

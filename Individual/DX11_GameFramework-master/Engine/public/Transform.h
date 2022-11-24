@@ -20,6 +20,7 @@ public:
 
 		/* 초당 회전해야하는 속도. */
 		float		fRotationPerSec;
+
 	}TRANSFORMDESC;
 
 protected:
@@ -50,6 +51,13 @@ public:
 		_float4		vTmp;
 		XMStoreFloat4(&vTmp, vState);
 		memcpy(&m_WorldMatrix.m[eState][0], &vTmp, sizeof vTmp);			
+	}
+
+	void Set_Pos(_fvector vState)
+	{
+		_float4		vPos;
+		XMStoreFloat4(&vPos, vState);
+		memcpy(&m_WorldMatrix.m[STATE_TRANSLATION][0], &vPos, sizeof vPos);
 	}
 
 	void Set_Scaled(STATE eState, _float fScale);	/* fScale값으로 길이를 변형한다. */

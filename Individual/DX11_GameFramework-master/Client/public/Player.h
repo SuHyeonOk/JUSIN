@@ -43,6 +43,9 @@ private:
 private:
 	void	Key_Input(_double TimeDelta);
 
+private:
+	_double		m_dTimeAcc = 0;
+
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

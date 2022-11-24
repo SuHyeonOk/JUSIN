@@ -44,8 +44,8 @@ private: /* 사본객체들을 보관하기위한 컨테이너. */
 	_uint										m_iNumLevels = 0;
 
 private:
-	class CGameObject* Find_Prototype(const _tchar* pPrototypeTag);
-	class CLayer* Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
+	class CGameObject*	Find_Prototype(const _tchar* pPrototypeTag);
+	class CLayer*		Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
 
 public:
 	virtual void Free() override;

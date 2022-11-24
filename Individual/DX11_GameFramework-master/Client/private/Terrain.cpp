@@ -31,32 +31,33 @@ HRESULT CTerrain::Initialize(void * pArg)
 		return E_FAIL;	
 	
 
+
 	return S_OK;
 }
 
 void CTerrain::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-}
-
-void CTerrain::Late_Tick(_double TimeDelta)
-{
-	__super::Late_Tick(TimeDelta);
-
-	_float4		vPickPos;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
+
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_LB))
 	{
+		_float4		vPickPos;
 		if (m_pVIBufferCom->Picking(m_pTransformCom, &vPickPos))
 		{
-			cout << vPickPos.x << "|" << vPickPos.y << "|" << vPickPos.z << "|" << vPickPos.w << endl;
+			cout << "PickPos : " << vPickPos.x << "|" << vPickPos.y << "|" << vPickPos.z << "|" << vPickPos.w << endl;
 			int a = 10;
 		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+
+}
+
+void CTerrain::Late_Tick(_double TimeDelta)
+{
+	__super::Late_Tick(TimeDelta);
 
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);

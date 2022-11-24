@@ -233,6 +233,8 @@ _bool CVIBuffer_Terrain::Picking(CTransform * pTransform, _float4* pOut)
 				vOutTemp = XMVector3TransformCoord(vPickPos, WoreldMatrix);
 				XMStoreFloat4(pOut, vOutTemp); 
 
+				pPicking->Set_MousePos(vOutTemp);
+
 				Safe_Release(pPicking);
 				return true;
 			}
@@ -245,6 +247,8 @@ _bool CVIBuffer_Terrain::Picking(CTransform * pTransform, _float4* pOut)
 				_vector vOutTemp;
 				vOutTemp = XMVector3TransformCoord(vPickPos, WoreldMatrix);
 				XMStoreFloat4(pOut, vOutTemp);
+
+				pPicking->Set_MousePos(vOutTemp);
 
 				Safe_Release(pPicking);
 				return true;

@@ -377,6 +377,13 @@ void CGameInstance::Clear_ImguiObjects()
 	m_pImgui_Manager->Clear_ImguiObjects();
 }
 
+_float4 CGameInstance::Get_MousePos()
+{
+	if (m_pPicking == nullptr)
+		return _float4();
+
+	m_pPicking->Get_MousePos();
+}
 
 void CGameInstance::Release_Engine()
 {
