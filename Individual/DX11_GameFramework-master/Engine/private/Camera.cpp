@@ -24,17 +24,18 @@ HRESULT CCamera::Initialize_Prototype()
 
 HRESULT CCamera::Initialize(void * pArg)
 {
-	ZeroMemory(&m_CameraDesc, sizeof(CAMERADESC));
+	CAMERADESC	CameraDesc;
+	ZeroMemory(&CameraDesc, sizeof(CAMERADESC));
 
 	if (nullptr != pArg)
-		memcpy(&m_CameraDesc, pArg, sizeof(m_CameraDesc));
+		memcpy(&CameraDesc, pArg, sizeof(CameraDesc));
 
-	if (FAILED(__super::Initialize(&m_CameraDesc)))
+	if (FAILED(__super::Initialize(&CameraDesc)))
 		return E_FAIL;
 
 	/* 카메라(게임오브젝트)가 들고있는 트랜스폼에 카메라의 상태를 동기화하낟. */
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMLoadFloat4(&m_CameraDesc.vEye));
-	m_pTransformCom->LookAt(XMLoadFloat4(&m_CameraDesc.vAt));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMLoadFloat4(&CameraDesc.vEye));
+	m_pTransformCom->LookAt(XMLoadFloat4(&CameraDesc.vAt));
 
 	return S_OK;
 }

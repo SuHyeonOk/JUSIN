@@ -33,7 +33,6 @@ public:
 
 private:
 	class CPipeLine*			m_pPipeLine = nullptr;
-	CAMERADESC					m_CameraDesc; 
 
 public:		
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;

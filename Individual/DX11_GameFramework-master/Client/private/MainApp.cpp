@@ -28,9 +28,6 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, GraphicDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Gara()))
-		return E_FAIL;
-
 	if (FAILED(Ready_Prototype_Component()))
 		return E_FAIL;
 
@@ -154,58 +151,6 @@ HRESULT CMainApp::Ready_Prototype_GameObject()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Dynamic"),
 		CCamera_Dynamic::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CMainApp::Ready_Gara()
-{
-	ID3D11Texture2D*			pTexture2D = nullptr;
-
-	D3D11_TEXTURE2D_DESC	TextureDesc;
-	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-
-	TextureDesc.Width = 256;
-	TextureDesc.Height = 256;
-	TextureDesc.MipLevels = 1;
-	TextureDesc.ArraySize = 1;
-	TextureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	TextureDesc.SampleDesc.Quality = 0;
-	TextureDesc.SampleDesc.Count = 1;
-
-	TextureDesc.Usage = D3D11_USAGE_DYNAMIC;
-	TextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	TextureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	TextureDesc.MiscFlags = 0;
-
-	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pTexture2D)))
-		return E_FAIL;
-
-	_ulong*			pPixel = new _ulong[256 * 256];
-
-	for (_uint i = 0; i < 256; ++i)
-	{
-		for (_uint j = 0; j < 256; ++j)
-		{
-			_uint		iIndex = i * 256 + j;
-
-			pPixel[iIndex] = 0xffffffff;
-		}
-	}
-
-	D3D11_MAPPED_SUBRESOURCE			SubResource;
-	ZeroMemory(&SubResource, sizeof SubResource);
-
-	m_pContext->Map(pTexture2D, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResource);
-
-	memcpy(SubResource.pData, pPixel, sizeof(_ulong) * 256 * 256);
-
-	m_pContext->Unmap(pTexture2D, 0);
-
-
-	if (FAILED(DirectX::SaveDDSTextureToFile(m_pContext, pTexture2D, TEXT("../Bin/Filter.dds"))))
-		return E_FAIL;
-
 
 	return S_OK;
 }

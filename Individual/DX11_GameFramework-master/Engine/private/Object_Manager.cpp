@@ -66,7 +66,7 @@ HRESULT CObject_Manager::Clone_GameObject(_uint iLevelIndex, const _tchar * pLay
 		m_pLayers[iLevelIndex].emplace(pLayerTag, pLayer);
 	}
 	else
-		pLayer->Add_GameObject(pPrototype);
+		pLayer->Add_GameObject(pGameObject);
 
 	return S_OK;
 }

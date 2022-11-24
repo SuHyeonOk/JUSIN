@@ -42,9 +42,6 @@ private:
 	HRESULT Ready_Prototype_Component();
 	HRESULT Ready_Prototype_GameObject();
 
-private:
-	HRESULT Ready_Gara();
-
 public:
 	static CMainApp* Create();
 	virtual void Free() override;
