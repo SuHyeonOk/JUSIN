@@ -18,7 +18,7 @@ public:
 	static CImgui_PropertyEditor* Create(void* pArg = nullptr);
 
 private:
-	class CGameObject* m_pSelectedObject = nullptr;
+	class CGameObject*	m_pSelectedObject = nullptr;
 };
 
 END

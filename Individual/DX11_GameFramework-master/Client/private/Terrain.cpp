@@ -46,13 +46,12 @@ void CTerrain::Tick(_double TimeDelta)
 		_float4		vPickPos;
 		if (m_pVIBufferCom->Picking(m_pTransformCom, &vPickPos))
 		{
-			cout << "PickPos : " << vPickPos.x << "|" << vPickPos.y << "|" << vPickPos.z << "|" << vPickPos.w << endl;
+			cout << "PickPos : " << vPickPos.x << " | " << vPickPos.y << " | " << vPickPos.z << " | " << vPickPos.w << endl;
 			int a = 10;
 		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
-
 }
 
 void CTerrain::Late_Tick(_double TimeDelta)

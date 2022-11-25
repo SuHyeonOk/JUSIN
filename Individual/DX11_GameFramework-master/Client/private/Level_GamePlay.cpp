@@ -1,6 +1,8 @@
+
 #include "stdafx.h"
 #include "..\public\Level_GamePlay.h"
 
+#include "ImGuizmo.h"
 #include "GameInstance.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -13,10 +15,7 @@ HRESULT CLevel_GamePlay::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Players(TEXT("Layer_Players"))))
-		return E_FAIL;
-
+	
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
@@ -41,6 +40,26 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_F2))
+	{
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Playerss"), TEXT("Prototype_GameObject_Player", &_float3(5.f, 5.f, 5.f)))))
+			return;
+
+	}
+
+	if (pGameInstance->Key_Down(DIK_F3))
+	{
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Playersss"), TEXT("Prototype_GameObject_Player", &_float3(5.f, 5.f, 5.f)))))
+			return;
+
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -53,23 +72,11 @@ HRESULT CLevel_GamePlay::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Players(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"))))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
 HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"), &_float3(7.f, 7.f, 7.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

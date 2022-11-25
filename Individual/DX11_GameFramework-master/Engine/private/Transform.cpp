@@ -1,7 +1,9 @@
 #include "..\public\Transform.h"
-#include "Shader.h"
+
 #include "ImGuizmo.h"
 #include "GameInstance.h"
+
+#include "Shader.h"
 
 CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent(pDevice, pContext)
@@ -14,6 +16,13 @@ CTransform::CTransform(const CTransform & rhs)
 	, m_WorldMatrix(rhs.m_WorldMatrix)
 {
 	
+}
+
+void CTransform::Set_Pos()
+{
+	m_WorldMatrix.m[STATE_TRANSLATION][0] = m_TransformDesc.f3Pos.x;
+	m_WorldMatrix.m[STATE_TRANSLATION][1] = m_TransformDesc.f3Pos.y;
+	m_WorldMatrix.m[STATE_TRANSLATION][2] = m_TransformDesc.f3Pos.z;
 }
 
 void CTransform::Set_Scaled(STATE eState, _float fScale)
@@ -281,7 +290,6 @@ CComponent * CTransform::Clone(void * pArg)
 
 	return pInstance;
 }
-
 
 void CTransform::Free()
 {

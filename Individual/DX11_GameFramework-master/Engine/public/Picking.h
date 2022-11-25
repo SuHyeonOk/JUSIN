@@ -12,10 +12,10 @@ public:
 	virtual ~CPicking() = default;
 
 public:
+	const _float4*		Get_MousePos() { return &m_f4MousePos; }
 	void		Set_MousePos(_fvector vMousePos) { 
 		XMStoreFloat4(&m_f4MousePos, vMousePos);
 	}
-	const _float4*		Get_MousePos() { return &m_f4MousePos; }
 
 public:
 	HRESULT Initialize(HWND hWnd, GRAPHIC_DESC::WINMODE WinMode, _uint iWinCX, _uint iWinCY, ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

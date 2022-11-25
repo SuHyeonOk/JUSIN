@@ -1,7 +1,6 @@
 	#include "stdafx.h"
 #include "..\public\Player.h"
 
-#include "ImGuizmo.h"
 #include "GameInstance.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -26,11 +25,17 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void * pArg)
 {
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -38,7 +43,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;		
 
-
+	m_pTransformCom->Set_Pos();
 
 	return S_OK;
 }
@@ -49,27 +54,28 @@ void CPlayer::Tick(_double TimeDelta)
 
 	Key_Input(TimeDelta);
 	
-	// TimerSample
-	//m_dTimeAcc += TimeDelta;
-	//if (1.f < m_dTimeAcc)
-	//{
+	_float4		f4MousePos, f4PlayerPos;
 
-	//	m_dTimeAcc = 0;
-	//}
+	// TimerSample
+	m_dTimeAcc += TimeDelta;
+	if (1.f < m_dTimeAcc)
+	{
+		_vector		vPlayerPos;
+		vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		cout << "PlayerPos : " << f4PlayerPos.x << " | " << f4PlayerPos.y << " | " << f4PlayerPos.z << " | " << f4PlayerPos.w << endl;
+
+		m_dTimeAcc = 0;
+	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_LB))
 	{
-		_float4		f4MousePos, f4PlayerPos;
-		_vector		vPlayerPos;
-		vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-		cout << "PlayerPos : " << f4PlayerPos.x << "|" << f4PlayerPos.y << "|" << f4PlayerPos.z << "|" << f4PlayerPos.w << endl;
 
 		f4MousePos = pGameInstance->Get_MousePos();
-		m_pTransformCom->Set_Pos(XMVectorSet(f4MousePos.x, f4MousePos.y, f4MousePos.z, f4MousePos.w));
+		m_pTransformCom->Set_Pos(_float3(f4MousePos.x, f4MousePos.y, f4MousePos.z));
 		int a = 0;
 	}
 
@@ -97,11 +103,6 @@ HRESULT CPlayer::Render()
 	m_pVIBufferCom->Render();
 
 	return S_OK;
-}
-
-void CPlayer::Imgui_RenderProperty()
-{
-	ImGui::Text("Test");
 }
 
 HRESULT CPlayer::SetUp_Components()

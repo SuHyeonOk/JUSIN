@@ -32,10 +32,10 @@ private:
 	CGameInstance*			m_pGameInstance = nullptr;
 	CRenderer*				m_pRenderer = nullptr;
 	
-
 private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;
+
 
 private:
 	HRESULT Start_Level(LEVEL eLevelID);	
