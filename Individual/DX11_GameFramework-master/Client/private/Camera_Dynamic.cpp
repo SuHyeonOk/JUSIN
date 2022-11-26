@@ -22,7 +22,6 @@ HRESULT CCamera_Dynamic::Initialize_Prototype()
 
 HRESULT CCamera_Dynamic::Initialize(void * pArg)
 {
-	CCamera::CAMERADESC			CameraDesc;
 	ZeroMemory(&CameraDesc, sizeof CameraDesc);
 
 	if (nullptr != pArg)
@@ -47,6 +46,20 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
+	if (pGameInstance->Key_Down(DIK_U))
+	{
+		Shake_Camera(1.f, 2.f);
+	}
+
+
+	if(m_bShake)
+		Shake_Camera(TimeDelta);
+	
+	//m_pTransformCom->LookAt()
+
+
 	if (GetKeyState('W') & 0x8000)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
@@ -67,7 +80,7 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 		m_pTransformCom->Go_Right(TimeDelta);
 	}
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
 
 	if (pGameInstance->Get_DIMouseState(CInput_Device::DIM_RB) & 0x80)
 	{
@@ -106,10 +119,48 @@ HRESULT CCamera_Dynamic::Render()
 
 HRESULT CCamera_Dynamic::SetUp_Components()
 {
-	
+
 	return S_OK;
 }
 
+void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
+{
+	if (!m_bShake)
+		return;
+
+	m_dShakeTimeNow += TimeDelta;
+	
+	_float fRand = 0.f;
+	
+	if (m_dShakeTime > m_dShakeTimeNow)
+	{
+		fRand = (rand() % (m_iShakePower * 2) - m_iShakePower*0.5f) * 0.03f;
+		CameraDesc.vAt.y += fRand;
+	}
+	else
+	{
+		m_dShakeTimeNow = 0;
+		m_bShake = false;
+	}
+
+	// TODO : 플레이어의 좌표를 가져오게 되면 수정하기
+
+	_vector vPos, vLook, vEyeResult, vAtResult;
+	vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	vEyeResult = vPos * 0.3f * vLook;
+	vAtResult = vPos * vLook;
+
+	_float4 f4Pos, f4Look, f4EyeResult, f4AtResult;
+	XMStoreFloat4(&f4EyeResult, vEyeResult);
+	XMStoreFloat4(&f4AtResult, vAtResult);
+
+	CameraDesc.vEye.y += fRand;
+
+	CameraDesc.vEye = f4EyeResult;
+	CameraDesc.vAt = f4AtResult;
+}
 
 CCamera_Dynamic * CCamera_Dynamic::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {

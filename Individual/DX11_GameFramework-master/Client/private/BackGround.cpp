@@ -34,8 +34,8 @@ HRESULT CBackGround::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_fSizeX = g_iWinSizeX;
-	m_fSizeY = g_iWinSizeY;
+	m_fSizeX = _float(g_iWinSizeX);
+	m_fSizeY = _float(g_iWinSizeY);
 
 	m_fX = m_fSizeX * 0.5f;
 	m_fY = m_fSizeY * 0.5f;

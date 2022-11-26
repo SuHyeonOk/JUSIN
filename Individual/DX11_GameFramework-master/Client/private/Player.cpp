@@ -113,7 +113,8 @@ HRESULT CPlayer::SetUp_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"), TEXT("Com_Model"),	
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
-	
+
+
 	return S_OK;
 }
 
@@ -247,7 +248,7 @@ void CPlayer::Key_Input(_double TimeDelta)
 
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CPlayer*		pInstance = new CPlayer(pDevice, pContext);
+	CPlayer*		pInstance = new CPlayer(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{

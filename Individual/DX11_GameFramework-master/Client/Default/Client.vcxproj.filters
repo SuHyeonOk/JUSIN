@@ -25,9 +25,6 @@
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{b9ad9fc5-4efa-4624-ba10-b57dc2aed216}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\PlayerTest">
-      <UniqueIdentifier>{0eb338fd-ab12-4ef8-9e1d-24a22809f2f1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Player">
       <UniqueIdentifier>{03360bd9-4e60-4a15-98fc-704c021cf003}</UniqueIdentifier>
     </Filter>
@@ -96,9 +93,6 @@
     <ClInclude Include="..\public\Level_Tool.h">
       <Filter>01.Levels\99. Tool</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\PlayerTest.h">
-      <Filter>02.GameObjects\PlayerTest</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\Player</Filter>
     </ClInclude>
@@ -136,9 +130,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Level_Tool.cpp">
       <Filter>01.Levels\99. Tool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\PlayerTest.cpp">
-      <Filter>02.GameObjects\PlayerTest</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\Player</Filter>

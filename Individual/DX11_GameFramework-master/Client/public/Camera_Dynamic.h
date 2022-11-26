@@ -17,6 +17,14 @@ private:
 	virtual ~CCamera_Dynamic() = default;
 
 public:
+	void Shake_Camera(_double fTime, _int iPower)
+	{
+		m_bShake = true;
+		m_dShakeTime = fTime;
+		m_iShakePower = iPower;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Tick(_double TimeDelta) override;
@@ -25,6 +33,19 @@ public:
 
 private:
 	HRESULT SetUp_Components();
+
+private:
+	void	Shake_Camera(_double TimeDelta);
+
+private:
+	CCamera::CAMERADESC			CameraDesc;
+
+	// Shake_Camera 와 관련된 변수
+	_bool	m_bShake = false;
+	_double	m_dShakeTime = 0;
+	_double	m_dShakeTimeNow = 0;
+	_int	m_iShakePower = 0;
+
 public:
 	static CCamera_Dynamic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
