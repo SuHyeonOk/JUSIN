@@ -5,18 +5,20 @@
 
 BEGIN(Engine)
 class CShader;
+class CTexture;
 class CRenderer;
-class CModel;
+
+class CVIBuffer_Terrain;
 END
 
 BEGIN(Client)
 
-class CPlayer final : public CGameObject
+class CPlayerTest final : public CGameObject
 {
 private:
-	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CPlayer(const CPlayer& rhs);
-	virtual ~CPlayer() = default;
+	CPlayerTest(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CPlayerTest(const CPlayerTest& rhs);
+	virtual ~CPlayerTest() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -28,7 +30,8 @@ public:
 private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
-	CModel*					m_pModelCom = nullptr;
+	CTexture*				m_pTextureCom = nullptr;
+	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;	
 
 private:
 	HRESULT SetUp_Components();
@@ -36,10 +39,12 @@ private:
 
 private:
 	void	Key_Input(_double TimeDelta);
-	_double	m_dTimeAcc = 0;
+
+private:
+	_double		m_dTimeAcc = 0;
 
 public:
-	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CPlayerTest* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };

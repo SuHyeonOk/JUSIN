@@ -10,21 +10,6 @@
     <Filter Include="00.MainApp">
       <UniqueIdentifier>{612d8d26-b016-4e58-8379-cd50509c1691}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels">
-      <UniqueIdentifier>{b4f73262-606c-417f-8f5a-dbe51f83d2d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\00.Loading">
-      <UniqueIdentifier>{85ea47b1-9b2d-4a32-8f1a-1a8be50ae20a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\01.Logo">
-      <UniqueIdentifier>{26344aaf-cba4-47a2-b6b2-b717d86a6fbb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\02.GamePlay">
-      <UniqueIdentifier>{22df0cdb-5b80-4341-b095-9cf9d96f954c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\00.Loading\Loader">
-      <UniqueIdentifier>{971af4d9-cc6e-45cd-8547-bdea84e24691}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects">
       <UniqueIdentifier>{e41e8875-419b-4b63-9229-2273345ad05a}</UniqueIdentifier>
     </Filter>
@@ -40,10 +25,28 @@
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{b9ad9fc5-4efa-4624-ba10-b57dc2aed216}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player">
+    <Filter Include="02.GameObjects\PlayerTest">
       <UniqueIdentifier>{0eb338fd-ab12-4ef8-9e1d-24a22809f2f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\99. Tool">
+    <Filter Include="02.GameObjects\Player">
+      <UniqueIdentifier>{03360bd9-4e60-4a15-98fc-704c021cf003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp\01.Levels">
+      <UniqueIdentifier>{b4f73262-606c-417f-8f5a-dbe51f83d2d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp\01.Levels\00.Loading">
+      <UniqueIdentifier>{85ea47b1-9b2d-4a32-8f1a-1a8be50ae20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp\01.Levels\00.Loading\Loader">
+      <UniqueIdentifier>{971af4d9-cc6e-45cd-8547-bdea84e24691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp\01.Levels\01.Logo">
+      <UniqueIdentifier>{26344aaf-cba4-47a2-b6b2-b717d86a6fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp\01.Levels\02.GamePlay">
+      <UniqueIdentifier>{22df0cdb-5b80-4341-b095-9cf9d96f954c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp\01.Levels\99. Tool">
       <UniqueIdentifier>{8f2cc244-962e-4458-b62f-2b25a7835dd0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -70,16 +73,16 @@
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Logo.h">
-      <Filter>01.Levels\01.Logo</Filter>
+      <Filter>00.MainApp\01.Levels\01.Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Loading.h">
-      <Filter>01.Levels\00.Loading</Filter>
+      <Filter>00.MainApp\01.Levels\00.Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_GamePlay.h">
-      <Filter>01.Levels\02.GamePlay</Filter>
+      <Filter>00.MainApp\01.Levels\02.GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Loader.h">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
+      <Filter>00.MainApp\01.Levels\00.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BackGround.h">
       <Filter>02.GameObjects\BackGround</Filter>
@@ -90,11 +93,14 @@
     <ClInclude Include="..\public\Camera_Dynamic.h">
       <Filter>02.GameObjects\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_Tool.h">
+      <Filter>00.MainApp\01.Levels\99. Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlayerTest.h">
+      <Filter>02.GameObjects\PlayerTest</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Level_Tool.h">
-      <Filter>01.Levels\99. Tool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,16 +114,16 @@
       <Filter>00.MainApp</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Logo.cpp">
-      <Filter>01.Levels\01.Logo</Filter>
+      <Filter>00.MainApp\01.Levels\01.Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Loading.cpp">
-      <Filter>01.Levels\00.Loading</Filter>
+      <Filter>00.MainApp\01.Levels\00.Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_GamePlay.cpp">
-      <Filter>01.Levels\02.GamePlay</Filter>
+      <Filter>00.MainApp\01.Levels\02.GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Loader.cpp">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
+      <Filter>00.MainApp\01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BackGround.cpp">
       <Filter>02.GameObjects\BackGround</Filter>
@@ -128,11 +134,14 @@
     <ClCompile Include="..\private\Camera_Dynamic.cpp">
       <Filter>02.GameObjects\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Level_Tool.cpp">
+      <Filter>00.MainApp\01.Levels\99. Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerTest.cpp">
+      <Filter>02.GameObjects\PlayerTest</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Level_Tool.cpp">
-      <Filter>01.Levels\99. Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +162,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

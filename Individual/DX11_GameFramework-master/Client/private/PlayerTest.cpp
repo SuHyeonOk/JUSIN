@@ -1,20 +1,21 @@
-#include "stdafx.h"
-#include "..\public\Player.h"
+	#include "stdafx.h"
+#include "..\public\PlayerTest.h"
+
 #include "GameInstance.h"
 
-CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CPlayerTest::CPlayerTest(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CPlayer::CPlayer(const CPlayer & rhs)
+CPlayerTest::CPlayerTest(const CPlayerTest & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CPlayer::Initialize_Prototype()
+HRESULT CPlayerTest::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -22,7 +23,7 @@ HRESULT CPlayer::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlayer::Initialize(void * pArg)
+HRESULT CPlayerTest::Initialize(void * pArg)
 {
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
@@ -40,49 +41,31 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
-		return E_FAIL;
+		return E_FAIL;		
 
 	m_pTransformCom->Set_Pos();
 
 	return S_OK;
 }
 
-void CPlayer::Tick(_double TimeDelta)
+void CPlayerTest::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	//Key_Input(TimeDelta);
+	
 
 }
 
-void CPlayer::Late_Tick(_double TimeDelta)
+void CPlayerTest::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	Key_Input(TimeDelta);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	{
-		_float4		f4MousePos, f4PlayerPos;
-		_vector		vPlayerPos;
-		vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-		cout << "PlayerPos : " << f4PlayerPos.x << " | " << f4PlayerPos.y << " | " << f4PlayerPos.z << " | " << f4PlayerPos.w << endl;
-
-		f4MousePos = pGameInstance->Get_MousePos();
-		m_pTransformCom->Set_Pos(_float3(f4MousePos.x, f4MousePos.y, f4MousePos.z));
-		int a = 0;
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	
+	if(nullptr != m_pRendererCom)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
 
-HRESULT CPlayer::Render()
+HRESULT CPlayerTest::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -92,12 +75,12 @@ HRESULT CPlayer::Render()
 
 	m_pShaderCom->Begin(0);
 
-	m_pModelCom->Render();
-	
+	m_pVIBufferCom->Render();
+
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_Components()
+HRESULT CPlayerTest::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -105,22 +88,24 @@ HRESULT CPlayer::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"), TEXT("Com_Model"),	
-		(CComponent**)&m_pModelCom)))
+	/* For.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"),
+		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-
-	
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Player"), TEXT("Com_Texture"),
+		(CComponent**)&m_pTextureCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_ShaderResources()
+HRESULT CPlayerTest::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -135,53 +120,16 @@ HRESULT CPlayer::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-
-	/* For.Lights */
-	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (nullptr == pLightDesc)
-		return E_FAIL;
-	//
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
-	//	return E_FAIL;
-
 	RELEASE_INSTANCE(CGameInstance);
 
-	
-
-
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-void CPlayer::Key_Input(_double TimeDelta)
+void CPlayerTest::Key_Input(_double TimeDelta)
 {
-	_matrix PlayerWorld;
-	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	_float4x4 f44PlayerWorld;
-	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-
-	// TimerSample
-	m_dTimeAcc += TimeDelta;
-	if (1.f < m_dTimeAcc)
-	{
-		cout << "PlayerWorld_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-		cout << "PlayerWorld_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-		cout << "PlayerWorld_Look	: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-		cout << "PlayerWorld_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-		cout << "----------------------------------------" << endl;
-
-		m_dTimeAcc = 0;
-	}
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
@@ -257,39 +205,51 @@ void CPlayer::Key_Input(_double TimeDelta)
 	//	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * fSensitivity);
 	//}
 
+//#ifdef _DEBUG
+//	_vector a = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+//
+//	a.m128_f32[0];
+//	//cout << MouseMove << " / " << a.m128_f32[0] << endl;
+//
+//	if (pGameInstance->Mouse_Down(CInput_Device::DIM_LB))
+//		cout << "////////////////////////" << endl;
+//
+//	//cout << a.x << " / " << a.y << " / " << a.z << endl;
+//#endif
+
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CPlayerTest * CPlayerTest::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CPlayer*		pInstance = new CPlayer(pDevice, pContext);
+ 	CPlayerTest*		pInstance = new CPlayerTest(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CPlayer");
+		MSG_BOX("Failed to Created : CPlayerTest");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CPlayer::Clone(void * pArg)
+CGameObject * CPlayerTest::Clone(void * pArg)
 {
-	CPlayer*		pInstance = new CPlayer(*this);
+	CPlayerTest*		pInstance = new CPlayerTest(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CPlayer");
+		MSG_BOX("Failed to Cloned : CPlayerTest");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CPlayer::Free()
+void CPlayerTest::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
-
 }
