@@ -33,7 +33,7 @@ HRESULT CCamera::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(&CameraDesc)))
 		return E_FAIL;
 
-	/* 카메라(게임오브젝트)가 들고있는 트랜스폼에 카메라의 상태를 동기화하낟. */
+	/* 카메라(게임오브젝트)가 들고있는 트랜스폼에 카메라의 상태를 동기화한다. */
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMLoadFloat4(&CameraDesc.vEye));
 	m_pTransformCom->LookAt(XMLoadFloat4(&CameraDesc.vAt));
 
@@ -46,7 +46,7 @@ void CCamera::Tick(_double TimeDelta)
 		return;
 
  	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransformCom->Get_WorldMatrix_Inverse());
-	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), 1280 / (_float)720, 0.2f, 300.f));
+	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), 1280 / 720.f, 0.2f, 300.f));
 }
 
 void CCamera::Late_Tick(_double TimeDelta)

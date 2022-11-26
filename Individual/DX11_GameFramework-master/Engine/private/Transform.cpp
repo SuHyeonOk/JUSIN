@@ -151,6 +151,16 @@ void CTransform::Go_Straight(_double TimeDelta)
 
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
 	vPosition += XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
+	
+	Set_State(CTransform::STATE_TRANSLATION, vPosition);
+}
+
+void CTransform::Go_Diagonal(_double TimeDelta)
+{
+	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
+	_vector	vLook = Get_State(CTransform::STATE_LOOK);
+
+	vPosition += XMVector3Normalize(vLook) * (m_TransformDesc.fSpeedPerSec) / 24.f * _float(TimeDelta);
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }

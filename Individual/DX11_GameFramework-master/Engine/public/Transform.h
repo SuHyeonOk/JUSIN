@@ -72,6 +72,7 @@ public:
 	virtual void Imgui_RenderProperty() override;
 
 	void Go_Straight(_double TimeDelta);
+	void Go_Diagonal(_double TimeDelta);
 	void Go_Backward(_double TimeDelta);
 	void Go_Left(_double TimeDelta);
 	void Go_Right(_double TimeDelta);
