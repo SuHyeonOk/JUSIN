@@ -32,7 +32,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	// CModel::Initialize_Prototype
 	if (FAILED(Ready_MeshContainers()))
 		return E_FAIL;
 

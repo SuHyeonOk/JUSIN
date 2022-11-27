@@ -1,8 +1,8 @@
-
 #include "stdafx.h"
 #include "..\public\Level_GamePlay.h"
 
-#include "ImGuizmo.h"
+#include "Imgui_PropertyEditor.h"
+
 #include "GameInstance.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -35,6 +35,24 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 		
+	ImGui::Begin("GamePlayTool");
+
+	const _char* Temp[] = { "Finn", "Jake", "Fiona" };
+	static int nNum = 1;
+	ImGui::Combo("##2", &nNum, Temp, IM_ARRAYSIZE(Temp));
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		_float4		f4MousePos;
+		f4MousePos = pGameInstance->Get_MousePos();
+
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+	
+	ImGui::End();
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)

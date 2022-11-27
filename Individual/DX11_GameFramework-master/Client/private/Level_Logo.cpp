@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "..\public\Level_Logo.h"
 
+#include "Imgui_PropertyEditor.h"
+
 #include "Level_Loading.h"
 #include "GameInstance.h"
-#include "Imgui_PropertyEditor.h"
+
 
 CLevel_Logo::CLevel_Logo(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
