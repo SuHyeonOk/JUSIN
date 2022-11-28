@@ -77,6 +77,22 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Present();
 
+#ifdef  _DEBUG
+
+	++m_iNunmDraw;
+
+	if (m_dTimeAcc >= 1)
+	{
+		wsprintf(m_szFPS, TEXT("fps : %d"), m_iNunmDraw);
+		m_iNunmDraw = 0;
+		m_dTimeAcc = 0;
+	}
+
+	SetWindowText(g_hWnd, m_szFPS);
+
+#endif //  _DEBUG
+
+
 	return S_OK;
 }
 

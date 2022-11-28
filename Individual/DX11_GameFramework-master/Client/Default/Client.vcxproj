@@ -178,6 +178,7 @@
     <ClInclude Include="..\public\Level_Tool.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\public\Map_Garden.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="Client.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="..\private\Level_Tool.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\private\Map_Garden.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="Client.cpp" />

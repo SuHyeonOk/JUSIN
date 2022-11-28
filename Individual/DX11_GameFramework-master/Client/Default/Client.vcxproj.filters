@@ -46,6 +46,12 @@
     <Filter Include="01.Levels\99. Tool">
       <UniqueIdentifier>{8f2cc244-962e-4458-b62f-2b25a7835dd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Map">
+      <UniqueIdentifier>{7c83f2f1-d10e-45a7-9d0b-8751ff0bb839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\Garden">
+      <UniqueIdentifier>{c6df6361-d7a3-419a-8fb8-b4e5a8cb1e14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -96,6 +102,9 @@
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Map_Garden.h">
+      <Filter>02.GameObjects\Map\Garden</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -133,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Map_Garden.cpp">
+      <Filter>02.GameObjects\Map\Garden</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

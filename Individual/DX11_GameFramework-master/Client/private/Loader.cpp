@@ -7,6 +7,7 @@
 #include "Terrain.h"
 #include "Player.h"
 
+#include "Map_Garden.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -148,11 +149,15 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
-
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
 	/* For.Prototype_Component_Model_Fiona */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Fiona/Fiona.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Garden */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Garden"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Garden/Garden.fbx"))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Finn */
@@ -172,14 +177,19 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
-	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	///* For.Prototype_GameObject_Terrain */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+	//	CTerrain::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 	/* For.Prototype_GameObject_Player */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Map_Garden */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Garden"),
+		CMap_Garden::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

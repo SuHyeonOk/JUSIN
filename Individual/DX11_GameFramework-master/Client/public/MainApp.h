@@ -36,11 +36,15 @@ private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;
 
-
 private:
 	HRESULT Start_Level(LEVEL eLevelID);	
 	HRESULT Ready_Prototype_Component();
 	HRESULT Ready_Prototype_GameObject();
+
+private:
+	_tchar*	m_szFPS;
+	_int	m_iNunmDraw = 0;
+	_double	m_dTimeAcc = 0;
 
 public:
 	static CMainApp* Create();

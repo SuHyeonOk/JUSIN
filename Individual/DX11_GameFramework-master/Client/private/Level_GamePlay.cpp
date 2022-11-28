@@ -19,13 +19,16 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Garden"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -47,6 +50,7 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 	{
 		_float4		f4MousePos;
 		f4MousePos = pGameInstance->Get_MousePos();
+
 
 	}
 
@@ -137,6 +141,18 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Map_Garden"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
