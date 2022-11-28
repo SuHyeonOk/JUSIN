@@ -50,7 +50,7 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 	
 	if (pGameInstance->Key_Down(DIK_U))
 	{
-		Shake_Camera(1.f, 2.f);
+		Shake_Camera(1, 2);
 	}
 
 

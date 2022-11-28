@@ -14,23 +14,27 @@ private:
 	virtual ~CModel() = default;
 
 public:
+	_uint Get_NumMeshes() const {
+		return m_iNumMeshes;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath);
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	HRESULT Render();
+	HRESULT Bind_Material(class CShader* pShader, _uint iMeshIndex, aiTextureType eType, const char* pConstantName);
+	HRESULT Render(CShader* pShader, _uint iMeshIndex);
 
 public:
 	const aiScene*						m_pAIScene = nullptr;
 	Assimp::Importer					m_Importer;
 	TYPE								m_eType = TYPE_END;
 
-	// CModel
 	/* 하나의 모델은 교체가 가능한 여러개의 메시로 구성되어있다. */
 	_uint								m_iNumMeshes = 0; // 몇 개의 메시로 구성되어 있는지
-	vector<class CMesh*>				m_Meshes;	
+	vector<class CMesh*>				m_Meshes;
 
-	// CModel
 	_uint								m_iNumMaterials = 0; // 재질 여러개
 	vector<MODELMATERIAL>				m_Materials;
 
