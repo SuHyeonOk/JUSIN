@@ -78,8 +78,8 @@ public:
 	void Go_Right(_double TimeDelta);
 
 	// Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
-	void Turn(_fvector vAxis, _double TimeDelta);		/* Dynamic */
-	void Rotation(_fvector vAxis, _float fRadian);		/* Static */
+	void Turn(_fvector vAxis, _double TimeDelta);		/* Dynamic 어느 축을 기준으로 시간만큼 회전하는지*/
+	void Rotation(_fvector vAxis, _float fRadian);		/* Static 어떤 축을 기준으로 어느 각도를 바라보는지*/
 
 	/* 쳐다본다. */
 	/*void LookAt(const CTransform* pTarget);*/

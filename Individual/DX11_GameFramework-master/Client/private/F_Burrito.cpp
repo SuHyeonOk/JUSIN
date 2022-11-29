@@ -1,20 +1,20 @@
 #include "stdafx.h"
-#include "..\public\Map_Garden.h"
+#include "..\public\F_Burrito.h"
 #include "GameInstance.h"
 
-CMap_Garden::CMap_Garden(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CF_Burrito::CF_Burrito(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CMap_Garden::CMap_Garden(const CMap_Garden & rhs)
+CF_Burrito::CF_Burrito(const CF_Burrito & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CMap_Garden::Initialize_Prototype()
+HRESULT CF_Burrito::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -22,25 +22,39 @@ HRESULT CMap_Garden::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CMap_Garden::Initialize(void * pArg)
+HRESULT CF_Burrito::Initialize(void * pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
+	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
+	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
+
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+
+	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components()))
+ 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+
+	m_pTransformCom->Set_Pos();
 
 	return S_OK;
 }
 
-void CMap_Garden::Tick(_double TimeDelta)
+void CF_Burrito::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 }
 
-void CMap_Garden::Late_Tick(_double TimeDelta)
+void CF_Burrito::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -48,7 +62,7 @@ void CMap_Garden::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CMap_Garden::Render()
+HRESULT CF_Burrito::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -69,7 +83,7 @@ HRESULT CMap_Garden::Render()
 	return S_OK;
 }
 
-HRESULT CMap_Garden::SetUp_Components()
+HRESULT CF_Burrito::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -82,14 +96,14 @@ HRESULT CMap_Garden::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Garden"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CMap_Garden::SetUp_ShaderResources()
+HRESULT CF_Burrito::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -104,54 +118,36 @@ HRESULT CMap_Garden::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-
-	/* For.Lights */
-	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	//if (nullptr == pLightDesc)
-	//	return E_FAIL;
-	
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
-	//	return E_FAIL;
-
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
 
-CMap_Garden * CMap_Garden::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CF_Burrito * CF_Burrito::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CMap_Garden*		pInstance = new CMap_Garden(pDevice, pContext);
+	CF_Burrito*		pInstance = new CF_Burrito(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CMap_Garden");
+		MSG_BOX("Failed to Created : CF_Burrito");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CMap_Garden::Clone(void * pArg)
+CGameObject * CF_Burrito::Clone(void * pArg)
 {
-	CMap_Garden*		pInstance = new CMap_Garden(*this);
+	CF_Burrito*		pInstance = new CF_Burrito(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CMap_Garden");
+		MSG_BOX("Failed to Cloned : CF_Burrito");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CMap_Garden::Free()
+void CF_Burrito::Free()
 {
 	__super::Free();
 

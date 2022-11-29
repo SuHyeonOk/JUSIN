@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\public\Level_GamePlay.h"
 
+#include <fstream>
 #include "Imgui_PropertyEditor.h"
 
 #include "GameInstance.h"
@@ -37,26 +38,9 @@ HRESULT CLevel_GamePlay::Initialize()
 void CLevel_GamePlay::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-		
-	ImGui::Begin("GamePlayTool");
 
-	const _char* Temp[] = { "Finn", "Jake", "Fiona" };
-	static int nNum = 1;
-	ImGui::Combo("##2", &nNum, Temp, IM_ARRAYSIZE(Temp));
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	{
-		_float4		f4MousePos;
-		f4MousePos = pGameInstance->Get_MousePos();
-
-
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
+	ImGuiTest();
 	
-	ImGui::End();
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)
@@ -116,7 +100,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Terrain"))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -158,6 +142,67 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CLevel_GamePlay::ImGuiTest()
+{
+	ImGui::Begin("GamePlayTool");
+
+#pragma region Food
+	const _char* FoodName[] = { "Royal_Tart", "Burrito" };
+	static int iFoodNum = 0;
+	ImGui::Combo("##2", &iFoodNum, FoodName, IM_ARRAYSIZE(FoodName));
+
+	ofstream ofs("../../Data/test.txt");
+	if (ofs.fail())
+	{
+		MSG_BOX("Error!");
+		return;
+	}
+	
+	ofs << 1234 << endl;
+	ofs << 'a' << endl;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+	
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		_float3	f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z};
+
+		if (0 == iFoodNum)
+		{
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Royal_Tart__%d", m_iRoyal_TartCount), TEXT("Prototype_GameObject_Royal_Tart"), &_float3(f3ClickPos))))
+				return;
+
+			m_iRoyal_TartCount++;
+		
+			//ofs << "Royal_Tart__%d", m_iRoyal_TartCount << endl;
+		}
+
+		if (1 == iFoodNum)
+		{
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Burrito__&d", m_iBurrito), TEXT("Prototype_GameObject_Burrito"), &_float3(f3ClickPos))))
+				return;		
+
+			m_iBurrito++;
+		}
+	}
+#pragma endregion Food
+
+
+
+
+	if (pGameInstance->Key_Down(DIK_R))
+	{
+		cout << FoodName << " | " << iFoodNum << endl;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	ImGui::End();
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

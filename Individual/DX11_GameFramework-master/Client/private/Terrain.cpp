@@ -24,13 +24,23 @@ HRESULT CTerrain::Initialize_Prototype()
 
 HRESULT CTerrain::Initialize(void * pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
+	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
+	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
+
+	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+
+	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
-		return E_FAIL;	
-	
+		return E_FAIL;
 
+	m_pTransformCom->Set_Pos();
 
 	return S_OK;
 }
@@ -47,7 +57,6 @@ void CTerrain::Tick(_double TimeDelta)
 		if (m_pVIBufferCom->Picking(m_pTransformCom, &vPickPos))
 		{
 			cout << "PickPos : " << vPickPos.x << " | " << vPickPos.y << " | " << vPickPos.z << " | " << vPickPos.w << endl;
-			int a = 10;
 		}
 	}
 
@@ -67,12 +76,12 @@ HRESULT CTerrain::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	//if (FAILED(SetUp_ShaderResources()))
+	//	return E_FAIL;
 
-	m_pShaderCom->Begin(0);
+	//m_pShaderCom->Begin(0);
 
-	m_pVIBufferCom->Render();
+	//m_pVIBufferCom->Render();
 
 	return S_OK;
 }
@@ -94,10 +103,10 @@ HRESULT CTerrain::SetUp_Components()
 		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"), TEXT("Com_Texture"),
-		(CComponent**)&m_pTextureCom[TYPE_DIFFUSE])))
-		return E_FAIL;
+	///* For.Com_Texture */
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"), TEXT("Com_Texture"),
+	//	(CComponent**)&m_pTextureCom[TYPE_DIFFUSE])))
+	//	return E_FAIL;
 
 	///* For.Com_Brush*/
 	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"), TEXT("Com_Brush"),
