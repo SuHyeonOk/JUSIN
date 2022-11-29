@@ -48,7 +48,7 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 
 	if (true == m_pLoader->isFinished())
 	{
-		if(pGameInstance->Key_Down(DIK_RETURN))
+		if (pGameInstance->Key_Down(DIK_RETURN))
 		{
 			CLevel*		pLevel = nullptr;
 
@@ -82,9 +82,7 @@ HRESULT CLevel_Loading::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-
-
+	
 	SetWindowText(g_hWnd, m_pLoader->Get_LoadingText());
 
 	return S_OK;

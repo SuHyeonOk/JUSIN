@@ -66,7 +66,7 @@ HRESULT CLevel_Logo::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	SetWindowText(g_hWnd, TEXT("Level : LOGO"));
+	//SetWindowText(g_hWnd, TEXT("Level : LOGO"));
 
 	return S_OK;
 }

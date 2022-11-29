@@ -45,7 +45,7 @@ HRESULT CLevel_Tool::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	SetWindowText(g_hWnd, TEXT("Level : TOOL"));
+	//SetWindowText(g_hWnd, TEXT("Level : TOOL"));
 
 	return S_OK;
 }

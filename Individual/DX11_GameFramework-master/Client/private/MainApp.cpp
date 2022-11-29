@@ -37,7 +37,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
-#ifdef _DEBUG
+#ifdef _DEBUG // 디버그 창
 	if (::AllocConsole() == TRUE) {
 		FILE* nfp[3];
 		freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
@@ -46,6 +46,7 @@ HRESULT CMainApp::Initialize()
 		std::ios::sync_with_stdio();
 	}
 #endif
+
 
 	return S_OK;
 }
@@ -57,6 +58,7 @@ void CMainApp::Tick(_double TimeDelta)
 
 	m_pGameInstance->Tick_Engine(TimeDelta);
 
+	m_dTimeAcc += TimeDelta;
 }
 
 HRESULT CMainApp::Render()
@@ -79,19 +81,18 @@ HRESULT CMainApp::Render()
 
 #ifdef  _DEBUG
 
-	++m_iNunmDraw;
-
-	if (m_dTimeAcc >= 1)
+	++m_iNumDraw;
+	
+	if (m_dTimeAcc >= _double(1))
 	{
-		wsprintf(m_szFPS, TEXT("fps : %d"), m_iNunmDraw);
-		m_iNunmDraw = 0;
+		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iNumDraw);
+		m_iNumDraw = 0;
 		m_dTimeAcc = 0;
 	}
 
 	SetWindowText(g_hWnd, m_szFPS);
-
+	
 #endif //  _DEBUG
-
 
 	return S_OK;
 }

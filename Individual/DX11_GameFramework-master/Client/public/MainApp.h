@@ -41,10 +41,10 @@ private:
 	HRESULT Ready_Prototype_Component();
 	HRESULT Ready_Prototype_GameObject();
 
-private:
-	_tchar*	m_szFPS;
-	_int	m_iNunmDraw = 0;
+private: // FPS 띄우기 위한 변수
+	_int	m_iNumDraw = 0;
 	_double	m_dTimeAcc = 0;
+	TCHAR	m_szFPS[17] = L"";
 
 public:
 	static CMainApp* Create();

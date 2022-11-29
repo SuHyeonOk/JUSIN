@@ -99,15 +99,15 @@ HRESULT CTerrain::SetUp_Components()
 		(CComponent**)&m_pTextureCom[TYPE_DIFFUSE])))
 		return E_FAIL;
 
-	/* For.Com_Brush*/
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"), TEXT("Com_Brush"),
-		(CComponent**)&m_pTextureCom[TYPE_BRUSH])))
-		return E_FAIL;
+	///* For.Com_Brush*/
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"), TEXT("Com_Brush"),
+	//	(CComponent**)&m_pTextureCom[TYPE_BRUSH])))
+	//	return E_FAIL;
 
-	/* For.Com_Filter */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Filter"), TEXT("Com_Filter"),
-		(CComponent**)&m_pTextureCom[TYPE_FILTER])))
-		return E_FAIL;
+	///* For.Com_Filter */
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Filter"), TEXT("Com_Filter"),
+	//	(CComponent**)&m_pTextureCom[TYPE_FILTER])))
+	//	return E_FAIL;
 
 	return S_OK;
 }
