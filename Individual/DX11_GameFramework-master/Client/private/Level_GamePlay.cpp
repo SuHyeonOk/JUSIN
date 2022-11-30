@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "..\public\Level_GamePlay.h"
 
+#include "GameInstance.h"
+
 #include <fstream>
 #include "Imgui_PropertyEditor.h"
+#include "DataManager.h"
 
-#include "GameInstance.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -213,48 +215,6 @@ void CLevel_GamePlay::ImGuiTest()
 
 		// WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
 	}
-
-	if (ImGui::Button("Load"))
-	{
-		wifstream		fin("../../Data/Food.txt", ios::in);
-
-		if (fin.fail())
-		{
-			MSG_BOX("Failed to Load File");
-			return;
-		}
-		
-		_tchar szObjName[MAX_PATH] = L"";
-		_tchar szObjPosX[MAX_PATH] = L"";
-		_tchar szObjPosY[MAX_PATH] = L"";
-		_tchar szObjPosZ[MAX_PATH] = L"";
-
-		_float	fObjPosX = 0.f;
-		_float	fObjPosY = 0.f;
-		_float	fObjPosZ = 0.f;
-
-		OBJINFO		eObjInfo;
-
-		while (true)
-		{
-			fin.getline(szObjName, MAX_PATH, '|');
-			fin.getline(szObjPosX, MAX_PATH, '|');
-			fin.getline(szObjPosY, MAX_PATH, '|');
-			fin.getline(szObjPosZ, MAX_PATH);
-
-			if (fin.eof())
-				break;
-
-			fObjPosX = (_float)_tstof(szObjPosX);
-			fObjPosY = (_float)_tstof(szObjPosY);
-			fObjPosZ = (_float)_tstof(szObjPosZ);
-
-			memcpy(eObjInfo.ObjName, szObjName, sizeof(_char[MAX_PATH]));
-			eObjInfo.ObjPos = _float3(fObjPosX, fObjPosY, fObjPosZ);
-		
-			m_vecObjInfo.push_back(eObjInfo);
-		}
-	}
 #pragma endregion Food
 
 	ImGui::End();
@@ -281,8 +241,6 @@ void CLevel_GamePlay::FoodLoad()
 	_float	fObjPosY = 0.f;
 	_float	fObjPosZ = 0.f;
 
-	OBJINFO		eObjInfo;
-
 	while (true)
 	{
 		fin.getline(szObjName, MAX_PATH, '|');
@@ -297,17 +255,17 @@ void CLevel_GamePlay::FoodLoad()
 		fObjPosY = (_float)_tstof(szObjPosY);
 		fObjPosZ = (_float)_tstof(szObjPosZ);
 
-		memcpy(eObjInfo.ObjName, szObjName, sizeof(_char[MAX_PATH]));
-		eObjInfo.ObjPos = _float3(fObjPosX, fObjPosY, fObjPosZ);
-
-		m_vecObjInfo.push_back(eObjInfo);
+		CDataManager::GetInstance()->Set_FoodInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
 	}
+	
+
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_uint iFoodVecCount = _uint(m_vecObjInfo.size());
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_FoodInfo();	
+	_uint iFoodVecCount = _uint(eVecObjInfo.size());
 
-	for (auto& pObjInfo : m_vecObjInfo)
+	for (auto& pObjInfo : eVecObjInfo)
 	{
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
@@ -335,24 +293,7 @@ void CLevel_GamePlay::FoodLoad()
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Burrito"), &_float3(pObjInfo.ObjPos))))
 					return;
 			}
-		}
-		
-		//if (m_iBurrito_Count <= iFoodVecCount)
-		//{
-		//	m_wstFoodName = L"Burrito__";
-		//	m_wstFoodName += to_wstring(m_iBurrito_Count);
-
-		//	wstring wstFoodNameTemp(pObjInfo.ObjName);
-
-		//	if (m_wstFoodName == wstFoodNameTemp)
-		//	{
-		//		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Burrito"), &_float3(pObjInfo.ObjPos))))
-		//			return;
-		//	}
-
-		//	++m_iBurrito_Count;
-		//}
-		
+		}		
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

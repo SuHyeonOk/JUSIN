@@ -31,22 +31,13 @@ private:
 	void	FoodLoad();
 
 private:
-	typedef struct tagObjectInfo
-	{
-		_tchar		ObjName[MAX_PATH];
-		_float3		ObjPos;
-	}OBJINFO;
-
-	vector<OBJINFO>	m_vecObjInfo;
-	OBJINFO			m_eObjeInfo;
-
 	const _tchar*	m_szFoodName;
 	wstring			m_wstFoodName;
 
-	_float3	m_f3ClickPos = _float3(0.f, 0.f, 0.f);
+	_float3			m_f3ClickPos = _float3(0.f, 0.f, 0.f);
 
-	_uint	m_iRoyal_Tart_Count = 0;
-	_uint	m_iBurrito_Count = 0;
+	_uint			m_iRoyal_Tart_Count = 0;
+	_uint			m_iBurrito_Count = 0;
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

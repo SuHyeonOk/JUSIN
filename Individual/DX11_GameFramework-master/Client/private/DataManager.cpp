@@ -10,7 +10,7 @@ CDataManager::CDataManager()
 void CDataManager::Set_FoodInfo(const _tchar & ObjName, const _float3 & ObjPos, void * pArg)
 {
 	OBJINFO		eObjInfo;
-	eObjInfo.ObjName[MAX_PATH] = ObjName;
+	memcpy(eObjInfo.ObjName, &ObjName, sizeof(_char[MAX_PATH]));
 	eObjInfo.ObjPos = ObjPos;
 
 	m_vecFoodInfo.push_back(eObjInfo);

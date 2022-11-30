@@ -16,6 +16,8 @@ class CDataManager : public CBase
 
 	}OBJINFO;
 
+	enum FOODKIND {ROYAL_TART, BURRITO, FOOD_END};
+
 public:
 	CDataManager();
 	virtual ~CDataManager() = default;

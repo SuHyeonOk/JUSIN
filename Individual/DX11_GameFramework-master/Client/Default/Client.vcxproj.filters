@@ -132,6 +132,9 @@
     <ClInclude Include="..\Public\DataManager.h">
       <Filter>77.Manager\Data</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Food.h">
+      <Filter>02.GameObjects\Food</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -181,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\DataManager.cpp">
       <Filter>77.Manager\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Food.cpp">
+      <Filter>02.GameObjects\Food</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
