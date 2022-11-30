@@ -64,6 +64,12 @@
     <Filter Include="02.GameObjects\Food\Burrito">
       <UniqueIdentifier>{7aa9dd56-ddd2-4938-8a43-318b35bed80e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="77.Manager">
+      <UniqueIdentifier>{fbd8c078-e35b-49eb-8785-af09916df527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="77.Manager\Data">
+      <UniqueIdentifier>{4ac3433c-2755-403a-9a53-b6e2aec60f3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -123,6 +129,9 @@
     <ClInclude Include="..\public\F_Burrito.h">
       <Filter>02.GameObjects\Food\Burrito</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\DataManager.h">
+      <Filter>77.Manager\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -169,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="..\private\F_Burrito.cpp">
       <Filter>02.GameObjects\Food\Burrito</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DataManager.cpp">
+      <Filter>77.Manager\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

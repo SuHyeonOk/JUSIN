@@ -32,6 +32,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Garden"))))
 		return E_FAIL;
 
+	FoodLoad();
+
 	return S_OK;
 }
 
@@ -151,7 +153,7 @@ void CLevel_GamePlay::ImGuiTest()
 #pragma region Food
 	const _char* FoodName[] = { "Royal_Tart", "Burrito" };
 	static int iFoodNum = 0;
-	ImGui::Combo("##2", &iFoodNum, FoodName, IM_ARRAYSIZE(FoodName));
+	ImGui::Combo("##2_FOOD", &iFoodNum, FoodName, IM_ARRAYSIZE(FoodName));
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -161,70 +163,199 @@ void CLevel_GamePlay::ImGuiTest()
 	
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
-		m_f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z};
+		m_f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z}; // 클릭시의 좌표 저장
 
 		if (0 == iFoodNum)
 		{
-			stFoodName = L"Royal_Tart__";
-			stFoodName += to_wstring(m_iRoyal_TartCount);
+			m_wstFoodName = L"Royal_Tart__";
+			m_wstFoodName += to_wstring(m_iRoyal_Tart_Count); // 문자열에 상수 더하기
 
-			m_szFoodName = stFoodName.c_str();
+			m_szFoodName = m_wstFoodName.c_str();	// wstring -> conat wchar*
 		
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Royal_Tart"), &_float3(m_f3ClickPos))))
 				return;
 
-			m_iRoyal_TartCount++;
+			m_iRoyal_Tart_Count++;
 		}
 
 		if (1 == iFoodNum)
 		{
-			stFoodName = L"Burrito__";
-			stFoodName += to_wstring(m_iRoyal_TartCount);
+			m_wstFoodName = L"Burrito__";
+			m_wstFoodName += to_wstring(m_iBurrito_Count);
 
-			m_szFoodName = stFoodName.c_str();
+			m_szFoodName = m_wstFoodName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Burrito"), &_float3(m_f3ClickPos))))
 				return;		
 
-			m_iBurrito++;
+			m_iBurrito_Count++;
 		}
-	}
-
-	if (ImGui::Button("Save"))
-	{
-		ofstream ofs("../../Data/Food.txt", ios::out | ios::app);
-		if (ofs.fail())
-		{
-			MSG_BOX("Failed to load File");
-			return;
-		}
-
-		std::string str = "";
-		str.assign(stFoodName.begin(), stFoodName.end());
-
-		ofs << str << " | " << m_f3ClickPos.x << " | " << m_f3ClickPos.y << " | " << m_f3ClickPos.z << "\n";
-	}
-
-	if (ImGui::Button("Load"))
-	{
-
-	}
-
-#pragma endregion Food
-
-
-
-
-	if (pGameInstance->Key_Down(DIK_R))
-	{
-		cout << FoodName << " | " << iFoodNum << endl;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (ImGui::Button("Save"))
+	{
+		wofstream fout("../../Data/Food.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		// fouttream 은 string 전용 / wfouttream 은 wstring 전용
+		//std::string str = "";
+		//str.assign(m_wstFoodName.begin(), m_wstFoodName.end());
+
+		fout << m_wstFoodName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+
+		// WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
+	}
+
+	if (ImGui::Button("Load"))
+	{
+		wifstream		fin("../../Data/Food.txt", ios::in);
+
+		if (fin.fail())
+		{
+			MSG_BOX("Failed to Load File");
+			return;
+		}
+		
+		_tchar szObjName[MAX_PATH] = L"";
+		_tchar szObjPosX[MAX_PATH] = L"";
+		_tchar szObjPosY[MAX_PATH] = L"";
+		_tchar szObjPosZ[MAX_PATH] = L"";
+
+		_float	fObjPosX = 0.f;
+		_float	fObjPosY = 0.f;
+		_float	fObjPosZ = 0.f;
+
+		OBJINFO		eObjInfo;
+
+		while (true)
+		{
+			fin.getline(szObjName, MAX_PATH, '|');
+			fin.getline(szObjPosX, MAX_PATH, '|');
+			fin.getline(szObjPosY, MAX_PATH, '|');
+			fin.getline(szObjPosZ, MAX_PATH);
+
+			if (fin.eof())
+				break;
+
+			fObjPosX = (_float)_tstof(szObjPosX);
+			fObjPosY = (_float)_tstof(szObjPosY);
+			fObjPosZ = (_float)_tstof(szObjPosZ);
+
+			memcpy(eObjInfo.ObjName, szObjName, sizeof(_char[MAX_PATH]));
+			eObjInfo.ObjPos = _float3(fObjPosX, fObjPosY, fObjPosZ);
+		
+			m_vecObjInfo.push_back(eObjInfo);
+		}
+	}
+#pragma endregion Food
+
 	ImGui::End();
 
 	return;
+}
+
+void CLevel_GamePlay::FoodLoad()
+{
+	wifstream		fin("../../Data/Food.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	OBJINFO		eObjInfo;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		memcpy(eObjInfo.ObjName, szObjName, sizeof(_char[MAX_PATH]));
+		eObjInfo.ObjPos = _float3(fObjPosX, fObjPosY, fObjPosZ);
+
+		m_vecObjInfo.push_back(eObjInfo);
+	}
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_uint iFoodVecCount = _uint(m_vecObjInfo.size());
+
+	for (auto& pObjInfo : m_vecObjInfo)
+	{
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			m_wstFoodName = L"Royal_Tart__";
+			m_wstFoodName += to_wstring(i);
+
+			wstring wstFoodNameTemp(pObjInfo.ObjName); // tchar -> wstring
+
+			if (m_wstFoodName == wstFoodNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Royal_Tart"), &_float3(pObjInfo.ObjPos))))
+					return;
+			}
+		}
+
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			m_wstFoodName = L"Burrito__";
+			m_wstFoodName += to_wstring(i);
+
+			wstring wstFoodNameTemp(pObjInfo.ObjName);
+
+			if (m_wstFoodName == wstFoodNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Burrito"), &_float3(pObjInfo.ObjPos))))
+					return;
+			}
+		}
+		
+		//if (m_iBurrito_Count <= iFoodVecCount)
+		//{
+		//	m_wstFoodName = L"Burrito__";
+		//	m_wstFoodName += to_wstring(m_iBurrito_Count);
+
+		//	wstring wstFoodNameTemp(pObjInfo.ObjName);
+
+		//	if (m_wstFoodName == wstFoodNameTemp)
+		//	{
+		//		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Burrito"), &_float3(pObjInfo.ObjPos))))
+		//			return;
+		//	}
+
+		//	++m_iBurrito_Count;
+		//}
+		
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
