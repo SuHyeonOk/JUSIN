@@ -58,12 +58,6 @@
     <Filter Include="02.GameObjects\Food">
       <UniqueIdentifier>{3a3e33c7-484b-415d-a1aa-f3ff659c3b4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Food\Royal_Tart">
-      <UniqueIdentifier>{fffec005-161e-4911-a47c-ee1ddc131d5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Food\Burrito">
-      <UniqueIdentifier>{7aa9dd56-ddd2-4938-8a43-318b35bed80e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="77.Manager">
       <UniqueIdentifier>{fbd8c078-e35b-49eb-8785-af09916df527}</UniqueIdentifier>
     </Filter>
@@ -123,12 +117,6 @@
     <ClInclude Include="..\public\Map_Garden.h">
       <Filter>02.GameObjects\Map\Garden</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\F_Royal_Tart.h">
-      <Filter>02.GameObjects\Food\Royal_Tart</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\F_Burrito.h">
-      <Filter>02.GameObjects\Food\Burrito</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\DataManager.h">
       <Filter>77.Manager\Data</Filter>
     </ClInclude>
@@ -175,12 +163,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Map_Garden.cpp">
       <Filter>02.GameObjects\Map\Garden</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\F_Royal_Tart.cpp">
-      <Filter>02.GameObjects\Food\Royal_Tart</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\F_Burrito.cpp">
-      <Filter>02.GameObjects\Food\Burrito</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DataManager.cpp">
       <Filter>77.Manager\Data</Filter>

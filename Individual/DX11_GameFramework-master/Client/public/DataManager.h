@@ -3,12 +3,14 @@
 #include "Client_Defines.h"
 #include "Base.h"
 
+
 BEGIN(Client)
 
 class CDataManager : public CBase
 {
 	DECLARE_SINGLETON(CDataManager)
 
+public:
 	typedef struct tagObjectInfo
 	{
 		_tchar		ObjName[MAX_PATH];
@@ -16,7 +18,7 @@ class CDataManager : public CBase
 
 	}OBJINFO;
 
-	enum FOODKIND {ROYAL_TART, BURRITO, FOOD_END};
+
 
 public:
 	CDataManager();

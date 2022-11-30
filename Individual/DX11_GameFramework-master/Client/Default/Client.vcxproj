@@ -174,8 +174,6 @@
     <ClInclude Include="..\public\Client_Defines.h" />
     <ClInclude Include="..\Public\DataManager.h" />
     <ClInclude Include="..\public\Food.h" />
-    <ClInclude Include="..\public\F_Burrito.h" />
-    <ClInclude Include="..\public\F_Royal_Tart.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
@@ -195,8 +193,6 @@
     <ClCompile Include="..\private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />
     <ClCompile Include="..\private\Food.cpp" />
-    <ClCompile Include="..\private\F_Burrito.cpp" />
-    <ClCompile Include="..\private\F_Royal_Tart.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />

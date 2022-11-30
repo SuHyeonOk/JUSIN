@@ -23,18 +23,26 @@ HRESULT CFood::Initialize_Prototype()
 }
 
 HRESULT CFood::Initialize(void * pArg)
-{
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
-	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
-
+{	
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+	if (nullptr != pArg)
+		memcpy(&m_tinFoodInfo, pArg, sizeof(FOODINFO));
+
+	if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
+	{
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinFoodInfo.fPos.x, m_tinFoodInfo.fPos.y, m_tinFoodInfo.fPos.z);
+	}
+	else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
+	{
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinFoodInfo.fPos.x, m_tinFoodInfo.fPos.y, m_tinFoodInfo.fPos.z);
+	}
+
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -95,10 +103,20 @@ HRESULT CFood::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"), TEXT("Com_Model"),
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
+	if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

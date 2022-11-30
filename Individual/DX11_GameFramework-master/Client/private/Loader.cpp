@@ -9,8 +9,7 @@
 
 #include "Map_Garden.h"
 
-#include "F_Royal_Tart.h"
-#include "F_Burrito.h"
+#include "Food.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -209,14 +208,9 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Food
-	/* For.Prototype_GameObject_Royal_Tart */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Royal_Tart"),
-		CF_Royal_Tart::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Burrito */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Burrito"),
-		CF_Burrito::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_Food */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
+		CFood::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("·Îµù³¡. "));

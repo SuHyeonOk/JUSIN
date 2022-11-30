@@ -7,6 +7,7 @@
 #include "Imgui_PropertyEditor.h"
 #include "DataManager.h"
 
+#include "Food.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -160,21 +161,26 @@ void CLevel_GamePlay::ImGuiTest()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CFood::FOODINFO		fFoodInfo;
 	_float4		f4MousePos;
 	f4MousePos = pGameInstance->Get_MousePos();
-	
+
+
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
 		m_f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z}; // 클릭시의 좌표 저장
 
 		if (0 == iFoodNum)
 		{
+			fFoodInfo.eFoodKind = fFoodInfo.ROYAL_TART;
+			fFoodInfo.fPos = m_f3ClickPos;
+
 			m_wstFoodName = L"Royal_Tart__";
 			m_wstFoodName += to_wstring(m_iRoyal_Tart_Count); // 문자열에 상수 더하기
 
 			m_szFoodName = m_wstFoodName.c_str();	// wstring -> conat wchar*
-		
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Royal_Tart"), &_float3(m_f3ClickPos))))
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iRoyal_Tart_Count++;
@@ -182,13 +188,16 @@ void CLevel_GamePlay::ImGuiTest()
 
 		if (1 == iFoodNum)
 		{
+			fFoodInfo.eFoodKind = fFoodInfo.BURRITO;
+			fFoodInfo.fPos = m_f3ClickPos;
+
 			m_wstFoodName = L"Burrito__";
 			m_wstFoodName += to_wstring(m_iBurrito_Count);
 
 			m_szFoodName = m_wstFoodName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Burrito"), &_float3(m_f3ClickPos))))
-				return;		
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+				return;
 
 			m_iBurrito_Count++;
 		}
@@ -196,7 +205,7 @@ void CLevel_GamePlay::ImGuiTest()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (ImGui::Button("Save"))
+	if (ImGui::Button("Food Save"))
 	{
 		wofstream fout("../../Data/Food.txt", ios::out | ios::app);
 		if (fout.fail())
@@ -262,6 +271,7 @@ void CLevel_GamePlay::FoodLoad()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CFood::FOODINFO					tFoodInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_FoodInfo();	
 	_uint iFoodVecCount = _uint(eVecObjInfo.size());
 
@@ -269,6 +279,9 @@ void CLevel_GamePlay::FoodLoad()
 	{
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
+			tFoodInfo.eFoodKind = tFoodInfo.ROYAL_TART;
+			tFoodInfo.fPos = pObjInfo.ObjPos;
+
 			m_wstFoodName = L"Royal_Tart__";
 			m_wstFoodName += to_wstring(i);
 
@@ -276,13 +289,16 @@ void CLevel_GamePlay::FoodLoad()
 
 			if (m_wstFoodName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Royal_Tart"), &_float3(pObjInfo.ObjPos))))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
 			}
 		}
 
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
+			tFoodInfo.eFoodKind = tFoodInfo.BURRITO;
+			tFoodInfo.fPos = pObjInfo.ObjPos;
+
 			m_wstFoodName = L"Burrito__";
 			m_wstFoodName += to_wstring(i);
 
@@ -290,7 +306,7 @@ void CLevel_GamePlay::FoodLoad()
 
 			if (m_wstFoodName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Burrito"), &_float3(pObjInfo.ObjPos))))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
 			}
 		}		
