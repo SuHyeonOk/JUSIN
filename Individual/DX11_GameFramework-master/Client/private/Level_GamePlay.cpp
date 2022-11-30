@@ -239,7 +239,7 @@ void CLevel_GamePlay::ImGuiFood()
 
 		fout.close();
 
-		// WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
 	}
 #pragma endregion Food
 }
@@ -323,6 +323,8 @@ void CLevel_GamePlay::ImGuiCoin()
 		fout << m_wstItemName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
 		fout.close();
+
+		WinExec("notepad.exe ../../Data/Coin.txt", SW_SHOW);
 	}
 }
 
