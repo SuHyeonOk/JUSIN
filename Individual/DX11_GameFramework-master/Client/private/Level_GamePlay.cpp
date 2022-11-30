@@ -153,15 +153,6 @@ void CLevel_GamePlay::ImGuiTest()
 	static int iFoodNum = 0;
 	ImGui::Combo("##2", &iFoodNum, FoodName, IM_ARRAYSIZE(FoodName));
 
-	ofstream ofs("../../Data/test.txt");
-	if (ofs.fail())
-	{
-		MSG_BOX("Error!");
-		return;
-	}
-	
-	ofs << 1234 << endl;
-	ofs << 'a' << endl;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -170,26 +161,55 @@ void CLevel_GamePlay::ImGuiTest()
 	
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
-		_float3	f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z};
+		m_f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z};
 
 		if (0 == iFoodNum)
 		{
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Royal_Tart__%d", m_iRoyal_TartCount), TEXT("Prototype_GameObject_Royal_Tart"), &_float3(f3ClickPos))))
+			stFoodName = L"Royal_Tart__";
+			stFoodName += to_wstring(m_iRoyal_TartCount);
+
+			m_szFoodName = stFoodName.c_str();
+		
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Royal_Tart"), &_float3(m_f3ClickPos))))
 				return;
 
 			m_iRoyal_TartCount++;
-		
-			//ofs << "Royal_Tart__%d", m_iRoyal_TartCount << endl;
 		}
 
 		if (1 == iFoodNum)
 		{
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Burrito__&d", m_iBurrito), TEXT("Prototype_GameObject_Burrito"), &_float3(f3ClickPos))))
+			stFoodName = L"Burrito__";
+			stFoodName += to_wstring(m_iRoyal_TartCount);
+
+			m_szFoodName = stFoodName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Burrito"), &_float3(m_f3ClickPos))))
 				return;		
 
 			m_iBurrito++;
 		}
 	}
+
+	if (ImGui::Button("Save"))
+	{
+		ofstream ofs("../../Data/Food.txt", ios::out | ios::app);
+		if (ofs.fail())
+		{
+			MSG_BOX("Failed to load File");
+			return;
+		}
+
+		std::string str = "";
+		str.assign(stFoodName.begin(), stFoodName.end());
+
+		ofs << str << " | " << m_f3ClickPos.x << " | " << m_f3ClickPos.y << " | " << m_f3ClickPos.z << "\n";
+	}
+
+	if (ImGui::Button("Load"))
+	{
+
+	}
+
 #pragma endregion Food
 
 
@@ -203,6 +223,8 @@ void CLevel_GamePlay::ImGuiTest()
 	RELEASE_INSTANCE(CGameInstance);
 
 	ImGui::End();
+
+	return;
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

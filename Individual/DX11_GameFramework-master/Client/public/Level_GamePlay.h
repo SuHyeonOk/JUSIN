@@ -28,8 +28,12 @@ private:
 	void	ImGuiTest();
 
 private:
-	_int	m_iRoyal_TartCount = 0;
-	_int	m_iBurrito = 0;
+	const _tchar*	m_szFoodName;
+	wstring			stFoodName;
+
+	_float3	m_f3ClickPos = _float3(0.f, 0.f, 0.f);
+	_uint	m_iRoyal_TartCount = 0;
+	_uint	m_iBurrito = 0;
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
