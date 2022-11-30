@@ -26,18 +26,26 @@ private:
 
 private:
 	void	ImGuiTest();
+	void	ImGuiFood();
+	void	ImGuiCoin();
 
 private:
 	void	FoodLoad();
+	void	CoinLoad();
 
 private:
-	const _tchar*	m_szFoodName;
-	wstring			m_wstFoodName;
-
+	const _tchar*	m_szItemName;
+	wstring			m_wstItemName;
 	_float3			m_f3ClickPos = _float3(0.f, 0.f, 0.f);
-
+	
+	// Food
 	_uint			m_iRoyal_Tart_Count = 0;
 	_uint			m_iBurrito_Count = 0;
+
+	// Coin
+	_uint			m_iCoinBronzeCount = 0;
+	_uint			m_iCoinSilverCount = 0;
+	_uint			m_iCoinGoldCount = 0;
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

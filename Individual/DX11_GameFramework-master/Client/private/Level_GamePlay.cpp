@@ -8,6 +8,7 @@
 #include "DataManager.h"
 
 #include "Food.h"
+#include "Coin.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -153,6 +154,22 @@ void CLevel_GamePlay::ImGuiTest()
 {
 	ImGui::Begin("GamePlayTool");
 
+	const _char* ItmeName[] = { "Empty", "Food", "Coin" };
+	static int iItemNum = 0;
+	ImGui::Combo("##2_ITEM", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
+
+	if(1 == iItemNum)
+		ImGuiFood();
+	else if(2 == iItemNum)
+		ImGuiCoin();
+
+	ImGui::End();
+
+	return;
+}
+
+void CLevel_GamePlay::ImGuiFood()
+{
 #pragma region Food
 	const _char* FoodName[] = { "Royal_Tart", "Burrito" };
 	static int iFoodNum = 0;
@@ -168,19 +185,19 @@ void CLevel_GamePlay::ImGuiTest()
 
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
-		m_f3ClickPos = {f4MousePos.x, f4MousePos.y, f4MousePos.z}; // 클릭시의 좌표 저장
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z }; // 클릭시의 좌표 저장
 
 		if (0 == iFoodNum)
 		{
 			fFoodInfo.eFoodKind = fFoodInfo.ROYAL_TART;
 			fFoodInfo.fPos = m_f3ClickPos;
 
-			m_wstFoodName = L"Royal_Tart__";
-			m_wstFoodName += to_wstring(m_iRoyal_Tart_Count); // 문자열에 상수 더하기
+			m_wstItemName = L"Royal_Tart__";
+			m_wstItemName += to_wstring(m_iRoyal_Tart_Count); // 문자열에 상수 더하기
 
-			m_szFoodName = m_wstFoodName.c_str();	// wstring -> conat wchar*
+			m_szItemName = m_wstItemName.c_str();	// wstring -> conat wchar*
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szItemName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iRoyal_Tart_Count++;
@@ -191,12 +208,12 @@ void CLevel_GamePlay::ImGuiTest()
 			fFoodInfo.eFoodKind = fFoodInfo.BURRITO;
 			fFoodInfo.fPos = m_f3ClickPos;
 
-			m_wstFoodName = L"Burrito__";
-			m_wstFoodName += to_wstring(m_iBurrito_Count);
+			m_wstItemName = L"Burrito__";
+			m_wstItemName += to_wstring(m_iBurrito_Count);
 
-			m_szFoodName = m_wstFoodName.c_str();
+			m_szItemName = m_wstItemName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szFoodName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szItemName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iBurrito_Count++;
@@ -216,19 +233,97 @@ void CLevel_GamePlay::ImGuiTest()
 
 		// fouttream 은 string 전용 / wfouttream 은 wstring 전용
 		//std::string str = "";
-		//str.assign(m_wstFoodName.begin(), m_wstFoodName.end());
+		//str.assign(m_wstItemName.begin(), m_wstItemName.end());
 
-		fout << m_wstFoodName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+		fout << m_wstItemName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
 		fout.close();
 
 		// WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
 	}
 #pragma endregion Food
+}
 
-	ImGui::End();
+void CLevel_GamePlay::ImGuiCoin()
+{
+	const _char* szCoinName[] = { "CoinBronze", "CoinSilver", "CoinGold" };
+	static int iCoinNum = 0;
+	ImGui::Combo("##2_COIN", &iCoinNum, szCoinName, IM_ARRAYSIZE(szCoinName));
 
-	return;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CCoin::COININFO		tCoinInfo;
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z }; 
+
+		if (0 == iCoinNum)
+		{
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
+			tCoinInfo.fPos = m_f3ClickPos;
+
+			m_wstItemName = L"CoinBronze__";
+			m_wstItemName += to_wstring(m_iCoinBronzeCount);
+
+			m_szItemName = m_wstItemName.c_str();	
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szItemName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				return;
+
+			m_iCoinBronzeCount++;
+		}
+		else if (1 == iCoinNum)
+		{
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
+			tCoinInfo.fPos = m_f3ClickPos;
+
+			m_wstItemName = L"CoinSilver__";
+			m_wstItemName += to_wstring(m_iCoinSilverCount);
+
+			m_szItemName = m_wstItemName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szItemName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				return;
+
+			m_iCoinSilverCount++;
+		}
+		else if (2 == iCoinNum)
+		{
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
+			tCoinInfo.fPos = m_f3ClickPos;
+
+			m_wstItemName = L"CoinGold__";
+			m_wstItemName += to_wstring(m_iCoinGoldCount);
+
+			m_szItemName = m_wstItemName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szItemName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				return;
+
+			m_iCoinGoldCount++;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Coin Save"))
+	{
+		wofstream fout("../../Data/Coin.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstItemName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+	}
 }
 
 void CLevel_GamePlay::FoodLoad()
@@ -273,7 +368,7 @@ void CLevel_GamePlay::FoodLoad()
 
 	CFood::FOODINFO					tFoodInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_FoodInfo();	
-	_uint iFoodVecCount = _uint(eVecObjInfo.size());
+	_int iFoodVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
@@ -282,12 +377,12 @@ void CLevel_GamePlay::FoodLoad()
 			tFoodInfo.eFoodKind = tFoodInfo.ROYAL_TART;
 			tFoodInfo.fPos = pObjInfo.ObjPos;
 
-			m_wstFoodName = L"Royal_Tart__";
-			m_wstFoodName += to_wstring(i);
+			m_wstItemName = L"Royal_Tart__";
+			m_wstItemName += to_wstring(i);
 
 			wstring wstFoodNameTemp(pObjInfo.ObjName); // tchar -> wstring
 
-			if (m_wstFoodName == wstFoodNameTemp)
+			if (m_wstItemName == wstFoodNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
@@ -299,17 +394,118 @@ void CLevel_GamePlay::FoodLoad()
 			tFoodInfo.eFoodKind = tFoodInfo.BURRITO;
 			tFoodInfo.fPos = pObjInfo.ObjPos;
 
-			m_wstFoodName = L"Burrito__";
-			m_wstFoodName += to_wstring(i);
+			m_wstItemName = L"Burrito__";
+			m_wstItemName += to_wstring(i);
 
 			wstring wstFoodNameTemp(pObjInfo.ObjName);
 
-			if (m_wstFoodName == wstFoodNameTemp)
+			if (m_wstItemName == wstFoodNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
 			}
 		}		
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CLevel_GamePlay::CoinLoad()
+{
+	wifstream		fin("../../Data/Coin.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		CDataManager::GetInstance()->Set_CoinInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CCoin::COININFO					tCoinInfo;
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_CoinInfo();
+	_int iFoodVecCount = _int(eVecObjInfo.size());
+
+	for (auto& pObjInfo : eVecObjInfo)
+	{
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
+			tCoinInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstItemName = L"CoinBronze__";
+			m_wstItemName += to_wstring(i);
+
+			wstring wstItemNameTemp(pObjInfo.ObjName);
+
+			if (m_wstItemName == wstItemNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+					return;
+			}
+		}
+
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
+			tCoinInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstItemName = L"CoinSilver__";
+			m_wstItemName += to_wstring(i);
+
+			wstring wstItemNameTemp(pObjInfo.ObjName);
+
+			if (m_wstItemName == wstItemNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+					return;
+			}
+		}
+
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
+			tCoinInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstItemName = L"CoinGold__";
+			m_wstItemName += to_wstring(i);
+
+			wstring wstItemNameTemp(pObjInfo.ObjName);
+
+			if (m_wstItemName == wstItemNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+					return;
+			}
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

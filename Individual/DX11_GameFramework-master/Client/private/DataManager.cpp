@@ -7,13 +7,22 @@ CDataManager::CDataManager()
 {
 }
 
-void CDataManager::Set_FoodInfo(const _tchar & ObjName, const _float3 & ObjPos, void * pArg)
+void CDataManager::Set_FoodInfo(const _tchar & ObjName, const _float3 & ObjPos)
 {
 	OBJINFO		eObjInfo;
 	memcpy(eObjInfo.ObjName, &ObjName, sizeof(_char[MAX_PATH]));
 	eObjInfo.ObjPos = ObjPos;
 
 	m_vecFoodInfo.push_back(eObjInfo);
+}
+
+void CDataManager::Set_CoinInfo(const _tchar & ObjName, const _float3 & ObjPos)
+{
+	OBJINFO		eObjInfo;
+	memcpy(eObjInfo.ObjName, &ObjName, sizeof(_char[MAX_PATH]));
+	eObjInfo.ObjPos = ObjPos;
+
+	m_vecCoinInfo.push_back(eObjInfo);
 }
 
 void CDataManager::Free()

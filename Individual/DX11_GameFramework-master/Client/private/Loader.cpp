@@ -10,6 +10,7 @@
 #include "Map_Garden.h"
 
 #include "Food.h"
+#include "Coin.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -171,12 +172,25 @@ HRESULT CLoader::Loading_ForGamePlay()
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Food/Royal_Tart/Royal_Tart.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Royal_Tart/Royal_Tart.fbx"))))
 		return E_FAIL;
-
 	/* For.Prototype_Component_Model_Burrito */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Food/Burrito/Burrito.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Burrito/Burrito.fbx"))))
+		return E_FAIL;
+
+	// Coin
+	/* For.Prototype_Component_Model_CoinBronze */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_1_Bronze/Coin_1_Bronze.fbx"))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_CoinSilver */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinSilver"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_2_Silver/Coin_2_Silver.fbx"))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_CoinGold */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinGold"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx"))))
 		return E_FAIL;
 	
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
@@ -211,6 +225,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Food */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
 		CFood::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Coin
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
+		CCoin::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

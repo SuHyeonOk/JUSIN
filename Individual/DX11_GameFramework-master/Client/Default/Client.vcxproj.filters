@@ -55,14 +55,20 @@
     <Filter Include="02.GameObjects\Monster">
       <UniqueIdentifier>{fd15bb03-f55a-4792-beaf-83947147a9b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Food">
-      <UniqueIdentifier>{3a3e33c7-484b-415d-a1aa-f3ff659c3b4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="77.Manager">
       <UniqueIdentifier>{fbd8c078-e35b-49eb-8785-af09916df527}</UniqueIdentifier>
     </Filter>
     <Filter Include="77.Manager\Data">
       <UniqueIdentifier>{4ac3433c-2755-403a-9a53-b6e2aec60f3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Item">
+      <UniqueIdentifier>{13a1b3ec-172d-4603-ae9f-9cac93f48232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Item\Food">
+      <UniqueIdentifier>{3a3e33c7-484b-415d-a1aa-f3ff659c3b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Item\Coin">
+      <UniqueIdentifier>{18384ab3-51cf-4a7d-8bec-2de789d52556}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +127,10 @@
       <Filter>77.Manager\Data</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Food.h">
-      <Filter>02.GameObjects\Food</Filter>
+      <Filter>02.GameObjects\Item\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Coin.h">
+      <Filter>02.GameObjects\Item\Coin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +177,10 @@
       <Filter>77.Manager\Data</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Food.cpp">
-      <Filter>02.GameObjects\Food</Filter>
+      <Filter>02.GameObjects\Item\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Coin.cpp">
+      <Filter>02.GameObjects\Item\Coin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
