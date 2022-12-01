@@ -268,6 +268,39 @@ void CTransform::Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// sh
+
+bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
+{
+	// fHeight 까지 fSpeed 로 올라 갔다가 0에 닿으면 true 를 return 한다.
+
+	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
+	_vector	vUp = Get_State(CTransform::STATE_UP);
+
+	_float4 f4Position;
+	XMStoreFloat4(&f4Position, vPosition);
+
+	if (fHeight >= f4Position.y && m_bJump)
+	{
+		vPosition += XMVector3Normalize(vUp) * fSpeed * _float(TimeDelta);
+		Set_State(CTransform::STATE_TRANSLATION, vPosition);
+	}
+	else
+	{
+		m_bJump = false;
+		vPosition -= XMVector3Normalize(vUp) * fSpeed * _float(TimeDelta);
+		Set_State(CTransform::STATE_TRANSLATION, vPosition);
+
+		if (0.f >= f4Position.y)
+		{
+			m_bJump = true;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 HRESULT CTransform::Bind_ShaderResource(CShader* pShaderCom, const char* pConstantName)
 {
 	if (nullptr == pShaderCom)

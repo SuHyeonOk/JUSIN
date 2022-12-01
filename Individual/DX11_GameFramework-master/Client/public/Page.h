@@ -45,8 +45,22 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
+	_bool		Rotation(_double dStartTime, _double dStopTime, _double TimeDelta);
+
+private:
 	PAGEINFO	m_tinPageInfo;
 	PAGEINFO	m_tPageInfo;
+
+private:
+	// Rotation()
+	_bool		m_bRotation_Stop = false;
+	_bool		m_bRotation_Start = false;
+	_double		m_dRotation_Stop_TimeAcc = 0;
+	_double		m_dRotation_Start_TimeAcc = 0;
+
+private:
+	_bool		m_bIdle = false;
+
 
 public:
 	static	CPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -94,6 +94,8 @@ public:
 	/* 추적한다 .*/
 	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f);
 
+public: // sh
+	bool	Jump(_float fHeight, _float fSpeed, _double TimeDelta);
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);
@@ -102,6 +104,9 @@ private:
 	_float4x4				m_WorldMatrix;
 	TRANSFORMDESC			m_TransformDesc;
 
+private:
+	// Jump()
+	_bool		m_bJump = false;
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

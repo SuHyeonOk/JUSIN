@@ -40,6 +40,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	// 파일 읽기
 	FoodLoad();
 	CoinLoad();
+	PageLoad();
 
 	return S_OK;
 }
@@ -161,10 +162,12 @@ void CLevel_GamePlay::ImGuiTest()
 	static int iItemNum = 0;
 	ImGui::Combo("##2_ITEM", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
-	if(1 == iItemNum)
+	if (1 == iItemNum)
 		ImGuiFood();
-	else if(2 == iItemNum)
+	else if (2 == iItemNum)
 		ImGuiCoin();
+	else if (3 == iItemNum)
+		ImGuiPage();
 
 	ImGui::End();
 
@@ -174,9 +177,9 @@ void CLevel_GamePlay::ImGuiTest()
 void CLevel_GamePlay::ImGuiFood()
 {
 #pragma region Food
-	const _char* FoodName[] = { "Royal_Tart", "Burrito" };
-	static int iFoodNum = 0;
-	ImGui::Combo("##2_FOOD", &iFoodNum, FoodName, IM_ARRAYSIZE(FoodName));
+	const _char* szObjName[] = { "Royal_Tart", "Burrito" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_FOOD", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -190,7 +193,7 @@ void CLevel_GamePlay::ImGuiFood()
 	{
 		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z }; // 클릭시의 좌표 저장
 
-		if (0 == iFoodNum)
+		if (0 == iObjNum)
 		{
 			fFoodInfo.eFoodKind = fFoodInfo.ROYAL_TART;
 			fFoodInfo.fPos = m_f3ClickPos;
@@ -206,7 +209,7 @@ void CLevel_GamePlay::ImGuiFood()
 			m_iRoyal_Tart_Count++;
 		}
 
-		if (1 == iFoodNum)
+		if (1 == iObjNum)
 		{
 			fFoodInfo.eFoodKind = fFoodInfo.BURRITO;
 			fFoodInfo.fPos = m_f3ClickPos;
@@ -249,9 +252,9 @@ void CLevel_GamePlay::ImGuiFood()
 
 void CLevel_GamePlay::ImGuiCoin()
 {
-	const _char* szCoinName[] = { "CoinBronze", "CoinSilver", "CoinGold" };
-	static int iCoinNum = 0;
-	ImGui::Combo("##2_COIN", &iCoinNum, szCoinName, IM_ARRAYSIZE(szCoinName));
+	const _char* szObjName[] = { "CoinBronze", "CoinSilver", "CoinGold" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_COIN", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -265,7 +268,7 @@ void CLevel_GamePlay::ImGuiCoin()
 	{
 		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z }; 
 
-		if (0 == iCoinNum)
+		if (0 == iObjNum)
 		{
 			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 			tCoinInfo.fPos = m_f3ClickPos;
@@ -280,7 +283,7 @@ void CLevel_GamePlay::ImGuiCoin()
 
 			m_iCoinBronze_Count++;
 		}
-		else if (1 == iCoinNum)
+		else if (1 == iObjNum)
 		{
 			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 			tCoinInfo.fPos = m_f3ClickPos;
@@ -295,7 +298,7 @@ void CLevel_GamePlay::ImGuiCoin()
 
 			m_iCoinSilver_Count++;
 		}
-		else if (2 == iCoinNum)
+		else if (2 == iObjNum)
 		{
 			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 			tCoinInfo.fPos = m_f3ClickPos;
@@ -333,9 +336,9 @@ void CLevel_GamePlay::ImGuiCoin()
 
 void CLevel_GamePlay::ImGuiPage()
 {
-	const _char* szPageName[] = { "Page_1" };
-	static int iPageNum = 0;
-	ImGui::Combo("##2_PAGE", &iPageNum, szPageName, IM_ARRAYSIZE(szPageName));
+	const _char* szObjName[] = { "Page_1" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_PAGE", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -349,7 +352,7 @@ void CLevel_GamePlay::ImGuiPage()
 	{
 		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
 
-		if (0 == iPageNum)
+		if (0 == iObjNum)
 		{
 			tPageInfo.fPos = m_f3ClickPos;
 
@@ -571,6 +574,68 @@ void CLevel_GamePlay::CoinLoad()
 
 void CLevel_GamePlay::PageLoad()
 {
+	wifstream		fin("../../Data/Page.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		CDataManager::GetInstance()->Set_PageInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CPage::PAGEINFO					tPageInfo;
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
+	_int iFoodVecCount = _int(eVecObjInfo.size());
+
+	for (auto& pObjInfo : eVecObjInfo)
+	{
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tPageInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Page_1__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+					return;
+			}
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

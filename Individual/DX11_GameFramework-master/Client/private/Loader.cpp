@@ -30,7 +30,7 @@ _uint APIENTRY LoadingThread(void* pArg)
 	switch (pLoader->Get_NextLevelID())
 	{
 	case LEVEL_TOOL:
-		pLoader->Loading_Tool();
+		//pLoader->Loading_Tool();
 		break;
 	case LEVEL_LOGO:
 		pLoader->Loading_ForLogo();
@@ -70,9 +70,25 @@ HRESULT CLoader::Loading_Tool()
 	
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
 
+	// Page
+	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx"))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
+	/* For.Prototype_Component_Shader_VtxModel*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+
+	// Page
+	/* For.Prototype_GameObject_Page */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
+		CPage::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 
@@ -99,13 +115,11 @@ HRESULT CLoader::Loading_ForLogo()
 	
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
-	
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
-
 	/* For.Prototype_GameObject_BackGround */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
 		CBackGround::Create(m_pDevice, m_pContext))))
@@ -241,11 +255,13 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Coin
+	/* For.Prototype_GameObject_Coin */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
 		CCoin::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Page
+	/* For.Prototype_GameObject_Page */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
 		CPage::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
