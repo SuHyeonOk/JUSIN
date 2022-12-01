@@ -13,7 +13,7 @@ public:
 public:
 	HRESULT Initialize(aiAnimation* pAIAnimation);	
 
-private:
+private: // CAnimation
 	char								m_szName[MAX_PATH];
 	_double								m_Duration = 0.f;
 	_double								m_TickPerSecond;

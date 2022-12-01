@@ -20,14 +20,14 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eType, aiMesh * pAIMesh, CModel
 		return E_FAIL;
 
 	m_iMaterialIndex = pAIMesh->mMaterialIndex;
-	m_iNumVertexBuffers = 1;
-	m_iNumVertices = pAIMesh->mNumVertices;
-	m_iNumPrimitive = pAIMesh->mNumFaces;
+	m_iNumVertexBuffers = 1;		// 버텍스 버퍼 하나
+	m_iNumVertices = pAIMesh->mNumVertices;	// mNumVertices 정점 개수
+	m_iNumPrimitive = pAIMesh->mNumFaces;	// mNumFaces 면 개수
 	m_eTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	m_eIndexFormat = DXGI_FORMAT_R32_UINT;
-	m_iIndicesSizePerPrimitive = sizeof(FACEINDICES32);
-	m_iNumIndicesPerPrimitive = 3;
-	m_iNumIndices = m_iNumIndicesPerPrimitive * m_iNumPrimitive;
+	m_eIndexFormat = DXGI_FORMAT_R32_UINT;	// 개수가 많으니 32 사용
+	m_iIndicesSizePerPrimitive = sizeof(FACEINDICES32); // 32
+	m_iNumIndicesPerPrimitive = 3; // 도형하나그릴 때 사용하는 정점 개수
+	m_iNumIndices = m_iNumIndicesPerPrimitive * m_iNumPrimitive; // 정점 개수 * 삼각형 개수
 
 #pragma region VERTEX_BUFFER
 
@@ -147,7 +147,7 @@ HRESULT CMesh::Ready_VertexBuffer_AnimModel(aiMesh * pAIMesh, CModel* pModel)
 
 	for (_uint i = 0; i < m_iNumBones; ++i)
 	{
-		aiBone*		pAIBone = pAIMesh->mBones[i];
+		aiBone*		pAIBone = pAIMesh->mBones[i]; // 진짜 Bones 정보를 가져왔다.
 
 		CBone*		pBone = pModel->Get_BonePtr(pAIMesh->mName.data); // 뼈 이름 검색
 		if (nullptr == pBone)
@@ -164,13 +164,13 @@ HRESULT CMesh::Ready_VertexBuffer_AnimModel(aiMesh * pAIMesh, CModel* pModel)
 		Safe_AddRef(pBone);
 
 		/* 이 뼈는 몇개의 정점에 영향을 주는가?! */
-		_uint iNumWeights = pAIBone->mNumWeights;
+		_uint iNumWeights = pAIBone->mNumWeights; 
 
 		for (_uint j = 0; j < iNumWeights; ++j)
-		{
-			_uint iVertexIndex = pAIBone->mWeights[j].mVertexId;
+		{ 
+			_uint iVertexIndex = pAIBone->mWeights[j].mVertexId;  // 첫 번째 영향을 주는 놈! 
 
-			if(0.0f == pVertices[iVertexIndex].vBlendWeight.x)
+			if(0.0f == pVertices[iVertexIndex].vBlendWeight.x) 
 			{
 				pVertices[iVertexIndex].vBlendIndex.x = i;
 				pVertices[iVertexIndex].vBlendWeight.x = pAIBone->mWeights[j].mWeight;

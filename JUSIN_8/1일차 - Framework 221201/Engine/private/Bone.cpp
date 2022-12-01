@@ -31,7 +31,8 @@ void CBone::Compute_CombindTransformationMatrix()
 	if (nullptr == m_pParent)
 		m_CombindTransformMatrix = m_TransformMatrix;
 
-	XMStoreFloat4x4(&m_CombindTransformMatrix, XMLoadFloat4x4(&m_TransformMatrix) * XMLoadFloat4x4(&m_pParent->m_CombindTransformMatrix));
+	XMStoreFloat4x4(&m_CombindTransformMatrix, XMLoadFloat4x4(&m_TransformMatrix) 
+		* XMLoadFloat4x4(&m_pParent->m_CombindTransformMatrix));
 
 }
 

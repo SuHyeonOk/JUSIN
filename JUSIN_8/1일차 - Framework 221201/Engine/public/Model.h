@@ -24,7 +24,7 @@ public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath);
 	virtual HRESULT Initialize(void* pArg);
 
-public:
+public: // CModel
 	void Play_Animation(_double TimeDelta);
 	HRESULT Bind_Material(class CShader* pShader, _uint iMeshIndex, aiTextureType eType, const char* pConstantName);	
 	HRESULT Render(CShader* pShader, _uint iMeshIndex);
@@ -35,10 +35,10 @@ public:
 	TYPE								m_eType = TYPE_END;
 
 	/* 하나의 모델은 교체가 가능한 여러개의 메시로 구성되어있다. */
-	_uint								m_iNumMeshes = 0;
+	_uint								m_iNumMeshes = 0; // 몇 개의 메시로 구성되어 있는지
 	vector<class CMesh*>				m_Meshes;	
 
-	_uint								m_iNumMaterials = 0;
+	_uint								m_iNumMaterials = 0; // 재질 여러개
 	vector<MODELMATERIAL>				m_Materials;
 
 	/* 전체 뼈의 갯수. */
@@ -48,7 +48,7 @@ public:
 	_uint								m_iNumAnimations = 0;
 	vector<class CAnimation*>			m_Animations;
 
-public: // CModel
+public: 
 	HRESULT Ready_Bones(aiNode* pNode);
 	HRESULT Ready_MeshContainers();
 	HRESULT Ready_Materials(const char* pModelFilePath);
