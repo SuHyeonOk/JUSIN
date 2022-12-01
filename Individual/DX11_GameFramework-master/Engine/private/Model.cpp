@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Bone.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent(pDevice, pContext)
@@ -28,6 +29,23 @@ CModel::CModel(const CModel & rhs)
 
 }
 
+CBone * CModel::Get_BonePtr(const char * pBoneName)
+{
+	// 벡터 순회 하면서 pBoneName 과 같은 녀석을 찾아야 한다.
+	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+	{
+		return !strcmp(pBoneName, pBone->Get_Name()); // strcmp 비교 Not 이라면 return
+	});
+
+	if (iter == m_Bones.end())
+		return nullptr;
+
+	return *iter;
+
+
+	return nullptr;
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 {
 	_uint			iFlag = 0;
@@ -41,18 +59,17 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	///* 뼈. */
-	//// 주축 (얘도 로드시에!)
+	/* 뼈. */
 	//m_pAIScene->mRootNode->mChildren->mChildren;
 
-	//// 로드 시 한 번
 	//m_pAIScene->mAnimations[0]->mChannels[0];
 
-	//m_pAIScene->mMeshes[0]->mBones[0];
+	//m_pAIScene->mMeshes[0]->mBones[0]
 
-
-
-
+	// CModel::Initialize_Prototype(
+	/* 뼈를 로드한다. */
+	if (FAILED(Ready_Bones(m_pAIScene->mRootNode)))
+		return E_FAIL;
 
 	if (FAILED(Ready_MeshContainers()))
 		return E_FAIL;
@@ -66,6 +83,18 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 HRESULT CModel::Initialize(void * pArg)
 {
 	return S_OK;
+}
+
+void CModel::Play_Animation(_double TimeDelta)
+{
+	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신한다. */
+	// m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta);
+
+	for (auto& pBone : m_Bones)
+	{
+		if (nullptr != pBone)
+			pBone->Compute_CombindTransformationMatrix();
+	}
 }
 
 HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType eType, const char * pConstantName)
@@ -83,16 +112,12 @@ HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType
 	if (iMaterialIndex >= m_iNumMaterials)
 		return E_FAIL;
 
-
 	if (nullptr != m_Materials[iMaterialIndex].pTexture[eType])
 	{
 		m_Materials[iMaterialIndex].pTexture[eType]->Bind_ShaderResource(pShader, pConstantName);
 	}
 	else
-	{
-		MSG_BOX("Model does not have texture.");
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -107,22 +132,38 @@ HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex)
 	return S_OK;
 }
 
+HRESULT CModel::Ready_Bones(aiNode * pAINode)
+{
+	CBone*		pBone = CBone::Create(pAINode);
+	if (nullptr == pBone)
+		return E_FAIL;
+
+	m_Bones.push_back(pBone);
+
+	for (_uint i = 0; i < pAINode->mNumChildren; ++i)
+	{
+		Ready_Bones(pAINode->mChildren[i]);
+	}
+
+	return S_OK;
+}
+
 HRESULT CModel::Ready_MeshContainers() // 메시 추가하기 위한 함수
 {
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	m_iNumMeshes = m_pAIScene->mNumMeshes; // 메시의 개수
+	m_iNumMeshes = m_pAIScene->mNumMeshes;
 
-	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	for (_uint i = 0; i < m_iNumMeshes; ++i) // 메시의 개수
 	{
 		aiMesh*		pAIMesh = m_pAIScene->mMeshes[i]; // 실제 메시의 정보
 
-		CMesh*		pMesh = CMesh::Create(m_pDevice, m_pContext, TYPE_ANIM, pAIMesh);
-		if (nullptr == pMesh) // 메쉬가 잘 생성 되었니
-			return E_FAIL;
+		CMesh*		pMesh = CMesh::Create(m_pDevice, m_pContext, m_eType, pAIMesh, this);
+		if (nullptr == pMesh)
+			return E_FAIL; // 메쉬가 잘 생성 되었니
 
-		m_Meshes.push_back(pMesh); // 잘 생성 되었으니 push_back
+		m_Meshes.push_back(pMesh);// 잘 생성 되었으니 push_back
 	}
 
 	return S_OK;
@@ -171,13 +212,13 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 				continue; // g_ false 면 저장하지 말고 다음 텍스처 조사 
 						  // h_ aiTextureType(j) 는 enum 값으로 casting 을 해준다 
 
-			 // w_ 8, 9 인자 : szExt, MEX_PATH 확장자 
-			 // v_ 6, 7인자, MAX_PATH : szTextureFileName 파일 이름 필요 
-			 // u_ 1인자 : strTexturePath.data 받아온 경로에 데이터를 쪼갠다. 
-			 // t_ 이 안으로 들어오면 진짜 Parh 를 만든다.
-			 // k_ continue 에 걸리지 않고 여기 까지 온 것은 텍스처가 있었다는 것 이니 
-			 // j_ strTexturePath.data 에서 data 를 보면 char 로 aistrrimp 이 담고 있는 문자열을 char 로 return 한다. strTexturePath.data == char 
-			 // r_ _splitpath_s() assimp 에서 제공하는 경로를 받아오는 함수 
+						  // w_ 8, 9 인자 : szExt, MEX_PATH 확장자 
+						  // v_ 6, 7인자, MAX_PATH : szTextureFileName 파일 이름 필요 
+						  // u_ 1인자 : strTexturePath.data 받아온 경로에 데이터를 쪼갠다. 
+						  // t_ 이 안으로 들어오면 진짜 Parh 를 만든다.
+						  // k_ continue 에 걸리지 않고 여기 까지 온 것은 텍스처가 있었다는 것 이니 
+						  // j_ strTexturePath.data 에서 data 를 보면 char 로 aistrrimp 이 담고 있는 문자열을 char 로 return 한다. strTexturePath.data == char 
+						  // r_ _splitpath_s() assimp 에서 제공하는 경로를 받아오는 함수 
 			_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szTextureFileName, MAX_PATH, szExt, MAX_PATH);
 
 			// x_ 뜯어낸 경로에 +경로 +파일이름 +확장자
