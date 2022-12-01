@@ -70,6 +70,9 @@
     <Filter Include="02.GameObjects\Item\Coin">
       <UniqueIdentifier>{18384ab3-51cf-4a7d-8bec-2de789d52556}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Item\Page">
+      <UniqueIdentifier>{b1655b7f-2c81-448b-87c2-cfb0c38b86ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -132,6 +135,9 @@
     <ClInclude Include="..\public\Coin.h">
       <Filter>02.GameObjects\Item\Coin</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Page.h">
+      <Filter>02.GameObjects\Item\Page</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -181,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Coin.cpp">
       <Filter>02.GameObjects\Item\Coin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Page.cpp">
+      <Filter>02.GameObjects\Item\Page</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
