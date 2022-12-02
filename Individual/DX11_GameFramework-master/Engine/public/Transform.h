@@ -97,7 +97,7 @@ public:
 
 public: // sh
 	bool		Jump(_float fHeight, _float fSpeed, _double TimeDelta);
-	HRESULT		RandomJump(_float fHeight, _float fSpeed, _float fminusHeight, _double TimeDelta);
+	HRESULT		RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false);
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);
@@ -115,7 +115,7 @@ private:
 	_bool		m_bBigJump = false;
 	_float		m_fSmallJump = 0.0f;
 	// 점프 후 회전
-	_bool		m_bRotation = false;
+	_bool		m_bRotation = false; //
 	// 점프 중 방향 한 번만 저장
 	_bool		m_bOneDir = false;
 

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "..\public\Page.h"
+
 #include "GameInstance.h"
+
+#include "ItemManager.h"
 
 CPage::CPage(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -48,6 +51,19 @@ HRESULT CPage::Initialize(void * pArg)
 void CPage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_U))
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vMyPosf4;
+		XMStoreFloat4(&vMyPosf4, vMyPos);
+
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vMyPosf4.x, vMyPosf4.y, vMyPosf4.z), 5, 2, 1);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);

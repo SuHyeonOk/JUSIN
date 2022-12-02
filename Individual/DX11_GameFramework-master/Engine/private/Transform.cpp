@@ -280,20 +280,20 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 	_float4 f4Position;
 	XMStoreFloat4(&f4Position, vPosition);
 
-	if (fHeight >= f4Position.y && m_bJump)
+	if (fHeight >= f4Position.y && !m_bJump)
 	{
 		vPosition += XMVector3Normalize(vUp) * fSpeed * _float(TimeDelta);
 		Set_State(CTransform::STATE_TRANSLATION, vPosition);
 	}
 	else
 	{
-		m_bJump = false;
+		m_bJump = true;
 		vPosition -= XMVector3Normalize(vUp) * fSpeed * _float(TimeDelta);
 		Set_State(CTransform::STATE_TRANSLATION, vPosition);
 
-		if (0.f >= f4Position.y)
+		if (0.05f >= f4Position.y) // 바닥에 파고 들어서 0.05 로 조정함 (바닥이 0이 아닌듯)
 		{
-			m_bJump = true;
+			m_bJump = false;
 			return true;
 		}
 	}
@@ -301,50 +301,47 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 	return false;
 }
 
-HRESULT CTransform::RandomJump(_float fHeight, _float fSpeed, _float fminusHeight, _double TimeDelta)
+HRESULT CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir)
 {
-	// 제자리에서 점프 하면서 Rendom 으로 x, z 좌표 만큼 멀어지고, 그 자리에서 회전한다.
+	// 랜덤 높이로 큰 점프 한 번, 작은 점프 3번을 하면서 랜덤 회전값 만큼 이동한다. (1번 실행)
+	// 이 앞 내용이 다 끝나면 제자리에서 회전한다. (계속 실행)
 
-	//_float	fHeight = 1.5f;
-	//_float	fSpeed = 6.f;
-	// fminusHeight = 0.4f;
+	_float fRandonHight =  5.f; //(_float)(rand() % iRandHeight) / 150.100;
 
-	// 큰 점프 후 작은 점프 3번
 	if (!m_bBigJump)
 	{
 		m_fSmallJump = 0.f;
 
-		if (Jump(fHeight, fSpeed, TimeDelta))
+		if (Jump(fRandonHight, fSpeed, TimeDelta))
 			m_bBigJump = true;
 	}
 	else
 	{
-		if (fHeight <= m_fSmallJump)
+		if (fRandonHight <= m_fSmallJump)
 			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
-			//m_bBigJump = false; // 큰 점프 후 작은 점프 3번 반복
 
-		if (Jump((fHeight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
+		if (Jump((fRandonHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
 			m_fSmallJump += fminusHeight;
 	}
 
-	if (m_bRotation)	// 점프하지 않으면 회전
-	{
-		Set_Pos(m_WorldMatrix.m[STATE_TRANSLATION][1]);
-		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-	}
-	else // 점프 중 이동
+	if (!m_bRotation)
 	{
 		if (!m_bOneDir)
 		{
-			_float fRandonNum = (_float)(rand() % 360);
-			Rotation(Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonNum));
+			_float fRandonRot = (_float)(rand() % 360);
+			Rotation(Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonRot));
 
 			m_bOneDir = true;
 		}
 		Go_Straight(TimeDelta);
 	}
+	else
+	{
+		Set_Pos(m_WorldMatrix.m[STATE_TRANSLATION][1]);
+		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
-	return S_OK;
+		return S_OK;
+	}
 }
 
 HRESULT CTransform::Bind_ShaderResource(CShader* pShaderCom, const char* pConstantName)

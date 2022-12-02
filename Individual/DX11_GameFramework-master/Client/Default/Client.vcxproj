@@ -175,6 +175,7 @@
     <ClInclude Include="..\public\Coin.h" />
     <ClInclude Include="..\Public\DataManager.h" />
     <ClInclude Include="..\public\Food.h" />
+    <ClInclude Include="..\Public\ItemManager.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="..\private\Coin.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />
     <ClCompile Include="..\private\Food.cpp" />
+    <ClCompile Include="..\Private\ItemManager.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />

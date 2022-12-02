@@ -69,12 +69,15 @@ void CCoin::Tick(_double TimeDelta)
 	_float4 f4Position;
 	XMStoreFloat4(&f4Position, vPosition);
 
-	cout << (_double)(rand() % 150) / 150.10 << endl;
+//	cout << (_float)(rand() % 250) / 150.100 << endl;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_Y))
+	if (pGameInstance->Key_Pressing(DIK_R))
 	{
+
+
+
 		m_bBigJump = false;
 		m_bRotation = false;
 
@@ -83,31 +86,36 @@ void CCoin::Tick(_double TimeDelta)
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	//m_pTransformCom->RandomJump(250, 6.f, 0.5f, TimeDelta);
+
+	RandomJump(TimeDelta);
+
 	// Pos 중심으로 몇개를 뿌릴 것 인지 Item Manager 에서 
 
 	// 제자리에서 점프 하면서 Rendom 으로 x, z 좌표 만큼 멀어지고, 그 자리에서 회전한다.
 
 	// 0.5 ~ 1.5 사이
-	_float fRandonNum = (_double)(rand() % 150) / 150.100;
-	_float	fHight = fRandonNum;
-	_float	fSpeed = 6.f;
+	_float fRandonHight = (_float)(rand() % 160) / 23.f;
+	cout << fRandonHight << endl;
+	_float fSpeed = 6.f;
+	_float fminusHeight = 0.5f;
 
 	// 큰 점프 후 작은 점프 3번
 	if (!m_bBigJump)
 	{
 		m_fSmallJump = 0.f;
 
-		if (m_pTransformCom->Jump(fHight, fSpeed, TimeDelta))
+		if (m_pTransformCom->Jump(fRandonHight, fSpeed, TimeDelta))
 			m_bBigJump = true;
 	}
 	else
 	{
-		if (fHight <= m_fSmallJump)
+		if (fRandonHight <= m_fSmallJump)
 			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
-			//m_bBigJump = false; // 큰 점프 후 작은 점프 3번 반복
+								//m_bBigJump = false; // 큰 점프 후 작은 점프 3번 반복
 
-		if (m_pTransformCom->Jump((fHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
-			m_fSmallJump += 0.5f;
+		if (m_pTransformCom->Jump((fRandonHight - m_fSmallJump), (fSpeed ), TimeDelta))
+			m_fSmallJump += fminusHeight;
 	}
 
 	if (m_bRotation)
@@ -212,6 +220,11 @@ HRESULT CCoin::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CCoin::RandomJump(_double TimeDelta)
+{
+
 }
 
 CCoin * CCoin::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

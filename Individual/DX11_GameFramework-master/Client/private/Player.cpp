@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\public\Player.h"
+
 #include "GameInstance.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -50,8 +51,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 void CPlayer::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-
 }
 
 void CPlayer::Late_Tick(_double TimeDelta)

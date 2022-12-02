@@ -73,6 +73,9 @@
     <Filter Include="02.GameObjects\Item\Page">
       <UniqueIdentifier>{b1655b7f-2c81-448b-87c2-cfb0c38b86ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="77.Manager\Item">
+      <UniqueIdentifier>{f16a8539-5b22-448a-9df1-88a15a183fa4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -138,6 +141,9 @@
     <ClInclude Include="..\public\Page.h">
       <Filter>02.GameObjects\Item\Page</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ItemManager.h">
+      <Filter>77.Manager\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -190,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Page.cpp">
       <Filter>02.GameObjects\Item\Page</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ItemManager.cpp">
+      <Filter>77.Manager\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

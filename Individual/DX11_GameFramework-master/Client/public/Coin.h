@@ -45,6 +45,9 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
+	void		RandomJump(_double TimeDelta);
+
+private:
 	COININFO	m_tinCoinInfo;
 	COININFO	m_tCoinInfo;
 
@@ -58,6 +61,7 @@ private:
 
 	// 점프 중 이동 거리 한 번 저장
 	_bool		m_bOneDit = false;
+
 
 public:
 	static	CCoin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
