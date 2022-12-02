@@ -49,9 +49,10 @@ void CPage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 2);
-	m_pTransformCom->Jump(1.2f, 1.5f, TimeDelta);
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
 
+	// 제 자리에서 뛰었다가 회전하고 반복 그런데 자연스럽지가 않음
 	//if (m_bIdle) 
 	//{
 	//	if (Rotation(0.3, 2, TimeDelta))

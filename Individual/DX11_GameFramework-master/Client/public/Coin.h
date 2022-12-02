@@ -48,6 +48,17 @@ private:
 	COININFO	m_tinCoinInfo;
 	COININFO	m_tCoinInfo;
 
+private:
+	// 큰 점프 후 작은 점프 3번
+	_bool		m_bBigJump = false;
+	_float		m_fSmallJump = 0.0f;
+
+	// 점프 후 회전
+	_bool		m_bRotation = false;
+
+	// 점프 중 이동 거리 한 번 저장
+	_bool		m_bOneDit = false;
+
 public:
 	static	CCoin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

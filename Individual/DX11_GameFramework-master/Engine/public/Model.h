@@ -18,14 +18,11 @@ public:
 		return m_iNumMeshes;
 	}
 
-	class CBone* Get_BonePtr(const char* pBoneName);
-
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath);
 	virtual HRESULT Initialize(void* pArg);
 
-public: // CModel
-	void Play_Animation(_double TimeDelta);
+public:
 	HRESULT Bind_Material(class CShader* pShader, _uint iMeshIndex, aiTextureType eType, const char* pConstantName);
 	HRESULT Render(CShader* pShader, _uint iMeshIndex);
 
@@ -41,18 +38,9 @@ public:
 	_uint								m_iNumMaterials = 0; // 재질 여러개
 	vector<MODELMATERIAL>				m_Materials;
 
-	/* 전체 뼈의 갯수. */
-	_uint								m_iNumBones = 0;
-	vector<class CBone*>				m_Bones;
-
-	_uint								m_iNumAnimations = 0;
-	vector<class CAnimation*>			m_Animations;
-
 public:
-	HRESULT Ready_Bones(aiNode* pNode);
 	HRESULT Ready_MeshContainers();
 	HRESULT Ready_Materials(const char* pModelFilePath);
-	/*HRESULT Ready_Animation();*/
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const char* pModelFilePath);

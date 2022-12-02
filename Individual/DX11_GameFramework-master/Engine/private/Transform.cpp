@@ -301,6 +301,52 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 	return false;
 }
 
+HRESULT CTransform::RandomJump(_float fHeight, _float fSpeed, _float fminusHeight, _double TimeDelta)
+{
+	// 제자리에서 점프 하면서 Rendom 으로 x, z 좌표 만큼 멀어지고, 그 자리에서 회전한다.
+
+	//_float	fHeight = 1.5f;
+	//_float	fSpeed = 6.f;
+	// fminusHeight = 0.4f;
+
+	// 큰 점프 후 작은 점프 3번
+	if (!m_bBigJump)
+	{
+		m_fSmallJump = 0.f;
+
+		if (Jump(fHeight, fSpeed, TimeDelta))
+			m_bBigJump = true;
+	}
+	else
+	{
+		if (fHeight <= m_fSmallJump)
+			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
+			//m_bBigJump = false; // 큰 점프 후 작은 점프 3번 반복
+
+		if (Jump((fHeight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
+			m_fSmallJump += fminusHeight;
+	}
+
+	if (m_bRotation)	// 점프하지 않으면 회전
+	{
+		Set_Pos(m_WorldMatrix.m[STATE_TRANSLATION][1]);
+		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	}
+	else // 점프 중 이동
+	{
+		if (!m_bOneDir)
+		{
+			_float fRandonNum = (_float)(rand() % 360);
+			Rotation(Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonNum));
+
+			m_bOneDir = true;
+		}
+		Go_Straight(TimeDelta);
+	}
+
+	return S_OK;
+}
+
 HRESULT CTransform::Bind_ShaderResource(CShader* pShaderCom, const char* pConstantName)
 {
 	if (nullptr == pShaderCom)

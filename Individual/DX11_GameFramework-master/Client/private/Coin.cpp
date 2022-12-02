@@ -23,7 +23,7 @@ HRESULT CCoin::Initialize_Prototype()
 }
 
 HRESULT CCoin::Initialize(void * pArg)
-{	
+{
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
@@ -32,7 +32,7 @@ HRESULT CCoin::Initialize(void * pArg)
 
 	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
@@ -52,7 +52,7 @@ HRESULT CCoin::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
- 	if (FAILED(SetUp_Components()))
+	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
@@ -64,7 +64,68 @@ void CCoin::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	_vector	vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4 f4Position;
+	XMStoreFloat4(&f4Position, vPosition);
+
+	cout << (_double)(rand() % 150) / 150.10 << endl;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_Y))
+	{
+		m_bBigJump = false;
+		m_bRotation = false;
+
+		m_bOneDit = false;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	// Pos 중심으로 몇개를 뿌릴 것 인지 Item Manager 에서 
+
+	// 제자리에서 점프 하면서 Rendom 으로 x, z 좌표 만큼 멀어지고, 그 자리에서 회전한다.
+
+	// 0.5 ~ 1.5 사이
+	_float fRandonNum = (_double)(rand() % 150) / 150.100;
+	_float	fHight = fRandonNum;
+	_float	fSpeed = 6.f;
+
+	// 큰 점프 후 작은 점프 3번
+	if (!m_bBigJump)
+	{
+		m_fSmallJump = 0.f;
+
+		if (m_pTransformCom->Jump(fHight, fSpeed, TimeDelta))
+			m_bBigJump = true;
+	}
+	else
+	{
+		if (fHight <= m_fSmallJump)
+			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
+			//m_bBigJump = false; // 큰 점프 후 작은 점프 3번 반복
+
+		if (m_pTransformCom->Jump((fHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
+			m_fSmallJump += 0.5f;
+	}
+
+	if (m_bRotation)
+	{
+		m_pTransformCom->Set_Pos(m_tinCoinInfo.fPos.y);
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	}
+	else
+	{
+		if (!m_bOneDit)
+		{
+			_float fRandonNum = (_float)(rand() % 360);
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonNum));
+
+			m_bOneDit = true;
+		}
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
 }
 
 void CCoin::Late_Tick(_double TimeDelta)

@@ -55,6 +55,7 @@ public:
 	}
 
 	void Set_Pos();
+	void Set_Pos(_float _vPosY) { m_WorldMatrix.m[STATE_TRANSLATION][1] = _vPosY; }
 	void Set_Pos(_float3 _vPos)	{
 		//_float4		vPos;
 		//XMStoreFloat4(&vPos, _vPos);
@@ -95,7 +96,8 @@ public:
 	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f);
 
 public: // sh
-	bool	Jump(_float fHeight, _float fSpeed, _double TimeDelta);
+	bool		Jump(_float fHeight, _float fSpeed, _double TimeDelta);
+	HRESULT		RandomJump(_float fHeight, _float fSpeed, _float fminusHeight, _double TimeDelta);
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);
@@ -107,6 +109,15 @@ private:
 private:
 	// Jump()
 	_bool		m_bJump = false;
+
+	// RandomJump()
+	// 큰 점프 후 작은 점프 3번
+	_bool		m_bBigJump = false;
+	_float		m_fSmallJump = 0.0f;
+	// 점프 후 회전
+	_bool		m_bRotation = false;
+	// 점프 중 방향 한 번만 저장
+	_bool		m_bOneDir = false;
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

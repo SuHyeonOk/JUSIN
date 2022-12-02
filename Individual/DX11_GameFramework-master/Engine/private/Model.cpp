@@ -2,7 +2,6 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
-#include "Bone.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent(pDevice, pContext)
@@ -29,23 +28,6 @@ CModel::CModel(const CModel & rhs)
 
 }
 
-CBone * CModel::Get_BonePtr(const char * pBoneName)
-{
-	// 벡터 순회 하면서 pBoneName 과 같은 녀석을 찾아야 한다.
-	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
-	{
-		return !strcmp(pBoneName, pBone->Get_Name()); // strcmp 비교 Not 이라면 return
-	});
-
-	if (iter == m_Bones.end())
-		return nullptr;
-
-	return *iter;
-
-
-	return nullptr;
-}
-
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 {
 	_uint			iFlag = 0;
@@ -59,17 +41,18 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	/* 뼈. */
+	///* 뼈. */
+	//// 주축 (얘도 로드시에!)
 	//m_pAIScene->mRootNode->mChildren->mChildren;
 
+	//// 로드 시 한 번
 	//m_pAIScene->mAnimations[0]->mChannels[0];
 
-	//m_pAIScene->mMeshes[0]->mBones[0]
+	//m_pAIScene->mMeshes[0]->mBones[0];
 
-	// CModel::Initialize_Prototype(
-	/* 뼈를 로드한다. */
-	if (FAILED(Ready_Bones(m_pAIScene->mRootNode)))
-		return E_FAIL;
+
+
+
 
 	if (FAILED(Ready_MeshContainers()))
 		return E_FAIL;
@@ -83,18 +66,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 HRESULT CModel::Initialize(void * pArg)
 {
 	return S_OK;
-}
-
-void CModel::Play_Animation(_double TimeDelta)
-{
-	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신한다. */
-	// m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta);
-
-	for (auto& pBone : m_Bones)
-	{
-		if (nullptr != pBone)
-			pBone->Compute_CombindTransformationMatrix();
-	}
 }
 
 HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType eType, const char * pConstantName)
@@ -112,12 +83,16 @@ HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType
 	if (iMaterialIndex >= m_iNumMaterials)
 		return E_FAIL;
 
+
 	if (nullptr != m_Materials[iMaterialIndex].pTexture[eType])
 	{
 		m_Materials[iMaterialIndex].pTexture[eType]->Bind_ShaderResource(pShader, pConstantName);
 	}
 	else
+	{
+		MSG_BOX("Model does not have texture.");
 		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -132,38 +107,22 @@ HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex)
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Bones(aiNode * pAINode)
-{
-	CBone*		pBone = CBone::Create(pAINode);
-	if (nullptr == pBone)
-		return E_FAIL;
-
-	m_Bones.push_back(pBone);
-
-	for (_uint i = 0; i < pAINode->mNumChildren; ++i)
-	{
-		Ready_Bones(pAINode->mChildren[i]);
-	}
-
-	return S_OK;
-}
-
 HRESULT CModel::Ready_MeshContainers() // 메시 추가하기 위한 함수
 {
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	m_iNumMeshes = m_pAIScene->mNumMeshes;
+	m_iNumMeshes = m_pAIScene->mNumMeshes; // 메시의 개수
 
-	for (_uint i = 0; i < m_iNumMeshes; ++i) // 메시의 개수
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
 		aiMesh*		pAIMesh = m_pAIScene->mMeshes[i]; // 실제 메시의 정보
 
-		CMesh*		pMesh = CMesh::Create(m_pDevice, m_pContext, m_eType, pAIMesh, this);
-		if (nullptr == pMesh)
-			return E_FAIL; // 메쉬가 잘 생성 되었니
+		CMesh*		pMesh = CMesh::Create(m_pDevice, m_pContext, TYPE_ANIM, pAIMesh);
+		if (nullptr == pMesh) // 메쉬가 잘 생성 되었니
+			return E_FAIL;
 
-		m_Meshes.push_back(pMesh);// 잘 생성 되었으니 push_back
+		m_Meshes.push_back(pMesh); // 잘 생성 되었으니 push_back
 	}
 
 	return S_OK;

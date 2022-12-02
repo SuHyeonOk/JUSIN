@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 
+#include "Coin.h"
 #include "Page.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -22,8 +23,8 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
@@ -55,6 +56,12 @@ HRESULT CLevel_Tool::Render()
 HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CCoin::COININFO					tObjInfo;
+	tObjInfo.eCoinKind = tObjInfo.COIN_BRONZE;
+	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Coin"), &tObjInfo)))
+		return E_FAIL;
 
 	CPage::PAGEINFO					tPageInfo;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
