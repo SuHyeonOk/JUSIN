@@ -301,21 +301,22 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 	return false;
 }
 
-HRESULT CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir)
+void CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir)
 {
 	// 랜덤 높이로 큰 점프 한 번, 작은 점프 3번을 하면서 랜덤 회전값 만큼 이동한다. (1번 실행)
 	// 이 앞 내용이 다 끝나면 제자리에서 회전한다. (계속 실행)
 
-	_float fRandonHight =  5.f; //(_float)(rand() % iRandHeight) / 150.100;
+	// (_float)(rand() % 1000) / 150.1
+	_float fRandonHight = (_float)(rand() % iRandHeight) / 150.1f;
 
-	if (!m_bBigJump)
+	if (!m_bBigJump) // 큰 점프
 	{
 		m_fSmallJump = 0.f;
 
 		if (Jump(fRandonHight, fSpeed, TimeDelta))
 			m_bBigJump = true;
 	}
-	else
+	else // 작은 점프
 	{
 		if (fRandonHight <= m_fSmallJump)
 			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
@@ -337,10 +338,10 @@ HRESULT CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHei
 	}
 	else
 	{
-		Set_Pos(m_WorldMatrix.m[STATE_TRANSLATION][1]);
+		Set_Pos(0.f);
 		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
-		return S_OK;
+		return;
 	}
 }
 

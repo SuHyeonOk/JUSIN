@@ -44,23 +44,10 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
-private:
-	void		RandomJump(_double TimeDelta);
 
 private:
 	COININFO	m_tinCoinInfo;
 	COININFO	m_tCoinInfo;
-
-private:
-	// 큰 점프 후 작은 점프 3번
-	_bool		m_bBigJump = false;
-	_float		m_fSmallJump = 0.0f;
-
-	// 점프 후 회전
-	_bool		m_bRotation = false;
-
-	// 점프 중 이동 거리 한 번 저장
-	_bool		m_bOneDit = false;
 
 
 public:

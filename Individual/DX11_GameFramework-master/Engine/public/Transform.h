@@ -95,12 +95,14 @@ public:
 	/* 추적한다 .*/
 	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f);
 
-public: // sh
-	bool		Jump(_float fHeight, _float fSpeed, _double TimeDelta);
-	HRESULT		RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false);
-
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);
+
+public: // sh
+	bool		Jump(_float fHeight, _float fSpeed, _double TimeDelta);
+	void		RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false);
+
+
 
 private:	
 	_float4x4				m_WorldMatrix;

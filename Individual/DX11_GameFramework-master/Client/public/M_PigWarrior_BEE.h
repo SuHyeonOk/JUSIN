@@ -11,22 +11,19 @@ END
 
 BEGIN(Client)
 
-class CPage final : public CGameObject
+class CM_PigWarrior_BEE final : public CGameObject
 {
 public:
-	typedef struct tagPageInfo
+	typedef struct tagMonsterInfo
 	{
-		enum PAGEKIND { PAGE_END };
-
 		_float3		fPos = _float3(0.f, 0.f, 0.f);
-		PAGEKIND	ePageKind;
 		
-	}PAGEINFO;
+	}MONSTERINFO;
 
 private:
-	CPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CPage(const CPage& rhs);
-	virtual ~CPage() = default;
+	CM_PigWarrior_BEE(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CM_PigWarrior_BEE(const CM_PigWarrior_BEE& rhs);
+	virtual ~CM_PigWarrior_BEE() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -45,23 +42,11 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
-	_bool		Rotation(_double dStartTime, _double dStopTime, _double TimeDelta);
+	MONSTERINFO		m_tinMonsterInfo;
+	MONSTERINFO		m_tMonsterInfo;
 
-private:
-	PAGEINFO	m_tinPageInfo;
-	PAGEINFO	m_tPageInfo;
-
-private:
-	// Rotation()
-	_bool		m_bRotation_Stop = false;
-	_bool		m_bRotation_Start = false;
-	_double		m_dRotation_Stop_TimeAcc = 0;
-	_double		m_dRotation_Start_TimeAcc = 0;
-
-	_bool		m_bIdle = false;
-	
 public:
-	static	CPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CM_PigWarrior_BEE* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };

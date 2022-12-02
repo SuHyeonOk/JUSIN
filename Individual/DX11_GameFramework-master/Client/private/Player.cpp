@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "ItemManager.h"
+
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -51,6 +53,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 void CPlayer::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
 }
 
 void CPlayer::Late_Tick(_double TimeDelta)
@@ -58,6 +61,19 @@ void CPlayer::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	Key_Input(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_U))
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vMyPosf4;
+		XMStoreFloat4(&vMyPosf4, vMyPos);
+
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vMyPosf4.x, vMyPosf4.y, vMyPosf4.z), 10, 5, 2);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

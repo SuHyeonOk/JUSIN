@@ -17,7 +17,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 	CCoin::COININFO					tCoinInfo;
 
-	for (_int i = 0; i < iBronzeCount; i++)
+	for (_uint i = 0; i < iBronzeCount; i++)
 	{
 		tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 		tCoinInfo.fPos = f3StartPos;
@@ -31,7 +31,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 			return E_FAIL;
 	}
 
-	for (_int i = 0; i < iSilverCount; i++)
+	for (_uint i = 0; i < iSilverCount; i++)
 	{
 		tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 		tCoinInfo.fPos = f3StartPos;
@@ -39,13 +39,13 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		m_wstObjName = L"CoinSilver_";
 		m_wstObjName += to_wstring(i);
 
-		m_szObjName = m_wstObjName.c_str();
+		m_szObjName = m_wstObjName.c_str(); 
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 
-	for (_int i = 0; i < iGoldCount; i++)
+	for (_uint i = 0; i < iGoldCount; i++)
 	{
 		tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 		tCoinInfo.fPos = f3StartPos;
@@ -53,8 +53,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		m_wstObjName = L"CoinGold_";
 		m_wstObjName += to_wstring(i);
 
-		m_szObjName = m_wstObjName.c_str();
-
+		m_szObjName = m_wstObjName.c_str(); 
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;

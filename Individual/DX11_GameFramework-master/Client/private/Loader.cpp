@@ -86,6 +86,12 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx"))))
 		return E_FAIL;
 
+	// Monster
+	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Monster/All_pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
+		return E_FAIL;
+
 	// Coin
 	/* For.Prototype_Component_Model_CoinBronze */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
@@ -222,7 +228,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Monster
-
+	/* For.Prototype_Component_Model_Royal_Tart */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Monster/All_pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
+		return E_FAIL;
 
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */

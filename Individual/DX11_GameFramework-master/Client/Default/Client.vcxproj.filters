@@ -76,6 +76,9 @@
     <Filter Include="77.Manager\Item">
       <UniqueIdentifier>{f16a8539-5b22-448a-9df1-88a15a183fa4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\PigWarrior_BEE">
+      <UniqueIdentifier>{c75bc1ea-60f0-4e59-93cd-b6df6396624b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -144,6 +147,9 @@
     <ClInclude Include="..\Public\ItemManager.h">
       <Filter>77.Manager\Item</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_PigWarrior_BEE.h">
+      <Filter>02.GameObjects\Monster\PigWarrior_BEE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ItemManager.cpp">
       <Filter>77.Manager\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_PigWarrior_BEE.cpp">
+      <Filter>02.GameObjects\Monster\PigWarrior_BEE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

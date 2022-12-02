@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "..\public\Page.h"
+#include "..\public\M_PigWarrior_BEE.h"
 
 #include "GameInstance.h"
 
-CPage::CPage(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_PigWarrior_BEE::CM_PigWarrior_BEE(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CPage::CPage(const CPage & rhs)
+CM_PigWarrior_BEE::CM_PigWarrior_BEE(const CM_PigWarrior_BEE & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CPage::Initialize_Prototype()
+HRESULT CM_PigWarrior_BEE::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -23,17 +23,17 @@ HRESULT CPage::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CPage::Initialize(void * pArg)
+HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 {	
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	if (nullptr != pArg)
-		memcpy(&m_tinPageInfo, pArg, sizeof(PAGEINFO));
+		memcpy(&m_tinMonsterInfo, pArg, sizeof(MONSTERINFO));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinPageInfo.fPos.x, m_tinPageInfo.fPos.y, m_tinPageInfo.fPos.z);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinMonsterInfo.fPos.x, m_tinMonsterInfo.fPos.y, m_tinMonsterInfo.fPos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -46,27 +46,13 @@ HRESULT CPage::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CPage::Tick(_double TimeDelta)
+void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
-
-	// 제 자리에서 뛰었다가 회전하고 반복 그런데 자연스럽지가 않음
-	//if (m_bIdle) 
-	//{
-	//	if (Rotation(0.3, 2, TimeDelta))
-	//		m_bIdle = false;
-	//}
-	//else
-	//{
-	//	if (m_pTransformCom->Jump(1.f, 2.f, TimeDelta))
-	//		m_bIdle = true;
-	//}
 }
 
-void CPage::Late_Tick(_double TimeDelta)
+void CM_PigWarrior_BEE::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -74,7 +60,7 @@ void CPage::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CPage::Render()
+HRESULT CM_PigWarrior_BEE::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -95,7 +81,7 @@ HRESULT CPage::Render()
 	return S_OK;
 }
 
-HRESULT CPage::SetUp_Components()
+HRESULT CM_PigWarrior_BEE::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -108,14 +94,14 @@ HRESULT CPage::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CPage::SetUp_ShaderResources()
+HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -135,64 +121,31 @@ HRESULT CPage::SetUp_ShaderResources()
 	return S_OK;
 }
 
-_bool CPage::Rotation(_double dStartTime, _double dStopTime, _double TimeDelta)
+CM_PigWarrior_BEE * CM_PigWarrior_BEE::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	// y 축을 기준으로 회전하고 있으며, dStartTime 에 시작하고, dStopTime 때 멈춘다.
-
-	if (!m_bRotation_Stop)
-	{
-		m_dRotation_Start_TimeAcc += TimeDelta;
-		if (dStartTime < m_dRotation_Start_TimeAcc)
-		{
-			m_bRotation_Start = true;
-			m_bRotation_Stop = true;
-			m_dRotation_Start_TimeAcc = 0;
-
-			return true;
-		}
-	}
-
-	if (m_bRotation_Start)
-	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 4);
-
-		m_dRotation_Stop_TimeAcc += TimeDelta;
-		if (dStopTime < m_dRotation_Stop_TimeAcc)
-		{
-			m_bRotation_Start = false;
-			m_bRotation_Stop = false;
-			m_dRotation_Stop_TimeAcc = 0;
-		}
-	}
-
-	return false;
-}
-
-CPage * CPage::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-{
-	CPage*		pInstance = new CPage(pDevice, pContext);
+	CM_PigWarrior_BEE*		pInstance = new CM_PigWarrior_BEE(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CPage");
+		MSG_BOX("Failed to Created : CM_PigWarrior_BEE");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CPage::Clone(void * pArg)
+CGameObject * CM_PigWarrior_BEE::Clone(void * pArg)
 {
-	CPage*		pInstance = new CPage(*this);
+	CM_PigWarrior_BEE*		pInstance = new CM_PigWarrior_BEE(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CPage");
+		MSG_BOX("Failed to Cloned : CM_PigWarrior_BEE");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CPage::Free()
+void CM_PigWarrior_BEE::Free()
 {
 	__super::Free();
 

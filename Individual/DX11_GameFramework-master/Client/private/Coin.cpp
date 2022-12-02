@@ -38,13 +38,13 @@ HRESULT CCoin::Initialize(void * pArg)
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
@@ -64,76 +64,7 @@ void CCoin::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	_vector	vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4 f4Position;
-	XMStoreFloat4(&f4Position, vPosition);
-
-//	cout << (_float)(rand() % 250) / 150.100 << endl;
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Pressing(DIK_R))
-	{
-
-
-
-		m_bBigJump = false;
-		m_bRotation = false;
-
-		m_bOneDit = false;
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	//m_pTransformCom->RandomJump(250, 6.f, 0.5f, TimeDelta);
-
-	RandomJump(TimeDelta);
-
-	// Pos 중심으로 몇개를 뿌릴 것 인지 Item Manager 에서 
-
-	// 제자리에서 점프 하면서 Rendom 으로 x, z 좌표 만큼 멀어지고, 그 자리에서 회전한다.
-
-	// 0.5 ~ 1.5 사이
-	_float fRandonHight = (_float)(rand() % 160) / 23.f;
-	cout << fRandonHight << endl;
-	_float fSpeed = 6.f;
-	_float fminusHeight = 0.5f;
-
-	// 큰 점프 후 작은 점프 3번
-	if (!m_bBigJump)
-	{
-		m_fSmallJump = 0.f;
-
-		if (m_pTransformCom->Jump(fRandonHight, fSpeed, TimeDelta))
-			m_bBigJump = true;
-	}
-	else
-	{
-		if (fRandonHight <= m_fSmallJump)
-			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
-								//m_bBigJump = false; // 큰 점프 후 작은 점프 3번 반복
-
-		if (m_pTransformCom->Jump((fRandonHight - m_fSmallJump), (fSpeed ), TimeDelta))
-			m_fSmallJump += fminusHeight;
-	}
-
-	if (m_bRotation)
-	{
-		m_pTransformCom->Set_Pos(m_tinCoinInfo.fPos.y);
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-	}
-	else
-	{
-		if (!m_bOneDit)
-		{
-			_float fRandonNum = (_float)(rand() % 360);
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonNum));
-
-			m_bOneDit = true;
-		}
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}
+	m_pTransformCom->RandomJump(1000, 6.f, 0.5f, TimeDelta);
 }
 
 void CCoin::Late_Tick(_double TimeDelta)
@@ -156,6 +87,9 @@ HRESULT CCoin::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
+		if (1 == i) // 그림자 모델 없앰 (비중이 클 수록 모델 순서가 앞에 위치한다.)ㅐ
+			continue;
+
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
@@ -220,11 +154,6 @@ HRESULT CCoin::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
-}
-
-void CCoin::RandomJump(_double TimeDelta)
-{
-
 }
 
 CCoin * CCoin::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
