@@ -62,19 +62,6 @@ void CPlayer::Late_Tick(_double TimeDelta)
 
 	Key_Input(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_U))
-	{
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 vMyPosf4;
-		XMStoreFloat4(&vMyPosf4, vMyPos);
-
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vMyPosf4.x, vMyPosf4.y, vMyPosf4.z), 10, 5, 2);
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	//if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))

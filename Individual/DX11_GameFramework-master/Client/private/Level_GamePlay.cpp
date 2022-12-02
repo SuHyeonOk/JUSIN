@@ -41,6 +41,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	FoodLoad();
 	CoinLoad();
 	PageLoad();
+	MonsterLoad();
 
 	return S_OK;
 }
@@ -49,7 +50,7 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	ImGuiTest();
+	ImGuiTest(); // @ ImGui 를 사용하지 않을 때 주석!
 	
 }
 
@@ -158,9 +159,9 @@ void CLevel_GamePlay::ImGuiTest()
 {
 	ImGui::Begin("GamePlayTool");
 
-	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page" };
+	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Monster" };
 	static int iItemNum = 0;
-	ImGui::Combo("##2_ITEM", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
+	ImGui::Combo("##2", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
 	if (1 == iItemNum)
 		ImGuiFood();
@@ -168,6 +169,8 @@ void CLevel_GamePlay::ImGuiTest()
 		ImGuiCoin();
 	else if (3 == iItemNum)
 		ImGuiPage();
+	else if (4 == iItemNum)
+		ImGuiMonster();
 
 	ImGui::End();
 
@@ -384,6 +387,56 @@ void CLevel_GamePlay::ImGuiPage()
 		fout.close();
 
 		WinExec("notepad.exe ../../Data/Page.txt", SW_SHOW);
+	}
+}
+
+void CLevel_GamePlay::ImGuiMonster()
+{
+	const _char* szObjName[] = { "PigWarrior_BEE" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
+
+
+		if (0 == iObjNum)
+		{
+			m_wstObjName = L"PigWarrior_BEE__";
+			m_wstObjName += to_wstring(m_iM_PigWarrior_BEE);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &m_f3ClickPos)))
+				return;
+
+			m_iM_PigWarrior_BEE++;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Monster Save"))
+	{
+		wofstream fout("../../Data/Monster.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+
+		WinExec("notepad.exe ../../Data/Monster.txt", SW_SHOW);
 	}
 }
 
@@ -630,6 +683,70 @@ void CLevel_GamePlay::PageLoad()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+					return;
+			}
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CLevel_GamePlay::MonsterLoad()
+{
+	wifstream		fin("../../Data/Monster.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		CDataManager::GetInstance()->Set_PageInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
+	_int m_iM_PigWarrior_BEE = _int(eVecObjInfo.size());
+
+	for (auto& pObjInfo : eVecObjInfo)
+	{
+		for (_int i = 0; i < m_iM_PigWarrior_BEE; i++)
+		{
+			m_wstObjName = L"PigWarrior_BEE__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
+					&_float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z))))
 					return;
 			}
 		}

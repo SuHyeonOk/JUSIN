@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include  "ItemManager.h"
+
 CM_PigWarrior_BEE::CM_PigWarrior_BEE(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -25,15 +27,27 @@ HRESULT CM_PigWarrior_BEE::Initialize_Prototype()
 
 HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 {	
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	if (nullptr != pArg)
-		memcpy(&m_tinMonsterInfo, pArg, sizeof(MONSTERINFO));
-
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinMonsterInfo.fPos.x, m_tinMonsterInfo.fPos.y, m_tinMonsterInfo.fPos.z);
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+
+	//CGameObject::GAMEOBJECTDESC		GameObjectDesc;
+	//ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
+
+	//if (nullptr != pArg)
+	//	memcpy(&m_tinMonsterInfo, pArg, sizeof(MONSTERINFO));
+
+	//GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+	//GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	//GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinMonsterInfo.fPos.x, m_tinMonsterInfo.fPos.y, m_tinMonsterInfo.fPos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -50,6 +64,18 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_U))
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vMyPosf4;
+		XMStoreFloat4(&vMyPosf4, vMyPos);
+
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vMyPosf4.x, vMyPosf4.y, vMyPosf4.z), 10, 5, 2);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_PigWarrior_BEE::Late_Tick(_double TimeDelta)

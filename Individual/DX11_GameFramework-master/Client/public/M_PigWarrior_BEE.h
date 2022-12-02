@@ -13,12 +13,12 @@ BEGIN(Client)
 
 class CM_PigWarrior_BEE final : public CGameObject
 {
-public:
-	typedef struct tagMonsterInfo
-	{
-		_float3		fPos = _float3(0.f, 0.f, 0.f);
-		
-	}MONSTERINFO;
+//public:
+//	typedef struct tagMonsterInfo
+//	{
+//		_float3		fPos = _float3(0.f, 0.f, 0.f);
+//		
+//	}MONSTERINFO;
 
 private:
 	CM_PigWarrior_BEE(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -41,9 +41,9 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
-private:
-	MONSTERINFO		m_tinMonsterInfo;
-	MONSTERINFO		m_tMonsterInfo;
+//private:
+//	MONSTERINFO		m_tinMonsterInfo;
+//	MONSTERINFO		m_tMonsterInfo;
 
 public:
 	static	CM_PigWarrior_BEE* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -50,6 +50,7 @@ void CPage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// IDLE : Page 제자리에서 위, 아래로 움직이며 회전
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
 

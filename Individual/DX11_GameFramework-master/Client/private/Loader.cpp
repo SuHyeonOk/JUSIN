@@ -7,11 +7,16 @@
 #include "Terrain.h"
 #include "Player.h"
 
+// Map
 #include "Map_Garden.h"
 
+// Item
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
+
+// Monster
+#include "M_PigWarrior_BEE.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -65,18 +70,8 @@ HRESULT CLoader::Loading_Tool()
 	Safe_AddRef(pGameInstance);
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
-		
-	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile%d.dds"), 2))))
-		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
-	
-	/* For.Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
-		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
 
@@ -89,7 +84,7 @@ HRESULT CLoader::Loading_Tool()
 	// Monster
 	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Monster/All_pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
 		return E_FAIL;
 
 	// Coin
@@ -119,9 +114,10 @@ HRESULT CLoader::Loading_Tool()
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 
-	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
+	// Monster
+	/* For.Prototype_GameObject_Coin */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
+		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Page
@@ -216,10 +212,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Fiona/Fiona.fbx"))))
 		return E_FAIL;
 
-	///* For.Prototype_Component_Model_Finn */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Finn"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Finn/Finn.fbx"))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Model_Finn */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Finn"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Finn/Finn.fbx"))))
+		return E_FAIL;
 
 	// Map
 	/* For.Prototype_Component_Model_Garden */
@@ -228,9 +224,9 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Monster
-	/* For.Prototype_Component_Model_Royal_Tart */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Monster/All_pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
+	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
 		return E_FAIL;
 
 	// Food
@@ -295,6 +291,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Map_Garden */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Garden"),
 		CMap_Garden::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Monster
+	/* For.Prototype_GameObject_Coin */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
+		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Food

@@ -29,17 +29,20 @@ private:
 	void	ImGuiFood();
 	void	ImGuiCoin();
 	void	ImGuiPage();
+	void	ImGuiMonster();
 
 private:
 	void	FoodLoad();
 	void	CoinLoad();
 	void	PageLoad();
+	void	MonsterLoad();
 
 private:
 	const _tchar*	m_szObjName;
 	wstring			m_wstObjName;
 	_float3			m_f3ClickPos = _float3(0.f, 0.f, 0.f);
 	
+	// ▶ @ ImGui 를 사용하지 않을 때 주석!
 	// Food
 	_uint			m_iRoyal_Tart_Count = 0;
 	_uint			m_iBurrito_Count = 0;
@@ -51,6 +54,11 @@ private:
 
 	// Page
 	_uint			m_iPage_1_Count = 0;
+
+	// Monster
+	_uint			m_iM_PigWarrior_BEE = 0;
+
+	// ▶ 끝
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
