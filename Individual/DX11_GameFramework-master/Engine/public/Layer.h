@@ -11,6 +11,9 @@ private:
 	virtual ~CLayer() = default;
 
 public:
+	class CComponent* Get_ComponentPtr(const _tchar* pComponentTag, _uint iLayerIndex); // ¢Â
+
+public:
 	HRESULT Add_GameObject(class CGameObject* pGameObject);
 	HRESULT Initialize();
 	void Tick(_double TimeDelta);

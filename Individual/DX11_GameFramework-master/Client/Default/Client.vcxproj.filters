@@ -85,9 +85,15 @@
     <Filter Include="02.GameObjects\Player\Jake">
       <UniqueIdentifier>{a7ce69b3-14b2-414f-92c6-c6d17d452ff5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="77.Manager\Obj">
+      <UniqueIdentifier>{dc42a624-63c8-4d30-908b-1d92b6f43a3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="..\..\Data\memo.txt">
+      <Filter>00.MainApp</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -162,6 +168,9 @@
     <ClInclude Include="..\public\Jake.h">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Obj_Manager.h">
+      <Filter>77.Manager\Obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -226,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Jake.cpp">
       <Filter>02.GameObjects\Player\Jake</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Obj_Manager.cpp">
+      <Filter>77.Manager\Obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -36,7 +36,9 @@ private:
 
 private:
 	void	Key_Input(_double TimeDelta);
-	_double	m_dTimeAcc = 0;
+
+private:
+	_bool	OnMove = false;
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

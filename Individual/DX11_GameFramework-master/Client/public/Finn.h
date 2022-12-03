@@ -36,6 +36,10 @@ private:
 
 private:
 	void	Key_Input(_double TimeDelta);
+
+private:
+	_bool	OnMove = false;
+
 	_double	m_dTimeAcc = 0;
 
 public:

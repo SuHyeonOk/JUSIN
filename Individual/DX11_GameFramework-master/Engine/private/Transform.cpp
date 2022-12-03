@@ -155,12 +155,12 @@ void CTransform::Go_Straight(_double TimeDelta)
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
 
-void CTransform::Go_Diagonal(_double TimeDelta)
+void CTransform::Go_Diagonal(_double TimeDelta, _float fSpeed)
 {
 	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
 	_vector	vLook = Get_State(CTransform::STATE_LOOK);
 
-	vPosition += XMVector3Normalize(vLook) * (m_TransformDesc.fSpeedPerSec) / 24.f * _float(TimeDelta);
+	vPosition += XMVector3Normalize(vLook) * 0.f * _float(TimeDelta);
 
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }

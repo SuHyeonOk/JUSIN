@@ -166,6 +166,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="..\..\Data\memo.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +187,7 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
     <ClInclude Include="..\public\M_PigWarrior_BEE.h" />
+    <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\Page.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Terrain.h" />
@@ -211,6 +213,7 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />
     <ClCompile Include="..\private\M_PigWarrior_BEE.cpp" />
+    <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\Page.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />

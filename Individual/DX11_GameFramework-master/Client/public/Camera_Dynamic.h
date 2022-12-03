@@ -35,6 +35,8 @@ private:
 	HRESULT SetUp_Components();
 
 private:
+	void	Key_Input(_double TimeDelta);
+	void	ToFollow(_double TimeDelta);
 	void	Shake_Camera(_double TimeDelta);
 
 private:

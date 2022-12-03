@@ -20,6 +20,16 @@ CGameObject::CGameObject(const CGameObject & rhs)
 	Safe_AddRef(m_pContext);
 }
 
+CComponent * CGameObject::Get_ComponentPtr(const _tchar * pComponentTag) // ¢Â
+{
+	CComponent*		pComponent = Find_Component(pComponentTag);
+
+	if (nullptr == pComponent)
+		return nullptr;
+
+	return pComponent;
+}
+
 HRESULT CGameObject::Initialize_Prototype()
 {
 	return S_OK;
@@ -65,7 +75,6 @@ void CGameObject::Imgui_RenderComponentProperties()
 	}
 }
 
-
 HRESULT CGameObject::Add_Component(_uint iLevelIndex, const _tchar * pPrototypeTag, const _tchar * pComponentTag, CComponent** ppOut, void * pArg)
 {
 	if (nullptr != Find_Component(pComponentTag))
@@ -89,7 +98,7 @@ HRESULT CGameObject::Add_Component(_uint iLevelIndex, const _tchar * pPrototypeT
 	return S_OK;
 }
 
-CComponent * CGameObject::Find_Component(const _tchar * pComponentTag)
+CComponent * CGameObject::Find_Component(const _tchar * pComponentTag) // ¢Â
 {
 	auto	iter = find_if(m_Components.begin(), m_Components.end(), CTag_Finder(pComponentTag));
 

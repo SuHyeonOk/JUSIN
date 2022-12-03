@@ -18,6 +18,9 @@ protected:
 	virtual ~CGameObject() = default;
 
 public:
+	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // ¢Â
+
+public:
 	static const _tchar*			m_pTransformComTag;
 
 public:

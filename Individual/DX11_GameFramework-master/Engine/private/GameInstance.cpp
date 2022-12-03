@@ -233,6 +233,14 @@ HRESULT CGameInstance::Render_Level()
 	return m_pLevel_Manager->Render();
 }
 
+CComponent * CGameInstance::Get_ComponentPtr(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iLayerIndex) // ◈
+{//												씬 레벨 인덱스	찾으려는 애의 레이터 테그		찾으려고 하는 애의 컴포 테그	찾으려고 애의 레이어에 있는 리스트의 몇 번째인지 (플레이어의 경우0)
+	if (nullptr == m_pObject_Manager)
+		return nullptr;
+
+	return m_pObject_Manager->Get_ComponentPtr(iLevelIndex, pLayerTag, pComponentTag, iLayerIndex);
+}
+
 HRESULT CGameInstance::Add_Prototype(const _tchar * pPrototypeTag, CGameObject * pPrototype)
 {
 	if (nullptr == m_pObject_Manager)

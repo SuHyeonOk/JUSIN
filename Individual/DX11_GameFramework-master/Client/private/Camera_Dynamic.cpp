@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "..\public\Camera_Dynamic.h"
+
 #include "GameInstance.h"
+
+#include "Obj_Manager.h"
 
 CCamera_Dynamic::CCamera_Dynamic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CCamera(pDevice, pContext)
@@ -31,6 +34,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 		CameraDesc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
 		CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 		CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
+
 		CameraDesc.TransformDesc.fSpeedPerSec = 5.f;
 		CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	}
@@ -46,58 +50,20 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
-	if (pGameInstance->Key_Down(DIK_U))
-	{
-		Shake_Camera(1, 2);
-	}
 
+	ToFollow(TimeDelta);
 
-	if(m_bShake)
-		Shake_Camera(TimeDelta);
-	
-	//m_pTransformCom->LookAt()
+	//if (pGameInstance->Key_Down(DIK_U))
+	//{
+	//	Shake_Camera(1, 2);
+	//}
 
+	//if(m_bShake)
+	//	Shake_Camera(TimeDelta);
+	//
+	////m_pTransformCom->LookAt()
 
-	if (GetKeyState('W') & 0x8000)
-	{
-		m_pTransformCom->Go_Straight(TimeDelta);
-	}	
-
-	if (GetKeyState('S') & 0x8000)
-	{
-		m_pTransformCom->Go_Backward(TimeDelta);
-	}
-
-	if (GetKeyState('A') & 0x8000)
-	{
-		m_pTransformCom->Go_Left(TimeDelta);
-	}
-
-	if (GetKeyState('D') & 0x8000)
-	{
-		m_pTransformCom->Go_Right(TimeDelta);
-	}
-
-	
-
-	if (pGameInstance->Get_DIMouseState(CInput_Device::DIM_RB) & 0x80)
-	{
-		_long			MouseMove = 0;
-
-		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
-		{
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * 0.1f);
-		}
-
-		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y))
-		{
-			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), TimeDelta * MouseMove * 0.1f);
-		}
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
+	Key_Input(TimeDelta);
 
 	__super::Tick(TimeDelta);
 }
@@ -121,6 +87,65 @@ HRESULT CCamera_Dynamic::SetUp_Components()
 {
 
 	return S_OK;
+}
+
+void CCamera_Dynamic::Key_Input(_double TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (GetKeyState('W') & 0x8000)
+	{
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+
+	if (GetKeyState('S') & 0x8000)
+	{
+		m_pTransformCom->Go_Backward(TimeDelta);
+	}
+
+	if (GetKeyState('A') & 0x8000)
+	{
+		m_pTransformCom->Go_Left(TimeDelta);
+	}
+
+	if (GetKeyState('D') & 0x8000)
+	{
+		m_pTransformCom->Go_Right(TimeDelta);
+	}
+	
+	if (pGameInstance->Get_DIMouseState(CInput_Device::DIM_RB) & 0x80)
+	{
+		_long			MouseMove = 0;
+
+		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
+		{
+			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), TimeDelta * MouseMove * 0.1f);
+		}
+
+		if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y))
+		{
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), TimeDelta * MouseMove * 0.1f);
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CCamera_Dynamic::ToFollow(_double TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
+
+	_vector vPlayerPos;
+	vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4 vf4PlayerPos;
+	XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f));
 }
 
 void CCamera_Dynamic::Shake_Camera(_double TimeDelta)

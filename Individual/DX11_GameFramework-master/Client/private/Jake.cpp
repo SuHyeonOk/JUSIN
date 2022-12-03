@@ -27,7 +27,7 @@ HRESULT CJake::Initialize_Prototype()
 
 HRESULT CJake::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(5.f, 0.f, 0.f);
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)
 		memcpy(&f3Pos, pArg, sizeof(_float3));
@@ -35,7 +35,7 @@ HRESULT CJake::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
 
@@ -46,7 +46,6 @@ HRESULT CJake::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
 
 	return S_OK;
 }
@@ -55,6 +54,19 @@ void CJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
+
+	_vector vPlayerPos;
+	vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4 vf4PlayerPos;
+	XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y, vf4PlayerPos.z));
 }
 
 void CJake::Late_Tick(_double TimeDelta)
@@ -180,90 +192,54 @@ HRESULT CJake::SetUp_ShaderResources()
 
 void CJake::Key_Input(_double TimeDelta)
 {
-	//_matrix PlayerWorld;
-	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	//_float4x4 f44PlayerWorld;
-	//XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-
-	//// TimerSample
-	//m_dTimeAcc += TimeDelta;
-	//if (1.f < m_dTimeAcc)
-	//{
-	//	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	//	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	//	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	//	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	//	cout << "----------------------------------------" << endl;
-
-	//	m_dTimeAcc = 0;
-	//}
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (OnMove)
+		m_pTransformCom->Go_Straight(TimeDelta);
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
+		OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
-		m_pTransformCom->Go_Straight(TimeDelta);
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
+		OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
-		m_pTransformCom->Go_Straight(TimeDelta);
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
+		OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
-		m_pTransformCom->Go_Straight(TimeDelta);
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
+		OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
-		m_pTransformCom->Go_Straight(TimeDelta);
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-			m_pTransformCom->Go_Diagonal(TimeDelta);
-		}
 	}
+
+	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+		OnMove = false;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
