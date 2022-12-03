@@ -79,6 +79,16 @@ HRESULT CLoader::Loading_Tool()
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
 
+	/* For.Prototype_Component_Model_Finn */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Finn"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Finn/Finn.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Jake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx"))))
+		return E_FAIL;
+
 	// Page
 	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
@@ -117,6 +127,16 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+
+	/* For.Prototype_GameObject_Finn */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn"),
+		CFinn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake"),
+		CJake::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// Monster
 	/* For.Prototype_GameObject_Coin */

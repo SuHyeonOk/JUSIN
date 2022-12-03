@@ -96,6 +96,9 @@ HRESULT CFinn::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
+		if (1 == i) // 초보 검 : 2
+			continue;
+
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 

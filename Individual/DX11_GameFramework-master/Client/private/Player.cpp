@@ -198,6 +198,8 @@ void CPlayer::Key_Input(_double TimeDelta)
 	//	m_dTimeAcc = 0;
 	//}
 
+
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
