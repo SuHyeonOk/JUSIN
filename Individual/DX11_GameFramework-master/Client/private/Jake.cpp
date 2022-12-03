@@ -53,20 +53,6 @@ HRESULT CJake::Initialize(void * pArg)
 void CJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
-
-	_vector vPlayerPos;
-	vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4 vf4PlayerPos;
-	XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y, vf4PlayerPos.z));
 }
 
 void CJake::Late_Tick(_double TimeDelta)

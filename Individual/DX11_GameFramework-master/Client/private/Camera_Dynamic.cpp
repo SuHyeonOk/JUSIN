@@ -51,7 +51,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
 
-	ToFollow(TimeDelta);
+	ToFollow(TimeDelta);	// ¢Ã 
 
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{
@@ -62,8 +62,6 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 	//	Shake_Camera(TimeDelta);
 	//
 	////m_pTransformCom->LookAt()
-
-	Key_Input(TimeDelta);
 
 	__super::Tick(TimeDelta);
 }
@@ -135,17 +133,51 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
+	if (pGameInstance->Key_Down(DIK_X))
+	{
+		m_ChangeTarget++;
+	}
 
-	_vector vPlayerPos;
-	vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	switch (m_ChangeTarget)
+	{
+	case FINN:
+	{
+		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
-	_float4 vf4PlayerPos;
-	XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
+		_vector vPlayerPos;
+		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+		_float4 vf4PlayerPos;
+		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
+
+		m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f));
+	}
+		break;
+
+	case JAKE:
+	{
+		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+
+		_vector vPlayerPos;
+		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+		_float4 vf4PlayerPos;
+		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
+
+		m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 5.f, vf4PlayerPos.z - 7.f));
+	}
+		break;
+
+	case FREE:
+		Key_Input(TimeDelta);
+		break;
+
+	case RESET:
+		m_ChangeTarget = 0;
+		break;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f));
 }
 
 void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
@@ -159,7 +191,7 @@ void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
 	
 	if (m_dShakeTime > m_dShakeTimeNow)
 	{
-		fRand = (rand() % (m_iShakePower * 2) - m_iShakePower*0.5f) * 0.03f;
+		fRand = (rand() % (m_iShakePower * 2) - m_iShakePower * 0.5f) * 0.03f;
 		CameraDesc.vAt.y += fRand;
 	}
 	else

@@ -17,6 +17,8 @@ private:
 	virtual ~CCamera_Dynamic() = default;
 
 public:
+	enum TARGET { FINN, JAKE, FREE, RESET, TARGET_END };
+
 	void Shake_Camera(_double fTime, _int iPower)
 	{
 		m_bShake = true;
@@ -41,6 +43,9 @@ private:
 
 private:
 	CCamera::CAMERADESC			CameraDesc;
+
+	// X 키를 누를 때 마다 시점이 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset
+	_uint	m_ChangeTarget = 0;
 
 	// Shake_Camera 와 관련된 변수
 	_bool	m_bShake = false;
