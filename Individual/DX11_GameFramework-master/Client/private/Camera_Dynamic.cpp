@@ -35,7 +35,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 		CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 		CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
 
-		CameraDesc.TransformDesc.fSpeedPerSec = 5.f;
+		CameraDesc.TransformDesc.fSpeedPerSec = 3.f;
 		CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	}
 	
@@ -50,8 +50,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
-
-	ToFollow(TimeDelta);	// ▣ 
+	ToFollow(TimeDelta);
 
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{
@@ -133,15 +132,13 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_X))
-	{
-		m_ChangeTarget++;
-	}
+	CObj_Manager::PLAYER	ePlayer;
+	ePlayer = CObj_Manager::GetInstance()->Get_Current_Player();
 
-	switch (m_ChangeTarget)
+	if (ePlayer == CObj_Manager::FINN)
 	{
-	case FINN:
-	{
+
+		// Finnxx 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos;
@@ -152,10 +149,10 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f));
 	}
-		break;
-
-	case JAKE:
+	else if (ePlayer == CObj_Manager::JAKE)
 	{
+
+		// Jaek 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos;
@@ -166,15 +163,9 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 5.f, vf4PlayerPos.z - 7.f));
 	}
-		break;
-
-	case FREE:
+	else if (ePlayer == CObj_Manager::FREE)
+	{
 		Key_Input(TimeDelta);
-		break;
-
-	case RESET:
-		m_ChangeTarget = 0;
-		break;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

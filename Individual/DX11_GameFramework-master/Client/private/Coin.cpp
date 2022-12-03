@@ -33,19 +33,19 @@ HRESULT CCoin::Initialize(void * pArg)
 	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
 

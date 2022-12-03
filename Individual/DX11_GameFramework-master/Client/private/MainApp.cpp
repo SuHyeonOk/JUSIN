@@ -5,6 +5,8 @@
 #include "Level_Loading.h"
 #include "Camera_Dynamic.h"
 
+#include "Obj_Manager.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
 {
@@ -57,6 +59,8 @@ void CMainApp::Tick(_double TimeDelta)
 		return;
 
 	m_pGameInstance->Tick_Engine(TimeDelta);
+	
+	CObj_Manager::GetInstance()->Tick(TimeDelta);
 
 	m_dTimeAcc += TimeDelta;
 }
