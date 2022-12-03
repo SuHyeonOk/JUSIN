@@ -25,6 +25,11 @@ HRESULT CCamera_Dynamic::Initialize_Prototype()
 
 HRESULT CCamera_Dynamic::Initialize(void * pArg)
 {
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
 	ZeroMemory(&CameraDesc, sizeof CameraDesc);
 
 	if (nullptr != pArg)
@@ -37,6 +42,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 		CameraDesc.TransformDesc.fSpeedPerSec = 3.f;
 		CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+		CameraDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
 	}
 	
 	if (FAILED(CCamera::Initialize(&CameraDesc)))
@@ -137,7 +143,6 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 	if (ePlayer == CObj_Manager::FINN)
 	{
-
 		// Finnxx 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
@@ -146,12 +151,13 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4PlayerPos;
 		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
-
-		m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f));
+		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f, 1.f);
+		
+		vPlayerPos = XMLoadFloat4(&vf4PlayerPos);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 1.25);
 	}
 	else if (ePlayer == CObj_Manager::JAKE)
 	{
-
 		// Jaek 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
@@ -160,8 +166,10 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4PlayerPos;
 		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
+		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 5.f, vf4PlayerPos.z - 7.f, 1.f);
 
-		m_pTransformCom->Set_Pos(_float3(vf4PlayerPos.x, vf4PlayerPos.y + 5.f, vf4PlayerPos.z - 7.f));
+		vPlayerPos = XMLoadFloat4(&vf4PlayerPos);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 1.25);
 	}
 	else if (ePlayer == CObj_Manager::FREE)
 	{
