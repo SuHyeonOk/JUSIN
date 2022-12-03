@@ -19,8 +19,9 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 	for (_uint i = 0; i < iBronzeCount; i++)
 	{
-		tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 		tCoinInfo.fPos = f3StartPos;
+		tCoinInfo.eState = tCoinInfo.COMEOUT;
+		tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 
 		m_wstObjName = L"CoinBronze_";
 		m_wstObjName += to_wstring(i);
@@ -33,8 +34,9 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 	for (_uint i = 0; i < iSilverCount; i++)
 	{
-		tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 		tCoinInfo.fPos = f3StartPos;
+		tCoinInfo.eState = tCoinInfo.COMEOUT;
+		tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 
 		m_wstObjName = L"CoinSilver_";
 		m_wstObjName += to_wstring(i);
@@ -47,8 +49,9 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 	for (_uint i = 0; i < iGoldCount; i++)
 	{
-		tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 		tCoinInfo.fPos = f3StartPos;
+		tCoinInfo.eState = tCoinInfo.COMEOUT;
+		tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 
 		m_wstObjName = L"CoinGold_";
 		m_wstObjName += to_wstring(i);

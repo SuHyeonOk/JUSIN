@@ -7,6 +7,10 @@
 #include "Terrain.h"
 #include "Player.h"
 
+// Player
+#include "Finn.h"
+#include "Jake.h"
+
 // Map
 #include "Map_Garden.h"
 
@@ -214,7 +218,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 	/* For.Prototype_Component_Model_Finn */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Finn"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Finn/Finn.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Finn/Finn.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Jake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx"))))
 		return E_FAIL;
 
 	// Map
@@ -285,6 +294,16 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Player */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Finn */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn"),
+		CFinn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake"),
+		CJake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Map

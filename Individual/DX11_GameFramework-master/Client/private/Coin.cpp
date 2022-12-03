@@ -64,7 +64,7 @@ void CCoin::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->RandomJump(1000, 6.f, 0.5f, TimeDelta);
+	CurrentState(TimeDelta);
 }
 
 void CCoin::Late_Tick(_double TimeDelta)
@@ -154,6 +154,16 @@ HRESULT CCoin::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CCoin::CurrentState(_double TimeDelta)
+{
+	if (m_tinCoinInfo.eState == m_tCoinInfo.IDLE)
+	{
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	}
+	else // COMEOUT
+		m_pTransformCom->RandomJump(1000, 6.f, 0.5f, TimeDelta);
 }
 
 CCoin * CCoin::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

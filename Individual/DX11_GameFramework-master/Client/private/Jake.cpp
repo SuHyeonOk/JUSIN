@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "..\public\Player.h"
+#include "..\public\Jake.h"
 
 #include "GameInstance.h"
 
 #include "ItemManager.h"
 
-CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CPlayer::CPlayer(const CPlayer & rhs)
+CJake::CJake(const CJake & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CPlayer::Initialize_Prototype()
+HRESULT CJake::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,9 +25,9 @@ HRESULT CPlayer::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlayer::Initialize(void * pArg)
+HRESULT CJake::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(-5.f, 0.f, 0.f);
+	_float3	f3Pos = _float3(5.f, 0.f, 0.f);
 
 	if (nullptr != pArg)
 		memcpy(&f3Pos, pArg, sizeof(_float3));
@@ -51,13 +51,13 @@ HRESULT CPlayer::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CPlayer::Tick(_double TimeDelta)
+void CJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 }
 
-void CPlayer::Late_Tick(_double TimeDelta)
+void CJake::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -85,7 +85,7 @@ void CPlayer::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CPlayer::Render()
+HRESULT CJake::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -106,7 +106,7 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_Components()
+HRESULT CJake::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -119,7 +119,7 @@ HRESULT CPlayer::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"), TEXT("Com_Model"),	
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Jake"), TEXT("Com_Model"),	
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -127,7 +127,7 @@ HRESULT CPlayer::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_ShaderResources()
+HRESULT CJake::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -178,7 +178,7 @@ HRESULT CPlayer::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CPlayer::Key_Input(_double TimeDelta)
+void CJake::Key_Input(_double TimeDelta)
 {
 	//_matrix PlayerWorld;
 	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
@@ -268,31 +268,31 @@ void CPlayer::Key_Input(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CJake * CJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CPlayer*		pInstance = new CPlayer(pDevice, pContext);
+	CJake*		pInstance = new CJake(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CPlayer");
+		MSG_BOX("Failed to Created : CJake");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CPlayer::Clone(void * pArg)
+CGameObject * CJake::Clone(void * pArg)
 {
-	CPlayer*		pInstance = new CPlayer(*this);
+	CJake*		pInstance = new CJake(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CPlayer");
+		MSG_BOX("Failed to Cloned : CJake");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CPlayer::Free()
+void CJake::Free()
 {
 	__super::Free();
 

@@ -34,6 +34,12 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Garden"))))
 		return E_FAIL;
 
@@ -136,6 +142,30 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Finn(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Finn"))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Jake"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -273,8 +303,9 @@ void CLevel_GamePlay::ImGuiCoin()
 
 		if (0 == iObjNum)
 		{
-			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 			tCoinInfo.fPos = m_f3ClickPos;
+			tCoinInfo.eState = tCoinInfo.IDLE;
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 
 			m_wstObjName = L"CoinBronze__";
 			m_wstObjName += to_wstring(m_iCoinBronze_Count);
@@ -288,8 +319,9 @@ void CLevel_GamePlay::ImGuiCoin()
 		}
 		else if (1 == iObjNum)
 		{
-			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 			tCoinInfo.fPos = m_f3ClickPos;
+			tCoinInfo.eState = tCoinInfo.IDLE;
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 
 			m_wstObjName = L"CoinSilver__";
 			m_wstObjName += to_wstring(m_iCoinSilver_Count);
@@ -303,8 +335,9 @@ void CLevel_GamePlay::ImGuiCoin()
 		}
 		else if (2 == iObjNum)
 		{
-			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 			tCoinInfo.fPos = m_f3ClickPos;
+			tCoinInfo.eState = tCoinInfo.IDLE;
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 
 			m_wstObjName = L"CoinGold__";
 			m_wstObjName += to_wstring(m_iCoinGold_Count);
@@ -572,8 +605,9 @@ void CLevel_GamePlay::CoinLoad()
 	{
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
-			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 			tCoinInfo.fPos = pObjInfo.ObjPos;
+			tCoinInfo.eState = tCoinInfo.IDLE;
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 
 			m_wstObjName = L"CoinBronze__";
 			m_wstObjName += to_wstring(i);
@@ -589,8 +623,9 @@ void CLevel_GamePlay::CoinLoad()
 
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
-			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 			tCoinInfo.fPos = pObjInfo.ObjPos;
+			tCoinInfo.eState = tCoinInfo.IDLE;
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 
 			m_wstObjName = L"CoinSilver__";
 			m_wstObjName += to_wstring(i);
@@ -606,8 +641,9 @@ void CLevel_GamePlay::CoinLoad()
 
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
-			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 			tCoinInfo.fPos = pObjInfo.ObjPos;
+			tCoinInfo.eState = tCoinInfo.IDLE;
+			tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 
 			m_wstObjName = L"CoinGold__";
 			m_wstObjName += to_wstring(i);

@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "..\public\Player.h"
+#include "..\public\Finn.h"
 
 #include "GameInstance.h"
 
 #include "ItemManager.h"
 
-CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CPlayer::CPlayer(const CPlayer & rhs)
+CFinn::CFinn(const CFinn & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CPlayer::Initialize_Prototype()
+HRESULT CFinn::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,9 +25,9 @@ HRESULT CPlayer::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlayer::Initialize(void * pArg)
+HRESULT CFinn::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(-5.f, 0.f, 0.f);
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)
 		memcpy(&f3Pos, pArg, sizeof(_float3));
@@ -46,18 +46,17 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
 
 	return S_OK;
 }
 
-void CPlayer::Tick(_double TimeDelta)
+void CFinn::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 }
 
-void CPlayer::Late_Tick(_double TimeDelta)
+void CFinn::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -85,7 +84,7 @@ void CPlayer::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CPlayer::Render()
+HRESULT CFinn::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -106,7 +105,7 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_Components()
+HRESULT CFinn::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -119,7 +118,7 @@ HRESULT CPlayer::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"), TEXT("Com_Model"),	
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Finn"), TEXT("Com_Model"),	
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -127,7 +126,7 @@ HRESULT CPlayer::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_ShaderResources()
+HRESULT CFinn::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -178,7 +177,7 @@ HRESULT CPlayer::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CPlayer::Key_Input(_double TimeDelta)
+void CFinn::Key_Input(_double TimeDelta)
 {
 	//_matrix PlayerWorld;
 	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
@@ -265,34 +264,100 @@ void CPlayer::Key_Input(_double TimeDelta)
 		}
 	}
 
+
+	//if (pGameInstance->Key_Pressing(DIK_UP))
+	//{
+	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+
+	//	if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//	if (pGameInstance->Key_Pressing(DIK_LEFT))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//}
+	//if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	//{
+	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+
+	//	if (pGameInstance->Key_Pressing(DIK_UP))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//}
+	//if (pGameInstance->Key_Pressing(DIK_DOWN))
+	//{
+	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+
+	//	if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//	if (pGameInstance->Key_Pressing(DIK_LEFT))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//}
+	//if (pGameInstance->Key_Pressing(DIK_LEFT))
+	//{
+	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
+	//	m_pTransformCom->Go_Straight(TimeDelta);
+
+	//	if (pGameInstance->Key_Pressing(DIK_UP))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	//	{
+	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	//		m_pTransformCom->Go_Diagonal(TimeDelta);
+	//	}
+	//}
+
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CFinn * CFinn::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CPlayer*		pInstance = new CPlayer(pDevice, pContext);
+	CFinn*		pInstance = new CFinn(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CPlayer");
+		MSG_BOX("Failed to Created : CFinn");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CPlayer::Clone(void * pArg)
+CGameObject * CFinn::Clone(void * pArg)
 {
-	CPlayer*		pInstance = new CPlayer(*this);
+	CFinn*		pInstance = new CFinn(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CPlayer");
+		MSG_BOX("Failed to Cloned : CFinn");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CPlayer::Free()
+void CFinn::Free()
 {
 	__super::Free();
 

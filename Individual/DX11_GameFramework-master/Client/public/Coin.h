@@ -17,9 +17,11 @@ public:
 	typedef struct tagCoinInfo
 	{
 		enum COINKIND { COIN_BRONZE, COIN_SILVER, COIN_GOLD, COIN_END };
+		enum STATE { IDLE, COMEOUT, STATE_END };
 
 		_float3		fPos = _float3(0.f, 0.f, 0.f);
 		COINKIND	eCoinKind;
+		STATE		eState;
 		
 	}COININFO;
 
@@ -41,14 +43,15 @@ private:
 	CModel*					m_pModelCom = nullptr;
 
 private:
-	HRESULT SetUp_Components();
-	HRESULT SetUp_ShaderResources();
+	HRESULT		SetUp_Components();
+	HRESULT		SetUp_ShaderResources();
 
+private:
+	void		CurrentState(_double TimeDelta);
 
 private:
 	COININFO	m_tinCoinInfo;
 	COININFO	m_tCoinInfo;
-
 
 public:
 	static	CCoin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

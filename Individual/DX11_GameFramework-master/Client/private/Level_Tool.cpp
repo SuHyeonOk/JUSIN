@@ -61,8 +61,9 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 		return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
-	tObjInfo.eCoinKind = tObjInfo.COIN_BRONZE;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
+	tObjInfo.eState = tObjInfo.IDLE;
+	tObjInfo.eCoinKind = tObjInfo.COIN_BRONZE;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Coin"), &tObjInfo)))
 		return E_FAIL;
 

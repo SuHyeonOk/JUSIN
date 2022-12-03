@@ -79,6 +79,12 @@
     <Filter Include="02.GameObjects\Monster\PigWarrior_BEE">
       <UniqueIdentifier>{c75bc1ea-60f0-4e59-93cd-b6df6396624b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player\Finn">
+      <UniqueIdentifier>{1667692c-e214-4161-8941-505a3084acf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\Jake">
+      <UniqueIdentifier>{a7ce69b3-14b2-414f-92c6-c6d17d452ff5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -150,6 +156,12 @@
     <ClInclude Include="..\public\M_PigWarrior_BEE.h">
       <Filter>02.GameObjects\Monster\PigWarrior_BEE</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Finn.h">
+      <Filter>02.GameObjects\Player\Finn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Jake.h">
+      <Filter>02.GameObjects\Player\Jake</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -208,6 +220,12 @@
     </ClCompile>
     <ClCompile Include="..\private\M_PigWarrior_BEE.cpp">
       <Filter>02.GameObjects\Monster\PigWarrior_BEE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Finn.cpp">
+      <Filter>02.GameObjects\Player\Finn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Jake.cpp">
+      <Filter>02.GameObjects\Player\Jake</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
