@@ -51,10 +51,10 @@ private:
 	CAMERAINFO					m_eCameraInfo;
 
 	// Shake_Camera 와 관련된 변수
-	_bool	m_bShake = false;
-	_double	m_dShakeTime = 0;
-	_double	m_dShakeTimeNow = 0;
-	_int	m_iShakePower = 0;
+	_bool		m_bShake = false;
+	_double		m_dShakeTime = 0;
+	_double		m_dShakeTimeNow = 0;
+	_int		m_iShakePower = 0;
 
 public:
 	static CCamera_Dynamic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

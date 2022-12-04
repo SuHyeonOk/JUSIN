@@ -189,7 +189,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	//// TimerSample
 	//m_dTimeAcc += TimeDelta;
-	//if (1.f < m_dTimeAcc)
+	//if (1 < m_dTimeAcc)
 	//{
 	//	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
 	//	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;

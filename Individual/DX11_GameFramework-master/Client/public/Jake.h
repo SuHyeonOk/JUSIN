@@ -36,6 +36,7 @@ private:
 
 private:
 	void	Key_Input(_double TimeDelta);
+	void	Player_
 
 private:
 	_bool	OnMove = false;

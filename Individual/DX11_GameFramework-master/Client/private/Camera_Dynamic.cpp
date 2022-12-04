@@ -147,30 +147,50 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 		// Finnxx 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
-		_vector vPlayerPos;
+		_vector vPlayerPos, vTargetPos;
 		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
-		_float4 vf4PlayerPos;
-		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
-		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f, 1.f);
+		_float4 vf4TargetPos;
+		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 6.f, vf4TargetPos.z - 7.f, 1.f);
+		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 		
-		vPlayerPos = XMLoadFloat4(&vf4PlayerPos);
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta);
+		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
+
+		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+
+		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+
+		if (10.f < fDistanceX || 7.7f > fDistanceX)		// 빠르게 따라간다. 9.17
+			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.4); // ▤ : 1.4 가 아닌 자연스럽게 따라갈 수 있도록 수정
+		else	// 그냥 따라간다.
+			m_pTransformCom->Chase(vTargetPos, TimeDelta);
 	}
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.JAKE)
 	{
 		// Jaek 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
-		_vector vPlayerPos;
+		_vector vPlayerPos, vTargetPos;
 		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
-		_float4 vf4PlayerPos;
-		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
-		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 5.5f, vf4PlayerPos.z - 7.f, 1.f);
+		_float4 vf4TargetPos;
+		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 6.f, vf4TargetPos.z - 7.f, 1.f);
+		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
-		vPlayerPos = XMLoadFloat4(&vf4PlayerPos);
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta);
+		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
+
+		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+
+		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+
+		if (10.f < fDistanceX || 7.7f > fDistanceX)		// 빠르게 따라간다. 9.17
+			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.4);
+		else	// 그냥 따라간다.
+			m_pTransformCom->Chase(vTargetPos, TimeDelta);
 	}
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.FREE)
 	{

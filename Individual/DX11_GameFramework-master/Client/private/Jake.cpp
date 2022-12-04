@@ -61,24 +61,6 @@ void CJake::Late_Tick(_double TimeDelta)
 
 	Key_Input(TimeDelta);
 
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	//{
-	//	_float4		f4MousePos, f4PlayerPos;
-	//	_vector		vPlayerPos;
-	//	vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	//	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-	//	cout << "PlayerPos : " << f4PlayerPos.x << " | " << f4PlayerPos.y << " | " << f4PlayerPos.z << " | " << f4PlayerPos.w << endl;
-
-	//	f4MousePos = pGameInstance->Get_MousePos();
-	//	m_pTransformCom->Set_Pos(_float3(f4MousePos.x, f4MousePos.y, f4MousePos.z));
-	//	int a = 0;
-	//}
-
-	//RELEASE_INSTANCE(CGameInstance);
-
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -120,7 +102,6 @@ HRESULT CJake::SetUp_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Jake"), TEXT("Com_Model"),	
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
-
 
 	return S_OK;
 }
