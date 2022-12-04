@@ -25,38 +25,39 @@ HRESULT CCamera_Dynamic::Initialize_Prototype()
 
 HRESULT CCamera_Dynamic::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+	if (nullptr != pArg)
+		memcpy(&m_eCameraInfo, pArg, sizeof(CAMERAINFO));
+
+	ZeroMemory(&m_CameraDesc, sizeof m_CameraDesc);
 
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_CameraDesc, pArg, sizeof(m_CameraDesc));
 
-	ZeroMemory(&CameraDesc, sizeof CameraDesc);
+	m_CameraDesc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
+	m_CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	m_CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
 
-	if (nullptr != pArg)
-		memcpy(&CameraDesc, pArg, sizeof(CAMERADESC));
-	else
-	{
-		CameraDesc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
-		CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-		CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
+	m_CameraDesc.TransformDesc.fSpeedPerSec = 3.5f;
+	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
-		CameraDesc.TransformDesc.fSpeedPerSec = 3.f;
-		CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-		CameraDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
-	}
-	
-	if (FAILED(CCamera::Initialize(&CameraDesc)))
+	if(m_eCameraInfo.eLevel == LEVEL_GAMEPLAY)
+		m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
+
+	if (FAILED(CCamera::Initialize(&m_CameraDesc)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;	
+
+	m_pTransformCom->Set_Pos();
 
 	return S_OK;
 }
 
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
-	ToFollow(TimeDelta);
+	if(m_eCameraInfo.eLevel != LEVEL_TOOL)
+		ToFollow(TimeDelta);
 
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{
@@ -138,13 +139,13 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CObj_Manager::PLAYER	ePlayer;
-	ePlayer = CObj_Manager::GetInstance()->Get_Current_Player();
-
-	if (ePlayer == CObj_Manager::FINN)
+	CObj_Manager::PLAYERINFO	ePlayerInfo;
+	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
+	
+	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)
 	{
 		// Finnxx 에게로
-		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Finn"), m_pTransformComTag, 0));
+		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos;
 		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -154,24 +155,24 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 6.f, vf4PlayerPos.z - 7.f, 1.f);
 		
 		vPlayerPos = XMLoadFloat4(&vf4PlayerPos);
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 1.25);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta);
 	}
-	else if (ePlayer == CObj_Manager::JAKE)
+	else if (ePlayerInfo.ePlayer == ePlayerInfo.JAKE)
 	{
 		// Jaek 에게로
-		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos;
 		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
 		_float4 vf4PlayerPos;
 		XMStoreFloat4(&vf4PlayerPos, vPlayerPos);
-		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 5.f, vf4PlayerPos.z - 7.f, 1.f);
+		vf4PlayerPos = _float4(vf4PlayerPos.x, vf4PlayerPos.y + 5.5f, vf4PlayerPos.z - 7.f, 1.f);
 
 		vPlayerPos = XMLoadFloat4(&vf4PlayerPos);
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 1.25);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta);
 	}
-	else if (ePlayer == CObj_Manager::FREE)
+	else if (ePlayerInfo.ePlayer == ePlayerInfo.FREE)
 	{
 		Key_Input(TimeDelta);
 	}
@@ -191,7 +192,7 @@ void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
 	if (m_dShakeTime > m_dShakeTimeNow)
 	{
 		fRand = (rand() % (m_iShakePower * 2) - m_iShakePower * 0.5f) * 0.03f;
-		CameraDesc.vAt.y += fRand;
+		m_CameraDesc.vAt.y += fRand;
 	}
 	else
 	{
@@ -212,10 +213,10 @@ void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
 	XMStoreFloat4(&f4EyeResult, vEyeResult);
 	XMStoreFloat4(&f4AtResult, vAtResult);
 
-	CameraDesc.vEye.y += fRand;
+	m_CameraDesc.vEye.y += fRand;
 
-	CameraDesc.vEye = f4EyeResult;
-	CameraDesc.vAt = f4AtResult;
+	m_CameraDesc.vEye = f4EyeResult;
+	m_CameraDesc.vAt = f4AtResult;
 }
 
 CCamera_Dynamic * CCamera_Dynamic::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

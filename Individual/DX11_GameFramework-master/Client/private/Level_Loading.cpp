@@ -3,6 +3,7 @@
 
 #include "Loader.h"
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 #include "Level_Tool.h"
 #include "Level_Logo.h"
@@ -52,17 +53,23 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 		{
 			CLevel*		pLevel = nullptr;
 
+			// ?◐ : 현재 플레이어가 있는 Level 변경 될 때 마다 처리해 주어야 한다.
+			CObj_Manager::PLAYERINFO ePlayerInfo;
+
 			switch (m_eNextLevelID)
 			{
 			case LEVEL_TOOL:
+				CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_TOOL);
 				pLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
 				break;
 
 			case LEVEL_LOGO:
+				CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_LOGO);
 				pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 				break;
 
 			case LEVEL_GAMEPLAY:
+				CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_GAMEPLAY);
 				pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
 				break;
 			}

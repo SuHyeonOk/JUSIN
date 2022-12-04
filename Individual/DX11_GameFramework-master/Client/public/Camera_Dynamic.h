@@ -11,6 +11,13 @@ BEGIN(Client)
 
 class CCamera_Dynamic final : public CCamera
 {
+public:
+	typedef struct tagCameraInfo
+	{
+		LEVEL		eLevel = LEVEL_END;
+		_float3		f3Pos = _float3(0.f, 0.f, 0.f);
+	}CAMERAINFO;
+
 private:
 	CCamera_Dynamic(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCamera_Dynamic(const CCamera_Dynamic& rhs);
@@ -40,7 +47,8 @@ private:
 	void	Shake_Camera(_double TimeDelta);
 
 private:
-	CCamera::CAMERADESC			CameraDesc;
+	CCamera::CAMERADESC			m_CameraDesc;
+	CAMERAINFO					m_eCameraInfo;
 
 	// Shake_Camera 와 관련된 변수
 	_bool	m_bShake = false;

@@ -45,4 +45,8 @@ void CDataManager::Set_MonsterInfo(const _tchar & ObjName, const _float3 & ObjPo
 
 void CDataManager::Free()
 {
+	m_vecFoodInfo.clear();
+	m_vecCoinInfo.clear();
+	m_vecPageInfo.clear();
+	m_vecMonsterInfo.clear();
 }

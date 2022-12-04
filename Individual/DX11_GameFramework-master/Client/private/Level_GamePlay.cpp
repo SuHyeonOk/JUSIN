@@ -10,6 +10,7 @@
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
+#include "Camera_Dynamic.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -129,7 +130,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &_float3(-10.f, 0.f, -10.f))))
+	CCamera_Dynamic::CAMERAINFO eCameraInfo;
+	eCameraInfo.eLevel = LEVEL_GAMEPLAY;
+	eCameraInfo.f3Pos = _float3(-10.f, 0.f, -10.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
