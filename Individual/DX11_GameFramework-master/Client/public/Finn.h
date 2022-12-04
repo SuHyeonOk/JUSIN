@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "Obj_Manager.h"
 
 BEGIN(Engine)
 class CShader;
@@ -41,6 +42,8 @@ private:
 	void	Check_Follow(_double TimeDelta);
 
 private:
+	CObj_Manager::PLAYERINFO	m_ePlayerInfo;
+
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 		
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간

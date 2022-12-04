@@ -2,6 +2,7 @@
 #include "..\public\ItemManager.h"
 
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 #include "Coin.h"
 
@@ -16,6 +17,8 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CCoin::COININFO					tCoinInfo;
+	CObj_Manager::PLAYERINFO	ePlayerInfo;
+	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player(); // ePlayerInfo.ePlayer_Level ÇöÀç Level
 
 	for (_uint i = 0; i < iBronzeCount; i++)
 	{
@@ -28,7 +31,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		m_szObjName = m_wstObjName.c_str(); // wstring -> conat wchar*
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(ePlayerInfo.ePlayer_Level, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 
@@ -43,7 +46,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		m_szObjName = m_wstObjName.c_str(); 
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(ePlayerInfo.ePlayer_Level, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 
@@ -58,7 +61,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		m_szObjName = m_wstObjName.c_str(); 
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(ePlayerInfo.ePlayer_Level, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 

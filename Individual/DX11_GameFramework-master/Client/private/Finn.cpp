@@ -2,7 +2,6 @@
 #include "..\public\Finn.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -45,6 +44,8 @@ HRESULT CFinn::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
+
+	m_ePlayerInfo.eState	= m_ePlayerInfo.IDLE;
 
 	return S_OK;
 }

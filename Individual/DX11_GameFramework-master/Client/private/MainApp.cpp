@@ -49,6 +49,7 @@ HRESULT CMainApp::Initialize()
 	}
 #endif
 
+	CObj_Manager::GetInstance()->Initialized();
 
 	return S_OK;
 }

@@ -2,8 +2,7 @@
 #include "..\public\M_PigWarrior_BEE.h"
 
 #include "GameInstance.h"
-
-#include  "ItemManager.h"
+#include "ItemManager.h"
 
 CM_PigWarrior_BEE::CM_PigWarrior_BEE(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -57,6 +56,10 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	m_eMonsterInfo.eState = m_eMonsterInfo.IDLE;
+	m_eMonsterInfo.iHp = 50;
+	m_eMonsterInfo.iExp = 10;
+
 	return S_OK;
 }
 
@@ -64,15 +67,31 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if (0 >= m_eMonsterInfo.iHp)
+	{
+		m_eMonsterInfo.eState = m_eMonsterInfo.DIE;
+
+		if (!m_OneCoin)
+		{
+			// Item
+			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+			_float4 vf4MyPos;
+			XMStoreFloat4(&vf4MyPos, vMyPos);
+
+			CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
+
+			m_OneCoin = true;
+		}
+	}
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_U))
+	if (pGameInstance->Key_Down(DIK_R))
 	{
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 vMyPosf4;
-		XMStoreFloat4(&vMyPosf4, vMyPos);
+		CObj_Manager::PLAYERINFO	ePlayerInfo;
+		ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vMyPosf4.x, vMyPosf4.y, vMyPosf4.z), 10, 5, 2);
+		m_eMonsterInfo.iHp -= ePlayerInfo.iAttack;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "Obj_Manager.h"
 
 BEGIN(Engine)
 class CShader;
@@ -44,6 +45,12 @@ private:
 //private:
 //	MONSTERINFO		m_tinMonsterInfo;
 //	MONSTERINFO		m_tMonsterInfo;
+
+private:
+	CObj_Manager::MONSTERINFO		m_eMonsterInfo;
+
+private:
+	_bool		m_OneCoin = false;
 
 public:
 	static	CM_PigWarrior_BEE* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

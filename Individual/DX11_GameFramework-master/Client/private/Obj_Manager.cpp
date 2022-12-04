@@ -10,7 +10,19 @@ CObj_Manager::CObj_Manager()
 {
 }
 
-void CObj_Manager::Tick(_double TimeDelta)
+HRESULT		CObj_Manager::Initialized()
+{
+	m_ePlayerInfo.iHp		= 100;
+	m_ePlayerInfo.iAttack	= 10;
+	m_ePlayerInfo.iExp		= 0;
+	m_ePlayerInfo.iLevel	= 0;
+	m_ePlayerInfo.iKey		= 0;
+	m_ePlayerInfo.iHeart	= 0;
+
+	return S_OK;
+}
+
+void		CObj_Manager::Tick(_double TimeDelta)
 {
 	Current_Player();			// 현재 플레이어가 누구인지 Tick
 
@@ -18,7 +30,7 @@ void CObj_Manager::Tick(_double TimeDelta)
 	//Get_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 }
 
-void CObj_Manager::Current_Player()
+void		CObj_Manager::Current_Player()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -47,7 +59,7 @@ void CObj_Manager::Current_Player()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-_vector CObj_Manager::Get_Player_Transform()
+_vector			CObj_Manager::Get_Player_Transform()
 {
 	// 현재 Player 를 확인하고 그 Player 의 Transform 을 넘겨준다.
 
@@ -75,6 +87,6 @@ _vector CObj_Manager::Get_Player_Transform()
 	return _vector();	// 없다면 쓰레기 값을 넘김
 }
 
-void CObj_Manager::Free()
+void		CObj_Manager::Free()
 {
 }
