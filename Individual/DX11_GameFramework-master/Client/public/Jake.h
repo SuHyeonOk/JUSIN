@@ -35,11 +35,15 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
+	void	Current_Player(_double TimeDelta);
 	void	Key_Input(_double TimeDelta);
-	void	Player_
+	void	Player_Follow(_double TimeDelta);
+	void	Check_Follow(_double TimeDelta);
 
 private:
-	_bool	OnMove = false;
+	_bool	m_OnMove = false;
+
+	_double	m_dNotfollow_TimeAcc = 0;
 
 public:
 	static CJake* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

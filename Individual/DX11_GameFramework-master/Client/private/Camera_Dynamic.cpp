@@ -170,14 +170,14 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.JAKE)
 	{
 		// Jaek 에게로
-		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos, vTargetPos;
-		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
 		_float4 vf4TargetPos;
 		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 6.f, vf4TargetPos.z - 7.f, 1.f);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 5.5f, vf4TargetPos.z - 7.f, 1.f);
 		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.

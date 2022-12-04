@@ -25,14 +25,15 @@ public:
 
 public:
 	PLAYERINFO	Get_Current_Player() { return m_ePlayerInfo; }
-	
+	_vector		Get_Player_Transform();
+
 	void		Set_Plyaer_Level(LEVEL eLevelID) { m_ePlayerInfo.ePlayer_Level = eLevelID; }
 
 public:
-	void	Tick(_double TimeDelta);
+	void		Tick(_double TimeDelta);
 
 private:
-	void	Current_Player();	// 현재 플레이어가 누구인지 Tick 을 도는 함수
+	void		Current_Player();	// 현재 플레이어가 누구인지 Tick 을 도는 함수
 
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn

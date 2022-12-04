@@ -59,7 +59,7 @@ void CMainApp::Tick(_double TimeDelta)
 		return;
 
 	m_pGameInstance->Tick_Engine(TimeDelta);
-	
+
 	CObj_Manager::GetInstance()->Tick(TimeDelta);
 
 	m_dTimeAcc += TimeDelta;

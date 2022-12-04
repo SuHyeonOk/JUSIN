@@ -2,6 +2,7 @@
 #include "..\public\Page.h"
 
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 CPage::CPage(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)

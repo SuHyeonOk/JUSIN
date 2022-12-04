@@ -35,12 +35,12 @@ HRESULT CLevel_Tool::Initialize()
 void CLevel_Tool::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-		
 }
 
 void CLevel_Tool::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
 }
 
 HRESULT CLevel_Tool::Render()

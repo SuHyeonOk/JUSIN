@@ -2,8 +2,7 @@
 #include "..\public\Finn.h"
 
 #include "GameInstance.h"
-
-#include "ItemManager.h"
+#include "Obj_Manager.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -60,25 +59,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Key_Input(TimeDelta);
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	//{
-	//	_float4		f4MousePos, f4PlayerPos;
-	//	_vector		vPlayerPos;
-	//	vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	//	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-	//	cout << "PlayerPos : " << f4PlayerPos.x << " | " << f4PlayerPos.y << " | " << f4PlayerPos.z << " | " << f4PlayerPos.w << endl;
-
-	//	f4MousePos = pGameInstance->Get_MousePos();
-	//	m_pTransformCom->Set_Pos(_float3(f4MousePos.x, f4MousePos.y, f4MousePos.z));
-	//	int a = 0;
-	//}
-
-	//RELEASE_INSTANCE(CGameInstance);
+	Current_Player(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -180,34 +161,34 @@ HRESULT CFinn::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CFinn::Current_Player(_double TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CObj_Manager::PLAYERINFO	ePlayerInfo;
+	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
+
+	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)	// Player 나라면
+	{
+		Key_Input(TimeDelta);						// 이동하고
+		Check_Follow(TimeDelta);					// 근처에 Jake 가 있는지 확인한다.
+	}
+	else
+		Player_Follow(TimeDelta);		// Player 가 내가 아니라면 따라간다.
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
 void CFinn::Key_Input(_double TimeDelta)
 {
-	//_matrix PlayerWorld;
-	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	//_float4x4 f44PlayerWorld;
-	//XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-
-	//// TimerSample
-	//m_dTimeAcc += TimeDelta;
-	//if (1 < m_dTimeAcc)
-	//{
-	//	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	//	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	//	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	//	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	//	cout << "----------------------------------------" << endl;
-
-	//	m_dTimeAcc = 0;
-	//}
-
-	if (OnMove)
+	if (m_OnMove)
 		m_pTransformCom->Go_Straight(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
-		OnMove = true;
+		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
 		
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
@@ -217,7 +198,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
-		OnMove = true;
+		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
@@ -227,7 +208,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
-		OnMove = true;
+		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
@@ -237,7 +218,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
-		OnMove = true;
+		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
@@ -247,7 +228,84 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	
 	if(pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
-		OnMove = false;
+		m_OnMove = false;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CFinn::Player_Follow(_double TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CObj_Manager::PLAYERINFO	ePlayerInfo;
+	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
+
+	// Jake 에게로
+	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+
+	_vector vPlayerPos;
+	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
+
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	if (2.0f < fDistanceX)	// 거리가 2.0f 이상이라면 바라보며 따라간다. 반대로 2.0f 이하라면 따라가지 않고, 바라보지도 않는다.
+	{
+		m_pTransformCom->LookAt(vPlayerPos);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CFinn::Check_Follow(_double TimeDelta)
+{
+	// 일정시간 동안 Jake 가 근처에 있지 않다면 Jake 를 내 근처로 이동시킨다.
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CObj_Manager::PLAYERINFO	ePlayerInfo;
+	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
+
+	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+
+	_vector vPlayerPos;
+	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
+
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos; // 내 좌표가 객체를 바라보는 방향 벡터 (Jaek <- Finn)
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	if (2.f < fDistanceX)
+	{
+		m_dNotfollow_TimeAcc += TimeDelta;
+		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
+		{
+			_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+			_float fLookX = XMVectorGetX(vMyLook);
+			_float fLookZ = XMVectorGetZ(vMyLook);
+
+			_float fAddX, fAddZ;
+			if (0 < fLookX)		// +
+				fAddX = 2.f;
+			else				// -
+				fAddX = -2.f;
+
+			if (0 < fLookZ)
+				fAddZ = 2.f;
+			else
+				fAddZ = -2.f;
+
+			_float4 f4MyPos;
+			XMStoreFloat4(&f4MyPos, vMyPos);
+			pJakeTransformCom->Set_Pos(_float3(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ));	// 내 옆으로 옮김
+
+			m_dNotfollow_TimeAcc = 0;
+		}
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
