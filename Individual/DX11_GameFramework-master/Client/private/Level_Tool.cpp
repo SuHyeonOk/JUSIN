@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 
+#include "M_Monster.h"
 #include "Coin.h"
 #include "Page.h"
 
@@ -63,7 +64,9 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), &_float3(7.f, 0.f, 0.f))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &_float3(-5.f, 0.f, 0.f))))
+	CM_Monster::MONSTERDESC		tMonsterDesc;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &tMonsterDesc)))
 		return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;

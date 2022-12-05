@@ -2,16 +2,17 @@
 #include "..\public\M_PigWarrior_BEE.h"
 
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 #include "ItemManager.h"
 
 CM_PigWarrior_BEE::CM_PigWarrior_BEE(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-	: CGameObject(pDevice, pContext)
+	: CM_Monster(pDevice, pContext)
 {
 
 }
 
 CM_PigWarrior_BEE::CM_PigWarrior_BEE(const CM_PigWarrior_BEE & rhs)
-	: CGameObject(rhs)
+	: CM_Monster(rhs)
 {
 
 }
@@ -26,39 +27,25 @@ HRESULT CM_PigWarrior_BEE::Initialize_Prototype()
 
 HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 {	
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+	CM_Monster::MONSTERDESC		MonsterDesc;
+	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
-	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
+	MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
+	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
-
-	//CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	//ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
-
-	//if (nullptr != pArg)
-	//	memcpy(&m_tinMonsterInfo, pArg, sizeof(MONSTERINFO));
-
-	//GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
-	//GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	//GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinMonsterInfo.fPos.x, m_tinMonsterInfo.fPos.y, m_tinMonsterInfo.fPos.z);
-
-	if (FAILED(__super::Initialize(&GameObjectDesc)))
+	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
 		return E_FAIL;
 
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Pos();
-
-	m_eMonsterInfo.eState = m_eMonsterInfo.IDLE;
-	m_eMonsterInfo.iHp = 50;
-	m_eMonsterInfo.iExp = 10;
+	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.iHp = 50;
+	m_tMonsterInfo.iExp = 10;
 
 	return S_OK;
 }
@@ -67,31 +54,18 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (0 >= m_eMonsterInfo.iHp)
-	{
-		m_eMonsterInfo.eState = m_eMonsterInfo.DIE;
+	Monster_Die();
 
-		if (!m_OneCoin)
-		{
-			// Item
-			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-			_float4 vf4MyPos;
-			XMStoreFloat4(&vf4MyPos, vMyPos);
 
-			CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
-
-			m_OneCoin = true;
-		}
-	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_R))
+	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
 		CObj_Manager::PLAYERINFO	ePlayerInfo;
 		ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
 
-		m_eMonsterInfo.iHp -= ePlayerInfo.iAttack;
+		m_tMonsterInfo.iHp -= ePlayerInfo.iAttack;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -164,6 +138,26 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CM_PigWarrior_BEE::Monster_Die()
+{
+	if (0 >= m_tMonsterInfo.iHp)
+	{
+		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
+
+		if (!m_OneCoin)     
+		{
+	 		// Item
+			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+			_float4 vf4MyPos;
+			XMStoreFloat4(&vf4MyPos, vMyPos);
+
+			CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
+
+			m_OneCoin = true;
+		}
+	}
 }
 
 CM_PigWarrior_BEE * CM_PigWarrior_BEE::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

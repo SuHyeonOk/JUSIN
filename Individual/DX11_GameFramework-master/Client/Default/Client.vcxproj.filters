@@ -171,6 +171,9 @@
     <ClInclude Include="..\public\Obj_Manager.h">
       <Filter>77.Manager\Obj</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Monster.h">
+      <Filter>02.GameObjects\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Obj_Manager.cpp">
       <Filter>77.Manager\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Monster.cpp">
+      <Filter>02.GameObjects\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

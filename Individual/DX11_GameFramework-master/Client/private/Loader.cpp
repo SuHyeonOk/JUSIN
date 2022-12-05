@@ -139,7 +139,7 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	// Monster
-	/* For.Prototype_GameObject_Coin */
+	/* For.Prototype_GameObject_M_PigWarrior_BEE */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
 		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

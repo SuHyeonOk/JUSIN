@@ -15,9 +15,11 @@ HRESULT		CObj_Manager::Initialized()
 	m_ePlayerInfo.iHp		= 100;
 	m_ePlayerInfo.iAttack	= 10;
 	m_ePlayerInfo.iExp		= 0;
+	m_ePlayerInfo.iExpMax	= 100;
 	m_ePlayerInfo.iLevel	= 0;
 	m_ePlayerInfo.iKey		= 0;
 	m_ePlayerInfo.iHeart	= 0;
+	m_ePlayerInfo.iGold		= 0;
 
 	return S_OK;
 }

@@ -158,12 +158,12 @@ HRESULT CCoin::SetUp_ShaderResources()
 
 void CCoin::CurrentState(_double TimeDelta)
 {
-	if (m_tinCoinInfo.eState == m_tCoinInfo.IDLE)
+	if (m_tinCoinInfo.eState == m_tCoinInfo.IDLE)	// 평상시에 회전하고 있다
 	{
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	}
-	else // COMEOUT
-		m_pTransformCom->RandomJump(1000, 6.f, 0.5f, TimeDelta);
+	else											// 동전 튀어나오는
+		m_pTransformCom->RandomJump(800, 6.f, 0.5f, TimeDelta);
 }
 
 CCoin * CCoin::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -41,6 +41,8 @@ private:
 	void	Player_Follow(_double TimeDelta);
 	void	Check_Follow(_double TimeDelta);
 
+	void	Player_Info();
+
 private:
 	CObj_Manager::PLAYERINFO	m_ePlayerInfo;
 

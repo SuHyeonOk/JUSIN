@@ -25,23 +25,14 @@ public:
 		_uint	iHp;
 		_uint	iAttack;
 		_uint	iExp;
+		_uint	iExpMax;
 		_uint	iLevel;
+		_uint	iGold;
 
 		_uint	iKey;
 		_uint	iHeart;
 
 	}PLAYERINFO;
-
-	typedef struct tagMonsterInfo
-	{
-		enum STATE {IDLE, ATTACK, HIT, DIE, STATE_END };
-
-		STATE	eState;
-		_uint	iHp;
-		_uint	iAttack;
-		_uint	iExp;
-
-	}MONSTERINFO;
 
 public:
 	CObj_Manager();

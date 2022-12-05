@@ -278,7 +278,7 @@ void CJake::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (2.f < fDistanceX)
+	if (3.f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면

@@ -23,13 +23,13 @@ private:
 	CCamera_Dynamic(const CCamera_Dynamic& rhs);
 	virtual ~CCamera_Dynamic() = default;
 
-public:
-	void Shake_Camera(_double fTime, _int iPower)
-	{
-		m_bShake = true;
-		m_dShakeTime = fTime;
-		m_iShakePower = iPower;
-	}
+//public:
+//	void Shake_Camera(_double fTime, _int iPower)
+//	{
+//		m_bShake = true;
+//		m_dShakeTime = fTime;
+//		m_iShakePower = iPower;
+//	}
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

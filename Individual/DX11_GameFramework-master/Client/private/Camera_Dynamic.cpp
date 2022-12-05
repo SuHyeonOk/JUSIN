@@ -25,8 +25,8 @@ HRESULT CCamera_Dynamic::Initialize_Prototype()
 
 HRESULT CCamera_Dynamic::Initialize(void * pArg)
 {
-	if (nullptr != pArg)
-		memcpy(&m_eCameraInfo, pArg, sizeof(CAMERAINFO));
+	//if (nullptr != pArg)
+	//	memcpy(&m_eCameraInfo, pArg, sizeof(CAMERAINFO));
 
 	ZeroMemory(&m_CameraDesc, sizeof m_CameraDesc);
 
