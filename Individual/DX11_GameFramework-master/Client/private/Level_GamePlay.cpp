@@ -158,7 +158,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Finn(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Finn"), &_float3(-10.f, 0.f, -10.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Finn"), &_float3(-10.f, 0.f, -10.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -170,7 +170,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-5.f, 0.f, -10.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-5.f, 0.f, -10.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

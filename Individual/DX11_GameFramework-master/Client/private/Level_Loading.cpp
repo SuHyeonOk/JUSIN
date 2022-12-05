@@ -59,17 +59,17 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 			switch (m_eNextLevelID)
 			{
 			case LEVEL_TOOL:
-				CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_TOOL);
+				//CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_TOOL);
 				pLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
 				break;
 
 			case LEVEL_LOGO:
-				CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_LOGO);
+				//CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_LOGO);
 				pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 				break;
 
 			case LEVEL_GAMEPLAY:
-				CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_GAMEPLAY);
+				//CObj_Manager::GetInstance()->Set_Plyaer_Level(LEVEL_GAMEPLAY);
 				pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
 				break;
 			}

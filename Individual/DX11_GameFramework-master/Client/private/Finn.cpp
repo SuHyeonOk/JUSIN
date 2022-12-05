@@ -108,7 +108,7 @@ HRESULT CFinn::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Finn"), TEXT("Com_Model"),	
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Finn"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 

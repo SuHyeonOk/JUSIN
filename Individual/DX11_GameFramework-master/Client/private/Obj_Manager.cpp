@@ -21,6 +21,7 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.iKey		= 0;
 	m_tPlayerInfo.iHeart	= 0;
 	m_tPlayerInfo.iCoin		= 0;
+	m_tPlayerInfo.ePlayer_Level = LEVEL(CGameInstance::Get_StaticLevelIndex());
 
 	return S_OK;
 }
@@ -63,7 +64,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	Current_Player();			// 현재 플레이어가 누구인지 Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 
-	// TODO : 어디서 Tick 을 돌려야 할지 모르겠음..!
+	
 }
 
 void		CObj_Manager::Current_Player()

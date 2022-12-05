@@ -7,6 +7,10 @@
 
 #include "Obj_Manager.h"
 
+#include "Model.h"
+#include "Finn.h"
+#include "Jake.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
 {
@@ -156,6 +160,25 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_Component_Shader_VtxTex */	
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTex.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	// Player
+	/* For.Prototype_Component_Model_Finn */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Finn"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Finn/Finn.fbx"))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Jake */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Jake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Finn */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn"),
+		CFinn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Jake */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake"),
+		CJake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

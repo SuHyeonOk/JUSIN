@@ -58,10 +58,10 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_Finn"), TEXT("Prototype_GameObject_Finn"), &_float3(5.f, 0.f, 0.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Prototype_GameObject_Finn"), &_float3(5.f, 0.f, 0.f))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), &_float3(7.f, 0.f, 0.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), &_float3(7.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	CM_Monster::MONSTERDESC		tMonsterDesc;
