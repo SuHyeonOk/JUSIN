@@ -26,6 +26,9 @@ private:
 private:
 	virtual void		Monster_Die()							override;
 
+private:
+	void				Player_Follow(const _double& TimeDelta);
+
 public:
 	static	CM_PigWarrior_BEE*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;

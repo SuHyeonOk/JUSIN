@@ -43,9 +43,10 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp = 50;
-	m_tMonsterInfo.iExp = 10;
+	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.iHp		= 30;
+	m_tMonsterInfo.iExp		= 30;
+	m_tMonsterInfo.iAttack	= 5;
 
 	return S_OK;
 }
@@ -56,16 +57,14 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 
 	Monster_Die();
 
-
+	Player_Follow(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		CObj_Manager::PLAYERINFO	ePlayerInfo;
-		ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
-
-		m_tMonsterInfo.iHp -= ePlayerInfo.iAttack;
+		// TODO : 충돌처리가 가능해 지면 수정
+		m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -142,13 +141,17 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 
 void CM_PigWarrior_BEE::Monster_Die()
 {
+	// 몬스터가 죽고 나면 할 행동
+
 	if (0 >= m_tMonsterInfo.iHp)
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
-		if (!m_OneCoin)     
+		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치
+
+		if (!m_OneCoin)	// 동전 생성
 		{
-	 		// Item
+			// Item
 			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 			_float4 vf4MyPos;
 			XMStoreFloat4(&vf4MyPos, vMyPos);
@@ -158,6 +161,20 @@ void CM_PigWarrior_BEE::Monster_Die()
 			m_OneCoin = true;
 		}
 	}
+
+	return;
+}
+
+void CM_PigWarrior_BEE::Player_Follow(const _double & TimeDelta)
+{
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
+	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	if(fDistanceX < 5.f)
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
+
 }
 
 CM_PigWarrior_BEE * CM_PigWarrior_BEE::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -188,7 +205,5 @@ void CM_PigWarrior_BEE::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pRendererCom);
+
 }

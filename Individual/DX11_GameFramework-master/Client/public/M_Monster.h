@@ -24,10 +24,11 @@ public:
 	{
 		enum STATE { IDLE, ATTACK, HIT, DIE, STATE_END };
 
-		STATE	eState;
-		_uint	iHp;
-		_uint	iAttack;
-		_uint	iExp;
+		STATE	eState		= STATE_END;
+
+		_int	iHp			= 0;
+		_int	iAttack		= 0;
+		_int	iExp		= 0;
 
 	}MONSTERINFO;
 
@@ -35,6 +36,9 @@ protected:
 	CM_Monster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CM_Monster(const CM_Monster& rhs);
 	virtual ~CM_Monster() = default;
+
+public:
+	_int		Get_Monster_Attack() { return m_tMonsterInfo.iAttack; }
 
 public:		// °Á ÇÊ¼ö
 	virtual HRESULT		Initialize_Prototype();

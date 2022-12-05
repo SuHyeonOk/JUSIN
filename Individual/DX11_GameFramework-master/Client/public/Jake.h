@@ -35,10 +35,13 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
+
+
+private:
 	void	Current_Player(_double TimeDelta);
-	void	Key_Input(_double TimeDelta);
 	void	Player_Follow(_double TimeDelta);
 	void	Check_Follow(_double TimeDelta);
+	void	Key_Input(_double TimeDelta);
 
 private:
 	_bool	m_OnMove = false;

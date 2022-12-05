@@ -6,7 +6,7 @@
 CM_Monster::CM_Monster(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
-
+	
 }
 
 CM_Monster::CM_Monster(const CM_Monster & rhs)
@@ -63,4 +63,8 @@ HRESULT CM_Monster::Render()
 void CM_Monster::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pModelCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pRendererCom);
 }

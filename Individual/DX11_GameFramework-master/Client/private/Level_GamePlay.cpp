@@ -1,16 +1,18 @@
 #include "stdafx.h"
 #include "..\public\Level_GamePlay.h"
 
-#include "GameInstance.h"
-
 #include <fstream> // @
 #include "Imgui_PropertyEditor.h"	// @
-#include "DataManager.h"
 
+#include "GameInstance.h"
+#include "DataManager.h"
+#include "Camera_Dynamic.h"
+
+#include "M_Monster.h"
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
-#include "Camera_Dynamic.h"
+
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -441,17 +443,19 @@ void CLevel_GamePlay::ImGuiMonster()
 
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
+		CM_Monster::MONSTERDESC		tMonsterDesc;
 		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
-
-
+		
 		if (0 == iObjNum)
 		{
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
 			m_wstObjName = L"PigWarrior_BEE__";
 			m_wstObjName += to_wstring(m_iM_PigWarrior_BEE);
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &tMonsterDesc)))
 				return;
 
 			m_iM_PigWarrior_BEE++;
@@ -771,6 +775,7 @@ void CLevel_GamePlay::MonsterLoad()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CM_Monster::MONSTERDESC		tMonsterDesc;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
 	_int m_iM_PigWarrior_BEE = _int(eVecObjInfo.size());
 
@@ -778,6 +783,8 @@ void CLevel_GamePlay::MonsterLoad()
 	{
 		for (_int i = 0; i < m_iM_PigWarrior_BEE; i++)
 		{
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
 			m_wstObjName = L"PigWarrior_BEE__";
 			m_wstObjName += to_wstring(i);
 
@@ -785,8 +792,7 @@ void CLevel_GamePlay::MonsterLoad()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
-					&_float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z))))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &tMonsterDesc)))
 					return;
 			}
 		}

@@ -3,6 +3,9 @@
 
 #include "GameInstance.h"
 
+#include "M_Monster.h"
+#include "M_PigWarrior_BEE.h"
+
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -45,7 +48,7 @@ HRESULT CFinn::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	m_ePlayerInfo.eState	= m_ePlayerInfo.IDLE;
+	m_tPlayerInfo.eState	= m_tPlayerInfo.IDLE;
 
 	return S_OK;
 }
@@ -55,6 +58,7 @@ void CFinn::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	Player_Info();
+
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -163,6 +167,28 @@ HRESULT CFinn::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CFinn::Player_Info()
+{
+	//CObj_Manager::PLAYERINFO	tPlayerInfo;
+	//tPlayerInfo.iHp = 
+
+	//CObj_Manager::GetInstance()->Set_Current_Player();
+
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//if (pGameInstance->Key_Down(DIK_R))
+	//{
+	//	CM_PigWarrior_BEE* pObj; 
+	//	// TODO : Get_Object 를 만들거나, 충돌처리 하여 객체를 받아올 수 있으면 수정
+
+	//	CM_Monster* pMonster = dynamic_cast<CM_Monster*>(pObj);
+	//	CObj_Manager::GetInstance()->Set_Player_PushHp(pMonster->Get_Monster_Attack());
+	//}
+
+	//RELEASE_INSTANCE(CGameInstance);
+
+}
+
 void CFinn::Current_Player(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -172,65 +198,12 @@ void CFinn::Current_Player(_double TimeDelta)
 
 	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)	// Player 나라면
 	{
+		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Key_Input(TimeDelta);						// 이동하고
 		Check_Follow(TimeDelta);					// 근처에 Jake 가 있는지 확인한다.
 	}
 	else
 		Player_Follow(TimeDelta);		// Player 가 내가 아니라면 따라간다.
-
-	RELEASE_INSTANCE(CGameInstance);
-}
-
-void CFinn::Key_Input(_double TimeDelta)
-{
-	if (m_OnMove)
-		m_pTransformCom->Go_Straight(TimeDelta);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Pressing(DIK_UP))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
-		
-		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-		if (pGameInstance->Key_Pressing(DIK_LEFT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-	}
-	if (pGameInstance->Key_Pressing(DIK_RIGHT))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
-
-		if (pGameInstance->Key_Pressing(DIK_UP))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-		if (pGameInstance->Key_Pressing(DIK_DOWN))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	}
-	if (pGameInstance->Key_Pressing(DIK_DOWN))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
-
-		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
-		if (pGameInstance->Key_Pressing(DIK_LEFT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	}
-	if (pGameInstance->Key_Pressing(DIK_LEFT))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
-
-		if (pGameInstance->Key_Pressing(DIK_UP))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-		if (pGameInstance->Key_Pressing(DIK_DOWN))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	}
-	
-	if(pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
-		m_OnMove = false;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -248,16 +221,19 @@ void CFinn::Player_Follow(_double TimeDelta)
 	_vector vPlayerPos;
 	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
 
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+	m_pTransformCom->LookAt(vPlayerPos);
+	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
 
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	//_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
 
-	if (2.0f < fDistanceX)	// 거리가 2.0f 이상이라면 바라보며 따라간다. 반대로 2.0f 이하라면 따라가지 않고, 바라보지도 않는다.
-	{
-		m_pTransformCom->LookAt(vPlayerPos);
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta);
-	}
+	//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	//if (2.0f < fDistanceX)	// 거리가 2.0f 이상이라면 바라보며 따라간다. 반대로 2.0f 이하라면 따라가지 않고, 바라보지도 않는다.
+	//{
+	//	m_pTransformCom->LookAt(vPlayerPos);
+	//	m_pTransformCom->Chase(vPlayerPos, TimeDelta);
+	//}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -312,9 +288,58 @@ void CFinn::Check_Follow(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CFinn::Player_Info()
+void CFinn::Key_Input(_double TimeDelta)
 {
-	//CObj_Manager::GetInstance()->
+	if (m_OnMove)
+		m_pTransformCom->Go_Straight(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Pressing(DIK_UP))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
+
+		if (pGameInstance->Key_Pressing(DIK_UP))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
+
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_LEFT))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
+
+		if (pGameInstance->Key_Pressing(DIK_UP))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+
+	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+		m_OnMove = false;
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 CFinn * CFinn::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -36,15 +36,16 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
-	void	Current_Player(_double TimeDelta);
-	void	Key_Input(_double TimeDelta);
-	void	Player_Follow(_double TimeDelta);
-	void	Check_Follow(_double TimeDelta);
-
 	void	Player_Info();
 
 private:
-	CObj_Manager::PLAYERINFO	m_ePlayerInfo;
+	void	Current_Player(_double TimeDelta);
+	void	Player_Follow(_double TimeDelta);
+	void	Check_Follow(_double TimeDelta);
+	void	Key_Input(_double TimeDelta);
+
+private:
+	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
 
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 		
