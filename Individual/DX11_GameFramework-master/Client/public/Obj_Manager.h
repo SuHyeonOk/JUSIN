@@ -17,9 +17,8 @@ public:
 		enum ITEM { ITEM_END };
 
 		PLAYER	ePlayer = PLAYER_END;		// 현재 플레이어
-		LEVEL	ePlayer_Level = LEVEL_END;	// 현재 플레이어가 있는 Level
 
-		STATE	eState;	// 이건 플레이어 에서?
+		STATE	eState;		// 이건 플레이어 에서?
 		ITEM	eItem;
 
 		_int	iHp;		// 몬스터"가" 체력을 깍을 때 필요
@@ -40,10 +39,14 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
+	// 현재 Level
+	LEVEL				Get_Current_Level()					{ return m_eCurrent_Level; }
+	void				Set_Current_Level(LEVEL eLevelID)	{ m_eCurrent_Level = eLevelID; }
+
+	// Player 정보
 	PLAYERINFO			Get_Current_Player()		{ return m_tPlayerInfo; }
 	_int				Get_Player_Attack()			{ return m_tPlayerInfo.iAttack; }
 
-	void				Set_Plyaer_Level(LEVEL eLevelID)			{ m_tPlayerInfo.ePlayer_Level = eLevelID; }
 	void				Set_Current_Player(PLAYERINFO ePlayerInfo)	{ m_tPlayerInfo = ePlayerInfo; }
 	void				Set_Player_Exp(_int eExp)					{ m_tPlayerInfo.iExp += eExp; }
 	void				Set_Player_PushHp(_int eHp)					{ if(m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
@@ -61,6 +64,7 @@ private:
 	void		CObj_Manager::Player_Exp();		// 현재 플레이어의 경험치를 Tick
 
 private:
+	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
 
 private:

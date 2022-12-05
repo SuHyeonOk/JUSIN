@@ -145,7 +145,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)
 	{
 		// Finnxx 에게로
-		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Finn"), m_pTransformComTag, 0));
+		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos, vTargetPos;
 		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -170,7 +170,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.JAKE)
 	{
 		// Jaek 에게로
-		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos, vTargetPos;
 		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);

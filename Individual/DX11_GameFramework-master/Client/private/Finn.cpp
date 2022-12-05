@@ -212,11 +212,8 @@ void CFinn::Player_Follow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CObj_Manager::PLAYERINFO	ePlayerInfo;
-	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
-
 	// Jake ¿¡°Ô·Î
-	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 	_vector vPlayerPos;
 	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
@@ -244,10 +241,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CObj_Manager::PLAYERINFO	ePlayerInfo;
-	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
-
-	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(ePlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), m_pTransformComTag, 0));
+	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 	_vector vPlayerPos;
 	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Þ¾Æ¿È

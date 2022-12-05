@@ -21,7 +21,6 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.iKey		= 0;
 	m_tPlayerInfo.iHeart	= 0;
 	m_tPlayerInfo.iCoin		= 0;
-	m_tPlayerInfo.ePlayer_Level = LEVEL(CGameInstance::Get_StaticLevelIndex());
 
 	return S_OK;
 }
@@ -39,7 +38,7 @@ _vector			CObj_Manager::Get_Player_Transform()
 
 	if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINN)
 	{
-		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(m_tPlayerInfo.ePlayer_Level, TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
 
 		_vector vPlayerPos;
 		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn ÁÂÇ¥ ¹Þ¾Æ¿È
@@ -47,7 +46,7 @@ _vector			CObj_Manager::Get_Player_Transform()
 	}
 	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
 	{
-		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(m_tPlayerInfo.ePlayer_Level, TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 
 		_vector vPlayerPos;
 		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
