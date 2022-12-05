@@ -58,7 +58,7 @@ private:
 	_uint			m_iPage_1_Count = 0;
 
 	// Monster
-	_uint			m_iM_PigWarrior_BEE = 0;
+	_uint			m_iMonster_Count = 0;
 
 	// ¢º ³¡
 

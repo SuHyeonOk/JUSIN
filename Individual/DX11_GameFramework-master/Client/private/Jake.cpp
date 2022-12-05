@@ -228,14 +228,14 @@ void CJake::Check_Follow(_double TimeDelta)
 
 			_float fAddX, fAddZ;
 			if (0 < fLookX)		// +
-				fAddX = 2.f;
+				fAddX = 1.2f;
 			else				// -
-				fAddX = -2.f;
+				fAddX = -1.2f;
 
 			if (0 < fLookZ)
-				fAddZ = 2.f;
+				fAddZ = 1.2f;
 			else
-				fAddZ = -2.f;
+				fAddZ = -1.2f;
 
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vMyPos);

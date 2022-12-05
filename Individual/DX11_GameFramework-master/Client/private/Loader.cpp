@@ -21,6 +21,7 @@
 
 // Monster
 #include "M_PigWarrior_BEE.h"
+#include "M_Pigs_COWBOY.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -101,6 +102,11 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_COWBOY/Pigs_COWBOY.fbx"))))
+		return E_FAIL;
+
 	// Coin
 	/* For.Prototype_Component_Model_CoinBronze */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
@@ -142,6 +148,11 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_M_PigWarrior_BEE */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
 		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
+	/* For.Prototype_GameObject_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
+		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Page
@@ -257,6 +268,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_COWBOY/Pigs_COWBOY.fbx"))))
+		return E_FAIL;
 
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */
@@ -336,6 +351,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Coin */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
 		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
+		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Food

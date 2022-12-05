@@ -13,7 +13,6 @@
 #include "Coin.h"
 #include "Page.h"
 
-
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -431,7 +430,7 @@ void CLevel_GamePlay::ImGuiPage()
 
 void CLevel_GamePlay::ImGuiMonster()
 {
-	const _char* szObjName[] = { "PigWarrior_BEE" };
+	const _char* szObjName[] = { "PigWarrior_BEE", "Pigs_COWBOY" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -451,15 +450,30 @@ void CLevel_GamePlay::ImGuiMonster()
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
 			m_wstObjName = L"PigWarrior_BEE__";
-			m_wstObjName += to_wstring(m_iM_PigWarrior_BEE);
+			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &tMonsterDesc)))
 				return;
 
-			m_iM_PigWarrior_BEE++;
+			m_iMonster_Count++;
 		}
+		if (1 == iObjNum)
+		{
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Pigs_COWBOY__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Pigs_COWBOY"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -607,11 +621,11 @@ void CLevel_GamePlay::CoinLoad()
 
 	CCoin::COININFO					tCoinInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_CoinInfo();
-	_int iFoodVecCount = _int(eVecObjInfo.size());
+	_int iCoinVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
-		for (_int i = 0; i < iFoodVecCount; i++)
+		for (_int i = 0; i < iCoinVecCount; i++)
 		{
 			tCoinInfo.fPos = pObjInfo.ObjPos;
 			tCoinInfo.eState = tCoinInfo.IDLE;
@@ -629,7 +643,7 @@ void CLevel_GamePlay::CoinLoad()
 			}
 		}
 
-		for (_int i = 0; i < iFoodVecCount; i++)
+		for (_int i = 0; i < iCoinVecCount; i++)
 		{
 			tCoinInfo.fPos = pObjInfo.ObjPos;
 			tCoinInfo.eState = tCoinInfo.IDLE;
@@ -647,7 +661,7 @@ void CLevel_GamePlay::CoinLoad()
 			}
 		}
 
-		for (_int i = 0; i < iFoodVecCount; i++)
+		for (_int i = 0; i < iCoinVecCount; i++)
 		{
 			tCoinInfo.fPos = pObjInfo.ObjPos;
 			tCoinInfo.eState = tCoinInfo.IDLE;
@@ -777,11 +791,11 @@ void CLevel_GamePlay::MonsterLoad()
 
 	CM_Monster::MONSTERDESC		tMonsterDesc;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
-	_int m_iM_PigWarrior_BEE = _int(eVecObjInfo.size());
+	_int iMonsterVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
-		for (_int i = 0; i < m_iM_PigWarrior_BEE; i++)
+		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
@@ -793,6 +807,21 @@ void CLevel_GamePlay::MonsterLoad()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior_BEE"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Pigs_COWBOY__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs_COWBOY"), &tMonsterDesc)))
 					return;
 			}
 		}

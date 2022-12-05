@@ -88,6 +88,9 @@
     <Filter Include="77.Manager\Obj">
       <UniqueIdentifier>{dc42a624-63c8-4d30-908b-1d92b6f43a3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Pigs_COWBOY">
+      <UniqueIdentifier>{aa8d53dd-61f7-4f44-84b5-f6dbd7aef256}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -174,6 +177,9 @@
     <ClInclude Include="..\public\M_Monster.h">
       <Filter>02.GameObjects\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Pigs_COWBOY.h">
+      <Filter>02.GameObjects\Monster\Pigs_COWBOY</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -244,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Monster.cpp">
       <Filter>02.GameObjects\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Pigs_COWBOY.cpp">
+      <Filter>02.GameObjects\Monster\Pigs_COWBOY</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
