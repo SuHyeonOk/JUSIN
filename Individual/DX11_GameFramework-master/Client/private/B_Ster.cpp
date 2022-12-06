@@ -34,7 +34,7 @@ HRESULT CB_Star::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
 
@@ -45,6 +45,7 @@ HRESULT CB_Star::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
+	m_f4Pos = _float4(f3Pos.x, f3Pos.y, f3Pos.z, 1.f);
 
 	return S_OK;
 }
@@ -57,12 +58,15 @@ void CB_Star::Tick(_double TimeDelta)
 	// 일정시간 후에 총알이 사라지도록 해야한다.
 
 	// 플레이어의 좌표가 아닌 총알을 발사하는 몬스터의 Look 으로 총알을 발사하는게 나을 것 같다.
-
-
-	//_vector vPlayerPos;
-	//vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+	_vector vPlayerPos;
+	vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 	//_float4	f4PlayerPos;
 	//XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+	m_pTransformCom->LookAt(vPlayerPos);
+	m_pTransformCom->Go_Straight(TimeDelta);
+
+
 
 	//m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z, 1.f), TimeDelta);
 }

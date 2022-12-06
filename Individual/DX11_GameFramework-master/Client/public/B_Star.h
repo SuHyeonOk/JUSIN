@@ -13,6 +13,13 @@ BEGIN(Client)
 
 class CB_Star final : public CGameObject
 {
+public:
+	typedef struct tagBulletDesc
+	{
+		_float		fAngle;
+		_float3		f3Pos;
+	}BULLETDESC;
+
 private:
 	CB_Star(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CB_Star(const CB_Star& rhs);
@@ -33,6 +40,9 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
+
+private:
+	_float4					m_f4Pos;
 
 public:
 	static	CB_Star*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -115,7 +115,7 @@ private:
  *
  * 사용예시
  * 	CFSMComponentBuilder builder = CFSMComponentBuilder() // 빌더 생성
-	.InitState(TEXT("Idle"))								  // 최초 시작 노드의 이름
+	.InitState(TEXT("Idle"))							  // 최초 시작 노드의 이름
 	.AddState(TEXT("Idle"))								  // Idle 상태노드 정의 시작
 		.OnStart(this, &CBackGround::Idle_OnStart)	      // Idle 상태 시작할 때 CBackGround::Idle_OnStart함수 실행(상태당 하나의 함수 정의, 생략가능)
 		.Tick(this, &CBackGround::Idle_Tick)		      // Idle 상태 유지 될 때 프레임마다 CBackGround::Idle_Tick함수 실행(상태당 하나의 함수 정의, 생략가능)

@@ -181,11 +181,11 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
 
-		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-		_vector		vDir =  vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
-		_vector		vMinDir = XMLoadFloat4(&m_vMinCamPos); // XMVectorSet(0.f, 1.f, 0.f, 1.f); 
+		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
+		_vector		vDir =  vPlayerPos - vMyPos;												// 내 좌표가 객체를 바라보는 방향 벡터
+		_vector		vMinDir = XMVectorSet(0.f, 1.f, 0.f, 1.f); // XMLoadFloat4(&m_vMinCamPos);	// 여기서는 실제 내 카메라의 좌표가 아닌, 임의의 축을 기준으로 계산하도록 한다.
 
-		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
 		_float		fMinCamPos = XMVectorGetX(XMVector3Length(vMinDir));
 
 		_float		fTemp = (fDistanceX - fMinCamPos) / (10.f - fMinCamPos);
@@ -193,8 +193,8 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 			fTemp = 1.f;
 		else if (0.f > fTemp)
 			fTemp *= -1;
-		cout << fTemp << endl;
-		m_fSpeed = 5.f * fTemp;
+		//cout << fTemp << endl;
+		m_fSpeed = 5.f * fTemp;	// 5.f PlayerSpeed
 
 		m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
 

@@ -102,7 +102,7 @@ void		CObj_Manager::Player_Exp()
 		m_tPlayerInfo.iLevel++;			// 레벨 증가
 		m_tPlayerInfo.iExpMax += 50;	// 최대 경험치 증가
 		m_tPlayerInfo.iAttack += 20;	// 공격력 증가
-		cout << m_tPlayerInfo.iLevel << endl;
+
 		return;
 	}
 }

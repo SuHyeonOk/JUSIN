@@ -184,7 +184,7 @@ void CM_Pigs_COWBOY::ToThe_Player(const _double & TimeDelta)
 		_float4	f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		cout << f4MyPos.x << " | " << f4MyPos.y << " | " << f4MyPos.z << endl;
+		//cout << f4MyPos.x << " | " << f4MyPos.y << " | " << f4MyPos.z << endl;
 
 		if (pGameInstance->Key_Down(DIK_B)) {
 
