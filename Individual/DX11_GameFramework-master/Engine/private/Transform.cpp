@@ -258,6 +258,20 @@ void CTransform::Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit)
 	}
 }
 
+void CTransform::Speed_Chase(_fvector vTargetPos, _float fSpeed, _double TimeDelta, _float fLimit)
+{
+	_vector		vPosition = Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vTargetPos - vPosition;							// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistance = XMVectorGetX(XMVector3Length(vDir));		// 그중 X 값을 뽑아와 거리 확인
+
+	if (fDistance > fLimit)		// 만약 거리가 1 이고, 인자가 0.1 이면 따라간다. / 거리가 - 0 이고, 인자가 0.1 이면 따라가지 않는다.
+	{
+		vPosition += XMVector3Normalize(vDir) * fSpeed * _float(TimeDelta);
+		Set_State(CTransform::STATE_TRANSLATION, vPosition);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// sh
 
 bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)

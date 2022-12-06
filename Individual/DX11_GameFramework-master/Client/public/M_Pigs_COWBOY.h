@@ -27,7 +27,7 @@ private:
 	virtual void		Monster_Die()							override;
 
 private:
-	void				Player_Follow(const _double& TimeDelta);
+	void				ToThe_Player(const _double& TimeDelta);
 
 public:
 	static	CM_Pigs_COWBOY*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

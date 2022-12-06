@@ -57,7 +57,7 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 
 	Monster_Die();
 
-	Player_Follow(TimeDelta);
+	ToThe_Player(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -165,15 +165,24 @@ void CM_PigWarrior_BEE::Monster_Die()
 	return;
 }
 
-void CM_PigWarrior_BEE::Player_Follow(const _double & TimeDelta)
+void CM_PigWarrior_BEE::ToThe_Player(const _double & TimeDelta)
 {
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
 	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if(fDistanceX < 5.f)
-		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
+	if (fDistanceX < 5.f)
+	{
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.5);
+
+		// ▣ : 위의 코드 말고, 아래 코드 사용하기
+		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
+	}
 
 }
 

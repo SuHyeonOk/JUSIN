@@ -7,10 +7,6 @@
 #include "Terrain.h"
 #include "Player.h"
 
-// Player
-#include "Finn.h"
-#include "Jake.h"
-
 // Map
 #include "Map_Garden.h"
 
@@ -18,6 +14,9 @@
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
+
+// Bullet
+#include "B_Star.h"
 
 // Monster
 #include "M_PigWarrior_BEE.h"
@@ -86,17 +85,6 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx"))))
 		return E_FAIL;
 
-	// Monster
-	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_M_Pigs_COWBOY */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_COWBOY/Pigs_COWBOY.fbx"))))
-		return E_FAIL;
-
 	// Coin
 	/* For.Prototype_Component_Model_CoinBronze */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
@@ -109,6 +97,28 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_Component_Model_CoinGold */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinGold"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx"))))
+		return E_FAIL;
+
+	// Skill
+	/* For.Prototype_Component_Model_S_Stun */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Stun"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Skill/Stun/Confused_Birds/Confused_Birds.fbx"))))
+		return E_FAIL;
+
+	// Bullet
+	/* For.Prototype_Component_Model_B_Star */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Star"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Star/Star.fbx"))))
+		return E_FAIL;
+
+	// Monster
+	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx"))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_COWBOY/Pigs_COWBOY.fbx"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
@@ -124,17 +134,6 @@ HRESULT CLoader::Loading_Tool()
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 
-	// Monster
-	/* For.Prototype_GameObject_M_PigWarrior_BEE */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
-		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	
-	/* For.Prototype_GameObject_M_Pigs_COWBOY */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
-		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	// Page
 	/* For.Prototype_GameObject_Page */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
@@ -145,6 +144,25 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_Coin */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
 		CCoin::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Skill
+
+
+	// Bullet
+	/* For.Prototype_GameObject_B_Star */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
+		CB_Star::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Monster
+	/* For.Prototype_GameObject_M_PigWarrior_BEE */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
+		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
+		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

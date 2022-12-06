@@ -1,4 +1,4 @@
-#include "stdafx.h"
+	#include "stdafx.h"
 #include "..\public\Camera_Dynamic.h"
 
 #include "GameInstance.h"
@@ -37,7 +37,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 	m_CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	m_CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
 
-	m_CameraDesc.TransformDesc.fSpeedPerSec = 3.5f;
+	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 3.5f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if(m_eCameraInfo.eLevel == LEVEL_GAMEPLAY)
@@ -50,6 +50,8 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 		return E_FAIL;	
 
 	m_pTransformCom->Set_Pos();
+
+	m_vMinCamPos = _float4(0.f, 6.f, -7.f, 1.f);
 
 	return S_OK;
 }
@@ -174,23 +176,32 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_vector vPlayerPos, vTargetPos;
 		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-		_float4 vf4TargetPos;
-		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 5.5f, vf4TargetPos.z - 7.f, 1.f);
-		vTargetPos = XMLoadFloat4(&vf4TargetPos);
+		vTargetPos = vPlayerPos + XMLoadFloat4(&m_vMinCamPos);
+		vTargetPos = XMVectorSetW(vTargetPos, 1.f);
 
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
 
 		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+		_vector		vDir =  vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+		_vector		vMinDir = XMLoadFloat4(&m_vMinCamPos); // XMVectorSet(0.f, 1.f, 0.f, 1.f); 
 
 		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+		_float		fMinCamPos = XMVectorGetX(XMVector3Length(vMinDir));
 
-		if (10.f < fDistanceX || 7.7f > fDistanceX)		// 빠르게 따라간다. 9.17
-			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.4);
-		else	// 그냥 따라간다.
-			m_pTransformCom->Chase(vTargetPos, TimeDelta);
+		_float		fTemp = (fDistanceX - fMinCamPos) / (10.f - fMinCamPos);
+		if (1.f < fTemp)
+			fTemp = 1.f;
+		else if (0.f > fTemp)
+			fTemp *= -1;
+		cout << fTemp << endl;
+		m_fSpeed = 5.f * fTemp;
+
+		m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
+
+		//if (10.f < fDistanceX || 7.7f > fDistanceX)		// 빠르게 따라간다. 9.17
+		//	m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.4);
+		//else	// 그냥 따라간다.
+		//	m_pTransformCom->Chase(vTargetPos, TimeDelta);
 	}
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.FREE)
 	{

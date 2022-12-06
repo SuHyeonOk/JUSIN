@@ -50,11 +50,15 @@ private:
 	CCamera::CAMERADESC			m_CameraDesc;
 	CAMERAINFO					m_eCameraInfo;
 
+	_float		m_fSpeed = 0.f;
+
 	// Shake_Camera 와 관련된 변수
 	_bool		m_bShake = false;
 	_double		m_dShakeTime = 0;
 	_double		m_dShakeTimeNow = 0;
 	_int		m_iShakePower = 0;
+
+	_float4		m_vMinCamPos;
 
 public:
 	static CCamera_Dynamic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

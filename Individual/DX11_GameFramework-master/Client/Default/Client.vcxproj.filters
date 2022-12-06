@@ -91,6 +91,12 @@
     <Filter Include="02.GameObjects\Monster\Pigs_COWBOY">
       <UniqueIdentifier>{aa8d53dd-61f7-4f44-84b5-f6dbd7aef256}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Bullet">
+      <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Bullet\Star">
+      <UniqueIdentifier>{0fab3231-86cc-4c7f-9783-5d6991169c03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -180,6 +186,9 @@
     <ClInclude Include="..\public\M_Pigs_COWBOY.h">
       <Filter>02.GameObjects\Monster\Pigs_COWBOY</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\B_Star.h">
+      <Filter>02.GameObjects\Bullet\Star</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -253,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Pigs_COWBOY.cpp">
       <Filter>02.GameObjects\Monster\Pigs_COWBOY</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\B_Ster.cpp">
+      <Filter>02.GameObjects\Bullet\Star</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

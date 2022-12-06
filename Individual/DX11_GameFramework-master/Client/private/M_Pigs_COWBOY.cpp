@@ -33,7 +33,7 @@ HRESULT CM_Pigs_COWBOY::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
-	MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
+	MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
 	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
 
@@ -57,9 +57,11 @@ void CM_Pigs_COWBOY::Tick(_double TimeDelta)
 
 	Monster_Die();
 
-	Player_Follow(TimeDelta);
+	ToThe_Player(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	// 나랑 총알의 위치를 비교하다가 총알이 
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
@@ -165,16 +167,33 @@ void CM_Pigs_COWBOY::Monster_Die()
 	return;
 }
 
-void CM_Pigs_COWBOY::Player_Follow(const _double & TimeDelta)
+void CM_Pigs_COWBOY::ToThe_Player(const _double & TimeDelta)
 {
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
 	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
 
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
 
-	if(fDistanceX < 5.f)
-		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
+	if (fDistanceX < 5.f)	// 거리 안 으로 들어왔다면 플레이어를 향해 총알 발사
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+		_vector	vMyPos;
+		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	
+		_float4	f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		cout << f4MyPos.x << " | " << f4MyPos.y << " | " << f4MyPos.z << endl;
+
+		if (pGameInstance->Key_Down(DIK_B)) {
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &_float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z))))
+				return;
+		}
+
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 CM_Pigs_COWBOY * CM_Pigs_COWBOY::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
