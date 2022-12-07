@@ -312,7 +312,7 @@ void CJake::Anim_Change()
 			m_pModelCom->Set_AnimIndex(25);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK:
+		case CObj_Manager::PLAYERINFO::ATTACK_1:
 			m_pModelCom->Set_AnimIndex(0);
 			break;
 

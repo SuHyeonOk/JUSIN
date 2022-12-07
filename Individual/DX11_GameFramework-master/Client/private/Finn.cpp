@@ -70,25 +70,13 @@ void CFinn::Tick(_double TimeDelta)
 	//cout << m_AnimiNum << endl;
 	//RELEASE_INSTANCE(CGameInstance);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_SPACE))
-	{
-		// TODO : 키를 누르면 애니메이션이 재생되어야 함
-		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK;
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	Player_Info();
 
+	Space_Attack(TimeDelta);
+	Anim_Change(TimeDelta);
 
-	Anim_Change();
-	_bool bTempFinisbed;
-	bTempFinisbed = m_pModelCom->Play_Animation(TimeDelta);
-	if (bTempFinisbed)
-		m_bFinished = true;
-	cout << m_bFinished << endl;
+	m_pModelCom->Play_Animation(TimeDelta);
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -370,10 +358,53 @@ void CFinn::Key_Input(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 
+	////////////////////////////////////////
+
+	if (pGameInstance->Key_Down(DIK_SPACE))
+	{
+		++m_iSpace_AttackCount;
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK;
+	}
+	
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CFinn::Anim_Change()
+void CFinn::Space_Attack(_double TimeDelta)
+{
+	cout << m_iSpace_AttackCount << endl;
+	if (0 == m_iSpace_AttackCount)
+		return;
+
+	if (1 == m_iSpace_AttackCount)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
+	}
+	else if (2 == m_iSpace_AttackCount)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_2;
+	}
+	else if (3 == m_iSpace_AttackCount)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_3;
+		
+	}
+	else
+	{
+		m_iSpace_AttackCount = 1;
+
+	}
+
+	// 일정 시간 동안 공격을 하지 않으면 IDLE 상태로 돌아간다.
+	m_dSpace_AttackTimeAcc += TimeDelta;
+	if (6. < m_dSpace_AttackTimeAcc)
+	{
+		m_iSpace_AttackCount = 0;
+		m_dSpace_AttackTimeAcc = 0;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
+}
+
+void CFinn::Anim_Change(_double TimeDelta)
 {
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
 	{
@@ -387,13 +418,21 @@ void CFinn::Anim_Change()
 			m_pModelCom->Set_AnimIndex(49);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK:
-			m_pModelCom->Set_AnimIndex(18);
- 		//	if (m_bFinished)
-			//{
-			//	cout << "___-------------------" << endl;
-   //				m_pModelCom->Set_AnimIndex(19);
-			//}
+		//case CObj_Manager::PLAYERINFO::ATTACK:
+		//	Space_Attack(TimeDelta);
+		//	break;
+
+		case CObj_Manager::PLAYERINFO::ATTACK_1:
+			m_pModelCom->Set_Repetition(true);
+			m_pModelCom->Set_AnimIndex(15);
+			break;
+		case CObj_Manager::PLAYERINFO::ATTACK_2:
+			m_pModelCom->Set_Repetition(true);
+			m_pModelCom->Set_AnimIndex(16);
+			break;
+		case CObj_Manager::PLAYERINFO::ATTACK_3:
+			m_pModelCom->Set_Repetition(true);
+			m_pModelCom->Set_AnimIndex(17);
 			break;
 
 		default:

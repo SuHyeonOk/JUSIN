@@ -6,12 +6,6 @@ CAnimation::CAnimation()
 {
 }
 
-void CAnimation::Set_Reset_KeyFrameIndex()
-{
-	for (_uint i = 0; i < m_iNumChannels; ++i)
-		m_Channels[i]->Reset_KeyFrameIndex();
-}
-
 HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 {
 	strcpy_s(m_szName, pAIAnimation->mName.data);
@@ -20,7 +14,7 @@ HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 
 	m_TickPerSecond = pAIAnimation->mTicksPerSecond;
 
-	/* 이 애니메이션 구동하는데 필요한 뼈대의 갯수다.  */
+	/* 이 애니메이션 구동하는데 필요한 뼈대의 개수다.  */
 	m_iNumChannels = pAIAnimation->mNumChannels;
 
 	for (_uint i = 0; i < m_iNumChannels; ++i)
@@ -37,10 +31,14 @@ HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 	return S_OK;
 }
 
-_bool CAnimation::Update_Bones(_double TimeDelta)
+void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)
 {
+	//cout << m_bRepetition << endl;
+	if (!bRepetition)
+ 		m_bRepetition = false;
+
 	if (true == m_isFinished && false == m_isLooping)
-		return false;
+		return;
 
 	m_PlayTime += m_TickPerSecond * TimeDelta;
 
@@ -52,17 +50,24 @@ _bool CAnimation::Update_Bones(_double TimeDelta)
 
 	for (_uint i = 0; i < m_iNumChannels; ++i)
 	{
-		if (true == m_isFinished)
-			m_Channels[i]->Reset_KeyFrameIndex();
+		if (!m_bRepetition && true == m_isFinished)
+			return;
+		
+		if (true == m_isFinished)					// 애니메이션이 끝나면
+			m_Channels[i]->Reset_KeyFrameIndex();	// 프레임을 처음으로 초기화
+
+
+		//if (!bRepetition && true == m_isFinished)	// 애니메이션이 끝나면
+		//	m_Channels[i]->Reset_KeyFrameIndex();	// 프레임을 처음으로 초기화
+
+		//if (bRepetition && true == m_isFinished)
+		//	return;
 
 		m_Channels[i]->Update_TransformMatrix(m_PlayTime);
 	}
 
 	if (true == m_isFinished)
-	{
 		m_isFinished = false;
-		return true;
-	}
 }
 
 CAnimation * CAnimation::Create(aiAnimation * pAIAnimation, CModel* pModel)

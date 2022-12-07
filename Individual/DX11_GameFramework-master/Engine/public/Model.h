@@ -24,20 +24,19 @@ public:
 
 	class CBone* Get_BonePtr(const char* pBoneName);
 
-public:
-	void Set_AnimIndex(_uint iAnimIndex) {
-		m_iCurrentAnimIndex = iAnimIndex;
-	}
+	void	Set_Repetition(_bool eRepetition);
 
-	_bool		Get_isFinished();		
-	void		Set_Reset_Animation(); 
+public:
+	void Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true) {	// Defult 로 반복은 true
+		m_iCurrentAnimIndex = iAnimIndex; m_bRepetition = bRepetition;
+	}
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix);
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	_bool Play_Animation(_double TimeDelta);
+	void	Play_Animation(_double TimeDelta);
 	HRESULT Bind_Material(class CShader* pShader, _uint iMeshIndex, aiTextureType eType, const char* pConstantName);
 	HRESULT Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName = nullptr);
 
@@ -48,21 +47,22 @@ public:
 	TYPE								m_eType = TYPE_END;
 
 	/* 하나의 모델은 교체가 가능한 여러개의 메시로 구성되어있다. */
-	_uint								m_iNumMeshes = 0;		// 몇 개의 메시로 구성되어 있는지
+	_uint								m_iNumMeshes = 0;			// 몇 개의 메시로 구성되어 있는지
 	vector<class CMesh*>				m_Meshes;
 
-	_uint								m_iNumMaterials = 0;	// 재질 여러개
+	_uint								m_iNumMaterials = 0;		// 재질 여러개
 	vector<MODELMATERIAL>				m_Materials;
 
 	/* 전체 뼈의 갯수. */
 	_uint								m_iNumBones = 0;
-	vector<class CBone*>				m_Bones;				// 원형이 아닌 복제된 뼈를 가져야 한다.
+	vector<class CBone*>				m_Bones;					// 원형이 아닌 복제된 뼈를 가져야 한다.
 
-	_uint								m_iCurrentAnimIndex = 0;
-	_uint								m_iNumAnimations = 0;
+	_bool								m_bRepetition = false;		// sh 애니메이션을 반복?
+	_uint								m_iCurrentAnimIndex = 0;	// 현재 애니메이션 순서
+	_uint								m_iNumAnimations = 0;		// 애니메이션 총 개수
 	vector<class CAnimation*>			m_Animations;
 
-	_float4x4							m_PivotMatrix;
+	_float4x4							m_PivotMatrix;				// 모델 초기값 설정 행렬
 
 public:
 	HRESULT Ready_Bones(aiNode* pNode, class CBone* pParent);

@@ -44,7 +44,8 @@ private:
 	void	Check_Follow(_double TimeDelta);
 	void	Key_Input(_double TimeDelta);
 
-	void	Anim_Change();
+	void	Space_Attack(_double TimeDelta);
+	void	Anim_Change(_double TimeDelta);
 
 private:
 	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
@@ -53,7 +54,8 @@ private:
 
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
-	_bool		m_bFinished;				// 애니메이션이 끝났니
+	_uint		m_iSpace_AttackCount = 0;	// Space_Attack() : 공격 3개
+	_double		m_dSpace_AttackTimeAcc = 0;
 
 	// Anim Test
 	_int	m_AnimiNum = 0;

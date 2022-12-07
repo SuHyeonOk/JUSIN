@@ -11,12 +11,11 @@ public:
 	virtual ~CAnimation() = default;
 
 public:
-	_bool		Get_isFinished() { return m_isFinished; }
-	void		Set_Reset_KeyFrameIndex();
+	void	Set_Repetition(_bool eRepetition) { m_bRepetition = eRepetition; }
 
 public:
 	HRESULT Initialize(aiAnimation* pAIAnimation, class CModel* pModel);
-	_bool Update_Bones(_double TimeDelta);
+	void	Update_Bones(_double TimeDelta, _bool bepetition);
 
 private:
 	char								m_szName[MAX_PATH];
@@ -34,6 +33,8 @@ private:
 	/* 이 애니메이션을 재생하기위해 갱신해야하는 뼈들. */
 	_uint								m_iNumChannels = 0;
 	vector<class CChannel*>				m_Channels;
+
+	_bool								m_bRepetition = true;	// sh 기본적으로 반복을 true 한다.
 
 public:
 	static CAnimation* Create(aiAnimation* pAIAnimation, class CModel* pModel);

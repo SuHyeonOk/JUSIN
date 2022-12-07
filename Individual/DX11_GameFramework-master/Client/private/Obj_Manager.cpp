@@ -70,7 +70,7 @@ void		CObj_Manager::Current_Player()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_X))
+	if (pGameInstance->Key_Down(DIK_Z))
 		m_ChangeTarget++;
 
 	switch (m_ChangeTarget)
