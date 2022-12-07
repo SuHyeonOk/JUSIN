@@ -58,8 +58,6 @@ void CFinn::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//// 15, 16, 17 슉슉슉
-	//// 18, 19 슉슉
 	//if (pGameInstance->Key_Down(DIK_P))
 	//{
 	//	++m_AnimiNum;
@@ -74,7 +72,7 @@ void CFinn::Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_SPACE))
+	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
 		// TODO : 키를 누르면 애니메이션이 재생되어야 함
 		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK;
@@ -86,7 +84,11 @@ void CFinn::Tick(_double TimeDelta)
 
 
 	Anim_Change();
-	m_pModelCom->Play_Animation(TimeDelta);
+	_bool bTempFinisbed;
+	bTempFinisbed = m_pModelCom->Play_Animation(TimeDelta);
+	if (bTempFinisbed)
+		m_bFinished = true;
+	cout << m_bFinished << endl;
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -114,7 +116,7 @@ HRESULT CFinn::Render()
 		if (1 == i) // 초보 검 : 2 /  빨간 검 1
 			continue;
 
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달하낟. */
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
@@ -232,6 +234,13 @@ void CFinn::Current_Player(_double TimeDelta)
 
 void CFinn::Player_Follow(_double TimeDelta)
 {
+	// 현재 플레이어를 따라간다.
+
+	if(CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
+		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	else
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// Jake 에게로
@@ -309,10 +318,8 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
-		m_tPlayerInfo.eState = m_tPlayerInfo.WALK;
+		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
 	}
-	else
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -358,7 +365,10 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+	{
 		m_OnMove = false;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -373,18 +383,23 @@ void CFinn::Anim_Change()
 			m_pModelCom->Set_AnimIndex(39);
 			break;
 
-		case CObj_Manager::PLAYERINFO::WALK:
+		case CObj_Manager::PLAYERINFO::RUN:
 			m_pModelCom->Set_AnimIndex(49);
 			break;
 
 		case CObj_Manager::PLAYERINFO::ATTACK:
 			m_pModelCom->Set_AnimIndex(18);
-
+ 		//	if (m_bFinished)
+			//{
+			//	cout << "___-------------------" << endl;
+   //				m_pModelCom->Set_AnimIndex(19);
+			//}
 			break;
 
 		default:
 			break;
 		}
+		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
 		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
 	}
 }

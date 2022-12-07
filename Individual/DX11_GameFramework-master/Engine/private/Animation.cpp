@@ -6,6 +6,12 @@ CAnimation::CAnimation()
 {
 }
 
+void CAnimation::Set_Reset_KeyFrameIndex()
+{
+	for (_uint i = 0; i < m_iNumChannels; ++i)
+		m_Channels[i]->Reset_KeyFrameIndex();
+}
+
 HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 {
 	strcpy_s(m_szName, pAIAnimation->mName.data);
@@ -31,13 +37,10 @@ HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 	return S_OK;
 }
 
-void CAnimation::Update_Bones(_double TimeDelta)
+_bool CAnimation::Update_Bones(_double TimeDelta)
 {
-	if (true == m_isFinished &&
-		false == m_isLooping)
-	{
-		return;
-	}
+	if (true == m_isFinished && false == m_isLooping)
+		return false;
 
 	m_PlayTime += m_TickPerSecond * TimeDelta;
 
@@ -56,8 +59,10 @@ void CAnimation::Update_Bones(_double TimeDelta)
 	}
 
 	if (true == m_isFinished)
+	{
 		m_isFinished = false;
-
+		return true;
+	}
 }
 
 CAnimation * CAnimation::Create(aiAnimation * pAIAnimation, CModel* pModel)

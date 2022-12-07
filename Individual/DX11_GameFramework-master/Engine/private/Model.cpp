@@ -62,6 +62,19 @@ CBone * CModel::Get_BonePtr(const char * pBoneName)
 	return nullptr;
 }
 
+_bool CModel::Get_isFinished()
+{
+	// 애니메이션이 끝났니~
+	//return 	m_Animations[m_iCurrentAnimIndex]->CAnimation::Get_isFinished;
+	return true;
+}
+
+void CModel::Set_Reset_Animation()
+{
+	// 지금 애니메이션을 0으로 초기화 한다
+	//m_Animations[m_iCurrentAnimIndex]->CAnimation::Set_Reset_KeyFrameIndex;
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	_uint			iFlag = 0;
@@ -100,39 +113,39 @@ HRESULT CModel::Initialize(void * pArg)
 	if (FAILED(Ready_Bones(m_pAIScene->mRootNode, nullptr)))
 		return E_FAIL;
 
-	/* 전체뼈를 보관하고 있느 ㄴm_Bones에서 각 메시에 영향을 주느 ㄴ뼈들을 찾아서.
+	/* 전체뼈를 보관하고 있는 m_Bones에서 각 메시에 영향을 주느 ㄴ뼈들을 찾아서.
 	메시 안에 다시 재보관한다(참조) */
 	for (auto& pMesh : m_Meshes)
 	{
 		pMesh->SetUp_MeshBones(this);
 	}
 
-	/* 애니메이션을 구동하는데 필요한 뼈대를 찾는 작업이 이뤄진다.
+	/* 애니메이션을 구동하는데 필요한 뼈대를 찾는 작업이 이뤄진다. 왜?
 	애니메이션을 구동하는데 필요한 뼈대 : 채널,
 	특정 채널(뼈)에 대해서 현재 시간에 맞는 키프레임상태를 얻어오고, 이걸 행렬로 만들고.
-	이 행렬을 전체뼈를 보관하고 있느 ㄴm_Bones중 같은 이름을 가진 뼈에 m_TransformMarix로 교체해주기 위해서.
-	*/
-
+	이 행렬을 전체뼈를 보관하고 있느 ㄴm_Bones중 같은 이름을 가진 뼈에 m_TransformMarix로 교체해주기 위해서.*/
 	if (FAILED(Ready_Animation()))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-void CModel::Play_Animation(_double TimeDelta)
+_bool CModel::Play_Animation(_double TimeDelta)
 {
 	if (TYPE_NONANIM == m_eType)
-		return;
+		return false;
 
-	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신하낟. */
-	m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta);
-
+	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신한다. */
+	_bool	bFinished;
+	bFinished = m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta);
+	
 	for (auto& pBone : m_Bones)
 	{
 		if (nullptr != pBone)
 			pBone->Compute_CombindTransformationMatrix();
 	}
-	int a = 10;
+
+	return bFinished;
 }
 
 HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType eType, const char * pConstantName)
@@ -162,8 +175,6 @@ HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType
 
 HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName)
 {
-
-
 	if (nullptr != m_Meshes[iMeshIndex])
 	{
 		if (nullptr != pBoneConstantName)

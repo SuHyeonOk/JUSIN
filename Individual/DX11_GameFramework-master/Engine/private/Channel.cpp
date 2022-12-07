@@ -6,7 +6,7 @@ CChannel::CChannel()
 {
 }
 
-/* 특정애니메이션ㄴ에서 사용되는 뼈. */
+/* 특정 애니메이션에서 사용되는 뼈. */
 HRESULT CChannel::Initialize(aiNodeAnim * pAIChannel, CModel* pModel)
 {
 	strcpy_s(m_szName, pAIChannel->mNodeName.data);
@@ -27,13 +27,13 @@ HRESULT CChannel::Initialize(aiNodeAnim * pAIChannel, CModel* pModel)
 		KEYFRAME			KeyFrame;
 		ZeroMemory(&KeyFrame, sizeof(KEYFRAME));
 
-		if(i < pAIChannel->mNumScalingKeys)
+		if(i < pAIChannel->mNumScalingKeys)		// 스케일 얻어오기
 		{
 			memcpy(&vScale, &pAIChannel->mScalingKeys[i].mValue, sizeof(XMFLOAT3));
 			KeyFrame.Time = pAIChannel->mScalingKeys[i].mTime;
 		}
 
-		if (i < pAIChannel->mNumRotationKeys)
+		if (i < pAIChannel->mNumRotationKeys)	// 회전 얻어오기
 		{
 			/*memcpy(&vScale, &pAIChannel->mRotationKeys[i].mValue, sizeof(XMFLOAT3));*/
 			vRotation.x = pAIChannel->mRotationKeys[i].mValue.x;
@@ -43,7 +43,7 @@ HRESULT CChannel::Initialize(aiNodeAnim * pAIChannel, CModel* pModel)
 			KeyFrame.Time = pAIChannel->mRotationKeys[i].mTime;
 		}
 
-		if (i < pAIChannel->mNumPositionKeys)
+		if (i < pAIChannel->mNumPositionKeys)	// 이동 얻어오기
 		{
 			memcpy(&vPosition, &pAIChannel->mPositionKeys[i].mValue, sizeof(XMFLOAT3));
 			KeyFrame.Time = pAIChannel->mPositionKeys[i].mTime;
@@ -60,7 +60,6 @@ HRESULT CChannel::Initialize(aiNodeAnim * pAIChannel, CModel* pModel)
 }
 
 /* 현재 애니메이션이 재생된 시간을 얻어온다. PlayTime */
-
 void CChannel::Update_TransformMatrix(_double PlayTime)
 {
 	_vector			vScale;
@@ -69,7 +68,8 @@ void CChannel::Update_TransformMatrix(_double PlayTime)
 
 	_matrix			TransformMatrix;
 
-	/* 현재 재생된 시간이 마지막 키프레임시간보다 커지며.ㄴ */
+	/* 현재 재생된 시간이 마지막 키프레임시간보다 커지면. */
+	// 보관 할 것이 없으니 이 동작에서 멈춰 있으면 된다.
 	if (PlayTime >= m_KeyFrames.back().Time)
 	{
 		vScale = XMLoadFloat3(&m_KeyFrames.back().vScale);
@@ -79,15 +79,17 @@ void CChannel::Update_TransformMatrix(_double PlayTime)
 	}
 	else
 	{
-		while (PlayTime >= m_KeyFrames[m_iCurrentKeyFrameIndex + 1].Time)
-		{
+		// m_iCurrentKeyFrameIndex : 무조건 0 번째 부터 시작한다.
+		while (PlayTime >= m_KeyFrames[m_iCurrentKeyFrameIndex + 1].Time)	// while 프레임 드랍에 대한 예외처리
+		{	
+			// 마지막 키 프레임 까지 갔다면 현재 키 프레임을 하나 증가시킨다.
 			++m_iCurrentKeyFrameIndex;
 		}
 
 		_double			Ratio = (PlayTime - m_KeyFrames[m_iCurrentKeyFrameIndex].Time) / 
 			(m_KeyFrames[m_iCurrentKeyFrameIndex + 1].Time - m_KeyFrames[m_iCurrentKeyFrameIndex].Time);
 
-		_vector			vSourScale, vDestScale;
+		_vector			vSourScale, vDestScale;			// 이전(Sour) 현재(Dest)
 		_vector			vSourRotation, vDestRotation;
 		_vector			vSourPosition, vDestPosition;
 
@@ -99,14 +101,16 @@ void CChannel::Update_TransformMatrix(_double PlayTime)
 		vDestRotation = XMLoadFloat4(&m_KeyFrames[m_iCurrentKeyFrameIndex + 1].vRotation);
 		vDestPosition = XMLoadFloat3(&m_KeyFrames[m_iCurrentKeyFrameIndex + 1].vPosition);
 
-		vScale = XMVectorLerp(vSourScale, vDestScale, Ratio);
-		vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, Ratio);
-		vPosition = XMVectorLerp(vSourPosition, vDestPosition, Ratio);
+		vScale = XMVectorLerp(vSourScale, vDestScale, _float(Ratio));
+		vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, _float(Ratio));
+		vPosition = XMVectorLerp(vSourPosition, vDestPosition, _float(Ratio));
 		vPosition = XMVectorSetW(vPosition, 1.f);
 	}
 
+	// XMMatrixAffineTransformation() 을 안 쓰고 스, 자, 이, 공, 부를 사용해도 된다.
 	TransformMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vPosition);
 
+	// 그리고 뼈에 상태에게 전달한다.
 	m_pBone->Set_TransformMatrix(TransformMatrix);	
 }
 

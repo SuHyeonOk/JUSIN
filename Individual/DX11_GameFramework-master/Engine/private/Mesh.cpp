@@ -218,11 +218,10 @@ HRESULT CMesh::Ready_VertexBuffer_AnimModel(aiMesh * pAIMesh, CModel* pModel)
 		memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
 	}
 
-	/* 메시에 영향ㅇ르 준다.ㅏ */
-	/* */
+	/* 메시에 영향을 준다. */
 	m_iNumBones = pAIMesh->mNumBones;
 
-	for (_uint i = 0; i < m_iNumBones; ++i)
+	for (_uint i = 0; i < m_iNumBones; ++i)		// CMesh::Ready_VertexBuffer_AnimModel(
 	{
 		aiBone*		pAIBone = pAIMesh->mBones[i];					// 진짜 Bones 정보를 가져왔다.
 

@@ -177,7 +177,7 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		return E_FAIL;
 	/* For.Prototype_Component_Model_Jake */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Jake"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Finn */

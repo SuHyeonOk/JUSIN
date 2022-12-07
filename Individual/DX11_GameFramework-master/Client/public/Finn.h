@@ -53,6 +53,8 @@ private:
 
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
+	_bool		m_bFinished;				// 애니메이션이 끝났니
+
 	// Anim Test
 	_int	m_AnimiNum = 0;
 

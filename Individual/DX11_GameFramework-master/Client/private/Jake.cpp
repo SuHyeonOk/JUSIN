@@ -2,7 +2,6 @@
 #include "..\public\Jake.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -46,6 +45,8 @@ HRESULT CJake::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
 	return S_OK;
 }
 
@@ -55,7 +56,8 @@ void CJake::Tick(_double TimeDelta)
 
 
 
-
+	Anim_Change();
+	m_pModelCom->Play_Animation(TimeDelta);
 }
 
 void CJake::Late_Tick(_double TimeDelta)
@@ -83,7 +85,7 @@ HRESULT CJake::Render()
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -97,7 +99,7 @@ HRESULT CJake::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -118,19 +120,6 @@ HRESULT CJake::SetUp_ShaderResources()
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Pressing(DIK_F))
-	{
-		_bool	bHit = true;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-			return E_FAIL;
-	}
-	else
-	{
-		_bool	bHit = false;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-			return E_FAIL;
-	}
 
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
@@ -181,6 +170,13 @@ void CJake::Current_Player(_double TimeDelta)
 
 void CJake::Player_Follow(_double TimeDelta)
 {
+	// 현재 플레이어를 따라간다.
+
+	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
+		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	else
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// Finnxx 에게로
@@ -247,7 +243,10 @@ void CJake::Key_Input(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (m_OnMove)
+	{
 		m_pTransformCom->Go_Straight(TimeDelta);
+		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	}
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
@@ -291,9 +290,38 @@ void CJake::Key_Input(_double TimeDelta)
 	}
 
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+	{
 		m_OnMove = false;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CJake::Anim_Change()
+{
+	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
+	{
+		switch (m_tPlayerInfo.eState)
+		{
+		case CObj_Manager::PLAYERINFO::IDLE:
+			m_pModelCom->Set_AnimIndex(18);
+			break;
+
+		case CObj_Manager::PLAYERINFO::RUN:
+			m_pModelCom->Set_AnimIndex(25);
+			break;
+
+		case CObj_Manager::PLAYERINFO::ATTACK:
+			m_pModelCom->Set_AnimIndex(0);
+			break;
+
+		default:
+			break;
+		}
+		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
+		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
+	}
 }
 
 CJake * CJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "Obj_Manager.h"
 
 BEGIN(Engine)
 class CShader;
@@ -43,7 +44,11 @@ private:
 	void	Check_Follow(_double TimeDelta);
 	void	Key_Input(_double TimeDelta);
 
+	void	Anim_Change();
+
 private:
+	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
+
 	_bool	m_OnMove = false;
 
 	_double	m_dNotfollow_TimeAcc = 0;

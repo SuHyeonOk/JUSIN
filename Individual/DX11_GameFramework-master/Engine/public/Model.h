@@ -29,12 +29,15 @@ public:
 		m_iCurrentAnimIndex = iAnimIndex;
 	}
 
+	_bool		Get_isFinished();		
+	void		Set_Reset_Animation(); 
+
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix);
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	void Play_Animation(_double TimeDelta);
+	_bool Play_Animation(_double TimeDelta);
 	HRESULT Bind_Material(class CShader* pShader, _uint iMeshIndex, aiTextureType eType, const char* pConstantName);
 	HRESULT Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName = nullptr);
 
