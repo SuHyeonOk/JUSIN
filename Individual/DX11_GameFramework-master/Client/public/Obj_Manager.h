@@ -13,12 +13,13 @@ public:
 	typedef struct tagPlayerInfo
 	{
 		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
-		enum STATE { IDLE, ATTACK, HIT, STUN, DIE, STATE_END };
+		enum STATE { IDLE, WALK, ATTACK, HIT, STUN, DIE, STATE_END };
 		enum ITEM { ITEM_END };
 
 		PLAYER	ePlayer = PLAYER_END;		// 현재 플레이어
 
-		STATE	eState;		// 이건 플레이어 에서?
+		STATE	eState;		// 현재 상태
+		STATE	ePreState;	// 이전 상태
 		ITEM	eItem;
 
 		_int	iHp;		// 몬스터"가" 체력을 깍을 때 필요
@@ -40,17 +41,17 @@ public:
 
 public:
 	// 현재 Level
-	LEVEL				Get_Current_Level()					{ return m_eCurrent_Level; }
-	void				Set_Current_Level(LEVEL eLevelID)	{ m_eCurrent_Level = eLevelID; }
+	LEVEL				Get_Current_Level() { return m_eCurrent_Level; }
+	void				Set_Current_Level(LEVEL eLevelID) { m_eCurrent_Level = eLevelID; }
 
 	// Player 정보
-	PLAYERINFO			Get_Current_Player()		{ return m_tPlayerInfo; }
-	_int				Get_Player_Attack()			{ return m_tPlayerInfo.iAttack; }
+	PLAYERINFO			Get_Current_Player() { return m_tPlayerInfo; }
+	_int				Get_Player_Attack() { return m_tPlayerInfo.iAttack; }
 
-	void				Set_Current_Player(PLAYERINFO ePlayerInfo)	{ m_tPlayerInfo = ePlayerInfo; }
-	void				Set_Player_Exp(_int eExp)					{ m_tPlayerInfo.iExp += eExp; }
-	void				Set_Player_PushHp(_int eHp)					{ if(m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
-	void				Set_Player_MinusHp(_int eHp)				{ if(0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= eHp; }
+	void				Set_Current_Player(PLAYERINFO ePlayerInfo) { m_tPlayerInfo = ePlayerInfo; }
+	void				Set_Player_Exp(_int eExp) { m_tPlayerInfo.iExp += eExp; }
+	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
+	void				Set_Player_MinusHp(_int eHp) { if (0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= eHp; }
 
 	void				CObj_Manager::Tick_Player_Transform(); // TODO
 	_vector				CObj_Manager::Get_Player_Transform(); // TODO
@@ -72,7 +73,7 @@ private:
 	_uint			m_ChangeTarget = 0;
 
 public:
-	virtual void Free() override;	
+	virtual void Free() override;
 };
 
 END

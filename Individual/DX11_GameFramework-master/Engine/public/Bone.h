@@ -15,25 +15,36 @@ public:
 		return m_szName;
 	}
 
-	// CBone
+	_matrix Get_OffsetMatrix() {
+		return XMLoadFloat4x4(&m_OffsetMatrix);
+	}
+
+	_matrix Get_CombindMatrix() {
+		return XMLoadFloat4x4(&m_CombindTransformMatrix);
+	}
+
 	void Set_OffsetMatrix(_float4x4 OffsetMatrix) {
 		m_OffsetMatrix = OffsetMatrix;
 	}
 
+	void Set_TransformMatrix(_fmatrix TransformMatrix) {
+		XMStoreFloat4x4(&m_TransformMatrix, TransformMatrix);
+	}
+
 public:
-	HRESULT Initialize(aiNode* pAINode);
+	HRESULT Initialize(aiNode* pAINode, CBone* pParent);
 	void Compute_CombindTransformationMatrix();
 
-private: // CBone
+private:
 	char				m_szName[MAX_PATH];			// 뼈의 이름
-	_float4x4			m_OffsetMatrix;				// ﻿정점의 로컬 스페이스로 가기 위한 상태 변환 행렬
-	_float4x4			m_TransformMatrix;			// ﻿뼈 만의 상태 변환 행렬
+	_float4x4			m_OffsetMatrix;				// ?정점의 로컬 스페이스로 가기 위한 상태 변환 행렬
+	_float4x4			m_TransformMatrix;			// ?뼈 만의 상태 변환 행렬
 	_float4x4			m_CombindTransformMatrix;	// 내 행렬 * 부모 행렬 = 이 행렬
-	CBone*				m_pParent;					// 뼈의 부모 저장
-	
+	CBone*				m_pParent = nullptr;		// 뼈의 부모 저장
+
 
 public:
-	static CBone* Create(aiNode* pAINode);
+	static CBone* Create(aiNode* pAINode, CBone* pParent);
 	virtual void Free() override;
 };
 

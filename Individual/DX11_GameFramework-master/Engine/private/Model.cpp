@@ -2,6 +2,8 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Bone.h"
+#include "Animation.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent(pDevice, pContext)
@@ -13,22 +15,54 @@ CModel::CModel(const CModel & rhs)
 	, m_pAIScene(rhs.m_pAIScene)
 	, m_eType(rhs.m_eType)
 	, m_iNumMeshes(rhs.m_iNumMeshes)
-	, m_Meshes(rhs.m_Meshes)
+	/*, m_Meshes(rhs.m_Meshes)*/
 	, m_Materials(rhs.m_Materials)
 	, m_iNumMaterials(rhs.m_iNumMaterials)
+	/*, m_Bones(rhs.m_Bones)*/
+	, m_iNumBones(rhs.m_iNumBones)
+	/*, m_Animations(rhs.m_Animations)*/
+	, m_iNumAnimations(rhs.m_iNumAnimations)
+	, m_iCurrentAnimIndex(rhs.m_iCurrentAnimIndex)
+	, m_PivotMatrix(rhs.m_PivotMatrix)
 {
+	/*for (auto& pBone : m_Bones)
+	Safe_AddRef(pBone);*/
+
+	//for (auto& pAnimation : m_Animations)
+	//	Safe_AddRef(pAnimation);
+
 	for (auto& Material : m_Materials)
 	{
 		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
 			Safe_AddRef(Material.pTexture[i]);
 	}
 
-	for (auto& pMesh : m_Meshes)
-		Safe_AddRef(pMesh);
+	for (auto& pMesh : rhs.m_Meshes)
+	{
+		m_Meshes.push_back((CMesh*)pMesh->Clone());
+	}
+
 
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
+CBone * CModel::Get_BonePtr(const char * pBoneName)
+{
+	// 벡터 순회 하면서 pBoneName 과 같은 녀석을 찾아야 한다.
+	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+	{
+		return !strcmp(pBoneName, pBone->Get_Name());
+	});
+
+	if (iter == m_Bones.end())
+		return nullptr;
+
+	return *iter;
+
+
+	return nullptr;
+}
+
+HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	_uint			iFlag = 0;
 
@@ -37,22 +71,17 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 	else
 		iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
 
+	m_eType = eType;
+
 	m_pAIScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	///* 뼈. */
-	//// 주축 (얘도 로드시에!)
-	//m_pAIScene->mRootNode->mChildren->mChildren;
+	XMStoreFloat4x4(&m_PivotMatrix, PivotMatrix);
 
-	//// 로드 시 한 번
-	//m_pAIScene->mAnimations[0]->mChannels[0];
-
-	//m_pAIScene->mMeshes[0]->mBones[0];
-
-
-
-
+	/* 뼈를 로드한다. / */
+	/*if (FAILED(Ready_Bones(m_pAIScene->mRootNode, nullptr)))
+	return E_FAIL;*/
 
 	if (FAILED(Ready_MeshContainers()))
 		return E_FAIL;
@@ -60,12 +89,50 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath)
 	if (FAILED(Ready_Materials(pModelFilePath)))
 		return E_FAIL;
 
+
+
 	return S_OK;
 }
 
 HRESULT CModel::Initialize(void * pArg)
 {
+	/* 모델의 전체뼈를 로드하여 보관한다. 메시별로 구분하지않는다. */
+	if (FAILED(Ready_Bones(m_pAIScene->mRootNode, nullptr)))
+		return E_FAIL;
+
+	/* 전체뼈를 보관하고 있느 ㄴm_Bones에서 각 메시에 영향을 주느 ㄴ뼈들을 찾아서.
+	메시 안에 다시 재보관한다(참조) */
+	for (auto& pMesh : m_Meshes)
+	{
+		pMesh->SetUp_MeshBones(this);
+	}
+
+	/* 애니메이션을 구동하는데 필요한 뼈대를 찾는 작업이 이뤄진다.
+	애니메이션을 구동하는데 필요한 뼈대 : 채널,
+	특정 채널(뼈)에 대해서 현재 시간에 맞는 키프레임상태를 얻어오고, 이걸 행렬로 만들고.
+	이 행렬을 전체뼈를 보관하고 있느 ㄴm_Bones중 같은 이름을 가진 뼈에 m_TransformMarix로 교체해주기 위해서.
+	*/
+
+	if (FAILED(Ready_Animation()))
+		return E_FAIL;
+
 	return S_OK;
+}
+
+void CModel::Play_Animation(_double TimeDelta)
+{
+	if (TYPE_NONANIM == m_eType)
+		return;
+
+	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신하낟. */
+	m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta);
+
+	for (auto& pBone : m_Bones)
+	{
+		if (nullptr != pBone)
+			pBone->Compute_CombindTransformationMatrix();
+	}
+	int a = 10;
 }
 
 HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType eType, const char * pConstantName)
@@ -83,46 +150,73 @@ HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType
 	if (iMaterialIndex >= m_iNumMaterials)
 		return E_FAIL;
 
-
 	if (nullptr != m_Materials[iMaterialIndex].pTexture[eType])
 	{
 		m_Materials[iMaterialIndex].pTexture[eType]->Bind_ShaderResource(pShader, pConstantName);
 	}
 	else
-	{
-		MSG_BOX("Model does not have texture.");
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName)
+{
+
+
+	if (nullptr != m_Meshes[iMeshIndex])
+	{
+		if (nullptr != pBoneConstantName)
+		{
+			_float4x4		BoneMatrices[128];
+
+			m_Meshes[iMeshIndex]->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+
+			pShader->Set_MatrixArray(pBoneConstantName, BoneMatrices, 128);
+		}
+
+		pShader->Begin(0);
+
+		m_Meshes[iMeshIndex]->Render();		// VIBuffer 의 자식으로 Render() 호출
 	}
 
 	return S_OK;
 }
 
-HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex)
+HRESULT CModel::Ready_Bones(aiNode * pAINode, CBone* pParent)
 {
-	pShader->Begin(0);
+	/* 생성하고자해ㅑㅆ떤 뼈의 정보. */
+	CBone*		pBone = CBone::Create(pAINode, pParent);
+	if (nullptr == pBone)
+		return E_FAIL;
 
-	if (nullptr != m_Meshes[iMeshIndex])
-		m_Meshes[iMeshIndex]->Render(); // VIBuffer 의 자식으로 Render() 호출
+	m_Bones.push_back(pBone);
+
+	/* 이뼈의 자식뼈를 만든다.  */
+	for (_uint i = 0; i < pAINode->mNumChildren; ++i)
+	{
+		Ready_Bones(pAINode->mChildren[i], pBone);
+	}
 
 	return S_OK;
 }
 
-HRESULT CModel::Ready_MeshContainers() // 메시 추가하기 위한 함수
+HRESULT CModel::Ready_MeshContainers()					// 메시 추가하기 위한 함수
 {
 	if (nullptr == m_pAIScene)
 		return E_FAIL;
 
-	m_iNumMeshes = m_pAIScene->mNumMeshes; // 메시의 개수
+	m_iNumMeshes = m_pAIScene->mNumMeshes;
 
-	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	for (_uint i = 0; i < m_iNumMeshes; ++i)			// 메시의 개수
 	{
-		aiMesh*		pAIMesh = m_pAIScene->mMeshes[i]; // 실제 메시의 정보
+		aiMesh*		pAIMesh = m_pAIScene->mMeshes[i];	// 실제 메시의 정보
 
-		CMesh*		pMesh = CMesh::Create(m_pDevice, m_pContext, TYPE_ANIM, pAIMesh);
-		if (nullptr == pMesh) // 메쉬가 잘 생성 되었니
+		CMesh*		pMesh = CMesh::Create(m_pDevice, m_pContext, m_eType, pAIMesh, this);
+		if (nullptr == pMesh)
 			return E_FAIL;
 
-		m_Meshes.push_back(pMesh); // 잘 생성 되었으니 push_back
+		m_Meshes.push_back(pMesh);						// 메시가 잘 생성 되었으니 push_back
 	}
 
 	return S_OK;
@@ -143,7 +237,7 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 
 	for (_uint i = 0; i < m_iNumMaterials; ++i) // 1_ 머티리얼 개수만큼 루프를 돌면서
 	{
-		// ﻿파일 이름, 패스, 확장자
+		// ?파일 이름, 패스, 확장자
 		char		szTextureFileName[MAX_PATH] = "";
 		char		szExt[MAX_PATH] = "";
 		char		szTexturePath[MAX_PATH] = "";
@@ -171,13 +265,13 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 				continue; // g_ false 면 저장하지 말고 다음 텍스처 조사 
 						  // h_ aiTextureType(j) 는 enum 값으로 casting 을 해준다 
 
-						  // w_ 8, 9 인자 : szExt, MEX_PATH 확장자 
-						  // v_ 6, 7인자, MAX_PATH : szTextureFileName 파일 이름 필요 
-						  // u_ 1인자 : strTexturePath.data 받아온 경로에 데이터를 쪼갠다. 
-						  // t_ 이 안으로 들어오면 진짜 Parh 를 만든다.
-						  // k_ continue 에 걸리지 않고 여기 까지 온 것은 텍스처가 있었다는 것 이니 
-						  // j_ strTexturePath.data 에서 data 를 보면 char 로 aistrrimp 이 담고 있는 문자열을 char 로 return 한다. strTexturePath.data == char 
-						  // r_ _splitpath_s() assimp 에서 제공하는 경로를 받아오는 함수 
+			// w_ 8, 9 인자 : szExt, MEX_PATH 확장자 
+			// v_ 6, 7인자, MAX_PATH : szTextureFileName 파일 이름 필요 
+			// u_ 1인자 : strTexturePath.data 받아온 경로에 데이터를 쪼갠다. 
+			// t_ 이 안으로 들어오면 진짜 Parh 를 만든다.
+			// k_ continue 에 걸리지 않고 여기 까지 온 것은 텍스처가 있었다는 것 이니 
+			// j_ strTexturePath.data 에서 data 를 보면 char 로 aistrrimp 이 담고 있는 문자열을 char 로 return 한다. strTexturePath.data == char 
+			// r_ _splitpath_s() assimp 에서 제공하는 경로를 받아오는 함수 
 			_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szTextureFileName, MAX_PATH, szExt, MAX_PATH);
 
 			// x_ 뜯어낸 경로에 +경로 +파일이름 +확장자
@@ -189,7 +283,7 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 			_tchar			szFullPath[MAX_PATH] = TEXT("");
 
 			// z_ seFullPath 에 경로가 담아진다.
-			MultiByteToWideChar(CP_ACP, 0, szTexturePath, strlen(szTexturePath), szFullPath, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szTexturePath, _int(strlen(szTexturePath)), szFullPath, MAX_PATH);
 
 			// o_ 우리는 경로가 아닌 파일 이름만 알면된다 그래서 splitpath 이용하여 파일 이름만 잘라온다. 
 			// n_ pModelFilePath 는 assimp 가 가지고 있는 재질 텍스처의 경로를 그대로 담아주는 녀석인데 
@@ -198,23 +292,41 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 			// 6_ 이렇게 구조체에 텍스처를 하나씩 다 채워줄 생각이다. 
 			ModelMaterial.pTexture[j] = CTexture::Create(m_pDevice, m_pContext, szFullPath);
 
-			// ㄱ_ ﻿이렇게 j로 루프를 돌면서 18개에 대한 텍스처 로드를 다 수행하고 다 끝나면 예외처리를 해준다.
+			// ㄱ_ ?이렇게 j로 루프를 돌면서 18개에 대한 텍스처 로드를 다 수행하고 다 끝나면 예외처리를 해준다.
 			if (nullptr == ModelMaterial.pTexture[j])
 				return E_FAIL;
 		}
 
-		// ㄴ_ ﻿이 루프가 끝나면 이 구조체가 여러가지 값의 텍스처를 다 채웠으니 이 구조체를 벡터에 담아준다. 끝.
+		// ㄴ_ ?이 루프가 끝나면 이 구조체가 여러가지 값의 텍스처를 다 채웠으니 이 구조체를 벡터에 담아준다. 끝.
 		m_Materials.push_back(ModelMaterial); // 3_ 로드를 다 하면 구조체를 추가한다.
 	}
 
 	return S_OK;
 }
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const char * pModelFilePath)
+HRESULT CModel::Ready_Animation()
+{
+	m_iNumAnimations = m_pAIScene->mNumAnimations;
+
+	for (_uint i = 0; i < m_iNumAnimations; ++i)
+	{
+		aiAnimation*		pAIAnimation = m_pAIScene->mAnimations[i];
+
+		CAnimation*			pAnim = CAnimation::Create(pAIAnimation, this);
+		if (nullptr == pAnim)
+			return E_FAIL;
+
+		m_Animations.push_back(pAnim);
+	}
+
+	return S_OK;
+}
+
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	CModel*		pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PivotMatrix)))
 	{
 		MSG_BOX("Failed to Created : CModel");
 		Safe_Release(pInstance);
@@ -238,6 +350,15 @@ CComponent * CModel::Clone(void * pArg)
 void CModel::Free()
 {
 	__super::Free();
+
+	for (auto& pAnimation : m_Animations)
+		Safe_Release(pAnimation);
+	m_Animations.clear();
+
+	for (auto& pBone : m_Bones)
+		Safe_Release(pBone);
+
+	m_Bones.clear();
 
 	for (auto& Material : m_Materials)
 	{

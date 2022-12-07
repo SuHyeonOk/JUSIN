@@ -22,7 +22,7 @@ HRESULT CFinn::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
@@ -48,7 +48,7 @@ HRESULT CFinn::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	m_tPlayerInfo.eState	= m_tPlayerInfo.IDLE;
+	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
 	return S_OK;
 }
@@ -57,8 +57,36 @@ void CFinn::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//// 15, 16, 17 슉슉슉
+	//// 18, 19 슉슉
+	//if (pGameInstance->Key_Down(DIK_P))
+	//{
+	//	++m_AnimiNum;
+	//}
+	//if (pGameInstance->Key_Down(DIK_O))
+	//{
+	//	--m_AnimiNum;
+	//}
+	//m_pModelCom->Set_AnimIndex(m_AnimiNum);
+	//cout << m_AnimiNum << endl;
+	//RELEASE_INSTANCE(CGameInstance);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Pressing(DIK_SPACE))
+	{
+		// TODO : 키를 누르면 애니메이션이 재생되어야 함
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	Player_Info();
 
+
+	Anim_Change();
+	m_pModelCom->Play_Animation(TimeDelta);
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -86,10 +114,10 @@ HRESULT CFinn::Render()
 		if (1 == i) // 초보 검 : 2 /  빨간 검 1
 			continue;
 
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달하낟. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -103,7 +131,7 @@ HRESULT CFinn::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -126,18 +154,12 @@ HRESULT CFinn::SetUp_ShaderResources()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_F))
-	{
-		_bool	bHit = true;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-			return E_FAIL;
-	}
-	else
-	{
-		_bool	bHit = false;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-			return E_FAIL;
-	}
+	//if (pGameInstance->Key_Pressing(DIK_F))
+	//{
+	//	_bool	bHit = true;
+	//	if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
+	//		return E_FAIL;
+	//}
 
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
@@ -163,7 +185,7 @@ HRESULT CFinn::SetUp_ShaderResources()
 	//	return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
-	
+
 	return S_OK;
 }
 
@@ -196,14 +218,14 @@ void CFinn::Current_Player(_double TimeDelta)
 	CObj_Manager::PLAYERINFO	ePlayerInfo;
 	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
 
-	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)	// Player 나라면
+	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)					// Player 나라면
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
-		Key_Input(TimeDelta);						// 이동하고
-		Check_Follow(TimeDelta);					// 근처에 Jake 가 있는지 확인한다.
+		Key_Input(TimeDelta);										// 이동하고
+		Check_Follow(TimeDelta);									// 근처에 Jake 가 있는지 확인한다.
 	}
 	else
-		Player_Follow(TimeDelta);		// Player 가 내가 아니라면 따라간다.
+		Player_Follow(TimeDelta);									// Player 가 내가 아니라면 따라간다.
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -216,7 +238,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 	_vector vPlayerPos;
-	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
+	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// Jake 좌표 받아옴
 
 	m_pTransformCom->LookAt(vPlayerPos);
 	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
@@ -285,7 +307,12 @@ void CFinn::Check_Follow(_double TimeDelta)
 void CFinn::Key_Input(_double TimeDelta)
 {
 	if (m_OnMove)
+	{
 		m_pTransformCom->Go_Straight(TimeDelta);
+		m_tPlayerInfo.eState = m_tPlayerInfo.WALK;
+	}
+	else
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -334,6 +361,32 @@ void CFinn::Key_Input(_double TimeDelta)
 		m_OnMove = false;
 
 	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CFinn::Anim_Change()
+{
+	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
+	{
+		switch (m_tPlayerInfo.eState)
+		{
+		case CObj_Manager::PLAYERINFO::IDLE:
+			m_pModelCom->Set_AnimIndex(39);
+			break;
+
+		case CObj_Manager::PLAYERINFO::WALK:
+			m_pModelCom->Set_AnimIndex(49);
+			break;
+
+		case CObj_Manager::PLAYERINFO::ATTACK:
+			m_pModelCom->Set_AnimIndex(18);
+
+			break;
+
+		default:
+			break;
+		}
+		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
+	}
 }
 
 CFinn * CFinn::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

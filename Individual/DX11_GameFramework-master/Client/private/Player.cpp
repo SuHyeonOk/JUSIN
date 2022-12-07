@@ -3,8 +3,6 @@
 
 #include "GameInstance.h"
 
-#include "ItemManager.h"
-
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -21,13 +19,13 @@ HRESULT CPlayer::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
 HRESULT CPlayer::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(-5.f, 0.f, 0.f);
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)
 		memcpy(&f3Pos, pArg, sizeof(_float3));
@@ -46,6 +44,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
+	m_pModelCom->Set_AnimIndex(3);
 
 	return S_OK;
 }
@@ -54,6 +53,7 @@ void CPlayer::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	m_pModelCom->Play_Animation(TimeDelta);
 }
 
 void CPlayer::Late_Tick(_double TimeDelta)
@@ -96,12 +96,11 @@ HRESULT CPlayer::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달하낟. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
-
 	return S_OK;
 }
 
@@ -113,15 +112,14 @@ HRESULT CPlayer::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"), TEXT("Com_Model"),	
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
-
 
 	return S_OK;
 }
@@ -136,18 +134,18 @@ HRESULT CPlayer::SetUp_ShaderResources()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_F))
-	{
-		_bool	bHit = true;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-			return E_FAIL;
-	}
-	else
-	{
-		_bool	bHit = false;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-			return E_FAIL;
-	}
+	//if (pGameInstance->Key_Pressing(DIK_F))
+	//{
+	//	_bool	bHit = true;
+	//	if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
+	//		return E_FAIL;
+	//}
+	//else
+	//{
+	//	_bool	bHit = false;
+	//	if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
+	//		return E_FAIL;
+	//}
 
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
@@ -159,6 +157,7 @@ HRESULT CPlayer::SetUp_ShaderResources()
 	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
 	if (nullptr == pLightDesc)
 		return E_FAIL;
+
 	//
 	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
 	//	return E_FAIL;
@@ -173,7 +172,7 @@ HRESULT CPlayer::SetUp_ShaderResources()
 	//	return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
-	
+
 	return S_OK;
 }
 
@@ -201,7 +200,12 @@ void CPlayer::Key_Input(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (OnMove)
+	{
 		m_pTransformCom->Go_Straight(TimeDelta);
+		m_pModelCom->Set_AnimIndex(4);
+	}
+	else
+		m_pModelCom->Set_AnimIndex(3);
 
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{

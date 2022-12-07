@@ -59,7 +59,7 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGuiTest(); // @ ImGui 를 사용하지 않을 때 주석!
-	
+
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)
@@ -170,7 +170,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-5.f, 0.f, -10.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-7.f, 0.f, -10.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -304,7 +304,7 @@ void CLevel_GamePlay::ImGuiCoin()
 
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
-		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z }; 
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
 
 		if (0 == iObjNum)
 		{
@@ -315,7 +315,7 @@ void CLevel_GamePlay::ImGuiCoin()
 			m_wstObjName = L"CoinBronze__";
 			m_wstObjName += to_wstring(m_iCoinBronze_Count);
 
-			m_szObjName = m_wstObjName.c_str();	
+			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
@@ -430,7 +430,7 @@ void CLevel_GamePlay::ImGuiPage()
 
 void CLevel_GamePlay::ImGuiMonster()
 {
-	const _char* szObjName[] = { "PigWarrior_BEE", "Pigs_COWBOY" };
+	const _char* szObjName[] = { "PigWarrior_BEE", "Pigs_COWBOY", "PigWarrior_WORKER" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -444,7 +444,7 @@ void CLevel_GamePlay::ImGuiMonster()
 	{
 		CM_Monster::MONSTERDESC		tMonsterDesc;
 		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
-		
+
 		if (0 == iObjNum)
 		{
 			tMonsterDesc.f3Pos = m_f3ClickPos;
@@ -469,6 +469,20 @@ void CLevel_GamePlay::ImGuiMonster()
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Pigs_COWBOY"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (2 == iObjNum)
+		{
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"PigWarrior_WORKER__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior_WORKER"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -530,13 +544,13 @@ void CLevel_GamePlay::FoodLoad()
 
 		CDataManager::GetInstance()->Set_FoodInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
 	}
-	
+
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CFood::FOODINFO					tFoodInfo;
-	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_FoodInfo();	
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_FoodInfo();
 	_int iFoodVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
@@ -573,7 +587,7 @@ void CLevel_GamePlay::FoodLoad()
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
 			}
-		}		
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -822,6 +836,21 @@ void CLevel_GamePlay::MonsterLoad()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs_COWBOY"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"PigWarrior_WORKER__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior_WORKER"), &tMonsterDesc)))
 					return;
 			}
 		}

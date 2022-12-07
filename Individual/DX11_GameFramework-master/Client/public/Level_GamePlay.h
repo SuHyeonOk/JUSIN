@@ -43,7 +43,7 @@ private:
 	const _tchar*	m_szObjName;
 	wstring			m_wstObjName;
 	_float3			m_f3ClickPos = _float3(0.f, 0.f, 0.f);
-	
+
 	// ▶ @ ImGui 를 사용하지 않을 때 주석!
 	// Food
 	_uint			m_iRoyal_Tart_Count = 0;

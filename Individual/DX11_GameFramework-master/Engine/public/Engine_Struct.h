@@ -37,6 +37,14 @@ namespace Engine
 		XMFLOAT4			vSpecular;
 	}LIGHTDESC;
 
+	typedef struct tagKeyframe
+	{
+		double		Time;
+		XMFLOAT3	vScale;
+		XMFLOAT4	vRotation;
+		XMFLOAT3	vPosition;
+	}KEYFRAME;
+
 	typedef struct tagFaceIndices16
 	{
 		unsigned short			_0, _1, _2;
@@ -65,14 +73,13 @@ namespace Engine
 		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexUV;
 		XMFLOAT3		vTangent;
-		/* 이 정점이 사용해야하는 뼈의 인덱스(전체뼈 중의 순서(x), 이 정점이 소속된 메시에 영향을 주는 뼈중의 순서(o))  */
-		XMUINT4			vBlendIndex;
+		XMUINT4			vBlendIndex; /* 이 정점이 사용해야하는 뼈의 인덱스(전체뼈 중의 순서(x), 이 정점이 소속된 메시에 영향을 주는 뼈중의 순서(o))  */
 		XMFLOAT4		vBlendWeight;
 	}VTXANIMMODEL;
 
 	typedef struct ENGINE_DLL tagVertexAnimModel_Declaration
 	{
-		static const unsigned int			iNumElements = 6;
+		static const unsigned int		iNumElements = 6;
 		static D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXANIMMODEL_DECLARATION;
 

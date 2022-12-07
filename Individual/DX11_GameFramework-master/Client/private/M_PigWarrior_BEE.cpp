@@ -26,7 +26,7 @@ HRESULT CM_PigWarrior_BEE::Initialize_Prototype()
 }
 
 HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
-{	
+{
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -40,13 +40,13 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
 		return E_FAIL;
 
- 	if (FAILED(SetUp_Components()))
+	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp		= 30;
-	m_tMonsterInfo.iExp		= 30;
-	m_tMonsterInfo.iAttack	= 5;
+	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.iHp = 30;
+	m_tMonsterInfo.iExp = 30;
+	m_tMonsterInfo.iAttack = 5;
 
 	return S_OK;
 }
@@ -178,6 +178,7 @@ void CM_PigWarrior_BEE::ToThe_Player(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.5);
 
 		// ▣ : 위의 코드 말고, 아래 코드 사용하기

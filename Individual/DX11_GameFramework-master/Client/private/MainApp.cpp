@@ -72,13 +72,13 @@ void CMainApp::Tick(_double TimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	if (nullptr == m_pGameInstance || 
+	if (nullptr == m_pGameInstance ||
 		nullptr == m_pRenderer)
 		return E_FAIL;
 
 	m_pGameInstance->Render_ImGui();
 
-	m_pGameInstance->Clear_Graphic_Device(&_float4(0.5f, 0.5f, 0.5f, 1.f));	
+	m_pGameInstance->Clear_Graphic_Device(&_float4(0.5f, 0.5f, 0.5f, 1.f));
 
 	m_pRenderer->Draw_RenderGroup();
 
@@ -91,7 +91,7 @@ HRESULT CMainApp::Render()
 #ifdef  _DEBUG
 
 	++m_iNumDraw;
-	
+
 	if (m_dTimeAcc >= _double(1))
 	{
 		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iNumDraw);
@@ -100,7 +100,7 @@ HRESULT CMainApp::Render()
 	}
 
 	SetWindowText(g_hWnd, m_szFPS);
-	
+
 #endif //  _DEBUG
 
 	return S_OK;
@@ -131,7 +131,7 @@ HRESULT CMainApp::Resize_BackBuffer()
 
 HRESULT CMainApp::Start_Level(LEVEL eLevelID)
 {
-	if (LEVEL_LOADING == eLevelID || 
+	if (LEVEL_LOADING == eLevelID ||
 		nullptr == m_pGameInstance)
 		return E_FAIL;
 
@@ -157,19 +157,27 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Shader_VtxTex */	
+	/* For.Prototype_Component_Shader_VtxTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTex.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Shader_VtxAnimModel*/
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimModel.hlsl"), VTXANIMMODEL_DECLARATION::Elements, VTXANIMMODEL_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	_matrix			PivotMatrix = XMMatrixIdentity();
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
 	// Player
 	/* For.Prototype_Component_Model_Finn */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Finn"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Finn/Finn.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Finn/Finn.fbx", PivotMatrix))))
 		return E_FAIL;
 	/* For.Prototype_Component_Model_Jake */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Jake"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Jake/Jake.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Finn */
@@ -180,7 +188,6 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake"),
 		CJake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 
 	Safe_AddRef(m_pRenderer);
 

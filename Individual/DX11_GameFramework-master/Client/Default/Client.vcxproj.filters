@@ -97,6 +97,9 @@
     <Filter Include="02.GameObjects\Bullet\Star">
       <UniqueIdentifier>{0fab3231-86cc-4c7f-9783-5d6991169c03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\PigWarrior_WORKER">
+      <UniqueIdentifier>{0c597f2c-43c1-4ff2-ad5a-71f22395d579}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -189,6 +192,9 @@
     <ClInclude Include="..\public\B_Star.h">
       <Filter>02.GameObjects\Bullet\Star</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_PigWarrior_WORKER.h">
+      <Filter>02.GameObjects\Monster\PigWarrior_WORKER</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -265,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="..\private\B_Ster.cpp">
       <Filter>02.GameObjects\Bullet\Star</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_PigWarrior_WORKER.cpp">
+      <Filter>02.GameObjects\Monster\PigWarrior_WORKER</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
