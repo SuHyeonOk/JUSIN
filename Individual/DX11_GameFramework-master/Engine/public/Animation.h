@@ -11,11 +11,12 @@ public:
 	virtual ~CAnimation() = default;
 
 public:
-	void	Set_Repetition(_bool eRepetition) { m_bRepetition = eRepetition; }
-
-public:
 	HRESULT Initialize(aiAnimation* pAIAnimation, class CModel* pModel);
 	void	Update_Bones(_double TimeDelta, _bool bepetition);
+
+public:
+	void	Reset_Channel();
+	void	Reset_Repetition() { m_bRepetition = true; }
 
 private:
 	char								m_szName[MAX_PATH];

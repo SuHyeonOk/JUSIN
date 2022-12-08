@@ -57,6 +57,15 @@ void CFinn::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	Player_Info();
+
+	Current_Player(TimeDelta);
+}
+
+void CFinn::Late_Tick(_double TimeDelta)
+{
+	__super::Late_Tick(TimeDelta);
+
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	//if (pGameInstance->Key_Down(DIK_P))
 	//{
@@ -70,20 +79,9 @@ void CFinn::Tick(_double TimeDelta)
 	//cout << m_AnimiNum << endl;
 	//RELEASE_INSTANCE(CGameInstance);
 
-
-	Player_Info();
-
 	Space_Attack(TimeDelta);
 	Anim_Change(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
-}
-
-void CFinn::Late_Tick(_double TimeDelta)
-{
-	__super::Late_Tick(TimeDelta);
-
-	Current_Player(TimeDelta);
+	m_pModelCom->Play_Animation(TimeDelta);	
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -224,10 +222,17 @@ void CFinn::Player_Follow(_double TimeDelta)
 {
 	// 현재 플레이어를 따라간다.
 
-	if(CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
+	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
 		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
 	else
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	{
+		m_dRun_TimeAcc += TimeDelta;
+		if (1 < m_dRun_TimeAcc)
+		{
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+			m_dRun_TimeAcc = 0;
+		}
+	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -237,19 +242,17 @@ void CFinn::Player_Follow(_double TimeDelta)
 	_vector vPlayerPos;
 	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// Jake 좌표 받아옴
 
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos;												// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+
+	if (3 > fDistanceX)
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
+	else
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
+
 	m_pTransformCom->LookAt(vPlayerPos);
-	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
-
-	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-	//_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
-
-	//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
-
-	//if (2.0f < fDistanceX)	// 거리가 2.0f 이상이라면 바라보며 따라간다. 반대로 2.0f 이하라면 따라가지 않고, 바라보지도 않는다.
-	//{
-	//	m_pTransformCom->LookAt(vPlayerPos);
-	//	m_pTransformCom->Chase(vPlayerPos, TimeDelta);
-	//}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -270,7 +273,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (3.f < fDistanceX)
+	if (4.f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
@@ -362,45 +365,51 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		++m_iSpace_AttackCount;
-		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK;
+		m_dSpace_InputTimeAcc += TimeDelta;
+		m_bSpace_Attack = true;
 	}
-	
+		
 	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFinn::Space_Attack(_double TimeDelta)
 {
 	cout << m_iSpace_AttackCount << endl;
-	if (0 == m_iSpace_AttackCount)
+
+	if (!m_bSpace_Attack)
 		return;
 
-	if (1 == m_iSpace_AttackCount)
+	m_dSpace_AttackTimeAcc += TimeDelta;
+	if (0.5 < m_dSpace_InputTimeAcc)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bSpace_Attack = false;
+		++m_iSpace_AttackCount;
+		m_dSpace_AttackTimeAcc = 0;
+	}
+
+	if (0 == m_iSpace_AttackCount)
 	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
 	}
-	else if (2 == m_iSpace_AttackCount)
+	else if (1 == m_iSpace_AttackCount)
 	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_2;
 	}
-	else if (3 == m_iSpace_AttackCount)
+	else if (2 == m_iSpace_AttackCount)
 	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_3;
-		
 	}
 	else
-	{
-		m_iSpace_AttackCount = 1;
+		m_iSpace_AttackCount = 0;
 
-	}
-
-	// 일정 시간 동안 공격을 하지 않으면 IDLE 상태로 돌아간다.
-	m_dSpace_AttackTimeAcc += TimeDelta;
-	if (6. < m_dSpace_AttackTimeAcc)
+	// 일정 시간 동안 키입력을 하지 않으면 IDLE 상태로 돌아간다.
+	if (5 < m_dSpace_AttackTimeAcc)
 	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bSpace_Attack = false;
 		m_iSpace_AttackCount = 0;
 		m_dSpace_AttackTimeAcc = 0;
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 }
 
@@ -418,21 +427,14 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(49);
 			break;
 
-		//case CObj_Manager::PLAYERINFO::ATTACK:
-		//	Space_Attack(TimeDelta);
-		//	break;
-
 		case CObj_Manager::PLAYERINFO::ATTACK_1:
-			m_pModelCom->Set_Repetition(true);
-			m_pModelCom->Set_AnimIndex(15);
+			m_pModelCom->Set_AnimIndex(18);
 			break;
 		case CObj_Manager::PLAYERINFO::ATTACK_2:
-			m_pModelCom->Set_Repetition(true);
-			m_pModelCom->Set_AnimIndex(16);
+			m_pModelCom->Set_AnimIndex(19);
 			break;
 		case CObj_Manager::PLAYERINFO::ATTACK_3:
-			m_pModelCom->Set_Repetition(true);
-			m_pModelCom->Set_AnimIndex(17);
+			m_pModelCom->Set_AnimIndex(20);
 			break;
 
 		default:

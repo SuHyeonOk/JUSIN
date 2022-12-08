@@ -62,9 +62,12 @@ CBone * CModel::Get_BonePtr(const char * pBoneName)
 	return nullptr;
 }
 
-void CModel::Set_Repetition(_bool eRepetition)
+void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition)
 {
-	m_Animations[m_iCurrentAnimIndex]->Set_Repetition(eRepetition);
+	m_Animations[m_iCurrentAnimIndex]->Reset_Channel();		// 이전 애니메이션의 키프레임, 재생 시간 초기화
+	m_iCurrentAnimIndex = iAnimIndex;						// 이제 실행할 애니메이션 대입
+	m_Animations[m_iCurrentAnimIndex]->Reset_Repetition();	// 반복하지 않는 애니메이션 초기화
+	m_bRepetition = bRepetition;							// 반복 할지 여부를 bool 로 대입
 }
 
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)

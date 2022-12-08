@@ -54,17 +54,17 @@ void CJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	Current_Player(TimeDelta);
 
 
-	Anim_Change();
-	m_pModelCom->Play_Animation(TimeDelta);
 }
 
 void CJake::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Current_Player(TimeDelta);
+	Anim_Change();
+	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -175,7 +175,14 @@ void CJake::Player_Follow(_double TimeDelta)
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
 		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
 	else
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	{
+		m_dRun_TimeAcc += TimeDelta;
+		if (1 < m_dRun_TimeAcc)
+		{
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+			m_dRun_TimeAcc = 0;
+		}
+	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -185,8 +192,17 @@ void CJake::Player_Follow(_double TimeDelta)
 	_vector vPlayerPos;
 	vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// Finn 좌표 받아옴
 
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	if(3 > fDistanceX)
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
+	else
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
+
 	m_pTransformCom->LookAt(vPlayerPos);
-	//m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -207,7 +223,7 @@ void CJake::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (3.f < fDistanceX)
+	if (4.f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면

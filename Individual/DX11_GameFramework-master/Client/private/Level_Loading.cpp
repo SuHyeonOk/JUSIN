@@ -49,34 +49,31 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 
 	if (true == m_pLoader->isFinished())
 	{
-		if (pGameInstance->Key_Down(DIK_RETURN))
+		CLevel*		pLevel = nullptr;
+
+		switch (m_eNextLevelID)
 		{
-			CLevel*		pLevel = nullptr;
+		case LEVEL_TOOL:
+			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_TOOL);
+			pLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
+			break;
 
-			switch (m_eNextLevelID)
-			{
-			case LEVEL_TOOL:
-				CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_TOOL);
-				pLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
-				break;
+		case LEVEL_LOGO:
+			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_LOGO);
+			pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+			break;
 
-			case LEVEL_LOGO:
-				CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_LOGO);
-				pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
-				break;
-
-			case LEVEL_GAMEPLAY:
-				CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_GAMEPLAY);
-				pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
-				break;
-			}
-
-			if (nullptr == pLevel)
-				return;
-
-			if (FAILED(pGameInstance->Open_Level(m_eNextLevelID, pLevel)))
-				return;
+		case LEVEL_GAMEPLAY:
+			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_GAMEPLAY);
+			pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
+			break;
 		}
+
+		if (nullptr == pLevel)
+			return;
+
+		if (FAILED(pGameInstance->Open_Level(m_eNextLevelID, pLevel)))
+			return;
 	}
 
 	Safe_Release(pGameInstance);

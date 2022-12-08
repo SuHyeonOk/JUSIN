@@ -53,9 +53,12 @@ private:
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
+	_double		m_dRun_TimeAcc = 0;			// 핀이 멈춰도 자연스럽게 다가오다가 아이들이 되도록
 
+	_bool		m_bSpace_Attack = false;
 	_uint		m_iSpace_AttackCount = 0;	// Space_Attack() : 공격 3개
-	_double		m_dSpace_AttackTimeAcc = 0;
+	_double		m_dSpace_AttackTimeAcc = 0;	// 일정시간동안 space를 누르지 않으면 공격 상태 초기화
+	_double		m_dSpace_InputTimeAcc = 0;	
 
 	// Anim Test
 	_int	m_AnimiNum = 0;
