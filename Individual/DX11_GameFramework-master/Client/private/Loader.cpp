@@ -18,6 +18,9 @@
 // Bullet
 #include "B_Star.h"
 
+// Stun
+#include "S_StunChick.h"
+
 // Monster
 #include "M_PigWarrior_BEE.h"
 #include "M_PigWarrior_WORKER.h"
@@ -114,6 +117,12 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Star/Star.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// Skill
+	/* For.Prototype_Component_Model_S_StunChick */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_StunChick"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Stun/Confused_Birds/Confused_Birds.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	// Monster
@@ -152,7 +161,10 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	// Skill
-
+	/* For.Prototype_GameObject_S_StunChick */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_StunChick"),
+		CS_StunChick::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// Bullet
 	/* For.Prototype_GameObject_B_Star */
@@ -293,6 +305,14 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	////////////////////////////////////// ¾Ö´Ï¸ðµ¨
+
+	// Skill
+	/* For.Prototype_Component_Model_S_StunChick */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_StunChick"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Stun/Confused_Birds/Confused_Birds.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	// Player
@@ -352,20 +372,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CMap_Garden::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Monster
-	/* For.Prototype_GameObject_M_PigWarrior_BEE */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
-		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_M_Pigs_COWBOY */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
-		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_M_PigWarrior_WORKER */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_WORKER"),
-		CM_PigWarrior_WORKER::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	// Food
 	/* For.Prototype_GameObject_Food */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
@@ -382,6 +388,26 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Page */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
 		CPage::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Skill
+	/* For.Prototype_GameObject_S_StunChick */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_StunChick"),
+		CS_StunChick::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Monster
+	/* For.Prototype_GameObject_M_PigWarrior_BEE */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
+		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Pigs_COWBOY */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
+		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_PigWarrior_WORKER */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_WORKER"),
+		CM_PigWarrior_WORKER::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

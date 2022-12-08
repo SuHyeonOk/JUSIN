@@ -70,6 +70,11 @@ void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition)
 	m_bRepetition = bRepetition;							// 반복 할지 여부를 bool 로 대입
 }
 
+_bool CModel::Get_Finished()
+{
+	return m_Animations[m_iCurrentAnimIndex]->Get_Finished();
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	_uint			iFlag = 0;

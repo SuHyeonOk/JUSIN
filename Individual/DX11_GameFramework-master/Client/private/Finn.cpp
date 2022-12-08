@@ -6,6 +6,7 @@
 #include "M_Monster.h"
 #include "M_PigWarrior_BEE.h"
 
+
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -83,6 +84,8 @@ void CFinn::Late_Tick(_double TimeDelta)
 	//RELEASE_INSTANCE(CGameInstance);
 
 	Space_Attack(TimeDelta);
+	Roolling(TimeDelta);
+	Stun();
 	Anim_Change(TimeDelta);
 	m_pModelCom->Play_Animation(TimeDelta);	
 
@@ -250,7 +253,12 @@ void CFinn::Current_Player(_double TimeDelta)
 		Check_Follow(TimeDelta);									// 근처에 Jake 가 있는지 확인한다.
 	}
 	else
-		Player_Follow(TimeDelta);									// Player 가 내가 아니라면 따라간다.
+	{		
+		if (pGameInstance->Key_Down(DIK_Z))
+			Change(TimeDelta);
+		else
+			Player_Follow(TimeDelta);								// Player 가 내가 아니라면 따라간다.
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -272,7 +280,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
 
-	if (3 > fDistanceX)
+	if (3.f > fDistanceX)
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
 	else
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
@@ -340,6 +348,9 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 void CFinn::Key_Input(_double TimeDelta)
 {
+	if (m_bRoll || m_bStru)
+		return;
+
 	if (m_OnMove)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
@@ -397,53 +408,111 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	////////////////////////////////////////
 
+
+
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		m_dSpace_InputTimeAcc += TimeDelta;
-		m_bSpace_Attack = true;
+
 	}
+
+	if (pGameInstance->Key_Down(DIK_LSHIFT))
+		m_bRoll = true;
 		
 	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFinn::Space_Attack(_double TimeDelta)
 {
-	cout << m_iSpace_AttackCount << endl;
 
-	if (!m_bSpace_Attack)
+}
+
+void CFinn::Roolling(_double TimeDelta)
+{
+	if (!m_bRoll)
 		return;
+	
+	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
+	m_tPlayerInfo.eState = m_tPlayerInfo.ROLL;
 
-	m_dSpace_AttackTimeAcc += TimeDelta;
-	if (0.5 < m_dSpace_InputTimeAcc)
-	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bSpace_Attack = false;
-		++m_iSpace_AttackCount;
-		m_dSpace_AttackTimeAcc = 0;
-	}
-
-	if (0 == m_iSpace_AttackCount)
-	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
-	}
-	else if (1 == m_iSpace_AttackCount)
-	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_2;
-	}
-	else if (2 == m_iSpace_AttackCount)
-	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_3;
-	}
+	if(!m_pModelCom->Get_Finished())
+		m_pTransformCom->Go_Straight(TimeDelta);
 	else
-		m_iSpace_AttackCount = 0;
-
-	// 일정 시간 동안 키입력을 하지 않으면 IDLE 상태로 돌아간다.
-	if (5 < m_dSpace_AttackTimeAcc)
 	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bSpace_Attack = false;
-		m_iSpace_AttackCount = 0;
-		m_dSpace_AttackTimeAcc = 0;
+		m_bRoll = false;
+	}
+}
+
+void CFinn::Stun()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_C))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::STUN);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+	////////
+
+	if (CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player_State())
+		return;		// 스턴이 아니라면 return
+	else
+		m_tPlayerInfo.eState = m_tPlayerInfo.STUN;
+
+	_vector vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+	
+	if (!m_bStru)
+	{
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("S_StunChick_0"), TEXT("Prototype_GameObject_S_StunChick"), &_float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z))))
+			return;
+
+		m_bStru = true;
+	}
+	
+	if (m_pModelCom->Get_Finished())
+		++m_iStun_Count;
+
+	if(2 <= m_iStun_Count)		// 애니메이션 두 번 재생 후 끝
+	{
+		m_bStru = false;
+		m_iStun_Count = 0;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
+}
+
+void CFinn::Change(_double TimeDelta)
+{
+	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player_State())
+		return;
+		
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	// Jake 에게로
+	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
+	RELEASE_INSTANCE(CGameInstance);
+
+	_vector vPlayerPos;
+	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// Jake 좌표 받아옴
+
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos;												// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+
+	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 0.5f);
+	m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+
+	if (0.5f < fDistanceX)
+	{		
+		m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
+
+		if (m_pModelCom->Get_Finished())
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 }
 
@@ -461,17 +530,26 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(49);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK_1:
-			m_pModelCom->Set_AnimIndex(18);
-			break;
-		case CObj_Manager::PLAYERINFO::ATTACK_2:
-			m_pModelCom->Set_AnimIndex(19);
-			break;
-		case CObj_Manager::PLAYERINFO::ATTACK_3:
-			m_pModelCom->Set_AnimIndex(20);
+		case CObj_Manager::PLAYERINFO::ROLL:
+			m_pModelCom->Set_AnimIndex(48, false);
 			break;
 
-		default:
+		case CObj_Manager::PLAYERINFO::ATTACK_1:
+			m_pModelCom->Set_AnimIndex(18, false);
+			break;
+		case CObj_Manager::PLAYERINFO::ATTACK_2:
+			m_pModelCom->Set_AnimIndex(19, false);
+			break;
+		case CObj_Manager::PLAYERINFO::ATTACK_3:
+			m_pModelCom->Set_AnimIndex(20, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STUN: 
+			m_pModelCom->Set_AnimIndex(51, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::CHANGE: 
+			m_pModelCom->Set_AnimIndex(31, false);
 			break;
 		}
 		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);

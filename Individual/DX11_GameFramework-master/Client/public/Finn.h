@@ -51,6 +51,10 @@ private:
 	void	Key_Input(_double TimeDelta);
 
 	void	Space_Attack(_double TimeDelta);
+	void	Roolling(_double TimeDelta);
+	void	Stun();
+	void	Change(_double TimeDelta);
+
 	void	Anim_Change(_double TimeDelta);
 
 private:
@@ -63,7 +67,13 @@ private:
 	_bool		m_bHit = false;
 	_double		m_bHit_TimeAcc = 0;			// 일정 시간 후 Hit 가 꺼짐
 
+	_bool		m_bRoll = false;			// 앞 구르기 
+	_bool		m_bStru = false;			// 스턴
+	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
+
+
 	_bool		m_bSpace_Attack = false;
+	_bool		m_bSpace = false;
 	_uint		m_iSpace_AttackCount = 0;	// Space_Attack() : 공격 3개
 	_double		m_dSpace_AttackTimeAcc = 0;	// 일정시간동안 space를 누르지 않으면 공격 상태 초기화
 	_double		m_dSpace_InputTimeAcc = 0;	

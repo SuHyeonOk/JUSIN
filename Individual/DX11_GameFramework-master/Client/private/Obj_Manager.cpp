@@ -71,7 +71,10 @@ void		CObj_Manager::Current_Player()
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Down(DIK_Z))
+	{
 		m_ChangeTarget++;
+		Set_Current_Player_State(PLAYERINFO::CHANGE);
+	}
 
 	switch (m_ChangeTarget)
 	{

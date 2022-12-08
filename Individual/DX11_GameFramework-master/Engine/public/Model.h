@@ -24,7 +24,8 @@ public:
 
 	class CBone* Get_BonePtr(const char* pBoneName);
 
-	void Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
+	void		Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
+	_bool		Get_Finished();
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix);

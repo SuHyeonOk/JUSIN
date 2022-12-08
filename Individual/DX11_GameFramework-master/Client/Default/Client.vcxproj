@@ -194,6 +194,8 @@
     <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\Page.h" />
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\public\Skill_Manager.h" />
+    <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -224,6 +226,8 @@
     <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\Page.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\private\Skill_Manager.cpp" />
+    <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
