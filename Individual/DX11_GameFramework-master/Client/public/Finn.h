@@ -1,19 +1,23 @@
-#pragma once
+	#pragma once
 
 #include "Client_Defines.h"
 #include "GameObject.h"
 #include "Obj_Manager.h"
 
 BEGIN(Engine)
-class CShader;
-class CRenderer;
 class CModel;
+class CShader;
+class CCollider;
+class CRenderer;
 END
 
 BEGIN(Client)
 
 class CFinn final : public CGameObject
 {
+public:
+	enum COLLIDERTYPE { COLLTYPE_AABB, COLLTYPE_OBB, COLLTYPE_SPHERE, COLLTYPE_END };
+
 private:
 	CFinn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CFinn(const CFinn& rhs);
@@ -30,10 +34,12 @@ private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
+	CCollider*				m_pColliderCom[COLLTYPE_END] = { nullptr };
 
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
+	void	Shader_Time(_double TimeDelta);
 
 private:
 	void	Player_Info();
@@ -54,6 +60,9 @@ private:
 
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 	_double		m_dRun_TimeAcc = 0;			// 핀이 멈춰도 자연스럽게 다가오다가 아이들이 되도록
+
+	_bool		m_bHit = false;
+	_double		m_bHit_TimeAcc = 0;			// 일정 시간 후 Hit 가 꺼짐
 
 	_bool		m_bSpace_Attack = false;
 	_uint		m_iSpace_AttackCount = 0;	// Space_Attack() : 공격 3개

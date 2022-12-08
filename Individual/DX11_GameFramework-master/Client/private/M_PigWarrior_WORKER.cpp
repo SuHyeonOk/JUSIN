@@ -44,8 +44,8 @@ HRESULT CM_PigWarrior_WORKER::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp		= 30;
-	m_tMonsterInfo.iExp		= 30;
+	m_tMonsterInfo.iHp		= 50;
+	m_tMonsterInfo.iExp			= 25;
 	m_tMonsterInfo.iAttack	= 5;
 
 	return S_OK;

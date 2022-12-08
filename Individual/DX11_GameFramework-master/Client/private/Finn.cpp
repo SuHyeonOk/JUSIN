@@ -59,7 +59,10 @@ void CFinn::Tick(_double TimeDelta)
 
 	Player_Info();
 
+	//Shader_Time(TimeDelta); // Shader Hit Time
+
 	Current_Player(TimeDelta);
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -108,6 +111,13 @@ HRESULT CFinn::Render()
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
+#ifdef _DEBUG
+	for (_uint i = 0; i < COLLTYPE_END; ++i)
+	{
+		if (nullptr != m_pColliderCom[i])
+			m_pColliderCom[i]->Render();
+	}
+#endif
 	return S_OK;
 }
 
@@ -128,6 +138,17 @@ HRESULT CFinn::SetUp_Components()
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_AABB */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.3f, 1.2f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
+		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -142,12 +163,12 @@ HRESULT CFinn::SetUp_ShaderResources()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//if (pGameInstance->Key_Pressing(DIK_F))
-	//{
-	//	_bool	bHit = true;
-	//	if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &bHit, sizeof _bool)))
-	//		return E_FAIL;
-	//}
+	if (pGameInstance->Key_Pressing(DIK_F))
+	{
+		m_bHit = true;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &m_bHit, sizeof _bool)))
+			return E_FAIL;
+	}
 
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
@@ -175,6 +196,22 @@ HRESULT CFinn::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CFinn::Shader_Time(_double TimeDelta)
+{
+	if (!m_bHit)
+		return;
+
+	if (m_bHit)
+	{
+		m_bHit_TimeAcc += TimeDelta;
+		if (0.5 < m_bHit_TimeAcc)
+		{
+			m_bHit = false;
+			m_bHit_TimeAcc = 0;
+		}
+	}
 }
 
 void CFinn::Player_Info()
@@ -279,8 +316,8 @@ void CFinn::Check_Follow(_double TimeDelta)
 		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
 		{
 			_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-			_float fLookX = XMVectorGetX(vMyLook);
-			_float fLookZ = XMVectorGetZ(vMyLook);
+			_float		fLookX = XMVectorGetX(vMyLook);
+			_float		fLookZ = XMVectorGetZ(vMyLook);
 
 			_float fAddX, fAddZ;
 			if (0 < fLookX)		// +
@@ -472,6 +509,9 @@ CGameObject * CFinn::Clone(void * pArg)
 void CFinn::Free()
 {
 	__super::Free();
+
+	for (_uint i = 0; i < COLLTYPE_END; ++i)
+		Safe_Release(m_pColliderCom[i]);
 
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);

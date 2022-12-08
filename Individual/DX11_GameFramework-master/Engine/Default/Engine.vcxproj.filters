@@ -121,6 +121,9 @@
     <Filter Include="01.Utility\03.Components\06. Model\Animation\Chaneel">
       <UniqueIdentifier>{65e3fb1f-7105-4599-8edd-d28c3336110a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\07. Collider">
+      <UniqueIdentifier>{fa68c591-74d0-4565-a39d-e87885ab8ddf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -297,6 +300,12 @@
     <ClInclude Include="..\public\Channel.h">
       <Filter>01.Utility\03.Components\06. Model\Animation\Chaneel</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Collider.h">
+      <Filter>01.Utility\03.Components\07. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DebugDraw.h">
+      <Filter>01.Utility\03.Components\07. Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -448,6 +457,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Channel.cpp">
       <Filter>01.Utility\03.Components\06. Model\Animation\Chaneel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DebugDraw.cpp">
+      <Filter>01.Utility\03.Components\07. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Collider.cpp">
+      <Filter>01.Utility\03.Components\07. Collider</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

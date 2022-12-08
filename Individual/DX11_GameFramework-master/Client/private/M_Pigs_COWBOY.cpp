@@ -43,10 +43,10 @@ HRESULT CM_Pigs_COWBOY::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp = 30;
-	m_tMonsterInfo.iExp = 30;
-	m_tMonsterInfo.iAttack = 5;
+	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.iHp		= 30;
+	m_tMonsterInfo.iExp		= 30;
+	m_tMonsterInfo.iAttack	= 10;
 
 	return S_OK;
 }
