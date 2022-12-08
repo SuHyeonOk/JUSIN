@@ -4,7 +4,6 @@
 #include "GameInstance.h"
 
 #include "M_Monster.h"
-#include "M_PigWarrior_BEE.h"
 
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -86,6 +85,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 	Space_Attack(TimeDelta);
 	Roolling(TimeDelta);
 	Stun();
+	Change();
 	Anim_Change(TimeDelta);
 	m_pModelCom->Play_Animation(TimeDelta);	
 
@@ -254,10 +254,7 @@ void CFinn::Current_Player(_double TimeDelta)
 	}
 	else
 	{		
-		if (pGameInstance->Key_Down(DIK_Z))
-			Change(TimeDelta);
-		else
-			Player_Follow(TimeDelta);								// Player 가 내가 아니라면 따라간다.
+		Player_Follow(TimeDelta);									// Player 가 내가 아니라면 따라간다.								
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -280,7 +277,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
 
-	if (3.f > fDistanceX)
+	if (2.7f > fDistanceX)
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
 	else
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
@@ -289,12 +286,15 @@ void CFinn::Player_Follow(_double TimeDelta)
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
-		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	{
+		if (2.0f < fDistanceX)
+			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	}
 	else
 	{
-		if (2 > fDistanceX)
+		if (2.0f > fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-	}
+	}	
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -315,7 +315,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (4.f < fDistanceX)
+	if (3.5f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
@@ -349,7 +349,10 @@ void CFinn::Check_Follow(_double TimeDelta)
 void CFinn::Key_Input(_double TimeDelta)
 {
 	if (m_bRoll || m_bStru)
+	{
+		m_OnMove = false;
 		return;
+	}
 
 	if (m_OnMove)
 	{
@@ -359,6 +362,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+#pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		m_OnMove = true;
@@ -405,15 +409,10 @@ void CFinn::Key_Input(_double TimeDelta)
 		m_OnMove = false;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
-
-	////////////////////////////////////////
-
-
+#pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-	{
-
-	}
+		m_bSpace_Attack = true;
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		m_bRoll = true;
@@ -423,13 +422,28 @@ void CFinn::Key_Input(_double TimeDelta)
 
 void CFinn::Space_Attack(_double TimeDelta)
 {
+	if (!m_bSpace_Attack)
+		return;
 
+	m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
+
+	if(m_OnMove)
+		m_bSpace_Attack = false;
+
+	if (m_pModelCom->Get_Finished())
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bSpace_Attack = false;
+	}
 }
 
 void CFinn::Roolling(_double TimeDelta)
 {
-	if (!m_bRoll)
+	if (!m_bRoll || m_bStru)
+	{
+		m_bRoll = false;
 		return;
+	}
 	
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
 	m_tPlayerInfo.eState = m_tPlayerInfo.ROLL;
@@ -452,10 +466,9 @@ void CFinn::Stun()
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::STUN);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
 	}
 
-	RELEASE_INSTANCE(CGameInstance);
 	////////
 
-	if (CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player_State())
+	if (!m_bStru && CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player_State())
 		return;		// 스턴이 아니라면 return
 	else
 		m_tPlayerInfo.eState = m_tPlayerInfo.STUN;
@@ -483,37 +496,19 @@ void CFinn::Stun()
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CFinn::Change(_double TimeDelta)
+void CFinn::Change()
 {
 	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player_State())
 		return;
-		
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	// Jake 에게로
-	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
-	RELEASE_INSTANCE(CGameInstance);
+	m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
 
-	_vector vPlayerPos;
-	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// Jake 좌표 받아옴
-
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// 내 좌표
-	_vector		vDir = vPlayerPos - vMyPos;												// 내 좌표가 객체를 바라보는 방향 벡터
-
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
-
-	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 0.5f);
-	m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
-
-	if (0.5f < fDistanceX)
-	{		
-		m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
-
-		if (m_pModelCom->Get_Finished())
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-	}
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
 void CFinn::Anim_Change(_double TimeDelta)

@@ -43,9 +43,6 @@ void CAnimation::Reset_Channel()
 
 void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)
 {
-	//if (!bRepetition)
- //		m_bRepetition = false;
-
 	if (true == m_isFinished && false == m_isLooping)
 		return;
 
@@ -62,9 +59,6 @@ void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)
 
 	for (_uint i = 0; i < m_iNumChannels; ++i)
 	{
-		//if (!m_bRepetition && true == m_isFinished)
-		//	return;
-		
 		if (true == m_isFinished)					// 애니메이션이 끝나면
 			m_Channels[i]->Reset_KeyFrameIndex();	// 프레임을 처음으로 초기화
 

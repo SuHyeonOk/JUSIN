@@ -1,4 +1,4 @@
-#include "stdafx.h"
+			  #include "stdafx.h"
 #include "..\public\Jake.h"
 
 #include "GameInstance.h"
@@ -55,15 +55,17 @@ void CJake::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
-
-
 }
 
 void CJake::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Anim_Change();
+	Space_Attack(TimeDelta);
+	Roolling(TimeDelta);
+	Stun();
+	Change();
+	Anim_Change(TimeDelta);
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
@@ -107,6 +109,18 @@ HRESULT CJake::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_Jake"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
+
+	//CCollider::COLLIDERDESC			ColliderDesc;
+
+	///* For.Com_AABB */
+	//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	//ColliderDesc.vSize = _float3(0.35f, 1.f, 0.35f);
+	//ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+
+	//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
+	//	(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -185,19 +199,22 @@ void CJake::Player_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	//if(3 > fDistanceX)
-	//	m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
-	//else
-	//	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
+	if (2.7f > fDistanceX)
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
+	else
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
 
 	m_pTransformCom->LookAt(vPlayerPos);
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
-		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	{
+		if (2.0f < fDistanceX)
+			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	}
 	else
 	{
-		if (2 > fDistanceX)
+		if (2.0f > fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 
@@ -220,7 +237,7 @@ void CJake::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (4.f < fDistanceX)
+	if (3.5f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
@@ -253,7 +270,11 @@ void CJake::Check_Follow(_double TimeDelta)
 
 void CJake::Key_Input(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (m_bRoll || m_bStru)
+	{
+		m_OnMove = false;
+		return;
+	}
 
 	if (m_OnMove)
 	{
@@ -261,6 +282,9 @@ void CJake::Key_Input(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
 	}
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+#pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		m_OnMove = true;
@@ -307,11 +331,100 @@ void CJake::Key_Input(_double TimeDelta)
 		m_OnMove = false;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
+#pragma endregion
+
+	if (pGameInstance->Key_Down(DIK_SPACE))
+		m_bSpace_Attack = true;
+
+	if (pGameInstance->Key_Down(DIK_LSHIFT))
+		m_bRoll = true;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CJake::Anim_Change()
+void CJake::Space_Attack(_double TimeDelta)
+{
+	if (!m_bSpace_Attack)
+		return;
+
+	m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
+
+	if (m_OnMove)
+		m_bSpace_Attack = false;
+
+	if (m_pModelCom->Get_Finished())
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bSpace_Attack = false;
+	}
+}
+
+void CJake::Roolling(_double TimeDelta)
+{
+	if (!m_bRoll || m_bStru)
+	{
+		m_bRoll = false;
+		return;
+	}
+
+	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
+	m_tPlayerInfo.eState = m_tPlayerInfo.ROLL;
+
+	if (!m_pModelCom->Get_Finished())
+		m_pTransformCom->Go_Straight(TimeDelta);
+	else
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bRoll = false;
+	}
+}
+
+void CJake::Stun()
+{
+	if (!m_bStru && CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player_State())
+		return;		// 스턴이 아니라면 return
+	else
+		m_tPlayerInfo.eState = m_tPlayerInfo.STUN;
+
+	_vector vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	if (!m_bStru)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("S_StunChick_1"), TEXT("Prototype_GameObject_S_StunChick"), &_float3(f4MyPos.x, f4MyPos.y + 1.f, f4MyPos.z))))
+			return;
+		RELEASE_INSTANCE(CGameInstance);
+
+		m_bStru = true;
+	}
+
+	if (m_pModelCom->Get_Finished())
+		++m_iStun_Count;
+
+	if (2 <= m_iStun_Count)		// 애니메이션 두 번 재생 후 끝
+	{
+		m_bStru = false;
+		m_iStun_Count = 0;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
+}
+
+void CJake::Change()
+{
+	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player_State())
+		return;
+
+	m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
+
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+}
+
+void CJake::Anim_Change(_double TimeDelta)
 {
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
 	{
@@ -325,11 +438,26 @@ void CJake::Anim_Change()
 			m_pModelCom->Set_AnimIndex(25);
 			break;
 
+		//case CObj_Manager::PLAYERINFO::ROLL:
+		//	m_pModelCom->Set_AnimIndex(48, false);
+		//	break;
+
 		case CObj_Manager::PLAYERINFO::ATTACK_1:
-			m_pModelCom->Set_AnimIndex(0);
+			m_pModelCom->Set_AnimIndex(0, false);
+			break;
+		case CObj_Manager::PLAYERINFO::ATTACK_2:
+			m_pModelCom->Set_AnimIndex(1, false);
+			break;
+		case CObj_Manager::PLAYERINFO::ATTACK_3:
+			m_pModelCom->Set_AnimIndex(2, false);
 			break;
 
-		default:
+		case CObj_Manager::PLAYERINFO::STUN:
+			m_pModelCom->Set_AnimIndex(26, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::CHANGE:
+			m_pModelCom->Set_AnimIndex(10, false);
 			break;
 		}
 		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
