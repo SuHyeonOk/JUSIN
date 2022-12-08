@@ -52,7 +52,6 @@ private:
 	_bool	m_OnMove = false;
 
 	_double	m_dNotfollow_TimeAcc = 0;
-	_double	m_dRun_TimeAcc = 0;			// 핀이 멈춰도 자연스럽게 다가오다가 아이들이 되도록
 
 public:
 	static CJake* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

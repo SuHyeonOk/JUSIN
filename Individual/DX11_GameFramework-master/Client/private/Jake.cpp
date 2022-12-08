@@ -172,18 +172,6 @@ void CJake::Player_Follow(_double TimeDelta)
 {
 	// 현재 플레이어를 따라간다.
 
-	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
-		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
-	else
-	{
-		m_dRun_TimeAcc += TimeDelta;
-		if (1 < m_dRun_TimeAcc)
-		{
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-			m_dRun_TimeAcc = 0;
-		}
-	}
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// Finnxx 에게로
@@ -197,12 +185,21 @@ void CJake::Player_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if(3 > fDistanceX)
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
-	else
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
+	//if(3 > fDistanceX)
+	//	m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
+	//else
+	//	m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
 
 	m_pTransformCom->LookAt(vPlayerPos);
+
+	// 따라갈 때 애니메이션
+	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
+		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+	else
+	{
+		if (2 > fDistanceX)
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }

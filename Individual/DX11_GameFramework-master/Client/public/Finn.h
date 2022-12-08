@@ -59,7 +59,6 @@ private:
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
-	_double		m_dRun_TimeAcc = 0;			// 핀이 멈춰도 자연스럽게 다가오다가 아이들이 되도록
 
 	_bool		m_bHit = false;
 	_double		m_bHit_TimeAcc = 0;			// 일정 시간 후 Hit 가 꺼짐
