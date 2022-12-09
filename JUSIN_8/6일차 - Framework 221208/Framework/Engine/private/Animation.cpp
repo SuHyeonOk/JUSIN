@@ -31,13 +31,10 @@ HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 	return S_OK;
 }
 
-void CAnimation::Update_Bones(_double TimeDelta)
+void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)
 {
-	if (true == m_isFinished &&
-		false == m_isLooping)
-	{
+	if (true == m_isFinished && false == m_isLooping)
 		return;
-	}
 
 	m_PlayTime += m_TickPerSecond * TimeDelta;
 
@@ -45,12 +42,15 @@ void CAnimation::Update_Bones(_double TimeDelta)
 	{
 		m_PlayTime = 0.0;
 		m_isFinished = true;
+
+		if (!bRepetition)
+			return;
 	}
 
 	for (_uint i = 0; i < m_iNumChannels; ++i)
 	{
-		if (true == m_isFinished)
-			m_Channels[i]->Reset_KeyFrameIndex();
+		if (true == m_isFinished)					// 애니메이션이 끝나면
+			m_Channels[i]->Reset_KeyFrameIndex();	// 프레임을 처음으로 초기화
 
 		m_Channels[i]->Update_TransformMatrix(m_PlayTime);
 	}
@@ -58,6 +58,16 @@ void CAnimation::Update_Bones(_double TimeDelta)
 	if (true == m_isFinished)
 		m_isFinished = false;
 
+}
+
+void CAnimation::Reset_Channel()
+{
+	for (_uint i = 0; i < m_iNumChannels; ++i)
+	{
+		m_Channels[i]->Reset_KeyFrameIndex();
+	}
+
+	m_PlayTime = 0.0f;
 }
 
 CAnimation * CAnimation::Create(aiAnimation * pAIAnimation, CModel* pModel)

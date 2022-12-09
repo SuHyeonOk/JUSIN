@@ -12,7 +12,9 @@ public:
 
 public:
 	HRESULT Initialize(aiAnimation* pAIAnimation, class CModel* pModel);
-	void Update_Bones(_double TimeDelta);
+	void Update_Bones(_double TimeDelta, _bool bRepetition);
+
+	void	Reset_Channel();
 
 private:
 	char								m_szName[MAX_PATH];

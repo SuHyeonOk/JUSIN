@@ -74,7 +74,6 @@ HRESULT CTerrain::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"), TEXT("Com_VIBuffer"),
 		(CComponent**)&m_pVIBufferCom)))
@@ -113,6 +112,7 @@ HRESULT CTerrain::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	RELEASE_INSTANCE(CGameInstance);
 
 	/* For.Lights */
 	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
@@ -131,7 +131,6 @@ HRESULT CTerrain::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
 		return E_FAIL;
 
-	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(m_pTextureCom[TYPE_DIFFUSE]->Bind_ShaderResources(m_pShaderCom, "g_DiffuseTexture")))
 		return E_FAIL;

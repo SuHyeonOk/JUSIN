@@ -61,6 +61,13 @@ CBone * CModel::Get_BonePtr(const char * pBoneName)
 	return nullptr;
 }
 
+void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition)
+{
+	m_Animations[m_iCurrentAnimIndex]->Reset_Channel();		// 이전 애니메이션의 키프레임, 재생 시간 초기화
+	m_iCurrentAnimIndex = iAnimIndex;						// 이제 실행할 애니메이션 대입
+	m_bRepetition = bRepetition;							// 반복 할지 여부를 bool 로 대입
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	_uint			iFlag = 0;
@@ -123,15 +130,15 @@ void CModel::Play_Animation(_double TimeDelta)
 	if (TYPE_NONANIM == m_eType)
 		return;
 
-	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신하낟. */
-	m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta);
+	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신한다. */
+	m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
 
 	for (auto& pBone : m_Bones)
 	{
 		if (nullptr != pBone)
 			pBone->Compute_CombindTransformationMatrix();
 	}
-	int a = 10;
+	_int a = 0;
 }
 
 HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType eType, const char * pConstantName)

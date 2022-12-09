@@ -25,9 +25,7 @@ public:
 	class CBone* Get_BonePtr(const char* pBoneName);
 
 public:
-	void Set_AnimIndex(_uint iAnimIndex) {
-		m_iCurrentAnimIndex = iAnimIndex;
-	}
+	void		Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix);
@@ -54,12 +52,14 @@ public:
 	/* 전체 뼈의 갯수. */
 	_uint								m_iNumBones = 0;
 	vector<class CBone*>				m_Bones;
+	_bool								m_bRepetition = false;		// sh 애니메이션을 반복?
 
 	_uint								m_iCurrentAnimIndex = 0;
 	_uint								m_iNumAnimations = 0;
 	vector<class CAnimation*>			m_Animations;
 
 	_float4x4							m_PivotMatrix;
+
 
 public:
 	HRESULT Ready_Bones(aiNode* pNode, class CBone* pParent);
