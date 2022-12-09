@@ -25,6 +25,7 @@ public:
 		enum STATE { IDLE, ATTACK, HIT, DIE, STATE_END };
 
 		STATE	eState		= STATE_END;
+		STATE	ePreState	= STATE_END;
 
 		_int	iHp			= 0;
 		_int	iAttack		= 0;

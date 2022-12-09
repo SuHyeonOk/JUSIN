@@ -47,7 +47,7 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 	m_tMonsterInfo.iHp		= 50;
 	m_tMonsterInfo.iExp		= 25;
 	m_tMonsterInfo.iAttack	= 5;
-
+	m_pModelCom->Set_AnimIndex(7);
 	return S_OK;
 }
 
@@ -55,8 +55,9 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	Monster_Die();
+	//Monster_Tick(TimeDelta);
 
+	Monster_Die();
 	ToThe_Player(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -73,6 +74,8 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 void CM_PigWarrior_BEE::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -93,7 +96,7 @@ HRESULT CM_PigWarrior_BEE::Render()
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -107,7 +110,7 @@ HRESULT CM_PigWarrior_BEE::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -137,6 +140,21 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CM_PigWarrior_BEE::Monster_Tick(_double TimeDelta)
+{
+	switch (m_tMonsterInfo.eState)
+	{
+	case MONSTERINFO::STATE::IDLE:
+		Idle_Tick();
+		break;
+	}
+}
+
+void CM_PigWarrior_BEE::Idle_Tick()
+{
+	m_pModelCom->Set_AnimIndex(7);
 }
 
 void CM_PigWarrior_BEE::Monster_Die()
@@ -170,7 +188,7 @@ void CM_PigWarrior_BEE::ToThe_Player(const _double & TimeDelta)
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
 	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
 
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
 
 	if (fDistanceX < 5.f)
 	{
@@ -181,7 +199,8 @@ void CM_PigWarrior_BEE::ToThe_Player(const _double & TimeDelta)
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.5);
 
-		// ▣ : 위의 코드 말고, 아래 코드 사용하기
+		//// ▣ : 위의 코드 말고, 아래 코드 사용하기
+		//m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
 	}
 

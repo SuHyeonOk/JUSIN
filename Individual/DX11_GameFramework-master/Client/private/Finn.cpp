@@ -48,6 +48,7 @@ HRESULT CFinn::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
 	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
 	return S_OK;
@@ -62,6 +63,7 @@ void CFinn::Tick(_double TimeDelta)
 	//Shader_Time(TimeDelta); // Shader Hit Time
 
 	Current_Player(TimeDelta);
+	Anim_Tick(TimeDelta);
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
@@ -82,12 +84,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 	//cout << m_AnimiNum << endl;
 	//RELEASE_INSTANCE(CGameInstance);
 
-	Space_Attack(TimeDelta);
-	Roolling(TimeDelta);
-	Stun();
-	Change();
-	Anim_Change(TimeDelta);
-	m_pModelCom->Play_Animation(TimeDelta);	
+	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -239,12 +236,30 @@ void CFinn::Player_Info()
 
 }
 
+void CFinn::Player_Tick(_double TimeDelta)
+{
+	switch (m_tPlayerInfo.ePlayer)
+	{
+	default:
+		break;
+	}
+	
+
+	Space_Attack(TimeDelta);
+	Roolling(TimeDelta);
+	Hit();
+	Stun();
+	Change();
+	Cheering();
+	Anim_Change(TimeDelta);
+}
+
 void CFinn::Current_Player(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	CObj_Manager::PLAYERINFO	ePlayerInfo;
 	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
+	RELEASE_INSTANCE(CGameInstance);
 
 	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)					// Player 나라면
 	{
@@ -256,8 +271,6 @@ void CFinn::Current_Player(_double TimeDelta)
 	{		
 		Player_Follow(TimeDelta);									// Player 가 내가 아니라면 따라간다.								
 	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFinn::Player_Follow(_double TimeDelta)
@@ -425,15 +438,55 @@ void CFinn::Space_Attack(_double TimeDelta)
 	if (!m_bSpace_Attack)
 		return;
 
-	m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
-
 	if(m_OnMove)
 		m_bSpace_Attack = false;
+	
+	m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
 
-	if (m_pModelCom->Get_Finished())
+	if (m_pModelCom->Get_Finished())		// 애니메이션이 끝났는데
 	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bSpace_Attack = false;
+		if (m_bSpace_Attack)					// 키 입력이 true 라면
+			m_bSpace_Attack_2 = true;
+		else
+		{
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+			m_bSpace_Attack = false;
+		}
+	}
+
+	if (m_bSpace_Attack_2)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_2;
+
+		if (m_pModelCom->Get_Finished())		// 애니메이션이 끝났는데
+		{
+			if (m_bSpace_Attack)					// 키 입력이 true 라면
+				m_bSpace_Attack_3 = true;
+			else
+			{
+				m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+				m_bSpace_Attack_2 = false;
+				m_bSpace_Attack = false;
+			}
+		}
+	}
+
+	if (m_bSpace_Attack_3)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_3;
+
+		if (m_pModelCom->Get_Finished())		// 애니메이션이 끝났는데
+		{
+			if (m_bSpace_Attack)					// 키 입력이 true 라면
+				m_bSpace_Attack_3 = true;
+			else
+			{
+				m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+				m_bSpace_Attack_3 = false;
+				m_bSpace_Attack_2 = false;
+				m_bSpace_Attack = false;
+			}
+		}
 	}
 }
 
@@ -454,6 +507,32 @@ void CFinn::Roolling(_double TimeDelta)
 	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 		m_bRoll = false;
+	}
+}
+
+void CFinn::Hit()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_V))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
+	}
+	RELEASE_INSTANCE(CGameInstance);
+	////////
+
+	if (CObj_Manager::PLAYERINFO::STATE::HIT != CObj_Manager::GetInstance()->Get_Current_Player_State())
+		return;
+
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		cout << CObj_Manager::GetInstance()->Get_Current_Player().ePlayer << endl;
+
+		m_OnMove = false;
+		m_tPlayerInfo.eState = m_tPlayerInfo.HIT;
+
+		if (m_pModelCom->Get_Finished())
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 }
 
@@ -511,6 +590,26 @@ void CFinn::Change()
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
+void CFinn::Cheering()
+{
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 == CObj_Manager::GetInstance()->Get_Current_Player_State())	// 공격 할 때 춤추기
+		m_bCheering = true;
+
+	if (!m_bCheering)
+		return;
+
+	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())		// 그러다가 이동하면 멈추고 따라가기
+		m_bCheering = false;
+
+	m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
+
+	if (m_pModelCom->Get_Finished())
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bCheering = false;
+	}
+}
+
 void CFinn::Anim_Change(_double TimeDelta)
 {
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
@@ -539,12 +638,20 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(20, false);
 			break;
 
+		case CObj_Manager::PLAYERINFO::HIT:
+			m_pModelCom->Set_AnimIndex(35, false);
+			break;
+
 		case CObj_Manager::PLAYERINFO::STUN: 
 			m_pModelCom->Set_AnimIndex(51, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::CHANGE: 
 			m_pModelCom->Set_AnimIndex(31, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::CHEERING:
+			m_pModelCom->Set_AnimIndex(14, false);
 			break;
 		}
 		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);

@@ -13,7 +13,7 @@ public:
 	typedef struct tagPlayerInfo
 	{
 		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
-		enum STATE { IDLE, RUN, ROLL, ATTACK_1, ATTACK_2, ATTACK_3, HIT, STUN, DIE, CHANGE, STATE_END };
+		enum STATE { IDLE, RUN, ROLL, ATTACK_1, ATTACK_2, ATTACK_3, HIT, STUN, DIE, CHANGE, CHEERING, STATE_END };
 		enum ITEM { ITEM_END };
 
 		PLAYER	ePlayer = PLAYER_END;		// 현재 플레이어

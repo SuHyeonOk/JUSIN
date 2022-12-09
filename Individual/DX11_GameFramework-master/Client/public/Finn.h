@@ -45,6 +45,7 @@ private:
 	void	Player_Info();
 
 private:
+	void	Player_Tick(_double TimeDelta);
 	void	Current_Player(_double TimeDelta);
 	void	Player_Follow(_double TimeDelta);
 	void	Check_Follow(_double TimeDelta);
@@ -52,8 +53,10 @@ private:
 
 	void	Space_Attack(_double TimeDelta);
 	void	Roolling(_double TimeDelta);
+	void	Hit();
 	void	Stun();
 	void	Change();
+	void	Cheering();
 
 	void	Anim_Change(_double TimeDelta);
 
@@ -62,10 +65,12 @@ private:
 
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 
-	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
-
+	// 셰이더
 	_bool		m_bHit = false;
 	_double		m_bHit_TimeAcc = 0;			// 일정 시간 후 Hit 가 꺼짐
+
+	//////////////////////////// 플레이어 일 때
+	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
 	_bool		m_bRoll = false;			// 앞 구르기 
 	_bool		m_bStru = false;			// 스턴
@@ -73,9 +78,15 @@ private:
 
 
 	_bool		m_bSpace_Attack = false;
+	_bool		m_bSpace_Attack_2 = false;
+	_bool		m_bSpace_Attack_3 = false;
+	_uint		m_iSpace_Attack_Count = 0;
 
 	// Anim Test
-	_int	m_AnimiNum = 0;
+	_int		m_AnimiNum = 0;
+
+	//////////////////////////// 플레이어가 아닐 때
+	_bool		m_bCheering = false;
 
 public:
 	static CFinn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -33,7 +33,7 @@ HRESULT CM_Monster::Initialize(void * pArg)
 
 	if (FAILED(__super::Initialize(&MonsterDesc)))
 		return E_FAIL;
-
+	
 	m_pTransformCom->Set_Pos();
 
 	return S_OK;
