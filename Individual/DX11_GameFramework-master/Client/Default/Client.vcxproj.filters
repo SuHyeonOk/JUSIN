@@ -109,6 +109,9 @@
     <Filter Include="77.Manager\Skill">
       <UniqueIdentifier>{0a55d0a0-fc0e-4c57-94f0-c7db11241467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Gonmes_RED">
+      <UniqueIdentifier>{739d5a27-9686-45a1-bf45-67009983ed65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -210,6 +213,9 @@
     <ClInclude Include="..\public\Skill_Manager.h">
       <Filter>77.Manager\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Gronmes_RED.h">
+      <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -295,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Skill_Manager.cpp">
       <Filter>77.Manager\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Gronmes_RED.cpp">
+      <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

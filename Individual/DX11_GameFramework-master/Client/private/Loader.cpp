@@ -25,6 +25,7 @@
 #include "M_PigWarrior_BEE.h"
 #include "M_PigWarrior_WORKER.h"
 #include "M_Pigs_COWBOY.h"
+#include "M_Gronmes_RED.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -78,8 +79,16 @@ HRESULT CLoader::Loading_Tool()
 	Safe_AddRef(pGameInstance);
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+	/* For.Prototype_Component_Texture_B_Star */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Star/Star_%d.png"), 6))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
+													/* For.Prototype_Component_VIBuffer_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
 
@@ -134,6 +143,10 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_COWBOY/Pigs_COWBOY.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gonmes_RED */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_M_Gonmes_RED"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_RED/Gnomes_RED.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 	/* For.Prototype_Component_Shader_VtxNorTex */
@@ -180,6 +193,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_M_Pigs_COWBOY */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
 		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Gronmes_RED */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gronmes_RED"),
+		CM_Gronmes_RED::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

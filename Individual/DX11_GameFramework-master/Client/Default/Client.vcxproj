@@ -187,6 +187,7 @@
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
+    <ClInclude Include="..\public\M_Gronmes_RED.h" />
     <ClInclude Include="..\public\M_Monster.h" />
     <ClInclude Include="..\public\M_Pigs_COWBOY.h" />
     <ClInclude Include="..\public\M_PigWarrior_BEE.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />
+    <ClCompile Include="..\private\M_Gronmes_RED.cpp" />
     <ClCompile Include="..\private\M_Monster.cpp" />
     <ClCompile Include="..\private\M_Pigs_COWBOY.cpp" />
     <ClCompile Include="..\private\M_PigWarrior_BEE.cpp" />

@@ -26,6 +26,7 @@ private:
 private:
 	void				Monster_Tick(_double TimeDelta);
 	void				Idle_Tick();
+	void				Attack_Tick();
 	virtual void		Monster_Die()							override;
 
 private:

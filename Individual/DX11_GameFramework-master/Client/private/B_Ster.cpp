@@ -47,6 +47,20 @@ HRESULT CB_Star::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_f4Pos = _float4(f3Pos.x, f3Pos.y, f3Pos.z, 1.f);
 
+	m_iSizeX = g_iWinSizeX;
+	m_iSizeY = g_iWinSizeY;
+
+	m_fX = m_iSizeX * 0.5f;
+	m_fY = m_iSizeY * 0.5f;
+
+
+	m_pTransformCom->Set_Scaled(_float3(m_iSizeX, m_iSizeY, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION,
+		XMVectorSet(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f, 1.f));
+
+	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(g_iWinSizeX, g_iWinSizeY, 0.f, 1.f));
+
 	return S_OK;
 }
 
@@ -76,7 +90,7 @@ void CB_Star::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
 
 HRESULT CB_Star::Render()
@@ -87,15 +101,9 @@ HRESULT CB_Star::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+	m_pShaderCom->Begin(0);
 
-	for (_uint i = 0; i < iNumMeshes; ++i)
-	{
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
-		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
-		m_pModelCom->Render(m_pShaderCom, i);
-	}
+	m_pVIBufferCom->Render();
 
 	return S_OK;
 }
@@ -108,13 +116,19 @@ HRESULT CB_Star::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Star"), TEXT("Com_Model"),
-		(CComponent**)&m_pModelCom)))
+
+	/* For.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"),
+		(CComponent**)&m_pVIBufferCom)))
+		return E_FAIL;
+
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"),
+		(CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -125,17 +139,16 @@ HRESULT CB_Star::SetUp_ShaderResources()
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(&m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
@@ -168,7 +181,10 @@ void CB_Star::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
+	for (auto& pTextureCom : m_pTextureCom)
+		Safe_Release(pTextureCom);
+
+	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
 }

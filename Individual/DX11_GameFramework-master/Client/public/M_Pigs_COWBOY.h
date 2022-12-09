@@ -26,10 +26,13 @@ private:
 private:
 	void				Monster_Tick(_double TimeDelta);
 	void				Idle_Tick();
-	virtual void		Monster_Die()							override;
+	void				Move_Tick();
+	void				Attack_Tick(_double TimeDelta);
+	void				Hit_Tick();
+	void				Die_Tick();
 
 private:
-	void				ToThe_Player(const _double& TimeDelta);
+	_double				m_dBullet_TimeAcc = 0;		// 총알 을 몇 초마다 발사할 것 인지.
 
 public:
 	static	CM_Pigs_COWBOY*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

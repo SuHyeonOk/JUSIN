@@ -59,9 +59,6 @@ void CM_Pigs_COWBOY::Tick(_double TimeDelta)
 
 	Monster_Tick(TimeDelta);
 
-	Monster_Die();
-	//ToThe_Player(TimeDelta);
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// 나랑 총알의 위치를 비교하다가 총알이 
@@ -152,18 +149,82 @@ void CM_Pigs_COWBOY::Monster_Tick(_double TimeDelta)
 	{
 	case MONSTERINFO::STATE::IDLE:
 		Idle_Tick();
-		m_pModelCom->Set_AnimIndex(1);
+		m_pModelCom->Set_AnimIndex(7);
+		break;
+
+	case MONSTERINFO::STATE::MOVE:
+		Move_Tick();
+		m_pModelCom->Set_AnimIndex(9);
+		break;
+
+	case MONSTERINFO::STATE::ATTACK:
+		Attack_Tick(TimeDelta);
+		m_pModelCom->Set_AnimIndex(0);
+		break;
+
+	case MONSTERINFO::STATE::HIT:
+		Hit_Tick();
+		m_pModelCom->Set_AnimIndex(6);
+		break;
+
+	case MONSTERINFO::STATE::DIE:
+		Die_Tick();
+		m_pModelCom->Set_AnimIndex(3);
 		break;
 	}
 }
 
 void CM_Pigs_COWBOY::Idle_Tick()
 {
-	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	
+	// IDLE 상태로 있다가 플레이어가 주변에 있는지 계속 확인한다.
+
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
+	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
+
+	if (fDistanceX < 5.f)	// 거리 안 으로 들어왔다면 ATTACK, 바라보기
+	{
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+	}
 }
 
-void CM_Pigs_COWBOY::Monster_Die()
+void CM_Pigs_COWBOY::Move_Tick()
+{
+}
+
+void CM_Pigs_COWBOY::Attack_Tick(_double TimeDelta)
+{
+	// 몬스터 위치에서 플레이어를 향해 총알 발사.
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_vector	vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	// 총알 범위 안에 들어온지 1초가 지나면 총알을 발사한다.
+	m_dBullet_TimeAcc += TimeDelta;
+	if (2 < m_dBullet_TimeAcc)
+	{
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &_float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z))))
+			return;
+
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_dBullet_TimeAcc = 0;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CM_Pigs_COWBOY::Hit_Tick()
+{
+}
+
+void CM_Pigs_COWBOY::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
@@ -187,35 +248,6 @@ void CM_Pigs_COWBOY::Monster_Die()
 	}
 
 	return;
-}
-
-void CM_Pigs_COWBOY::ToThe_Player(const _double & TimeDelta)
-{
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
-	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
-
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
-
-	if (fDistanceX < 5.f)	// 거리 안 으로 들어왔다면 플레이어를 향해 총알 발사
-	{
-		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());		// 플레이어가 거리 안 으로 들어왔다면 바라보기
-
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-		_vector	vMyPos;
-		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-		_float4	f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		if (pGameInstance->Key_Down(DIK_B)) {
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &_float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z))))
-				return;
-		}
-
-		RELEASE_INSTANCE(CGameInstance);
-	}
 }
 
 CM_Pigs_COWBOY * CM_Pigs_COWBOY::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

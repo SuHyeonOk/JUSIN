@@ -5,14 +5,18 @@
 
 BEGIN(Engine)
 class CShader;
+class CTexture;
 class CRenderer;
-class CModel;
+class CVIBuffer_Terrain;
 END
 
 BEGIN(Client)
 
 class CB_Star final : public CGameObject
 {
+public:
+	enum TEXTURE { TYPE_DIFFUSE, TYPE_BRUSH, TYPE_FILTER, TYPE_END };
+
 public:
 	typedef struct tagBulletDesc
 	{
@@ -37,12 +41,20 @@ private:
 	HRESULT					SetUp_ShaderResources();
 
 private:
-	CRenderer*				m_pRendererCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
-	CModel*					m_pModelCom = nullptr;
+	CRenderer*				m_pRendererCom = nullptr;
+	CTexture*				m_pTextureCom[TYPE_END] = { nullptr };
+	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
 
 private:
 	_float4					m_f4Pos;
+
+private:
+	_float4x4				m_ViewMatrix;
+	_float4x4				m_ProjMatrix;
+
+	_float					m_fX, m_fY;
+		_int m_iSizeX, m_iSizeY;
 
 public:
 	static	CB_Star*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -31,9 +31,9 @@ void CLevel_Logo::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	ImGui::Begin("FullscrrenTest");
-	ImGui::Text("%d", g_bFullScreen);
-	ImGui::End();
+	//ImGui::Begin("FullscrrenTest");
+	//ImGui::Text("%d", g_bFullScreen);
+	//ImGui::End();
 		
 }
 
