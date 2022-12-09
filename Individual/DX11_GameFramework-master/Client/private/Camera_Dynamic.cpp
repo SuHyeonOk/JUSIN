@@ -51,7 +51,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	m_vMinCamPos = _float4(0.f, 6.f, -7.f, 1.f);
+	m_vMinCamPos = _float4(0.f, 4.5f, -5.f, 1.f);
 
 	return S_OK;
 }
@@ -154,7 +154,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4TargetPos;
 		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 6.f, vf4TargetPos.z - 7.f, 1.f);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 4.5f, vf4TargetPos.z - 5.f, 1.f);
 		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 		
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
@@ -163,9 +163,9 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
 
 		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
-
-		if (10.f < fDistanceX || 7.7f > fDistanceX)		// 빠르게 따라간다. 9.17
-			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.4); // ▤ : 1.4 가 아닌 자연스럽게 따라갈 수 있도록 수정
+		cout << fDistanceX << endl;
+		if (7.f < fDistanceX || 6.f > fDistanceX)		// 빠르게 따라간다. 9.17
+			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45); // ▤ : 1.4 가 아닌 자연스럽게 따라갈 수 있도록 수정
 		else	// 그냥 따라간다.
 			m_pTransformCom->Chase(vTargetPos, TimeDelta);
 	}
@@ -176,32 +176,47 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_vector vPlayerPos, vTargetPos;
 		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		vTargetPos = vPlayerPos + XMLoadFloat4(&m_vMinCamPos);
-		vTargetPos = XMVectorSetW(vTargetPos, 1.f);
+
+		_float4 vf4TargetPos;
+		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 4.f, vf4TargetPos.z - 5.f, 1.f);
+		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
 
-		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
-		_vector		vDir =  vPlayerPos - vMyPos;												// 내 좌표가 객체를 바라보는 방향 벡터
-		_vector		vMinDir = XMVectorSet(0.f, 1.f, 0.f, 1.f); // XMLoadFloat4(&m_vMinCamPos);	// 여기서는 실제 내 카메라의 좌표가 아닌, 임의의 축을 기준으로 계산하도록 한다.
+		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
 
-		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
-		_float		fMinCamPos = XMVectorGetX(XMVector3Length(vMinDir));
+		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
+		cout << fDistanceX << endl;
+		if (7.f < fDistanceX || 5.5f > fDistanceX)		// 빠르게 따라간다. 9.17
+			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45); // ▤ : 1.4 가 아닌 자연스럽게 따라갈 수 있도록 수정
+		else	// 그냥 따라간다.
+			m_pTransformCom->Chase(vTargetPos, TimeDelta);
 
-		_float		fTemp = (fDistanceX - fMinCamPos) / (10.f - fMinCamPos);
-		if (1.f < fTemp)
-			fTemp = 1.f;
-		else if (0.f > fTemp)
-			fTemp *= -1;
-		//cout << fTemp << endl;
-		m_fSpeed = 5.f * fTemp;	// 5.f PlayerSpeed
+		//_vector vPlayerPos, vTargetPos;
+		//vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		//vTargetPos = vPlayerPos + XMLoadFloat4(&m_vMinCamPos);
+		//vTargetPos = XMVectorSetW(vTargetPos, 1.f);
 
-		m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
+		//// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
 
-		//if (10.f < fDistanceX || 7.7f > fDistanceX)		// 빠르게 따라간다. 9.17
-		//	m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.4);
-		//else	// 그냥 따라간다.
-		//	m_pTransformCom->Chase(vTargetPos, TimeDelta);
+		//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
+		//_vector		vDir =  vPlayerPos - vMyPos;												// 내 좌표가 객체를 바라보는 방향 벡터
+		//_vector		vMinDir = XMVectorSet(0.f, 1.f, 0.f, 1.f); // XMLoadFloat4(&m_vMinCamPos);	// 여기서는 실제 내 카메라의 좌표가 아닌, 임의의 축을 기준으로 계산하도록 한다.
+
+		//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X 값을 뽑아와 거리 확인
+		//_float		fMinCamPos = XMVectorGetX(XMVector3Length(vMinDir));
+
+		//_float		fTemp = (fDistanceX - fMinCamPos) / (10.f - fMinCamPos);
+		//if (1.f < fTemp)
+		//	fTemp = 1.f;
+		//else if (0.f > fTemp)
+		//	fTemp *= -1;
+		////cout << fTemp << endl;
+		//m_fSpeed = 5.f * fTemp;	// 5.f PlayerSpeed
+
+		//m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
 	}
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.FREE)
 	{

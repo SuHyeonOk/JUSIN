@@ -24,6 +24,8 @@ private:
 	virtual HRESULT		SetUp_ShaderResources()					override;
 
 private:
+	void				Monster_Tick(_double TimeDelta);
+	void				Idle_Tick();
 	virtual void		Monster_Die()							override;
 
 private:

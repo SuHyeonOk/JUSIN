@@ -15,10 +15,8 @@ public:
 	void	Update_Bones(_double TimeDelta, _bool bepetition);
 
 public:
-	_bool	Get_Finished() { return m_isFinished; }
-
 	void	Reset_Channel();
-	void	Reset_Repetition() { m_bRepetition = true; }
+	_bool	Get_Finished() { return m_isFinished; }
 
 private:
 	char								m_szName[MAX_PATH];

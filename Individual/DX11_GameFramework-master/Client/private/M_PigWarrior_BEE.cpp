@@ -43,11 +43,17 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	//애니메이션 m_pModelCom->Set_AnimIndex(); 로 변경 하잖아용... 그런데 Initialize() 에서 Set 한 애니메이션은 잘 동작하는데
+	//	Tick 이나 Late_Tick 에서 호출한 Set 으로는 실행이 안 돼요ㅠㅠ 혹시 이런 적 없으시죠..?
+	// 애니메이션 잘 돌아가고 있난 Play_Animation 에서 확인해 보는데 제가 Set 한 Index 도 잘 들어오거등요..
+	
+	//m_pModelCom->Set_AnimIndex(7);
+
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.iHp		= 50;
 	m_tMonsterInfo.iExp		= 25;
 	m_tMonsterInfo.iAttack	= 5;
-	m_pModelCom->Set_AnimIndex(7);
+	
 	return S_OK;
 }
 
@@ -55,7 +61,7 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//Monster_Tick(TimeDelta);
+	Monster_Tick(TimeDelta);
 
 	Monster_Die();
 	ToThe_Player(TimeDelta);
@@ -144,9 +150,11 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 
 void CM_PigWarrior_BEE::Monster_Tick(_double TimeDelta)
 {
+
+
 	switch (m_tMonsterInfo.eState)
 	{
-	case MONSTERINFO::STATE::IDLE:
+	case MONSTERINFO::STATE::DIE:
 		Idle_Tick();
 		break;
 	}
@@ -197,11 +205,11 @@ void CM_PigWarrior_BEE::ToThe_Player(const _double & TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.5);
+		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.f);
 
 		//// ▣ : 위의 코드 말고, 아래 코드 사용하기
 		//m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
+		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
 	}
 
 }

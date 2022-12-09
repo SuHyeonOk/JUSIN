@@ -179,10 +179,10 @@ void CM_PigWarrior_WORKER::ToThe_Player(const _double & TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.5);
+		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.f);
 
 		// ▣ : 위의 코드 말고, 아래 코드 사용하기
-		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.5);
+		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 11.f5);
 	}
 
 }

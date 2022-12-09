@@ -43,6 +43,8 @@ HRESULT CM_Pigs_COWBOY::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	m_pModelCom->Set_AnimIndex(7);
+
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.iHp		= 30;
 	m_tMonsterInfo.iExp		= 30;
@@ -55,9 +57,10 @@ void CM_Pigs_COWBOY::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	Monster_Die();
+	Monster_Tick(TimeDelta);
 
-	ToThe_Player(TimeDelta);
+	Monster_Die();
+	//ToThe_Player(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -75,6 +78,8 @@ void CM_Pigs_COWBOY::Tick(_double TimeDelta)
 void CM_Pigs_COWBOY::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+	
+	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -95,7 +100,7 @@ HRESULT CM_Pigs_COWBOY::Render()
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -109,7 +114,7 @@ HRESULT CM_Pigs_COWBOY::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -141,13 +146,30 @@ HRESULT CM_Pigs_COWBOY::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CM_Pigs_COWBOY::Monster_Tick(_double TimeDelta)
+{
+	switch (m_tMonsterInfo.eState)
+	{
+	case MONSTERINFO::STATE::IDLE:
+		Idle_Tick();
+		m_pModelCom->Set_AnimIndex(1);
+		break;
+	}
+}
+
+void CM_Pigs_COWBOY::Idle_Tick()
+{
+	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	
+}
+
 void CM_Pigs_COWBOY::Monster_Die()
 {
 	// 몬스터가 죽고 나면 할 행동
 
 	if (0 >= m_tMonsterInfo.iHp)
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 
 		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치
 
@@ -185,8 +207,6 @@ void CM_Pigs_COWBOY::ToThe_Player(const _double & TimeDelta)
 
 		_float4	f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		//cout << f4MyPos.x << " | " << f4MyPos.y << " | " << f4MyPos.z << endl;
 
 		if (pGameInstance->Key_Down(DIK_B)) {
 
