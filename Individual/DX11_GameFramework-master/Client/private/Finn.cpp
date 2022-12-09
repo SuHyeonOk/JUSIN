@@ -256,7 +256,8 @@ void CFinn::Player_Tick(_double TimeDelta)
 
 	//////////////////////////////////////////////////////// 위는 테스트를 위한 것
 
-	Change();
+	Change_Tick();
+	Cheering_Tick();
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
@@ -264,24 +265,21 @@ void CFinn::Player_Tick(_double TimeDelta)
 	switch (m_tPlayerInfo.eState)
 	{
 	case CObj_Manager::PLAYERINFO::ATTACK_1:
-		Space_Attack(TimeDelta);
+		Space_Attack_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::ROLL:
-		Roolling(TimeDelta);
+		Roolling_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::HIT:
-		Hit();
+		Hit_Tick();
 		break;
 
 	case CObj_Manager::PLAYERINFO::STUN:
-		Stun();
+		Stun_Tick();
 		break;
 
-	case CObj_Manager::PLAYERINFO::CHEERING:
-		Cheering();
-		break;
 	}
 
 	Anim_Change(TimeDelta);
@@ -464,7 +462,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CFinn::Space_Attack(_double TimeDelta)
+void CFinn::Space_Attack_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
@@ -472,7 +470,7 @@ void CFinn::Space_Attack(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::Roolling(_double TimeDelta)
+void CFinn::Roolling_Tick(_double TimeDelta)
 {
 	if (m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 		return;
@@ -485,7 +483,7 @@ void CFinn::Roolling(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::Hit()
+void CFinn::Hit_Tick()
 {
 	m_OnMove = false;
 
@@ -493,7 +491,7 @@ void CFinn::Hit()
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::Stun()
+void CFinn::Stun_Tick()
 {
 	_vector vMyPos;
 	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -521,7 +519,7 @@ void CFinn::Stun()
 	}
 }
 
-void CFinn::Change()
+void CFinn::Change_Tick()
 {
 	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return;
@@ -533,18 +531,18 @@ void CFinn::Change()
 		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.IDLE);
 }
 
-void CFinn::Cheering()
+void CFinn::Cheering_Tick()
 {
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return;
 
-		if (m_pModelCom->Get_Finished())
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-	}
+	m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
+
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
 void CFinn::Anim_Change(_double TimeDelta)
