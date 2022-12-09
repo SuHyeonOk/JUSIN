@@ -55,7 +55,7 @@ void CS_StunChick::Tick(_double TimeDelta)
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
-	if (CObj_Manager::PLAYERINFO::STATE::STUN == CObj_Manager::GetInstance()->Get_Current_Player_State())
+	if (CObj_Manager::PLAYERINFO::STATE::STUN == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		m_Player_Strun = true;
 	else
 	{

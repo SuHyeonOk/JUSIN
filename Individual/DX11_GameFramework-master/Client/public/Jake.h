@@ -37,7 +37,7 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
-	void	Anim_Tick(_double TimeDelta);
+	void	Player_Tick(_double TimeDelta);
 	void	Current_Player(_double TimeDelta);
 	void	Player_Follow(_double TimeDelta);
 	void	Check_Follow(_double TimeDelta);

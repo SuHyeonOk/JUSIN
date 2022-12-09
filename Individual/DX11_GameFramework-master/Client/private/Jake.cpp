@@ -44,6 +44,7 @@ HRESULT CJake::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
+	m_pModelCom->Set_AnimIndex(18);
 
 	m_tPlayerInfo.ePlayer	= m_tPlayerInfo.JAKE;
 	m_tPlayerInfo.eState	= m_tPlayerInfo.IDLE;
@@ -56,7 +57,7 @@ void CJake::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
-	Anim_Tick(TimeDelta);
+	Player_Tick(TimeDelta);
 }
 
 void CJake::Late_Tick(_double TimeDelta)
@@ -160,25 +161,42 @@ HRESULT CJake::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CJake::Anim_Tick(_double TimeDelta)
+void CJake::Player_Tick(_double TimeDelta)
 {
-	Space_Attack(TimeDelta);
-	Roolling(TimeDelta);
-	Hit();
-	Stun();
 	Change();
-	Cheering();
+
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
+
+	switch (m_tPlayerInfo.eState)
+	{
+	case CObj_Manager::PLAYERINFO::ATTACK_1:
+		Space_Attack(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::ROLL:
+		Roolling(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::HIT:
+		Hit();
+		break;
+
+	case CObj_Manager::PLAYERINFO::STUN:
+		Stun();
+		break;
+
+	case CObj_Manager::PLAYERINFO::CHEERING:
+		Cheering();
+		break;
+	}
+
 	Anim_Change(TimeDelta);
 }
 
 void CJake::Current_Player(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CObj_Manager::PLAYERINFO	ePlayerInfo;
-	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
-
-	if (ePlayerInfo.ePlayer == ePlayerInfo.JAKE)
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
 		Key_Input(TimeDelta);
@@ -188,8 +206,6 @@ void CJake::Current_Player(_double TimeDelta)
 	{
 		Player_Follow(TimeDelta);
 	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CJake::Player_Follow(_double TimeDelta)
@@ -209,23 +225,23 @@ void CJake::Player_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (2.7f > fDistanceX)
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 2.f);
+	if (2.2f > fDistanceX)
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f);
 	else
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 2.f);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f);
 
 	m_pTransformCom->LookAt(vPlayerPos);
 
 	// 따라갈 때 애니메이션
-	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State() ||
-		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player_State())
+	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
-		if (2.0f < fDistanceX)
+		if (1.5f < fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
 	}
 	else
 	{
-		if (2.0f > fDistanceX)
+		if (1.5f > fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 
@@ -248,10 +264,10 @@ void CJake::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (3.5f < fDistanceX)
+	if (3.f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
-		if (5 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
+		if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
 		{
 			_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 			_float fLookX = XMVectorGetX(vMyLook);
@@ -281,7 +297,9 @@ void CJake::Check_Follow(_double TimeDelta)
 
 void CJake::Key_Input(_double TimeDelta)
 {
-	if (m_bRoll || m_bStru)
+	if (m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
+		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
+		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 	{
 		m_OnMove = false;
 		return;
@@ -290,7 +308,7 @@ void CJake::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
-		m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -340,89 +358,50 @@ void CJake::Key_Input(_double TimeDelta)
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		m_bSpace_Attack = true;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK_1);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
-		m_bRoll = true;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CJake::Space_Attack(_double TimeDelta)
 {
-	if (!m_bSpace_Attack)
-		return;
-
-	m_tPlayerInfo.eState = m_tPlayerInfo.ATTACK_1;
-
-	if (m_OnMove)
-		m_bSpace_Attack = false;
+	m_OnMove = false;
 
 	if (m_pModelCom->Get_Finished())
-	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bSpace_Attack = false;
-	}
 }
 
 void CJake::Roolling(_double TimeDelta)
 {
-	if (!m_bRoll || m_bStru)
-	{
-		m_bRoll = false;
+	if (m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 		return;
-	}
 
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
-	m_tPlayerInfo.eState = m_tPlayerInfo.ROLL;
 
 	if (!m_pModelCom->Get_Finished())
 		m_pTransformCom->Go_Straight(TimeDelta);
 	else
-	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bRoll = false;
-	}
 }
 
 void CJake::Hit()
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	m_OnMove = false;
 
-	if (pGameInstance->Key_Down(DIK_V))
-	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
-	}
-	RELEASE_INSTANCE(CGameInstance);
-	
-	////////
-	if (CObj_Manager::PLAYERINFO::STATE::HIT != CObj_Manager::GetInstance()->Get_Current_Player_State())
-		return;
-
-	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	{
-		cout << CObj_Manager::GetInstance()->Get_Current_Player().ePlayer << endl;
-
-		m_OnMove = false;
-		m_tPlayerInfo.eState = m_tPlayerInfo.HIT;
-
-		if (m_pModelCom->Get_Finished())
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-	}
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
 void CJake::Stun()
 {
-	if (!m_bStru && CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player_State())
-		return;		// 스턴이 아니라면 return
-	else
-		m_tPlayerInfo.eState = m_tPlayerInfo.STUN;
-
 	_vector vMyPos;
 	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4	f4MyPos;
@@ -446,38 +425,32 @@ void CJake::Stun()
 		m_bStru = false;
 		m_iStun_Count = 0;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 }
 
 void CJake::Change()
 {
-	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player_State())
+	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return;
 
+	m_OnMove = false;
 	m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
 
 	if (m_pModelCom->Get_Finished())
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.IDLE);
 }
 
 void CJake::Cheering()
 {
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 == CObj_Manager::GetInstance()->Get_Current_Player_State())	// 공격 할 때 춤추기
-		m_bCheering = true;
-
-	if (!m_bCheering)
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player_State())		// 그러다가 이동하면 멈추고 따라가기
-		m_bCheering = false;
-
-	m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
-
-	if (m_pModelCom->Get_Finished())
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bCheering = false;
+		m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
+
+		if (m_pModelCom->Get_Finished())
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 }
 
@@ -525,7 +498,9 @@ void CJake::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(20, false);
 			break;
 		}
-		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
+
+		if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
 		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
 	}
 }

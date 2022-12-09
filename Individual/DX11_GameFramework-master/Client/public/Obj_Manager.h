@@ -47,7 +47,7 @@ public:
 	// Player 정보
 	PLAYERINFO			Get_Current_Player() { return m_tPlayerInfo; }
 	void				Set_Current_Player(PLAYERINFO ePlayerInfo) { m_tPlayerInfo = ePlayerInfo; }
-	PLAYERINFO::STATE	Get_Current_Player_State() { return m_tPlayerInfo.eState; }
+	//PLAYERINFO::STATE	Get_Current_Player_State() { return m_tPlayerInfo.eState; }
 	void				Set_Current_Player_State(PLAYERINFO::STATE	eState) { m_tPlayerInfo.eState = eState; }
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
