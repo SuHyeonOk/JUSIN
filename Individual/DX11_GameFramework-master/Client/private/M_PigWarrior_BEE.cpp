@@ -66,8 +66,9 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		// TODO : 충돌처리가 가능해 지면 수정
+		// TODO : 충돌처리가 가능해 지면 수정 (둘 다 한 번만 호출 되어야 함)
 		m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -146,16 +147,8 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 
 void CM_PigWarrior_BEE::Monster_Tick(const _double& TimeDelta)
 {
-	if (m_tMonsterInfo.eState == m_tMonsterInfo.MOVE)
-	{
-		_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-		if (1.5f > fDistance)
-			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-		else
-			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-	}
-
-	/////////////////////////////////////////////////////////////
+	if (0 >= m_tMonsterInfo.iHp)
+		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	switch (m_tMonsterInfo.eState)
 	{
@@ -193,30 +186,45 @@ void CM_PigWarrior_BEE::Monster_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior_BEE::Idle_Tick(const _double& TimeDelta)
 {
+	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	if (!m_bAttack && 1.5f > fDistance)
+		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+
 	if(m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-
-
 }
 
 void CM_PigWarrior_BEE::Move_Tick(const _double& TimeDelta)
 {
-	_bool bArrival = CUtilities_Manager::GetInstance()->Get_RandomPos(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
+	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	if (!m_bAttack && 1.5f > fDistance)
+		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+
+	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 5.f, TimeDelta);
 
 	if (bArrival)
+	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_bAttack = false;
+	}
 }
 
 void CM_PigWarrior_BEE::Find_Tick()
 {
-	if (m_pModelCom->Get_Finished())
+	if (25 == m_pModelCom->Get_Keyframes())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 }
 
 void CM_PigWarrior_BEE::Attack_Tick(const _double& TimeDelta)
 {
-	if(m_pModelCom->Get_Finished())
+	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
+	if (0 == iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
+	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+		m_bAttack = true;
+	}
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
@@ -224,32 +232,27 @@ void CM_PigWarrior_BEE::Attack_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior_BEE::Hit_Tick()
 {
+	if (m_pModelCom->Get_Finished())
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
 
 void CM_PigWarrior_BEE::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
-	if (0 >= m_tMonsterInfo.iHp)
+	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+
+	if (!m_OneCoin)	// 동전 생성
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
+		// Item
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vf4MyPos;
+		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
 
-		if (!m_OneCoin)	// 동전 생성
-		{
-			// Item
-			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-			_float4 vf4MyPos;
-			XMStoreFloat4(&vf4MyPos, vMyPos);
-
-			CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
-
-			m_OneCoin = true;
-		}
+		m_OneCoin = true;
 	}
-
-	return;
 }
 
 CM_PigWarrior_BEE * CM_PigWarrior_BEE::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

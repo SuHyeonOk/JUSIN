@@ -77,6 +77,11 @@ _bool CModel::Get_Finished()
 	return m_Animations[m_iCurrentAnimIndex]->Get_Finished();
 }
 
+_int CModel::Get_Keyframes()
+{
+	return m_Animations[m_iCurrentAnimIndex]->Get_Keyframes();
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	_uint			iFlag = 0;

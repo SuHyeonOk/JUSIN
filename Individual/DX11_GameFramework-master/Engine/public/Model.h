@@ -26,6 +26,7 @@ public:
 
 	void		Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
 	_bool		Get_Finished();
+	_int		Get_Keyframes();
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix);

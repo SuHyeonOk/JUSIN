@@ -17,7 +17,7 @@ public:
 public:
 	void	Reset_Channel();
 	_bool	Get_Finished() { return m_isFinished; }
-	//_double	Get_
+	_int	Get_Keyframes();
 
 private:
 	char								m_szName[MAX_PATH];

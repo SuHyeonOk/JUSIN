@@ -55,6 +55,9 @@ protected:	// 자식에게 거의 필수적인 함수
 protected:	// 자식이 자주 사용할 함수
 	virtual void		Monster_Die() {};
 
+protected:		
+	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 5.f);	// 랜덤 위치로 이동하는 기능.
+
 protected:
 	CRenderer*			m_pRendererCom = nullptr;
 	CShader*			m_pShaderCom = nullptr;
@@ -65,6 +68,10 @@ protected:
 
 protected:
 	_bool				m_OneCoin = false;	// Monster_Die();
+
+private:
+	_float4				m_f4RandomPos;
+	_bool				m_bRandomPos = false;
 
 public:
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

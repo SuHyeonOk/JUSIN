@@ -11,15 +11,16 @@ private:
 	virtual ~CChannel() = default;
 
 public:
+	void	Reset_KeyFrameIndex()	{ m_iCurrentKeyFrameIndex = 0; }
+	_uint	Get_Keyframes()			{ return m_iCurrentKeyFrameIndex;}
+
+public:
 	HRESULT Initialize(aiNodeAnim* pAIChannel, class CModel* pModel);
 	void Update_TransformMatrix(_double PlayTime);
-	void Reset_KeyFrameIndex() {
-		m_iCurrentKeyFrameIndex = 0;
-	}
 
 private:
-	char			m_szName[MAX_PATH] = "";
-	class CBone*	m_pBone = nullptr;
+	char				m_szName[MAX_PATH] = "";
+	class CBone*		m_pBone = nullptr;
 
 	_uint				m_iNumKeyframes = 0;
 	vector<KEYFRAME>	m_KeyFrames;

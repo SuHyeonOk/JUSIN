@@ -37,6 +37,9 @@ private:
 	_float4				m_f4RandomPos;
 	_bool				m_bRandomPos = false;
 
+	_bool				m_bAttack = false;
+	_uint				m_iAttack_Count = 0;
+
 	_double				m_bTimeAcc = 0;
 
 public:

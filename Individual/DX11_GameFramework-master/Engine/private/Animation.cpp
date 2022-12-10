@@ -41,6 +41,14 @@ void CAnimation::Reset_Channel()
 	m_PlayTime = 0.0f;
 }
 
+_int CAnimation::Get_Keyframes()
+{
+	for (_uint i = 0; i < m_iNumChannels; ++i)
+	{
+		return m_Channels[i]->Get_Keyframes();
+	}
+}
+
 void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)
 {
 	if (true == m_isFinished && false == m_isLooping)
