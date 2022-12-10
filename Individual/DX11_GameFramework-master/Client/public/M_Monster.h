@@ -58,7 +58,7 @@ protected:	// 자식이 자주 사용할 함수
 	virtual void		Monster_Die() {};
 
 protected:		
-	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 5.f);	// 랜덤 위치로 이동하는 기능.
+	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 3.f);	// 랜덤 위치로 이동하는 기능.
 
 protected:
 	CRenderer*			m_pRendererCom = nullptr;

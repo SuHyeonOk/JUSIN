@@ -36,7 +36,7 @@ HRESULT CFinn::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
 
@@ -478,7 +478,7 @@ void CFinn::Roolling_Tick(_double TimeDelta)
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
 
 	if (!m_pModelCom->Get_Finished())
-		m_pTransformCom->Go_Straight(TimeDelta);
+		m_pTransformCom->Go_Straight(TimeDelta, 3.5f);
 	else
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }

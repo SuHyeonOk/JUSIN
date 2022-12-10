@@ -219,7 +219,7 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 1.5f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 5.f, TimeDelta);
+	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
 
 	if (bArrival)
 	{

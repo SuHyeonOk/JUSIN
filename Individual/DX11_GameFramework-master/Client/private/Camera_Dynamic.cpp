@@ -37,7 +37,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 	m_CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	m_CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
 
-	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 3.5f;
+	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if(m_eCameraInfo.eLevel == LEVEL_GAMEPLAY)
