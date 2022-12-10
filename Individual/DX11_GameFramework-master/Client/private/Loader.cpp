@@ -23,7 +23,6 @@
 
 // Monster
 #include "M_PigWarrior_BEE.h"
-#include "M_PigWarrior_WORKER.h"
 #include "M_Pigs_COWBOY.h"
 #include "M_Gronmes_RED.h"
 
@@ -142,6 +141,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_Component_Model_M_Pigs_COWBOY */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_COWBOY/Pigs_COWBOY.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_PigWarrior_WORKER */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_WORKER"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_WORKER/PigWarrior_WORKER.fbx", PivotMatrix))))
 		return E_FAIL;
 	/* For.Prototype_Component_Model_M_Gonmes_RED */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_M_Gonmes_RED"),
@@ -349,7 +352,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 	/* For.Prototype_Component_Model_M_PigWarrior_WORKER */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_WORKER"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_WORKER/PigWarrior_WORKER.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_WORKER/PigWarrior_WORKER.fbx", PivotMatrix))))
 		return E_FAIL;
 #pragma endregion
 
@@ -421,10 +424,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_M_Pigs_COWBOY */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
 		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_M_PigWarrior_WORKER */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_WORKER"),
-		CM_PigWarrior_WORKER::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

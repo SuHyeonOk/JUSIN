@@ -2,3 +2,4 @@ PigWarrior_BEE__0|-5.51089|0|-0.79212
 Pigs_COWBOY__0|-14.4083|0|-4.06829
 PigWarrior_WORKER__0|-7.3771|0|2.77552
 PigWarrior_WORKER__3|0|0|0
+PigWarrior_WORKER__1|-5.50762|0|0.421413

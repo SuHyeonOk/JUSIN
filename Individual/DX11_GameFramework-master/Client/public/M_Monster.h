@@ -16,7 +16,10 @@ class CM_Monster abstract : public CGameObject
 public:
 	typedef struct tagMonsterDesc : public CGameObject::GAMEOBJECTDESC
 	{
-		_float3		f3Pos;
+		enum MONSTERKIND { W_BEE, W_WORKER, MONSTERKIND_END };
+
+		MONSTERKIND		eMonsterKind = MONSTERKIND_END;
+		_float3			f3Pos;
 
 	}MONSTERDESC;
 
@@ -24,8 +27,7 @@ public:
 	{
 		enum STATE { IDLE, MOVE, FIND, ATTACK, HIT, DIE, STATE_END };
 
-		STATE	eState		= STATE_END;
-		STATE	ePreState	= STATE_END;
+		STATE			eState			= STATE_END;
 
 		_int	iHp			= 0;
 		_int	iAttack		= 0;
@@ -65,6 +67,7 @@ protected:
 
 protected:
 	MONSTERINFO			m_tMonsterInfo;
+	MONSTERDESC			m_tMonsterDesc;
 
 protected:
 	_bool				m_OneCoin = false;	// Monster_Die();

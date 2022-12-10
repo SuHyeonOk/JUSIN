@@ -12,10 +12,10 @@ private:
 	virtual ~CLevel_GamePlay() = default;
 
 public:
-	virtual HRESULT Initialize() override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize() override;
+	virtual void		Tick(_double TimeDelta) override;
+	virtual void		Late_Tick(_double TimeDelta) override;
+	virtual HRESULT		Render() override;
 
 private:
 	HRESULT Ready_Lights();
@@ -27,17 +27,17 @@ private:
 	HRESULT Ready_Layer_Map_Garden(const _tchar* pLayerTag);
 
 private:
-	void	ImGuiTest();
-	void	ImGuiFood();
-	void	ImGuiCoin();
-	void	ImGuiPage();
-	void	ImGuiMonster();
+	void	ImGui();
+	void	ImGui_Food();
+	void	ImGui_Coin();
+	void	ImGui_Page();
+	void	ImGui_Monster();
 
 private:
-	void	FoodLoad();
-	void	CoinLoad();
-	void	PageLoad();
-	void	MonsterLoad();
+	void	Food_Load();
+	void	Coin_Load();
+	void	Page_Load();
+	void	Monster_Load();
 
 private:
 	const _tchar*	m_szObjName;

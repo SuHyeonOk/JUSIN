@@ -97,9 +97,6 @@
     <Filter Include="02.GameObjects\Bullet\Star">
       <UniqueIdentifier>{0fab3231-86cc-4c7f-9783-5d6991169c03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\PigWarrior_WORKER">
-      <UniqueIdentifier>{0c597f2c-43c1-4ff2-ad5a-71f22395d579}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Skill">
       <UniqueIdentifier>{c3adfdb9-9af1-4f8e-b7cb-342773219d44}</UniqueIdentifier>
     </Filter>
@@ -207,9 +204,6 @@
     <ClInclude Include="..\public\B_Star.h">
       <Filter>02.GameObjects\Bullet\Star</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\M_PigWarrior_WORKER.h">
-      <Filter>02.GameObjects\Monster\PigWarrior_WORKER</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\S_StunChick.h">
       <Filter>02.GameObjects\Skill\Stun</Filter>
     </ClInclude>
@@ -298,9 +292,6 @@
     </ClCompile>
     <ClCompile Include="..\private\B_Ster.cpp">
       <Filter>02.GameObjects\Bullet\Star</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\M_PigWarrior_WORKER.cpp">
-      <Filter>02.GameObjects\Monster\PigWarrior_WORKER</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_StunChick.cpp">
       <Filter>02.GameObjects\Skill\Stun</Filter>

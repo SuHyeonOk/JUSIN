@@ -34,19 +34,28 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
-	MonsterDesc.TransformDesc.fSpeedPerSec = 1.5f;
-	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+	m_tMonsterDesc.eMonsterKind = MonsterDesc.eMonsterKind;
 
-	m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
+	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
+	{
+		MonsterDesc.TransformDesc.fSpeedPerSec = 1.5f;
+		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
+	}
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
+	{
+		MonsterDesc.TransformDesc.fSpeedPerSec = 1.5f;
+		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
+	}
 
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
-	m_pModelCom->Set_AnimIndex(7);
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.iHp		= 50;
@@ -117,11 +126,21 @@ HRESULT CM_PigWarrior_BEE::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"), TEXT("Com_Model"),
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
+	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_WORKER"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	
 	return S_OK;
 }
 
