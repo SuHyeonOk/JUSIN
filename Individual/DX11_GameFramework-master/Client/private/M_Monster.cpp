@@ -29,10 +29,6 @@ HRESULT CM_Monster::Initialize(void * pArg)
 	MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
-	MonsterDesc.eMonsterKind = MonsterDesc.eMonsterKind;
-	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
-
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MONSTERDESC));
 

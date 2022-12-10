@@ -25,14 +25,20 @@ private:
 
 private:
 	void				Monster_Tick(const _double& TimeDelta);
-	void				Idle_Tick();
-	void				Move_Tick();
+	void				Idle_Tick(const _double& TimeDelta);
+	void				Move_Tick(const _double& TimeDelta);
+	void				Find_Tick();
 	void				Attack_Tick(const _double& TimeDelta);
 	void				Hit_Tick();
 	void				Die_Tick();
 
 private:
-	_double				m_dBullet_TimeAcc = 0;		// 총알 을 몇 초마다 발사할 것 인지.
+	_float4				m_f4First_Pos;
+	_float4				m_f4RandomPos;
+	_bool				m_bRandomPos = false;
+
+	_bool				m_bAttack = false;
+	_uint				m_iAttack_Count = 0;
 
 public:
 	static	CM_Pigs*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

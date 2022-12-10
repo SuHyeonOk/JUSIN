@@ -430,7 +430,7 @@ void CLevel_GamePlay::ImGui_Page()
 
 void CLevel_GamePlay::ImGui_Monster()
 {
-	const _char* szObjName[] = { "PigWarrior_BEE", "PigWarrior_WORKER", "Pigs_COWBOY" };
+	const _char* szObjName[] = { "PigWarrior_BEE", "PigWarrior_WORKER", "Pigs_COWBOY", "Pigs_SR" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -477,6 +477,22 @@ void CLevel_GamePlay::ImGui_Monster()
 		}
 		if (2 == iObjNum)
 		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Pigs_COWBOY__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (3 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
 			m_wstObjName = L"Pigs_COWBOY__";
@@ -845,6 +861,7 @@ void CLevel_GamePlay::Monster_Load()
 		}
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
 			m_wstObjName = L"Pigs_COWBOY__";
@@ -858,7 +875,22 @@ void CLevel_GamePlay::Monster_Load()
 					return;
 			}
 		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
+			m_wstObjName = L"Pigs_SR__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+					return;
+			}
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -383,7 +383,7 @@ void CJake::Roolling_Tick(_double TimeDelta)
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
 
 	if (!m_pModelCom->Get_Finished())
-		m_pTransformCom->Go_Straight(TimeDelta, 3.5f);
+		m_pTransformCom->Go_Straight(TimeDelta, 4.f);
 	else
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
