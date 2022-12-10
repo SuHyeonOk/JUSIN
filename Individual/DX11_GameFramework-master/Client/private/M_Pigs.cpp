@@ -188,7 +188,7 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::ATTACK:
 		Attack_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(1, false);
+		m_pModelCom->Set_AnimIndex(0, false);
 		break;
 
 	case MONSTERINFO::STATE::HIT:
@@ -206,7 +206,7 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 void CM_Pigs::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 1.5f > fDistance)
+	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
 	if (m_pModelCom->Get_Finished())
@@ -216,7 +216,7 @@ void CM_Pigs::Idle_Tick(const _double& TimeDelta)
 void CM_Pigs::Move_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 1.5f > fDistance)
+	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
 	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
@@ -230,7 +230,7 @@ void CM_Pigs::Move_Tick(const _double& TimeDelta)
 
 void CM_Pigs::Find_Tick()
 {
-	if (25 == m_pModelCom->Get_Keyframes())
+	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
@@ -245,8 +245,24 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 		m_bAttack = true;
 	}
 
-	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_vector	vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	m_dBullet_TimeAcc += TimeDelta;
+	if (2 < m_dBullet_TimeAcc)
+	{
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &_float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z))))
+			return;
+
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_dBullet_TimeAcc = 0;
+	}
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Pigs::Hit_Tick()

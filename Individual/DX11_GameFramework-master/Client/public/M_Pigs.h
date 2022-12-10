@@ -38,7 +38,7 @@ private:
 	_bool				m_bRandomPos = false;
 
 	_bool				m_bAttack = false;
-	_uint				m_iAttack_Count = 0;
+	_double				m_dBullet_TimeAcc = 0;
 
 public:
 	static	CM_Pigs*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

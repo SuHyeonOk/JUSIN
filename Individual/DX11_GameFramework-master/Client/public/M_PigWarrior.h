@@ -38,7 +38,6 @@ private:
 	_bool				m_bRandomPos = false;
 
 	_bool				m_bAttack = false;
-	_uint				m_iAttack_Count = 0;
 
 public:
 	static	CM_PigWarrior*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
