@@ -17,6 +17,7 @@ public:
 public:
 	void	Reset_Channel();
 	_bool	Get_Finished() { return m_isFinished; }
+	//_double	Get_
 
 private:
 	char								m_szName[MAX_PATH];

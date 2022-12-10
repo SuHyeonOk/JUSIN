@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\public\Coin.h"
+
 #include "GameInstance.h"
 
 CCoin::CCoin(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

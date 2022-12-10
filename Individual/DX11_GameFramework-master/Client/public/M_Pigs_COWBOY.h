@@ -24,10 +24,10 @@ private:
 	virtual HRESULT		SetUp_ShaderResources()					override;
 
 private:
-	void				Monster_Tick(_double TimeDelta);
+	void				Monster_Tick(const _double& TimeDelta);
 	void				Idle_Tick();
 	void				Move_Tick();
-	void				Attack_Tick(_double TimeDelta);
+	void				Attack_Tick(const _double& TimeDelta);
 	void				Hit_Tick();
 	void				Die_Tick();
 

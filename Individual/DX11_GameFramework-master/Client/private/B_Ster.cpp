@@ -146,8 +146,8 @@ HRESULT CB_Star::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(&m_pShaderCom, "g_Texture")))
-		return E_FAIL;
+	//if (FAILED(m_pTextureCom->Bind_ShaderResource(&m_pShaderCom, "g_Texture")))
+	//	return E_FAIL;
 
 
 	return S_OK;

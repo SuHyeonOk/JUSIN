@@ -47,7 +47,6 @@ public:
 	// Player 정보
 	PLAYERINFO			Get_Current_Player() { return m_tPlayerInfo; }
 	void				Set_Current_Player(PLAYERINFO ePlayerInfo) { m_tPlayerInfo = ePlayerInfo; }
-	//PLAYERINFO::STATE	Get_Current_Player_State() { return m_tPlayerInfo.eState; }
 	void				Set_Current_Player_State(PLAYERINFO::STATE	eState) { m_tPlayerInfo.eState = eState; }
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
@@ -58,9 +57,10 @@ public:
 	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
 	void				Set_Player_MinusHp(_int eHp) { if (0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= eHp; }
 
-	// 좌표
-	void				CObj_Manager::Tick_Player_Transform(); 
-	_vector				CObj_Manager::Get_Player_Transform(); 
+public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
+	void				CObj_Manager::Tick_Player_Transform();				// Player 에서 현재 내 거리를 계산한다.
+	_vector				CObj_Manager::Get_Player_Transform();				// 현재 Player 의 거리를 가져온다.
+	_float				CObj_Manager::Player_Distance(_fvector	_MyPos);	// Player 와 내 거리
 
 public:
 	HRESULT		CObj_Manager::Initialized();

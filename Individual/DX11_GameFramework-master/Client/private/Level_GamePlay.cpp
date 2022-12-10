@@ -51,6 +51,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	PageLoad();
 	MonsterLoad();
 
+
 	return S_OK;
 }
 
@@ -59,7 +60,6 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGuiTest(); // @ ImGui 를 사용하지 않을 때 주석!
-
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)

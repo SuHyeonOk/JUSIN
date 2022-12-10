@@ -64,6 +64,9 @@ CBone * CModel::Get_BonePtr(const char * pBoneName)
 
 void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition)
 {
+	if (m_iCurrentAnimIndex == iAnimIndex)
+		return;
+
 	m_Animations[m_iCurrentAnimIndex]->Reset_Channel();		// 이전 애니메이션의 키프레임, 재생 시간 초기화
 	m_iCurrentAnimIndex = iAnimIndex;						// 이제 실행할 애니메이션 대입
 	m_bRepetition = bRepetition;							// 반복 할지 여부를 bool 로 대입

@@ -112,6 +112,9 @@
     <Filter Include="02.GameObjects\Monster\Gonmes_RED">
       <UniqueIdentifier>{739d5a27-9686-45a1-bf45-67009983ed65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="77.Manager\Utilities">
+      <UniqueIdentifier>{49b40824-f224-43bb-97ba-78310e3fbe65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -216,6 +219,9 @@
     <ClInclude Include="..\public\M_Gronmes_RED.h">
       <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Utilities_Manager.h">
+      <Filter>77.Manager\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -304,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Gronmes_RED.cpp">
       <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Utilities_Manager.cpp">
+      <Filter>77.Manager\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

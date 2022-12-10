@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Process.h>
+#include <random>
 
 namespace Client
 {

@@ -24,14 +24,20 @@ private:
 	virtual HRESULT		SetUp_ShaderResources()					override;
 
 private:
-	void				Monster_Tick(_double TimeDelta);
-	void				Idle_Tick();
-	void				Attack_Tick();
-	virtual void		Monster_Die()							override;
+	void				Monster_Tick(const _double& TimeDelta);
+	void				Idle_Tick(const _double& TimeDelta);
+	void				Move_Tick(const _double& TimeDelta);
+	void				Find_Tick();
+	void				Attack_Tick(const _double& TimeDelta);
+	void				Hit_Tick();
+	void				Die_Tick();
 
 private:
-	void				ToThe_Player(const _double& TimeDelta);
+	_float4				m_f4First_Pos;
+	_float4				m_f4RandomPos;
+	_bool				m_bRandomPos = false;
 
+	_double				m_bTimeAcc = 0;
 
 public:
 	static	CM_PigWarrior_BEE*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

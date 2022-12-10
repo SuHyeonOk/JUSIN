@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "ItemManager.h"
+#include "Utilities_Manager.h"
 
 CM_PigWarrior_BEE::CM_PigWarrior_BEE(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -33,9 +34,11 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
-	MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
+	MonsterDesc.TransformDesc.fSpeedPerSec = 1.5f;
 	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+
+	m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
 
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
 		return E_FAIL;
@@ -45,10 +48,10 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 
 	m_pModelCom->Set_AnimIndex(7);
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp = 50;
-	m_tMonsterInfo.iExp = 25;
-	m_tMonsterInfo.iAttack = 5;
+	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
+	m_tMonsterInfo.iHp		= 50;
+	m_tMonsterInfo.iExp		= 25;
+	m_tMonsterInfo.iAttack	= 5;
 
 	return S_OK;
 }
@@ -57,18 +60,7 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//Monster_Die();
-	ToThe_Player(TimeDelta);
-
-
-	if (GetKeyState('P') & 0x8000)
-	{
-		m_pModelCom->Set_AnimIndex(1);
-	}
-	else
-		m_pModelCom->Set_AnimIndex(7);
-
-
+	Monster_Tick(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -79,19 +71,6 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
-
-	//Monster_Tick(TimeDelta);
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Key_Down(DIK_P))
-	//	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-
-	//if (pGameInstance->Key_Down(DIK_O))
-	//	m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-
-
-	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_PigWarrior_BEE::Late_Tick(_double TimeDelta)
@@ -165,31 +144,89 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_PigWarrior_BEE::Monster_Tick(_double TimeDelta)
+void CM_PigWarrior_BEE::Monster_Tick(const _double& TimeDelta)
 {
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.MOVE)
+	{
+		_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		if (1.5f > fDistance)
+			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+		else
+			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	}
+
+	/////////////////////////////////////////////////////////////
+
 	switch (m_tMonsterInfo.eState)
 	{
 	case MONSTERINFO::STATE::IDLE:
-		Idle_Tick();
+		Idle_Tick(TimeDelta);
+		m_pModelCom->Set_AnimIndex(7, false);
+		break;
+
+	case MONSTERINFO::STATE::MOVE:
+		Move_Tick(TimeDelta);
+		m_pModelCom->Set_AnimIndex(8, false);
+		break;
+
+	case MONSTERINFO::STATE::FIND:
+		Find_Tick();
+		m_pModelCom->Set_AnimIndex(3, false);
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
-		Attack_Tick();
+		Attack_Tick(TimeDelta);
+		m_pModelCom->Set_AnimIndex(1, false);
+		break;
+
+	case MONSTERINFO::STATE::HIT:
+		Hit_Tick();
+		m_pModelCom->Set_AnimIndex(6, false);
+		break;
+
+	case MONSTERINFO::STATE::DIE:
+		Die_Tick();
+		m_pModelCom->Set_AnimIndex(4, false);
 		break;
 	}
 }
 
-void CM_PigWarrior_BEE::Idle_Tick()
+void CM_PigWarrior_BEE::Idle_Tick(const _double& TimeDelta)
 {
-	m_pModelCom->Set_AnimIndex(7);
+	if(m_pModelCom->Get_Finished())
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+
+
 }
 
-void CM_PigWarrior_BEE::Attack_Tick()
+void CM_PigWarrior_BEE::Move_Tick(const _double& TimeDelta)
 {
-	m_pModelCom->Set_AnimIndex(1);
+	_bool bArrival = CUtilities_Manager::GetInstance()->Get_RandomPos(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
+
+	if (bArrival)
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
-void CM_PigWarrior_BEE::Monster_Die()
+void CM_PigWarrior_BEE::Find_Tick()
+{
+	if (m_pModelCom->Get_Finished())
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+}
+
+void CM_PigWarrior_BEE::Attack_Tick(const _double& TimeDelta)
+{
+	if(m_pModelCom->Get_Finished())
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
+}
+
+void CM_PigWarrior_BEE::Hit_Tick()
+{
+}
+
+void CM_PigWarrior_BEE::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
@@ -213,28 +250,6 @@ void CM_PigWarrior_BEE::Monster_Die()
 	}
 
 	return;
-}
-
-void CM_PigWarrior_BEE::ToThe_Player(const _double & TimeDelta)
-{
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// 내 좌표
-	_vector		vDir = CObj_Manager::GetInstance()->Get_Player_Transform() - vMyPos;		// 내 좌표가 객체를 바라보는 방향 벡터
-
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
-
-	if (fDistanceX < 5.f)
-	{
-		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-		_float4 f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
-		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-		m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z, 1.f), TimeDelta, 1.f);
-
-		// ▣ : 위의 코드 말고, 아래 코드 사용하기
-		//m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 11.f5);
-	}
-
 }
 
 CM_PigWarrior_BEE * CM_PigWarrior_BEE::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

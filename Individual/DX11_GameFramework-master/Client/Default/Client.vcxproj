@@ -198,6 +198,7 @@
     <ClInclude Include="..\public\Skill_Manager.h" />
     <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\public\Utilities_Manager.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="..\private\Skill_Manager.cpp" />
     <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\private\Utilities_Manager.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

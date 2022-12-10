@@ -143,7 +143,7 @@ HRESULT CM_Pigs_COWBOY::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_Pigs_COWBOY::Monster_Tick(_double TimeDelta)
+void CM_Pigs_COWBOY::Monster_Tick(const _double& TimeDelta)
 {
 	switch (m_tMonsterInfo.eState)
 	{
@@ -158,7 +158,7 @@ void CM_Pigs_COWBOY::Monster_Tick(_double TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
-		Attack_Tick(TimeDelta);
+		//Attack_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(0);
 		break;
 
@@ -194,7 +194,7 @@ void CM_Pigs_COWBOY::Move_Tick()
 {
 }
 
-void CM_Pigs_COWBOY::Attack_Tick(_double TimeDelta)
+void CM_Pigs_COWBOY::Attack_Tick(const _double& TimeDelta)
 {
 	// 몬스터 위치에서 플레이어를 향해 총알 발사.
 
