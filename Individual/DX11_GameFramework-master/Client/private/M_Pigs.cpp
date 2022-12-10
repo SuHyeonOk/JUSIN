@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "..\public\M_Pigs_COWBOY.h"
+#include "..\public\M_Pigs.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 
-CM_Pigs_COWBOY::CM_Pigs_COWBOY(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Pigs::CM_Pigs(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
 
 }
 
-CM_Pigs_COWBOY::CM_Pigs_COWBOY(const CM_Pigs_COWBOY & rhs)
+CM_Pigs::CM_Pigs(const CM_Pigs & rhs)
 	: CM_Monster(rhs)
 {
 
 }
 
-HRESULT CM_Pigs_COWBOY::Initialize_Prototype()
+HRESULT CM_Pigs::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,7 +25,7 @@ HRESULT CM_Pigs_COWBOY::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CM_Pigs_COWBOY::Initialize(void * pArg)
+HRESULT CM_Pigs::Initialize(void * pArg)
 {
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
@@ -53,7 +53,7 @@ HRESULT CM_Pigs_COWBOY::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CM_Pigs_COWBOY::Tick(_double TimeDelta)
+void CM_Pigs::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -72,7 +72,7 @@ void CM_Pigs_COWBOY::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Pigs_COWBOY::Late_Tick(_double TimeDelta)
+void CM_Pigs::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 	
@@ -82,7 +82,7 @@ void CM_Pigs_COWBOY::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CM_Pigs_COWBOY::Render()
+HRESULT CM_Pigs::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -103,7 +103,7 @@ HRESULT CM_Pigs_COWBOY::Render()
 	return S_OK;
 }
 
-HRESULT CM_Pigs_COWBOY::SetUp_Components()
+HRESULT CM_Pigs::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -123,7 +123,7 @@ HRESULT CM_Pigs_COWBOY::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CM_Pigs_COWBOY::SetUp_ShaderResources()
+HRESULT CM_Pigs::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -143,7 +143,7 @@ HRESULT CM_Pigs_COWBOY::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_Pigs_COWBOY::Monster_Tick(const _double& TimeDelta)
+void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 {
 	switch (m_tMonsterInfo.eState)
 	{
@@ -174,7 +174,7 @@ void CM_Pigs_COWBOY::Monster_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Pigs_COWBOY::Idle_Tick()
+void CM_Pigs::Idle_Tick()
 {
 	// IDLE 상태로 있다가 플레이어가 주변에 있는지 계속 확인한다.
 
@@ -190,11 +190,11 @@ void CM_Pigs_COWBOY::Idle_Tick()
 	}
 }
 
-void CM_Pigs_COWBOY::Move_Tick()
+void CM_Pigs::Move_Tick()
 {
 }
 
-void CM_Pigs_COWBOY::Attack_Tick(const _double& TimeDelta)
+void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 {
 	// 몬스터 위치에서 플레이어를 향해 총알 발사.
 
@@ -220,11 +220,11 @@ void CM_Pigs_COWBOY::Attack_Tick(const _double& TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Pigs_COWBOY::Hit_Tick()
+void CM_Pigs::Hit_Tick()
 {
 }
 
-void CM_Pigs_COWBOY::Die_Tick()
+void CM_Pigs::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
@@ -250,31 +250,31 @@ void CM_Pigs_COWBOY::Die_Tick()
 	return;
 }
 
-CM_Pigs_COWBOY * CM_Pigs_COWBOY::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Pigs * CM_Pigs::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CM_Pigs_COWBOY*		pInstance = new CM_Pigs_COWBOY(pDevice, pContext);
+	CM_Pigs*		pInstance = new CM_Pigs(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CM_Pigs_COWBOY");
+		MSG_BOX("Failed to Created : CM_Pigs");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CM_Pigs_COWBOY::Clone(void * pArg)
+CGameObject * CM_Pigs::Clone(void * pArg)
 {
-	CM_Pigs_COWBOY*		pInstance = new CM_Pigs_COWBOY(*this);
+	CM_Pigs*		pInstance = new CM_Pigs(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CM_Pigs_COWBOY");
+		MSG_BOX("Failed to Cloned : CM_Pigs");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CM_Pigs_COWBOY::Free()
+void CM_Pigs::Free()
 {
 	__super::Free();
 

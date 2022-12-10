@@ -22,8 +22,8 @@
 #include "S_StunChick.h"
 
 // Monster
-#include "M_PigWarrior_BEE.h"
-#include "M_Pigs_COWBOY.h"
+#include "M_PigWarrior.h"
+#include "M_Pigs.h"
 #include "M_Gronmes_RED.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -189,13 +189,13 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	// Monster
-	/* For.Prototype_GameObject_M_PigWarrior_BEE */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
-		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_M_PigWarrior */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior"),
+		CM_PigWarrior::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_M_Pigs_COWBOY */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
-		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_M_Pigs */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs"),
+		CM_Pigs::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_M_Gronmes_RED */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gronmes_RED"),
@@ -417,13 +417,13 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Monster
-	/* For.Prototype_GameObject_M_PigWarrior_BEE */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior_BEE"),
-		CM_PigWarrior_BEE::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_M_PigWarrior */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_PigWarrior"),
+		CM_PigWarrior::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_M_Pigs_COWBOY */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs_COWBOY"),
-		CM_Pigs_COWBOY::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_M_Pigs */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs"),
+		CM_Pigs::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

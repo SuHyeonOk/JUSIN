@@ -5,12 +5,12 @@
 
 BEGIN(Client)
 
-class CM_Pigs_COWBOY final : public CM_Monster
+class CM_Pigs final : public CM_Monster
 {
 private:
-	CM_Pigs_COWBOY(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CM_Pigs_COWBOY(const CM_Pigs_COWBOY& rhs);
-	virtual ~CM_Pigs_COWBOY() = default;
+	CM_Pigs(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CM_Pigs(const CM_Pigs& rhs);
+	virtual ~CM_Pigs() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype()					override;
@@ -35,7 +35,7 @@ private:
 	_double				m_dBullet_TimeAcc = 0;		// 총알 을 몇 초마다 발사할 것 인지.
 
 public:
-	static	CM_Pigs_COWBOY*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CM_Pigs*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free()						override;
 };

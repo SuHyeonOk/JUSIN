@@ -1,24 +1,24 @@
 #include "stdafx.h"
-#include "..\public\M_PigWarrior_BEE.h"
+#include "..\public\M_PigWarrior.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
 
-CM_PigWarrior_BEE::CM_PigWarrior_BEE(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_PigWarrior::CM_PigWarrior(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
 
 }
 
-CM_PigWarrior_BEE::CM_PigWarrior_BEE(const CM_PigWarrior_BEE & rhs)
+CM_PigWarrior::CM_PigWarrior(const CM_PigWarrior & rhs)
 	: CM_Monster(rhs)
 {
 
 }
 
-HRESULT CM_PigWarrior_BEE::Initialize_Prototype()
+HRESULT CM_PigWarrior::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -26,7 +26,7 @@ HRESULT CM_PigWarrior_BEE::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
+HRESULT CM_PigWarrior::Initialize(void * pArg)
 {
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
@@ -65,7 +65,7 @@ HRESULT CM_PigWarrior_BEE::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CM_PigWarrior_BEE::Tick(_double TimeDelta)
+void CM_PigWarrior::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -83,7 +83,7 @@ void CM_PigWarrior_BEE::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_PigWarrior_BEE::Late_Tick(_double TimeDelta)
+void CM_PigWarrior::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -93,7 +93,7 @@ void CM_PigWarrior_BEE::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CM_PigWarrior_BEE::Render()
+HRESULT CM_PigWarrior::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -114,7 +114,7 @@ HRESULT CM_PigWarrior_BEE::Render()
 	return S_OK;
 }
 
-HRESULT CM_PigWarrior_BEE::SetUp_Components()
+HRESULT CM_PigWarrior::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -144,7 +144,7 @@ HRESULT CM_PigWarrior_BEE::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
+HRESULT CM_PigWarrior::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -164,7 +164,7 @@ HRESULT CM_PigWarrior_BEE::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_PigWarrior_BEE::Monster_Tick(const _double& TimeDelta)
+void CM_PigWarrior::Monster_Tick(const _double& TimeDelta)
 {
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
@@ -203,7 +203,7 @@ void CM_PigWarrior_BEE::Monster_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_PigWarrior_BEE::Idle_Tick(const _double& TimeDelta)
+void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 1.5f > fDistance)
@@ -213,7 +213,7 @@ void CM_PigWarrior_BEE::Idle_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
-void CM_PigWarrior_BEE::Move_Tick(const _double& TimeDelta)
+void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 1.5f > fDistance)
@@ -228,7 +228,7 @@ void CM_PigWarrior_BEE::Move_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_PigWarrior_BEE::Find_Tick()
+void CM_PigWarrior::Find_Tick()
 {
 	if (25 == m_pModelCom->Get_Keyframes())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
@@ -236,7 +236,7 @@ void CM_PigWarrior_BEE::Find_Tick()
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 }
 
-void CM_PigWarrior_BEE::Attack_Tick(const _double& TimeDelta)
+void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 {
 	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
 	if (0 == iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
@@ -249,13 +249,13 @@ void CM_PigWarrior_BEE::Attack_Tick(const _double& TimeDelta)
 	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
 }
 
-void CM_PigWarrior_BEE::Hit_Tick()
+void CM_PigWarrior::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
 
-void CM_PigWarrior_BEE::Die_Tick()
+void CM_PigWarrior::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
@@ -274,31 +274,31 @@ void CM_PigWarrior_BEE::Die_Tick()
 	}
 }
 
-CM_PigWarrior_BEE * CM_PigWarrior_BEE::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_PigWarrior * CM_PigWarrior::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CM_PigWarrior_BEE*		pInstance = new CM_PigWarrior_BEE(pDevice, pContext);
+	CM_PigWarrior*		pInstance = new CM_PigWarrior(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CM_PigWarrior_BEE");
+		MSG_BOX("Failed to Created : CM_PigWarrior");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CM_PigWarrior_BEE::Clone(void * pArg)
+CGameObject * CM_PigWarrior::Clone(void * pArg)
 {
-	CM_PigWarrior_BEE*		pInstance = new CM_PigWarrior_BEE(*this);
+	CM_PigWarrior*		pInstance = new CM_PigWarrior(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CM_PigWarrior_BEE");
+		MSG_BOX("Failed to Cloned : CM_PigWarrior");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CM_PigWarrior_BEE::Free()
+void CM_PigWarrior::Free()
 {
 	__super::Free();
 

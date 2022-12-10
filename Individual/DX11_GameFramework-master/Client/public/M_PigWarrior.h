@@ -5,12 +5,12 @@
 
 BEGIN(Client)
 
-class CM_PigWarrior_BEE final : public CM_Monster
+class CM_PigWarrior final : public CM_Monster
 {
 private:
-	CM_PigWarrior_BEE(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CM_PigWarrior_BEE(const CM_PigWarrior_BEE& rhs);
-	virtual ~CM_PigWarrior_BEE() = default;
+	CM_PigWarrior(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CM_PigWarrior(const CM_PigWarrior& rhs);
+	virtual ~CM_PigWarrior() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype()					override;
@@ -43,7 +43,7 @@ private:
 	_double				m_bTimeAcc = 0;
 
 public:
-	static	CM_PigWarrior_BEE*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CM_PigWarrior*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free()						override;
 };

@@ -76,9 +76,6 @@
     <Filter Include="77.Manager\Item">
       <UniqueIdentifier>{f16a8539-5b22-448a-9df1-88a15a183fa4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\PigWarrior_BEE">
-      <UniqueIdentifier>{c75bc1ea-60f0-4e59-93cd-b6df6396624b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Player\Finn">
       <UniqueIdentifier>{1667692c-e214-4161-8941-505a3084acf6}</UniqueIdentifier>
     </Filter>
@@ -87,9 +84,6 @@
     </Filter>
     <Filter Include="77.Manager\Obj">
       <UniqueIdentifier>{dc42a624-63c8-4d30-908b-1d92b6f43a3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Pigs_COWBOY">
-      <UniqueIdentifier>{aa8d53dd-61f7-4f44-84b5-f6dbd7aef256}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Bullet">
       <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
@@ -111,6 +105,12 @@
     </Filter>
     <Filter Include="77.Manager\Utilities">
       <UniqueIdentifier>{49b40824-f224-43bb-97ba-78310e3fbe65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\PigWarrior">
+      <UniqueIdentifier>{c75bc1ea-60f0-4e59-93cd-b6df6396624b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Pigs">
+      <UniqueIdentifier>{aa8d53dd-61f7-4f44-84b5-f6dbd7aef256}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +183,6 @@
     <ClInclude Include="..\Public\ItemManager.h">
       <Filter>77.Manager\Item</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\M_PigWarrior_BEE.h">
-      <Filter>02.GameObjects\Monster\PigWarrior_BEE</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Finn.h">
       <Filter>02.GameObjects\Player\Finn</Filter>
     </ClInclude>
@@ -197,9 +194,6 @@
     </ClInclude>
     <ClInclude Include="..\public\M_Monster.h">
       <Filter>02.GameObjects\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\M_Pigs_COWBOY.h">
-      <Filter>02.GameObjects\Monster\Pigs_COWBOY</Filter>
     </ClInclude>
     <ClInclude Include="..\public\B_Star.h">
       <Filter>02.GameObjects\Bullet\Star</Filter>
@@ -215,6 +209,12 @@
     </ClInclude>
     <ClInclude Include="..\public\Utilities_Manager.h">
       <Filter>77.Manager\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\M_PigWarrior.h">
+      <Filter>02.GameObjects\Monster\PigWarrior</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\M_Pigs.h">
+      <Filter>02.GameObjects\Monster\Pigs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +272,6 @@
     <ClCompile Include="..\Private\ItemManager.cpp">
       <Filter>77.Manager\Item</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\M_PigWarrior_BEE.cpp">
-      <Filter>02.GameObjects\Monster\PigWarrior_BEE</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Finn.cpp">
       <Filter>02.GameObjects\Player\Finn</Filter>
     </ClCompile>
@@ -286,9 +283,6 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Monster.cpp">
       <Filter>02.GameObjects\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\M_Pigs_COWBOY.cpp">
-      <Filter>02.GameObjects\Monster\Pigs_COWBOY</Filter>
     </ClCompile>
     <ClCompile Include="..\private\B_Ster.cpp">
       <Filter>02.GameObjects\Bullet\Star</Filter>
@@ -304,6 +298,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Utilities_Manager.cpp">
       <Filter>77.Manager\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_PigWarrior.cpp">
+      <Filter>02.GameObjects\Monster\PigWarrior</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Pigs.cpp">
+      <Filter>02.GameObjects\Monster\Pigs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
