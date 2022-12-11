@@ -355,7 +355,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (3.f < fDistanceX)
+	if (5.f < fDistanceX)	// 거리가 5이상일 때
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
@@ -468,6 +468,8 @@ void CFinn::Space_Attack_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+
 }
 
 void CFinn::Roolling_Tick(_double TimeDelta)
@@ -564,7 +566,7 @@ void CFinn::Anim_Change(_double TimeDelta)
 			break;
 
 		case CObj_Manager::PLAYERINFO::ATTACK_1:
-			m_pModelCom->Set_AnimIndex(18, false);
+			m_pModelCom->Set_AnimIndex(5, false);
 			break;
 		case CObj_Manager::PLAYERINFO::ATTACK_2:
 			m_pModelCom->Set_AnimIndex(19, false);

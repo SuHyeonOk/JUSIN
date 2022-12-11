@@ -64,8 +64,8 @@ HRESULT CLevel_Tool::Ready_Layer_Bullet(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CB_Star::BULLETINFO		tBulletInfo;
-	tBulletInfo.f3Start_Pos = _float3(-2.f, 0.f, 0.f);
-	tBulletInfo.f3Target_Pos = _float3(-2.f, 0.f, 0.f);
+	tBulletInfo.f3Start_Pos = _float3(4.f, 0.f, 0.f);
+	tBulletInfo.f3Target_Pos = _float3(4.f, 0.f, 0.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_Bullet"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
 		return E_FAIL;
 

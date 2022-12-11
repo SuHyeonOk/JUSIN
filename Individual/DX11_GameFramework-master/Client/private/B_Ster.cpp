@@ -101,7 +101,7 @@ HRESULT CB_Star::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(0);
+	m_pShaderCom->Begin(0);	// pass
 
 	m_pVIBufferCom->Render();
 
@@ -147,9 +147,11 @@ HRESULT CB_Star::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
-		return E_FAIL;
-
+	for (_uint i = 0; i <= 6; ++i)
+	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture"), i))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
