@@ -7,6 +7,8 @@
 #include "Coin.h"
 #include "Page.h"
 
+#include "B_Star.h"
+
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -16,6 +18,9 @@ CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 HRESULT CLevel_Tool::Initialize()
 {
 	if (FAILED(__super::Initialize()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Bullet(TEXT("Layer_Bullet"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
@@ -54,6 +59,21 @@ HRESULT CLevel_Tool::Render()
 	return S_OK;
 }
 
+HRESULT CLevel_Tool::Ready_Layer_Bullet(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CB_Star::BULLETINFO		tBulletInfo;
+	tBulletInfo.f3Start_Pos = _float3(-2.f, 0.f, 0.f);
+	tBulletInfo.f3Target_Pos = _float3(-2.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_Bullet"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -71,9 +91,9 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Coin"), &tObjInfo)))
 		return E_FAIL;
 
-	CPage::PAGEINFO					tPageInfo;
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-		return E_FAIL;
+	//CPage::PAGEINFO					tPageInfo;
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+	//	return E_FAIL;
 
 	CM_Monster::MONSTERDESC		tMonsterDesc;
 	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 0.f);

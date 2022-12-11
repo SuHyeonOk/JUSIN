@@ -26,17 +26,15 @@ HRESULT CB_Star::Initialize_Prototype()
 
 HRESULT CB_Star::Initialize(void * pArg)
 {	
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_tBulletInfo, pArg, sizeof(BULLETINFO));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -45,21 +43,7 @@ HRESULT CB_Star::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_f4Pos = _float4(f3Pos.x, f3Pos.y, f3Pos.z, 1.f);
-
-	m_iSizeX = g_iWinSizeX;
-	m_iSizeY = g_iWinSizeY;
-
-	m_fX = m_iSizeX * 0.5f;
-	m_fY = m_iSizeY * 0.5f;
-
-
-	m_pTransformCom->Set_Scaled(_float3(m_iSizeX, m_iSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION,
-		XMVectorSet(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f, 1.f));
-
-	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
-	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(g_iWinSizeX, g_iWinSizeY, 0.f, 1.f));
+	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
 	return S_OK;
 }
@@ -68,21 +52,37 @@ void CB_Star::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	_matrix PlayerWorld;
+	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
+	_float4x4 f44PlayerWorld;
+	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
+	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
+	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
+	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
+	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
+	cout << "----------------------------------------" << endl;
+
 	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날리고, 
 	// 일정시간 후에 총알이 사라지도록 해야한다.
 
 	// 플레이어의 좌표가 아닌 총알을 발사하는 몬스터의 Look 으로 총알을 발사하는게 나을 것 같다.
-	_vector vPlayerPos;
-	vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-	//_float4	f4PlayerPos;
-	//XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-	m_pTransformCom->LookAt(vPlayerPos);
-	m_pTransformCom->Go_Straight(TimeDelta);
+	
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_TOOL, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	RELEASE_INSTANCE(CGameInstance);
 
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
 
+	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//_vector		vTargetPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+	//_vector		vDir = vTargetPos - vMyPos;						
 
-	//m_pTransformCom->Chase(XMVectorSet(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z, 1.f), TimeDelta);
+	//vMyPos += XMVector3Normalize(vDir) * 2.f * _float(TimeDelta);
+	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+
+	m_pTransformCom->Chase(XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f), TimeDelta);	// 플레이어를 따라간다.
 }
 
 void CB_Star::Late_Tick(_double TimeDelta)
@@ -111,24 +111,20 @@ HRESULT CB_Star::Render()
 HRESULT CB_Star::SetUp_Components()
 {
 	/* For.Com_Renderer */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
-		(CComponent**)&m_pRendererCom)))
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"),
-		(CComponent**)&m_pShaderCom)))
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 
 	/* For.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"),
-		(CComponent**)&m_pVIBufferCom)))
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"),
-		(CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -139,15 +135,20 @@ HRESULT CB_Star::SetUp_ShaderResources()
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 
-
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
-	//if (FAILED(m_pTextureCom->Bind_ShaderResource(&m_pShaderCom, "g_Texture")))
-	//	return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
 
 
 	return S_OK;
@@ -181,9 +182,7 @@ void CB_Star::Free()
 {
 	__super::Free();
 
-	for (auto& pTextureCom : m_pTextureCom)
-		Safe_Release(pTextureCom);
-
+	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

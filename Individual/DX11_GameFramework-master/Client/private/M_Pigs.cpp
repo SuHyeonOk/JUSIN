@@ -6,6 +6,8 @@
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
 
+#include "B_Star.h"
+
 CM_Pigs::CM_Pigs(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
@@ -187,7 +189,7 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
-		Attack_Tick(TimeDelta);
+		//Attack_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(0, false);
 		break;
 
@@ -239,11 +241,11 @@ void CM_Pigs::Find_Tick()
 void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 {
 	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
-	if (0 == iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
-	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-		m_bAttack = true;
-	}
+	if (0 != iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
+		return;
+
+	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	m_bAttack = true;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -253,15 +255,16 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	_float4	f4MyPos;
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
-	m_dBullet_TimeAcc += TimeDelta;
-	if (2 < m_dBullet_TimeAcc)
-	{
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &_float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z))))
-			return;
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+	_float4	f4PlayerPos;
+	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		m_dBullet_TimeAcc = 0;
-	}
+	CB_Star::BULLETINFO		tBulletInfo;
+	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z);
+	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 1.f, f4PlayerPos.z);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
+		return;
+	cout << "발사!" << endl;
 	RELEASE_INSTANCE(CGameInstance);
 }
 

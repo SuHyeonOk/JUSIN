@@ -61,6 +61,19 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 	if(m_eCameraInfo.eLevel != LEVEL_TOOL)
 		ToFollow(TimeDelta);
 
+	////////////////////////////// 디버그용
+	//_vector vddMyPos;
+	//vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	//_float4	f4ddMyPos;
+	//XMStoreFloat4(&f4ddMyPos, vddMyPos);
+
+	//cout << "카메라 위치 " << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
+	////////////////////////////// 디버그용
+
+
+
+
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{
 	//	Shake_Camera(1, 2);

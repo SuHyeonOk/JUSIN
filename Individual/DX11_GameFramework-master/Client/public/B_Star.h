@@ -18,11 +18,12 @@ public:
 	enum TEXTURE { TYPE_DIFFUSE, TYPE_BRUSH, TYPE_FILTER, TYPE_END };
 
 public:
-	typedef struct tagBulletDesc
+	typedef struct tagBulletInfo
 	{
-		_float		fAngle;
-		_float3		f3Pos;
-	}BULLETDESC;
+		_float3		f3Start_Pos;
+		_float3		f3Target_Pos;
+
+	}BULLETINFO;
 
 private:
 	CB_Star(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -30,11 +31,11 @@ private:
 	virtual ~CB_Star() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual void		Tick(_double TimeDelta) override;
+	virtual void		Late_Tick(_double TimeDelta) override;
+	virtual HRESULT		Render() override;
 
 private:
 	HRESULT					SetUp_Components();
@@ -43,18 +44,12 @@ private:
 private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
-	CTexture*				m_pTextureCom[TYPE_END] = { nullptr };
+	CTexture*				m_pTextureCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
 
 private:
-	_float4					m_f4Pos;
+	BULLETINFO				m_tBulletInfo;
 
-private:
-	_float4x4				m_ViewMatrix;
-	_float4x4				m_ProjMatrix;
-
-	_float					m_fX, m_fY;
-		_int m_iSizeX, m_iSizeY;
 
 public:
 	static	CB_Star*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
