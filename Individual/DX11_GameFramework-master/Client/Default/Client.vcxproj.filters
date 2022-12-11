@@ -118,6 +118,15 @@
     <Filter Include="02.GameObjects\UI\Informacion">
       <UniqueIdentifier>{98f28abc-5e56-4d9c-b993-bf834e0c80e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Informacion\HP">
+      <UniqueIdentifier>{e3e2f479-87a7-4908-9ea9-415240a359a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Informacion\LEVEL">
+      <UniqueIdentifier>{77d5c957-a791-433c-808f-c74c28ee3ed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Hug_Wolf">
+      <UniqueIdentifier>{e8504163-bb30-4f09-93a0-aa0d0819c3b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -225,6 +234,12 @@
     <ClInclude Include="..\public\UI_Informacion.h">
       <Filter>02.GameObjects\UI\Informacion</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_HPGauge.h">
+      <Filter>02.GameObjects\UI\Informacion\HP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\M_Hug_Wolf.h">
+      <Filter>02.GameObjects\Monster\Hug_Wolf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -317,6 +332,12 @@
     <ClCompile Include="..\private\UI_Informacion.cpp">
       <Filter>02.GameObjects\UI\Informacion</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\UI_HPGauge.cpp">
+      <Filter>02.GameObjects\UI\Informacion\HP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Hug_Wolf.cpp">
+      <Filter>02.GameObjects\Monster\Hug_Wolf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -345,6 +366,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Map.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTexArray.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

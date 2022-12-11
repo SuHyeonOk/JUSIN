@@ -457,41 +457,35 @@ void CJake::Anim_Change(_double TimeDelta)
 		switch (m_tPlayerInfo.eState)
 		{
 		case CObj_Manager::PLAYERINFO::IDLE:
-			m_pModelCom->Set_AnimIndex(18);
+			m_pModelCom->Set_AnimIndex(42);
 			break;
 
 		case CObj_Manager::PLAYERINFO::RUN:
-			m_pModelCom->Set_AnimIndex(25);
+			m_pModelCom->Set_AnimIndex(53);
 			break;
 
 		case CObj_Manager::PLAYERINFO::ROLL:
-			m_pModelCom->Set_AnimIndex(19, false);
+			m_pModelCom->Set_AnimIndex(52, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::ATTACK_1:
-			m_pModelCom->Set_AnimIndex(0, false);
-			break;
-		case CObj_Manager::PLAYERINFO::ATTACK_2:
-			m_pModelCom->Set_AnimIndex(1, false);
-			break;
-		case CObj_Manager::PLAYERINFO::ATTACK_3:
-			m_pModelCom->Set_AnimIndex(2, false);
+			m_pModelCom->Set_AnimIndex(4, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::HIT:
-			m_pModelCom->Set_AnimIndex(14, false);
+			m_pModelCom->Set_AnimIndex(38, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STUN:
-			m_pModelCom->Set_AnimIndex(26, false);
+			m_pModelCom->Set_AnimIndex(56, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::CHANGE:
-			m_pModelCom->Set_AnimIndex(10, false);
+			m_pModelCom->Set_AnimIndex(33, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::CHEERING:
-			m_pModelCom->Set_AnimIndex(20, false);
+			m_pModelCom->Set_AnimIndex(9, false);
 			break;
 		}
 

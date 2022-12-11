@@ -205,7 +205,7 @@ void CM_PigWarrior::Monster_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 {
-	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 1.5f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
@@ -215,7 +215,7 @@ void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 {
-	_float	fDistance = CObj_Manager::GetInstance()->Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 1.5f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 

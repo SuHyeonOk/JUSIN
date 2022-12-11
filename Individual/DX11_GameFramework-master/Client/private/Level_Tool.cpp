@@ -68,7 +68,10 @@ HRESULT CLevel_Tool::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_UI_Informacion"))))
 		return E_FAIL;
-
+	
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI_HPGauge"), TEXT("Prototype_GameObject_UI_HPGauge"))))
+		return E_FAIL;
+		
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -128,11 +131,15 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
 		return E_FAIL;
 
-	tMonsterDesc.f3Pos = _float3(-5.f, 2.f, 2.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_0"), TEXT("Prototype_GameObject_M_Gronmes_RED"), &tMonsterDesc)))
-		return E_FAIL;
-	tMonsterDesc.f3Pos = _float3(-4.f, 2.f, 2.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes_RED"), &tMonsterDesc)))
+	//tMonsterDesc.f3Pos = _float3(-5.f, 2.f, 2.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_0"), TEXT("Prototype_GameObject_M_Gronmes_RED"), &tMonsterDesc)))
+	//	return E_FAIL;
+	//tMonsterDesc.f3Pos = _float3(-4.f, 2.f, 2.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes_RED"), &tMonsterDesc)))
+	//	return E_FAIL;
+
+	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Hug_Wolf"), TEXT("Prototype_GameObject_M_Hug_Wolf"), &tMonsterDesc)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -65,6 +65,7 @@ private:
 
 	//////////////////////////// 플레이어가 아닐 때
 
+	int m_i = 0;
 public:
 	static CJake* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

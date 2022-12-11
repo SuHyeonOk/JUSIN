@@ -73,6 +73,9 @@ void CB_Star::Tick(_double TimeDelta)
 	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
 
 	m_pTransformCom->Chase(XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f), TimeDelta);	// 플레이어를 따라간다.
+
+	// 셰이더를 위해.
+	m_dTextrue_TimeAcc += TimeDelta;
 }
 
 void CB_Star::Late_Tick(_double TimeDelta)
@@ -105,9 +108,8 @@ HRESULT CB_Star::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTexArray"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
-
 
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
@@ -137,13 +139,19 @@ HRESULT CB_Star::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResources(m_pShaderCom, "g_Texture")))
-		return E_FAIL;
-
-	//for (_uint i = 0; i <= 6; ++i)
+	//for (_uint i = 0; i <= 6;)
 	//{
-	//	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture"), i))
-	//		return E_FAIL;
+	//	if (0.3 < m_dTextrue_TimeAcc)
+	//	{
+	//		if (FAILED(m_pShaderCom->Set_RawValue("g_iTextureIndex", &i, sizeof _uint)))
+	//			return E_FAIL;
+	//		
+	//		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i)))
+	//			return E_FAIL;
+
+	//		++i;
+	//		m_dTextrue_TimeAcc = 0;
+	//	}
 	//}
 
 	return S_OK;

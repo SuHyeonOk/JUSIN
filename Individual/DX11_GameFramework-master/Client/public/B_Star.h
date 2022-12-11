@@ -50,6 +50,8 @@ private:
 private:
 	BULLETINFO				m_tBulletInfo;
 
+	_double					m_dTextrue_TimeAcc = 0;
+
 
 public:
 	static	CB_Star*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -109,7 +109,7 @@ void		CObj_Manager::Player_Exp()
 	}
 }
 
-_float		CObj_Manager::Player_Distance(_fvector	_MyPos)
+_float		CObj_Manager::Get_Player_Distance(_fvector	_MyPos)
 {
 	_vector	vDistance = CObj_Manager::GetInstance()->Get_Player_Transform() - _MyPos;
 

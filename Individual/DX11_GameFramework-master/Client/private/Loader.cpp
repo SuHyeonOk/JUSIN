@@ -25,6 +25,7 @@
 #include "M_PigWarrior.h"
 #include "M_Pigs.h"
 #include "M_Gronmes_RED.h"
+#include "M_Hug_Wolf.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -154,6 +155,10 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_M_Gonmes_RED"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_RED/Gnomes_RED.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Hug_Wolf */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Hug_Wolf"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Hug_Wolf/Hug_Wolf.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 	/* For.Prototype_Component_Shader_VtxNorTex */
@@ -204,6 +209,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_M_Gronmes_RED */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gronmes_RED"),
 		CM_Gronmes_RED::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Hug_Wolf */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Hug_Wolf"),
+		CM_Hug_Wolf::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
