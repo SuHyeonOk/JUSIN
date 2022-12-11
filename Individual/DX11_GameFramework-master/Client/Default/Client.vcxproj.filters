@@ -112,6 +112,12 @@
     <Filter Include="02.GameObjects\Monster\Pigs">
       <UniqueIdentifier>{aa8d53dd-61f7-4f44-84b5-f6dbd7aef256}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI">
+      <UniqueIdentifier>{31c9cc2e-017f-4748-b2de-94eb53795b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Informacion">
+      <UniqueIdentifier>{98f28abc-5e56-4d9c-b993-bf834e0c80e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -216,6 +222,9 @@
     <ClInclude Include="..\public\M_Pigs.h">
       <Filter>02.GameObjects\Monster\Pigs</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Informacion.h">
+      <Filter>02.GameObjects\UI\Informacion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -304,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Pigs.cpp">
       <Filter>02.GameObjects\Monster\Pigs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Informacion.cpp">
+      <Filter>02.GameObjects\UI\Informacion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -109,6 +112,18 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
 	//	return E_FAIL;
 
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_UI_Informacion"))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 

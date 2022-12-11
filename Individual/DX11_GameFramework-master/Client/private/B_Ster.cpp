@@ -52,16 +52,6 @@ void CB_Star::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	_matrix PlayerWorld;
-	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	_float4x4 f44PlayerWorld;
-	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	cout << "----------------------------------------" << endl;
-
 	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날리고, 
 	// 일정시간 후에 총알이 사라지도록 해야한다.
 
@@ -147,11 +137,14 @@ HRESULT CB_Star::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	for (_uint i = 0; i <= 6; ++i)
-	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture"), i))
-			return E_FAIL;
-	}
+	if (FAILED(m_pTextureCom->Bind_ShaderResources(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
+
+	//for (_uint i = 0; i <= 6; ++i)
+	//{
+	//	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture"), i))
+	//		return E_FAIL;
+	//}
 
 	return S_OK;
 }
