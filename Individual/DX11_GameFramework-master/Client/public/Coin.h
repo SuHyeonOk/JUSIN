@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CShader;
 class CRenderer;
 class CModel;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -41,6 +42,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 
 private:
 	HRESULT		SetUp_Components();
@@ -52,6 +54,10 @@ private:
 private:
 	COININFO	m_tinCoinInfo;
 	COININFO	m_tCoinInfo;
+
+private:
+	_bool		m_bPlayer_Collider = false;
+	_double		m_bDead_TimeAcc = 0;	// 코인은 바로 사라 지지 않고, 자연스럽게 플레이어를 따라가다가 사라짐
 
 public:
 	static	CCoin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -2,6 +2,7 @@
 #include "..\public\Coin.h"
 
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 CCoin::CCoin(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -66,11 +67,28 @@ void CCoin::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	CurrentState(TimeDelta);
+
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CCoin::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
+		m_bPlayer_Collider = true;
+
+	if(m_bPlayer_Collider)
+	{
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
+
+		m_bDead_TimeAcc += TimeDelta;
+		if (1 < m_bDead_TimeAcc)
+		{
+			CGameObject::Set_Dead();
+			m_bDead_TimeAcc = 0;
+		}
+	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -97,6 +115,10 @@ HRESULT CCoin::Render()
 		m_pModelCom->Render(m_pShaderCom, i);
 	}
 
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
@@ -133,6 +155,17 @@ HRESULT CCoin::SetUp_Components()
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
+
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_SPHERE */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -195,6 +228,7 @@ void CCoin::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "..\public\Food.h"
+
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 CFood::CFood(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -60,11 +62,16 @@ void CFood::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CFood::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
+		CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -88,6 +95,10 @@ HRESULT CFood::Render()
 		m_pModelCom->Render(m_pShaderCom, i);
 	}
 
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
@@ -117,6 +128,17 @@ HRESULT CFood::SetUp_Components()
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
+
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_SPHERE */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -169,6 +191,7 @@ void CFood::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

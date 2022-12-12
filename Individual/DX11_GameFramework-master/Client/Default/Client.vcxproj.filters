@@ -127,6 +127,9 @@
     <Filter Include="02.GameObjects\Monster\Tree_Witch">
       <UniqueIdentifier>{e8504163-bb30-4f09-93a0-aa0d0819c3b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\3D_UI">
+      <UniqueIdentifier>{352e6a8d-765b-4250-b2bb-35b391327d7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

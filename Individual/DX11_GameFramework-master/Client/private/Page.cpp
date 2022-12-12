@@ -25,7 +25,7 @@ HRESULT CPage::Initialize_Prototype()
 }
 
 HRESULT CPage::Initialize(void * pArg)
-{	
+{
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
@@ -39,7 +39,7 @@ HRESULT CPage::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
- 	if (FAILED(SetUp_Components()))
+	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
@@ -55,7 +55,7 @@ void CPage::Tick(_double TimeDelta)
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
 
-	// 제 자리에서 뛰었다가 회전하고 반복 그런데 자연스럽지가 않음
+	// 제 자리에서 뛰었다가 회전하고 반복 그런데 자연스럽지가 않음 (사용 안 할듯? 그래둥..)
 	//if (m_bIdle) 
 	//{
 	//	if (Rotation(0.3, 2, TimeDelta))
@@ -66,11 +66,16 @@ void CPage::Tick(_double TimeDelta)
 	//	if (m_pTransformCom->Jump(1.f, 2.f, TimeDelta))
 	//		m_bIdle = true;
 	//}
+
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CPage::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
+		CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -94,6 +99,10 @@ HRESULT CPage::Render()
 		m_pModelCom->Render(m_pShaderCom, i);
 	}
 
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
@@ -112,6 +121,17 @@ HRESULT CPage::SetUp_Components()
 	/* For.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_SPHERE */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -198,6 +218,7 @@ void CPage::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

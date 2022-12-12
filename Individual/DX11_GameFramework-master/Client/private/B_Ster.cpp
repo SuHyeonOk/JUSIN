@@ -32,7 +32,7 @@ HRESULT CB_Star::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 
@@ -45,20 +45,20 @@ HRESULT CB_Star::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
-	cout << "위" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.x << endl;
+	//cout << "위" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.z << endl;
 
-	if (0 < m_tBulletInfo.f3Target_Pos.x)
-		m_tBulletInfo.f3Target_Pos.x -= 5;
-	else
-		m_tBulletInfo.f3Target_Pos.x += 5;
+	//if (0 <= m_tBulletInfo.f3Target_Pos.x)
+	//	m_tBulletInfo.f3Target_Pos.x += 5;
+	//else
+	//	m_tBulletInfo.f3Target_Pos.x -= 5;
 
-	if (0 < m_tBulletInfo.f3Target_Pos.z)
-		m_tBulletInfo.f3Target_Pos.x -= 5;
-	else
-		m_tBulletInfo.f3Target_Pos.x += 5;
+	//if (0 <= m_tBulletInfo.f3Target_Pos.z)
+	//	m_tBulletInfo.f3Target_Pos.z += 5;
+	//else
+	//	m_tBulletInfo.f3Target_Pos.z -= 5;
 
-	cout << "아래" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.x << endl;
-	cout << "---------------------------------" << endl;
+	//cout << "아래" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.z << endl;
+	//cout << "---------------------------------" << endl;
 	return S_OK;
 }
 
@@ -78,16 +78,21 @@ void CB_Star::Tick(_double TimeDelta)
 
 	// 총알이 생성된 뒤 3초가 지나면 삭제한다.
 	m_dBullet_TimeAcc += TimeDelta;
-	if (3 < m_dBullet_TimeAcc)
+	if (1 < m_dBullet_TimeAcc)
 	{
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
 	}
+
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CB_Star::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
+	//	CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
@@ -105,6 +110,10 @@ HRESULT CB_Star::Render()
 
 	m_pVIBufferCom->Render();
 
+//#ifdef _DEBUG
+//	if (nullptr != m_pColliderCom)
+//		m_pColliderCom->Render();
+//#endif
 	return S_OK;
 }
 
@@ -124,6 +133,17 @@ HRESULT CB_Star::SetUp_Components()
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
+
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_SPHERE */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.03f, 0.03f, 0.03f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -180,6 +200,7 @@ void CB_Star::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom);

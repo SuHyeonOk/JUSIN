@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CShader;
 class CRenderer;
 class CModel;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -29,16 +30,17 @@ private:
 	virtual ~CPage() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual void		Tick(_double TimeDelta) override;
+	virtual void		Late_Tick(_double TimeDelta) override;
+	virtual HRESULT		Render() override;
 
 private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 
 private:
 	HRESULT SetUp_Components();

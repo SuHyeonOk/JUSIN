@@ -151,24 +151,24 @@ HRESULT CFinn::SetUp_Components()
 		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
 		return E_FAIL;
 
-	/* For.Com_OBB */
-	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-	ColliderDesc.vRotation = _float3(0.f, XMConvertToRadians(45.0f), 0.f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	///* For.Com_OBB */
+	//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	//ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+	//ColliderDesc.vRotation = _float3(0.f, XMConvertToRadians(45.0f), 0.f);
+	//ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_OBB"), TEXT("Com_OBB"),
-		(CComponent**)&m_pColliderCom[COLLTYPE_OBB], &ColliderDesc)))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_OBB"), TEXT("Com_OBB"),
+	//	(CComponent**)&m_pColliderCom[COLLTYPE_OBB], &ColliderDesc)))
+	//	return E_FAIL;
 
-	/* For.Com_SPHERE */
-	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	///* For.Com_SPHERE */
+	//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	//ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
+	//ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
-		(CComponent**)&m_pColliderCom[COLLTYPE_SPHERE], &ColliderDesc)))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+	//	(CComponent**)&m_pColliderCom[COLLTYPE_SPHERE], &ColliderDesc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

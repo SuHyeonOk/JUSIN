@@ -8,6 +8,7 @@ class CShader;
 class CTexture;
 class CRenderer;
 class CVIBuffer_Terrain;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -46,6 +47,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 
 private:
 	BULLETINFO				m_tBulletInfo;

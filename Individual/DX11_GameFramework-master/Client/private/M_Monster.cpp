@@ -104,9 +104,9 @@ _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float 
 		_vector vCheckDistance = vRandomPos - vFirstPos;
 		_float fCheckDistance = XMVectorGetX(XMVector3Length(vCheckDistance));
 
-		if (fRange < fCheckDistance)
-			m_bRandomPos = false;
-		else
+		//if (fRange < fCheckDistance)
+		//	m_bRandomPos = false;
+		//else
 			m_bRandomPos = true;
 	}
 

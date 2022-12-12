@@ -55,13 +55,8 @@ void CS_StunChick::Tick(_double TimeDelta)
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
-	if (CObj_Manager::PLAYERINFO::STATE::STUN == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		m_Player_Strun = true;
-	else
-	{
-		m_Player_Strun = false;
-		// OBJ_DEAD
-	}
+	if (CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CGameObject::Set_Dead();
 }
 
 void CS_StunChick::Late_Tick(_double TimeDelta)
@@ -76,9 +71,6 @@ void CS_StunChick::Late_Tick(_double TimeDelta)
 
 HRESULT CS_StunChick::Render()
 {
-	//if (!m_Player_Strun)
-	//	return S_OK;
-
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
