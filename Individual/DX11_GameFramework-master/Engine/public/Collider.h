@@ -20,6 +20,7 @@ public:
 		_float3			vSize;		/* 너비, 높이, 깊이 */
 		_float3			vRotation;	/* x축회전, y축회전, z축회전 */
 	}COLLIDERDESC;
+
 public:
 	CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCollider(const CCollider& rhs);
@@ -28,6 +29,9 @@ public:
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType);
 	virtual HRESULT Initialize(void* pArg);
+
+public:
+	_bool Collision(class CCollider* pTargetCollider);
 
 public:
 	void Update(_fmatrix TransformMatrix);
@@ -41,7 +45,9 @@ private:
 	TYPE						m_eType = TYPE_END;
 	BoundingBox*				m_pAABB_Original = nullptr;
 	BoundingBox*				m_pAABB = nullptr;
+	BoundingOrientedBox*		m_pOBB_Original = nullptr;
 	BoundingOrientedBox*		m_pOBB = nullptr;
+	BoundingSphere*				m_pSphere_Original = nullptr;
 	BoundingSphere*				m_pSphere = nullptr;
 	_bool						m_isColl = false;
 
@@ -53,7 +59,8 @@ private:
 	_float4												m_vColor;
 #endif // _DEBUG
 
-	
+private:
+	_matrix Remove_Rotation(_fmatrix TransformMatrix);
 
 public:
 	static CCollider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType);

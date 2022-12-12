@@ -24,13 +24,16 @@ private:
 	virtual HRESULT		SetUp_ShaderResources()					override;
 
 private:
-	void				Monster_Tick(const _double& TimeDelta);
-	void				Idle_Tick(const _double& TimeDelta);
-	void				Move_Tick(const _double& TimeDelta);
-	void				Find_Tick();
-	void				Attack_Tick(const _double& TimeDelta);
-	void				Hit_Tick();
-	void				Die_Tick();
+	virtual void		Monster_Tick(const _double& TimeDelta)	override;
+	virtual void		Idle_Tick(const _double& TimeDelta)		override;
+	virtual void		Move_Tick(const _double& TimeDelta)		override;
+	virtual void		Find_Tick()								override;
+	virtual void		Attack_Tick(const _double& TimeDelta)	override;
+	virtual void		Hit_Tick()								override;
+	virtual	void		Die_Tick()								override;
+
+private:
+	virtual void		Collision_ToPlayer()					override;
 
 private:
 	_float4				m_f4First_Pos;

@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CShader;
 class CRenderer;
 class CModel;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -55,7 +56,16 @@ protected:	// 자식에게 거의 필수적인 함수
 	virtual HRESULT		SetUp_ShaderResources() { return S_OK; }
 
 protected:	// 자식이 자주 사용할 함수
-	virtual void		Monster_Die() {};
+	virtual void			Monster_Tick(const _double& TimeDelta) {};
+	virtual void			Idle_Tick(const _double& TimeDelta) {};
+	virtual void			Move_Tick(const _double& TimeDelta) {};
+	virtual void			Find_Tick() {};
+	virtual void			Attack_Tick(const _double& TimeDelta) {};
+	virtual void			Hit_Tick() {};
+	virtual	void			Die_Tick() {};
+
+protected:
+	virtual void		Collision_ToPlayer() {};
 
 protected:		
 	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 3.f);	// 랜덤 위치로 이동하는 기능.
@@ -64,6 +74,7 @@ protected:
 	CRenderer*			m_pRendererCom = nullptr;
 	CShader*			m_pShaderCom = nullptr;
 	CModel*				m_pModelCom = nullptr;
+	CCollider*			m_pColliderCom[COLLTYPE_END] = { nullptr };
 
 protected:
 	MONSTERINFO			m_tMonsterInfo;

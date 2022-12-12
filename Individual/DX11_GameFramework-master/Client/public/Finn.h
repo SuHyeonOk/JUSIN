@@ -15,9 +15,6 @@ BEGIN(Client)
 
 class CFinn final : public CGameObject
 {
-public:
-	enum COLLIDERTYPE { COLLTYPE_AABB, COLLTYPE_OBB, COLLTYPE_SPHERE, COLLTYPE_END };
-
 private:
 	CFinn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CFinn(const CFinn& rhs);

@@ -35,9 +35,9 @@ HRESULT CM_Tree_Wolf::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
-	MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
-	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+	MonsterDesc.TransformDesc.fSpeedPerSec		= 2.f;
+	MonsterDesc.TransformDesc.fRotationPerSec	= XMConvertToRadians(90.0f);
+	MonsterDesc.TransformDesc.f3Pos				= _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
 
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
 		return E_FAIL;
@@ -68,6 +68,7 @@ void CM_Tree_Wolf::Tick(_double TimeDelta)
 		m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
 		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 	}
+
 	RELEASE_INSTANCE(CGameInstance);
 }
 
@@ -76,6 +77,7 @@ void CM_Tree_Wolf::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
+	Collision_ToPlayer();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -117,6 +119,17 @@ HRESULT CM_Tree_Wolf::SetUp_Components()
 	/* For.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Tree_Witch"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_AABB */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(1.5f, 1.7f, 1.5f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
+		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -236,8 +249,6 @@ void CM_Tree_Wolf::Attack_Tick(const _double& TimeDelta)
 		}
 	}
 
-
-
 }
 
 void CM_Tree_Wolf::Hit_Tick()
@@ -263,6 +274,19 @@ void CM_Tree_Wolf::Die_Tick()
 
 		m_OneCoin = true;
 	}
+}
+
+void CM_Tree_Wolf::Collision_ToPlayer()
+{
+	CGameInstance*			pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_AABB"), 0);
+	if (nullptr == pTargetCollider)
+		return;
+
+	m_pColliderCom[COLLTYPE_AABB]->Collision(pTargetCollider);
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 CM_Tree_Wolf * CM_Tree_Wolf::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

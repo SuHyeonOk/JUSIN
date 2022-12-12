@@ -36,6 +36,9 @@ HRESULT CObject_Manager::Clear(_uint iLevelIndex)
 
 CComponent * CObject_Manager::Get_ComponentPtr(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iLayerIndex) // ¢Â
 {
+	if (iLevelIndex >= m_iNumLevels)
+		return nullptr;
+
 	CLayer*	pLayer = Find_Layer(iLevelIndex, pLayerTag);
 
 	if (nullptr == pLayer)

@@ -31,10 +31,17 @@ void CLayer::Late_Tick(_double TimeDelta)
 
 CComponent * CLayer::Get_ComponentPtr(const _tchar * pComponentTag, _uint iLayerIndex) // ◈
 { // 내 리스트의 iLayerIndex 번째 애의 pComponentTag 컴포넌트를 찾아서 리턴
+
+	if (iLayerIndex >= m_GameObjects.size())
+		return nullptr;
+
 	auto iter = m_GameObjects.begin();
 
 	for (_uint i = 0; i < iLayerIndex; ++i)
 		++iter;
+
+	if (iter == m_GameObjects.end())
+		return nullptr;
 
 	return (*iter)->Get_ComponentPtr(pComponentTag);
 }

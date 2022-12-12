@@ -43,12 +43,13 @@ HRESULT CM_Monster::Initialize(void * pArg)
 void CM_Monster::Tick(const _double& TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CM_Monster::Late_Tick(const _double& TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -59,6 +60,10 @@ HRESULT CM_Monster::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom[COLLTYPE_AABB])
+		m_pColliderCom[COLLTYPE_AABB]->Render();
+#endif
 	return S_OK;
 }
 
@@ -129,6 +134,7 @@ void CM_Monster::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom[COLLTYPE_AABB]);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

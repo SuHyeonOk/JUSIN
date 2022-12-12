@@ -50,7 +50,7 @@ HRESULT CCollider::Initialize_Prototype(TYPE eType)
 HRESULT CCollider::Initialize(void * pArg)
 {
 	COLLIDERDESC		ColliderDesc;
-	memcpy(&ColliderDesc, pArg, sizeof(COLLIDERDESC));	
+	memcpy(&ColliderDesc, pArg, sizeof(COLLIDERDESC));
 
 	switch (m_eType)
 	{
@@ -60,47 +60,51 @@ HRESULT CCollider::Initialize(void * pArg)
 			XMMatrixScaling(ColliderDesc.vSize.x, ColliderDesc.vSize.y, ColliderDesc.vSize.z) *				// 사이즈
 			XMMatrixTranslation(ColliderDesc.vCenter.x, ColliderDesc.vCenter.y, ColliderDesc.vCenter.z));	// 중심
 		m_pAABB = new BoundingBox(*m_pAABB_Original);
+
 		break;
 
 	case CCollider::TYPE_OBB:
-		m_pOBB = new BoundingOrientedBox(_float3(0.f, 0.f, 0.f), _float3(0.5f, 0.5f, 0.5f), _float4(0.f, 0.f, 0.f, 1.f));
-
-		m_pOBB->Transform(*m_pOBB,
-			XMMatrixScaling(ColliderDesc.vSize.x, ColliderDesc.vSize.y, ColliderDesc.vSize.z) *
+		m_pOBB_Original = new BoundingOrientedBox(_float3(0.f, 0.f, 0.f), _float3(ColliderDesc.vSize.x * 0.5f, ColliderDesc.vSize.y * 0.5f, ColliderDesc.vSize.z * 0.5f), _float4(0.f, 0.f, 0.f, 1.f));
+		m_pOBB_Original->Transform(*m_pOBB_Original,
+			// XMMatrixScaling(ColliderDesc.vSize.x, ColliderDesc.vSize.y, ColliderDesc.vSize.z) *			
 			XMMatrixRotationX(ColliderDesc.vRotation.x) *
 			XMMatrixRotationY(ColliderDesc.vRotation.y) *
 			XMMatrixRotationZ(ColliderDesc.vRotation.z) *
 			XMMatrixTranslation(ColliderDesc.vCenter.x, ColliderDesc.vCenter.y, ColliderDesc.vCenter.z));
+		m_pOBB = new BoundingOrientedBox(*m_pOBB_Original);
 		break;
 
 	case CCollider::TYPE_SPHERE:
-		m_pSphere = new BoundingSphere(_float3(0.f, 0.f, 0.f), ColliderDesc.vSize.x * 0.5f);
+		m_pSphere_Original = new BoundingSphere(_float3(0.f, 0.f, 0.f), 0.5f);
 
-		m_pSphere->Transform(*m_pSphere,
+		m_pSphere_Original->Transform(*m_pSphere_Original,
 			XMMatrixScaling(ColliderDesc.vSize.x, ColliderDesc.vSize.y, ColliderDesc.vSize.z) *
 			XMMatrixRotationX(ColliderDesc.vRotation.x) *
 			XMMatrixRotationY(ColliderDesc.vRotation.y) *
 			XMMatrixRotationZ(ColliderDesc.vRotation.z) *
 			XMMatrixTranslation(ColliderDesc.vCenter.x, ColliderDesc.vCenter.y, ColliderDesc.vCenter.z));
+
+		m_pSphere = new BoundingSphere(*m_pSphere_Original);
 		break;
 	}
-	
+
 	return S_OK;
 }
+
 void CCollider::Update(_fmatrix TransformMatrix)
 {
 	switch (m_eType)
 	{
 	case CCollider::TYPE_AABB:
-		m_pAABB_Original->Transform(*m_pAABB, TransformMatrix);		
+		m_pAABB_Original->Transform(*m_pAABB, Remove_Rotation(TransformMatrix));
 		break;
 
 	case CCollider::TYPE_OBB:
-
+		m_pOBB_Original->Transform(*m_pOBB, TransformMatrix);
 		break;
 
 	case CCollider::TYPE_SPHERE:
-
+		m_pSphere_Original->Transform(*m_pSphere, TransformMatrix);
 		break;
 	}
 }
@@ -108,7 +112,7 @@ void CCollider::Update(_fmatrix TransformMatrix)
 #ifdef _DEBUG
 
 HRESULT CCollider::Render()
-{	
+{
 	m_vColor = m_isColl == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
 
 	m_pEffect->SetWorld(XMMatrixIdentity());
@@ -145,6 +149,52 @@ HRESULT CCollider::Render()
 }
 #endif // _DEBUG
 
+_bool CCollider::Collision(CCollider * pTargetCollider)
+{
+	m_isColl = false;	// 처음 들어왔을 때는 무조건 false 로 만들어 준다.
+
+	switch (m_eType)
+	{
+	case CCollider::TYPE_AABB:
+		if (TYPE_AABB == pTargetCollider->m_eType)
+			m_isColl = m_pAABB->Intersects(*pTargetCollider->m_pAABB);	// 결과값으로 _bool 을 반환한다.
+		if (TYPE_OBB == pTargetCollider->m_eType)
+			m_isColl = m_pAABB->Intersects(*pTargetCollider->m_pOBB);
+		if (TYPE_SPHERE == pTargetCollider->m_eType)
+			m_isColl = m_pAABB->Intersects(*pTargetCollider->m_pSphere);
+		break;
+	case CCollider::TYPE_OBB:
+		if (TYPE_AABB == pTargetCollider->m_eType)
+			m_isColl = m_pOBB->Intersects(*pTargetCollider->m_pAABB);
+		if (TYPE_OBB == pTargetCollider->m_eType)
+			m_isColl = m_pOBB->Intersects(*pTargetCollider->m_pOBB);
+		if (TYPE_SPHERE == pTargetCollider->m_eType)
+			m_isColl = m_pOBB->Intersects(*pTargetCollider->m_pSphere);
+		break;
+	case CCollider::TYPE_SPHERE:
+		if (TYPE_AABB == pTargetCollider->m_eType)
+			m_isColl = m_pSphere->Intersects(*pTargetCollider->m_pAABB);
+		if (TYPE_OBB == pTargetCollider->m_eType)
+			m_isColl = m_pSphere->Intersects(*pTargetCollider->m_pOBB);
+		if (TYPE_SPHERE == pTargetCollider->m_eType)
+			m_isColl = m_pSphere->Intersects(*pTargetCollider->m_pSphere);
+		break;
+	}
+
+	return m_isColl;
+}
+
+_matrix CCollider::Remove_Rotation(_fmatrix TransformMatrix)
+{
+	_matrix			ResultMatrix = TransformMatrix;
+
+	ResultMatrix.r[0] = XMVectorSet(1.f, 0.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(TransformMatrix.r[0]));
+	ResultMatrix.r[1] = XMVectorSet(0.f, 1.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(TransformMatrix.r[1]));
+	ResultMatrix.r[2] = XMVectorSet(0.f, 0.f, 1.f, 0.f) * XMVectorGetX(XMVector3Length(TransformMatrix.r[2]));
+
+	return ResultMatrix;
+}
+
 CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType)
 {
 	CCollider*		pInstance = new CCollider(pDevice, pContext);
@@ -175,7 +225,9 @@ void CCollider::Free()
 
 	Safe_Delete(m_pAABB_Original);
 	Safe_Delete(m_pAABB);
+	Safe_Delete(m_pOBB_Original);
 	Safe_Delete(m_pOBB);
+	Safe_Delete(m_pSphere_Original);
 	Safe_Delete(m_pSphere);
 
 #ifdef _DEBUG

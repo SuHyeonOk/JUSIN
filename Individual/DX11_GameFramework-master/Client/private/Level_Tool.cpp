@@ -26,6 +26,12 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Layer_Bullet(TEXT("Layer_Bullet"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
@@ -92,15 +98,34 @@ HRESULT CLevel_Tool::Ready_Layer_Bullet(const _tchar * pLayerTag)
 	return S_OK;
 }
 
+HRESULT CLevel_Tool::Ready_Layer_Finn(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Finn"), &_float3(5.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Tool::Ready_Layer_Jake(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(7.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Prototype_GameObject_Finn"), &_float3(5.f, 0.f, 0.f))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), &_float3(7.f, 0.f, 0.f))))
-		return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
