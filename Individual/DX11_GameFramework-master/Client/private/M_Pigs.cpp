@@ -261,7 +261,7 @@ void CM_Pigs::Find_Tick()
 	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
 	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
 	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
+	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
 		return;
 

@@ -301,6 +301,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Star/Star.png")))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region 버퍼
@@ -413,7 +418,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
-													  /* For.Prototype_GameObject_Terrain */
+	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -445,6 +450,18 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Page */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
 		CPage::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Bullet
+	/* For.Prototype_GameObject_B_Star */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
+		CB_Star::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// 3DUI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
+		CUI_3DTexture::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill

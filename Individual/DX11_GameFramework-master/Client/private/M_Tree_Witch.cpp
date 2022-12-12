@@ -7,6 +7,8 @@
 #include "Skill_Manager.h"		// 스킬 플레이어와 공유하려고..
 #include "Utilities_Manager.h"	// 랜덤값 쓰려고..
 
+#include "UI_3DTexture.h"		// 느낌표 띄우려고...
+
 CM_Tree_Wolf::CM_Tree_Wolf(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
@@ -207,6 +209,23 @@ void CM_Tree_Wolf::Find_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_vector	vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
+	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 2.f, f4MyPos.z - 0.5f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Tree_Wolf::Move_Tick(const _double& TimeDelta)

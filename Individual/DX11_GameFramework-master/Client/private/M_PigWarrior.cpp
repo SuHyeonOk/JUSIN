@@ -6,6 +6,8 @@
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
 
+#include "UI_3DTexture.h"
+
 CM_PigWarrior::CM_PigWarrior(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
@@ -246,6 +248,23 @@ void CM_PigWarrior::Find_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_vector	vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
+	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
