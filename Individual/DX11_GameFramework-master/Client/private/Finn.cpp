@@ -258,7 +258,7 @@ void CFinn::Player_Tick(_double TimeDelta)
 
 	Change_Tick();
 	Cheering_Tick();
-
+	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
 
@@ -273,7 +273,7 @@ void CFinn::Player_Tick(_double TimeDelta)
 		break;
 
 	case CObj_Manager::PLAYERINFO::HIT:
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::STUN:
@@ -485,12 +485,21 @@ void CFinn::Roolling_Tick(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::Hit_Tick()
+void CFinn::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
+	m_dHit_TimeAcc += TimeDelta;
+	if (0.3 < m_dHit_TimeAcc)
+		m_pTransformCom->Go_Backward(0);
+	else
+		m_pTransformCom->Go_Backward(TimeDelta);
+
 	if (m_pModelCom->Get_Finished())
+	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_dHit_TimeAcc = 0;
+	}
 }
 
 void CFinn::Stun_Tick()

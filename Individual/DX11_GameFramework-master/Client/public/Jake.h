@@ -45,7 +45,7 @@ private:
 
 	void	Space_Attack_Tick(_double TimeDelta);
 	void	Roolling_Tick(_double TimeDelta);
-	void	Hit_Tick();
+	void	Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
 	void	Change_Tick();
 	void	Cheering_Tick();

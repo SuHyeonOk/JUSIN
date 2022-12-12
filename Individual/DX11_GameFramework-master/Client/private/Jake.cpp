@@ -82,6 +82,9 @@ HRESULT CJake::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
+		if (2 == i)		// 방패
+			continue;
+
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
@@ -181,7 +184,7 @@ void CJake::Player_Tick(_double TimeDelta)
 		break;
 
 	case CObj_Manager::PLAYERINFO::HIT:
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::STUN:
@@ -388,9 +391,14 @@ void CJake::Roolling_Tick(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CJake::Hit_Tick()
+void CJake::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
+
+	if (10 <= m_pModelCom->Get_Keyframes())
+		m_pTransformCom->Go_Backward(0);
+	else
+		m_pTransformCom->Go_Backward(TimeDelta);
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;

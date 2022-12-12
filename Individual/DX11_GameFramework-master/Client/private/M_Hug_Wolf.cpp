@@ -153,9 +153,6 @@ void CM_Hug_Wolf::Monster_Tick(const _double& TimeDelta)
 	//cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
 	//cout << "----------------------------------------" << endl;
 
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVectorSet(1.f, 0.f, 0.f, 0.f));
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVectorSet(0.f, 0.f, -1.f, 0.f));
-
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
