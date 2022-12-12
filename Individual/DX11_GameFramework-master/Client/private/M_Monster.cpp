@@ -2,6 +2,7 @@
 #include "..\public\M_Monster.h"
 
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 #include "Utilities_Manager.h"
 
 CM_Monster::CM_Monster(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -128,6 +129,11 @@ _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float 
 	}
 	else
 		return false;
+}
+
+_bool CM_Monster::Collision_ToPlayer()
+{
+	return CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom[COLLTYPE_AABB]);
 }
 
 void CM_Monster::Free()

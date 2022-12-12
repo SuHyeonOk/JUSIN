@@ -33,9 +33,6 @@ private:
 	virtual	void		Die_Tick()								override;
 
 private:
-	virtual void		Collision_ToPlayer()					override;
-
-private:
 	_float4				m_f4First_Pos;
 	_float4				m_f4RandomPos;
 	_bool				m_bRandomPos = false;

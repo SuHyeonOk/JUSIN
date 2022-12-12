@@ -32,7 +32,7 @@ HRESULT CB_Star::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 
@@ -45,6 +45,20 @@ HRESULT CB_Star::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
+	cout << "위" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.x << endl;
+
+	if (0 < m_tBulletInfo.f3Target_Pos.x)
+		m_tBulletInfo.f3Target_Pos.x -= 5;
+	else
+		m_tBulletInfo.f3Target_Pos.x += 5;
+
+	if (0 < m_tBulletInfo.f3Target_Pos.z)
+		m_tBulletInfo.f3Target_Pos.x -= 5;
+	else
+		m_tBulletInfo.f3Target_Pos.x += 5;
+
+	cout << "아래" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.x << endl;
+	cout << "---------------------------------" << endl;
 	return S_OK;
 }
 
@@ -52,11 +66,7 @@ void CB_Star::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날리고, 
-	// 일정시간 후에 총알이 사라지도록 해야한다.
-
-	// 플레이어의 좌표가 아닌 총알을 발사하는 몬스터의 Look 으로 총알을 발사하는게 나을 것 같다.
-
+	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날리고, 일정시간 후에 총알이 사라지도록 해야한다.
 	
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_TOOL, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
@@ -64,18 +74,15 @@ void CB_Star::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
-
-	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//_vector		vTargetPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
-	//_vector		vDir = vTargetPos - vMyPos;						
-
-	//vMyPos += XMVector3Normalize(vDir) * 2.f * _float(TimeDelta);
-	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
-
 	m_pTransformCom->Chase(XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f), TimeDelta);	// 플레이어를 따라간다.
 
-	// 셰이더를 위해.
-	m_dTextrue_TimeAcc += TimeDelta;
+	// 총알이 생성된 뒤 3초가 지나면 삭제한다.
+	m_dBullet_TimeAcc += TimeDelta;
+	if (3 < m_dBullet_TimeAcc)
+	{
+		CGameObject::Set_Dead();
+		m_dBullet_TimeAcc = 0;
+	}
 }
 
 void CB_Star::Late_Tick(_double TimeDelta)
@@ -108,7 +115,7 @@ HRESULT CB_Star::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTexArray"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
@@ -139,20 +146,8 @@ HRESULT CB_Star::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	//for (_uint i = 0; i <= 6;)
-	//{
-	//	if (0.3 < m_dTextrue_TimeAcc)
-	//	{
-	//		if (FAILED(m_pShaderCom->Set_RawValue("g_iTextureIndex", &i, sizeof _uint)))
-	//			return E_FAIL;
-	//		
-	//		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i)))
-	//			return E_FAIL;
-
-	//		++i;
-	//		m_dTextrue_TimeAcc = 0;
-	//	}
-	//}
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
 
 	return S_OK;
 }

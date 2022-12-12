@@ -2,10 +2,10 @@
 #include "..\public\M_Tree_Witch.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
-#include "ItemManager.h"
-#include "Skill_Manager.h"
-#include "Utilities_Manager.h"
+#include "Obj_Manager.h"		// 플레이어 정보 얻어오려고..
+#include "ItemManager.h"		// 죽을 때 동전 터트릴려고..
+#include "Skill_Manager.h"		// 스킬 플레이어와 공유하려고..
+#include "Utilities_Manager.h"	// 랜덤값 쓰려고..
 
 CM_Tree_Wolf::CM_Tree_Wolf(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -68,7 +68,6 @@ void CM_Tree_Wolf::Tick(_double TimeDelta)
 		m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
 		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 	}
-
 	RELEASE_INSTANCE(CGameInstance);
 }
 
@@ -77,7 +76,7 @@ void CM_Tree_Wolf::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
-	Collision_ToPlayer();
+	CM_Monster::Collision_ToPlayer();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -261,6 +260,7 @@ void CM_Tree_Wolf::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
+	CGameObject::Set_Dead();
 	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
 
 	if (!m_OneCoin)	// 동전 생성
@@ -270,23 +270,10 @@ void CM_Tree_Wolf::Die_Tick()
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x + 2.f, vf4MyPos.y, vf4MyPos.z), 15, 7, 5);
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 15, 7, 5);
 
 		m_OneCoin = true;
 	}
-}
-
-void CM_Tree_Wolf::Collision_ToPlayer()
-{
-	CGameInstance*			pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_AABB"), 0);
-	if (nullptr == pTargetCollider)
-		return;
-
-	m_pColliderCom[COLLTYPE_AABB]->Collision(pTargetCollider);
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 CM_Tree_Wolf * CM_Tree_Wolf::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

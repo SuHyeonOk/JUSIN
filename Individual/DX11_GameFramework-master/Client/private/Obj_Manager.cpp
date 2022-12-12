@@ -58,6 +58,34 @@ _vector			CObj_Manager::Get_Player_Transform()
 	return _vector();	// 없다면 쓰레기 값을 넘김
 }
 
+_bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
+{
+	// 현재 Player 를 확인하고, 그 Player 의 Collider 를 넘겨준다.
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINN)
+	{
+		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_AABB"), 0);
+		if (nullptr == pTargetCollider)
+			return false;
+
+		return pColliderCom[COLLTYPE_AABB]->Collision(pTargetCollider);
+	}
+	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
+	{
+		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_AABB"), 0);
+		if (nullptr == pTargetCollider)
+			return false;
+
+		return pColliderCom[COLLTYPE_AABB]->Collision(pTargetCollider);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return false;	// 없다면 쓰레기 값을 넘김
+}
+
 void		CObj_Manager::Tick(_double TimeDelta)
 {
 	Current_Player();			// 현재 플레이어가 누구인지 Tick

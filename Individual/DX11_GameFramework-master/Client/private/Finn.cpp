@@ -66,8 +66,7 @@ void CFinn::Tick(_double TimeDelta)
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
 
-	for (_uint i = 0; i < COLLTYPE_END; ++i)
-		m_pColliderCom[i]->Update(m_pTransformCom->Get_WorldMatrix());
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -145,7 +144,7 @@ HRESULT CFinn::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.3f, 1.2f, 0.3f);
+	ColliderDesc.vSize = _float3(0.4f, 1.2f, 0.4f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),

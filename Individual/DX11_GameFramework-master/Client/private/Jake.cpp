@@ -58,6 +58,8 @@ void CJake::Tick(_double TimeDelta)
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
+
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CJake::Late_Tick(_double TimeDelta)
@@ -91,6 +93,10 @@ HRESULT CJake::Render()
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
@@ -111,17 +117,17 @@ HRESULT CJake::SetUp_Components()
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
-	//CCollider::COLLIDERDESC			ColliderDesc;
+	CCollider::COLLIDERDESC			ColliderDesc;
 
-	///* For.Com_AABB */
-	//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	//ColliderDesc.vSize = _float3(0.35f, 1.f, 0.35f);
-	//ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	/* For.Com_AABB */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.35f, 0.7f, 0.35f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 
-	//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
-	//	(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
-	//	return E_FAIL;
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -531,6 +537,7 @@ void CJake::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

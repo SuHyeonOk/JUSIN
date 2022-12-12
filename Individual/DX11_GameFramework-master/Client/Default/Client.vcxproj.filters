@@ -374,8 +374,5 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Map.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTexArray.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

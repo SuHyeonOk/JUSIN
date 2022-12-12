@@ -12,12 +12,28 @@ HRESULT CLayer::Initialize()
 
 void CLayer::Tick(_double TimeDelta)
 {
-	for (auto& pGameObject : m_GameObjects)
+	for (list<class CGameObject*>::iterator iter = m_GameObjects.begin(); iter != m_GameObjects.end();)
 	{
-		if (nullptr != pGameObject)
-			pGameObject->Tick(TimeDelta);
+		if (nullptr != *iter)
+			(*iter)->Tick(TimeDelta);
+
+		// 죽었다면
+		if ((*iter)->Get_Dead())
+		{
+			// 동적할당 해제
+			Safe_Release(*iter);
+			// 리스트에서 이레이즈
+			iter = m_GameObjects.erase(iter);
+		}
+		else
+			++iter;
 	}
-		
+
+	//for (auto& pGameObject : m_GameObjects)
+	//{
+	//	if (nullptr != pGameObject)
+	//		pGameObject->Tick(TimeDelta);
+	//}
 }
 
 void CLayer::Late_Tick(_double TimeDelta)

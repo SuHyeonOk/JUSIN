@@ -18,10 +18,13 @@ protected:
 	virtual ~CGameObject() = default;
 
 public:
-	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // ¢Â
+	static const _tchar*			m_pTransformComTag;
 
 public:
-	static const _tchar*			m_pTransformComTag;
+	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // ¢Â
+
+	_bool		Get_Dead() { return m_bDead; }
+	void		Set_Dead() { m_bDead = true; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -49,6 +52,9 @@ protected:
 protected:	
 	HRESULT				Add_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, class CComponent** ppOut, void* pArg = nullptr);
 	class CComponent*	Find_Component(const _tchar* pComponentTag);
+
+private:
+	_bool		m_bDead = false;
 
 public:	
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;

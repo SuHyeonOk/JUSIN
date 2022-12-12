@@ -90,6 +90,7 @@ void CM_Pigs::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
+	CM_Monster::Collision_ToPlayer();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -143,6 +144,17 @@ HRESULT CM_Pigs::SetUp_Components()
 			return E_FAIL;
 	}
 
+	CCollider::COLLIDERDESC			ColliderDesc;
+
+	/* For.Com_AABB */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.5f, 0.7f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
+		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -189,7 +201,7 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
-		//Attack_Tick(TimeDelta);
+		Attack_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(0, false);
 		break;
 
@@ -264,7 +276,7 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 1.f, f4PlayerPos.z);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
 		return;
-	cout << "น฿ป็!" << endl;
+
 	RELEASE_INSTANCE(CGameInstance);
 }
 

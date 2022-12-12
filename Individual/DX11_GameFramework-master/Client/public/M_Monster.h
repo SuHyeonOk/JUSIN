@@ -64,11 +64,9 @@ protected:	// 자식이 자주 사용할 함수
 	virtual void			Hit_Tick() {};
 	virtual	void			Die_Tick() {};
 
-protected:
-	virtual void		Collision_ToPlayer() {};
-
 protected:		
 	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 3.f);	// 랜덤 위치로 이동하는 기능.
+	_bool				Collision_ToPlayer();
 
 protected:
 	CRenderer*			m_pRendererCom = nullptr;
@@ -76,18 +74,18 @@ protected:
 	CModel*				m_pModelCom = nullptr;
 	CCollider*			m_pColliderCom[COLLTYPE_END] = { nullptr };
 
-protected:
+protected:	// 멤버 변수로 쓰이는 것
 	MONSTERINFO			m_tMonsterInfo;
 	MONSTERDESC			m_tMonsterDesc;
 
-protected:
+protected:	
 	_bool				m_OneCoin = false;	// Monster_Die();
 
-private:
+private:	// RandomMove();
 	_float4				m_f4RandomPos;
 	_bool				m_bRandomPos = false;
 
-public:
+public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;
 	virtual void			Free() override;
 };

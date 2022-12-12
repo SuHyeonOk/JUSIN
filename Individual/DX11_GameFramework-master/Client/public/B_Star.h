@@ -50,7 +50,7 @@ private:
 private:
 	BULLETINFO				m_tBulletInfo;
 
-	_double					m_dTextrue_TimeAcc = 0;
+	_double					m_dBullet_TimeAcc = 0;
 
 
 public:
