@@ -5,12 +5,12 @@
 #include "Obj_Manager.h"
 
 CUI_Informacion::CUI_Informacion(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-	: CGameObject(pDevice, pContext)
+	: CUI_(pDevice, pContext)
 {
 }
 
 CUI_Informacion::CUI_Informacion(const CUI_Informacion & rhs)
-	: CGameObject(rhs)
+	: CUI_(rhs)
 {
 }
 
@@ -165,8 +165,4 @@ void CUI_Informacion::Free()
 
 	for (auto& pTextureCom : m_pTextureCom)
 		Safe_Release(pTextureCom);
-
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pRendererCom);
 }

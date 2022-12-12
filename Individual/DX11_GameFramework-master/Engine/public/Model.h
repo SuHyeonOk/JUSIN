@@ -25,8 +25,9 @@ public:
 	class CBone* Get_BonePtr(const char* pBoneName);
 
 	void		Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
-	_bool		Get_Finished();
-	_int		Get_Keyframes();
+	_bool		Get_Finished();		// 애니메이션이 끝났는지
+	_int		Get_Keyframes();	// 현재 재생중인 애니메이션의 Frames
+	_bool		Animation_Check(_int iCurrentAnimIndex);	// 현재 애니메이션 Index를 받아 현재 애니메이션과 동일하면 true 아니라면 false
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix);

@@ -82,6 +82,14 @@ _int CModel::Get_Keyframes()
 	return m_Animations[m_iCurrentAnimIndex]->Get_Keyframes();
 }
 
+_bool CModel::Animation_Check(_int iCurrentAnimIndex)
+{
+	if (m_iCurrentAnimIndex == iCurrentAnimIndex)
+		return true;
+	else
+		return false;
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const char * pModelFilePath, _fmatrix PivotMatrix)
 {
 	_uint			iFlag = 0;

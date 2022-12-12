@@ -124,7 +124,7 @@
     <Filter Include="02.GameObjects\UI\Informacion\LEVEL">
       <UniqueIdentifier>{77d5c957-a791-433c-808f-c74c28ee3ed0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Hug_Wolf">
+    <Filter Include="02.GameObjects\Monster\Tree_Witch">
       <UniqueIdentifier>{e8504163-bb30-4f09-93a0-aa0d0819c3b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -237,8 +237,11 @@
     <ClInclude Include="..\public\UI_HPGauge.h">
       <Filter>02.GameObjects\UI\Informacion\HP</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\M_Hug_Wolf.h">
-      <Filter>02.GameObjects\Monster\Hug_Wolf</Filter>
+    <ClInclude Include="..\public\UI_.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\M_Tree_Witch.h">
+      <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,8 +338,11 @@
     <ClCompile Include="..\private\UI_HPGauge.cpp">
       <Filter>02.GameObjects\UI\Informacion\HP</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\M_Hug_Wolf.cpp">
-      <Filter>02.GameObjects\Monster\Hug_Wolf</Filter>
+    <ClCompile Include="..\private\UI_.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Tree_Witch.cpp">
+      <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

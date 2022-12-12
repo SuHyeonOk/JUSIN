@@ -1,18 +1,15 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "UI_.h"
 
 BEGIN(Engine)
-class CShader;
 class CTexture;
-class CRenderer;
-class CVIBuffer_Rect;
 END
 
 BEGIN(Client)
 
-class CUI_Informacion final : public CGameObject
+class CUI_Informacion final : public CUI_
 {
 public:
 	enum TEXTTYPE { TYPE_FINN, TYPE_JAKE, TYPE_END };
@@ -23,27 +20,18 @@ private:
 	virtual ~CUI_Informacion() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual void		Tick(_double TimeDelta) override;
+	virtual void		Late_Tick(_double TimeDelta) override;
+	virtual HRESULT		Render() override;
 
 private:
-	CShader*				m_pShaderCom = nullptr;
-	CRenderer*				m_pRendererCom = nullptr;
-	CTexture*				m_pTextureCom[TYPE_END] = { nullptr };
-	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;	
+	CTexture*			m_pTextureCom[TYPE_END] = { nullptr };
 
 private:
-	_float4x4				m_ViewMatrix;
-	_float4x4				m_ProjMatrix;
-
-	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-
-private:
-	HRESULT SetUp_Components();
-	HRESULT SetUp_ShaderResources();
+	virtual			HRESULT SetUp_Components() override;
+	virtual			HRESULT SetUp_ShaderResources() override;
 
 public:
 	static CUI_Informacion* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

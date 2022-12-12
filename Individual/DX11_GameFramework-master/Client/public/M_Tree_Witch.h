@@ -5,12 +5,12 @@
 
 BEGIN(Client)
 
-class CM_Hug_Wolf final : public CM_Monster
+class CM_Tree_Wolf final : public CM_Monster
 {
 private:
-	CM_Hug_Wolf(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CM_Hug_Wolf(const CM_Hug_Wolf& rhs);
-	virtual ~CM_Hug_Wolf() = default;
+	CM_Tree_Wolf(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CM_Tree_Wolf(const CM_Tree_Wolf& rhs);
+	virtual ~CM_Tree_Wolf() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype()					override;
@@ -43,7 +43,7 @@ private:
 	_int	m_i = 0;
 
 public:
-	static	CM_Hug_Wolf*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CM_Tree_Wolf*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free()						override;
 };

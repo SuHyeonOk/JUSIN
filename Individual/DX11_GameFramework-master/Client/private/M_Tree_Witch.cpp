@@ -1,24 +1,25 @@
 #include "stdafx.h"
-#include "..\public\M_Hug_Wolf.h"
+#include "..\public\M_Tree_Witch.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 #include "Skill_Manager.h"
+#include "Utilities_Manager.h"
 
-CM_Hug_Wolf::CM_Hug_Wolf(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Tree_Wolf::CM_Tree_Wolf(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
 
 }
 
-CM_Hug_Wolf::CM_Hug_Wolf(const CM_Hug_Wolf & rhs)
+CM_Tree_Wolf::CM_Tree_Wolf(const CM_Tree_Wolf & rhs)
 	: CM_Monster(rhs)
 {
 
 }
 
-HRESULT CM_Hug_Wolf::Initialize_Prototype()
+HRESULT CM_Tree_Wolf::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -26,7 +27,7 @@ HRESULT CM_Hug_Wolf::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CM_Hug_Wolf::Initialize(void * pArg)
+HRESULT CM_Tree_Wolf::Initialize(void * pArg)
 {
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
@@ -52,7 +53,7 @@ HRESULT CM_Hug_Wolf::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CM_Hug_Wolf::Tick(_double TimeDelta)
+void CM_Tree_Wolf::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -70,7 +71,7 @@ void CM_Hug_Wolf::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Hug_Wolf::Late_Tick(_double TimeDelta)
+void CM_Tree_Wolf::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -80,7 +81,7 @@ void CM_Hug_Wolf::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CM_Hug_Wolf::Render()
+HRESULT CM_Tree_Wolf::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -101,7 +102,7 @@ HRESULT CM_Hug_Wolf::Render()
 	return S_OK;
 }
 
-HRESULT CM_Hug_Wolf::SetUp_Components()
+HRESULT CM_Tree_Wolf::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -114,14 +115,14 @@ HRESULT CM_Hug_Wolf::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Hug_Wolf"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Tree_Witch"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CM_Hug_Wolf::SetUp_ShaderResources()
+HRESULT CM_Tree_Wolf::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -141,18 +142,8 @@ HRESULT CM_Hug_Wolf::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_Hug_Wolf::Monster_Tick(const _double& TimeDelta)
+void CM_Tree_Wolf::Monster_Tick(const _double& TimeDelta)
 {
-	//_matrix PlayerWorld;
-	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	//_float4x4 f44PlayerWorld;
-	//XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-	//cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	//cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	//cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	//cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	//cout << "----------------------------------------" << endl;
-
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
@@ -160,54 +151,55 @@ void CM_Hug_Wolf::Monster_Tick(const _double& TimeDelta)
 	{
 	case MONSTERINFO::STATE::IDLE:
 		Idle_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(7, false);
+		m_pModelCom->Set_AnimIndex(5, false);
 		break;
 
 	case MONSTERINFO::STATE::MOVE:
 		Move_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(8, false);
+		m_pModelCom->Set_AnimIndex(10, false);
 		break;
 
 	case MONSTERINFO::STATE::FIND:
 		Find_Tick();
-		m_pModelCom->Set_AnimIndex(0, false);
+		m_pModelCom->Set_AnimIndex(7, false);
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
 		Attack_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(1, false);
 		break;
 
 	case MONSTERINFO::STATE::HIT:
 		Hit_Tick();
-		m_pModelCom->Set_AnimIndex(6, false);
+		m_pModelCom->Set_AnimIndex(4, false);
 		break;
 
 	case MONSTERINFO::STATE::DIE:
 		Die_Tick();
-		m_pModelCom->Set_AnimIndex(4, false);
+		m_pModelCom->Set_AnimIndex(2, false);
 		break;
 	}
+
+	// 1 : 춤 / 6 일어나기 / 7 : 누르기 / 8 : 뛸준비 / 9 : 누르기 위해 뛴다.
 }
 
-void CM_Hug_Wolf::Idle_Tick(const _double& TimeDelta)
+void CM_Tree_Wolf::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 }
 
-void CM_Hug_Wolf::Find_Tick()
+void CM_Tree_Wolf::Find_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
-	//m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 }
 
-void CM_Hug_Wolf::Move_Tick(const _double& TimeDelta)
+void CM_Tree_Wolf::Move_Tick(const _double& TimeDelta)
 {
-	//m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
 
 	if (0.9f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
@@ -216,11 +208,28 @@ void CM_Hug_Wolf::Move_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Hug_Wolf::Attack_Tick(const _double& TimeDelta)
+void CM_Tree_Wolf::Attack_Tick(const _double& TimeDelta)
 {
-	if (m_pModelCom->Get_Finished())
+	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
+	iRandomNum = 1; // Temp
+	if (0 == iRandomNum)
+		m_pModelCom->Set_AnimIndex(0, false);	// 덩굴
+	else
+		m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프
+
+	if (m_pModelCom->Animation_Check(0))
 	{
-		m_pModelCom->Set_AnimIndex(1, false);
+
+	}
+	if (m_pModelCom->Animation_Check(9))
+	{
+		if (m_pModelCom->Get_Finished())
+		{
+			m_pModelCom->Set_AnimIndex(7, false);	// 누르기
+		}
+	}
+	if (m_pModelCom->Animation_Check(7))
+	{
 		if (m_pModelCom->Get_Finished())
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
@@ -231,13 +240,13 @@ void CM_Hug_Wolf::Attack_Tick(const _double& TimeDelta)
 
 }
 
-void CM_Hug_Wolf::Hit_Tick()
+void CM_Tree_Wolf::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
-void CM_Hug_Wolf::Die_Tick()
+void CM_Tree_Wolf::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
@@ -256,31 +265,31 @@ void CM_Hug_Wolf::Die_Tick()
 	}
 }
 
-CM_Hug_Wolf * CM_Hug_Wolf::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Tree_Wolf * CM_Tree_Wolf::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CM_Hug_Wolf*		pInstance = new CM_Hug_Wolf(pDevice, pContext);
+	CM_Tree_Wolf*		pInstance = new CM_Tree_Wolf(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CM_Hug_Wolf");
+		MSG_BOX("Failed to Created : CM_Tree_Wolf");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CM_Hug_Wolf::Clone(void * pArg)
+CGameObject * CM_Tree_Wolf::Clone(void * pArg)
 {
-	CM_Hug_Wolf*		pInstance = new CM_Hug_Wolf(*this);
+	CM_Tree_Wolf*		pInstance = new CM_Tree_Wolf(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CM_Hug_Wolf");
+		MSG_BOX("Failed to Cloned : CM_Tree_Wolf");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CM_Hug_Wolf::Free()
+void CM_Tree_Wolf::Free()
 {
 	__super::Free();
 

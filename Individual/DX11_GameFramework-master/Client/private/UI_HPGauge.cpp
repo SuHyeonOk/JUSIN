@@ -5,12 +5,12 @@
 #include "Obj_Manager.h"
 
 CUI_HPGauge::CUI_HPGauge(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-	: CGameObject(pDevice, pContext)
+	: CUI_(pDevice, pContext)
 {
 }
 
 CUI_HPGauge::CUI_HPGauge(const CUI_HPGauge & rhs)
-	: CGameObject(rhs)
+	: CUI_(rhs)
 {
 }
 
@@ -27,8 +27,8 @@ HRESULT CUI_HPGauge::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	GameObjectDesc.TransformDesc.fSpeedPerSec		= 5.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec	= XMConvertToRadians(90.0f);
 
 	if (FAILED(CGameObject::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -42,9 +42,8 @@ HRESULT CUI_HPGauge::Initialize(void * pArg)
 	m_fX = m_fSizeX * 0.5f;
 	m_fY = m_fSizeY * 0.5f;
 
-
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-420, 250 + 100/* + 100 Áö¿ì±â TODO*/, 0.f, 1.f));
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));
@@ -155,7 +154,4 @@ void CUI_HPGauge::Free()
 	__super::Free();
 
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pRendererCom);
 }
