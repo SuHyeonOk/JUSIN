@@ -55,6 +55,8 @@ private:
 	void	Change_Tick();
 	void	Cheering_Tick();
 
+	void	TreeWitch_Tick();
+
 	void	Anim_Change(_double TimeDelta);
 
 private:
@@ -81,7 +83,7 @@ private:
 
 	// Anim Test
 	_int		m_AnimiNum = 0;
-
+	_int		m_i = 0;
 	//////////////////////////// 플레이어가 아닐 때
 
 public:

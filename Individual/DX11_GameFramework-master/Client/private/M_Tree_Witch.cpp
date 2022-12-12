@@ -164,18 +164,18 @@ void CM_Tree_Wolf::Monster_Tick(const _double& TimeDelta)
 	switch (m_tMonsterInfo.eState)
 	{
 	case MONSTERINFO::STATE::IDLE:
-		Idle_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(5, false);
+		Idle_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::MOVE:
-		Move_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(10, false);
+		Move_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::FIND:
+		m_pModelCom->Set_AnimIndex(8, false);
 		Find_Tick();
-		m_pModelCom->Set_AnimIndex(7, false);
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
@@ -183,13 +183,13 @@ void CM_Tree_Wolf::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::HIT:
-		Hit_Tick();
 		m_pModelCom->Set_AnimIndex(4, false);
+		Hit_Tick();
 		break;
 
 	case MONSTERINFO::STATE::DIE:
-		Die_Tick();
 		m_pModelCom->Set_AnimIndex(2, false);
+		Die_Tick();
 		break;
 	}
 
@@ -201,6 +201,15 @@ void CM_Tree_Wolf::Idle_Tick(const _double& TimeDelta)
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+
+	if (m_bAttack)
+	{
+		if (m_pModelCom->Get_Finished())
+		{
+			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+			m_bAttack = false;
+		}
+	}
 }
 
 void CM_Tree_Wolf::Find_Tick()
@@ -231,42 +240,70 @@ void CM_Tree_Wolf::Find_Tick()
 void CM_Tree_Wolf::Move_Tick(const _double& TimeDelta)
 {
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
 
-	if (0.9f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
+	iRandomNum = 1; // Temp
+	if (0 == iRandomNum)		// 덩굴 생성
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
+
+		if (2.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		{
+			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+			m_pModelCom->Set_AnimIndex(0, false);
+		}
+	}		
+	else						// 깔아 뭉개기	
+	{
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
+
+		if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		{
+			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+			m_pModelCom->Set_AnimIndex(8, false);
+
+			// 플레이어의 애니메이션 상태 변경하기
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH);
+		}
 	}
 }
 
 void CM_Tree_Wolf::Attack_Tick(const _double& TimeDelta)
 {
-	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
-	iRandomNum = 1; // Temp
-	if (0 == iRandomNum)
-		m_pModelCom->Set_AnimIndex(0, false);	// 덩굴
-	else
-		m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프
-
+	// 덩굴
 	if (m_pModelCom->Animation_Check(0))
 	{
+		cout << "0" << endl;
+		return;
+	}
+	
+	//cout << m_pModelCom->Get_AnimIndex() << endl;
 
-	}
-	if (m_pModelCom->Animation_Check(9))
+	// 깔아 뭉개기 
+	if (m_pModelCom->Animation_Check(8) && m_pModelCom->Get_Finished())
 	{
-		if (m_pModelCom->Get_Finished())
-		{
-			m_pModelCom->Set_AnimIndex(7, false);	// 누르기
-		}
+		//cout << "888888" << endl;
+		m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프
+		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP);
 	}
-	if (m_pModelCom->Animation_Check(7))
+	if (m_pModelCom->Animation_Check(9) && m_pModelCom->Get_Finished())
 	{
-		if (m_pModelCom->Get_Finished())
-		{
-			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		}
+		//cout << "9999999" << endl;
+		m_pModelCom->Set_AnimIndex(7, false);	// 누르기
+		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE);
 	}
-
+	if (m_pModelCom->Animation_Check(7) && m_pModelCom->Get_Finished())
+	{
+		//cout << "7777777" << endl;
+		m_pModelCom->Set_AnimIndex(6, false);	// 일어나기
+		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE);
+	}
+	if (m_pModelCom->Animation_Check(6) && m_pModelCom->Get_Finished())
+	{
+		//cout << "666666" << endl;
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_bAttack = true;
+	}
 }
 
 void CM_Tree_Wolf::Hit_Tick()

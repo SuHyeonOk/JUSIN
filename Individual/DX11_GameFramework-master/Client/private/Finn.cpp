@@ -2,9 +2,9 @@
 #include "..\public\Finn.h"
 
 #include "GameInstance.h"
+#include "Skill_Manager.h"	// 할머니 스킬 알려고
 
 #include "M_Monster.h"
-
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -298,6 +298,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Stun_Tick();
 		break;
 
+	case CObj_Manager::PLAYERINFO::TREEWITCH:
+		TreeWitch_Tick();
+		break;
+
 	}
 
 	Anim_Change(TimeDelta);
@@ -406,9 +410,10 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 void CFinn::Key_Input(_double TimeDelta)
 {
-	if (m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
-		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
-		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
+	if (m_tPlayerInfo.eState == m_tPlayerInfo.ROLL	||
+		m_tPlayerInfo.eState == m_tPlayerInfo.HIT	||
+		m_tPlayerInfo.eState == m_tPlayerInfo.STUN	||
+		m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH)
 	{
 		m_OnMove = false;
 		return;
@@ -572,6 +577,42 @@ void CFinn::Cheering_Tick()
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+}
+
+void CFinn::TreeWitch_Tick()
+{
+	if (m_tPlayerInfo.ePlayer != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		return;
+
+	m_OnMove = false;
+
+	// 할머니 스킬
+	// [핀] 55 : 눌리기 직전 54 : 눌리기 53 : 일어나기
+
+	CSkill_Manager::MONSTERSKILL tMonsterSkill;
+	tMonsterSkill.eTreeWitch = CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch;
+
+	cout << tMonsterSkill.eTreeWitch <<  "  |  " << CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch << " \\ " << 
+		CSkill_Manager::GetInstance()->Get_TreeWitch_Skill() << endl;
+
+	switch (tMonsterSkill.eTreeWitch)
+	{
+	case CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP:
+		m_pModelCom->Set_AnimIndex(55, false);
+		break;
+
+	case CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE:
+		m_pModelCom->Set_AnimIndex(54, false);
+		break;
+
+	case CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE:
+	{
+		m_pModelCom->Set_AnimIndex(53, false);
+		if (m_pModelCom->Animation_Check(53) && m_pModelCom->Get_Finished())
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
+		break;
+	}
 }
 
 void CFinn::Anim_Change(_double TimeDelta)

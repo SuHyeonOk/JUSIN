@@ -12,9 +12,9 @@ class CSkill_Manager : public CBase
 public:
 	typedef struct tagMonsterSkill
 	{
-		enum HUGWOLF { BUG, MISS, HUGWOLF_END };
+		enum TREEWITCH { JUMP, PRESSURE, RISE, TREEWITCH_END };
 
-		HUGWOLF		eHugWolf;
+		TREEWITCH		eTreeWitch;
 
 	}MONSTERSKILL;
 
@@ -23,9 +23,9 @@ public:
 	virtual ~CSkill_Manager() = default;
 
 public:
-	MONSTERSKILL	Get_MonsterSkill() { return m_tMonsterSkill; }
-	void			Set_MonsterSkill(MONSTERSKILL::HUGWOLF eHugWolf) { m_tMonsterSkill.eHugWolf = eHugWolf; }
-
+	MONSTERSKILL	Get_Monster_Skill() { return m_tMonsterSkill; }
+	MONSTERSKILL::TREEWITCH		Get_TreeWitch_Skill() { return m_tMonsterSkill.eTreeWitch; }
+	void						Set_TreeWitch_Skill(MONSTERSKILL::TREEWITCH eTreeWitch) { m_tMonsterSkill.eTreeWitch = eTreeWitch; }
 
 private:
 	MONSTERSKILL	m_tMonsterSkill;

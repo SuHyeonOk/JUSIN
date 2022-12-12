@@ -130,6 +130,9 @@
     <Filter Include="02.GameObjects\UI\3DTexture">
       <UniqueIdentifier>{352e6a8d-765b-4250-b2bb-35b391327d7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Bullet\Random">
+      <UniqueIdentifier>{7de3fb44-f513-48d9-8163-d9582ba03b01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
