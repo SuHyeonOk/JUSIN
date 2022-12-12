@@ -127,7 +127,7 @@
     <Filter Include="02.GameObjects\Monster\Tree_Witch">
       <UniqueIdentifier>{e8504163-bb30-4f09-93a0-aa0d0819c3b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\UI\3D_UI">
+    <Filter Include="02.GameObjects\UI\3DTexture">
       <UniqueIdentifier>{352e6a8d-765b-4250-b2bb-35b391327d7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -246,6 +246,9 @@
     <ClInclude Include="..\public\M_Tree_Witch.h">
       <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_3DTexture.h">
+      <Filter>02.GameObjects\UI\3DTexture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -346,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Tree_Witch.cpp">
       <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_3DTexture.cpp">
+      <Filter>02.GameObjects\UI\3DTexture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

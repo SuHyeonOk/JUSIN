@@ -10,6 +10,9 @@
 // Map
 #include "Map_Garden.h"
 
+// 3DUI
+#include "UI_3DTexture.h"
+
 // Item
 #include "Food.h"
 #include "Coin.h"
@@ -201,6 +204,12 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_B_Star */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
 		CB_Star::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// 3DUI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
+		CUI_3DTexture::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Monster

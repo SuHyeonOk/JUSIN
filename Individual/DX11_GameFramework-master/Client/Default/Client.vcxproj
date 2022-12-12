@@ -199,6 +199,7 @@
     <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_.h" />
+    <ClInclude Include="..\public\UI_3DTexture.h" />
     <ClInclude Include="..\public\UI_HPGauge.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
     <ClInclude Include="..\public\Utilities_Manager.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\UI_.cpp" />
+    <ClCompile Include="..\private\UI_3DTexture.cpp" />
     <ClCompile Include="..\private\UI_HPGauge.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
     <ClCompile Include="..\private\Utilities_Manager.cpp" />

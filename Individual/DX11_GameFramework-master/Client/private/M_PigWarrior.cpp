@@ -271,6 +271,7 @@ void CM_PigWarrior::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
+	CGameObject::Set_Dead();
 	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
 
 	if (!m_OneCoin)	// 동전 생성

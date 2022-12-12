@@ -7,6 +7,7 @@
 #include "Utilities_Manager.h"
 
 #include "B_Star.h"
+#include "UI_3DTexture.h"
 
 CM_Pigs::CM_Pigs(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -248,6 +249,23 @@ void CM_Pigs::Find_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_vector	vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4	f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
+	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Pigs::Attack_Tick(const _double& TimeDelta)
@@ -273,8 +291,8 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 
 	CB_Star::BULLETINFO		tBulletInfo;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z);
-	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 1.f, f4PlayerPos.z);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
+	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y * 0.5f, f4PlayerPos.z);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -290,6 +308,7 @@ void CM_Pigs::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
+	CGameObject::Set_Dead();
 	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
 
 	if (!m_OneCoin)	// 동전 생성
