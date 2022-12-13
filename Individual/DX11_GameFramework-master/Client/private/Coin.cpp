@@ -128,7 +128,8 @@ HRESULT CCoin::Render()
 
 void CCoin::On_Collision(CGameObject * pOther)
 {
-	m_bPlayer_Collider = true;
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+		m_bPlayer_Collider = true;
 }
 
 HRESULT CCoin::SetUp_Components()

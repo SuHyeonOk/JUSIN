@@ -26,6 +26,8 @@ HRESULT CB_Star::Initialize_Prototype()
 
 HRESULT CB_Star::Initialize(void * pArg)
 {	
+	m_wsTag = L"2DBullet";
+
 	if (nullptr != pArg)
 		memcpy(&m_tBulletInfo, pArg, sizeof(BULLETINFO));
 
@@ -93,6 +95,8 @@ void CB_Star::Late_Tick(_double TimeDelta)
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	CGameObject::Set_Dead();
 
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
@@ -109,11 +113,15 @@ HRESULT CB_Star::Render()
 
 	m_pVIBufferCom->Render();
 
-//#ifdef _DEBUG
-//	if (nullptr != m_pColliderCom)
-//		m_pColliderCom->Render();
-//#endif
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
+}
+
+void CB_Star::On_Collision(CGameObject * pOther)
+{
 }
 
 HRESULT CB_Star::SetUp_Components()
@@ -141,7 +149,7 @@ HRESULT CB_Star::SetUp_Components()
 	ColliderDesc.vSize = _float3(0.03f, 0.03f, 0.03f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 

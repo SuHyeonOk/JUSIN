@@ -93,7 +93,6 @@ void CM_Pigs::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
-	CM_Monster::Collision_ToPlayer();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -118,6 +117,11 @@ HRESULT CM_Pigs::Render()
 	}
 
 	return S_OK;
+}
+
+void CM_Pigs::On_Collision(CGameObject * pOther)
+{
+
 }
 
 HRESULT CM_Pigs::SetUp_Components()
@@ -154,7 +158,7 @@ HRESULT CM_Pigs::SetUp_Components()
 	ColliderDesc.vSize = _float3(0.5f, 0.7f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_AABB"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
 		return E_FAIL;
 

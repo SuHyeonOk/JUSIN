@@ -26,6 +26,8 @@ HRESULT CB_3DAnimBullet::Initialize_Prototype()
 
 HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 {	
+	m_wsTag = L"3DBullet";
+
 	if (nullptr != pArg)
 		memcpy(&m_tBulletInfo, pArg, sizeof(ANIMBULLETINFO));
 
@@ -76,10 +78,9 @@ void CB_3DAnimBullet::Late_Tick(_double TimeDelta)
 		}
 	}
 
-	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
-	//	CGameObject::Set_Dead();
-
 	m_pModelCom->Play_Animation(TimeDelta);
+
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
@@ -144,7 +145,7 @@ HRESULT CB_3DAnimBullet::SetUp_Components()
 		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 	}
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 

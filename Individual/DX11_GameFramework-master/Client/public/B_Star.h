@@ -38,6 +38,8 @@ public:
 	virtual void		Late_Tick(_double TimeDelta) override;
 	virtual HRESULT		Render() override;
 
+	virtual void		On_Collision(CGameObject* pOther) override;
+
 private:
 	HRESULT					SetUp_Components();
 	HRESULT					SetUp_ShaderResources();

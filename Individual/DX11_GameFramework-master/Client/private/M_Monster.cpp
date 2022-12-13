@@ -52,6 +52,8 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -133,7 +135,8 @@ _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float 
 
 _bool CM_Monster::Collision_ToPlayer()
 {
-	return CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom[COLLTYPE_AABB]);
+	//return CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom[COLLTYPE_AABB]);
+	return false;
 }
 
 void CM_Monster::Free()
