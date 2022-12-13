@@ -7,6 +7,8 @@
 #include "Utilities_Manager.h"
 
 #include "UI_3DTexture.h"
+#include "W_PigWarrior.h"
+#include "Bone.h"
 
 CM_PigWarrior::CM_PigWarrior(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -61,6 +63,9 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Parts()))
+		return E_FAIL;
+
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.iHp		= 50;
 	m_tMonsterInfo.iExp		= 25;
@@ -84,6 +89,9 @@ void CM_PigWarrior::Tick(_double TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 	}
 
+	m_MonsterParts[0]->Tick(TimeDelta);
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
+
 	RELEASE_INSTANCE(CGameInstance);
 }
 
@@ -92,6 +100,9 @@ void CM_PigWarrior::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
+
+	m_MonsterParts[0]->Late_Tick(TimeDelta);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_M_WEAPON, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -109,6 +120,9 @@ HRESULT CM_PigWarrior::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
+		if (1 == i)
+			continue;
+
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
@@ -177,6 +191,33 @@ HRESULT CM_PigWarrior::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CM_PigWarrior::Ready_Parts()
+{
+	CGameObject*		pPartObject = nullptr;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CW_PigWarrior::WEAPONDESC			WeaponDesc;
+	ZeroMemory(&WeaponDesc, sizeof(CW_PigWarrior::WEAPONDESC));
+
+	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("woodenSword");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_PigWarrior_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_MonsterParts.push_back(pPartObject);
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -357,5 +398,7 @@ void CM_PigWarrior::Free()
 {
 	__super::Free();
 
-
+	for (auto& pPart : m_MonsterParts)
+		Safe_Release(pPart);
+	m_MonsterParts.clear();
 }

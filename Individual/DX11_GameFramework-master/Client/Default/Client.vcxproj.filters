@@ -133,7 +133,7 @@
     <Filter Include="02.GameObjects\Bullet\3D_AnimBullet">
       <UniqueIdentifier>{7de3fb44-f513-48d9-8163-d9582ba03b01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\Weapon">
+    <Filter Include="02.GameObjects\Player\Finn\Weapon">
       <UniqueIdentifier>{cf813d33-0cb7-491b-bc30-ac569231de62}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -259,7 +259,10 @@
       <Filter>02.GameObjects\Bullet\3D_AnimBullet</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Finn_Weapon.h">
-      <Filter>02.GameObjects\Player\Weapon</Filter>
+      <Filter>02.GameObjects\Player\Finn\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\W_PigWarrior.h">
+      <Filter>02.GameObjects\Monster\PigWarrior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -369,7 +372,10 @@
       <Filter>02.GameObjects\Bullet\3D_AnimBullet</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Finn_Weapon.cpp">
-      <Filter>02.GameObjects\Player\Weapon</Filter>
+      <Filter>02.GameObjects\Player\Finn\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\W_PigWarrior.cpp">
+      <Filter>02.GameObjects\Monster\PigWarrior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

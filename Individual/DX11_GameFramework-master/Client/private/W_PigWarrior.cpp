@@ -1,22 +1,24 @@
 #include "stdafx.h"
-#include "..\public\Finn_Weapon.h"
+#include "..\public\W_PigWarrior.h"
 
 #include "GameInstance.h"
 #include "Bone.h"
 
-CFinn_Weapon::CFinn_Weapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+#include "Obj_Manager.h"
+
+CW_PigWarrior::CW_PigWarrior(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CFinn_Weapon::CFinn_Weapon(const CFinn_Weapon & rhs)
+CW_PigWarrior::CW_PigWarrior(const CW_PigWarrior & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CFinn_Weapon::Initialize_Prototype()
+HRESULT CW_PigWarrior::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,10 +26,8 @@ HRESULT CFinn_Weapon::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CFinn_Weapon::Initialize(void * pArg)
+HRESULT CW_PigWarrior::Initialize(void * pArg)
 {
-	m_wsTag = L"Finn_Weapon";
-
 	if (nullptr != pArg)
 		memcpy(&m_WeaponDesc, pArg, sizeof(m_WeaponDesc));
 
@@ -37,19 +37,23 @@ HRESULT CFinn_Weapon::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;	
 
-	//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
-	
+	if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)
+	{
+		m_wsTag = L"PigWarrior_Sword";
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -90.f);
+	}
+
 	return S_OK;
 }
 
-void CFinn_Weapon::Tick(_double TimeDelta)
+void CW_PigWarrior::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CFinn_Weapon::Late_Tick(_double TimeDelta)
+void CW_PigWarrior::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -64,11 +68,13 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
 
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_M_WEAPON, this);
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CFinn_Weapon::Render()
+HRESULT CW_PigWarrior::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -86,14 +92,22 @@ HRESULT CFinn_Weapon::Render()
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
 	}
 
-//#ifdef _DEBUG
-//	if (nullptr != m_pColliderCom)
-//		m_pColliderCom->Render();
-//#endif
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
-HRESULT CFinn_Weapon::SetUp_Components()
+void CW_PigWarrior::On_Collision(CGameObject * pOther)
+{
+	//  TODO : 체력이 충돌 되는 순간 한 번만 깍이는 것이아닌 드드드드 계속 충돌이 될 것이다.
+	// 어떻게 구현하는 것이 좋을까? 플레이어의 지금은 Set_Player_MinusHp() 에서 1.f 초 동안에는 다음 체력이 깍일 수 없도록 하는 방법이 있다.
+	//if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	//	CObj_Manager::GetInstance()->Set_Player_MinusHp(m_WeaponDesc.iAttack);
+}
+
+HRESULT CW_PigWarrior::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -106,7 +120,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),	
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"), TEXT("Com_Model"),	
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -114,7 +128,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(5.f, 5.f, 5.f);
+	ColliderDesc.vSize = _float3(1.f, 5.f, 1.f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
@@ -124,7 +138,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CFinn_Weapon::SetUp_ShaderResources()
+HRESULT CW_PigWarrior::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -143,7 +157,6 @@ HRESULT CFinn_Weapon::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_SocketMatrix", &m_SocketMatrix)))
 		return E_FAIL;
 
-
 	/* For.Lights */
 	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
 	if (nullptr == pLightDesc)
@@ -154,31 +167,31 @@ HRESULT CFinn_Weapon::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CFinn_Weapon * CFinn_Weapon::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CW_PigWarrior * CW_PigWarrior::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CFinn_Weapon*		pInstance = new CFinn_Weapon(pDevice, pContext);
+ 	CW_PigWarrior*		pInstance = new CW_PigWarrior(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CFinn_Weapon");
+		MSG_BOX("Failed to Created : CW_PigWarrior");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CFinn_Weapon::Clone(void * pArg)
+CGameObject * CW_PigWarrior::Clone(void * pArg)
 {
-	CFinn_Weapon*		pInstance = new CFinn_Weapon(*this);
+	CW_PigWarrior*		pInstance = new CW_PigWarrior(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CFinn_Weapon");
+		MSG_BOX("Failed to Cloned : CW_PigWarrior");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CFinn_Weapon::Free()
+void CW_PigWarrior::Free()
 {
 	__super::Free();
 

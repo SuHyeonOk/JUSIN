@@ -25,6 +25,8 @@ private:
 	virtual HRESULT		SetUp_Components()						override;
 	virtual HRESULT		SetUp_ShaderResources()					override;
 
+	HRESULT				Ready_Parts();
+
 private:
 	virtual void		Monster_Tick(const _double& TimeDelta)	override;
 	virtual void		Idle_Tick(const _double& TimeDelta)		override;
@@ -35,6 +37,8 @@ private:
 	virtual	void		Die_Tick()								override;
 
 private:
+	vector<CGameObject*>		m_MonsterParts;
+	
 	_float4				m_f4First_Pos;
 	_float4				m_f4RandomPos;
 	_bool				m_bRandomPos = false;

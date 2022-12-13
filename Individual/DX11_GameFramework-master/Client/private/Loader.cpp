@@ -15,6 +15,7 @@
 
 // Weapon
 #include "Finn_Weapon.h"
+#include "W_PigWarrior.h"
 
 // Item
 #include "Food.h"
@@ -151,11 +152,15 @@ HRESULT CLoader::Loading_Tool()
 	// Weapon
 	/* For.Prototype_Component_Model_W_Root_sword */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Root_sword/Root_sword.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Root_sword/Root_sword.fbx", PivotMatrix))))
 		return E_FAIL;
 	/* For.Prototype_Component_Model_W_Family_sword */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Player/Family_sword/Family_sword.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Family_sword/Family_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Wooden_Sword */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Wooden_Sword/Wooden_Sword.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -205,6 +210,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_Finn_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Weapon"),
 		CFinn_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_PigWarrior_Weapon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
+		CW_PigWarrior::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Page

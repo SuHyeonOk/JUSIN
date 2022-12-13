@@ -37,10 +37,9 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
-	void	Shader_Time(_double TimeDelta);
+	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
-private:
-	HRESULT Ready_Parts();
+	void	Shader_Time(_double TimeDelta);
 
 private:
 	void	Player_Info();
