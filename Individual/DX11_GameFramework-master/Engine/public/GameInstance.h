@@ -8,6 +8,7 @@
 #include "Component_Manager.h"
 #include "PipeLine.h"
 #include "Picking.h"
+#include "Collider_Manager.h"
 
 BEGIN(Engine)
 
@@ -91,6 +92,12 @@ public: // for imgui manager
 public: // For.Picking
 	_float4		Get_MousePos();
 
+
+public: // For. Collider_Manager
+	HRESULT Add_ColGroup(CCollider_Manager::COL_TYPE eColType, class CGameObject* pGameObject);
+	void Update_Col(CCollider_Manager::COL_TYPE eColType_L, CCollider_Manager::COL_TYPE eColType_R);
+	void Reset_Col();
+
 private:
 	static _uint					m_iStaticLevelIndex;
 
@@ -106,6 +113,7 @@ private:
 
 	class CImgui_Manager*			m_pImgui_Manager = nullptr;
 	class CPicking*					m_pPicking = nullptr;
+	class CCollider_Manager*		m_pCollider_Manager = nullptr;
 
 public:
 	static void Release_Engine();

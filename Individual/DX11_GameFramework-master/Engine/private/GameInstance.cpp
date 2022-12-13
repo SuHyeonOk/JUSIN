@@ -6,6 +6,7 @@
 #include "Timer_Manager.h"
 #include "Light_Manager.h"
 
+
 IMPLEMENT_SINGLETON(CGameInstance)
 
 _uint CGameInstance::m_iStaticLevelIndex = 0;
@@ -23,7 +24,9 @@ CGameInstance::CGameInstance()
 
 	, m_pImgui_Manager(CImgui_Manager::GetInstance())
 	, m_pPicking(CPicking::GetInstance())
+	, m_pCollider_Manager(CCollider_Manager::GetInstance())
 {
+	Safe_AddRef(m_pCollider_Manager);
 	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pComponent_Manager);
 	Safe_AddRef(m_pObject_Manager);
@@ -395,9 +398,35 @@ _float4 CGameInstance::Get_MousePos()
 	m_pPicking->Get_MousePos();
 }
 
+HRESULT CGameInstance::Add_ColGroup(CCollider_Manager::COL_TYPE eColType, CGameObject * pGameObject)
+{
+	if (m_pCollider_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pCollider_Manager->Add_ColGroup(eColType, pGameObject);
+}
+
+void CGameInstance::Update_Col(CCollider_Manager::COL_TYPE eColType_L, CCollider_Manager::COL_TYPE eColType_R)
+{
+	if (m_pCollider_Manager == nullptr)
+		return;
+
+	m_pCollider_Manager->Update_Col(eColType_L, eColType_R);
+}
+
+void CGameInstance::Reset_Col()
+{
+	if (m_pCollider_Manager == nullptr)
+		return;
+
+	m_pCollider_Manager->Reset_Col();
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::GetInstance()->DestroyInstance();
+
+	CCollider_Manager::GetInstance()->DestroyInstance();
 
 	CObject_Manager::GetInstance()->DestroyInstance();
 
@@ -424,6 +453,7 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pCollider_Manager);
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pImgui_Manager);
 

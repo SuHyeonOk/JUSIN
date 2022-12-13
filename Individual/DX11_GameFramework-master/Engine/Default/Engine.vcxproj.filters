@@ -124,6 +124,9 @@
     <Filter Include="01.Utility\03.Components\07. Collider">
       <UniqueIdentifier>{fa68c591-74d0-4565-a39d-e87885ab8ddf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\07. Collider\00. Manager">
+      <UniqueIdentifier>{307f089e-1bf0-49cc-ad02-308e969a5b16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -306,6 +309,9 @@
     <ClInclude Include="..\public\DebugDraw.h">
       <Filter>01.Utility\03.Components\07. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Collider_Manager.h">
+      <Filter>01.Utility\03.Components\07. Collider\00. Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -463,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Collider.cpp">
       <Filter>01.Utility\03.Components\07. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Collider_Manager.cpp">
+      <Filter>01.Utility\03.Components\07. Collider\00. Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -69,6 +69,12 @@ void CMainApp::Tick(_double TimeDelta)
 
 	CObj_Manager::GetInstance()->Tick(TimeDelta);
 
+	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_ITEM);
+	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_MONSTER);
+
+
+	CGameInstance::GetInstance()->Reset_Col();
+
 	m_dTimeAcc += TimeDelta;
 }
 
