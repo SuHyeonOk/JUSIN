@@ -66,7 +66,7 @@ _bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
 
 	if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINN)
 	{
-		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_AABB"), 0);
+		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Collider"), 0);
 		if (nullptr == pTargetCollider)
 			return false;
 
@@ -74,7 +74,7 @@ _bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
 	}
 	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
 	{
-		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_AABB"), 0);
+		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Collider"), 0);
 		if (nullptr == pTargetCollider)
 			return false;
 

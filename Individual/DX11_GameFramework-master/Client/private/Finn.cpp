@@ -28,6 +28,8 @@ HRESULT CFinn::Initialize_Prototype()
 
 HRESULT CFinn::Initialize(void * pArg)
 {
+	m_wsTag = L"Finn";
+
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)

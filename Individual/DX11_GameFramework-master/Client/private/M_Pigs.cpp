@@ -31,6 +31,8 @@ HRESULT CM_Pigs::Initialize_Prototype()
 
 HRESULT CM_Pigs::Initialize(void * pArg)
 {
+	m_wsTag = L"Pigs";
+
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 

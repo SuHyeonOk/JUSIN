@@ -10,19 +10,19 @@
 #include "UI_3DTexture.h"		// ´À³¦Ç¥ ¶ç¿ì·Á°í...
 #include "B_3DAnimBullet.h"		// µ¢±¼..
 
-CM_Tree_Wolf::CM_Tree_Wolf(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Tree_Witch::CM_Tree_Witch(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
 
 }
 
-CM_Tree_Wolf::CM_Tree_Wolf(const CM_Tree_Wolf & rhs)
+CM_Tree_Witch::CM_Tree_Witch(const CM_Tree_Witch & rhs)
 	: CM_Monster(rhs)
 {
 
 }
 
-HRESULT CM_Tree_Wolf::Initialize_Prototype()
+HRESULT CM_Tree_Witch::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -30,8 +30,10 @@ HRESULT CM_Tree_Wolf::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CM_Tree_Wolf::Initialize(void * pArg)
+HRESULT CM_Tree_Witch::Initialize(void * pArg)
 {
+	m_wsTag = L"TreeWitch";
+
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -56,7 +58,7 @@ HRESULT CM_Tree_Wolf::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CM_Tree_Wolf::Tick(_double TimeDelta)
+void CM_Tree_Witch::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -74,7 +76,7 @@ void CM_Tree_Wolf::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Tree_Wolf::Late_Tick(_double TimeDelta)
+void CM_Tree_Witch::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -85,7 +87,7 @@ void CM_Tree_Wolf::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CM_Tree_Wolf::Render()
+HRESULT CM_Tree_Witch::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -106,7 +108,7 @@ HRESULT CM_Tree_Wolf::Render()
 	return S_OK;
 }
 
-HRESULT CM_Tree_Wolf::SetUp_Components()
+HRESULT CM_Tree_Witch::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -137,7 +139,7 @@ HRESULT CM_Tree_Wolf::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CM_Tree_Wolf::SetUp_ShaderResources()
+HRESULT CM_Tree_Witch::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -157,7 +159,7 @@ HRESULT CM_Tree_Wolf::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_Tree_Wolf::Monster_Tick(const _double& TimeDelta)
+void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 {
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
@@ -197,7 +199,7 @@ void CM_Tree_Wolf::Monster_Tick(const _double& TimeDelta)
 	// 1 : Ãã / 6 ÀÏ¾î³ª±â / 7 : ´©¸£±â / 8 : ¶ÛÁØºñ / 9 : ´©¸£±â À§ÇØ ¶Ú´Ù.
 }
 
-void CM_Tree_Wolf::Idle_Tick(const _double& TimeDelta)
+void CM_Tree_Witch::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 5.f > fDistance)
@@ -213,7 +215,7 @@ void CM_Tree_Wolf::Idle_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Tree_Wolf::Find_Tick()
+void CM_Tree_Witch::Find_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
@@ -238,7 +240,7 @@ void CM_Tree_Wolf::Find_Tick()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Tree_Wolf::Move_Tick(const _double& TimeDelta)
+void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 {
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
@@ -269,7 +271,7 @@ void CM_Tree_Wolf::Move_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Tree_Wolf::Attack_Tick(const _double& TimeDelta)
+void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 {
 	// µ¢±¼
 	if (m_pModelCom->Animation_Check(0))
@@ -321,13 +323,13 @@ void CM_Tree_Wolf::Attack_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Tree_Wolf::Hit_Tick()
+void CM_Tree_Witch::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
-void CM_Tree_Wolf::Die_Tick()
+void CM_Tree_Witch::Die_Tick()
 {
 	// ¸ó½ºÅÍ°¡ Á×°í ³ª¸é ÇÒ Çàµ¿
 
@@ -347,31 +349,31 @@ void CM_Tree_Wolf::Die_Tick()
 	}
 }
 
-CM_Tree_Wolf * CM_Tree_Wolf::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Tree_Witch * CM_Tree_Witch::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CM_Tree_Wolf*		pInstance = new CM_Tree_Wolf(pDevice, pContext);
+	CM_Tree_Witch*		pInstance = new CM_Tree_Witch(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CM_Tree_Wolf");
+		MSG_BOX("Failed to Created : CM_Tree_Witch");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CM_Tree_Wolf::Clone(void * pArg)
+CGameObject * CM_Tree_Witch::Clone(void * pArg)
 {
-	CM_Tree_Wolf*		pInstance = new CM_Tree_Wolf(*this);
+	CM_Tree_Witch*		pInstance = new CM_Tree_Witch(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CM_Tree_Wolf");
+		MSG_BOX("Failed to Cloned : CM_Tree_Witch");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CM_Tree_Wolf::Free()
+void CM_Tree_Witch::Free()
 {
 	__super::Free();
 

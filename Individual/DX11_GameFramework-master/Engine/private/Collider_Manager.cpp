@@ -16,7 +16,7 @@ HRESULT CCollider_Manager::Add_ColGroup(COL_TYPE eColType, CGameObject * pGameOb
 		eColType >= COL_END)
 		return E_FAIL;
 
-	m_RenderObjects[eColType].push_back(pGameObject);
+	m_ColliderObjects[eColType].push_back(pGameObject);
 
 	Safe_AddRef(pGameObject);
 
@@ -26,9 +26,9 @@ HRESULT CCollider_Manager::Add_ColGroup(COL_TYPE eColType, CGameObject * pGameOb
 void CCollider_Manager::Update_Col(COL_TYPE eColType_L, COL_TYPE eColType_R)
 {
 
-	for (auto& pObj_L : m_RenderObjects[eColType_L])
+	for (auto& pObj_L : m_ColliderObjects[eColType_L])
 	{
-		for (auto& pObj_R : m_RenderObjects[eColType_R])
+		for (auto& pObj_R : m_ColliderObjects[eColType_R])
 		{
 
 			CCollider* pCol_L = (CCollider*)pObj_L->Get_ComponentPtr(TEXT("Com_Collider"));
@@ -48,13 +48,12 @@ void CCollider_Manager::Reset_Col()
 {
 	for (_uint i = 0; i < COL_END; ++i)
 	{
-		for (auto& pObj : m_RenderObjects[i])
+		for (auto& pObj : m_ColliderObjects[i])
 			Safe_Release(pObj);
-		m_RenderObjects[i].clear();
+		m_ColliderObjects[i].clear();
 	}
 
 }
-
 
 void CCollider_Manager::Free()
 {

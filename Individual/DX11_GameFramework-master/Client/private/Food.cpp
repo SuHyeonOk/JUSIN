@@ -26,6 +26,8 @@ HRESULT CFood::Initialize_Prototype()
 
 HRESULT CFood::Initialize(void * pArg)
 {	
+	m_wsTag = L"Food";
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 

@@ -30,6 +30,8 @@ HRESULT CM_PigWarrior::Initialize_Prototype()
 
 HRESULT CM_PigWarrior::Initialize(void * pArg)
 {
+	m_wsTag = L"PigWarrior";
+
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 

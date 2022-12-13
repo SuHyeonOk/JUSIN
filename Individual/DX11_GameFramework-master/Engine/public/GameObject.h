@@ -25,6 +25,7 @@ public:
 
 	_bool		Get_Dead() { return m_bDead; }
 	void		Set_Dead() { m_bDead = true; }
+	wstring		Get_Tag() { return m_wsTag; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -54,6 +55,9 @@ protected:
 protected:	
 	HRESULT				Add_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, class CComponent** ppOut, void* pArg = nullptr);
 	class CComponent*	Find_Component(const _tchar* pComponentTag);
+
+protected:
+	wstring		m_wsTag = L"";		// 자식의 ObjTag 를 저장하기 위한 용도
 
 private:
 	_bool		m_bDead = false;

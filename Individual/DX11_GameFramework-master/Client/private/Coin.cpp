@@ -26,6 +26,8 @@ HRESULT CCoin::Initialize_Prototype()
 
 HRESULT CCoin::Initialize(void * pArg)
 {
+	m_wsTag = L"Coin";
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
@@ -82,16 +84,15 @@ void CCoin::Late_Tick(_double TimeDelta)
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
-		m_bDead_TimeAcc += TimeDelta;
-		if (1 < m_bDead_TimeAcc)
+		m_dDead_TimeAcc += TimeDelta;
+		if (1 < m_dDead_TimeAcc)
 		{
 			CGameObject::Set_Dead();
-			m_bDead_TimeAcc = 0;
+			m_dDead_TimeAcc = 0;
 		}
 	}
 
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITEM, this);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_COIN, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

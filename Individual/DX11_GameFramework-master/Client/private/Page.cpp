@@ -26,6 +26,8 @@ HRESULT CPage::Initialize_Prototype()
 
 HRESULT CPage::Initialize(void * pArg)
 {
+	m_wsTag = L"Page";
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 

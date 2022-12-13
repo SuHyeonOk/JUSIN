@@ -68,11 +68,11 @@ void CB_3DAnimBullet::Late_Tick(_double TimeDelta)
 	{
 		m_bPlayer_Collider = CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom);
 
-		m_bDead_TimeAcc += TimeDelta;
-		if (1 < m_bDead_TimeAcc)
+		m_dDead_TimeAcc += TimeDelta;
+		if (1 < m_dDead_TimeAcc)
 		{
 			CGameObject::Set_Dead();
-			m_bDead_TimeAcc = 0;
+			m_dDead_TimeAcc = 0;
 		}
 	}
 

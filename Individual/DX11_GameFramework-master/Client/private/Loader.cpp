@@ -236,7 +236,7 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 	/* For.Prototype_GameObject_M_Tree_Witch */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Tree_Witch"),
-		CM_Tree_Wolf::Create(m_pDevice, m_pContext))))
+		CM_Tree_Witch::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("·Îµù³¡. "));
