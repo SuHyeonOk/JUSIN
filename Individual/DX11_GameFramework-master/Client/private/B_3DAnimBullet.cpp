@@ -50,7 +50,10 @@ HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
+	{
 		m_pModelCom->Set_AnimIndex(0);
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), 90.f);
+	}
 
 	return S_OK;
 }
