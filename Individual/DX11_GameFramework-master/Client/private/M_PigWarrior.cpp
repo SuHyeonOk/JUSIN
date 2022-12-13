@@ -90,6 +90,7 @@ void CM_PigWarrior::Tick(_double TimeDelta)
 	}
 
 	m_MonsterParts[0]->Tick(TimeDelta);
+	m_MonsterParts[1]->Tick(TimeDelta);
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -102,7 +103,8 @@ void CM_PigWarrior::Late_Tick(_double TimeDelta)
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	m_MonsterParts[0]->Late_Tick(TimeDelta);
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_M_WEAPON, this);
+	m_MonsterParts[1]->Late_Tick(TimeDelta);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -120,7 +122,7 @@ HRESULT CM_PigWarrior::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i)
+		if (1 == i || 2 == i)
 			continue;
 
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
@@ -206,9 +208,24 @@ HRESULT CM_PigWarrior::Ready_Parts()
 	CW_PigWarrior::WEAPONDESC			WeaponDesc;
 	ZeroMemory(&WeaponDesc, sizeof(CW_PigWarrior::WEAPONDESC));
 
+	WeaponDesc.eWarriorType = WeaponDesc.SWORD;
 	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("woodenSword");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_PigWarrior_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_MonsterParts.push_back(pPartObject);
+
+	WeaponDesc.eWarriorType = WeaponDesc.CYLINDER;
+	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Cylinder001");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
 	Safe_AddRef(WeaponDesc.pSocket);
 	Safe_AddRef(m_pTransformCom);

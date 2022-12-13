@@ -37,10 +37,15 @@ HRESULT CW_PigWarrior::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;	
 
-	if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)
+	if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)	// 요기
 	{
 		m_wsTag = L"PigWarrior_Sword";
 		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -90.f);
+	}
+	else if (WEAPONDESC::WARRIORTYPE::CYLINDER == m_WeaponDesc.eWarriorType)	// 요기
+	{
+		m_wsTag = L"PigWarrior_Cylinder";
+		//m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -100.f);
 	}
 
 	return S_OK;
@@ -119,21 +124,40 @@ HRESULT CW_PigWarrior::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"), TEXT("Com_Model"),	
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	/* For.Com_SPHERE */
-	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.f, 5.f, 1.f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)	// 요기
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
-		(CComponent**)&m_pColliderCom, &ColliderDesc)))
-		return E_FAIL;
+		/* For.Com_SPHERE */
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.3f, 0.5f, 0.3f);
+		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+			(CComponent**)&m_pColliderCom, &ColliderDesc)))
+			return E_FAIL;
+	}
+	else if (WEAPONDESC::WARRIORTYPE::CYLINDER == m_WeaponDesc.eWarriorType)	// 요기
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Cylinder"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+
+		/* For.Com_SPHERE */
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.5f, 0.3f, 0.5f);
+		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+			(CComponent**)&m_pColliderCom, &ColliderDesc)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

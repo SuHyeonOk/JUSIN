@@ -21,7 +21,7 @@ public:
 		_float4x4			PivotMatrix;
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
-
+		
 		enum WARRIORTYPE { SWORD, CYLINDER, WARRIORTYPE_END };
 
 		WARRIORTYPE			eWarriorType = WARRIORTYPE_END;
