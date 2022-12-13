@@ -88,9 +88,6 @@
     <Filter Include="02.GameObjects\Bullet">
       <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Bullet\Star">
-      <UniqueIdentifier>{0fab3231-86cc-4c7f-9783-5d6991169c03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Skill">
       <UniqueIdentifier>{c3adfdb9-9af1-4f8e-b7cb-342773219d44}</UniqueIdentifier>
     </Filter>
@@ -130,7 +127,10 @@
     <Filter Include="02.GameObjects\UI\3DTexture">
       <UniqueIdentifier>{352e6a8d-765b-4250-b2bb-35b391327d7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Bullet\Random">
+    <Filter Include="02.GameObjects\Bullet\2DBullet">
+      <UniqueIdentifier>{0fab3231-86cc-4c7f-9783-5d6991169c03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Bullet\3D_AnimBullet">
       <UniqueIdentifier>{7de3fb44-f513-48d9-8163-d9582ba03b01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -217,7 +217,7 @@
       <Filter>02.GameObjects\Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\public\B_Star.h">
-      <Filter>02.GameObjects\Bullet\Star</Filter>
+      <Filter>02.GameObjects\Bullet\2DBullet</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_StunChick.h">
       <Filter>02.GameObjects\Skill\Stun</Filter>
@@ -251,6 +251,9 @@
     </ClInclude>
     <ClInclude Include="..\public\UI_3DTexture.h">
       <Filter>02.GameObjects\UI\3DTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\B_3DAnimBullet.h">
+      <Filter>02.GameObjects\Bullet\3D_AnimBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -321,7 +324,7 @@
       <Filter>02.GameObjects\Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\private\B_Ster.cpp">
-      <Filter>02.GameObjects\Bullet\Star</Filter>
+      <Filter>02.GameObjects\Bullet\2DBullet</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_StunChick.cpp">
       <Filter>02.GameObjects\Skill\Stun</Filter>
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_3DTexture.cpp">
       <Filter>02.GameObjects\UI\3DTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\B_3DAnimBullet.cpp">
+      <Filter>02.GameObjects\Bullet\3D_AnimBullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

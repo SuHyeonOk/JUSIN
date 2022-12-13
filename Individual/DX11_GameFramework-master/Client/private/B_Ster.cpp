@@ -67,13 +67,12 @@ void CB_Star::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날리고, 일정시간 후에 총알이 사라지도록 해야한다.
-	
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);																					// 카메라를 바라본다.
 	m_pTransformCom->Chase(XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f), TimeDelta);	// 플레이어를 따라간다.
 
 	// 총알이 생성된 뒤 3초가 지나면 삭제한다.

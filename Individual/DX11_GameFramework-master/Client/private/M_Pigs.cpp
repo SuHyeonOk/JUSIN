@@ -292,7 +292,7 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	CB_Star::BULLETINFO		tBulletInfo;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z);
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y * 0.5f, f4PlayerPos.z);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Star_0"), TEXT("Prototype_GameObject_B_Star"), &tBulletInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);

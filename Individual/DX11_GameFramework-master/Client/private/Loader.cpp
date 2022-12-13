@@ -20,6 +20,7 @@
 
 // Bullet
 #include "B_Star.h"
+#include "B_3DAnimBullet.h"
 
 // Stun
 #include "S_StunChick.h"
@@ -168,6 +169,7 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Tree_Witch/Tree_Witch.fbx", PivotMatrix))))
 		return E_FAIL;
 	/* For.Prototype_Component_Model_B_Tree_Witch_Roots_FX */
+	PivotMatrix = XMMatrixRotationX(XMConvertToRadians(90.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Tree_Witch_Roots_FX"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Tree_Witch_Roots_FX/Tree_Witch_Roots_FX.fbx", PivotMatrix))))
 		return E_FAIL;
@@ -207,6 +209,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_B_Star */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
 		CB_Star::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_B_RandomBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
+		CB_3DAnimBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 3DUI
