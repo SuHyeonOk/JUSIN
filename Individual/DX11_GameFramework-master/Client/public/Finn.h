@@ -36,7 +36,11 @@ private:
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
+
 	void	Shader_Time(_double TimeDelta);
+
+private:
+	HRESULT Ready_Parts();
 
 private:
 	void	Player_Info();
@@ -60,6 +64,7 @@ private:
 	void	Anim_Change(_double TimeDelta);
 
 private:
+	vector<CGameObject*>		m_PlayerParts;
 	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
 
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨

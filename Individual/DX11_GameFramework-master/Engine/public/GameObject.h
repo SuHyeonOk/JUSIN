@@ -46,6 +46,10 @@ public: /* imgui */
 protected:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;
+	_bool					m_isCloned = false;
+
+protected:
+	wstring		m_wsTag = L"";		// 자식의 ObjTag 를 저장하기 위한 용도
 
 protected:
 	/* 객체들이 사용해야 할 컴포넌트들을 보관한다. */
@@ -56,11 +60,8 @@ protected:
 	HRESULT				Add_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, class CComponent** ppOut, void* pArg = nullptr);
 	class CComponent*	Find_Component(const _tchar* pComponentTag);
 
-protected:
-	wstring		m_wsTag = L"";		// 자식의 ObjTag 를 저장하기 위한 용도
-
 private:
-	_bool		m_bDead = false;
+	_bool		m_bDead = false;	// 객체가 사라져야 한다면 , true
 
 public:	
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;

@@ -224,36 +224,52 @@ void CM_PigWarrior::Monster_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 {
+	// IDLE 일 때, MOVE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 1.5f > fDistance)
+	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
+	// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
 	if(m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
 void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 {
-	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 1.5f > fDistance)
-		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-
-	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
-
-	if (bArrival)
+	if (m_bFind)		// 플레이어를 찾았을 때! 플레이어와 거리가 1이 될 때 까지 이동한다.
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		m_bAttack = false;
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
+
+		if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	}
+	else				// 플레이어를 찾지 못 했을 때 랜덤으로 이동하고 있는다
+	{
+		// MOVE 일 때, IDLE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
+		_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		if (!m_bAttack && 3.f > fDistance)
+			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+
+		// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
+		_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
+		if (bArrival)
+		{
+			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+			m_bAttack = false;
+		}
 	}
 }
 
 void CM_PigWarrior::Find_Tick()
 {
+	m_bFind = true;	// 플레이어를 찾았다면 플레이어에게 다가가기 위해서 MOVE로 이동한다.
+
 	if (25 == m_pModelCom->Get_Keyframes())
-		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
+	// 3D UI 로 느낌표를 띄워주기 위해서 작성한 코드
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_vector	vMyPos;
@@ -274,6 +290,8 @@ void CM_PigWarrior::Find_Tick()
 
 void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 {
+	m_bFind = false;
+
 	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
 	if (0 == iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
 	{

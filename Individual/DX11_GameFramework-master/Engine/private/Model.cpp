@@ -186,7 +186,7 @@ HRESULT CModel::Bind_Material(CShader * pShader, _uint iMeshIndex, aiTextureType
 	return S_OK;
 }
 
-HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName)
+HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName, _uint iPassIndex)
 {
 	if (nullptr != m_Meshes[iMeshIndex])
 	{
@@ -199,7 +199,7 @@ HRESULT CModel::Render(CShader* pShader, _uint iMeshIndex, const char* pBoneCons
 			pShader->Set_MatrixArray(pBoneConstantName, BoneMatrices, 128);
 		}
 
-		pShader->Begin(0);
+		pShader->Begin(iPassIndex);
 
 		m_Meshes[iMeshIndex]->Render();		// VIBuffer 의 자식으로 Render() 호출
 	}

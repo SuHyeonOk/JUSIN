@@ -113,6 +113,9 @@ HRESULT CPlayer::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
+		if (1 == i || 2 == i)
+			continue;
+
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달하낟. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");		
 
@@ -141,7 +144,8 @@ HRESULT CPlayer::Ready_Parts()
 	ZeroMemory(&WeaponDesc, sizeof(CWeapon::WEAPONDESC));
 
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
-	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("SWORD");
+
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Root_sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
 	Safe_AddRef(WeaponDesc.pSocket);
 	Safe_AddRef(m_pTransformCom);

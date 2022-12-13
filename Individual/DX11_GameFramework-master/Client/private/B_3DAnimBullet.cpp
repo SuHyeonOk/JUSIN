@@ -52,6 +52,7 @@ HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
 	{
 		m_pModelCom->Set_AnimIndex(0);
+		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 2.f));
 		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), 90.f);
 	}
 

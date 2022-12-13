@@ -252,7 +252,7 @@ void CM_Pigs::Move_Tick(const _double& TimeDelta)
 void CM_Pigs::Find_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 

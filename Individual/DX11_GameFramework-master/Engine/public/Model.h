@@ -22,6 +22,10 @@ public:
 		return XMLoadFloat4x4(&m_PivotMatrix);
 	}
 
+	_float4x4 Get_PivotFloat4x4() const {
+		return m_PivotMatrix;
+	}
+
 	class CBone* Get_BonePtr(const char* pBoneName);
 
 	void		Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
@@ -37,7 +41,7 @@ public:
 public:
 	void	Play_Animation(_double TimeDelta);
 	HRESULT Bind_Material(class CShader* pShader, _uint iMeshIndex, aiTextureType eType, const char* pConstantName);
-	HRESULT Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName = nullptr);
+	HRESULT Render(CShader* pShader, _uint iMeshIndex, const char* pBoneConstantName = nullptr, _uint iPassIndex = 0);
 
 public:
 	const aiScene*						m_pAIScene = nullptr;

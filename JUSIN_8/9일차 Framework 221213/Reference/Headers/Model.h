@@ -22,7 +22,6 @@ public:
 		return XMLoadFloat4x4(&m_PivotMatrix);
 	}
 
-	// CModel
 	_float4x4 Get_PivotFloat4x4() const {
 		return m_PivotMatrix;
 	}

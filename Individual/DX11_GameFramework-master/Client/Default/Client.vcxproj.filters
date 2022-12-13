@@ -133,6 +133,9 @@
     <Filter Include="02.GameObjects\Bullet\3D_AnimBullet">
       <UniqueIdentifier>{7de3fb44-f513-48d9-8163-d9582ba03b01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player\Weapon">
+      <UniqueIdentifier>{cf813d33-0cb7-491b-bc30-ac569231de62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -255,6 +258,9 @@
     <ClInclude Include="..\public\B_3DAnimBullet.h">
       <Filter>02.GameObjects\Bullet\3D_AnimBullet</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Finn_Weapon.h">
+      <Filter>02.GameObjects\Player\Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -361,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="..\private\B_3DAnimBullet.cpp">
       <Filter>02.GameObjects\Bullet\3D_AnimBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Finn_Weapon.cpp">
+      <Filter>02.GameObjects\Player\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
