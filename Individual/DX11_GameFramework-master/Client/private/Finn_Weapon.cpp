@@ -20,7 +20,7 @@ HRESULT CFinn_Weapon::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
@@ -35,7 +35,7 @@ HRESULT CFinn_Weapon::Initialize(void * pArg)
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
-		return E_FAIL;	
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -50,7 +50,7 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	_matrix			SocketMatrix = m_WeaponDesc.pSocket->Get_OffsetMatrix() * 
+	_matrix			SocketMatrix = m_WeaponDesc.pSocket->Get_OffsetMatrix() *
 		m_WeaponDesc.pSocket->Get_CombindMatrix() * XMLoadFloat4x4(&m_WeaponDesc.PivotMatrix);
 
 	SocketMatrix.r[0] = XMVector3Normalize(SocketMatrix.r[0]);
@@ -60,9 +60,11 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 	SocketMatrix = SocketMatrix * m_WeaponDesc.pTargetTransform->Get_WorldMatrix();
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
-
+	
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
+
+	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -70,18 +72,18 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 
 HRESULT   CFinn_Weapon::Render()
 {
- 	if (FAILED(__super::Render()))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
-	
+
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
-		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");		
+		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
 	}
@@ -107,7 +109,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	if (m_WeaponDesc.eSword == WEAPONDESC::SWORD::ROOT)
+	if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::SWORD::ROOT)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),
@@ -119,7 +121,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
 		ColliderDesc.vCenter = _float3(0.5f, 0.f, -0.05f);
 	}
-	else if (m_WeaponDesc.eSword == WEAPONDESC::SWORD::DOLDEN)
+	else if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::SWORD::DOLDEN)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"), TEXT("Com_Model"),
@@ -131,7 +133,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
 		ColliderDesc.vCenter = _float3(0.5f, 0.f, -0.05f);
 	}
-	else if (m_WeaponDesc.eSword == WEAPONDESC::SWORD::RAMILY)
+	else if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::SWORD::FAMILY)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"), TEXT("Com_Model"),
@@ -143,7 +145,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
 		ColliderDesc.vCenter = _float3(0.7f, 0.f, -0.1f);
 	}
-	
+
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
@@ -174,7 +176,7 @@ HRESULT CFinn_Weapon::SetUp_ShaderResources()
 	/* For.Lights */
 	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
 	if (nullptr == pLightDesc)
-		return E_FAIL;	
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -183,7 +185,7 @@ HRESULT CFinn_Weapon::SetUp_ShaderResources()
 
 CFinn_Weapon * CFinn_Weapon::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CFinn_Weapon*		pInstance = new CFinn_Weapon(pDevice, pContext);
+	CFinn_Weapon*		pInstance = new CFinn_Weapon(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -214,7 +216,7 @@ void CFinn_Weapon::Free()
 		Safe_Release(m_WeaponDesc.pSocket);
 		Safe_Release(m_WeaponDesc.pTargetTransform);
 	}
-	
+
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);

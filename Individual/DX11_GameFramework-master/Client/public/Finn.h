@@ -43,6 +43,8 @@ private:
 
 private:
 	void	Player_Info();
+	void	Sword_Tick(const _double & TimeDelta);
+	void	Sword_LateTick(const _double & TimeDelta);
 
 private:
 	void	Player_Tick(_double TimeDelta);

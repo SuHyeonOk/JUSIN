@@ -17,14 +17,18 @@ public:
 	typedef struct tagPlayerInfo
 	{
 		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
+		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
+
 		enum STATE { IDLE, RUN, ROLL, ATTACK_1, ATTACK_2, ATTACK_3, HIT, STUN, DIE, CHANGE, CHEERING, TREEWITCH, STATE_END };
+		STATE		eState;		// 현재 상태
+		STATE		ePreState;	// 이전 상태
+
+		enum SWORD { ROOT, DOLDEN, FAMILY, SWORD_END };
+		SWORD		eSword = SWORD_END;
+
 		enum ITEM { ITEM_END };
+		ITEM		eItem = ITEM_END;
 
-		PLAYER	ePlayer = PLAYER_END;		// 현재 플레이어
-
-		STATE	eState;		// 현재 상태
-		STATE	ePreState;	// 이전 상태
-		ITEM	eItem;
 
 		_int	iHp;		// 몬스터"가" 체력을 깍을 때 필요
 		_int	iHpMax;

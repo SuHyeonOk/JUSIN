@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "Obj_Manager.h"
 
 BEGIN(Engine)
 class CShader;
@@ -22,8 +23,7 @@ public:
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
 
-		enum SWORD { ROOT, DOLDEN, RAMILY , SWORD_END };
-		SWORD				eSword;
+		CObj_Manager::PLAYERINFO::SWORD	eSwordType;
 
 	}WEAPONDESC;
 

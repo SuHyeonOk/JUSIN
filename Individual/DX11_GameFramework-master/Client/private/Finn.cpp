@@ -69,11 +69,10 @@ void CFinn::Tick(_double TimeDelta)
 
 	//Shader_Time(TimeDelta); // Shader Hit Time
 
+	Sword_Tick(TimeDelta);
+
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
-
-	m_PlayerParts[0]->Tick(TimeDelta);
-	m_PlayerParts[1]->Tick(TimeDelta);
 
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
@@ -95,10 +94,9 @@ void CFinn::Late_Tick(_double TimeDelta)
 	//cout << m_AnimiNum << endl;
 	//RELEASE_INSTANCE(CGameInstance);
 
-	m_pModelCom->Play_Animation(TimeDelta);
+	Sword_LateTick(TimeDelta);
 
-	m_PlayerParts[0]->Late_Tick(TimeDelta);
-	m_PlayerParts[1]->Late_Tick(TimeDelta);
+	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
@@ -255,20 +253,7 @@ HRESULT CFinn::Ready_Parts()
 	CFinn_Weapon::WEAPONDESC			WeaponDesc;
 	ZeroMemory(&WeaponDesc, sizeof(CFinn_Weapon::WEAPONDESC));
 
-	//WeaponDesc.eSword = WeaponDesc.ROOT;
-	//WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
-	//WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
-	//WeaponDesc.pTargetTransform = m_pTransformCom;
-	//Safe_AddRef(WeaponDesc.pSocket);
-	//Safe_AddRef(m_pTransformCom);
-
-	//pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Finn_Weapon"), &WeaponDesc);
-	//if (nullptr == pPartObject)
-	//	return E_FAIL;
-
-	//m_PlayerParts.push_back(pPartObject);
-
-	WeaponDesc.eSword = WeaponDesc.DOLDEN;
+	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::SWORD::ROOT;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -281,7 +266,20 @@ HRESULT CFinn::Ready_Parts()
 
 	m_PlayerParts.push_back(pPartObject);
 
-	WeaponDesc.eSword = WeaponDesc.RAMILY;
+	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::SWORD::DOLDEN;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Finn_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_PlayerParts.push_back(pPartObject);
+
+	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::SWORD::FAMILY;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -321,19 +319,35 @@ void CFinn::Player_Info()
 
 }
 
+void CFinn::Sword_Tick(const _double & TimeDelta)
+{
+	if (CObj_Manager::PLAYERINFO::SWORD::ROOT == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+		m_PlayerParts[0]->Tick(TimeDelta);
+	else if (CObj_Manager::PLAYERINFO::SWORD::DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+		m_PlayerParts[1]->Tick(TimeDelta);
+	else if (CObj_Manager::PLAYERINFO::SWORD::FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+		m_PlayerParts[2]->Tick(TimeDelta);
+}
+
+void CFinn::Sword_LateTick(const _double & TimeDelta)
+{
+	if (CObj_Manager::PLAYERINFO::SWORD::ROOT == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+		m_PlayerParts[0]->Late_Tick(TimeDelta);
+	else if (CObj_Manager::PLAYERINFO::SWORD::DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+		m_PlayerParts[1]->Late_Tick(TimeDelta);
+	else if (CObj_Manager::PLAYERINFO::SWORD::FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+		m_PlayerParts[2]->Late_Tick(TimeDelta);
+}
+
 void CFinn::Player_Tick(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Down(DIK_V))
-	{
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
-	}
 
 	if (pGameInstance->Key_Down(DIK_C))
-	{
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::STUN);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
-	}
 
 	RELEASE_INSTANCE(CGameInstance);
 
