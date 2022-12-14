@@ -158,6 +158,10 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Family_sword/Family_sword.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Golden_Sword_New */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Golden_Sword_New/Golden_Sword_New.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Model_W_Wooden_Sword */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"),
@@ -350,7 +354,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 #pragma region 버퍼
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 버퍼
-													/* For.Prototype_Component_VIBuffer_Terrain */
+	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
@@ -403,12 +407,41 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	////////////////////////////////////// 애니모델
+	// Weapon
+	/* For.Prototype_Component_Model_W_Root_sword */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Root_sword/Root_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Family_sword */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Family_sword/Family_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Golden_Sword_New */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Golden_Sword_New/Golden_Sword_New.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_W_Wooden_Sword */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Wooden_Sword/Wooden_Sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Cylinder */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Cylinder"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Cylinder/Cylinder.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	///////////////////////////////////////////////////////////// ANIM
 
 	// Skill
 	/* For.Prototype_Component_Model_S_StunChick */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_StunChick"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Stun/Confused_Birds/Confused_Birds.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// Bullet
+	/* For.Prototype_Component_Model_B_Tree_Witch_Roots_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Tree_Witch_Roots_FX"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Tree_Witch_Roots_FX/Tree_Witch_Roots_FX.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -435,6 +468,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Model_M_Pigs_SR */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_SR"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_SR/Pigs_SR.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Tree_Witch */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Tree_Witch"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Tree_Witch/Tree_Witch.fbx", PivotMatrix))))
 		return E_FAIL;
 #pragma endregion
 
@@ -497,6 +534,20 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
 		CB_Star::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_B_RandomBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
+		CB_3DAnimBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Weapon
+	/* For.Prototype_GameObject_Finn_Weapon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Weapon"),
+		CFinn_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_PigWarrior_Weapon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
+		CW_PigWarrior::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// 3DUI
 	/* For.Prototype_GameObject_UI_3DTexture */
@@ -518,6 +569,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_M_Pigs */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs"),
 		CM_Pigs::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Tree_Witch */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Tree_Witch"),
+		CM_Tree_Witch::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

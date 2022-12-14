@@ -22,6 +22,9 @@ public:
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
 
+		enum SWORD { ROOT, DOLDEN, RAMILY , SWORD_END };
+		SWORD				eSword;
+
 	}WEAPONDESC;
 
 private:

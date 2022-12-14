@@ -9,6 +9,8 @@
 
 #include "B_Star.h"
 
+#include "Finn_Weapon.h"
+
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -69,6 +71,7 @@ HRESULT CLevel_Tool::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	// TODO : 렌더 순서 배우면
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI_HPGauge"), TEXT("Prototype_GameObject_UI_HPGauge"))))
 		return E_FAIL;
 

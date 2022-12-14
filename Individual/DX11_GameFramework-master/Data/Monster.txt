@@ -1,5 +1,5 @@
-PigWarrior_BEE__0|-5.51089|0|-0.79212
-Pigs_COWBOY__0|-14.4083|0|-4.06829
-PigWarrior_WORKER__0|-7.3771|0|2.77552
-Pigs_COWBOY__3|0|0|0
-PigWarrior_WORKER__1|-5.50762|0|0.421413
+Layer_PigWarrior_BEE__0|-12.2932|0|-6.59404
+Layer_PigWarrior_WORKER__1|-4.44249|0|-2.5808
+Layer_Pigs_COWBOY__2|-7.04587|0|3.34874
+Layer_Pigs_COWBOY__3|-15.5913|0|3.10659
+Layer_Tree_Witch__4|-20.7211|0|2.79885

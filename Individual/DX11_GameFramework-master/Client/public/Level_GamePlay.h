@@ -35,10 +35,10 @@ private:
 	void	ImGui_Monster();
 
 private:
-	void	Food_Load();
-	void	Coin_Load();
-	void	Page_Load();
-	void	Monster_Load();
+	void	Load_Food();
+	void	Load_Coin();
+	void	Load_Page();
+	void	Load_Monster();
 
 private:
 	const _tchar*	m_szObjName;

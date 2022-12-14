@@ -127,6 +127,12 @@
     <Filter Include="01.Utility\03.Components\07. Collider\00. Manager">
       <UniqueIdentifier>{307f089e-1bf0-49cc-ad02-308e969a5b16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\08. Navigation">
+      <UniqueIdentifier>{e2a89775-4021-436e-b8d0-b3f9a58807e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\08. Navigation\Cell">
+      <UniqueIdentifier>{358cc249-b25e-4e92-a28a-a96032f122b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">

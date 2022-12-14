@@ -45,7 +45,7 @@ HRESULT CW_PigWarrior::Initialize(void * pArg)
 	else if (WEAPONDESC::WARRIORTYPE::CYLINDER == m_WeaponDesc.eWarriorType)	// ¿ä±â
 	{
 		m_wsTag = L"PigWarrior_Cylinder";
-		//m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -100.f);
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -45.f);
 	}
 
 	return S_OK;
@@ -55,7 +55,6 @@ void CW_PigWarrior::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CW_PigWarrior::Late_Tick(_double TimeDelta)
@@ -73,6 +72,7 @@ void CW_PigWarrior::Late_Tick(_double TimeDelta)
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
 
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_M_WEAPON, this);
 
 	if (nullptr != m_pRendererCom)
@@ -135,10 +135,10 @@ HRESULT CW_PigWarrior::SetUp_Components()
 
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(0.3f, 0.5f, 0.3f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, -0.3f);
 
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 			(CComponent**)&m_pColliderCom, &ColliderDesc)))
 			return E_FAIL;
 	}
@@ -151,10 +151,10 @@ HRESULT CW_PigWarrior::SetUp_Components()
 
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(0.5f, 0.3f, 0.5f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 			(CComponent**)&m_pColliderCom, &ColliderDesc)))
 			return E_FAIL;
 	}

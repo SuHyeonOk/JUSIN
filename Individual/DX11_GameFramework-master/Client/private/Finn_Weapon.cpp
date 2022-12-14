@@ -31,14 +31,12 @@ HRESULT CFinn_Weapon::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&m_WeaponDesc, pArg, sizeof(m_WeaponDesc));
 
-	if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(__super::Initialize(&pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;	
 
-	//m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
-	
 	return S_OK;
 }
 
@@ -46,7 +44,6 @@ void CFinn_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CFinn_Weapon::Late_Tick(_double TimeDelta)
@@ -64,13 +61,16 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
 
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CFinn_Weapon::Render()
+HRESULT   CFinn_Weapon::Render()
 {
-	if (FAILED(__super::Render()))
+ 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	if (FAILED(SetUp_ShaderResources()))
@@ -86,10 +86,10 @@ HRESULT CFinn_Weapon::Render()
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
 	}
 
-//#ifdef _DEBUG
-//	if (nullptr != m_pColliderCom)
-//		m_pColliderCom->Render();
-//#endif
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
@@ -105,19 +105,46 @@ HRESULT CFinn_Weapon::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),	
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	/* For.Com_SPHERE */
-	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(5.f, 5.f, 5.f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	if (m_WeaponDesc.eSword == WEAPONDESC::SWORD::ROOT)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+		/* For.Com_SPHERE */
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+		ColliderDesc.vCenter = _float3(0.5f, 0.f, -0.05f);
+	}
+	else if (m_WeaponDesc.eSword == WEAPONDESC::SWORD::DOLDEN)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+
+		/* For.Com_SPHERE */
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+		ColliderDesc.vCenter = _float3(0.5f, 0.f, -0.05f);
+	}
+	else if (m_WeaponDesc.eSword == WEAPONDESC::SWORD::RAMILY)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+
+		/* For.Com_SPHERE */
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+		ColliderDesc.vCenter = _float3(0.7f, 0.f, -0.1f);
+	}
+	
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 

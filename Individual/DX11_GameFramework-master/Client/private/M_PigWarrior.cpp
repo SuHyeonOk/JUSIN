@@ -90,7 +90,7 @@ void CM_PigWarrior::Tick(_double TimeDelta)
 	}
 
 	m_MonsterParts[0]->Tick(TimeDelta);
-	m_MonsterParts[1]->Tick(TimeDelta);
+	//m_MonsterParts[1]->Tick(TimeDelta);
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -103,7 +103,7 @@ void CM_PigWarrior::Late_Tick(_double TimeDelta)
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	m_MonsterParts[0]->Late_Tick(TimeDelta);
-	m_MonsterParts[1]->Late_Tick(TimeDelta);
+	//m_MonsterParts[1]->Late_Tick(TimeDelta);
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
 
 	if (nullptr != m_pRendererCom)
@@ -122,8 +122,8 @@ HRESULT CM_PigWarrior::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i || 2 == i)
-			continue;
+		//if (1 == i /*|| 2 == i 방패*/)
+		//	continue;
 
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");

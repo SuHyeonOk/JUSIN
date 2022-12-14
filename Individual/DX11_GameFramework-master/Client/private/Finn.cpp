@@ -72,8 +72,8 @@ void CFinn::Tick(_double TimeDelta)
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
 
-	for (_uint i = 0; i < m_PlayerParts.size(); ++i)
-		m_PlayerParts[i]->Tick(TimeDelta);
+	m_PlayerParts[0]->Tick(TimeDelta);
+	m_PlayerParts[1]->Tick(TimeDelta);
 
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
@@ -97,8 +97,8 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	for (_uint i = 0; i < m_PlayerParts.size(); ++i)
-		m_PlayerParts[i]->Late_Tick(TimeDelta);
+	m_PlayerParts[0]->Late_Tick(TimeDelta);
+	m_PlayerParts[1]->Late_Tick(TimeDelta);
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
@@ -119,9 +119,6 @@ HRESULT CFinn::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i || 2 == i) // 초보 검 : 2 /  빨간 검 1
-			continue;
-
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
@@ -258,8 +255,35 @@ HRESULT CFinn::Ready_Parts()
 	CFinn_Weapon::WEAPONDESC			WeaponDesc;
 	ZeroMemory(&WeaponDesc, sizeof(CFinn_Weapon::WEAPONDESC));
 
+	//WeaponDesc.eSword = WeaponDesc.ROOT;
+	//WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	//WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
+	//WeaponDesc.pTargetTransform = m_pTransformCom;
+	//Safe_AddRef(WeaponDesc.pSocket);
+	//Safe_AddRef(m_pTransformCom);
+
+	//pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Finn_Weapon"), &WeaponDesc);
+	//if (nullptr == pPartObject)
+	//	return E_FAIL;
+
+	//m_PlayerParts.push_back(pPartObject);
+
+	WeaponDesc.eSword = WeaponDesc.DOLDEN;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
-	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Root_sword");
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Finn_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_PlayerParts.push_back(pPartObject);
+
+	WeaponDesc.eSword = WeaponDesc.RAMILY;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
 	Safe_AddRef(WeaponDesc.pSocket);
 	Safe_AddRef(m_pTransformCom);

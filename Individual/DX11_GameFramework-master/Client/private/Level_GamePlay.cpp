@@ -49,10 +49,10 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 	// 파일 읽기
-	Food_Load();
-	Coin_Load();
-	Page_Load();
-	Monster_Load();
+	Load_Food();
+	Load_Coin();
+	Load_Page();
+	Load_Monster();
 
 
 	return S_OK;
@@ -297,9 +297,10 @@ void CLevel_GamePlay::ImGui_Food()
 		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
 		fout.close();
-
-		WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
 	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
 #pragma endregion Food
 }
 
@@ -385,9 +386,10 @@ void CLevel_GamePlay::ImGui_Coin()
 		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
 		fout.close();
-
-		WinExec("notepad.exe ../../Data/Coin.txt", SW_SHOW);
 	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Coin.txt", SW_SHOW);
 }
 
 void CLevel_GamePlay::ImGui_Page()
@@ -438,14 +440,15 @@ void CLevel_GamePlay::ImGui_Page()
 		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
 		fout.close();
-
-		WinExec("notepad.exe ../../Data/Page.txt", SW_SHOW);
 	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Page.txt", SW_SHOW);
 }
 
 void CLevel_GamePlay::ImGui_Monster()
 {
-	const _char* szObjName[] = { "PigWarrior_BEE", "PigWarrior_WORKER", "Pigs_COWBOY", "Pigs_SR" };
+	const _char* szObjName[] = { "PigWarrior_BEE", "PigWarrior_WORKER", "Pigs_COWBOY", "Pigs_SR", "Tree_Witch" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -465,7 +468,7 @@ void CLevel_GamePlay::ImGui_Monster()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
-			m_wstObjName = L"PigWarrior_BEE__";
+			m_wstObjName = L"Layer_PigWarrior_BEE__";
 			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
@@ -480,7 +483,7 @@ void CLevel_GamePlay::ImGui_Monster()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
-			m_wstObjName = L"PigWarrior_WORKER__";
+			m_wstObjName = L"Layer_PigWarrior_WORKER__";
 			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
@@ -495,7 +498,7 @@ void CLevel_GamePlay::ImGui_Monster()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
-			m_wstObjName = L"Pigs_COWBOY__";
+			m_wstObjName = L"Layer_Pigs_COWBOY__";
 			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
@@ -509,13 +512,28 @@ void CLevel_GamePlay::ImGui_Monster()
 		{
 			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Pigs_COWBOY__";
+			
+			m_wstObjName = L"Layer_Pigs_COWBOY__";
 			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (4 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.TREE_WITCH;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Tree_Witch__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -537,12 +555,13 @@ void CLevel_GamePlay::ImGui_Monster()
 		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
 		fout.close();
-
-		WinExec("notepad.exe ../../Data/Monster.txt", SW_SHOW);
 	}
+
+	if(ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Monster.txt", SW_SHOW);
 }
 
-void CLevel_GamePlay::Food_Load()
+void CLevel_GamePlay::Load_Food()
 {
 	wifstream		fin("../../Data/Food.txt", ios::in);
 
@@ -626,7 +645,7 @@ void CLevel_GamePlay::Food_Load()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_GamePlay::Coin_Load()
+void CLevel_GamePlay::Load_Coin()
 {
 	wifstream		fin("../../Data/Coin.txt", ios::in);
 
@@ -730,7 +749,7 @@ void CLevel_GamePlay::Coin_Load()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_GamePlay::Page_Load()
+void CLevel_GamePlay::Load_Page()
 {
 	wifstream		fin("../../Data/Page.txt", ios::in);
 
@@ -796,7 +815,7 @@ void CLevel_GamePlay::Page_Load()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_GamePlay::Monster_Load()
+void CLevel_GamePlay::Load_Monster()
 {
 	wifstream		fin("../../Data/Monster.txt", ios::in);
 
@@ -847,7 +866,7 @@ void CLevel_GamePlay::Monster_Load()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
-			m_wstObjName = L"PigWarrior_BEE__";
+			m_wstObjName = L"Layer_PigWarrior_BEE__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
@@ -863,7 +882,7 @@ void CLevel_GamePlay::Monster_Load()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
-			m_wstObjName = L"PigWarrior_WORKER__";
+			m_wstObjName = L"Layer_PigWarrior_WORKER__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
@@ -879,7 +898,7 @@ void CLevel_GamePlay::Monster_Load()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
-			m_wstObjName = L"Pigs_COWBOY__";
+			m_wstObjName = L"Layer_Pigs_COWBOY__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
@@ -895,7 +914,7 @@ void CLevel_GamePlay::Monster_Load()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
-			m_wstObjName = L"Pigs_SR__";
+			m_wstObjName = L"Layer_Pigs_SR__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
@@ -903,6 +922,22 @@ void CLevel_GamePlay::Monster_Load()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.TREE_WITCH;	// 요기
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Tree_Witch__";	// 요기
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))	// 요기
 					return;
 			}
 		}
