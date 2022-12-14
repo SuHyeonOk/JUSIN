@@ -82,13 +82,6 @@ void CM_PigWarrior::Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_SPACE))
-	{
-		// TODO : 충돌처리가 가능해 지면 수정 (둘 다 한 번만 호출 되어야 함)
-		m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
-		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-	}
-
 	m_MonsterParts[0]->Tick(TimeDelta);
 	m_MonsterParts[1]->Tick(TimeDelta);
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
@@ -141,6 +134,7 @@ HRESULT CM_PigWarrior::Render()
 
 void CM_PigWarrior::On_Collision(CGameObject * pOther)
 {
+	CM_Monster::On_Collision(pOther);
 }
 
 HRESULT CM_PigWarrior::SetUp_Components()
@@ -372,7 +366,7 @@ void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 void CM_PigWarrior::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
 void CM_PigWarrior::Die_Tick()

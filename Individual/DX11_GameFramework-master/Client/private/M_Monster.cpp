@@ -46,6 +46,19 @@ void CM_Monster::Tick(const _double& TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
+
+	if (m_bHit)
+	{
+		m_dHit_TimeAcc += TimeDelta;
+		if (0.7 < m_dHit_TimeAcc)
+		{
+			m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+			m_bHit = false;
+			m_dHit_TimeAcc = 0;
+		}
+	}
 }
 
 void CM_Monster::Late_Tick(const _double& TimeDelta)
@@ -68,6 +81,15 @@ HRESULT CM_Monster::Render()
 		m_pColliderCom[COLLTYPE_AABB]->Render();
 #endif
 	return S_OK;
+}
+
+void CM_Monster::On_Collision(CGameObject * pOther)
+{
+	if (L"Finn_Weapon" == pOther->Get_Tag() &&
+		CObj_Manager::PLAYERINFO::STATE::ATTACK_1 == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		m_bHit = true;
+	}
 }
 
 _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart, _float fEnd)
@@ -131,12 +153,6 @@ _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float 
 	}
 	else
 		return false;
-}
-
-_bool CM_Monster::Collision_ToPlayer()
-{
-	//return CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom[COLLTYPE_AABB]);
-	return false;
 }
 
 void CM_Monster::Free()

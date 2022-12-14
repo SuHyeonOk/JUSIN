@@ -51,6 +51,8 @@ public:		// 걍 필수
 	virtual void		Late_Tick(const _double& TimeDelta);
 	virtual HRESULT		Render();
 
+	virtual void		On_Collision(CGameObject* pOther) override;
+
 protected:	// 자식에게 거의 필수적인 함수
 	virtual HRESULT		SetUp_Components()		{ return S_OK; }
 	virtual HRESULT		SetUp_ShaderResources() { return S_OK; }
@@ -66,7 +68,7 @@ protected:	// 자식이 자주 사용할 함수
 
 protected:		
 	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 3.f);	// 랜덤 위치로 이동하는 기능.
-	_bool				Collision_ToPlayer();
+	_bool				Collision_ToPlayer() {};
 
 protected:
 	CRenderer*			m_pRendererCom = nullptr;
@@ -79,6 +81,9 @@ protected:	// 멤버 변수로 쓰이는 것
 	MONSTERDESC			m_tMonsterDesc;
 
 protected:	
+	_bool				m_bHit = false; // On_Collision();
+	_double				m_dHit_TimeAcc = 0;
+
 	_bool				m_OneCoin = false;	// Monster_Die();
 
 private:	// RandomMove();

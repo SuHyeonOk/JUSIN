@@ -73,19 +73,8 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 void CM_Pigs::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
+	cout << m_tMonsterInfo.iHp << endl;
 	Monster_Tick(TimeDelta);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_SPACE))
-	{
-		// TODO : 충돌처리가 가능해 지면 수정 (둘 다 한 번만 호출 되어야 함)
-		m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
-		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Pigs::Late_Tick(_double TimeDelta)
@@ -121,7 +110,18 @@ HRESULT CM_Pigs::Render()
 
 void CM_Pigs::On_Collision(CGameObject * pOther)
 {
+	__super::On_Collision(pOther);
 
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//if (pGameInstance->Key_Down(DIK_SPACE))
+	//{
+	//	// TODO : 충돌처리가 가능해 지면 수정 (둘 다 한 번만 호출 되어야 함)
+	//	m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+	//	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+	//}
+
+	//RELEASE_INSTANCE(CGameInstance);
 }
 
 HRESULT CM_Pigs::SetUp_Components()
