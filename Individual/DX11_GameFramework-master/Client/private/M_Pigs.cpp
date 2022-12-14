@@ -252,7 +252,7 @@ void CM_Pigs::Move_Tick(const _double& TimeDelta)
 void CM_Pigs::Find_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
@@ -285,12 +285,12 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_vector	vMyPos;
-	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
+	// ³» ÁÂÇ¥
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4	f4MyPos;
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
+	// ÇÃ·¹ÀÌ¾î ÁÂÇ¥
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 	_float4	f4PlayerPos;
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);

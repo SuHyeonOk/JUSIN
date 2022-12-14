@@ -47,20 +47,6 @@ HRESULT CB_Star::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
-	//cout << "위" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.z << endl;
-
-	//if (0 <= m_tBulletInfo.f3Target_Pos.x)
-	//	m_tBulletInfo.f3Target_Pos.x += 5;
-	//else
-	//	m_tBulletInfo.f3Target_Pos.x -= 5;
-
-	//if (0 <= m_tBulletInfo.f3Target_Pos.z)
-	//	m_tBulletInfo.f3Target_Pos.z += 5;
-	//else
-	//	m_tBulletInfo.f3Target_Pos.z -= 5;
-
-	//cout << "아래" << m_tBulletInfo.f3Target_Pos.x << " || " << m_tBulletInfo.f3Target_Pos.z << endl;
-	//cout << "---------------------------------" << endl;
 	return S_OK;
 }
 
@@ -74,8 +60,21 @@ void CB_Star::Tick(_double TimeDelta)
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);																					// 카메라를 바라본다.
-	m_pTransformCom->Chase(XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f), TimeDelta);	// 플레이어를 따라간다.
+	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector	vDistance = vPlayerPos - vMyPos;
+	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
+
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
+ 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+
+
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+}
+
+void CB_Star::Late_Tick(_double TimeDelta)
+{
+	__super::Late_Tick(TimeDelta);
 
 	// 총알이 생성된 뒤 3초가 지나면 삭제한다.
 	m_dBullet_TimeAcc += TimeDelta;
@@ -84,13 +83,6 @@ void CB_Star::Tick(_double TimeDelta)
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
 	}
-
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
-}
-
-void CB_Star::Late_Tick(_double TimeDelta)
-{
-	__super::Late_Tick(TimeDelta);
 
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	CGameObject::Set_Dead();
@@ -122,6 +114,7 @@ HRESULT CB_Star::Render()
 
 void CB_Star::On_Collision(CGameObject * pOther)
 {
+	CGameObject::Set_Dead();
 }
 
 HRESULT CB_Star::SetUp_Components()

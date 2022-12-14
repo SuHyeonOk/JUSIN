@@ -296,10 +296,16 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 {
 	if (m_bFind)		// 플레이어를 찾았을 때! 플레이어와 거리가 1이 될 때 까지 이동한다.
 	{
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
+		// 거리가 4 안 이라면 플레이어를 따라가서 거리가 1이 될 때 공격한다.
 		if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+
+		// 거리가 4 가 넘어가면 플레이어 따라가는 것을 포기한다.
+		if (4.f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+			m_bFind = false;
 	}
 	else				// 플레이어를 찾지 못 했을 때 랜덤으로 이동하고 있는다
 	{
@@ -356,9 +362,6 @@ void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		m_bAttack = true;
 	}
-
-	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
 }
 
 void CM_PigWarrior::Hit_Tick()
