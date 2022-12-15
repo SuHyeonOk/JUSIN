@@ -524,6 +524,14 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region 네비게이션
+	lstrcpy(m_szLoadingText, TEXT("네비게이션정보생성중"));
+	/* For.Prototype_Component_Navigation */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navigation.dat")))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
 	/* For.Prototype_GameObject_Terrain */

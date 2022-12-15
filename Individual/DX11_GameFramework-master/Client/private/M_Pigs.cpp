@@ -296,6 +296,7 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 	CB_2DBullet::BULLETINFO		tBulletInfo;
+	tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
 	tBulletInfo.eToodyBullet = tBulletInfo.STAR_BULLET;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z);
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y * 0.5f, f4PlayerPos.z);

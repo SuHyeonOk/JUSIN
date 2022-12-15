@@ -22,6 +22,7 @@ public:
 		ANIMBULLETTYPE	eBulletType;
 
 		_float3		f3Pos;
+		_int		iMonsterAttack = 0;
 
 	}ANIMBULLETINFO;
 
@@ -36,6 +37,8 @@ public:
 	virtual void		Tick(_double TimeDelta) override;
 	virtual void		Late_Tick(_double TimeDelta) override;
 	virtual HRESULT		Render() override;
+
+	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
 	HRESULT					SetUp_Components();

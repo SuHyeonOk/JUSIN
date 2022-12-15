@@ -24,6 +24,8 @@ public:
 		_float3		f3Start_Pos;
 		_float3		f3Target_Pos;
 
+		_int		iMonsterAttack = 0;
+
 	}BULLETINFO;
 
 private:
@@ -56,7 +58,6 @@ private:
 
 	_float4					m_f4Distance;
 	_double					m_dBullet_TimeAcc = 0;
-
 
 public:
 	static	CB_2DBullet*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

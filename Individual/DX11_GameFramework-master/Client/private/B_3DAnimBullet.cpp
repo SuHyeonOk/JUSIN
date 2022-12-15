@@ -118,6 +118,11 @@ HRESULT CB_3DAnimBullet::Render()
 	return S_OK;
 }
 
+void CB_3DAnimBullet::On_Collision(CGameObject * pOther)
+{
+	CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
+}
+
 HRESULT CB_3DAnimBullet::SetUp_Components()
 {
 	/* For.Com_Renderer */

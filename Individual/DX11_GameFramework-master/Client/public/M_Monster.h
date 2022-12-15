@@ -85,8 +85,8 @@ protected:	// 멤버 변수로 쓰이는 것
 	MONSTERDESC			m_tMonsterDesc;
 
 protected:	
-	_bool				m_bHit = false; // On_Collision();
-	_double				m_dHit_TimeAcc = 0;
+	_bool				m_bPlayer_Attack = false; // On_Collision();
+	_double				m_dPlayer_Attack_TimeAcc = 0;
 
 	_bool				m_OneCoin = false;	// Monster_Die();
 

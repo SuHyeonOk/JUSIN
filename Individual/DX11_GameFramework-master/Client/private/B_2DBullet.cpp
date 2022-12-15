@@ -134,6 +134,7 @@ HRESULT CB_2DBullet::Render()
 void CB_2DBullet::On_Collision(CGameObject * pOther)
 {
 	CGameObject::Set_Dead();
+	CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
 }
 
 HRESULT CB_2DBullet::SetUp_Components()

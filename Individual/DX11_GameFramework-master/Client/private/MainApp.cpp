@@ -57,6 +57,35 @@ HRESULT CMainApp::Initialize()
 
 	CObj_Manager::GetInstance()->Initialized();
 
+	_ulong		dwByte = 0;
+	HANDLE		hFile = CreateFile(TEXT("../../Data/Navigation.dat"), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	if (0 == hFile)
+		return E_FAIL;
+
+	_float3		vPoints[3];
+
+	vPoints[0] = _float3(0.0f, 0.f, 5.0f);
+	vPoints[1] = _float3(5.0f, 0.f, 0.0f);
+	vPoints[2] = _float3(0.0f, 0.f, 0.0f);
+	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+
+	vPoints[0] = _float3(0.0f, 0.f, 5.0f);
+	vPoints[1] = _float3(5.0f, 0.f, 5.0f);
+	vPoints[2] = _float3(5.0f, 0.f, 0.0f);
+	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+
+	vPoints[0] = _float3(0.0f, 0.f, 10.0f);
+	vPoints[1] = _float3(5.0f, 0.f, 5.0f);
+	vPoints[2] = _float3(0.0f, 0.f, 5.0f);
+	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+
+	vPoints[0] = _float3(5.0f, 0.f, 5.0f);
+	vPoints[1] = _float3(10.0f, 0.f, 0.0f);
+	vPoints[2] = _float3(5.0f, 0.f, 0.0f);
+	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+
+	CloseHandle(hFile);
+
 	return S_OK;
 }
 

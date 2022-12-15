@@ -136,6 +136,9 @@
     <Filter Include="01.Utility\03.Components\02.VIBuffer\Cell">
       <UniqueIdentifier>{33ab106e-840e-4bd2-a884-e211add2ccc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\08. Navigation\Shader">
+      <UniqueIdentifier>{c261f3af-336d-4a57-802f-456768ddd461}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -321,6 +324,15 @@
     <ClInclude Include="..\public\Collider_Manager.h">
       <Filter>01.Utility\03.Components\07. Collider\00. Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Cell.h">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Cell.h">
+      <Filter>01.Utility\03.Components\08. Navigation\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Navigation.h">
+      <Filter>01.Utility\03.Components\08. Navigation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -482,5 +494,19 @@
     <ClCompile Include="..\private\Collider_Manager.cpp">
       <Filter>01.Utility\03.Components\07. Collider\00. Manager</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Cell.cpp">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cell.cpp">
+      <Filter>01.Utility\03.Components\08. Navigation\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Navigation.cpp">
+      <Filter>01.Utility\03.Components\08. Navigation</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Navigation.hlsl">
+      <Filter>01.Utility\03.Components\08. Navigation\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

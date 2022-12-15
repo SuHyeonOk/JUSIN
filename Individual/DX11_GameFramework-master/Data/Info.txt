@@ -1,2 +1,0 @@
-@ : ImGui 를 사용하지 않을 경우 주석!
-◈ : Get_Component
