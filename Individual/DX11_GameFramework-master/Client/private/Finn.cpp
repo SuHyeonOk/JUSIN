@@ -133,6 +133,17 @@ HRESULT CFinn::Render()
 	return S_OK;
 }
 
+void CFinn::On_Collision(CGameObject * pOther)
+{
+	//wstring wsMonsterTagFind = pOther->Get_Tag();
+	//wstring TagTemp = wsMonsterTagFind.substr(10);
+
+	//if (L"Monster__" == TagTemp)
+	//{
+	//	CObj_Manager::Set_Player_MinusHp()
+	//}
+}
+
 HRESULT CFinn::SetUp_Components()
 {
 	/* For.Com_Renderer */

@@ -89,11 +89,29 @@ _bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
 	return false;	// 없다면 쓰레기 값을 넘김
 }
 
+void		CObj_Manager::Set_Player_MinusHp(_int eHp)
+{
+	m_iMonster_Attck = eHp;
+}
+
 void		CObj_Manager::Tick(_double TimeDelta)
 {
 	Current_Player();			// 현재 플레이어가 누구인지 Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 
+	cout << m_tPlayerInfo.iHp << endl;
+
+	if (0 < m_iMonster_Attck)
+	{
+		m_dPlayerAttck_TimeAcc += TimeDelta;
+		if (0.7 < m_dPlayerAttck_TimeAcc)
+		{
+			if (0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= m_iMonster_Attck;
+			
+			m_iMonster_Attck = 0;
+			m_dPlayerAttck_TimeAcc = 0;
+		}
+	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

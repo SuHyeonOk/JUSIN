@@ -54,6 +54,7 @@ private:
 private:
 	BULLETINFO				m_tBulletInfo;
 
+	_float4					m_f4Distance;
 	_double					m_dBullet_TimeAcc = 0;
 
 

@@ -47,6 +47,11 @@ HRESULT CB_Star::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
+	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vDistance = vPlayerPos - vMyPos;
+	XMStoreFloat4(&m_f4Distance, vDistance);
+
 	return S_OK;
 }
 
@@ -60,16 +65,17 @@ void CB_Star::Tick(_double TimeDelta)
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
+
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector	vDistance = vPlayerPos - vMyPos;
+	_vector vDistance;
+	vDistance = XMLoadFloat4(&m_f4Distance);
 	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
- 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+ 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		// 충돌처리
 }
 
 void CB_Star::Late_Tick(_double TimeDelta)

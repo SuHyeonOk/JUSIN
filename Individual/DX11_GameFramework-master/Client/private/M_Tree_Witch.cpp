@@ -32,7 +32,7 @@ HRESULT CM_Tree_Witch::Initialize_Prototype()
 
 HRESULT CM_Tree_Witch::Initialize(void * pArg)
 {
-	m_wsTag = L"TreeWitch";
+	m_wsTag = L"Monster__TreeWitch";
 
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));

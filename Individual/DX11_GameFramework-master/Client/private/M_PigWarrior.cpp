@@ -32,7 +32,7 @@ HRESULT CM_PigWarrior::Initialize_Prototype()
 
 HRESULT CM_PigWarrior::Initialize(void * pArg)
 {
-	m_wsTag = L"PigWarrior";
+	m_wsTag = L"Monster__PigWarrior";
 
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
@@ -63,13 +63,15 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	m_tMonsterInfo.iHp = 50;
+	m_tMonsterInfo.iExp = 25;
+	m_tMonsterInfo.iAttack = 5;
+
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.iHp		= 50;
-	m_tMonsterInfo.iExp		= 25;
-	m_tMonsterInfo.iAttack	= 5;
+
 
 	return S_OK;
 }
@@ -115,13 +117,10 @@ HRESULT CM_PigWarrior::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE) {
-			if (2 == i)		// 칼 없애기
-				continue;
-		}
+		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
+			if (2 == i)	continue;	// 꿀벌 칼 없애기
 		else
-			if (1 == i)
-				continue;
+			if (1 == i) continue;	// 노동자 칼 없애기
 
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");

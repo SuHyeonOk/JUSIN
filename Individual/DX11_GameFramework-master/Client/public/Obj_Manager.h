@@ -63,7 +63,7 @@ public:
 	// UI 관련
 	void				Set_Player_Exp(_int eExp)		{ m_tPlayerInfo.iExp += eExp; }
 	void				Set_Player_PushHp(_int eHp)		{ if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
-	void				Set_Player_MinusHp(_int eHp)	{ if (0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= eHp; }
+	void				Set_Player_MinusHp(_int eHp);
 
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.
@@ -86,6 +86,9 @@ private:
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
 	_uint			m_ChangeTarget = 0;
+
+	_int			m_iMonster_Attck = 0;
+	_double			m_dPlayerAttck_TimeAcc = 0;
 
 public:
 	virtual void Free() override;

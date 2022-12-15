@@ -31,7 +31,7 @@ HRESULT CM_Pigs::Initialize_Prototype()
 
 HRESULT CM_Pigs::Initialize(void * pArg)
 {
-	m_wsTag = L"Pigs";
+	m_wsTag = L"Monster__Pigs";
 
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
@@ -73,7 +73,7 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 void CM_Pigs::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	cout << m_tMonsterInfo.iHp << endl;
+
 	Monster_Tick(TimeDelta);
 }
 

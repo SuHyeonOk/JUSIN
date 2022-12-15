@@ -40,6 +40,7 @@ HRESULT CW_PigWarrior::Initialize(void * pArg)
 	if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)	// 요기
 	{
 		m_wsTag = L"PigWarrior_Sword";
+		m_WeaponDesc.iAttack = m_WeaponDesc.iAttack;
 		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -90.f);
 	}
 	else if (WEAPONDESC::WARRIORTYPE::CYLINDER == m_WeaponDesc.eWarriorType)	// 요기
@@ -108,8 +109,8 @@ void CW_PigWarrior::On_Collision(CGameObject * pOther)
 {
 	//  TODO : 체력이 충돌 되는 순간 한 번만 깍이는 것이아닌 드드드드 계속 충돌이 될 것이다.
 	// 어떻게 구현하는 것이 좋을까? 플레이어의 지금은 Set_Player_MinusHp() 에서 1.f 초 동안에는 다음 체력이 깍일 수 없도록 하는 방법이 있다.
-	//if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-	//	CObj_Manager::GetInstance()->Set_Player_MinusHp(m_WeaponDesc.iAttack);
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag()) // TODO : 몬스터가 ATTACK 상태인지 확인하기
+		CObj_Manager::GetInstance()->Set_Player_MinusHp(m_WeaponDesc.iAttack);
 }
 
 HRESULT CW_PigWarrior::SetUp_Components()
