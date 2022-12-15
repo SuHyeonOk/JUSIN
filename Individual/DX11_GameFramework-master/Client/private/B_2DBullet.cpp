@@ -134,7 +134,16 @@ HRESULT CB_2DBullet::Render()
 void CB_2DBullet::On_Collision(CGameObject * pOther)
 {
 	CGameObject::Set_Dead();
-	CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
+	//CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
+
+	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+	{
+		if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STUN);
+	}
+
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 }
 
 HRESULT CB_2DBullet::SetUp_Components()

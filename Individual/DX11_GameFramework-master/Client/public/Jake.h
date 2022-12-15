@@ -23,8 +23,8 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
+	virtual void	Tick(_double TimeDelta) override;
+	virtual void	Late_Tick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 
 private:
@@ -37,6 +37,12 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
+	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
+
+private:
+	void	Sword_Tick(const _double & TimeDelta);
+	void	Sword_LateTick(const _double & TimeDelta);
+
 private:
 	void	Player_Tick(_double TimeDelta);
 	void	Current_Player(_double TimeDelta);
@@ -45,6 +51,7 @@ private:
 	void	Key_Input(_double TimeDelta);
 
 	void	Space_Attack_Tick(_double TimeDelta);
+	void	Control_Tick(_double TimeDelta);
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
@@ -54,6 +61,7 @@ private:
 	void	Anim_Change(_double TimeDelta);
 
 private:
+	vector<CGameObject*>		m_PlayerParts;
 	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
 
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨

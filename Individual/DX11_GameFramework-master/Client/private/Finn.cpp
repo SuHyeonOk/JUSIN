@@ -264,7 +264,7 @@ HRESULT CFinn::Ready_Parts()
 	CFinn_Weapon::WEAPONDESC			WeaponDesc;
 	ZeroMemory(&WeaponDesc, sizeof(CFinn_Weapon::WEAPONDESC));
 
-	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::SWORD::ROOT;
+	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -277,7 +277,7 @@ HRESULT CFinn::Ready_Parts()
 
 	m_PlayerParts.push_back(pPartObject);
 
-	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::SWORD::DOLDEN;
+	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -290,7 +290,7 @@ HRESULT CFinn::Ready_Parts()
 
 	m_PlayerParts.push_back(pPartObject);
 
-	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::SWORD::FAMILY;
+	WeaponDesc.eSwordType = CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -332,21 +332,21 @@ void CFinn::Player_Info()
 
 void CFinn::Sword_Tick(const _double & TimeDelta)
 {
-	if (CObj_Manager::PLAYERINFO::SWORD::ROOT == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Tick(TimeDelta);
-	else if (CObj_Manager::PLAYERINFO::SWORD::DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[1]->Tick(TimeDelta);
-	else if (CObj_Manager::PLAYERINFO::SWORD::FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[2]->Tick(TimeDelta);
 }
 
 void CFinn::Sword_LateTick(const _double & TimeDelta)
 {
-	if (CObj_Manager::PLAYERINFO::SWORD::ROOT == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Late_Tick(TimeDelta);
-	else if (CObj_Manager::PLAYERINFO::SWORD::DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[1]->Late_Tick(TimeDelta);
-	else if (CObj_Manager::PLAYERINFO::SWORD::FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().eSword)
+	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[2]->Late_Tick(TimeDelta);
 }
 
@@ -372,7 +372,7 @@ void CFinn::Player_Tick(_double TimeDelta)
 
 	switch (m_tPlayerInfo.eState)
 	{
-	case CObj_Manager::PLAYERINFO::ATTACK_1:
+	case CObj_Manager::PLAYERINFO::ATTACK:
 		Space_Attack_Tick(TimeDelta);
 		break;
 
@@ -437,7 +437,8 @@ void CFinn::Player_Follow(_double TimeDelta)
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+		CObj_Manager::PLAYERINFO::STATE::CONTROL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (1.5f < fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
@@ -567,7 +568,7 @@ void CFinn::Key_Input(_double TimeDelta)
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK_1);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -660,7 +661,7 @@ void CFinn::Cheering_Tick()
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return;
 
 	m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
@@ -723,14 +724,8 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(48, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK_1:
+		case CObj_Manager::PLAYERINFO::ATTACK:
 			m_pModelCom->Set_AnimIndex(5, false);
-			break;
-		case CObj_Manager::PLAYERINFO::ATTACK_2:
-			m_pModelCom->Set_AnimIndex(19, false);
-			break;
-		case CObj_Manager::PLAYERINFO::ATTACK_3:
-			m_pModelCom->Set_AnimIndex(20, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::HIT:

@@ -127,9 +127,6 @@
     <Filter Include="02.GameObjects\UI\3DTexture">
       <UniqueIdentifier>{352e6a8d-765b-4250-b2bb-35b391327d7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\Finn\Weapon">
-      <UniqueIdentifier>{cf813d33-0cb7-491b-bc30-ac569231de62}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -243,9 +240,6 @@
     <ClInclude Include="..\public\UI_3DTexture.h">
       <Filter>02.GameObjects\UI\3DTexture</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Finn_Weapon.h">
-      <Filter>02.GameObjects\Player\Finn\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\W_PigWarrior.h">
       <Filter>02.GameObjects\Monster\PigWarrior</Filter>
     </ClInclude>
@@ -257,6 +251,12 @@
     </ClInclude>
     <ClInclude Include="..\public\B_3DAnimBullet.h">
       <Filter>02.GameObjects\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Finn_Weapon.h">
+      <Filter>02.GameObjects\Player\Finn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Jake_Weapon.h">
+      <Filter>02.GameObjects\Player\Jake</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -356,9 +356,6 @@
     <ClCompile Include="..\private\UI_3DTexture.cpp">
       <Filter>02.GameObjects\UI\3DTexture</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Finn_Weapon.cpp">
-      <Filter>02.GameObjects\Player\Finn\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\W_PigWarrior.cpp">
       <Filter>02.GameObjects\Monster\PigWarrior</Filter>
     </ClCompile>
@@ -370,6 +367,12 @@
     </ClCompile>
     <ClCompile Include="..\private\B_2DBullet.cpp">
       <Filter>02.GameObjects\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Finn_Weapon.cpp">
+      <Filter>02.GameObjects\Player\Finn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Jake_Weapon.cpp">
+      <Filter>02.GameObjects\Player\Jake</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

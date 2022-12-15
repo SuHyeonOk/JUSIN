@@ -23,7 +23,8 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.iCoin		= 0;
 
 	m_tPlayerInfo.ePlayer = PLAYERINFO::PLAYER::FINN;
-	m_tPlayerInfo.eSword = PLAYERINFO::SWORD::ROOT;
+	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
+	m_tPlayerInfo.eJakeWeapon = PLAYERINFO::JAKEWEAPON::LFIST;
 
 	return S_OK;
 }
@@ -91,21 +92,34 @@ _bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
 
 void		CObj_Manager::Set_Player_MinusHp(_int eHp)
 {
+	//if (PLAYERINFO::PLAYER::JAKE == m_tPlayerInfo.ePlayer &&
+	//	PLAYERINFO::STATE::CONTROL == m_tPlayerInfo.eJakeWeapon)
+	//	return;
+
+	if (m_bShield)
+	{
+		m_bShield = false;
+		return;
+	}
+
 	m_iMonster_Attck = eHp;
 }
 
 void		CObj_Manager::Tick(_double TimeDelta)
 {
-	Current_Player();			// 현재 플레이어가 누구인지 Tick
+	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 
-	cout << m_tPlayerInfo.iHp << endl;
+	cout << "HP : " << m_tPlayerInfo.iHp << " | MAXHP : " << m_tPlayerInfo.iHpMax <<
+		" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
+		" | EXP : " << m_tPlayerInfo.iExp << " | MAXEXP : " << m_tPlayerInfo.iExpMax << endl;
 
 	if (0 < m_iMonster_Attck)
 	{
 		m_dPlayerAttck_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayerAttck_TimeAcc)
 		{
+			Set_Current_Player_State(PLAYERINFO::STATE::HIT);
 			if (0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= m_iMonster_Attck;
 			
 			m_iMonster_Attck = 0;
@@ -113,16 +127,19 @@ void		CObj_Manager::Tick(_double TimeDelta)
 		}
 	}
 
+
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_U))	// TODO : Playr 레벨이 1이 넘으면 칼이 변한다.
+	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
 	{
-		m_tPlayerInfo.eSword = PLAYERINFO::SWORD::DOLDEN;
+		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_DOLDEN;
 	}
-	if (pGameInstance->Key_Down(DIK_I))	// TODO : Playr 레벨이 1이 넘으면 칼이 변한다.
+	if (pGameInstance->Key_Down(DIK_I))	// TODO : 중간 보스 잡으면 변경
 	{
-		m_tPlayerInfo.eSword = PLAYERINFO::SWORD::FAMILY;
+		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_FAMILY;
 	}
+
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -163,9 +180,11 @@ void		CObj_Manager::Player_Exp()
 {
 	if (m_tPlayerInfo.iExp >= m_tPlayerInfo.iExpMax)
 	{
-		m_tPlayerInfo.iLevel++;			// 레벨 증가
-		m_tPlayerInfo.iExpMax += 50;	// 최대 경험치 증가
-		m_tPlayerInfo.iAttack += 20;	// 공격력 증가
+		m_tPlayerInfo.iHp = m_tPlayerInfo.iHpMax;		// 체력 꽉 채워주기
+		m_tPlayerInfo.iLevel++;							// 레벨 증가
+		m_tPlayerInfo.iExp = 0;							// 경험치 0 으로 초기화
+		m_tPlayerInfo.iExpMax += 50;					// 최대 경험치 증가
+		m_tPlayerInfo.iAttack += 10;					// 공격력 증가
 
 		return;
 	}

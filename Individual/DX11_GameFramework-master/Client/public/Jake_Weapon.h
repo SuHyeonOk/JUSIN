@@ -14,7 +14,7 @@ END
 
 BEGIN(Client)
 
-class CFinn_Weapon final : public CGameObject
+class CJake_Weapon final : public CGameObject
 {
 public:
 	typedef struct tagWeaponDesc
@@ -23,21 +23,23 @@ public:
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
 
-		CObj_Manager::PLAYERINFO::PLAYERWEAPON	eSwordType;
+		CObj_Manager::PLAYERINFO::JAKEWEAPON	eWeaponType;
 
 	}WEAPONDESC;
 
 private:
-	CFinn_Weapon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CFinn_Weapon(const CFinn_Weapon& rhs);
-	virtual ~CFinn_Weapon() = default;
+	CJake_Weapon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CJake_Weapon(const CJake_Weapon& rhs);
+	virtual ~CJake_Weapon() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual void		Tick(_double TimeDelta) override;
+	virtual void		Late_Tick(_double TimeDelta) override;
+	virtual HRESULT		Render() override;
+
+	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
 	CShader*				m_pShaderCom = nullptr;
@@ -54,7 +56,7 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 public:
-	static CFinn_Weapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CJake_Weapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };

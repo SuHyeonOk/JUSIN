@@ -1,22 +1,23 @@
-#include "stdafx.h"
-#include "..\public\Finn_Weapon.h"
+癤�#include "stdafx.h"
+#include "..\public\Jake_Weapon.h"
 
 #include "GameInstance.h"
 #include "Bone.h"
+#include "Obj_Manager.h"
 
-CFinn_Weapon::CFinn_Weapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CJake_Weapon::CJake_Weapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CFinn_Weapon::CFinn_Weapon(const CFinn_Weapon & rhs)
+CJake_Weapon::CJake_Weapon(const CJake_Weapon & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CFinn_Weapon::Initialize_Prototype()
+HRESULT CJake_Weapon::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,9 +25,13 @@ HRESULT CFinn_Weapon::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CFinn_Weapon::Initialize(void * pArg)
+HRESULT CJake_Weapon::Initialize(void * pArg)
 {
-	m_wsTag = L"Finn_Weapon";
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
+		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+		m_wsTag = L"Jake_Weapon";
+	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+		m_wsTag = L"Jake_Shield";
 
 	if (nullptr != pArg)
 		memcpy(&m_WeaponDesc, pArg, sizeof(m_WeaponDesc));
@@ -40,13 +45,13 @@ HRESULT CFinn_Weapon::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CFinn_Weapon::Tick(_double TimeDelta)
+void CJake_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 }
 
-void CFinn_Weapon::Late_Tick(_double TimeDelta)
+void CJake_Weapon::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -60,32 +65,33 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 	SocketMatrix = SocketMatrix * m_WeaponDesc.pTargetTransform->Get_WorldMatrix();
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
-	
+
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT   CFinn_Weapon::Render()
+HRESULT   CJake_Weapon::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 	{
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
-		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
 
-		m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
+		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+			m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
+		}
 	}
 
 #ifdef _DEBUG
@@ -95,7 +101,12 @@ HRESULT   CFinn_Weapon::Render()
 	return S_OK;
 }
 
-HRESULT CFinn_Weapon::SetUp_Components()
+void CJake_Weapon::On_Collision(CGameObject * pOther)
+{
+	CObj_Manager::GetInstance()->Set_Jake_Shield();
+}
+
+HRESULT CJake_Weapon::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -109,41 +120,31 @@ HRESULT CFinn_Weapon::SetUp_Components()
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT)
+	if (m_WeaponDesc.eWeaponType == CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST)
 	{
-		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),
-			(CComponent**)&m_pModelCom)))
-			return E_FAIL;
-
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
-		ColliderDesc.vCenter = _float3(0.5f, 0.f, -0.05f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
-	else if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN)
+	else if (m_WeaponDesc.eWeaponType == CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST)
 	{
-		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"), TEXT("Com_Model"),
-			(CComponent**)&m_pModelCom)))
-			return E_FAIL;
-
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
-		ColliderDesc.vCenter = _float3(0.5f, 0.f, -0.05f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
-	else if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY)
+	else if (m_WeaponDesc.eWeaponType == CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Jake_Punch_Shield"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
-		ColliderDesc.vCenter = _float3(0.7f, 0.f, -0.1f);
+		ColliderDesc.vSize = _float3(1.f, 1.f, 1.f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -153,7 +154,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CFinn_Weapon::SetUp_ShaderResources()
+HRESULT CJake_Weapon::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -183,31 +184,31 @@ HRESULT CFinn_Weapon::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CFinn_Weapon * CFinn_Weapon::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CJake_Weapon * CJake_Weapon::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CFinn_Weapon*		pInstance = new CFinn_Weapon(pDevice, pContext);
+	CJake_Weapon*		pInstance = new CJake_Weapon(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CFinn_Weapon");
+		MSG_BOX("Failed to Created : CJake_Weapon");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CFinn_Weapon::Clone(void * pArg)
+CGameObject * CJake_Weapon::Clone(void * pArg)
 {
-	CFinn_Weapon*		pInstance = new CFinn_Weapon(*this);
+	CJake_Weapon*		pInstance = new CJake_Weapon(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CFinn_Weapon");
+		MSG_BOX("Failed to Cloned : CJake_Weapon");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CFinn_Weapon::Free()
+void CJake_Weapon::Free()
 {
 	__super::Free();
 

@@ -2,6 +2,7 @@
 #include "..\public\Jake.h"
 
 #include "GameInstance.h"
+#include "Jake_Weapon.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -45,6 +46,9 @@ HRESULT CJake::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Parts()))
+		return E_FAIL;
+
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(18);
 
@@ -56,7 +60,14 @@ HRESULT CJake::Initialize(void * pArg)
 
 void CJake::Tick(_double TimeDelta)
 {
+	// 28 : 할머니 한테 뒤집혀 지려고
+	// 58 : 굴러나오기
+	// 59 : 눌려있기
+	// 60 : 어어 ㅓ 두로 넘어간다.
+
 	__super::Tick(TimeDelta);
+
+	Sword_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
@@ -67,6 +78,8 @@ void CJake::Tick(_double TimeDelta)
 void CJake::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	Sword_LateTick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -129,7 +142,6 @@ HRESULT CJake::SetUp_Components()
 	ColliderDesc.vSize = _float3(0.35f, 0.7f, 0.35f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
@@ -175,6 +187,83 @@ HRESULT CJake::SetUp_ShaderResources()
 	return S_OK;
 }
 
+HRESULT CJake::Ready_Parts()
+{
+	CGameObject*		pPartObject = nullptr;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CJake_Weapon::WEAPONDESC			WeaponDesc;
+	ZeroMemory(&WeaponDesc, sizeof(CJake_Weapon::WEAPONDESC));
+
+	WeaponDesc.eWeaponType = CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bip001 L Finger0");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	//Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Jake_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_PlayerParts.push_back(pPartObject);
+
+	WeaponDesc.eWeaponType = CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("R_Arm_Drill");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	//Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Jake_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_PlayerParts.push_back(pPartObject);
+
+	WeaponDesc.eWeaponType = CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bip001 L Finger0");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	//Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Jake_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_PlayerParts.push_back(pPartObject);
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+void CJake::Sword_Tick(const _double & TimeDelta)
+{
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
+		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+	{
+		m_PlayerParts[0]->Tick(TimeDelta);
+		m_PlayerParts[1]->Tick(TimeDelta);
+	}
+	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+		m_PlayerParts[2]->Tick(TimeDelta);
+}
+
+void CJake::Sword_LateTick(const _double & TimeDelta)
+{
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
+		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+	{
+		m_PlayerParts[0]->Late_Tick(TimeDelta);
+		m_PlayerParts[1]->Late_Tick(TimeDelta);
+	}
+	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+		m_PlayerParts[2]->Late_Tick(TimeDelta);
+}
+
 void CJake::Player_Tick(_double TimeDelta)
 {
 	// Player 가 아닐 때 계속 확인해야하는 기능
@@ -186,8 +275,12 @@ void CJake::Player_Tick(_double TimeDelta)
 
 	switch (m_tPlayerInfo.eState)
 	{
-	case CObj_Manager::PLAYERINFO::ATTACK_1:
+	case CObj_Manager::PLAYERINFO::ATTACK:
 		Space_Attack_Tick(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::CONTROL:
+		Control_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::ROLL:
@@ -317,8 +410,11 @@ void CJake::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.CONTROL)
+		{
+			m_pTransformCom->Go_Straight(TimeDelta);
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		}
 	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -373,10 +469,18 @@ void CJake::Key_Input(_double TimeDelta)
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK_1);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
+
+	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::CONTROL);
+	if (pGameInstance->Key_Up(DIK_LCONTROL))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST);
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -387,6 +491,14 @@ void CJake::Space_Attack_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+}
+
+void CJake::Control_Tick(_double TimeDelta)
+{
+	if (m_OnMove)
+		m_pTransformCom->Go_Straight(TimeDelta, 2.f);
+	
+	CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE);
 }
 
 void CJake::Roolling_Tick(_double TimeDelta)
@@ -406,7 +518,7 @@ void CJake::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	if (10 <= m_pModelCom->Get_Keyframes())
+	if (7 <= m_pModelCom->Get_Keyframes())
 		m_pTransformCom->Go_Backward(0);
 	else
 		m_pTransformCom->Go_Backward(TimeDelta);
@@ -460,7 +572,7 @@ void CJake::Cheering_Tick()
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK_1 != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return;
 
 	m_tPlayerInfo.eState = m_tPlayerInfo.CHEERING;
@@ -487,8 +599,12 @@ void CJake::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(52, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK_1:
+		case CObj_Manager::PLAYERINFO::ATTACK:
 			m_pModelCom->Set_AnimIndex(4, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::CONTROL:
+			m_pModelCom->Set_AnimIndex(6);
 			break;
 
 		case CObj_Manager::PLAYERINFO::HIT:
@@ -541,6 +657,10 @@ CGameObject * CJake::Clone(void * pArg)
 void CJake::Free()
 {
 	__super::Free();
+
+	for (auto& pPart : m_PlayerParts)
+		Safe_Release(pPart);
+	m_PlayerParts.clear();
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);

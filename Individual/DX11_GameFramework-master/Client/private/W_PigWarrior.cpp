@@ -138,10 +138,6 @@ HRESULT CW_PigWarrior::SetUp_Components()
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, -0.5f);
-
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
-			(CComponent**)&m_pColliderCom, &ColliderDesc)))
-			return E_FAIL;
 	}
 	else if (WEAPONDESC::WARRIORTYPE::CYLINDER == m_WeaponDesc.eWarriorType)	// ¿ä±â
 	{
@@ -154,11 +150,11 @@ HRESULT CW_PigWarrior::SetUp_Components()
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
-			(CComponent**)&m_pColliderCom, &ColliderDesc)))
-			return E_FAIL;
 	}
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

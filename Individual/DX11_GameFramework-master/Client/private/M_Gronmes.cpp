@@ -117,6 +117,7 @@ HRESULT CM_Gronmes::Render()
 
 void CM_Gronmes::On_Collision(CGameObject * pOther)
 {
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::STUN);
 	__super::On_Collision(pOther);
 }
 

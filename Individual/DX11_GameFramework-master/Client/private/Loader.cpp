@@ -15,6 +15,7 @@
 
 // Weapon
 #include "Finn_Weapon.h"
+#include "Jake_Weapon.h"
 #include "W_PigWarrior.h"
 
 // Item
@@ -167,6 +168,10 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Golden_Sword_New/Golden_Sword_New.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Jake_Punch_Shield */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Jake_Punch_Shield"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Jake_Punch_Shield/Jake_Punch_Shield.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Model_W_Wooden_Sword */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"),
@@ -230,6 +235,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_Finn_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Weapon"),
 		CFinn_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Jake_Weapon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake_Weapon"),
+		CJake_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_PigWarrior_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),

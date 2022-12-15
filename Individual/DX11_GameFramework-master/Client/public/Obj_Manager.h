@@ -19,12 +19,15 @@ public:
 		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
 		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
 
-		enum STATE { IDLE, RUN, ROLL, ATTACK_1, ATTACK_2, ATTACK_3, HIT, STUN, DIE, CHANGE, CHEERING, TREEWITCH, STATE_END };
+		enum STATE { IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, STUN, DIE, CHANGE, CHEERING, TREEWITCH, STATE_END };
 		STATE		eState;		// 현재 상태
 		STATE		ePreState;	// 이전 상태
 
-		enum SWORD { ROOT, DOLDEN, FAMILY, SWORD_END };
-		SWORD		eSword = SWORD_END;
+		enum PLAYERWEAPON { F_ROOT, F_DOLDEN, F_FAMILY, SHIELD_END };
+		PLAYERWEAPON		ePlayerWeapon = SHIELD_END;
+
+		enum JAKEWEAPON { LFIST, RFIST, SHLDE, JAKEWERPON_END };
+		JAKEWEAPON			eJakeWeapon = JAKEWERPON_END;
 
 		enum ITEM { ITEM_END };
 		ITEM		eItem = ITEM_END;
@@ -57,13 +60,17 @@ public:
 	void				Set_Current_Player(PLAYERINFO ePlayerInfo) { m_tPlayerInfo = ePlayerInfo; }
 	void				Set_Current_Player_State(PLAYERINFO::STATE	eState) { m_tPlayerInfo.eState = eState; }
 
+	// 무기
+	void				Set_Jake_Shield() { m_bShield = true; }
+	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }
+
 	// 플레이어의 공격력 몬스터에게 주기 위해서
 	_int				Get_Player_Attack() { return m_tPlayerInfo.iAttack; }	
 
 	// UI 관련
 	void				Set_Player_Exp(_int eExp)		{ m_tPlayerInfo.iExp += eExp; }
 	void				Set_Player_PushHp(_int eHp)		{ if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
-	void				Set_Player_MinusHp(_int eHp);
+	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
 
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.
@@ -82,6 +89,9 @@ private:
 private:
 	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
+
+private:
+	_bool			m_bShield = false;
 
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn

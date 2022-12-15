@@ -85,8 +85,8 @@ HRESULT CM_Monster::Render()
 
 void CM_Monster::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn_Weapon" == pOther->Get_Tag() &&
-		CObj_Manager::PLAYERINFO::STATE::ATTACK_1 == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag() &&
+		CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		m_bPlayer_Attack = true;
 	}
