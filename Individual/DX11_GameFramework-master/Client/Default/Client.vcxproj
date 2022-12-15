@@ -171,8 +171,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\public\B_2DBullet.h" />
     <ClInclude Include="..\public\B_3DAnimBullet.h" />
-    <ClInclude Include="..\public\B_Star.h" />
     <ClInclude Include="..\public\Camera_Dynamic.h" />
     <ClInclude Include="..\public\Client_Defines.h" />
     <ClInclude Include="..\public\Coin.h" />
@@ -189,7 +189,7 @@
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
-    <ClInclude Include="..\public\M_Gronmes_RED.h" />
+    <ClInclude Include="..\public\M_Gronmes.h" />
     <ClInclude Include="..\public\M_Monster.h" />
     <ClInclude Include="..\public\M_Pigs.h" />
     <ClInclude Include="..\public\M_PigWarrior.h" />
@@ -213,8 +213,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\private\B_2DBullet.cpp" />
     <ClCompile Include="..\private\B_3DAnimBullet.cpp" />
-    <ClCompile Include="..\private\B_Ster.cpp" />
     <ClCompile Include="..\private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\Coin.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />
@@ -230,7 +230,7 @@
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />
-    <ClCompile Include="..\private\M_Gronmes_RED.cpp" />
+    <ClCompile Include="..\private\M_Gronmes.cpp" />
     <ClCompile Include="..\private\M_Monster.cpp" />
     <ClCompile Include="..\private\M_Pigs.cpp" />
     <ClCompile Include="..\private\M_PigWarrior.cpp" />

@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "..\public\B_Star.h"
+#include "..\public\B_2DBullet.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-CB_Star::CB_Star(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CB_2DBullet::CB_2DBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CB_Star::CB_Star(const CB_Star & rhs)
+CB_2DBullet::CB_2DBullet(const CB_2DBullet & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CB_Star::Initialize_Prototype()
+HRESULT CB_2DBullet::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,7 +24,7 @@ HRESULT CB_Star::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CB_Star::Initialize(void * pArg)
+HRESULT CB_2DBullet::Initialize(void * pArg)
 {	
 	m_wsTag = L"2DBullet";
 
@@ -34,9 +34,18 @@ HRESULT CB_Star::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
+	{
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+	}
+	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+	{
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+	}
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -45,7 +54,11 @@ HRESULT CB_Star::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+
+	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
 	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -55,7 +68,7 @@ HRESULT CB_Star::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CB_Star::Tick(_double TimeDelta)
+void CB_2DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -78,7 +91,7 @@ void CB_Star::Tick(_double TimeDelta)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		// 충돌처리
 }
 
-void CB_Star::Late_Tick(_double TimeDelta)
+void CB_2DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -99,7 +112,7 @@ void CB_Star::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
 
-HRESULT CB_Star::Render()
+HRESULT CB_2DBullet::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -118,12 +131,12 @@ HRESULT CB_Star::Render()
 	return S_OK;
 }
 
-void CB_Star::On_Collision(CGameObject * pOther)
+void CB_2DBullet::On_Collision(CGameObject * pOther)
 {
 	CGameObject::Set_Dead();
 }
 
-HRESULT CB_Star::SetUp_Components()
+HRESULT CB_2DBullet::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
@@ -137,9 +150,18 @@ HRESULT CB_Star::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
@@ -155,7 +177,7 @@ HRESULT CB_Star::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CB_Star::SetUp_ShaderResources()
+HRESULT CB_2DBullet::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -178,31 +200,31 @@ HRESULT CB_Star::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CB_Star * CB_Star::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CB_2DBullet * CB_2DBullet::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CB_Star*		pInstance = new CB_Star(pDevice, pContext);
+	CB_2DBullet*		pInstance = new CB_2DBullet(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CB_Star");
+		MSG_BOX("Failed to Created : CB_2DBullet");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CB_Star::Clone(void * pArg)
+CGameObject * CB_2DBullet::Clone(void * pArg)
 {
-	CB_Star*		pInstance = new CB_Star(*this);
+	CB_2DBullet*		pInstance = new CB_2DBullet(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CB_Star");
+		MSG_BOX("Failed to Cloned : CB_2DBullet");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CB_Star::Free()
+void CB_2DBullet::Free()
 {
 	__super::Free();
 

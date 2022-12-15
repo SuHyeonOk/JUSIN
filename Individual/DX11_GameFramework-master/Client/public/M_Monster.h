@@ -17,7 +17,11 @@ class CM_Monster abstract : public CGameObject
 public:
 	typedef struct tagMonsterDesc : public CGameObject::GAMEOBJECTDESC
 	{
-		enum MONSTERKIND { W_BEE, W_WORKER, S_COWBOY, S_SR, TREE_WITCH, MONSTERKIND_END };
+		enum MONSTERKIND { 
+			W_BEE, W_WORKER, 
+			S_COWBOY, S_SR, 
+			G_BLUE, G_RED, G_YELLOW,
+			TREE_WITCH, MONSTERKIND_END };
 
 		MONSTERKIND		eMonsterKind = MONSTERKIND_END;
 		_float3			f3Pos;

@@ -23,7 +23,7 @@
 #include "Page.h"
 
 // Bullet
-#include "B_Star.h"
+#include "B_2DBullet.h"
 #include "B_3DAnimBullet.h"
 
 // Stun
@@ -32,7 +32,7 @@
 // Monster
 #include "M_PigWarrior.h"
 #include "M_Pigs.h"
-#include "M_Gronmes_RED.h"
+#include "M_Gronmes.h"
 #include "M_Tree_Witch.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -87,9 +87,14 @@ HRESULT CLoader::Loading_Tool()
 	Safe_AddRef(pGameInstance);
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+	// 2D Bullet
 	/* For.Prototype_Component_Texture_B_Star */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Star/Star.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Star/Star.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_B_Circle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Circle/Circle.png")))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
@@ -191,10 +196,18 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_SR"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_SR/Pigs_SR.fbx", PivotMatrix))))
 		return E_FAIL;
-	///* For.Prototype_Component_Model_M_Gonmes_RED */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_M_Gonmes_RED"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_RED/Gnomes_RED.fbx", PivotMatrix))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gnomes_BLUE */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gnomes_BLUE"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_BLUE/Gnomes_BLUE.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gonmes_RED */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gonmes_RED"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_RED/Gnomes_RED.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gnomes_YELLOW */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gnomes_YELLOW"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_YELLOW/Gnomes_YELLOW.fbx", PivotMatrix))))
+		return E_FAIL;
 	/* For.Prototype_Component_Model_M_Tree_Witch */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Tree_Witch"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Tree_Witch/Tree_Witch.fbx", PivotMatrix))))
@@ -242,9 +255,9 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	// Bullet
-	/* For.Prototype_GameObject_B_Star */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
-		CB_Star::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_B_ToodyBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_ToodyBullet"),
+		CB_2DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
@@ -266,9 +279,9 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs"),
 		CM_Pigs::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_M_Gronmes_RED */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gronmes_RED"),
-		CM_Gronmes_RED::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_M_Gronmes */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gronmes"),
+		CM_Gronmes::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_M_Tree_Witch */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Tree_Witch"),
@@ -341,11 +354,17 @@ HRESULT CLoader::Loading_ForGamePlay()
 	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Filter.bmp"), 1))))
 	//	return E_FAIL;
 
+	// 2D Bullet
 	/* For.Prototype_Component_Texture_B_Star */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Star/Star.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Star/Star.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_B_Circle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Circle/Circle.png")))))
 		return E_FAIL;
 
+	// 2D UI
 	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
@@ -469,6 +488,18 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_SR"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/Pigs_SR/Pigs_SR.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gnomes_BLUE */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gnomes_BLUE"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_BLUE/Gnomes_BLUE.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gonmes_RED */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gonmes_RED"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_RED/Gnomes_RED.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Gnomes_YELLOW */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gnomes_YELLOW"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Gnomes/Gnomes_YELLOW/Gnomes_YELLOW.fbx", PivotMatrix))))
+		return E_FAIL;
 	/* For.Prototype_Component_Model_M_Tree_Witch */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Tree_Witch"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Tree_Witch/Tree_Witch.fbx", PivotMatrix))))
@@ -530,9 +561,9 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Bullet
-	/* For.Prototype_GameObject_B_Star */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_Star"),
-		CB_Star::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_B_ToodyBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_ToodyBullet"),
+		CB_2DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
@@ -569,6 +600,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_M_Pigs */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Pigs"),
 		CM_Pigs::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Gronmes */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gronmes"),
+		CM_Gronmes::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_M_Tree_Witch */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Tree_Witch"),

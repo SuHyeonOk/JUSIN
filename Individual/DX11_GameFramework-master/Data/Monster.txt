@@ -1,5 +1,8 @@
-Layer_PigWarrior_BEE__0|-12.2932|0|-6.59404
-Layer_PigWarrior_WORKER__1|-4.44249|0|-2.5808
-Layer_Pigs_COWBOY__2|-7.04587|0|3.34874
-Layer_Pigs_COWBOY__3|-15.5913|0|3.10659
-Layer_Tree_Witch__4|-20.7211|0|2.79885
+Layer_PigWarrior_BEE__0|-2.43118|0|-2.29724
+Layer_Pigs_COWBOY__1|-20.3171|0|2.73441
+Layer_Gronmes_YELLOW__2|-20.0424|0|38.9434
+Layer_PigWarrior_WORKER__3|-35.6547|0|48.5682
+Layer_Pigs_SR__4|-30.9981|0|43.7465
+Layer_Tree_Witch__5|-34.5262|4.76837e-07|60.8365
+Layer_Gronmes_BLUE__6|-22.6655|0|58.6277
+Layer_Gronmes_RED__7|-14.859|0|58.0386

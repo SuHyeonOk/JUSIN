@@ -448,7 +448,11 @@ void CLevel_GamePlay::ImGui_Page()
 
 void CLevel_GamePlay::ImGui_Monster()
 {
-	const _char* szObjName[] = { "PigWarrior_BEE", "PigWarrior_WORKER", "Pigs_COWBOY", "Pigs_SR", "Tree_Witch" };
+	const _char* szObjName[] = { 
+		"PigWarrior_BEE", "PigWarrior_WORKER", 
+		"Pigs_COWBOY", "Pigs_SR", 
+		"Gronmes_BULE", "Gronmes_RED", "Gronmes_YELLOW", 
+		"Tree_Witch" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -513,7 +517,7 @@ void CLevel_GamePlay::ImGui_Monster()
 			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 			
-			m_wstObjName = L"Layer_Pigs_COWBOY__";
+			m_wstObjName = L"Layer_Pigs_SR__";
 			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
@@ -524,6 +528,51 @@ void CLevel_GamePlay::ImGui_Monster()
 			m_iMonster_Count++;
 		}
 		if (4 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Gronmes_BLUE__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (5 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Gronmes_RED__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (6 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Gronmes_YELLOW__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (7 == iObjNum)
 		{
 			tMonsterDesc.eMonsterKind = tMonsterDesc.TREE_WITCH;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
@@ -538,7 +587,6 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_iMonster_Count++;
 		}
-
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -848,7 +896,7 @@ void CLevel_GamePlay::Load_Monster()
 		fObjPosY = (_float)_tstof(szObjPosY);
 		fObjPosZ = (_float)_tstof(szObjPosZ);
 
-		CDataManager::GetInstance()->Set_PageInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+		CDataManager::GetInstance()->Set_MonsterInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
 	}
 
 
@@ -856,7 +904,7 @@ void CLevel_GamePlay::Load_Monster()
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CM_Monster::MONSTERDESC		tMonsterDesc;
-	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_MonsterInfo();
 	_int iMonsterVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
@@ -922,6 +970,54 @@ void CLevel_GamePlay::Load_Monster()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Gronmes_BLUE__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Gronmes_RED__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Gronmes_YELLOW__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 					return;
 			}
 		}

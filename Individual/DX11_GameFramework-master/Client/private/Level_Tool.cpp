@@ -7,10 +7,6 @@
 #include "Coin.h"
 #include "Page.h"
 
-#include "B_Star.h"
-
-#include "Finn_Weapon.h"
-
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -142,12 +138,19 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
 		return E_FAIL;
 
-	//tMonsterDesc.f3Pos = _float3(-5.f, 2.f, 2.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_0"), TEXT("Prototype_GameObject_M_Gronmes_RED"), &tMonsterDesc)))
-	//	return E_FAIL;
-	//tMonsterDesc.f3Pos = _float3(-4.f, 2.f, 2.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes_RED"), &tMonsterDesc)))
-	//	return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_0"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-3.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-1.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+		return E_FAIL;
+
 
 	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\public\M_Pigs.h"
+#include "..\public\M_Gronmes.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
@@ -9,19 +9,19 @@
 #include "B_2DBullet.h"
 #include "UI_3DTexture.h"
 
-CM_Pigs::CM_Pigs(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Gronmes::CM_Gronmes(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
 
 }
 
-CM_Pigs::CM_Pigs(const CM_Pigs & rhs)
+CM_Gronmes::CM_Gronmes(const CM_Gronmes & rhs)
 	: CM_Monster(rhs)
 {
 
 }
 
-HRESULT CM_Pigs::Initialize_Prototype()
+HRESULT CM_Gronmes::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -29,9 +29,9 @@ HRESULT CM_Pigs::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CM_Pigs::Initialize(void * pArg)
+HRESULT CM_Gronmes::Initialize(void * pArg)
 {
-	m_wsTag = L"Monster__Pigs";
+	m_wsTag = L"Monster__Gronmes";
 
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
@@ -41,16 +41,23 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 
 	m_tMonsterDesc.eMonsterKind = MonsterDesc.eMonsterKind;
 
-	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_COWBOY)
+	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_BLUE)
 	{
-		MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
+		MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
 		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
 	}
-	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_SR)
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_RED)
 	{
-		MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
+		MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
+		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
+	}
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_YELLOW)
+	{
+		MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
 		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
@@ -63,21 +70,21 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.iHp		= 30;
-	m_tMonsterInfo.iExp		= 30;
+	m_tMonsterInfo.iHp		= 40;
+	m_tMonsterInfo.iExp		= 40;
 	m_tMonsterInfo.iAttack	= 10;
 
 	return S_OK;
 }
 
-void CM_Pigs::Tick(_double TimeDelta)
+void CM_Gronmes::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 	Monster_Tick(TimeDelta);
 }
 
-void CM_Pigs::Late_Tick(_double TimeDelta)
+void CM_Gronmes::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -87,7 +94,7 @@ void CM_Pigs::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CM_Pigs::Render()
+HRESULT CM_Gronmes::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -108,23 +115,12 @@ HRESULT CM_Pigs::Render()
 	return S_OK;
 }
 
-void CM_Pigs::On_Collision(CGameObject * pOther)
+void CM_Gronmes::On_Collision(CGameObject * pOther)
 {
 	__super::On_Collision(pOther);
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Key_Down(DIK_SPACE))
-	//{
-	//	// TODO : 충돌처리가 가능해 지면 수정 (둘 다 한 번만 호출 되어야 함)
-	//	m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
-	//	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-	//}
-
-	//RELEASE_INSTANCE(CGameInstance);
 }
 
-HRESULT CM_Pigs::SetUp_Components()
+HRESULT CM_Gronmes::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -136,17 +132,24 @@ HRESULT CM_Pigs::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_COWBOY)
+	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_BLUE)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_COWBOY"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gnomes_BLUE"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_SR)
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_RED)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Pigs_SR"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gonmes_RED"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_YELLOW)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Gnomes_YELLOW"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
@@ -165,7 +168,7 @@ HRESULT CM_Pigs::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CM_Pigs::SetUp_ShaderResources()
+HRESULT CM_Gronmes::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -185,7 +188,7 @@ HRESULT CM_Pigs::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CM_Pigs::Monster_Tick(const _double& TimeDelta)
+void CM_Gronmes::Monster_Tick(const _double& TimeDelta)
 {
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
@@ -194,17 +197,17 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 	{
 	case MONSTERINFO::STATE::IDLE:
 		Idle_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(7, false);
+		m_pModelCom->Set_AnimIndex(6, false);
 		break;
 
 	case MONSTERINFO::STATE::MOVE:
 		Move_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(9, false);
+		m_pModelCom->Set_AnimIndex(7, false);
 		break;
 
 	case MONSTERINFO::STATE::FIND:
 		Find_Tick();
-		m_pModelCom->Set_AnimIndex(4, false);
+		m_pModelCom->Set_AnimIndex(2, false);
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
@@ -224,7 +227,7 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Pigs::Idle_Tick(const _double& TimeDelta)
+void CM_Gronmes::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 3.f > fDistance)
@@ -234,7 +237,7 @@ void CM_Pigs::Idle_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
-void CM_Pigs::Move_Tick(const _double& TimeDelta)
+void CM_Gronmes::Move_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 3.f > fDistance)
@@ -249,7 +252,7 @@ void CM_Pigs::Move_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Pigs::Find_Tick()
+void CM_Gronmes::Find_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
@@ -274,7 +277,7 @@ void CM_Pigs::Find_Tick()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Pigs::Attack_Tick(const _double& TimeDelta)
+void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 {
 	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
 	if (0 != iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
@@ -296,22 +299,22 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 	CB_2DBullet::BULLETINFO		tBulletInfo;
-	tBulletInfo.eToodyBullet = tBulletInfo.STAR_BULLET;
+	tBulletInfo.eToodyBullet = tBulletInfo.CIRCLE_BULLET;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.3f, f4MyPos.z);
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y * 0.5f, f4PlayerPos.z);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Star_0"), TEXT("Prototype_GameObject_B_ToodyBullet"), &tBulletInfo)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Circle_0"), TEXT("Prototype_GameObject_B_ToodyBullet"), &tBulletInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CM_Pigs::Hit_Tick()
+void CM_Gronmes::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
 
-void CM_Pigs::Die_Tick()
+void CM_Gronmes::Die_Tick()
 {
 	// 몬스터가 죽고 나면 할 행동
 
@@ -325,37 +328,37 @@ void CM_Pigs::Die_Tick()
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 6, 2);
 
 		m_OneCoin = true;
 	}
 }
 
-CM_Pigs * CM_Pigs::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CM_Gronmes * CM_Gronmes::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CM_Pigs*		pInstance = new CM_Pigs(pDevice, pContext);
+	CM_Gronmes*		pInstance = new CM_Gronmes(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CM_Pigs");
+		MSG_BOX("Failed to Created : CM_Gronmes");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CM_Pigs::Clone(void * pArg)
+CGameObject * CM_Gronmes::Clone(void * pArg)
 {
-	CM_Pigs*		pInstance = new CM_Pigs(*this);
+	CM_Gronmes*		pInstance = new CM_Gronmes(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CM_Pigs");
+		MSG_BOX("Failed to Cloned : CM_Gronmes");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CM_Pigs::Free()
+void CM_Gronmes::Free()
 {
 	__super::Free();
 

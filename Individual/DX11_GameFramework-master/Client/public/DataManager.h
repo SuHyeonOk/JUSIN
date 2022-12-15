@@ -15,7 +15,7 @@ public:
 		_tchar		ObjName[MAX_PATH];
 		_float3		ObjPos;
 
-		void Set_CoinInfo(const _tchar & ObjName, const _float3 & ObjPos);
+		//void Set_CoinInfo(const _tchar & ObjName, const _float3 & ObjPos);
 
 	}OBJINFO;
 	

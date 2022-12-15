@@ -13,23 +13,23 @@ END
 
 BEGIN(Client)
 
-class CB_Star final : public CGameObject
+class CB_2DBullet final : public CGameObject
 {
-public:
-	enum TEXTURE { TYPE_DIFFUSE, TYPE_BRUSH, TYPE_FILTER, TYPE_END };
-
 public:
 	typedef struct tagBulletInfo
 	{
+		enum TOODYBULLET { STAR_BULLET, CIRCLE_BULLET, TOODYBULLET_END };
+		TOODYBULLET	eToodyBullet;
+
 		_float3		f3Start_Pos;
 		_float3		f3Target_Pos;
 
 	}BULLETINFO;
 
 private:
-	CB_Star(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CB_Star(const CB_Star& rhs);
-	virtual ~CB_Star() = default;
+	CB_2DBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CB_2DBullet(const CB_2DBullet& rhs);
+	virtual ~CB_2DBullet() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -59,7 +59,7 @@ private:
 
 
 public:
-	static	CB_Star*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CB_2DBullet*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };
