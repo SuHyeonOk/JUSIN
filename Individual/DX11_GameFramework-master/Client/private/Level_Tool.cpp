@@ -7,6 +7,8 @@
 #include "Coin.h"
 #include "Page.h"
 
+#include "B_3DAnimBullet.h"
+
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -107,6 +109,11 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CB_3DAnimBullet::ANIMBULLETINFO	tBulletInfo;
+	tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
+	tBulletInfo.f3Pos = _float3(0.f, 0.f, 4.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+		return E_FAIL;
 
 
 	CCoin::COININFO					tObjInfo;

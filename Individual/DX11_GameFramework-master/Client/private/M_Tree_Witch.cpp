@@ -237,8 +237,10 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 {
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
-	iRandomNum = 0; // Temp
+	_int iRandomNum = 1;
+	if(m_tMonsterInfo.eState == m_tMonsterInfo.MOVE)
+		iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
+
 	if (0 == iRandomNum)		// µ¢±¼ »ý¼º
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -267,25 +269,26 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 {
 	// µ¢±¼
-	if (m_pModelCom->Animation_Check(0))
+	if (m_pModelCom->Animation_Check(0) && m_pModelCom->Get_Finished())
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = true;
 
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (5 <= m_pModelCom->Get_Keyframes())
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+			_float4	f4PlayerPos;
+			XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-		_float4	f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
-		CB_3DAnimBullet::ANIMBULLETINFO	tBulletInfo;
-		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
-		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
-		tBulletInfo.f3Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
-			return;
-
-		RELEASE_INSTANCE(CGameInstance);
+			CB_3DAnimBullet::ANIMBULLETINFO	tBulletInfo;
+			tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+			tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
+			tBulletInfo.f3Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+				return;
+			RELEASE_INSTANCE(CGameInstance);
+		}
 	}
 	
 	//cout << m_pModelCom->Get_AnimIndex() << endl;

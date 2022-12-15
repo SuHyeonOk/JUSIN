@@ -53,7 +53,8 @@ HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 	{
 		m_pModelCom->Set_AnimIndex(0);
 		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.5f));
-		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), 120.f);
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), 90.f);
+		m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), 20.f);
 	}
 
 	return S_OK;
@@ -75,7 +76,7 @@ void CB_3DAnimBullet::Late_Tick(_double TimeDelta)
 		m_bPlayer_Collider = CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom);
 
 		m_dDead_TimeAcc += TimeDelta;
-		if (1 < m_dDead_TimeAcc)
+		if (2 < m_dDead_TimeAcc)
 		{
 			CGameObject::Set_Dead();
 			m_dDead_TimeAcc = 0;
