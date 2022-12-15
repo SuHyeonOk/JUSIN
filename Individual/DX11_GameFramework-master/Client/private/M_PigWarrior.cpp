@@ -382,7 +382,7 @@ void CM_PigWarrior::Die_Tick()
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 5, 2);
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 5, 1, 0);
 
 		m_OneCoin = true;
 	}

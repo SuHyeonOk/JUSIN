@@ -34,9 +34,7 @@ HRESULT CAnimation::Initialize(aiAnimation * pAIAnimation, CModel* pModel)
 void CAnimation::Reset_Channel()
 {
 	for (_uint i = 0; i < m_iNumChannels; ++i)
-	{
 		m_Channels[i]->Reset_KeyFrameIndex();
-	}
 
 	m_PlayTime = 0.0f;
 }
@@ -44,9 +42,9 @@ void CAnimation::Reset_Channel()
 _int CAnimation::Get_Keyframes()
 {
 	for (_uint i = 0; i < m_iNumChannels; ++i)
-	{
 		return m_Channels[i]->Get_Keyframes();
-	}
+
+	return -1;
 }
 
 void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)

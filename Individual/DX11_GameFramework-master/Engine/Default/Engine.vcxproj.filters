@@ -133,6 +133,9 @@
     <Filter Include="01.Utility\03.Components\08. Navigation\Cell">
       <UniqueIdentifier>{358cc249-b25e-4e92-a28a-a96032f122b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\02.VIBuffer\Cell">
+      <UniqueIdentifier>{33ab106e-840e-4bd2-a884-e211add2ccc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
