@@ -10,6 +10,8 @@
 #include "Model.h"
 #include "Finn.h"
 #include "Jake.h"
+#include "Finn_Weapon.h"
+#include "Jake_Weapon.h"
 #include "UI_Informacion.h"
 #include "UI_HPGauge.h"
 
@@ -224,7 +226,35 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		return E_FAIL;
 
 	_matrix			PivotMatrix = XMMatrixIdentity();
-	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// PlayerWeapon
+	/* For.Prototype_Component_Model_W_Root_sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Root_sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Root_sword/Root_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Family_sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Family_sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Family_sword/Family_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Golden_Sword_New */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Golden_Sword_New"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Golden_Sword_New/Golden_Sword_New.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_Jake_Punch_Shield */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Jake_Punch_Shield"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Jake_Punch_Shield/Jake_Punch_Shield.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Finn_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Weapon"),
+		CFinn_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Jake_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake_Weapon"),
+		CJake_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL; 
+	
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));	/////////////////////////////////////////////// 180
 
 	// Player
 	/* For.Prototype_Component_Model_Finn */

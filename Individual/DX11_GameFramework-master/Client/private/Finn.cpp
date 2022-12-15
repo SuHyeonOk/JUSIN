@@ -352,18 +352,6 @@ void CFinn::Sword_LateTick(const _double & TimeDelta)
 
 void CFinn::Player_Tick(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_V))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
-
-	if (pGameInstance->Key_Down(DIK_C))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::STUN);	// TODO : 플레이어를 STUN 시킬 때 쓰면 된다.
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	//////////////////////////////////////////////////////// 위는 테스트를 위한 것
-
 	Change_Tick();
 	Cheering_Tick();
 	
@@ -603,11 +591,11 @@ void CFinn::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	m_dHit_TimeAcc += TimeDelta;
-	if (0.3 < m_dHit_TimeAcc)
-		m_pTransformCom->Go_Backward(0);
-	else
-		m_pTransformCom->Go_Backward(TimeDelta);
+	//m_dHit_TimeAcc += TimeDelta;
+	//if (0.3 < m_dHit_TimeAcc)
+	//	m_pTransformCom->Go_Backward(0);
+	//else
+	//	m_pTransformCom->Go_Backward(TimeDelta);
 
 	if (m_pModelCom->Get_Finished())
 	{

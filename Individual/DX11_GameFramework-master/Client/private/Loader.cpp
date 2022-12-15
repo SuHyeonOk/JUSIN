@@ -14,8 +14,6 @@
 #include "UI_3DTexture.h"
 
 // Weapon
-#include "Finn_Weapon.h"
-#include "Jake_Weapon.h"
 #include "W_PigWarrior.h"
 
 // Item
@@ -104,7 +102,7 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
-													/* For.Prototype_Component_VIBuffer_Terrain */
+	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
@@ -133,12 +131,6 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	// Skill
-	/* For.Prototype_Component_Model_S_Stun */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Stun"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Skill/Stun/Confused_Birds/Confused_Birds.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	// Bullet
 	/* For.Prototype_Component_Model_B_Star */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Star"),
@@ -156,23 +148,6 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	// Weapon
-	/* For.Prototype_Component_Model_W_Root_sword */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Root_sword/Root_sword.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_W_Family_sword */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Family_sword/Family_sword.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_W_Golden_Sword_New */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Golden_Sword_New/Golden_Sword_New.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_W_Jake_Punch_Shield */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Jake_Punch_Shield"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Jake_Punch_Shield/Jake_Punch_Shield.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	/* For.Prototype_Component_Model_W_Wooden_Sword */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Wooden_Sword/Wooden_Sword.fbx", PivotMatrix))))
@@ -232,14 +207,6 @@ HRESULT CLoader::Loading_Tool()
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 
 	// Weapon
-	/* For.Prototype_GameObject_Finn_Weapon */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Weapon"),
-		CFinn_Weapon::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_Jake_Weapon */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake_Weapon"),
-		CJake_Weapon::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	/* For.Prototype_GameObject_PigWarrior_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
 		CW_PigWarrior::Create(m_pDevice, m_pContext))))
@@ -436,19 +403,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Weapon
-	/* For.Prototype_Component_Model_W_Root_sword */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Root_sword/Root_sword.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_W_Family_sword */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Family_sword/Family_sword.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_W_Golden_Sword_New */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Golden_Sword_New/Golden_Sword_New.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	/* For.Prototype_Component_Model_W_Wooden_Sword */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Wooden_Sword"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Wooden_Sword/Wooden_Sword.fbx", PivotMatrix))))
@@ -588,10 +542,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// Weapon
-	/* For.Prototype_GameObject_Finn_Weapon */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Weapon"),
-		CFinn_Weapon::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	/* For.Prototype_GameObject_PigWarrior_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
 		CW_PigWarrior::Create(m_pDevice, m_pContext))))

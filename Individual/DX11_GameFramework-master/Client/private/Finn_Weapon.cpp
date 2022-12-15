@@ -112,7 +112,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 	if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Root_sword"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
@@ -124,7 +124,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 	else if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Golden_Sword_New"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Golden_Sword_New"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
@@ -136,7 +136,7 @@ HRESULT CFinn_Weapon::SetUp_Components()
 	else if (m_WeaponDesc.eSwordType == CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_W_Family_sword"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Family_sword"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 

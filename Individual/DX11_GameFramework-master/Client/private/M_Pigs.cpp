@@ -308,7 +308,7 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 
 void CM_Pigs::Hit_Tick()
 {
-	if (m_pModelCom->Get_Finished())
+ 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
 
