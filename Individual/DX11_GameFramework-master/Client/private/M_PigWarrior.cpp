@@ -119,7 +119,7 @@ HRESULT CM_PigWarrior::Render()
 	{
 		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
 			if (2 == i)	continue;	// 꿀벌 칼 없애기
-		else
+		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
 			if (1 == i) continue;	// 노동자 칼 없애기
 
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
@@ -134,6 +134,8 @@ HRESULT CM_PigWarrior::Render()
 void CM_PigWarrior::On_Collision(CGameObject * pOther)
 {
 	CM_Monster::On_Collision(pOther);
+
+	// TODO : !하고 싶다면..? PigWarrior 의 경우에는 방패 때문에 예외적으로 충돌 처리
 }
 
 HRESULT CM_PigWarrior::SetUp_Components()
@@ -282,11 +284,11 @@ void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 {
 	// IDLE 일 때, MOVE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 2.f > fDistance)
+	if (!m_bAttack && 3.f > fDistance)	// ※ 플레이어 탐색 범위		
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
 	// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
-	if(m_pModelCom->Get_Finished())
+	if(m_pModelCom->Animation_Check(7) && m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
@@ -294,41 +296,6 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 {
 	// 1 : 플레이어를 찾았을 때의 MOVE
 	// 2 : 플레이어를 찾지 못 하고 랜덤으로 이동하는 MOVE
-
-	// 랜덤으로 이동하고 있는데
-	
-
-	//if (m_bFind)
-	//{
-	//	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-	//	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
-
-	//	// 플레이어와의 거리가 1일 되었다면 ATTACK 으로 간다.
-	//	if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-	//		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-
-	//	// 거리가 4 가 넘어가면 플레이어 따라가는 것을 포기하면서 원점으로 돌아간다.
-	//	if (4.f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-	//	{
-	//		m_pTransformCom->LookAt(XMVectorSet(m_f4CenterPos.x, m_f4CenterPos.y, m_f4CenterPos.z, m_f4CenterPos.y));
-	//		m_pTransformCom->Chase(XMVectorSet(m_f4CenterPos.x, m_f4CenterPos.y, m_f4CenterPos.z, m_f4CenterPos.y), TimeDelta);
-	//		m_bFind = false;
-	//	}
-	//}
-	//else
-	//{
-	//	// 플레이어가 범위 안 으로 들어왔다.
-	//	if (!m_bAttack && 3.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-	//		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-	//	else
-	//	{
-	//		m_bAttack = false;
-	//		if(!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta))
-	//			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	//	}
-	//}
-
-
 
 	if (m_bFind)		// 플레이어를 찾았을 때! 플레이어와 거리가 1이 될 때 까지 이동한다.
 	{
@@ -339,7 +306,7 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 		if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-		// 거리가 4 가 넘어가면 플레이어 따라가는 것을 포기하면서 원점으로 돌아간다.
+		// ※ 플레이어 포기 범위
 		if (4.f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 			m_bFind = false;
 	}
@@ -347,15 +314,18 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 	{
 		// MOVE 일 때, IDLE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
 		_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-		if (!m_bAttack && 2.f > fDistance)
+		if (!m_bAttack && 3.f > fDistance)	// ※ 플레이어 탐색 범위
 			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
 		// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
-		_bool bArrival = CM_Monster::RandomMove(m_pTransformCom, m_f4First_Pos, 2.f, TimeDelta);
-		if (bArrival)
+		CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta);
+		
+		m_dMove_TimeAcc += TimeDelta;	// MOVE 한지 3초가 지나면 Idle 상태로
+		if (3 < m_dMove_TimeAcc)		// ※ 몬스터 MOVE 시간
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 			m_bAttack = false;
+			m_dMove_TimeAcc = 0;
 		}
 	}
 }
@@ -396,8 +366,8 @@ void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 
 	if (0 == iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		m_bAttack = true;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 	}
 }
 

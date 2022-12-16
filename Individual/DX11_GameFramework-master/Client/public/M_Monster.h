@@ -71,7 +71,7 @@ protected:	// 자식이 자주 사용할 함수
 	virtual	void			Die_Tick() {};
 
 protected:	
-	_bool				Random_Move(CTransform* pTransform, _float4 f4CenterPos, _double TimeDelta, _float fRange = 2.f);
+	void				Random_Move(CTransform* pTransform, _float4 f4CenterPos, _double TimeDelta, _float fRange = 2.f);
 	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 3.f);	// 랜덤 위치로 이동하는 기능.
 	_bool				Collision_ToPlayer() {};
 
