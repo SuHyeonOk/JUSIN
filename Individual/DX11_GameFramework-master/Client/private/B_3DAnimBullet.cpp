@@ -53,8 +53,7 @@ HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 	{
 		m_pModelCom->Set_AnimIndex(0);
 		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.5f));
-		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), 90.f);
-		m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), 20.f);
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(90.f));
 	}
 
 	return S_OK;
@@ -155,8 +154,8 @@ HRESULT CB_3DAnimBullet::SetUp_Components()
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)	// ¿ä±â
 	{
-		ColliderDesc.vSize = _float3(1.f, 0.5f, 1.f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		ColliderDesc.vSize = _float3(2.f, 2.f, 2.f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

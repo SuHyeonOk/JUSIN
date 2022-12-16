@@ -31,6 +31,7 @@ private:
 	virtual void		Move_Tick(const _double& TimeDelta)		override;
 	virtual void		Find_Tick()								override;
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
+	//virtual void		Attack2_Tick(const _double& TimeDelta);
 	virtual void		Hit_Tick()								override;
 	virtual	void		Die_Tick()								override;
 
@@ -38,6 +39,8 @@ private:
 	_float4				m_f4First_Pos;
 	_float4				m_f4RandomPos;
 	_bool				m_bRandomPos = false;
+
+	_int				m_iRandomNum = 0;
 
 	_bool				m_bAttack = false;
 	_double				m_dBullet_TimeAcc = 0;

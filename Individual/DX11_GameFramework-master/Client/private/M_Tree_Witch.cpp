@@ -237,10 +237,34 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 {
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	_int iRandomNum = 1;
-	if(m_tMonsterInfo.eState == m_tMonsterInfo.MOVE)
-		iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	//if (pGameInstance->Key_Pressing(DIK_N))
+	//{
+	//	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
+
+	//	if (2.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+	//	{
+	//		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	//		m_pModelCom->Set_AnimIndex(0, false);
+	//	}
+	//}
+	//if (pGameInstance->Key_Pressing(DIK_M))
+	//{
+	//	if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+	//	{
+	//		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	//		m_pModelCom->Set_AnimIndex(8, false);
+
+	//		// 플레이어의 애니메이션 상태 변경하기
+	//		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH);
+	//	}
+	//}
+
+	//RELEASE_INSTANCE(CGameInstance);
+
+	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
+	iRandomNum = 1;
 	if (0 == iRandomNum)		// 덩굴 생성
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -290,33 +314,33 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 			RELEASE_INSTANCE(CGameInstance);
 		}
 	}
-	
-	//cout << m_pModelCom->Get_AnimIndex() << endl;
-
-	// 깔아 뭉개기 
-	if (m_pModelCom->Animation_Check(8) && m_pModelCom->Get_Finished())
+	else
 	{
-		//cout << "888888" << endl;
-		m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프
-		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP);
-	}
-	if (m_pModelCom->Animation_Check(9) && m_pModelCom->Get_Finished())
-	{
-		//cout << "9999999" << endl;
-		m_pModelCom->Set_AnimIndex(7, false);	// 누르기
-		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE);
-	}
-	if (m_pModelCom->Animation_Check(7) && m_pModelCom->Get_Finished())
-	{
-		//cout << "7777777" << endl;
-		m_pModelCom->Set_AnimIndex(6, false);	// 일어나기
-		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE);
-	}
-	if (m_pModelCom->Animation_Check(6) && m_pModelCom->Get_Finished())
-	{
-		//cout << "666666" << endl;
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		m_bAttack = true;
+		// 깔아 뭉개기 
+		if (m_pModelCom->Animation_Check(8) && m_pModelCom->Get_Finished())
+		{
+			//cout << "888888" << endl;
+			m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프
+			CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP);
+		}
+		if (m_pModelCom->Animation_Check(9) && m_pModelCom->Get_Finished())
+		{
+			//cout << "9999999" << endl;
+			m_pModelCom->Set_AnimIndex(7, false);	// 누르기
+			CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE);
+		}
+		if (m_pModelCom->Animation_Check(7) && m_pModelCom->Get_Finished())
+		{
+			//cout << "7777777" << endl;
+			m_pModelCom->Set_AnimIndex(6, false);	// 일어나기
+			CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE);
+		}
+		if (m_pModelCom->Animation_Check(6) && m_pModelCom->Get_Finished())
+		{
+			//cout << "666666" << endl;
+			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+			m_bAttack = true;
+		}
 	}
 }
 

@@ -400,7 +400,20 @@ void CJake::Check_Follow(_double TimeDelta)
 
 void CJake::Key_Input(_double TimeDelta)
 {
-	if (m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::CONTROL);
+	}
+	if (pGameInstance->Key_Up(DIK_LCONTROL))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST);
+	}
+
+	if (m_tPlayerInfo.eState == m_tPlayerInfo.CONTROL||
+		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 	{
@@ -410,14 +423,9 @@ void CJake::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.CONTROL)
-		{
-			m_pTransformCom->Go_Straight(TimeDelta);
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
-		}
+		m_pTransformCom->Go_Straight(TimeDelta);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 #pragma region ÀÌµ¿
 	if (pGameInstance->Key_Pressing(DIK_UP))
@@ -474,14 +482,6 @@ void CJake::Key_Input(_double TimeDelta)
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
 
-	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::CONTROL);
-	if (pGameInstance->Key_Up(DIK_LCONTROL))
-	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST);
-	}
-
 	RELEASE_INSTANCE(CGameInstance);
 }
 
@@ -495,8 +495,7 @@ void CJake::Space_Attack_Tick(_double TimeDelta)
 
 void CJake::Control_Tick(_double TimeDelta)
 {
-	if (m_OnMove)
-		m_pTransformCom->Go_Straight(TimeDelta, 2.f);
+	m_pTransformCom->Go_Straight(0);
 	
 	CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE);
 }

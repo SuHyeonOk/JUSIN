@@ -243,7 +243,7 @@ void CM_Gronmes::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 3.f, TimeDelta);
+	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 2.f, TimeDelta);
 
 	if (bArrival)
 	{

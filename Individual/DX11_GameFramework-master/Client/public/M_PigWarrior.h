@@ -38,7 +38,7 @@ private:
 
 private:
 	vector<CGameObject*>		m_MonsterParts;
-	
+	_float4				m_f4CenterPos;
 	_float4				m_f4First_Pos;
 	_float4				m_f4RandomPos;
 	_bool				m_bRandomPos = false;
