@@ -23,7 +23,7 @@
 
 // Bullet
 #include "B_2DBullet.h"
-#include "B_3DAnimBullet.h"
+#include "B_3DBullet.h"
 
 // Stun
 #include "S_StunChick.h"
@@ -237,7 +237,7 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
-		CB_3DAnimBullet::Create(m_pDevice, m_pContext))))
+		CB_3DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 3DUI
@@ -544,7 +544,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
-		CB_3DAnimBullet::Create(m_pDevice, m_pContext))))
+		CB_3DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Weapon

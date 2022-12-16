@@ -172,7 +172,7 @@
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\public\B_2DBullet.h" />
-    <ClInclude Include="..\public\B_3DAnimBullet.h" />
+    <ClInclude Include="..\public\B_3DBullet.h" />
     <ClInclude Include="..\public\Camera_Dynamic.h" />
     <ClInclude Include="..\public\Client_Defines.h" />
     <ClInclude Include="..\public\Coin.h" />
@@ -216,7 +216,7 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\private\B_2DBullet.cpp" />
-    <ClCompile Include="..\private\B_3DAnimBullet.cpp" />
+    <ClCompile Include="..\private\B_3DBullet.cpp" />
     <ClCompile Include="..\private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\Coin.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />

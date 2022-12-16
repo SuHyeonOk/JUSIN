@@ -12,7 +12,7 @@ END
 
 BEGIN(Client)
 
-class CB_3DAnimBullet final : public CGameObject
+class CB_3DBullet final : public CGameObject
 {
 public:
 	typedef struct tagRandomBulletInfo : public CGameObject::GAMEOBJECTDESC
@@ -26,10 +26,10 @@ public:
 
 	}ANIMBULLETINFO;
 
-private:
-	CB_3DAnimBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CB_3DAnimBullet(const CB_3DAnimBullet& rhs);
-	virtual ~CB_3DAnimBullet() = default;
+public:
+	CB_3DBullet::CB_3DBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CB_3DBullet::CB_3DBullet(const CB_3DBullet& rhs);
+	virtual ~CB_3DBullet() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -45,11 +45,14 @@ private:
 	HRESULT					SetUp_ShaderResources();
 
 private:
+	void					Bullet_Dead();
+
+private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
-	
+
 private:
 	ANIMBULLETINFO		m_tBulletInfo;
 
@@ -57,7 +60,7 @@ private:
 	_bool				m_bPlayer_Collider = false;
 
 public:
-	static	CB_3DAnimBullet*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CB_3DBullet*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

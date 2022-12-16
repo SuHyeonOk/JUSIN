@@ -252,9 +252,6 @@
     <ClInclude Include="..\public\B_2DBullet.h">
       <Filter>02.GameObjects\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\B_3DAnimBullet.h">
-      <Filter>02.GameObjects\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Finn_Weapon.h">
       <Filter>02.GameObjects\Player\Finn</Filter>
     </ClInclude>
@@ -263,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="..\public\N_NPC.h">
       <Filter>02.GameObjects\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\B_3DBullet.h">
+      <Filter>02.GameObjects\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -368,9 +368,6 @@
     <ClCompile Include="..\private\M_Gronmes.cpp">
       <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\B_3DAnimBullet.cpp">
-      <Filter>02.GameObjects\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\B_2DBullet.cpp">
       <Filter>02.GameObjects\Bullet</Filter>
     </ClCompile>
@@ -382,6 +379,9 @@
     </ClCompile>
     <ClCompile Include="..\private\N_NPC.cpp">
       <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\B_3DBullet.cpp">
+      <Filter>02.GameObjects\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

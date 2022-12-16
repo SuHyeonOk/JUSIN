@@ -672,10 +672,10 @@ void CFinn::TreeWitch_Tick()
 		m_pModelCom->Set_AnimIndex(55, false);
 	else if(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 		m_pModelCom->Set_AnimIndex(54, false);
-	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 	{
 		m_pModelCom->Set_AnimIndex(53, false);
-		if (m_pModelCom->Animation_Check(53) && m_pModelCom->Get_Finished())
+		if (m_pModelCom->Get_Finished())
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 }

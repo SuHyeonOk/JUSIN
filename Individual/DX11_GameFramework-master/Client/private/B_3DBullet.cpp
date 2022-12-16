@@ -1,22 +1,20 @@
 #include "stdafx.h"
-#include "..\public\B_3DAnimBullet.h"
+#include "..\public\B_3DBullet.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-CB_3DAnimBullet::CB_3DAnimBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CB_3DBullet::CB_3DBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
-
 }
 
-CB_3DAnimBullet::CB_3DAnimBullet(const CB_3DAnimBullet & rhs)
+CB_3DBullet::CB_3DBullet(const CB_3DBullet & rhs)
 	: CGameObject(rhs)
 {
-
 }
 
-HRESULT CB_3DAnimBullet::Initialize_Prototype()
+HRESULT CB_3DBullet::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,8 +22,8 @@ HRESULT CB_3DAnimBullet::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CB_3DAnimBullet::Initialize(void * pArg)
-{	
+HRESULT CB_3DBullet::Initialize(void * pArg)
+{
 	m_wsTag = L"3DBullet";
 
 	if (nullptr != pArg)
@@ -44,7 +42,7 @@ HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
- 	if (FAILED(SetUp_Components()))
+	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
@@ -59,25 +57,18 @@ HRESULT CB_3DAnimBullet::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CB_3DAnimBullet::Tick(_double TimeDelta)
+void CB_3DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CB_3DAnimBullet::Late_Tick(_double TimeDelta)
+void CB_3DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS) 
-	{
-		m_bPlayer_Collider = CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom);
-
-		if(m_pModelCom->Get_Finished())
-			CGameObject::Set_Dead();
-	}
-
+	Bullet_Dead();
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
@@ -86,7 +77,7 @@ void CB_3DAnimBullet::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
 
-HRESULT CB_3DAnimBullet::Render()
+HRESULT CB_3DBullet::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -110,7 +101,7 @@ HRESULT CB_3DAnimBullet::Render()
 	return S_OK;
 }
 
-void CB_3DAnimBullet::On_Collision(CGameObject * pOther)
+void CB_3DBullet::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
@@ -119,7 +110,7 @@ void CB_3DAnimBullet::On_Collision(CGameObject * pOther)
 	}
 }
 
-HRESULT CB_3DAnimBullet::SetUp_Components()
+HRESULT CB_3DBullet::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -157,7 +148,7 @@ HRESULT CB_3DAnimBullet::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CB_3DAnimBullet::SetUp_ShaderResources()
+HRESULT CB_3DBullet::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -177,31 +168,42 @@ HRESULT CB_3DAnimBullet::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CB_3DAnimBullet * CB_3DAnimBullet::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+void CB_3DBullet::Bullet_Dead()
 {
-	CB_3DAnimBullet*		pInstance = new CB_3DAnimBullet(pDevice, pContext);
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
+	{
+		m_bPlayer_Collider = CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom);
+
+		if (m_pModelCom->Get_Finished())
+			CGameObject::Set_Dead();
+	}
+}
+
+CB_3DBullet * CB_3DBullet::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+{
+	CB_3DBullet*		pInstance = new CB_3DBullet(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CB_3DAnimBullet");
+		MSG_BOX("Failed to Created : CB_3DBullet");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CB_3DAnimBullet::Clone(void * pArg)
+CGameObject * CB_3DBullet::Clone(void * pArg)
 {
-	CB_3DAnimBullet*		pInstance = new CB_3DAnimBullet(*this);
+	CB_3DBullet*		pInstance = new CB_3DBullet(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CB_3DAnimBullet");
+		MSG_BOX("Failed to Cloned : CB_3DBullet");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CB_3DAnimBullet::Free()
+void CB_3DBullet::Free()
 {
 	__super::Free();
 
