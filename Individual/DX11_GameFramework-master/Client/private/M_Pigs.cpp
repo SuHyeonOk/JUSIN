@@ -46,14 +46,14 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
-		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
+		m_f4CenterPos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
 	}
 	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_SR)
 	{
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
-		m_f4First_Pos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
+		m_f4CenterPos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
 	}
 
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
@@ -240,9 +240,7 @@ void CM_Pigs::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	_bool bArrival = RandomMove(m_pTransformCom, m_f4First_Pos, 2.f, TimeDelta);
-
-	if (bArrival)
+	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 2.5))
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = false;

@@ -308,7 +308,8 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 
 		// ※ 플레이어 포기 범위
 		if (4.f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-			m_bFind = false;
+			m_bFind = false; // 크흠.. 범위 벗어났을 때 막 뱅글뱅글 돌면서 회전하는 문제 있음..
+
 	}
 	else				// 플레이어를 찾지 못 했을 때 랜덤으로 이동하고 있는다
 	{
@@ -317,15 +318,19 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 		if (!m_bAttack && 3.f > fDistance)	// ※ 플레이어 탐색 범위
 			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-		// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
-		CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta);
-		
-		m_dMove_TimeAcc += TimeDelta;	// MOVE 한지 3초가 지나면 Idle 상태로
-		if (3 < m_dMove_TimeAcc)		// ※ 몬스터 MOVE 시간
+		//// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
+		//CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta);
+		//m_dMove_TimeAcc += TimeDelta;	// MOVE 한지 3초가 지나면 Idle 상태로
+		//if (3 < m_dMove_TimeAcc)		// ※ 몬스터 MOVE 시간
+		//{
+		//	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		//	m_bAttack = false;
+		//	m_dMove_TimeAcc = 0;
+		//}
+		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 			m_bAttack = false;
-			m_dMove_TimeAcc = 0;
 		}
 	}
 }

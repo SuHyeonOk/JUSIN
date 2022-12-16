@@ -42,7 +42,6 @@ private:
 
 	_bool					m_bFind = false;
 	_bool					m_bAttack = false;
-	_double					m_dMove_TimeAcc = 0;
 
 public:
 	static	CM_PigWarrior*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

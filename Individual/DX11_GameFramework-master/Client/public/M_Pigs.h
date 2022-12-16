@@ -35,9 +35,7 @@ private:
 	virtual	void		Die_Tick()								override;
 
 private:
-	_float4				m_f4First_Pos;
-	_float4				m_f4RandomPos;
-	_bool				m_bRandomPos = false;
+	_float4				m_f4CenterPos;
 
 	_bool				m_bAttack = false;
 	_double				m_dBullet_TimeAcc = 0;
