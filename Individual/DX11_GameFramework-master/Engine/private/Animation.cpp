@@ -75,6 +75,32 @@ void CAnimation::Update_Bones(_double TimeDelta, _bool bRepetition)
 		m_isFinished = false;
 }
 
+void CAnimation::Update_Bones_Blend(_double TimeDelta, _float fBlendRatio)
+{
+	if (true == m_isFinished && false == m_isLooping)
+		return;
+
+	m_PlayTime += m_TickPerSecond * TimeDelta;
+
+	if (m_PlayTime >= m_Duration)
+	{
+		m_PlayTime = 0.0;
+		m_isFinished = true;
+	}
+
+	for (_uint i = 0; i < m_iNumChannels; ++i)
+	{
+		if (true == m_isFinished)
+			m_Channels[i]->Reset_KeyFrameIndex();
+
+		// 임으로 사이에 만들어준 블랜딩할 행렬로 재생한다.
+		m_Channels[i]->Blend_TransformMatrix(m_PlayTime, fBlendRatio);
+	}
+
+	if (true == m_isFinished)
+		m_isFinished = false;
+}
+
 CAnimation * CAnimation::Create(aiAnimation * pAIAnimation, CModel* pModel)
 {
 	CAnimation*		pInstance = new CAnimation();

@@ -13,6 +13,7 @@ public:
 public:
 	HRESULT Initialize(aiAnimation* pAIAnimation, class CModel* pModel);
 	void	Update_Bones(_double TimeDelta, _bool bepetition);
+	void	Update_Bones_Blend(_double TimeDelta, _float fBlendRatio);
 
 public:
 	void	Reset_Channel();

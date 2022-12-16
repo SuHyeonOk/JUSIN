@@ -31,6 +31,10 @@ public:
 		XMStoreFloat4x4(&m_TransformMatrix, TransformMatrix);
 	}
 
+	_matrix Get_TransformMatrix() {
+		return XMLoadFloat4x4(&m_TransformMatrix);
+	}
+
 public:
 	HRESULT Initialize(aiNode* pAINode, CBone* pParent);
 	void Compute_CombindTransformationMatrix();

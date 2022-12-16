@@ -67,6 +67,9 @@ void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition)
 	if (m_iCurrentAnimIndex == iAnimIndex)
 		return;
 
+	m_iPreAnimIndex = m_iCurrentAnimIndex;					// 애니 인덱스를 현재 인덱스로 초기화
+	m_fBlendCurTime = 0.f;									// 블렌딩 시간을 초기화
+
 	m_Animations[m_iCurrentAnimIndex]->Reset_Channel();		// 이전 애니메이션의 키프레임, 재생 시간 초기화
 	m_iCurrentAnimIndex = iAnimIndex;						// 이제 실행할 애니메이션 대입
 	m_bRepetition = bRepetition;							// 반복 할지 여부를 bool 로 대입
@@ -150,9 +153,18 @@ void CModel::Play_Animation(_double TimeDelta)
 	if (TYPE_NONANIM == m_eType)
 		return;
 
-	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신한다. */
-	m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
+	if (m_fBlendCurTime < m_fBlendDuration)
+	{
+		_float fBlendRatio = m_fBlendCurTime / m_fBlendDuration;
+		m_Animations[m_iPreAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
+		m_Animations[m_iCurrentAnimIndex]->Update_Bones_Blend(TimeDelta, fBlendRatio);
 
+		m_fBlendCurTime += _float(TimeDelta);
+	}
+	else
+		m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
+
+	/* 현재 애니메이션에 맞는 뼈들의 TranformMAtrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
 	{
 		if (nullptr != pBone)

@@ -662,39 +662,29 @@ void CFinn::TreeWitch_Tick()
 	if (m_tPlayerInfo.ePlayer != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	m_OnMove = false;
-
 	// 할머니 스킬
 	// [핀] 55 : 눌리기 직전 54 : 눌리기 53 : 일어나기
 
 	CSkill_Manager::MONSTERSKILL tMonsterSkill;
 	tMonsterSkill.eTreeWitch = CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch;
 
-	cout << tMonsterSkill.eTreeWitch <<  "  |  " << CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch << " \\ " << 
-		CSkill_Manager::GetInstance()->Get_TreeWitch_Skill() << endl;
-
-	switch (tMonsterSkill.eTreeWitch)
-	{
-	case CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP:
+	if(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 		m_pModelCom->Set_AnimIndex(55, false);
-		break;
-
-	case CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE:
+	else if(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 		m_pModelCom->Set_AnimIndex(54, false);
-		break;
-
-	case CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE:
+	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 	{
 		m_pModelCom->Set_AnimIndex(53, false);
 		if (m_pModelCom->Animation_Check(53) && m_pModelCom->Get_Finished())
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
-		break;
-	}
 }
 
 void CFinn::Anim_Change(_double TimeDelta)
 {
+	if (m_tPlayerInfo.TREEWITCH == m_tPlayerInfo.eState)
+		return;
+
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
 	{
 		switch (m_tPlayerInfo.eState)

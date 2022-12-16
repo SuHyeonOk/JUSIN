@@ -55,7 +55,6 @@ private:
 
 private:
 	_bool				m_bPlayer_Collider = false;
-	_double				m_dDead_TimeAcc = 0;
 
 public:
 	static	CB_3DAnimBullet*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

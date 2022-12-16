@@ -16,7 +16,10 @@ public:
 
 public:
 	HRESULT Initialize(aiNodeAnim* pAIChannel, class CModel* pModel);
-	void Update_TransformMatrix(_double PlayTime);
+	void	Update_TransformMatrix(_double PlayTime);
+
+public:
+	void	Blend_TransformMatrix(_double PlayTime, _float fBlendRadio);
 
 private:
 	char				m_szName[MAX_PATH] = "";

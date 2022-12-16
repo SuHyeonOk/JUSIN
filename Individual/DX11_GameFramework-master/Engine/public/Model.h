@@ -67,6 +67,11 @@ public:
 
 	_float4x4							m_PivotMatrix;				// 모델 초기값 설정 행렬
 
+private:
+	_float								m_fBlendDuration = 0.2f;	// Blend
+	_float								m_fBlendCurTime = 0.2f;
+	_uint								m_iPreAnimIndex = 0;
+
 public:
 	HRESULT Ready_Bones(aiNode* pNode, class CBone* pParent);
 	HRESULT Ready_MeshContainers();

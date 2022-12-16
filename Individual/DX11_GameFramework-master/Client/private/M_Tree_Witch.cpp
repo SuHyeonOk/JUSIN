@@ -195,16 +195,13 @@ void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 void CM_Tree_Witch::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 5.f > fDistance)
+	if (!m_bAttack && 4.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	if (m_bAttack)
+	if (m_bAttack && 10 == m_pModelCom->Get_Keyframes())
 	{
-		if (m_pModelCom->Get_Finished())
-		{
-			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-			m_bAttack = false;
-		}
+		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
+		m_bAttack = false;
 	}
 }
 
@@ -237,34 +234,8 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 {
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Key_Pressing(DIK_N))
-	//{
-	//	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
-
-	//	if (2.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-	//	{
-	//		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-	//		m_pModelCom->Set_AnimIndex(0, false);
-	//	}
-	//}
-	//if (pGameInstance->Key_Pressing(DIK_M))
-	//{
-	//	if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-	//	{
-	//		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-	//		m_pModelCom->Set_AnimIndex(8, false);
-
-	//		// 플레이어의 애니메이션 상태 변경하기
-	//		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH);
-	//	}
-	//}
-
-	//RELEASE_INSTANCE(CGameInstance);
-
-	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
-	iRandomNum = 1;
+	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 50);
+	cout << iRandomNum << endl;
 	if (0 == iRandomNum)		// 덩굴 생성
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -298,21 +269,18 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = true;
 
-		if (5 <= m_pModelCom->Get_Keyframes())
-		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-			_float4	f4PlayerPos;
-			XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4	f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-			CB_3DAnimBullet::ANIMBULLETINFO	tBulletInfo;
-			tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
-			tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
-			tBulletInfo.f3Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
-				return;
-			RELEASE_INSTANCE(CGameInstance);
-		}
+		CB_3DAnimBullet::ANIMBULLETINFO	tBulletInfo;
+		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
+		tBulletInfo.f3Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+			return;
+		RELEASE_INSTANCE(CGameInstance);
 	}
 	else
 	{

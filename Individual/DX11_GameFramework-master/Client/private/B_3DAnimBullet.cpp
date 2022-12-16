@@ -74,12 +74,8 @@ void CB_3DAnimBullet::Late_Tick(_double TimeDelta)
 	{
 		m_bPlayer_Collider = CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom);
 
-		m_dDead_TimeAcc += TimeDelta;
-		if (2 < m_dDead_TimeAcc)
-		{
+		if(m_pModelCom->Get_Finished())
 			CGameObject::Set_Dead();
-			m_dDead_TimeAcc = 0;
-		}
 	}
 
 	m_pModelCom->Play_Animation(TimeDelta);
@@ -99,16 +95,12 @@ HRESULT CB_3DAnimBullet::Render()
 		return E_FAIL;
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i) // 그림자 모델 없앰 (비중이 클 수록 모델 순서가 앞에 위치한다.)
-			continue;
-
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 #ifdef _DEBUG
