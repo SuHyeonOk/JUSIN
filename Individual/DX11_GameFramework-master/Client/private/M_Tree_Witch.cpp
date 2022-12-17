@@ -52,7 +52,7 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.iHp		= 70;
-	m_tMonsterInfo.iExp		= 100;
+	m_tMonsterInfo.iExp		= 50;
 	m_tMonsterInfo.iAttack	= 15;
 
 	return S_OK;

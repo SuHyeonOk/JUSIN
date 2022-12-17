@@ -178,6 +178,7 @@
     <ClInclude Include="..\public\Coin.h" />
     <ClInclude Include="..\Public\DataManager.h" />
     <ClInclude Include="..\public\Finn.h" />
+    <ClInclude Include="..\public\Finn_Change.h" />
     <ClInclude Include="..\public\Finn_Weapon.h" />
     <ClInclude Include="..\public\Food.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
     <ClInclude Include="..\public\M_Gronmes.h" />
+    <ClInclude Include="..\public\M_Magic_Man.h" />
     <ClInclude Include="..\public\M_Monster.h" />
     <ClInclude Include="..\public\M_Pigs.h" />
     <ClInclude Include="..\public\M_PigWarrior.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="..\private\Coin.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />
     <ClCompile Include="..\private\Finn.cpp" />
+    <ClCompile Include="..\private\Finn_Change.cpp" />
     <ClCompile Include="..\private\Finn_Weapon.cpp" />
     <ClCompile Include="..\private\Food.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
@@ -234,6 +237,7 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />
     <ClCompile Include="..\private\M_Gronmes.cpp" />
+    <ClCompile Include="..\private\M_Magic_Man.cpp" />
     <ClCompile Include="..\private\M_Monster.cpp" />
     <ClCompile Include="..\private\M_Pigs.cpp" />
     <ClCompile Include="..\private\M_PigWarrior.cpp" />

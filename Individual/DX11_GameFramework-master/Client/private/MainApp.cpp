@@ -12,6 +12,7 @@
 #include "Jake.h"
 #include "Finn_Weapon.h"
 #include "Jake_Weapon.h"
+#include "Finn_Change.h"
 #include "UI_Informacion.h"
 #include "UI_HPGauge.h"
 
@@ -273,6 +274,20 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_GameObject_Jake */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake"),
 		CJake::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_S_Magic_Man_Finn */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Finn"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Finn/Magic_Man_Finn.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_Magic_Man_Jake */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Magic_Man_Finn */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Change"),
+		CFinn_Change::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// UI

@@ -21,7 +21,8 @@ public:
 			W_BEE, W_WORKER, 
 			S_COWBOY, S_SR, 
 			G_BLUE, G_RED, G_YELLOW,
-			TREE_WITCH, MONSTERKIND_END };
+			TREE_WITCH, MAGIC_MAN,
+			MONSTERKIND_END };
 
 		MONSTERKIND		eMonsterKind = MONSTERKIND_END;
 		_float3			f3Pos;
@@ -30,7 +31,7 @@ public:
 
 	typedef struct tagMonsterInfo
 	{
-		enum STATE { IDLE, MOVE, FIND, ATTACK, ATTACK_2, HIT, DIE, STATE_END };
+		enum STATE { IDLE, MOVE, FIND, ATTACK, ATTACK_2, HIT, DIE, ADD_0, STATE_END };
 
 		STATE			eState			= STATE_END;
 

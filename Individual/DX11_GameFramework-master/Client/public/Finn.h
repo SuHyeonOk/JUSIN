@@ -45,8 +45,8 @@ private:
 
 private:
 	void	Player_Info();
-	void	Sword_Tick(const _double & TimeDelta);
-	void	Sword_LateTick(const _double & TimeDelta);
+	void	Parts_Tick(const _double & TimeDelta);
+	void	Parts_LateTick(const _double & TimeDelta);
 
 private:
 	void	Player_Tick(_double TimeDelta);
@@ -63,6 +63,7 @@ private:
 	void	Cheering_Tick();
 
 	void	TreeWitch_Tick();
+	void	Magic_Tick(_double TimeDelta);
 
 	void	Anim_Change(_double TimeDelta);
 
@@ -84,6 +85,7 @@ private:
 	_bool		m_bStru = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
+	_double		m_dMagic_TimeAcc = 0;
 
 	_bool		m_bSpace_Attack_2 = false;
 	_bool		m_bSpace_Attack_3 = false;

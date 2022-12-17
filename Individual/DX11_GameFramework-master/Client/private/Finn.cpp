@@ -6,6 +6,7 @@
 
 #include "Bone.h"
 #include "Finn_Weapon.h"
+#include "Finn_Change.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -69,7 +70,7 @@ void CFinn::Tick(_double TimeDelta)
 
 	//Shader_Time(TimeDelta); // Shader Hit Time
 
-	Sword_Tick(TimeDelta);
+	Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
@@ -94,7 +95,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 	//cout << m_AnimiNum << endl;
 	//RELEASE_INSTANCE(CGameInstance);
 
-	Sword_LateTick(TimeDelta);
+	Parts_LateTick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -203,7 +204,7 @@ HRESULT CFinn::SetUp_ShaderResources()
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
+	
 	if (pGameInstance->Key_Pressing(DIK_F))
 	{
 		m_bHit = true;
@@ -303,6 +304,22 @@ HRESULT CFinn::Ready_Parts()
 
 	m_PlayerParts.push_back(pPartObject);
 
+	// [3]
+	CFinn_Change::CHANGEDESC	tChangeDesc;
+
+	tChangeDesc.eChange = CFinn_Change::CHANGEDESC::MAGIC;
+	tChangeDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	tChangeDesc.pSocket = m_pModelCom->Get_BonePtr("SlaveAnim");
+	tChangeDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(tChangeDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Finn_Change"), &tChangeDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_PlayerParts.push_back(pPartObject);
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -330,7 +347,7 @@ void CFinn::Player_Info()
 
 }
 
-void CFinn::Sword_Tick(const _double & TimeDelta)
+void CFinn::Parts_Tick(const _double & TimeDelta)
 {
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Tick(TimeDelta);
@@ -338,9 +355,12 @@ void CFinn::Sword_Tick(const _double & TimeDelta)
 		m_PlayerParts[1]->Tick(TimeDelta);
 	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[2]->Tick(TimeDelta);
+
+	if(CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		m_PlayerParts[3]->Tick(TimeDelta);
 }
 
-void CFinn::Sword_LateTick(const _double & TimeDelta)
+void CFinn::Parts_LateTick(const _double & TimeDelta)
 {
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Late_Tick(TimeDelta);
@@ -348,6 +368,9 @@ void CFinn::Sword_LateTick(const _double & TimeDelta)
 		m_PlayerParts[1]->Late_Tick(TimeDelta);
 	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[2]->Late_Tick(TimeDelta);
+
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		m_PlayerParts[3]->Late_Tick(TimeDelta);
 }
 
 void CFinn::Player_Tick(_double TimeDelta)
@@ -380,6 +403,9 @@ void CFinn::Player_Tick(_double TimeDelta)
 		TreeWitch_Tick();
 		break;
 
+	case CObj_Manager::PLAYERINFO::MAGIC:
+		Magic_Tick(TimeDelta);
+		break;
 	}
 
 	Anim_Change(TimeDelta);
@@ -491,7 +517,8 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (m_tPlayerInfo.eState == m_tPlayerInfo.ROLL	||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT	||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN	||
-		m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH)
+		m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH ||
+		m_tPlayerInfo.eState == m_tPlayerInfo.MAGIC)
 	{
 		m_OnMove = false;
 		return;
@@ -500,7 +527,13 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
+
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+
+		//if(m_tPlayerInfo.eState != CObj_Manager::PLAYERINFO::STATE::MAGIC)
+		//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		//else
+		//	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::RUN);
 	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -550,7 +583,12 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
+
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		//if (m_tPlayerInfo.eState != CObj_Manager::PLAYERINFO::STATE::MAGIC)
+		//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		//else
+		//	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::IDLE);
 	}
 #pragma endregion
 
@@ -680,9 +718,22 @@ void CFinn::TreeWitch_Tick()
 	}
 }
 
-void CFinn::Anim_Change(_double TimeDelta)
+void CFinn::Magic_Tick(_double TimeDelta)
 {
-	if (m_tPlayerInfo.TREEWITCH == m_tPlayerInfo.eState)
+	m_dMagic_TimeAcc += TimeDelta;
+	if (3 < m_dMagic_TimeAcc)
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.IDLE);
+		m_dMagic_TimeAcc = 0;
+	}
+
+
+}
+
+void CFinn::Anim_Change(_double TimeDelta)
+{   
+	if (m_tPlayerInfo.MAGIC == m_tPlayerInfo.eState ||
+		m_tPlayerInfo.TREEWITCH == m_tPlayerInfo.eState)
 		return;
 
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)

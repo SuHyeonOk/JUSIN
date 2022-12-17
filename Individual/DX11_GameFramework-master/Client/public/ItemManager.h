@@ -15,6 +15,7 @@ public:
 
 public:
 	HRESULT	RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _uint iSilverCount, _uint iGoldCount);
+	HRESULT	RandomPage_Clone(_float3 f3StartPos);
 
 private:
 	const _tchar*	m_szObjName;

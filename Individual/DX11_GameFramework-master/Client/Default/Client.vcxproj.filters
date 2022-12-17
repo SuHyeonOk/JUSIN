@@ -130,6 +130,9 @@
     <Filter Include="02.GameObjects\NPC">
       <UniqueIdentifier>{d03630e5-bedb-4a71-ba9b-324f4de70d57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Magic_Man">
+      <UniqueIdentifier>{e335d783-7ccf-419c-b0a6-83860d25423f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -264,6 +267,12 @@
     <ClInclude Include="..\public\B_3DBullet.h">
       <Filter>02.GameObjects\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Magic_Man.h">
+      <Filter>02.GameObjects\Monster\Magic_Man</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Finn_Change.h">
+      <Filter>02.GameObjects\Player\Finn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -382,6 +391,12 @@
     </ClCompile>
     <ClCompile Include="..\private\B_3DBullet.cpp">
       <Filter>02.GameObjects\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Magic_Man.cpp">
+      <Filter>02.GameObjects\Monster\Magic_Man</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Finn_Change.cpp">
+      <Filter>02.GameObjects\Player\Finn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

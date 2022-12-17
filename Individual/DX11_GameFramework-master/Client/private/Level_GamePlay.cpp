@@ -412,6 +412,7 @@ void CLevel_GamePlay::ImGui_Page()
 
 		if (0 == iObjNum)
 		{
+			tPageInfo.ePageKind = tPageInfo.MOVE;
 			tPageInfo.fPos = m_f3ClickPos;
 
 			m_wstObjName = L"Page_1__";

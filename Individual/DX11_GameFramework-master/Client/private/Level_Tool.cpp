@@ -6,6 +6,7 @@
 #include "M_Monster.h"
 #include "Coin.h"
 #include "Page.h"
+#include "M_Magic_Man.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -114,10 +115,6 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Coin"), &tObjInfo)))
 		return E_FAIL;
 
-	//CPage::PAGEINFO					tPageInfo;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-	//	return E_FAIL;
-
 	CM_Monster::MONSTERDESC		tMonsterDesc;
 	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 0.f);
 	tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
@@ -149,10 +146,15 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 		return E_FAIL;
 
+	//tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+	//	return E_FAIL;
 
-	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 5.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
 		return E_FAIL;
+
+
 
 	RELEASE_INSTANCE(CGameInstance);
 

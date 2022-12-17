@@ -5,6 +5,7 @@
 #include "Obj_Manager.h"
 
 #include "Coin.h"
+#include "Page.h"
 
 IMPLEMENT_SINGLETON(CItemManager)
 
@@ -24,7 +25,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		tCoinInfo.eState = tCoinInfo.COMEOUT;
 		tCoinInfo.eCoinKind = tCoinInfo.COIN_BRONZE;
 
-		m_wstObjName = L"CoinBronze_";
+		m_wstObjName = L"Layer_CoinBronze_";
 		m_wstObjName += to_wstring(i);
 
 		m_szObjName = m_wstObjName.c_str(); // wstring -> conat wchar*
@@ -39,7 +40,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		tCoinInfo.eState = tCoinInfo.COMEOUT;
 		tCoinInfo.eCoinKind = tCoinInfo.COIN_SILVER;
 
-		m_wstObjName = L"CoinSilver_";
+		m_wstObjName = L"Layer_CoinSilver_";
 		m_wstObjName += to_wstring(i);
 
 		m_szObjName = m_wstObjName.c_str(); 
@@ -54,7 +55,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		tCoinInfo.eState = tCoinInfo.COMEOUT;
 		tCoinInfo.eCoinKind = tCoinInfo.COIN_GOLD;
 
-		m_wstObjName = L"CoinGold_";
+		m_wstObjName = L"Layer_CoinGold_";
 		m_wstObjName += to_wstring(i);
 
 		m_szObjName = m_wstObjName.c_str(); 
@@ -62,6 +63,22 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CPage::PAGEINFO tPageInfo;
+	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
+	tPageInfo.ePageKind = tPageInfo.IDLE;
+
+	if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
