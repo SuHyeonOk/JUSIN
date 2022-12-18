@@ -28,19 +28,23 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
 	CNavigation*			m_pNavigationCom = nullptr;
 
 private:
 	HRESULT SetUp_Components();
+	HRESULT SetUp_ShaderResources();
 
 private:
 	void	ImGui_Navigation();
 
-private:
-	_float4		m_PickingPos;
+private:	// ImGui_Navigation()
+	_float4		m_f4PickingPos = { 0.f, 0.f, 0.f, 1.f };
+	//_float4		m_f3FinalPos = { 0.f, 0.f, 0.f, 1.f };
 	_float3		m_f3Points[3];
+	_float3		m_f3TempPoints[3];
 
 public:
 	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
