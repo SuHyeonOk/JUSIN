@@ -130,6 +130,8 @@ HRESULT CFinn::Render()
 		if (nullptr != m_pColliderCom[i])
 			m_pColliderCom[i]->Render();
 	}
+
+	m_pNavigationCom->Render();
 #endif
 	return S_OK;
 }
@@ -173,24 +175,15 @@ HRESULT CFinn::SetUp_Components()
 		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
 		return E_FAIL;
 
-	///* For.Com_OBB */
-	//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	//ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-	//ColliderDesc.vRotation = _float3(0.f, XMConvertToRadians(45.0f), 0.f);
-	//ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	/* For.Com_Navigation */
+	CNavigation::NAVIDESC			NaviDesc;
+	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
 
-	//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_OBB"), TEXT("Com_OBB"),
-	//	(CComponent**)&m_pColliderCom[COLLTYPE_OBB], &ColliderDesc)))
-	//	return E_FAIL;
+	NaviDesc.iCurrentIndex = 0;
 
-	///* For.Com_SPHERE */
-	//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	//ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
-	//ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-
-	//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_SPHERE"),
-	//	(CComponent**)&m_pColliderCom[COLLTYPE_SPHERE], &ColliderDesc)))
-	//	return E_FAIL;
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
+		(CComponent**)&m_pNavigationCom, &NaviDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -375,9 +368,11 @@ void CFinn::Parts_LateTick(const _double & TimeDelta)
 
 void CFinn::Player_Tick(_double TimeDelta)
 {
+	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
 	
+	// 내가 플레이어 일 때 만 할 행동
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
 
@@ -526,7 +521,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta);
+		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
 
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 
@@ -727,7 +722,6 @@ void CFinn::Magic_Tick(_double TimeDelta)
 		m_dMagic_TimeAcc = 0;
 	}
 
-
 }
 
 void CFinn::Anim_Change(_double TimeDelta)
@@ -814,6 +808,7 @@ void CFinn::Free()
 	for (_uint i = 0; i < COLLTYPE_END; ++i)
 		Safe_Release(m_pColliderCom[i]);
 
+	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

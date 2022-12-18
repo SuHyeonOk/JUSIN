@@ -8,6 +8,8 @@
 #include "Page.h"
 #include "M_Magic_Man.h"
 
+#include "Imgui_PropertyEditor.h"	// @
+
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -34,8 +36,8 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
@@ -46,6 +48,7 @@ HRESULT CLevel_Tool::Initialize()
 void CLevel_Tool::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
 }
 
 void CLevel_Tool::Late_Tick(_double TimeDelta)

@@ -6,3 +6,4 @@ Layer_Pigs_SR__4|-30.9981|0|43.7465
 Layer_Tree_Witch__5|-34.5262|4.76837e-07|60.8365
 Layer_Gronmes_BLUE__6|-22.6655|0|58.6277
 Layer_Gronmes_RED__7|-14.859|0|58.0386
+Layer_Magic_Man__8|-34.2865|0|50.6915

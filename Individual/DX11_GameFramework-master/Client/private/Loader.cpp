@@ -215,6 +215,14 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+	/* For.Prototype_Component_Navigation */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navigation.txt")))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// Weapon
 	/* For.Prototype_GameObject_PigWarrior_Weapon */
@@ -353,6 +361,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Circle/Circle.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_B_Magic */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
+		return E_FAIL;
 
 	// 2D UI
 	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
@@ -431,7 +443,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Stun/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	// Skill
@@ -515,7 +527,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 	lstrcpy(m_szLoadingText, TEXT("네비게이션정보생성중"));
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navigation.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navigation.txt")))))
 		return E_FAIL;
 #pragma endregion
 
@@ -565,7 +577,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Weapon
+	// Monster Weapon
 	/* For.Prototype_GameObject_PigWarrior_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
 		CW_PigWarrior::Create(m_pDevice, m_pContext))))

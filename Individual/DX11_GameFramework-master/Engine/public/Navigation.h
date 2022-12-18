@@ -21,18 +21,20 @@ public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pNavigationDataFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
 
+public:
+	_bool isMove_OnNavigation(_fvector TargetPos);
+
 #ifdef _DEBUG
 public:
 	HRESULT Render();
 #endif // 
 
-private:	
+private:
 	vector<class CCell*>	m_Cells;
 	NAVIDESC				m_NaviDesc;
 
 private:
 	HRESULT	Ready_Neighbor();
-
 
 #ifdef _DEBUG
 private:

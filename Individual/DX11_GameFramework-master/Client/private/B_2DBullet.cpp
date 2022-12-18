@@ -66,7 +66,7 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::MAGIC_BULLET)
-		m_pTransformCom->Set_Scaled(_float3(0.7, 0.7, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(0.7f, 0.7f, 1.f));
 
 	// 처음 한 번만 플레이어를 향하는 벡터를 구한다.
 	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);

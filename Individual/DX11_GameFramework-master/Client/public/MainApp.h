@@ -46,6 +46,9 @@ private: // FPS 띄우기 위한 변수
 	_double	m_dTimeAcc = 0;
 	TCHAR	m_szFPS[17] = L"";
 
+private:
+	_float4	m_PickingPos;
+
 public:
 	static CMainApp* Create();
 	virtual void Free() override;

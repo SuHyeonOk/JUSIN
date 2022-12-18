@@ -6,6 +6,7 @@
 #include "Camera_Dynamic.h"
 
 #include "Obj_Manager.h"
+#include "DataManager.h"
 
 #include "Model.h"
 #include "Finn.h"
@@ -15,6 +16,7 @@
 #include "Finn_Change.h"
 #include "UI_Informacion.h"
 #include "UI_HPGauge.h"
+
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -59,6 +61,16 @@ HRESULT CMainApp::Initialize()
 #endif
 
 	CObj_Manager::GetInstance()->Initialized();
+
+
+
+
+
+
+
+
+
+
 
 	_ulong		dwByte = 0;
 	HANDLE		hFile = CreateFile(TEXT("../../Data/Navigation.dat"), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);

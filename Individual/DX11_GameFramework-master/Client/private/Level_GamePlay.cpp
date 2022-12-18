@@ -453,7 +453,7 @@ void CLevel_GamePlay::ImGui_Monster()
 		"PigWarrior_BEE", "PigWarrior_WORKER", 
 		"Pigs_COWBOY", "Pigs_SR", 
 		"Gronmes_BULE", "Gronmes_RED", "Gronmes_YELLOW", 
-		"Tree_Witch" };
+		"Tree_Witch", "Magic_Man" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -584,6 +584,21 @@ void CLevel_GamePlay::ImGui_Monster()
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (8 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.MAGIC_MAN;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Magic_Man__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -904,7 +919,7 @@ void CLevel_GamePlay::Load_Monster()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CM_Monster::MONSTERDESC		tMonsterDesc;
+	CM_Monster::MONSTERDESC			tMonsterDesc;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_MonsterInfo();
 	_int iMonsterVecCount = _int(eVecObjInfo.size());
 
@@ -1035,6 +1050,22 @@ void CLevel_GamePlay::Load_Monster()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))	// 요기
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.MAGIC_MAN;	// 요기
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Magic_Man__";	// 요기
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))	// 요기
 					return;
 			}
 		}
