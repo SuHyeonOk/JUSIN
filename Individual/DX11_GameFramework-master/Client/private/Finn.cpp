@@ -111,6 +111,9 @@ HRESULT CFinn::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return E_FAIL;
+
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
@@ -182,7 +185,7 @@ HRESULT CFinn::SetUp_Components()
 	NaviDesc.iCurrentIndex = 0;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
-		(CComponent**)&m_pNavigationCom, &NaviDesc)))
+		(CComponent**)&m_pNavigationCom/*, &NaviDesc*/)))
 		return E_FAIL;
 
 	return S_OK;

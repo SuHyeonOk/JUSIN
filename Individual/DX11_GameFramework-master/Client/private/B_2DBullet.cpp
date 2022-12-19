@@ -81,7 +81,7 @@ void CB_2DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날리고, 일정시간 후에 총알이 사라지도록 해야한다.
+	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날린다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -104,7 +104,7 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	// 총알이 생성된 뒤 3초가 지나면 삭제한다.
+	// 총알이 생성된 뒤 1초가 지나면 삭제한다.
 	m_dBullet_TimeAcc += TimeDelta;
 	if (1 < m_dBullet_TimeAcc)
 	{

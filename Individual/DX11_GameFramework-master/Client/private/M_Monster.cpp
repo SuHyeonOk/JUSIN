@@ -94,6 +94,7 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 
 _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _double TimeDelta, _double dMoveTime, _float fRange)
 {
+	// 이동 시킬 시간을 담는다.
 	m_bRandomMove_TimeAcc += TimeDelta;
 	if (dMoveTime < m_bRandomMove_TimeAcc)
 	{

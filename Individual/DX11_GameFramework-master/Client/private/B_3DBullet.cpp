@@ -36,7 +36,13 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Pos.x, m_tBulletInfo.f3Pos.y, m_tBulletInfo.f3Pos.z);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+	}
+	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 요기 (검색해서 각기 설정해 주면 된다.)
+	{
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(180.f);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 	}
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -53,6 +59,14 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.5f));
 		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(90.f));
 	}
+	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
+		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 0.5f));
+
+	// 처음 한 번만 플레이어를 향하는 벡터를 구한다.
+	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vDistance = vPlayerPos - vMyPos;
+	XMStoreFloat4(&m_f4Distance, vDistance);
 
 	return S_OK;
 }
@@ -62,14 +76,23 @@ void CB_3DBullet::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 플레이어를 향해 회전하며 날아가는 총알
+		Magic_Tick(TimeDelta);
+
 }
 
 void CB_3DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Bullet_Dead();
-	m_pModelCom->Play_Animation(TimeDelta);
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	
+		Magic_LateTick(TimeDelta);
+
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)	// 애니메이션이 있는 총알 만!
+	{
+		m_pModelCom->Play_Animation(TimeDelta);
+	}
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 
@@ -107,6 +130,14 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 	{
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 		CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
+
+		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
+		{
+			if (m_pModelCom->Get_Finished())		// 플레이어랑 충돌하면 애니메이션이 끝나고 사라진다.
+				CGameObject::Set_Dead();
+		}
+		else if(m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
+			CGameObject::Set_Dead();				// 플레이어랑 닿으면 사라진다.
 	}
 }
 
@@ -129,6 +160,13 @@ HRESULT CB_3DBullet::SetUp_Components()
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
+	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC) // 요기
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_FireDragon_Area_FX"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
@@ -139,6 +177,11 @@ HRESULT CB_3DBullet::SetUp_Components()
 	{
 		ColliderDesc.vSize = _float3(2.f, 2.f, 2.f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	}
+	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 요기
+	{
+		ColliderDesc.vSize = _float3(1.f, 1.5f, 1.f);
+		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -168,14 +211,19 @@ HRESULT CB_3DBullet::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CB_3DBullet::Bullet_Dead()
+void CB_3DBullet::Magic_Tick(const _double & TimeDelta)
 {
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
-	{
-		m_bPlayer_Collider = CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom);
+	m_pTransformCom->Go_Straight(TimeDelta);
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+}
 
-		if (m_pModelCom->Get_Finished())
-			CGameObject::Set_Dead();
+void CB_3DBullet::Magic_LateTick(const _double & TimeDelta)
+{
+	m_dBullet_TimeAcc += TimeDelta;
+	if (10 < m_dBullet_TimeAcc)
+	{
+		CGameObject::Set_Dead();
+		m_dBullet_TimeAcc = 0;
 	}
 }
 

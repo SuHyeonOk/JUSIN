@@ -153,10 +153,10 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	// Bullet
-	/* For.Prototype_Component_Model_B_Star */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Star"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Star/Star.fbx", PivotMatrix))))
+	// 3D Bullet
+	/* For.Prototype_Component_Model_B_FireDragon_Area_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_FireDragon_Area_FX"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/FireDragon_Area_FX/FireDragon_Area_FX.fbx", PivotMatrix))))
 		return E_FAIL;
 	/* For.Prototype_Component_Model_B_Tree_Witch_Roots_FX */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Tree_Witch_Roots_FX"),

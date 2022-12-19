@@ -271,14 +271,14 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 		
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		
-		CB_3DBullet::ANIMBULLETINFO	tBulletInfo;
 		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 		_float4	f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
+		CB_3DBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
-		tBulletInfo.f3Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
+		tBulletInfo.f3Start_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
 		
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
 			return;

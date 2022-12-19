@@ -31,7 +31,7 @@ public:
 
 	typedef struct tagMonsterInfo
 	{
-		enum STATE { IDLE, MOVE, FIND, ATTACK, ATTACK_2, HIT, DIE, ADD_0, STATE_END };
+		enum STATE { IDLE, MOVE, FIND, ATTACK, HIT, DIE, STATE_END };
 
 		STATE			eState			= STATE_END;
 

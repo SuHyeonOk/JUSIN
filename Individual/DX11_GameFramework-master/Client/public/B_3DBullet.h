@@ -17,11 +17,13 @@ class CB_3DBullet final : public CGameObject
 public:
 	typedef struct tagRandomBulletInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum ANIMBULLETTYPE { TYPE_ROOTS, TYPE_END };
+		enum ANIMBULLETTYPE { TYPE_ROOTS, TYPE_MAGIC, TYPE_END };
 
-		ANIMBULLETTYPE	eBulletType;
+		ANIMBULLETTYPE	eBulletType = TYPE_END;
 
-		_float3		f3Pos;
+		_float3		f3Start_Pos;
+		_float3		f3Target_Pos;
+
 		_int		iMonsterAttack = 0;
 
 	}ANIMBULLETINFO;
@@ -45,19 +47,20 @@ private:
 	HRESULT					SetUp_ShaderResources();
 
 private:
-	void					Bullet_Dead();
-
-private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CShader*				m_pShaderCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
 
 private:
-	ANIMBULLETINFO		m_tBulletInfo;
+	void					Magic_Tick(const _double & TimeDelta);
+	void					Magic_LateTick(const _double & TimeDelta);
 
 private:
-	_bool				m_bPlayer_Collider = false;
+	ANIMBULLETINFO		m_tBulletInfo;
+	
+	_float4				m_f4Distance;
+	_double				m_dBullet_TimeAcc = 0;
 
 public:
 	static	CB_3DBullet*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -8,7 +8,7 @@
 #include "Utilities_Manager.h"	
 
 #include "UI_3DTexture.h"		
-#include "B_2DBullet.h"		
+#include "B_3DBullet.h"
 
 CM_Magic_Man::CM_Magic_Man(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -51,7 +51,7 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
 	m_tMonsterInfo.iHp		= 70;
 	m_tMonsterInfo.iExp		= 70;
 	m_tMonsterInfo.iAttack	= 20;
@@ -160,11 +160,6 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 
 	switch (m_tMonsterInfo.eState)
 	{
-	case MONSTERINFO::STATE::ADD_0:
-		m_pModelCom->Set_AnimIndex(7, false);	// 무언갈 뿌리면서 등장한다.
-		Appearance_Tick();
-		break;
-
 	case MONSTERINFO::STATE::IDLE:
 		m_pModelCom->Set_AnimIndex(6, false);
 		Idle_Tick(TimeDelta);
@@ -176,12 +171,12 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::FIND:
-		m_pModelCom->Set_AnimIndex(0, false);
-		Find_Tick(TimeDelta);
+		m_pModelCom->Set_AnimIndex(7, false);
+		Find_Tick();
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
-		m_pModelCom->Set_AnimIndex(1, false);
+		m_pModelCom->Set_AnimIndex(0, false);
 		Attack_Tick(TimeDelta);
 		break;
 
@@ -197,13 +192,15 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Magic_Man::Appearance_Tick()
+void CM_Magic_Man::Find_Tick()
 {
+	// 가장 먼저 플레이어가 주변에 있는지 계속 탐색한다.
 	_vector vCenterPos = XMLoadFloat4(&m_f4CenterPos);
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 	_vector vDistance = vPlayerPos - vCenterPos;
 	_float	fDistance = XMVectorGetX(XMVector3Length(vDistance));
 
+	// TODO : 나중에 정확한 생성 위치를 정하면 그 자리에서 cout 으로 확인해 보면서 일정한 거리에서 나타나 도록 수정하기 (높이 때문에 거리가 내가 생각하는 거리가 아님)
 	if (5.f > fDistance)
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vCenterPos);
@@ -213,69 +210,43 @@ void CM_Magic_Man::Appearance_Tick()
 
 void CM_Magic_Man::Idle_Tick(const _double& TimeDelta)
 {
-	if (!m_bAttack && !m_bFind && 4.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-	else if(!m_bAttack && m_bFind && 3.5f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+	// 플레이어가 범위 안 으로 들어오면 FIND 가 아닌 ATTACK 이다. 왜? 이미 위에서 플레이어가 범위 안 으로 들어왔을 때! 깜짝 등장하기 때문에
+	if (3.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-
+	
+	// 플레이어가 범위 안에 없을 때 에는 IDLE 애니메이션이 끝나면 MOVE 로 이동한다.
 	if (m_pModelCom->Animation_Check(6) && m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
-void CM_Magic_Man::Find_Tick(const _double& TimeDelta)
-{
-	if (m_pModelCom->Get_Finished())
-	{
-		m_bFind = true;
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-
-		// 플레이어 상태 변경하기
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::MAGIC);
-	}
-
-	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	_vector	vMyPos;
-	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4	f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
-
-	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
-	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
-	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 2.f, f4MyPos.z - 0.5f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
-		return;
-
-	RELEASE_INSTANCE(CGameInstance);
-}
-
 void CM_Magic_Man::Move_Tick(const _double& TimeDelta)
 {
-	if (!m_bAttack && !m_bFind && 4.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-	else if (!m_bAttack && m_bFind && 3.5f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+	// MOVE 상태로 있는데 범위 안에 플레이어가 들어오면 공격한다.!
+	if (!m_bAttack && 3.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3, 5))
+	// 플레이어가 범위 안 으로 들어오지 않는 경우, IDLE 상태로 돌아간다.
+	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3, 5))	// 3초 동안 이동하고, 거리 5 범위 이내에서 움직인다.
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = false;
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}
 }
 
 void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 {
+	// 플레이어가 범위 안 으로 들어왔다 공격한다.
+	// 플레이어 에게 총알을 날린다. 그 총알을 플레이어가 맞으면 플레어는 상태 제어를 받는다.
+
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	if (m_pModelCom->Get_Finished())
+	// 애니메이션이 종료되면 플레이어 에게 총알을 날린다.
+	if (m_pModelCom->Animation_Check(0) && m_pModelCom->Get_Finished())
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		m_bAttack = true;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
+		// 총알 날리는 코드
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 		// 내 좌표
@@ -288,12 +259,12 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 		_float4	f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CB_2DBullet::BULLETINFO		tBulletInfo;
+		CB_3DBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
-		tBulletInfo.eToodyBullet = tBulletInfo.MAGIC_BULLET;
-		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y * 0.5f, f4MyPos.z);
-		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y * 0.5f, f4PlayerPos.z);
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Star_0"), TEXT("Prototype_GameObject_B_ToodyBullet"), &tBulletInfo)))
+		tBulletInfo.eBulletType = tBulletInfo.TYPE_MAGIC;
+		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
+		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Magic_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
 			return;
 
 		RELEASE_INSTANCE(CGameInstance);
@@ -303,7 +274,7 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 void CM_Magic_Man::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
 
 void CM_Magic_Man::Die_Tick()
@@ -353,6 +324,5 @@ CGameObject * CM_Magic_Man::Clone(void * pArg)
 void CM_Magic_Man::Free()
 {
 	__super::Free();
-
 
 }
