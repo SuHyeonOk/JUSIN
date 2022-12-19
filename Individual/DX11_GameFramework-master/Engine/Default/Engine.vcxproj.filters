@@ -139,6 +139,9 @@
     <Filter Include="01.Utility\03.Components\08. Navigation\Shader">
       <UniqueIdentifier>{c261f3af-336d-4a57-802f-456768ddd461}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\02.VIBuffer\Cobe">
+      <UniqueIdentifier>{87105f4c-2e53-4165-995a-b85d872945dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="..\public\Navigation.h">
       <Filter>01.Utility\03.Components\08. Navigation</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Cube.h">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Cobe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -502,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Navigation.cpp">
       <Filter>01.Utility\03.Components\08. Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Cube.cpp">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Cobe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

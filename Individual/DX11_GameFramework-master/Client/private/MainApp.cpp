@@ -9,6 +9,7 @@
 #include "DataManager.h"
 
 #include "Model.h"
+#include "Sky.h"
 #include "Finn.h"
 #include "Jake.h"
 #include "Finn_Weapon.h"
@@ -61,45 +62,6 @@ HRESULT CMainApp::Initialize()
 #endif
 
 	CObj_Manager::GetInstance()->Initialized();
-
-
-
-
-
-
-
-
-
-
-
-	_ulong		dwByte = 0;
-	HANDLE		hFile = CreateFile(TEXT("../../Data/Navigation.dat"), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
-
-	_float3		vPoints[3];
-
-	vPoints[0] = _float3(0.0f, 0.f, 5.0f);
-	vPoints[1] = _float3(5.0f, 0.f, 0.0f);
-	vPoints[2] = _float3(0.0f, 0.f, 0.0f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
-
-	vPoints[0] = _float3(0.0f, 0.f, 5.0f);
-	vPoints[1] = _float3(5.0f, 0.f, 5.0f);
-	vPoints[2] = _float3(5.0f, 0.f, 0.0f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
-
-	vPoints[0] = _float3(0.0f, 0.f, 10.0f);
-	vPoints[1] = _float3(5.0f, 0.f, 5.0f);
-	vPoints[2] = _float3(0.0f, 0.f, 5.0f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
-
-	vPoints[0] = _float3(5.0f, 0.f, 5.0f);
-	vPoints[1] = _float3(10.0f, 0.f, 0.0f);
-	vPoints[2] = _float3(5.0f, 0.f, 0.0f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
-
-	CloseHandle(hFile);
 
 	return S_OK;
 }
@@ -214,6 +176,11 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_VIBuffer_Cube */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Shader_VtxTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTex.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements))))
@@ -222,6 +189,11 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_Component_Shader_VtxAnimModel*/
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimModel.hlsl"), VTXANIMMODEL_DECLARATION::Elements, VTXANIMMODEL_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxCubeTex */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxCubeTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCubeTex.hlsl"), VTXCUBETEX_DECLARATION::Elements, VTXCUBETEX_DECLARATION::iNumElements))))
 		return E_FAIL;
 
 	// Collider
@@ -236,6 +208,12 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_Component_Collider_SPHERE*/
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
+		return E_FAIL;
+
+	// SkyBox
+	/* For.Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	_matrix			PivotMatrix = XMMatrixIdentity();

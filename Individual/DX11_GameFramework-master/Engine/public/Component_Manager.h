@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Navigation.h"
 #include "VIBuffer_Rect.h"
+#include "VIBuffer_Cube.h"
 #include "VIBuffer_Terrain.h"
 
 /* 다양한 컴포넌트(원형)들을 담고 있는다. -> 사본컴포넌트들은 사용해야할 객체들이 보유한다. */

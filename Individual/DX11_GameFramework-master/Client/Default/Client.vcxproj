@@ -170,6 +170,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Bin\ShaderFiles\Shader_Client_Defines.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\public\B_2DBullet.h" />
     <ClInclude Include="..\public\B_3DBullet.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\public\Page.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Skill_Manager.h" />
+    <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_.h" />
@@ -247,6 +249,7 @@
     <ClCompile Include="..\private\Page.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Skill_Manager.cpp" />
+    <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\UI_.cpp" />
@@ -272,6 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Map.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
