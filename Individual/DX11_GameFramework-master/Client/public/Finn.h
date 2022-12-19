@@ -77,23 +77,18 @@ private:
 
 	// 셰이더
 	_bool		m_bHit = false;
-	_double		m_bHit_TimeAcc = 0;			// 일정 시간 후 Hit 가 꺼짐
 
 	//////////////////////////// 플레이어 일 때
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
 	_double		m_dHit_TimeAcc = 0;
 
-	_bool		m_bStru = false;			// 스턴
+	_bool		m_bStun = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
-	_bool		m_bSpace_Attack_2 = false;
-	_bool		m_bSpace_Attack_3 = false;
-	_uint		m_iSpace_Attack_Count = 0;
+	_bool		m_bMagic = false;			// 몬스터 Magic 공격
+	_double		m_bMagic_TimeAcc = 0;
 
-	// Anim Test
-	_int		m_AnimiNum = 0;
-	_int		m_i = 0;
 	//////////////////////////// 플레이어가 아닐 때
 
 public:

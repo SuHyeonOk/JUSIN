@@ -75,7 +75,8 @@ public:
 
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.
-	_vector				CObj_Manager::Get_Player_Transform();					// 현재 Player 의 거리를 가져온다.
+	_vector				CObj_Manager::Get_Player_Transform();					// 현재 Player 의 POS 를 가져온다.
+	_vector				CObj_Manager::Get_Player_Look();					// 현재 Player 의 LOOK 를 가져온다.
 	_float				CObj_Manager::Get_Player_Distance(_fvector	_MyPos);	// Player 와 내 거리
 	_bool				CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END]);					// 현재 Player 의 Collider 을 가져온다.
 

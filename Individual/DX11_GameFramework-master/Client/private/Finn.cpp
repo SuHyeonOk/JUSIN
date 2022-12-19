@@ -75,7 +75,11 @@ void CFinn::Tick(_double TimeDelta)
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
 
-	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
+		m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
+	}
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -99,19 +103,16 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
-
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CFinn::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
 	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)	// 몬스터에게 맞았을 경우 PlayerRneder() 를 하지 않는다.
+		return S_OK;
+
+	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	if (FAILED(SetUp_ShaderResources()))
@@ -185,7 +186,7 @@ HRESULT CFinn::SetUp_Components()
 	NaviDesc.iCurrentIndex = 0;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
-		(CComponent**)&m_pNavigationCom/*, &NaviDesc*/)))
+		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -214,10 +215,10 @@ HRESULT CFinn::SetUp_ShaderResources()
 		return E_FAIL;
 
 
-	/* For.Lights */
-	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (nullptr == pLightDesc)
-		return E_FAIL;
+	///* For.Lights */
+	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
+	//if (nullptr == pLightDesc)
+	//	return E_FAIL;
 	//
 	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
 	//	return E_FAIL;
@@ -241,15 +242,15 @@ void CFinn::Shader_Time(_double TimeDelta)
 	if (!m_bHit)
 		return;
 
-	if (m_bHit)
-	{
-		m_bHit_TimeAcc += TimeDelta;
-		if (0.5 < m_bHit_TimeAcc)
-		{
-			m_bHit = false;
-			m_bHit_TimeAcc = 0;
-		}
-	}
+	//if (m_bHit)
+	//{
+	//	m_bHit_TimeAcc += TimeDelta;
+	//	if (0.5 < m_bHit_TimeAcc)
+	//	{
+	//		m_bHit = false;
+	//		m_bHit_TimeAcc = 0;
+	//	}
+	//}
 }
 
 HRESULT CFinn::Ready_Parts()
@@ -501,8 +502,10 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		m_pTransformCom->Go_Straight(TimeDelta/*, m_pNavigationCom*/);
+
+		if(m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -552,12 +555,15 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -610,14 +616,14 @@ void CFinn::Stun_Tick()
 	_float4	f4MyPos;
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
-	if (!m_bStru)
+	if (!m_bStun)
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("S_StunChick_0"), TEXT("Prototype_GameObject_S_StunChick"), &_float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z))))
 			return;
 		RELEASE_INSTANCE(CGameInstance);
 
-		m_bStru = true;
+		m_bStun = true;
 	}
 
 	if (m_pModelCom->Get_Finished())
@@ -625,7 +631,7 @@ void CFinn::Stun_Tick()
 
 	if (2 <= m_iStun_Count)		// 애니메이션 두 번 재생 후 끝
 	{
-		m_bStru = false;
+		m_bStun = false;
 		m_iStun_Count = 0;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
@@ -682,18 +688,30 @@ void CFinn::TreeWitch_Tick()
 
 HRESULT CFinn::Magic_Tick(_double TimeDelta)
 {
-	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4 f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
-
-	CFinn_Change::CHANGEINFO		tChangeInfo;
-	tChangeInfo.eChange = tChangeInfo.MAGIC;
-	tChangeInfo.Pos		= _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
+	if (!m_bMagic)
+	{
+		m_bMagic = true;
 	
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn_Magic"), TEXT("Prototype_GameObject_Finn_Change"), &tChangeInfo)))
-		return E_FAIL;
-	RELEASE_INSTANCE(CGameInstance);
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CFinn_Change::CHANGEINFO		tChangeInfo;
+		tChangeInfo.eChange = tChangeInfo.MAGIC;
+		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn_Magic"), TEXT("Prototype_GameObject_Finn_Change"), &tChangeInfo)))
+			return E_FAIL;
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	//m_bMagic_TimeAcc += TimeDelta;
+	//{
+	//	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	//	m_bMagic = false;
+	//	m_bMagic_TimeAcc = 0;
+	//}
 
 	return S_OK;
 }

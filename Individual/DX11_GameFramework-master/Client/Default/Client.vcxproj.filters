@@ -282,6 +282,9 @@
     <ClInclude Include="..\public\Sky.h">
       <Filter>02.GameObjects\Sky</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Jake_Change.h">
+      <Filter>02.GameObjects\Player\Jake</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -409,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Sky.cpp">
       <Filter>02.GameObjects\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Jake_Change.cpp">
+      <Filter>02.GameObjects\Player\Jake</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

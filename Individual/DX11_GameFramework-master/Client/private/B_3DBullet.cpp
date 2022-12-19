@@ -40,8 +40,8 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 	}
 	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 요기 (검색해서 각기 설정해 주면 된다.)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(180.f);
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 	}
 
@@ -136,8 +136,11 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 			if (m_pModelCom->Get_Finished())		// 플레이어랑 충돌하면 애니메이션이 끝나고 사라진다.
 				CGameObject::Set_Dead();
 		}
-		else if(m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
+		else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
+		{
 			CGameObject::Set_Dead();				// 플레이어랑 닿으면 사라진다.
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::MAGIC);	// 플레이어 State 을 변경한다.
+		}
 	}
 }
 
@@ -210,11 +213,10 @@ HRESULT CB_3DBullet::SetUp_ShaderResources()
 
 	return S_OK;
 }
-
 void CB_3DBullet::Magic_Tick(const _double & TimeDelta)
 {
-	m_pTransformCom->Go_Straight(TimeDelta);
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	m_pTransformCom->Go_Straight(TimeDelta * 1.5);
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 1.5);
 }
 
 void CB_3DBullet::Magic_LateTick(const _double & TimeDelta)

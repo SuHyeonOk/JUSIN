@@ -154,7 +154,6 @@ HRESULT CM_Magic_Man::SetUp_ShaderResources()
 
 void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 {
-
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 

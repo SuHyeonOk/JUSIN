@@ -184,6 +184,7 @@
     <ClInclude Include="..\public\Food.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
     <ClInclude Include="..\public\Jake.h" />
+    <ClInclude Include="..\public\Jake_Change.h" />
     <ClInclude Include="..\public\Jake_Weapon.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="..\private\Food.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
     <ClCompile Include="..\private\Jake.cpp" />
+    <ClCompile Include="..\private\Jake_Change.cpp" />
     <ClCompile Include="..\private\Jake_Weapon.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />

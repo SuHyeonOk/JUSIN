@@ -12,7 +12,7 @@ END
 
 BEGIN(Client)
 
-class CFinn_Change final : public CGameObject
+class CJake_Change final : public CGameObject
 {
 public:
 	typedef struct tagPlayerChangeInfo
@@ -25,9 +25,9 @@ public:
 	}CHANGEINFO;
 
 private:
-	CFinn_Change(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CFinn_Change(const CFinn_Change& rhs);
-	virtual ~CFinn_Change() = default;
+	CJake_Change(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CJake_Change(const CJake_Change& rhs);
+	virtual ~CJake_Change() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -51,9 +51,12 @@ private:
 private:
 	CHANGEINFO				m_tChangeInfo;
 
+private:
+
+
 public:
-	static	CFinn_Change*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject*	Clone(void* pArg = nullptr) override;
+	static CJake_Change* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };
 

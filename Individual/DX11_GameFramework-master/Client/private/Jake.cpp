@@ -2,7 +2,10 @@
 #include "..\public\Jake.h"
 
 #include "GameInstance.h"
+
+#include "Bone.h"
 #include "Jake_Weapon.h"
+#include "Jake_Change.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -92,6 +95,12 @@ void CJake::Late_Tick(_double TimeDelta)
 
 HRESULT CJake::Render()
 {
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		cout << " 렌더 안 들어옴 " << endl;
+		return S_OK;
+	}
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -107,7 +116,6 @@ HRESULT CJake::Render()
 
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
@@ -200,7 +208,7 @@ HRESULT CJake::Ready_Parts()
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bip001 L Finger0");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
-	//Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(WeaponDesc.pSocket);
 	Safe_AddRef(m_pTransformCom);
 
 	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Jake_Weapon"), &WeaponDesc);
@@ -213,7 +221,7 @@ HRESULT CJake::Ready_Parts()
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("R_Arm_Drill");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
-	//Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(WeaponDesc.pSocket);
 	Safe_AddRef(m_pTransformCom);
 
 	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Jake_Weapon"), &WeaponDesc);
@@ -226,7 +234,7 @@ HRESULT CJake::Ready_Parts()
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bip001 L Finger0");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
-	//Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(WeaponDesc.pSocket);
 	Safe_AddRef(m_pTransformCom);
 
 	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Jake_Weapon"), &WeaponDesc);
@@ -266,6 +274,12 @@ void CJake::Sword_LateTick(const _double & TimeDelta)
 
 void CJake::Player_Tick(_double TimeDelta)
 {
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		Magic_Tick(TimeDelta);
+		return;
+	}
+
 	// Player 가 아닐 때 계속 확인해야하는 기능
 	Change_Tick();
 	Cheering_Tick();
@@ -294,6 +308,10 @@ void CJake::Player_Tick(_double TimeDelta)
 	case CObj_Manager::PLAYERINFO::STUN:
 		Stun_Tick();
 		break;
+
+	//case CObj_Manager::PLAYERINFO::MAGIC:
+	//	Magic_Tick(TimeDelta);
+	//	break;
 	}
 
 	Anim_Change(TimeDelta);
@@ -424,7 +442,9 @@ void CJake::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
 #pragma region 이동
@@ -469,14 +489,16 @@ void CJake::Key_Input(_double TimeDelta)
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
 	}
 
-	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+	if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC && 
+		pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
+
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 #pragma endregion
 
-	if (pGameInstance->Key_Down(DIK_SPACE))
+	if (pGameInstance->Key_Down(DIK_SPACE) && m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
@@ -578,6 +600,37 @@ void CJake::Cheering_Tick()
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+}
+
+HRESULT CJake::Magic_Tick(_double TimeDelta)
+{
+	if (!m_bMagic)
+	{
+		m_bMagic = true;
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CJake_Change::CHANGEINFO		tChangeInfo;
+		tChangeInfo.eChange = tChangeInfo.MAGIC;
+		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake_Magic"), TEXT("Prototype_GameObject_Jake_Change"), &tChangeInfo)))
+			return E_FAIL;
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	m_bMagic_TimeAcc += TimeDelta;
+	if(10 < m_bMagic_TimeAcc)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_bMagic = false;
+		m_bMagic_TimeAcc = 0;
+	}
+
+	return S_OK;
 }
 
 void CJake::Anim_Change(_double TimeDelta)

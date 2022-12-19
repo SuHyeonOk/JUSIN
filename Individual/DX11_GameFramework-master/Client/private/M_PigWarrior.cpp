@@ -71,8 +71,6 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
 
-
-
 	return S_OK;
 }
 

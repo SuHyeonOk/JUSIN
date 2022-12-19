@@ -1,25 +1,22 @@
 #include "stdafx.h"
-#include "..\public\Finn_Change.h"
+#include "..\public\Jake_Change.h"
 
 #include "GameInstance.h"
-#include "Bone.h"
-
 #include "Obj_Manager.h"
-#include "Skill_Manager.h"
 
-CFinn_Change::CFinn_Change(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CJake_Change::CJake_Change(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CFinn_Change::CFinn_Change(const CFinn_Change & rhs)
+CJake_Change::CJake_Change(const CJake_Change & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CFinn_Change::Initialize_Prototype()
+HRESULT CJake_Change::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -27,10 +24,10 @@ HRESULT CFinn_Change::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CFinn_Change::Initialize(void * pArg)
+HRESULT CJake_Change::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
-		memcpy(&m_tChangeInfo, pArg, sizeof(m_tChangeInfo));
+		memcpy(&m_tChangeInfo, pArg, sizeof(CHANGEINFO));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -47,38 +44,40 @@ HRESULT CFinn_Change::Initialize(void * pArg)
 
 	if (CHANGEINFO::CHANGE::MAGIC == m_tChangeInfo.eChange)
 	{
-		m_wsTag = L"Finn_Magic";
-		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(90.f));
-		m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), XMConvertToRadians(90.f));
+		m_wsTag = L"Jake_Magic";
 	}
+
+	m_pTransformCom->Set_Pos();
+	m_pModelCom->Set_AnimIndex(0);
 
 	return S_OK;
 }
 
-void CFinn_Change::Tick(_double TimeDelta)
+void CJake_Change::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, CObj_Manager::GetInstance()->Get_Player_Transform());
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Look());
+
+	m_pModelCom->Play_Animation(TimeDelta);
+
+	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 	}
 }
 
-void CFinn_Change::Late_Tick(_double TimeDelta)
+void CJake_Change::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
-
-
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT   CFinn_Change::Render()
+HRESULT CJake_Change::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -90,10 +89,9 @@ HRESULT   CFinn_Change::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달하낟. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
-		m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 #ifdef _DEBUG
@@ -103,12 +101,11 @@ HRESULT   CFinn_Change::Render()
 	return S_OK;
 }
 
-void CFinn_Change::On_Collision(CGameObject * pOther)
+void CJake_Change::On_Collision(CGameObject * pOther)
 {
-
 }
 
-HRESULT CFinn_Change::SetUp_Components()
+HRESULT CJake_Change::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -125,7 +122,7 @@ HRESULT CFinn_Change::SetUp_Components()
 	if (CHANGEINFO::CHANGE::MAGIC == m_tChangeInfo.eChange)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Finn"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Jake"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
@@ -135,7 +132,6 @@ HRESULT CFinn_Change::SetUp_Components()
 		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 	}
 
-
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
@@ -143,7 +139,7 @@ HRESULT CFinn_Change::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CFinn_Change::SetUp_ShaderResources()
+HRESULT CJake_Change::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -163,31 +159,31 @@ HRESULT CFinn_Change::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CFinn_Change * CFinn_Change::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CJake_Change * CJake_Change::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CFinn_Change*		pInstance = new CFinn_Change(pDevice, pContext);
+	CJake_Change*		pInstance = new CJake_Change(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CFinn_Change");
+		MSG_BOX("Failed to Created : CJake_Change");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CFinn_Change::Clone(void * pArg)
+CGameObject * CJake_Change::Clone(void * pArg)
 {
-	CFinn_Change*		pInstance = new CFinn_Change(*this);
+	CJake_Change*		pInstance = new CJake_Change(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CFinn_Change");
+		MSG_BOX("Failed to Cloned : CJake_Change");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CFinn_Change::Free()
+void CJake_Change::Free()
 {
 	__super::Free();
 
@@ -195,5 +191,4 @@ void CFinn_Change::Free()
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
-
 }

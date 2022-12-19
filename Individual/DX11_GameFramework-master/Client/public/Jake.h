@@ -58,6 +58,8 @@ private:
 	void	Change_Tick();
 	void	Cheering_Tick();
 
+	HRESULT	Magic_Tick(_double TimeDelta);
+
 	void	Anim_Change(_double TimeDelta);
 
 private:
@@ -71,6 +73,9 @@ private:
 	//////////////////////////// 플레이어 일 때
 	_bool		m_bStru = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
+
+	_bool		m_bMagic = false;			// 몬스터 Magic 공격
+	_double		m_bMagic_TimeAcc = 0;
 
 	//////////////////////////// 플레이어가 아닐 때
 

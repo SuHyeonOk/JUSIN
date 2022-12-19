@@ -62,6 +62,32 @@ _vector			CObj_Manager::Get_Player_Transform()
 	return _vector();	// 없다면 쓰레기 값을 넘김
 }
 
+_vector			CObj_Manager::Get_Player_Look()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINN)
+	{
+		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+
+		_vector vPlayerPos;
+		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_LOOK);		
+		return vPlayerPos;
+	}
+	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
+	{
+		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+
+		_vector vPlayerPos;
+		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_LOOK);
+		return vPlayerPos;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return _vector();	// 없다면 쓰레기 값을 넘김
+}
+
 _bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
 {
 	// 현재 Player 를 확인하고, 그 Player 의 Collider 를 넘겨준다.
