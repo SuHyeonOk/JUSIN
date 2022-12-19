@@ -48,6 +48,8 @@ HRESULT CTerrain::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	m_vecPoints.resize(200);
+
 	return S_OK;
 }
 
@@ -86,7 +88,7 @@ HRESULT CTerrain::Render()
 		return E_FAIL;
 
 	m_pShaderCom->Begin(0);
-
+		
 	m_pVIBufferCom->Render();
 
 #ifdef _DEBUG
@@ -150,43 +152,100 @@ void CTerrain::ImGui_Navigation()
 	f4MousePos = pGameInstance->Get_MousePos();
 
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-		m_f4PickingPos = _float4(f4MousePos.x, f4MousePos.y, f4MousePos.z, f4MousePos.w);
-	
-	RELEASE_INSTANCE(CGameInstance);
-
-	for (_int i = 0; i < 3; ++i)	// 반복문을 돌면서, 나와 거리가 2안으로 들어오는 좌표가 있는지 확인한다.
 	{
-		_vector vPickingPos = XMLoadFloat4(&m_f4PickingPos);												// 현재 찍은 좌표
-		_vector vPoints = XMLoadFloat4(&_float4(m_f3TempPoints[i].x, m_f3TempPoints[i].y, m_f3TempPoints[i].z, 1.f));	// 바로 전에 찍었던 좌표들
+		++m_iButtonCount;
+		m_f4PickingPos = _float4(f4MousePos.x, f4MousePos.y, f4MousePos.z, f4MousePos.w);
+	}
 
-		_vector vDistance = vPoints - vPickingPos;					// 기존 픽킹 자리 - 현재 픽킹 자리
-		_float fRange = XMVectorGetX(XMVector3Length(vDistance));	// 사이의 거리를 구한다.
+	for (auto& pPoints : m_vecPoints)
+	{
+		_vector vPickingPos = XMLoadFloat4(&m_f4PickingPos);														// 현재 찍은 좌표
+		_vector vPoints_A = XMLoadFloat4(&_float4(pPoints.Point_A.x, pPoints.Point_A.y, pPoints.Point_A.z, 1.f));	// 바로 이전에 찍은 좌표
+		_vector vPoints_B = XMLoadFloat4(&_float4(pPoints.Point_B.x, pPoints.Point_B.y, pPoints.Point_B.z, 1.f));	
+		_vector vPoints_C = XMLoadFloat4(&_float4(pPoints.Point_C.x, pPoints.Point_C.y, pPoints.Point_C.z, 1.f));	
+		
+		_vector vDistance_A = vPoints_A - vPickingPos;																// 기존 픽킹 자리 - 현재 픽킹 자리
+		_vector vDistance_B = vPoints_B - vPickingPos;																
+		_vector vDistance_C = vPoints_C - vPickingPos;																
 
-		if (2.f < fRange)																						// 거리가 2 보다 크다면
-			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);	// 👉 새로 입력한 좌표를 넣어준다.
-		else																									// 거리가 2 보다 작다면
+		_float fRange_A = XMVectorGetX(XMVector3Length(vDistance_A));												// 사이의 거리를 구한다.
+		_float fRange_B = XMVectorGetX(XMVector3Length(vDistance_B));												
+		_float fRange_C = XMVectorGetX(XMVector3Length(vDistance_C));												
+
+		if (0.3f < fRange_A)
+			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);	
+		else																									
+			m_f4PickingPos = _float4(pPoints.Point_A.x, pPoints.Point_A.y, pPoints.Point_A.z, 1.f);
+
+		if (0.3f < fRange_B)
+			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);
+		else
+			m_f4PickingPos = _float4(pPoints.Point_B.x, pPoints.Point_B.y, pPoints.Point_B.z, 1.f);
+
+		if (0.3f < fRange_C)
+			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);
+		else
 		{
-			m_f4PickingPos = _float4(m_f3TempPoints[i].x, m_f3TempPoints[i].y, m_f3TempPoints[i].z, 1.f);		// 👉 이전에 입력한 좌표를 넣어준다.
+			m_f4PickingPos = _float4(pPoints.Point_C.x, pPoints.Point_C.y, pPoints.Point_C.z, 1.f);
 			break;
 		}
 	}
-	
+
 	// 하나하나찍기
-	if (ImGui::Button("0_PointsSave"))
+	if(1 == m_iButtonCount)
 		m_f3Points[0] = _float3(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z);
-
-	if (ImGui::Button("1_PointsSave"))
+	else if (2 == m_iButtonCount)
 		m_f3Points[1] = _float3(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z);
-
-	if (ImGui::Button("2_PointsSave"))
+	else if (3 == m_iButtonCount)
+	{
+		m_iButtonCount = 0;
 		m_f3Points[2] = _float3(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z);
+	}
+
+	// 벡터 노멀라이즈 하고, 내적
+	// 양수, 음수 음수일 경우 두 점의 위치를 바꿔주면 된다.
+	// 01 / 02
+
+	//if (0 == m_iButtonCount)
+	//{
+	//	// 반 시계 방향 예외처리
+	//	_vector	vTest0_A = XMVector3Normalize(XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f));
+	//	_vector	vTest0_B = XMVector3Normalize(XMVectorSet(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z, 1.f));
+	//	_vector vTest0 = XMVector3Dot(vTest0_A, vTest0_B);
+
+	//	_vector	vTest1_A = XMVector3Normalize(XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f));
+	//	_vector	vTest1_C = XMVector3Normalize(XMVectorSet(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z, 1.f));
+	//	_vector vTest1 = XMVector3Dot(vTest0_A, vTest1_C);
+
+	//	_vector vResult = XMVector3Cross(vTest0, vTest1);
+
+	//	if (!XMVector3Equal(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), vResult))
+	//	{
+	//		_float3 f3TempPoints = _float3(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z);
+	//		m_f3Points[1] = _float3(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z);
+	//		m_f3Points[2] = _float3(f3TempPoints.x, f3TempPoints.y, f3TempPoints.z);
+	//	}
+	//}
+
+	if (ImGui::Button("Delegate"))
+		m_vecPoints.pop_back();
 
 	// 전체적으로 담기
-	if (ImGui::Button("Navigation Save"))
+	if (pGameInstance->Key_Down(DIK_C)) //(ImGui::Button("Navigation Save"))
 	{
-		m_f3TempPoints[0] = _float3(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z);
-		m_f3TempPoints[1] = _float3(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z);
-		m_f3TempPoints[2] = _float3(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z);
+		if (0 != m_iButtonCount)
+		{
+			MSG_BOX("점 3개를 다 찍지 않았습니다.!");
+			ImGui::End();
+			return;
+		}
+
+		POINTS points;
+		points.Point_A = _float3(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z);
+		points.Point_B = _float3(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z);
+		points.Point_C = _float3(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z);
+
+		m_vecPoints.push_back(points);
 
 		wofstream fout("../../Data/Navigation.txt", ios::out | ios::app);
 		if (fout.fail())
@@ -202,17 +261,12 @@ void CTerrain::ImGui_Navigation()
 		fout.close();
 	}
 
-	if (ImGui::Button("Data_txt"))
+	if (pGameInstance->Key_Down(DIK_V)) // (ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/Navigation.txt", SW_SHOW);
 
+	RELEASE_INSTANCE(CGameInstance);
+
 	ImGui::End();
-
-
-	//_matrix	Temp;
-	//XMPlaneTransform(XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f), Temp);
-
-	//XMVector3Cross()
-
 }
 
 CTerrain * CTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -242,6 +296,8 @@ CGameObject * CTerrain::Clone(void * pArg)
 void CTerrain::Free()
 {
 	__super::Free();
+
+	m_vecPoints.clear();
 
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pVIBufferCom);
