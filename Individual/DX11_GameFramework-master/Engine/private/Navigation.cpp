@@ -142,9 +142,8 @@ _bool CNavigation::isMove_OnNavigation(_fvector TargetPos)
 
 	/* 움직이고 난 결과위치가 쎌 안에 있다면.  */
 	if (true == m_Cells[m_NaviDesc.iCurrentIndex]->isIn(TargetPos, &iNeighborIndex))
-		return true; // 움직여. 
-					 /* 움직이고 난 결과위치가 이쎌을 벗어난다면. */
-	else
+		return true;	// 움직여. 
+	else 				/* 움직이고 난 결과위치가 이쎌을 벗어난다면. */
 	{
 		/* 나간방향으로 이웃이 있었다면. */
 		if (-1 != iNeighborIndex)

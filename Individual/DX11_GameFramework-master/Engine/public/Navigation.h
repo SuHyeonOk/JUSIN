@@ -10,6 +10,7 @@ public:
 	typedef struct tagNavigationDesc
 	{
 		_int		iCurrentIndex = -1;
+		_int		iRiver = 2;
 	}NAVIDESC;
 
 private:

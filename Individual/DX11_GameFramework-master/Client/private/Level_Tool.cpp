@@ -157,9 +157,9 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
 		return E_FAIL;
 
-	// 스카이 박스
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_Sky"), &tMonsterDesc)))
-		return E_FAIL;
+	//// 스카이 박스
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_Sky"), &tMonsterDesc)))
+	//	return E_FAIL;
 
 
 	RELEASE_INSTANCE(CGameInstance);

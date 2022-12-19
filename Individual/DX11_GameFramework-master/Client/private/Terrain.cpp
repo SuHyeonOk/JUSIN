@@ -84,11 +84,11 @@ HRESULT CTerrain::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	//if (FAILED(SetUp_ShaderResources()))
+	//	return E_FAIL;
 
-	m_pShaderCom->Begin(0);
-		
+	//m_pShaderCom->Begin(0);
+
 	m_pVIBufferCom->Render();
 
 #ifdef _DEBUG
@@ -115,10 +115,10 @@ HRESULT CTerrain::SetUp_Components()
 		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"), TEXT("Com_Texture"),
-		(CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	///* For.Com_Texture */
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"), TEXT("Com_Texture"),
+	//	(CComponent**)&m_pTextureCom)))
+	//	return E_FAIL;
 
 	/* For.Com_Navigation */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
@@ -143,8 +143,8 @@ HRESULT CTerrain::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResources(m_pShaderCom, "g_DiffuseTexture")))
-		return E_FAIL;
+	//if (FAILED(m_pTextureCom->Bind_ShaderResources(m_pShaderCom, "g_DiffuseTexture")))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -180,17 +180,19 @@ void CTerrain::ImGui_Navigation()
 		_float fRange_B = XMVectorGetX(XMVector3Length(vDistance_B));												
 		_float fRange_C = XMVectorGetX(XMVector3Length(vDistance_C));												
 
-		if (0.3f < fRange_A)
+		_float fSaveRange = 0.3f;
+
+		if (fSaveRange < fRange_A)
 			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);	
 		else																									
 			m_f4PickingPos = _float4(pPoints.Point_A.x, pPoints.Point_A.y, pPoints.Point_A.z, 1.f);
 
-		if (0.3f < fRange_B)
+		if (fSaveRange < fRange_B)
 			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);
 		else
 			m_f4PickingPos = _float4(pPoints.Point_B.x, pPoints.Point_B.y, pPoints.Point_B.z, 1.f);
 
-		if (0.3f < fRange_C)
+		if (fSaveRange < fRange_C)
 			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);
 		else
 		{
@@ -210,9 +212,11 @@ void CTerrain::ImGui_Navigation()
 		m_f3Points[2] = _float3(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z);
 	}
 
-	// 벡터 노멀라이즈 하고, 내적
-	// 양수, 음수 음수일 경우 두 점의 위치를 바꿔주면 된다.
-	// 01 / 02
+	// -40.4735|0|29.9112|-38.6497|0|29.9748|-38.0559|0|27.6982
+
+	//// 벡터 노멀라이즈 하고, 내적
+	//// 양수, 음수 음수일 경우 두 점의 위치를 바꿔주면 된다.
+	//// 01 / 02
 
 	//if (0 == m_iButtonCount)
 	//{
@@ -239,7 +243,7 @@ void CTerrain::ImGui_Navigation()
 		m_vecPoints.pop_back();
 
 	// 전체적으로 담기
-	if (pGameInstance->Key_Down(DIK_C)) //(ImGui::Button("Navigation Save"))
+	if (pGameInstance->Key_Down(DIK_3)) //(ImGui::Button("Navigation Save"))
 	{
 		if (0 != m_iButtonCount)
 		{
@@ -269,7 +273,7 @@ void CTerrain::ImGui_Navigation()
 		fout.close();
 	}
 
-	if (pGameInstance->Key_Down(DIK_V)) // (ImGui::Button("Data_txt"))
+	if (pGameInstance->Key_Down(DIK_4)) // (ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/Navigation.txt", SW_SHOW);
 
 	RELEASE_INSTANCE(CGameInstance);
