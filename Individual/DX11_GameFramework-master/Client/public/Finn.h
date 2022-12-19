@@ -65,7 +65,7 @@ private:
 	void	Cheering_Tick();
 
 	void	TreeWitch_Tick();
-	void	Magic_Tick(_double TimeDelta);
+	HRESULT	Magic_Tick(_double TimeDelta);
 
 	void	Anim_Change(_double TimeDelta);
 
@@ -86,8 +86,6 @@ private:
 
 	_bool		m_bStru = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
-
-	_double		m_dMagic_TimeAcc = 0;
 
 	_bool		m_bSpace_Attack_2 = false;
 	_bool		m_bSpace_Attack_3 = false;

@@ -218,26 +218,21 @@ void CTerrain::ImGui_Navigation()
 	//// 양수, 음수 음수일 경우 두 점의 위치를 바꿔주면 된다.
 	//// 01 / 02
 
-	//if (0 == m_iButtonCount)
-	//{
-	//	// 반 시계 방향 예외처리
-	//	_vector	vTest0_A = XMVector3Normalize(XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f));
-	//	_vector	vTest0_B = XMVector3Normalize(XMVectorSet(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z, 1.f));
-	//	_vector vTest0 = XMVector3Dot(vTest0_A, vTest0_B);
-
-	//	_vector	vTest1_A = XMVector3Normalize(XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f));
-	//	_vector	vTest1_C = XMVector3Normalize(XMVectorSet(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z, 1.f));
-	//	_vector vTest1 = XMVector3Dot(vTest0_A, vTest1_C);
-
-	//	_vector vResult = XMVector3Cross(vTest0, vTest1);
-
-	//	if (!XMVector3Equal(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), vResult))
-	//	{
-	//		_float3 f3TempPoints = _float3(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z);
-	//		m_f3Points[1] = _float3(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z);
-	//		m_f3Points[2] = _float3(f3TempPoints.x, f3TempPoints.y, f3TempPoints.z);
-	//	}
-	//}
+	if (0 == m_iButtonCount)
+	{
+		// 반 시계 방향 예외처리
+		_vector	vDiatance_A = XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f) - XMVectorSet(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z, 1.f);
+		_vector	vDiatance_B = XMVectorSet(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z, 1.f) - XMVectorSet(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z, 1.f);
+		_vector vCross = XMVector3Cross(vDiatance_A, vDiatance_B);
+		_vector vRelease = XMVector3Dot(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMVector3Normalize(vCross));
+		
+		if (0 > XMVectorGetY(vRelease))
+		{
+			_float3 f3TempPoints = _float3(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z);
+			m_f3Points[1] = _float3(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z);
+			m_f3Points[2] = _float3(f3TempPoints.x, f3TempPoints.y, f3TempPoints.z);
+		}
+	}
 
 	if (ImGui::Button("Delegate"))
 		m_vecPoints.pop_back();

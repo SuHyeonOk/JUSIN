@@ -16,21 +16,14 @@ BEGIN(Client)
 class CFinn_Change final : public CGameObject
 {
 public:
-	typedef struct tagChangeDesc
+	typedef struct tagPlayerChangeInfo
 	{
-		_float4x4			PivotMatrix;
-		CBone*				pSocket;
-		CTransform*			pTargetTransform;
+		enum CHANGE { MAGIC, CHANGE_END };
+		CHANGE		eChange;
 
-		enum	CHANGE { MAGIC, CHANGE_END };
-		CHANGE	eChange = CHANGE_END;
+		_float3		Pos;
 
-	}CHANGEDESC;
-
-private:
-	enum STATE { IDLE, MOVE, STATE_END };
-	void		Set_State(STATE eState) {m_eState = eState;}
-	STATE		m_eState = STATE_END;
+	}CHANGEINFO;
 
 private:
 	CFinn_Change(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -52,15 +45,12 @@ private:
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
 
-	CHANGEDESC				m_tChangeDesc;
-
-	_float4x4				m_SocketMatrix;
-
-	_bool					m_OnMove = false;
-
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
+
+private:
+	CHANGEINFO				m_tChangeInfo;
 
 public:
 	static	CFinn_Change* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

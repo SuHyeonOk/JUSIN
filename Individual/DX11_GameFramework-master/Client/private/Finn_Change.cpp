@@ -29,20 +29,17 @@ HRESULT CFinn_Change::Initialize_Prototype()
 
 HRESULT CFinn_Change::Initialize(void * pArg)
 {
-	if (CHANGEDESC::CHANGE::MAGIC == m_tChangeDesc.eChange)
+	if(CHANGEINFO::CHANGE::MAGIC == m_tChangeInfo.eChange)
 		m_wsTag = L"Finn_Magic";
 
 	if (nullptr != pArg)
-		memcpy(&m_tChangeDesc, pArg, sizeof(m_tChangeDesc));
+		memcpy(&m_tChangeInfo, pArg, sizeof(m_tChangeInfo));
 
 	if (FAILED(__super::Initialize(&pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
-	m_eState = IDLE;
-	m_pModelCom->Set_AnimIndex(5);
 
 	return S_OK;
 }
@@ -56,54 +53,6 @@ void CFinn_Change::Tick(_double TimeDelta)
 void CFinn_Change::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	_matrix			SocketMatrix = m_tChangeDesc.pSocket->Get_OffsetMatrix() *
-		m_tChangeDesc.pSocket->Get_CombindMatrix() * XMLoadFloat4x4(&m_tChangeDesc.PivotMatrix);
-
-	SocketMatrix.r[0] = XMVector3Normalize(SocketMatrix.r[0]);
-	SocketMatrix.r[1] = XMVector3Normalize(SocketMatrix.r[1]);
-	SocketMatrix.r[2] = XMVector3Normalize(SocketMatrix.r[2]);
-
-	SocketMatrix = SocketMatrix * m_tChangeDesc.pTargetTransform->Get_WorldMatrix();
-
-	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
-
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
-
-
-	//switch (CSkill_Manager::GetInstance()->Get_Player_Skill().eMagic)
-	//{
-	//case CSkill_Manager::PLAYERSKILL::IDLE:
-	//	m_pModelCom->Set_AnimIndex(4);
-	//	break;
-	//case CSkill_Manager::PLAYERSKILL::RUN:
-	//	m_pModelCom->Set_AnimIndex(5);
-	//	break;
-	//}
-
-	
-
-	//switch (CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	//{
-	//case CObj_Manager::PLAYERINFO::STATE::IDLE:
-	//	m_pModelCom->Set_AnimIndex(4);
-	//	break;
-	//case CObj_Manager::PLAYERINFO::STATE::RUN:
-	//	m_pModelCom->Set_AnimIndex(5);
-	//	break;
-	//case CObj_Manager::PLAYERINFO::STATE::ATTACK:
-	//	m_pModelCom->Set_AnimIndex(0, false);
-	//	break;
-	//case CObj_Manager::PLAYERINFO::STATE::HIT:
-	//	m_pModelCom->Set_AnimIndex(2, false);
-	//	break;
-	//}
-
-
-
-
-
-
 
 	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
@@ -156,7 +105,7 @@ HRESULT CFinn_Change::SetUp_Components()
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	if (CHANGEDESC::CHANGE::MAGIC == m_tChangeDesc.eChange)
+	if (CHANGEINFO::CHANGE::MAGIC == m_tChangeInfo.eChange)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Finn"), TEXT("Com_Model"),
@@ -182,8 +131,6 @@ HRESULT CFinn_Change::SetUp_ShaderResources()
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 
-	// g_WorldMatrix * SocketMatrix;
-
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -192,14 +139,6 @@ HRESULT CFinn_Change::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Set_Matrix("g_SocketMatrix", &m_SocketMatrix)))
-		return E_FAIL;
-
-
-	/* For.Lights */
-	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (nullptr == pLightDesc)
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -234,12 +173,6 @@ CGameObject * CFinn_Change::Clone(void * pArg)
 void CFinn_Change::Free()
 {
 	__super::Free();
-
-	if (true == m_isCloned)
-	{
-		Safe_Release(m_tChangeDesc.pSocket);
-		Safe_Release(m_tChangeDesc.pTargetTransform);
-	}
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
