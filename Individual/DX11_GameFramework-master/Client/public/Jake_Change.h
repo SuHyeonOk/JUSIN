@@ -49,10 +49,12 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
-	CHANGEINFO				m_tChangeInfo;
+	void				KeyInput(const _double & TimeDelta);
 
 private:
-
+	CHANGEINFO				m_tChangeInfo;
+	
+	_bool					m_OnMove = false;
 
 public:
 	static CJake_Change* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

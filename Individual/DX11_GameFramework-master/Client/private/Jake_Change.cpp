@@ -57,8 +57,7 @@ void CJake_Change::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, CObj_Manager::GetInstance()->Get_Player_Transform());
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Look());
+	KeyInput(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -157,6 +156,72 @@ HRESULT CJake_Change::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CJake_Change::KeyInput(const _double & TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (m_OnMove)
+	{
+		m_pTransformCom->Go_Straight(TimeDelta);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+	}
+
+#pragma region ÀÌµ¿
+	if (pGameInstance->Key_Pressing(DIK_UP))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
+
+		if (pGameInstance->Key_Pressing(DIK_UP))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
+
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_LEFT))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
+
+		if (pGameInstance->Key_Pressing(DIK_UP))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+
+	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+	{
+		m_OnMove = false;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
+#pragma endregion
+
+	if (pGameInstance->Key_Down(DIK_SPACE))
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 CJake_Change * CJake_Change::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

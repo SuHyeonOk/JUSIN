@@ -725,35 +725,35 @@ void CFinn::Anim_Change(_double TimeDelta)
 	{
 		switch (m_tPlayerInfo.eState)
 		{
-		case CObj_Manager::PLAYERINFO::IDLE:
+		case CObj_Manager::PLAYERINFO::STATE::IDLE:
 			m_pModelCom->Set_AnimIndex(39);
 			break;
 
-		case CObj_Manager::PLAYERINFO::RUN:
+		case CObj_Manager::PLAYERINFO::STATE::RUN:
 			m_pModelCom->Set_AnimIndex(49);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ROLL:
+		case CObj_Manager::PLAYERINFO::STATE::ROLL:
 			m_pModelCom->Set_AnimIndex(48, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK:
+		case CObj_Manager::PLAYERINFO::STATE::ATTACK:
 			m_pModelCom->Set_AnimIndex(5, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::HIT:
+		case CObj_Manager::PLAYERINFO::STATE::HIT:
 			m_pModelCom->Set_AnimIndex(35, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STUN:
+		case CObj_Manager::PLAYERINFO::STATE::STUN:
 			m_pModelCom->Set_AnimIndex(51, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::CHANGE:
+		case CObj_Manager::PLAYERINFO::STATE::CHANGE:
 			m_pModelCom->Set_AnimIndex(31, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::CHEERING:
+		case CObj_Manager::PLAYERINFO::STATE::CHEERING:
 			m_pModelCom->Set_AnimIndex(14, false);
 			break;
 		}

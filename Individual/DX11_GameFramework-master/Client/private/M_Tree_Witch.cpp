@@ -313,7 +313,7 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 			m_bAttack = true;
 
 			// 플레이어의 애니메이션 상태 변경하기
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
+			//CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		}
 	}
 }

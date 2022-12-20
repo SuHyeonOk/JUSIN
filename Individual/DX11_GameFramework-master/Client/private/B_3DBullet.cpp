@@ -128,11 +128,12 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 		CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
 
 		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
 		{
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+
 			if (m_pModelCom->Get_Finished())		// 플레이어랑 충돌하면 애니메이션이 끝나고 사라진다.
 				CGameObject::Set_Dead();
 		}

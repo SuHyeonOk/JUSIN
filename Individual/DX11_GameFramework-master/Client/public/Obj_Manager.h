@@ -19,8 +19,10 @@ public:
 		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
 		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
 
-		enum STATE { IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, STUN, DIE, CHANGE, CHEERING, 
-					 TREEWITCH, MAGIC, STATE_END };
+		enum STATE {
+			IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, STUN, DIE, CHANGE, CHEERING,
+			TREEWITCH, MAGIC, STATE_END
+		};
 		STATE		eState;		// 현재 상태
 		STATE		ePreState;	// 이전 상태
 
@@ -66,19 +68,21 @@ public:
 	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
-	_int				Get_Player_Attack() { return m_tPlayerInfo.iAttack; }	
+	_int				Get_Player_Attack() { return m_tPlayerInfo.iAttack; }
 
 	// UI 관련
-	void				Set_Player_Exp(_int eExp)		{ m_tPlayerInfo.iExp += eExp; }
-	void				Set_Player_PushHp(_int eHp)		{ if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
+	void				Set_Player_Exp(_int eExp) { m_tPlayerInfo.iExp += eExp; }
+	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
 	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
 
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.
 	_vector				CObj_Manager::Get_Player_Transform();					// 현재 Player 의 POS 를 가져온다.
-	_vector				CObj_Manager::Get_Player_Look();					// 현재 Player 의 LOOK 를 가져온다.
 	_float				CObj_Manager::Get_Player_Distance(_fvector	_MyPos);	// Player 와 내 거리
-	_bool				CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END]);					// 현재 Player 의 Collider 을 가져온다.
+
+	// 플레이어 스킬에서 Rotation() 을 위해서
+	_float				Get_Angle() { return XMConvertToRadians(m_fAngle); }
+	void				Set_Angle(_float fAngle) { m_fAngle = fAngle; }
 
 public:
 	HRESULT		CObj_Manager::Initialized();
@@ -94,6 +98,8 @@ private:
 
 private:
 	_bool			m_bShield = false;
+
+	_float			m_fAngle = 0.f;
 
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn

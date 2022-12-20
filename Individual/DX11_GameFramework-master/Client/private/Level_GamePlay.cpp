@@ -48,11 +48,11 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Garden"))))
 		return E_FAIL;
 
-	// 파일 읽기
-	Load_Food();
-	Load_Coin();
-	Load_Page();
-	Load_Monster();
+	//// 파일 읽기
+	//Load_Food();
+	//Load_Coin();
+	//Load_Page();
+	//Load_Monster();
 
 
 	return S_OK;

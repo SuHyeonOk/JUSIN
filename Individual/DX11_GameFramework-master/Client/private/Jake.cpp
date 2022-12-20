@@ -95,11 +95,8 @@ void CJake::Late_Tick(_double TimeDelta)
 
 HRESULT CJake::Render()
 {
-	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	{
-		cout << " 렌더 안 들어옴 " << endl;
-		return S_OK;
-	}
+	if (m_bMagic)
+		return E_FAIL;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -274,7 +271,7 @@ void CJake::Sword_LateTick(const _double & TimeDelta)
 
 void CJake::Player_Tick(_double TimeDelta)
 {
-	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (m_bMagic)
 	{
 		Magic_Tick(TimeDelta);
 		return;
@@ -309,9 +306,9 @@ void CJake::Player_Tick(_double TimeDelta)
 		Stun_Tick();
 		break;
 
-	//case CObj_Manager::PLAYERINFO::MAGIC:
-	//	Magic_Tick(TimeDelta);
-	//	break;
+	case CObj_Manager::PLAYERINFO::MAGIC:
+		Magic_Tick(TimeDelta);
+		break;
 	}
 
 	Anim_Change(TimeDelta);
@@ -418,6 +415,9 @@ void CJake::Check_Follow(_double TimeDelta)
 
 void CJake::Key_Input(_double TimeDelta)
 {
+	if (m_bMagic)
+		return;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
@@ -452,54 +452,84 @@ void CJake::Key_Input(_double TimeDelta)
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+		CObj_Manager::GetInstance()->Set_Angle(0.f);
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+			CObj_Manager::GetInstance()->Set_Angle(45.f);
+		}
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+			CObj_Manager::GetInstance()->Set_Angle(315.f);
+		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
+		CObj_Manager::GetInstance()->Set_Angle(90.f);
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+			CObj_Manager::GetInstance()->Set_Angle(45.f);
+		}
+
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+			CObj_Manager::GetInstance()->Set_Angle(225.f);
+		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
+		CObj_Manager::GetInstance()->Set_Angle(180.f);
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+			CObj_Manager::GetInstance()->Set_Angle(135.f);
+		}
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+			CObj_Manager::GetInstance()->Set_Angle(225.f);
+		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
+		CObj_Manager::GetInstance()->Set_Angle(270.f);
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+			CObj_Manager::GetInstance()->Set_Angle(315.f);
+		}
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
+		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+			CObj_Manager::GetInstance()->Set_Angle(225.f);
+		}
 	}
 
-	if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC && 
-		pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
+	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
 
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 #pragma endregion
 
-	if (pGameInstance->Key_Down(DIK_SPACE) && m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+	if (pGameInstance->Key_Down(DIK_SPACE))
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -512,7 +542,7 @@ void CJake::Space_Attack_Tick(_double TimeDelta)
 	m_OnMove = false;
 
 	if (m_pModelCom->Get_Finished())
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 }
 
 void CJake::Control_Tick(_double TimeDelta)
@@ -532,7 +562,7 @@ void CJake::Roolling_Tick(_double TimeDelta)
 	if (!m_pModelCom->Get_Finished())
 		m_pTransformCom->Go_Straight(TimeDelta, 4.f);
 	else
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 }
 
 void CJake::Hit_Tick(_double TimeDelta)
@@ -545,7 +575,7 @@ void CJake::Hit_Tick(_double TimeDelta)
 		m_pTransformCom->Go_Backward(TimeDelta);
 
 	if (m_pModelCom->Get_Finished())
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 }
 
 void CJake::Stun_Tick()
@@ -585,7 +615,7 @@ void CJake::Change_Tick()
 	m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
 
 	if (m_pModelCom->Get_Finished())
-		CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.IDLE);
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
 void CJake::Cheering_Tick()
@@ -604,10 +634,12 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
+	// m_bMagic -> ture 라면? KeyInput, Render 를 호출하지 않는다.
 	if (!m_bMagic)
 	{
 		m_bMagic = true;
 
+		// Magic 모델 생성
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
@@ -622,6 +654,18 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 		RELEASE_INSTANCE(CGameInstance);
 	}
 
+
+
+	// Magic 모델을 따라간다.
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake_Magic"), TEXT("Com_Transform"), 0));
+
+	_vector vChangePos;
+	vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
+	RELEASE_INSTANCE(CGameInstance);
+
+	// Get_Dead 가 true 라면 아이들로 변경한다.
 	m_bMagic_TimeAcc += TimeDelta;
 	if(10 < m_bMagic_TimeAcc)
 	{
@@ -635,48 +679,51 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 
 void CJake::Anim_Change(_double TimeDelta)
 {
+	//if (m_bMagic)
+	//	return;
+
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
 	{
 		switch (m_tPlayerInfo.eState)
 		{
-		case CObj_Manager::PLAYERINFO::IDLE:
+		case CObj_Manager::PLAYERINFO::STATE::IDLE:
 			m_pModelCom->Set_AnimIndex(42);
 			break;
 
-		case CObj_Manager::PLAYERINFO::RUN:
+		case CObj_Manager::PLAYERINFO::STATE::RUN:
 			m_pModelCom->Set_AnimIndex(53);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ROLL:
+		case CObj_Manager::PLAYERINFO::STATE::ROLL:
 			m_pModelCom->Set_AnimIndex(52, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::ATTACK:
+		case CObj_Manager::PLAYERINFO::STATE::ATTACK:
 			m_pModelCom->Set_AnimIndex(4, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::CONTROL:
+		case CObj_Manager::PLAYERINFO::STATE::CONTROL:
 			m_pModelCom->Set_AnimIndex(6);
 			break;
 
-		case CObj_Manager::PLAYERINFO::HIT:
+		case CObj_Manager::PLAYERINFO::STATE::HIT:
 			m_pModelCom->Set_AnimIndex(38, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STUN:
+		case CObj_Manager::PLAYERINFO::STATE::STUN:
 			m_pModelCom->Set_AnimIndex(56, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::CHANGE:
+		case CObj_Manager::PLAYERINFO::STATE::CHANGE:
 			m_pModelCom->Set_AnimIndex(33, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::CHEERING:
+		case CObj_Manager::PLAYERINFO::STATE::CHEERING:
 			m_pModelCom->Set_AnimIndex(9, false);
 			break;
 		}
 
-		if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)	// 내가 현재 플레이어 일 때만 상태를 변경한다.
 			CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
 		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
 	}
