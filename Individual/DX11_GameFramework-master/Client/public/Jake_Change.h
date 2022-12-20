@@ -8,6 +8,7 @@ class CShader;
 class CRenderer;
 class CModel;
 class CCollider;
+class CNavigation;
 END
 
 BEGIN(Client)
@@ -17,7 +18,7 @@ class CJake_Change final : public CGameObject
 public:
 	typedef struct tagPlayerChangeInfo
 	{
-		enum CHANGE { MAGIC, CHANGE_END };
+		enum CHANGE { FINN, JAKE, CHANGE_END };
 		CHANGE		eChange;
 
 		_float3		f3Pos;
@@ -43,6 +44,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
+	CNavigation*			m_pNavigationCom = nullptr;
 
 private:
 	HRESULT SetUp_Components();
@@ -50,6 +52,10 @@ private:
 
 private:
 	void				KeyInput(const _double & TimeDelta);
+
+	void				Skill_Tick(const _double & TimeDelta);
+	void				Attack_Tick();
+	void				Hit_Tick();
 
 private:
 	CHANGEINFO				m_tChangeInfo;

@@ -74,8 +74,8 @@ private:
 	_bool		m_bStru = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
-	_bool		m_bMagic = false;			// 몬스터 Magic 공격
-	_double		m_bMagic_TimeAcc = 0;
+	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
+	_double		m_bSkillClone_TimeAcc = 0;
 
 	//////////////////////////// 플레이어가 아닐 때
 

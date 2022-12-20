@@ -95,7 +95,8 @@ void CJake::Late_Tick(_double TimeDelta)
 
 HRESULT CJake::Render()
 {
-	if (m_bMagic)
+	// 플레이어 스킬 상태일때 Player 의 Render 를 잠시 꺼둔다.
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return E_FAIL;
 
 	if (FAILED(__super::Render()))
@@ -271,12 +272,6 @@ void CJake::Sword_LateTick(const _double & TimeDelta)
 
 void CJake::Player_Tick(_double TimeDelta)
 {
-	if (m_bMagic)
-	{
-		Magic_Tick(TimeDelta);
-		return;
-	}
-
 	// Player 가 아닐 때 계속 확인해야하는 기능
 	Change_Tick();
 	Cheering_Tick();
@@ -319,8 +314,13 @@ void CJake::Current_Player(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
-		Key_Input(TimeDelta);
 		Check_Follow(TimeDelta);
+
+		// 플레이어의 스킬 때 키 입력을 받지 않는다.
+		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			Key_Input(TimeDelta);
+		else
+			m_OnMove = false;
 	}
 	else
 		Player_Follow(TimeDelta);
@@ -415,9 +415,6 @@ void CJake::Check_Follow(_double TimeDelta)
 
 void CJake::Key_Input(_double TimeDelta)
 {
-	if (m_bMagic)
-		return;
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
@@ -442,9 +439,7 @@ void CJake::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		m_pTransformCom->Go_Straight(TimeDelta);
-
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
 #pragma region 이동
@@ -452,84 +447,52 @@ void CJake::Key_Input(_double TimeDelta)
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
-		CObj_Manager::GetInstance()->Set_Angle(0.f);
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-			CObj_Manager::GetInstance()->Set_Angle(45.f);
-		}
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-			CObj_Manager::GetInstance()->Set_Angle(315.f);
-		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
-		CObj_Manager::GetInstance()->Set_Angle(90.f);
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-			CObj_Manager::GetInstance()->Set_Angle(45.f);
-		}
-
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-			CObj_Manager::GetInstance()->Set_Angle(225.f);
-		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
-		CObj_Manager::GetInstance()->Set_Angle(180.f);
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
-			CObj_Manager::GetInstance()->Set_Angle(135.f);
-		}
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-			CObj_Manager::GetInstance()->Set_Angle(225.f);
-		}
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
 		m_OnMove = true;
 		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
-		CObj_Manager::GetInstance()->Set_Angle(270.f);
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-			CObj_Manager::GetInstance()->Set_Angle(315.f);
-		}
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
-		{
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-			CObj_Manager::GetInstance()->Set_Angle(225.f);
-		}
 	}
 
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
-
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -634,10 +597,10 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
-	// m_bMagic -> ture 라면? KeyInput, Render 를 호출하지 않는다.
-	if (!m_bMagic)
+	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
+	if (!m_bSkill_Clone)
 	{
-		m_bMagic = true;
+		m_bSkill_Clone = true;
 
 		// Magic 모델 생성
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -645,7 +608,7 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
 		CJake_Change::CHANGEINFO		tChangeInfo;
-		tChangeInfo.eChange = tChangeInfo.MAGIC;
+		tChangeInfo.eChange = tChangeInfo.JAKE;
 		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -654,24 +617,31 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 		RELEASE_INSTANCE(CGameInstance);
 	}
 
-
-
 	// Magic 모델을 따라간다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake_Magic"), TEXT("Com_Transform"), 0));
 
-	_vector vChangePos;
-	vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
-	RELEASE_INSTANCE(CGameInstance);
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (nullptr == pChangeTransformCom)
+	{
+		// 변신 되었다가 바로 생성 하려고 할 때 문제가 주소를 찾아오지 못 하는 문제가 있어서 일정 시간을 준 다음 따라 가도록 한다.
+		if (0.5 < m_bSkillClone_TimeAcc)
+			_int a = 0;
+	}
+	else
+	{
+		_vector vChangePos;
+		vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 
 	// Get_Dead 가 true 라면 아이들로 변경한다.
-	m_bMagic_TimeAcc += TimeDelta;
-	if(10 < m_bMagic_TimeAcc)
+	if(15 < m_bSkillClone_TimeAcc)
 	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_bMagic = false;
-		m_bMagic_TimeAcc = 0;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;	// 상태 변경
+		m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
+		m_bSkillClone_TimeAcc = 0;
 	}
 
 	return S_OK;
@@ -679,9 +649,6 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 
 void CJake::Anim_Change(_double TimeDelta)
 {
-	//if (m_bMagic)
-	//	return;
-
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
 	{
 		switch (m_tPlayerInfo.eState)

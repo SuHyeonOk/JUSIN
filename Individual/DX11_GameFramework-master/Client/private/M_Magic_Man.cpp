@@ -5,9 +5,7 @@
 #include "Obj_Manager.h"		
 #include "ItemManager.h"		
 #include "Skill_Manager.h"		
-#include "Utilities_Manager.h"	
-
-#include "UI_3DTexture.h"		
+	
 #include "B_3DBullet.h"
 
 CM_Magic_Man::CM_Magic_Man(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -98,7 +96,12 @@ HRESULT CM_Magic_Man::Render()
 
 void CM_Magic_Man::On_Collision(CGameObject * pOther)
 {
-	CM_Monster::On_Collision(pOther);
+	// 일반 무기 공격은 피해를 입지 않고, 변신된 후의 주먹 공격만 충돌한다.
+	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
+		if (L"Finn_Magic" == pOther->Get_Tag() || L"Jake_Magic" == pOther->Get_Tag())
+			m_bPlayer_Attack = true;
+
+	//CM_Monster::On_Collision(pOther);
 }
 
 HRESULT CM_Magic_Man::SetUp_Components()

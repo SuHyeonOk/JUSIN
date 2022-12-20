@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Skill_Manager.h"
 
 CJake_Change::CJake_Change(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -42,10 +43,12 @@ HRESULT CJake_Change::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	if (CHANGEINFO::CHANGE::MAGIC == m_tChangeInfo.eChange)
-	{
+	if (CHANGEINFO::CHANGE::FINN == m_tChangeInfo.eChange)
+		m_wsTag = L"Finn_Magic";
+	else if (CHANGEINFO::CHANGE::JAKE == m_tChangeInfo.eChange)
 		m_wsTag = L"Jake_Magic";
-	}
+
+	CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
@@ -58,19 +61,21 @@ void CJake_Change::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	KeyInput(TimeDelta);
+	Skill_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	{
-		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
-		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
-	}
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CJake_Change::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	// 만약 플레이어의 상태가 MAGIC 가 아니라면 사라진다.
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -96,12 +101,15 @@ HRESULT CJake_Change::Render()
 #ifdef _DEBUG
 	if (nullptr != m_pColliderCom)
 		m_pColliderCom->Render();
+
+	m_pNavigationCom->Render();
 #endif
 	return S_OK;
 }
 
 void CJake_Change::On_Collision(CGameObject * pOther)
 {
+
 }
 
 HRESULT CJake_Change::SetUp_Components()
@@ -118,7 +126,19 @@ HRESULT CJake_Change::SetUp_Components()
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	if (CHANGEINFO::CHANGE::MAGIC == m_tChangeInfo.eChange)
+	if (CHANGEINFO::CHANGE::FINN == m_tChangeInfo.eChange)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Finn"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+
+		/* For.Com_SPHERE */
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	}
+	else if (CHANGEINFO::CHANGE::JAKE == m_tChangeInfo.eChange)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Jake"), TEXT("Com_Model"),
@@ -127,13 +147,24 @@ HRESULT CJake_Change::SetUp_Components()
 
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(1.2f, 1.2f, 1.2f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 1.3f);
 	}
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
+
+	/* For.Com_Navigation */
+	CNavigation::NAVIDESC			NaviDesc;
+	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
+
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
+		(CComponent**)&m_pNavigationCom, &NaviDesc)))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -158,16 +189,56 @@ HRESULT CJake_Change::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CJake_Change::Skill_Tick(const _double & TimeDelta)
+{
+	if (CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::HIT);
+
+	switch (CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
+	{
+	case Client::CSkill_Manager::MAGICSKILL::IDLE:
+		m_pModelCom->Set_AnimIndex(4);
+		break;
+	case Client::CSkill_Manager::MAGICSKILL::RUN:
+		m_pModelCom->Set_AnimIndex(5);
+		break;
+	case Client::CSkill_Manager::MAGICSKILL::ATTACK:
+		m_pModelCom->Set_AnimIndex(1, false);
+		Attack_Tick();
+		break;
+	case Client::CSkill_Manager::MAGICSKILL::HIT:
+		m_pModelCom->Set_AnimIndex(3, false);
+		Hit_Tick();
+		break;
+	}
+}
+
+void CJake_Change::Attack_Tick()
+{
+	if (m_pModelCom->Get_Finished())
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
+}
+
+void CJake_Change::Hit_Tick()
+{
+	if (m_pModelCom->Get_Finished())
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
+}
+
 void CJake_Change::KeyInput(const _double & TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::RUN);
 	}
 
+	if (m_OnMove && 15 <= m_pModelCom->Get_Keyframes())
+		m_pTransformCom->Go_Straight(TimeDelta/*, m_pNavigationCom*/);
+	else if (m_OnMove && 15 >= m_pModelCom->Get_Keyframes())
+		m_pTransformCom->Go_Straight(TimeDelta * 0.5/*, m_pNavigationCom*/);
+		
 #pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
@@ -210,16 +281,17 @@ void CJake_Change::KeyInput(const _double & TimeDelta)
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
 			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
 	}
+#pragma endregion
 
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 	}
-#pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::ATTACK);
+
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -252,6 +324,7 @@ void CJake_Change::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
