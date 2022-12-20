@@ -510,10 +510,8 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta/*, m_pNavigationCom*/);
-
-		if(m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
+		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -563,15 +561,12 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_OnMove = false;
-
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.MAGIC)
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -595,7 +590,7 @@ void CFinn::Roolling_Tick(_double TimeDelta)
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
 
 	if (!m_pModelCom->Get_Finished())
-		m_pTransformCom->Go_Straight(TimeDelta, 4.f);
+		m_pTransformCom->Go_Straight(TimeDelta, 4.f, m_pNavigationCom);
 	else
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }

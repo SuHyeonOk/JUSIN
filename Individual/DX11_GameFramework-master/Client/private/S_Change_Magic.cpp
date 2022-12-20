@@ -74,8 +74,8 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	// 만약 플레이어의 상태가 MAGIC 가 아니라면 사라진다.
-	//if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	//	CGameObject::Set_Dead();
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

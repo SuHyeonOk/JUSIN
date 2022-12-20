@@ -126,12 +126,12 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CS_Change_Magic::CHANGEINFO		tChangeInfo;
-	tChangeInfo.eChange = tChangeInfo.FINN;
-	tChangeInfo.f3Pos = _float3(0.f, 0.f, 10.f);
+	//CS_Change_Magic::CHANGEINFO		tChangeInfo;
+	//tChangeInfo.eChange = tChangeInfo.FINN;
+	//tChangeInfo.f3Pos = _float3(0.f, 0.f, 10.f);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN0"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN0"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
+	//	return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);

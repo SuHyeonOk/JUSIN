@@ -14,11 +14,12 @@ CCell::CCell(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	Safe_AddRef(m_pContext);
 }
 
-HRESULT CCell::Initialize(const _float3 * pPoints, _int iIndex)
+HRESULT CCell::Initialize(const _float3 * pPoints, _int iIndex, _int iNaviType)
 {
 	m_iIndex = iIndex;
 	memcpy(m_vPoints, pPoints, sizeof(_float3) * POINT_END);
 
+	m_iCellType = iNaviType;
 
 #ifdef _DEBUG
 	m_pVIBuffer = CVIBuffer_Cell::Create(m_pDevice, m_pContext, m_vPoints);
@@ -80,7 +81,6 @@ _bool CCell::isIn(_fvector vTargetPos, _int* pNeighborIndex) // ?이 삼각형 안에 
 	return true;
 }
 
-
 #ifdef _DEBUG
 HRESULT CCell::Render(CShader * pShader)
 {
@@ -108,11 +108,11 @@ HRESULT CCell::Render(CShader * pShader)
 }
 #endif // _DEBUG
 
-CCell * CCell::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _float3 * pPoints, _int iIndex)
+CCell * CCell::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _float3 * pPoints, _int iIndex, _int iNaviType)
 {
 	CCell*		pInstance = new CCell(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize(pPoints, iIndex)))
+	if (FAILED(pInstance->Initialize(pPoints, iIndex, iNaviType)))
 	{
 		MSG_BOX("Failed to Created : CCell");
 		Safe_Release(pInstance);

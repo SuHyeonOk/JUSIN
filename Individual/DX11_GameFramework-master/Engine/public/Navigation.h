@@ -10,7 +10,8 @@ public:
 	typedef struct tagNavigationDesc
 	{
 		_int		iCurrentIndex = -1;
-		_int		iRiver = 2;
+		_int		iCellType = 0;
+
 	}NAVIDESC;
 
 private:
@@ -21,6 +22,9 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pNavigationDataFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
+
+public:
+	_int	Get_CellType();
 
 public:
 	_bool isMove_OnNavigation(_fvector TargetPos);
@@ -41,8 +45,6 @@ private:
 private:
 	class CShader*			m_pShader = nullptr;
 #endif // _DEBUG
-
-
 
 public:
 	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pNavigationDataFilePath);

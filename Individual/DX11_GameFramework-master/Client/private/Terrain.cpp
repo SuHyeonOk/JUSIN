@@ -50,6 +50,8 @@ HRESULT CTerrain::Initialize(void * pArg)
 
 	m_vecPoints.resize(200);
 
+	Lode_Navigation(TEXT("../../Data/Navigation.txt"));
+
 	return S_OK;
 }
 
@@ -149,6 +151,69 @@ HRESULT CTerrain::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CTerrain::Lode_Navigation(const _tchar * pNavigationDataFilePath)
+{
+	wifstream		fin(pNavigationDataFilePath, ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load Navigation");
+		return;
+	}
+
+	_tchar szNavigatType[MAX_PATH] = L"";
+
+	_tchar szPosX_0[MAX_PATH] = L"";
+	_tchar szPosY_0[MAX_PATH] = L"";
+	_tchar szPosZ_0[MAX_PATH] = L"";
+
+	_tchar szPosX_1[MAX_PATH] = L"";
+	_tchar szPosY_1[MAX_PATH] = L"";
+	_tchar szPosZ_1[MAX_PATH] = L"";
+
+	_tchar szPosX_2[MAX_PATH] = L"";
+	_tchar szPosY_2[MAX_PATH] = L"";
+	_tchar szPosZ_2[MAX_PATH] = L"";
+
+	POINTS	tPoints;
+
+	while (true)
+	{
+		fin.getline(szNavigatType, MAX_PATH, '|');
+
+		fin.getline(szPosX_0, MAX_PATH, '|');
+		fin.getline(szPosY_0, MAX_PATH, '|');
+		fin.getline(szPosZ_0, MAX_PATH, '|');
+
+		fin.getline(szPosX_1, MAX_PATH, '|');
+		fin.getline(szPosY_1, MAX_PATH, '|');
+		fin.getline(szPosZ_1, MAX_PATH, '|');
+
+		fin.getline(szPosX_2, MAX_PATH, '|');
+		fin.getline(szPosY_2, MAX_PATH, '|');
+		fin.getline(szPosZ_2, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		tPoints.iCellType = (_int)_wtof(szNavigatType);
+
+		tPoints.Point_A.x = (_float)_wtof(szPosX_0);
+		tPoints.Point_A.y = (_float)_wtof(szPosY_0);
+		tPoints.Point_A.z = (_float)_wtof(szPosZ_0);
+
+		tPoints.Point_B.x = (_float)_wtof(szPosX_1);
+		tPoints.Point_B.y = (_float)_wtof(szPosY_1);
+		tPoints.Point_B.z = (_float)_wtof(szPosZ_1);
+
+		tPoints.Point_C.x = (_float)_wtof(szPosX_2);
+		tPoints.Point_C.y = (_float)_wtof(szPosY_2);
+		tPoints.Point_C.z = (_float)_wtof(szPosZ_2);
+
+		m_vecPoints.push_back(tPoints);
+	}
+}
+
 void CTerrain::ImGui_Navigation()
 {
 	ImGui::Begin("NavTool");
@@ -234,6 +299,12 @@ void CTerrain::ImGui_Navigation()
 		}
 	}
 
+
+	if (ImGui::Button("CellType : Default"))
+		m_iCellType = 0;
+	if (ImGui::Button("CellType : River"))
+		m_iCellType = 1;
+
 	if (ImGui::Button("Delegate"))
 		m_vecPoints.pop_back();
 
@@ -261,7 +332,8 @@ void CTerrain::ImGui_Navigation()
 			return;
 		}
 
-		fout << m_f3Points[0].x << "|" << m_f3Points[0].y << L"|" << m_f3Points[0].z << "|"
+		fout << m_iCellType << "|"
+			 << m_f3Points[0].x << "|" << m_f3Points[0].y << L"|" << m_f3Points[0].z << "|"
 			 << m_f3Points[1].x << "|" << m_f3Points[1].y << L"|" << m_f3Points[1].z << "|"
 			 << m_f3Points[2].x << "|" << m_f3Points[2].y << L"|" << m_f3Points[2].z << "\n";
 

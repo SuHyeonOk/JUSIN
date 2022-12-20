@@ -17,6 +17,7 @@ class CTerrain final : public CGameObject
 {
 	typedef struct tagPoints
 	{
+		_int		iCellType = 0;
 		_float3		Point_A;
 		_float3		Point_B;
 		_float3		Point_C;
@@ -47,6 +48,7 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
+	void	Lode_Navigation(const _tchar * pNavigationDataFilePath);
 	void	ImGui_Navigation();
 
 private:	// ImGui_Navigation()
@@ -54,9 +56,9 @@ private:	// ImGui_Navigation()
 	_float4				m_f4PickingPos = { 0.f, 0.f, 0.f, 1.f };
 	_float3				m_f3Points[3];
 	_float3				m_f3TempPoints[3];
+	
 	_int				m_iButtonCount = 0;
-
-
+	_int				m_iCellType = 0;	// 0 : ±âº», 1 : °­
 
 public:
 	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -22,8 +22,10 @@ public:
 		m_iNeighborIndices[eNeighbor] = pNeighbor->m_iIndex;
 	}
 
+	_int	Get_CellType() { return m_iCellType; }
+
 public:
-	HRESULT Initialize(const _float3* pPoints, _int iIndex);
+	HRESULT Initialize(const _float3* pPoints, _int iIndex, _int iNaviType);
 
 public:
 	_bool Compare_Points(const _float3& SourPoint, const _float3& DestPoint);
@@ -42,6 +44,8 @@ private:
 	_int				m_iIndex = 0;
 	_float3				m_vPoints[POINT_END];
 	_int				m_iNeighborIndices[NEIGHBOR_END];
+	
+	_int				m_iCellType = 0;
 
 #ifdef _DEBUG
 private:
@@ -49,7 +53,7 @@ private:
 #endif // _DEBUG
 
 public:
-	static CCell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _float3* pPoints, _int iIndex);
+	static CCell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _float3* pPoints, _int iIndex, _int iNaviType);
 	virtual void Free();
 };
 

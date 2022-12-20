@@ -36,6 +36,8 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar * pNavigationDataFilePath
 		return E_FAIL;
 	}
 
+	_tchar szNavigatType[MAX_PATH] = L"";
+
 	_tchar szPosX_0[MAX_PATH] = L"";
 	_tchar szPosY_0[MAX_PATH] = L"";
 	_tchar szPosZ_0[MAX_PATH] = L"";
@@ -48,10 +50,13 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar * pNavigationDataFilePath
 	_tchar szPosY_2[MAX_PATH] = L"";
 	_tchar szPosZ_2[MAX_PATH] = L"";
 
+	_int		iNavigatType = 0;
 	_float3		vPoints[CCell::POINT_END];
 
 	while (true)
 	{
+		fin.getline(szNavigatType, MAX_PATH, '|');
+
 		fin.getline(szPosX_0, MAX_PATH, '|');
 		fin.getline(szPosY_0, MAX_PATH, '|');
 		fin.getline(szPosZ_0, MAX_PATH, '|');
@@ -67,6 +72,8 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar * pNavigationDataFilePath
 		if (fin.eof())
 			break;
 
+		iNavigatType = (_int)_wtof(szNavigatType);
+
 		vPoints[0].x = (_float)_wtof(szPosX_0);
 		vPoints[0].y = (_float)_wtof(szPosY_0);
 		vPoints[0].z = (_float)_wtof(szPosZ_0);
@@ -79,8 +86,7 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar * pNavigationDataFilePath
 		vPoints[2].y = (_float)_wtof(szPosY_2);
 		vPoints[2].z = (_float)_wtof(szPosZ_2);
 
-
-		CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size());
+		CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size(), iNavigatType);
 		if (nullptr == pCell)
 			return E_FAIL;
 
@@ -123,6 +129,8 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar * pNavigationDataFilePath
 	return S_OK;
 }
 
+
+
 HRESULT CNavigation::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
@@ -131,6 +139,13 @@ HRESULT CNavigation::Initialize(void * pArg)
 	}
 
 	return S_OK;
+}
+
+_int CNavigation::Get_CellType()
+{
+	// 내가 위치한 곳의 셀 타입을 받아오고 싶다.
+
+	return m_NaviDesc.iCellType = m_Cells[m_NaviDesc.iCurrentIndex]->Get_CellType();
 }
 
 _bool CNavigation::isMove_OnNavigation(_fvector TargetPos)
@@ -172,6 +187,14 @@ _bool CNavigation::isMove_OnNavigation(_fvector TargetPos)
 HRESULT CNavigation::Render()
 {
 	_float		fHeight = 0.0f;
+
+	// TODO : 왜 안 보일까.?/
+	if (1 == m_NaviDesc.iCellType)
+	{
+		fHeight = 0.05f;
+		HRESULT hr = m_pShader->Set_RawValue("g_fHeight", &fHeight, sizeof(_float));
+		m_pShader->Set_RawValue("g_vColor", &_float4(0.f, 0.f, 1.f, 1.f), sizeof(_float4));
+	}
 
 	if (-1 == m_NaviDesc.iCurrentIndex)
 	{
