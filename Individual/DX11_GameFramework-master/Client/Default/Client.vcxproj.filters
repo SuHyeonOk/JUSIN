@@ -88,12 +88,6 @@
     <Filter Include="02.GameObjects\Bullet">
       <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Skill">
-      <UniqueIdentifier>{c3adfdb9-9af1-4f8e-b7cb-342773219d44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Skill\Stun">
-      <UniqueIdentifier>{01f6bf09-8866-472b-8acd-4a4cb5d314c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="77.Manager\Skill">
       <UniqueIdentifier>{0a55d0a0-fc0e-4c57-94f0-c7db11241467}</UniqueIdentifier>
     </Filter>
@@ -138,6 +132,15 @@
     </Filter>
     <Filter Include="02.GameObjects\Effect">
       <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill">
+      <UniqueIdentifier>{2b45075f-075f-4884-a753-ab10792ce700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\Stun">
+      <UniqueIdentifier>{01f6bf09-8866-472b-8acd-4a4cb5d314c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\Magic">
+      <UniqueIdentifier>{6f7a346b-b41f-4fce-8af0-c2a772e94af3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -223,7 +226,7 @@
       <Filter>02.GameObjects\Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_StunChick.h">
-      <Filter>02.GameObjects\Skill\Stun</Filter>
+      <Filter>02.GameObjects\PlayerSkill\Stun</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Skill_Manager.h">
       <Filter>77.Manager\Skill</Filter>
@@ -285,11 +288,11 @@
     <ClInclude Include="..\public\Sky.h">
       <Filter>02.GameObjects\Sky</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Jake_Change.h">
-      <Filter>02.GameObjects\Player\Jake</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Effect_Rect_Instancing.h">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\S_Change_Magic.h">
+      <Filter>02.GameObjects\PlayerSkill\Magic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -360,7 +363,7 @@
       <Filter>02.GameObjects\Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_StunChick.cpp">
-      <Filter>02.GameObjects\Skill\Stun</Filter>
+      <Filter>02.GameObjects\PlayerSkill\Stun</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Skill_Manager.cpp">
       <Filter>77.Manager\Skill</Filter>
@@ -419,11 +422,11 @@
     <ClCompile Include="..\private\Sky.cpp">
       <Filter>02.GameObjects\Sky</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Jake_Change.cpp">
-      <Filter>02.GameObjects\Player\Jake</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Effect_Rect_Instancing.cpp">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_Change_Magic.cpp">
+      <Filter>02.GameObjects\PlayerSkill\Magic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

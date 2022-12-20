@@ -65,7 +65,7 @@ private:
 	void	Cheering_Tick();
 
 	void	TreeWitch_Tick();
-	HRESULT	Magic_Tick(_double TimeDelta);
+	HRESULT	Magic_Tick(_double TimeDelsdta);
 
 	void	Anim_Change(_double TimeDelta);
 
@@ -86,8 +86,8 @@ private:
 	_bool		m_bStun = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
-	_bool		m_bMagic = false;			// 몬스터 Magic 공격
-	_double		m_bMagic_TimeAcc = 0;
+	_bool		m_bSkill_Clone = false;			// 몬스터 Magic 공격
+	_double		m_bSkillClone_TimeAcc = 0;
 
 	//////////////////////////// 플레이어가 아닐 때
 

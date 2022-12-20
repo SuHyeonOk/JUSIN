@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CJake_Change final : public CGameObject
+class CS_Change_Magic final : public CGameObject
 {
 public:
 	typedef struct tagPlayerChangeInfo
@@ -26,9 +26,9 @@ public:
 	}CHANGEINFO;
 
 private:
-	CJake_Change(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CJake_Change(const CJake_Change& rhs);
-	virtual ~CJake_Change() = default;
+	CS_Change_Magic(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CS_Change_Magic(const CS_Change_Magic& rhs);
+	virtual ~CS_Change_Magic() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -63,7 +63,7 @@ private:
 	_bool					m_OnMove = false;
 
 public:
-	static CJake_Change* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CS_Change_Magic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };

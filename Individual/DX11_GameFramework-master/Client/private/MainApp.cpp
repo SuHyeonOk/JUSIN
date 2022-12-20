@@ -15,7 +15,7 @@
 #include "Finn_Weapon.h"
 #include "Jake_Weapon.h"
 #include "Finn_Change.h"
-#include "Jake_Change.h"
+#include "S_Change_Magic.h"
 
 #include "UI_Informacion.h"
 #include "UI_HPGauge.h"
@@ -297,14 +297,9 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
 		return E_FAIL;
-
-	/* For.Prototype_GameObject_Magic_Man_Finn */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Finn_Change"),
-		CFinn_Change::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	/* For.Prototype_GameObject_Magic_Man_Jake */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Jake_Change"),
-		CJake_Change::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Change_Magic"),
+		CS_Change_Magic::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

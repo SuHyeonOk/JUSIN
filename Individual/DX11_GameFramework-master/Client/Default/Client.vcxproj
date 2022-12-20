@@ -185,7 +185,6 @@
     <ClInclude Include="..\public\Food.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
     <ClInclude Include="..\public\Jake.h" />
-    <ClInclude Include="..\public\Jake_Change.h" />
     <ClInclude Include="..\public\Jake_Weapon.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
@@ -206,6 +205,7 @@
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Skill_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
+    <ClInclude Include="..\public\S_Change_Magic.h" />
     <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_.h" />
@@ -233,7 +233,6 @@
     <ClCompile Include="..\private\Food.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
     <ClCompile Include="..\private\Jake.cpp" />
-    <ClCompile Include="..\private\Jake_Change.cpp" />
     <ClCompile Include="..\private\Jake_Weapon.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
@@ -254,6 +253,7 @@
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Skill_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
+    <ClCompile Include="..\private\S_Change_Magic.cpp" />
     <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\UI_.cpp" />

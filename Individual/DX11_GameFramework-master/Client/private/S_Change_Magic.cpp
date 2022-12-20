@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "..\public\Jake_Change.h"
+#include "..\public\S_Change_Magic.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
 
-CJake_Change::CJake_Change(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CS_Change_Magic::CS_Change_Magic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CJake_Change::CJake_Change(const CJake_Change & rhs)
+CS_Change_Magic::CS_Change_Magic(const CS_Change_Magic & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CJake_Change::Initialize_Prototype()
+HRESULT CS_Change_Magic::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,7 +25,7 @@ HRESULT CJake_Change::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CJake_Change::Initialize(void * pArg)
+HRESULT CS_Change_Magic::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
 		memcpy(&m_tChangeInfo, pArg, sizeof(CHANGEINFO));
@@ -56,7 +56,7 @@ HRESULT CJake_Change::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CJake_Change::Tick(_double TimeDelta)
+void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -69,19 +69,19 @@ void CJake_Change::Tick(_double TimeDelta)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CJake_Change::Late_Tick(_double TimeDelta)
+void CS_Change_Magic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
 	// 만약 플레이어의 상태가 MAGIC 가 아니라면 사라진다.
-	if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		CGameObject::Set_Dead();
+	//if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	//	CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CJake_Change::Render()
+HRESULT CS_Change_Magic::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -107,12 +107,12 @@ HRESULT CJake_Change::Render()
 	return S_OK;
 }
 
-void CJake_Change::On_Collision(CGameObject * pOther)
+void CS_Change_Magic::On_Collision(CGameObject * pOther)
 {
 
 }
 
-HRESULT CJake_Change::SetUp_Components()
+HRESULT CS_Change_Magic::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -169,7 +169,7 @@ HRESULT CJake_Change::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CJake_Change::SetUp_ShaderResources()
+HRESULT CS_Change_Magic::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -189,7 +189,7 @@ HRESULT CJake_Change::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CJake_Change::Skill_Tick(const _double & TimeDelta)
+void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)
 {
 	if (CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::HIT);
@@ -213,19 +213,19 @@ void CJake_Change::Skill_Tick(const _double & TimeDelta)
 	}
 }
 
-void CJake_Change::Attack_Tick()
+void CS_Change_Magic::Attack_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 }
 
-void CJake_Change::Hit_Tick()
+void CS_Change_Magic::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 }
 
-void CJake_Change::KeyInput(const _double & TimeDelta)
+void CS_Change_Magic::KeyInput(const _double & TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -296,31 +296,31 @@ void CJake_Change::KeyInput(const _double & TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-CJake_Change * CJake_Change::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CS_Change_Magic * CS_Change_Magic::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CJake_Change*		pInstance = new CJake_Change(pDevice, pContext);
+	CS_Change_Magic*		pInstance = new CS_Change_Magic(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CJake_Change");
+		MSG_BOX("Failed to Created : CS_Change_Magic");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CJake_Change::Clone(void * pArg)
+CGameObject * CS_Change_Magic::Clone(void * pArg)
 {
-	CJake_Change*		pInstance = new CJake_Change(*this);
+	CS_Change_Magic*		pInstance = new CS_Change_Magic(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CJake_Change");
+		MSG_BOX("Failed to Cloned : CS_Change_Magic");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CJake_Change::Free()
+void CS_Change_Magic::Free()
 {
 	__super::Free();
 

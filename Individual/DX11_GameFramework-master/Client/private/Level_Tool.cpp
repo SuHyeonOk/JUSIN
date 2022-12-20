@@ -8,7 +8,7 @@
 #include "Page.h"
 #include "M_Magic_Man.h"
 
-#include "Jake_Change.h"
+#include "S_Change_Magic.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -126,6 +126,13 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CS_Change_Magic::CHANGEINFO		tChangeInfo;
+	tChangeInfo.eChange = tChangeInfo.FINN;
+	tChangeInfo.f3Pos = _float3(0.f, 0.f, 10.f);
+
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN0"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
+		return E_FAIL;
+
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
 	tObjInfo.eState = tObjInfo.IDLE;
@@ -175,8 +182,6 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	//// 스카이 박스
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_Sky"), &tMonsterDesc)))
 	//	return E_FAIL;
-
-
 
 	RELEASE_INSTANCE(CGameInstance);
 

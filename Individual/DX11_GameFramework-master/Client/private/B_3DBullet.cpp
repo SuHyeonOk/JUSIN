@@ -216,8 +216,8 @@ HRESULT CB_3DBullet::SetUp_ShaderResources()
 }
 void CB_3DBullet::Magic_Tick(const _double & TimeDelta)
 {
-	m_pTransformCom->Go_Straight(TimeDelta * 1.5);
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 1.5);
+	m_pTransformCom->Go_Straight(TimeDelta * 2);
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 2);
 }
 
 void CB_3DBullet::Magic_LateTick(const _double & TimeDelta)

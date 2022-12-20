@@ -5,7 +5,7 @@
 
 #include "Bone.h"
 #include "Jake_Weapon.h"
-#include "Jake_Change.h"
+#include "S_Change_Magic.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -96,7 +96,8 @@ void CJake::Late_Tick(_double TimeDelta)
 HRESULT CJake::Render()
 {
 	// 플레이어 스킬 상태일때 Player 의 Render 를 잠시 꺼둔다.
-	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer &&
+		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return E_FAIL;
 
 	if (FAILED(__super::Render()))
@@ -352,7 +353,8 @@ void CJake::Player_Follow(_double TimeDelta)
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (1.5f < fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
@@ -607,19 +609,19 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CJake_Change::CHANGEINFO		tChangeInfo;
+		CS_Change_Magic::CHANGEINFO		tChangeInfo;
 		tChangeInfo.eChange = tChangeInfo.JAKE;
 		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake_Magic"), TEXT("Prototype_GameObject_Jake_Change"), &tChangeInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
 			return E_FAIL;
 		RELEASE_INSTANCE(CGameInstance);
 	}
 
 	// Magic 모델을 따라간다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake_Magic"), TEXT("Com_Transform"), 0));
+	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Com_Transform"), 0));
 
 	m_bSkillClone_TimeAcc += TimeDelta;
 	if (nullptr == pChangeTransformCom)

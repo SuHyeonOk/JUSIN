@@ -6,7 +6,7 @@
 
 #include "Bone.h"
 #include "Finn_Weapon.h"
-#include "Finn_Change.h"
+#include "S_Change_Magic.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -109,8 +109,10 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 HRESULT CFinn::Render()
 {
-	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)	// 몬스터에게 맞았을 경우 PlayerRneder() 를 하지 않는다.
-		return S_OK;
+	// 플레이어 스킬 상태일때 Player 의 Render 를 잠시 꺼둔다.
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer && 
+		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return E_FAIL;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -393,8 +395,13 @@ void CFinn::Current_Player(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)					// Player 나라면
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
-		Key_Input(TimeDelta);										// 이동하고
 		Check_Follow(TimeDelta);									// 근처에 Jake 가 있는지 확인한다.
+
+		// 플레이어의 스킬 때 키 입력을 받지 않는다.
+		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			Key_Input(TimeDelta);
+		else
+			m_OnMove = false;
 	}
 	else
 	{
@@ -428,7 +435,8 @@ void CFinn::Player_Follow(_double TimeDelta)
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (1.5f < fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
@@ -688,30 +696,52 @@ void CFinn::TreeWitch_Tick()
 
 HRESULT CFinn::Magic_Tick(_double TimeDelta)
 {
-	if (!m_bMagic)
+	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
+	if (!m_bSkill_Clone)
 	{
-		m_bMagic = true;
-	
+		m_bSkill_Clone = true;
+
+		// Magic 모델 생성
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CFinn_Change::CHANGEINFO		tChangeInfo;
-		tChangeInfo.eChange = tChangeInfo.MAGIC;
+		CS_Change_Magic::CHANGEINFO		tChangeInfo;
+		tChangeInfo.eChange = tChangeInfo.FINN;
 		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn_Magic"), TEXT("Prototype_GameObject_Finn_Change"), &tChangeInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
 			return E_FAIL;
 		RELEASE_INSTANCE(CGameInstance);
 	}
 
-	//m_bMagic_TimeAcc += TimeDelta;
-	//{
-	//	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-	//	m_bMagic = false;
-	//	m_bMagic_TimeAcc = 0;
-	//}
+	// Magic 모델을 따라간다.
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN"), TEXT("Com_Transform"), 0));
+
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (nullptr == pChangeTransformCom)
+	{
+		// 변신 되었다가 바로 생성 하려고 할 때 문제가 주소를 찾아오지 못 하는 문제가 있어서 일정 시간을 준 다음 따라 가도록 한다.
+		if (0.5 < m_bSkillClone_TimeAcc)
+			_int a = 0;
+	}
+	else
+	{
+		_vector vChangePos;
+		vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	// Get_Dead 가 true 라면 아이들로 변경한다.
+	if (15 < m_bSkillClone_TimeAcc)
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;	// 상태 변경
+		m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
+		m_bSkillClone_TimeAcc = 0;
+	}
 
 	return S_OK;
 }
