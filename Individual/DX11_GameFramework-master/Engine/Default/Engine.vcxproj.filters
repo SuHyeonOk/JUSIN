@@ -142,6 +142,15 @@
     <Filter Include="01.Utility\03.Components\02.VIBuffer\Cobe">
       <UniqueIdentifier>{87105f4c-2e53-4165-995a-b85d872945dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\02.VIBuffer\Instancing">
+      <UniqueIdentifier>{5c16d9c8-1515-4bf6-bbe7-5588b8fe5c00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\02.VIBuffer\Instancing\Point">
+      <UniqueIdentifier>{7f3b181f-afe0-4903-88e4-2ebb4b2307cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\02.VIBuffer\Instancing\Rect">
+      <UniqueIdentifier>{097716ef-c503-4a4e-b850-b7427ec1e432}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -339,6 +348,12 @@
     <ClInclude Include="..\public\VIBuffer_Cube.h">
       <Filter>01.Utility\03.Components\02.VIBuffer\Cobe</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Rect_Instancing.h">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Instancing.h">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -511,6 +526,12 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Cube.cpp">
       <Filter>01.Utility\03.Components\02.VIBuffer\Cobe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Instancing.cpp">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Rect_Instancing.cpp">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Rect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

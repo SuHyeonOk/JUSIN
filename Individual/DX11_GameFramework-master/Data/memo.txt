@@ -7,3 +7,33 @@
 ▤ : 1.4 가 아닌 카메라가 플레이어를 자연 스럽게 따라가도록 수정해야함
 
 pigWarrior 친구들 범위 벗어나면 원점으로 돌아갈 때 이상하게 돌아감
+
+
+그림자에만 다음의 셰이더 코드 넣어주기
+
+PS_OUT PS_MAIN(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
+
+	Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor.a = Out.vColor.a * 0.7f; // 0.7f 값 조절해 가면서!
+
+	return Out;
+}
+
+technique11 DefaultTechnique
+{
+	pass Default
+	{
+		SetRasterizerState(RS_Default);
+		SetDepthStencilState(DS_Default, 0);
+		SetBlendState(BS_AlphaBlend, float4(0.0f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN();
+	}
+}

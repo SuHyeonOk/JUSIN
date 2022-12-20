@@ -18,6 +18,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	HRESULT Ready_Layer_Effect(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_UI_Informacion(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Finn(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Jake(const _tchar* pLayerTag);

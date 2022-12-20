@@ -136,6 +136,9 @@
     <Filter Include="02.GameObjects\Sky">
       <UniqueIdentifier>{8655c6ab-9198-4bdc-aae8-93973bbffeba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Effect">
+      <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -285,6 +288,9 @@
     <ClInclude Include="..\public\Jake_Change.h">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Effect_Rect_Instancing.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -416,6 +422,9 @@
     <ClCompile Include="..\private\Jake_Change.cpp">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Effect_Rect_Instancing.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -447,6 +456,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRect_Instancing.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

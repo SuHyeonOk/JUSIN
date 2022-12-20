@@ -21,6 +21,9 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 	
+	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
 		return E_FAIL;
 
@@ -63,6 +66,18 @@ HRESULT CLevel_Tool::Render()
 		return E_FAIL;
 
 	//SetWindowText(g_hWnd, TEXT("Level : TOOL"));
+
+	return S_OK;
+}
+
+HRESULT CLevel_Tool::Ready_Layer_Effect(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Effect_Rect_Instancing"))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
