@@ -10,8 +10,14 @@
 // Map
 #include "Map_Garden.h"
 
+// UI
+#include "UI_Talk.h"
+
 // 3DUI
 #include "UI_3DTexture.h"
+
+// NPC
+#include "N_Bubblegum.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -117,10 +123,21 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
+	
+	// UI
+	/* For.Prototype_Component_Texture_UI_Talk */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
+		return E_FAIL;
 
+	// 3D UI
 	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
 		return E_FAIL;
 
 	// SktBox
@@ -138,6 +155,12 @@ HRESULT CLoader::Loading_Tool()
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
 
 	_matrix			PivotMatrix = XMMatrixIdentity();
+
+	// NPC
+	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// Player
 	/* For.Prototype_Component_Model_S_StunChick */
@@ -281,6 +304,12 @@ HRESULT CLoader::Loading_Tool()
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	//UI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
+		CUI_Talk::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// 3DUI
 	/* For.Prototype_GameObject_UI_3DTexture */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
@@ -318,6 +347,12 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_Effect_Point_Instancing */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Point_Instancing"),
 		CEffect_Point_Instancing::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// NPC
+	/* For.Prototype_GameObject_N_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
+		CN_Bubblegum::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));

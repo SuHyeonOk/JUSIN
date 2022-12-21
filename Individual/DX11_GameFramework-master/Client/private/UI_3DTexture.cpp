@@ -32,12 +32,9 @@ HRESULT CUI_3DTexture::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	if (m_tTextureInfo.eTextureType == m_tTextureInfo.TYPE_FIND)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tTextureInfo.f3Pos.x, m_tTextureInfo.f3Pos.y, m_tTextureInfo.f3Pos.z);
-	}
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tTextureInfo.f3Pos.x, m_tTextureInfo.f3Pos.y, m_tTextureInfo.f3Pos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -54,9 +51,10 @@ HRESULT CUI_3DTexture::Initialize(void * pArg)
 void CUI_3DTexture::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
+	
 	if (m_tTextureInfo.eTextureType == m_tTextureInfo.TYPE_FIND)
 		Find_Tick(TimeDelta);
+
 }
 
 void CUI_3DTexture::Late_Tick(_double TimeDelta)
@@ -102,7 +100,12 @@ HRESULT CUI_3DTexture::SetUp_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-
+	else if (m_tTextureInfo.eTextureType == m_tTextureInfo.TYPE_TALK)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -132,7 +135,8 @@ HRESULT CUI_3DTexture::SetUp_ShaderResources()
 
 void CUI_3DTexture::Find_Tick(const _double & TimeDelta)
 {
-	m_pTransformCom->Chase(XMVectorSet(m_tTextureInfo.f3Pos.x, m_tTextureInfo.f3Pos.y, m_tTextureInfo.f3Pos.z, 1.f), TimeDelta);
+	// 일정 시간 있다가 사라진다.
+	m_pTransformCom->Set_Pos(_float3(m_tTextureInfo.f3Pos.x, m_tTextureInfo.f3Pos.y, m_tTextureInfo.f3Pos.z));
 
 	m_dTexture_TimeAcc += TimeDelta;
 	if (0.5 < m_dTexture_TimeAcc)

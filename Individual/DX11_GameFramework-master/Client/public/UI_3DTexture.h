@@ -17,7 +17,7 @@ class CUI_3DTexture final : public CGameObject
 public:
 	typedef struct tag3DTextureInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum TEXTTYPE { TYPE_FIND, TYPE_END };
+		enum TEXTTYPE { TYPE_FIND, TYPE_TALK, TYPE_END };
 
 		TEXTTYPE	eTextureType;
 
@@ -47,7 +47,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
-	
+
 private:
 	void					Find_Tick(const _double & TimeDelta);
 

@@ -26,11 +26,11 @@ HRESULT CN_NPC::Initialize_Prototype()
 
 HRESULT CN_NPC::Initialize(void * pArg)
 {
-	NPCINFO		NpcInfo;
-	ZeroMemory(&NpcInfo, sizeof(NPCINFO));
+	NPCDESC		NpcInfo;
+	ZeroMemory(&NpcInfo, sizeof(NPCDESC));
 
 	if (nullptr != pArg)
-		memcpy(&NpcInfo, pArg, sizeof(NPCINFO));
+		memcpy(&NpcInfo, pArg, sizeof(NPCDESC));
 
 	if (FAILED(__super::Initialize(&NpcInfo)))
 		return E_FAIL;
@@ -73,7 +73,7 @@ void CN_NPC::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-
+		m_bIsTalk = CObj_Manager::GetInstance()->Get_IsTalk();
 	}
 }
 

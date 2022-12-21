@@ -74,7 +74,6 @@ public:
 
 	void Go_Straight(_double TimeDelta, class CNavigation* pNaviCom = nullptr);
 	void Go_Straight(_double TimeDelta, _float fSpeed, class CNavigation* pNaviCom = nullptr);
-	void Go_Down(_double TimeDelta, _float fSpeed, _float fDeep);
 	void Go_Backward(_double TimeDelta);
 	void Go_Left(_double TimeDelta);
 	void Go_Right(_double TimeDelta);
@@ -97,6 +96,9 @@ public:
 	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f);
 	void Speed_Chase(_fvector vTargetPos, _float fSpeed, _double TimeDelta, _float fLimit = 0.1f);
 
+	_bool	Go_SwinUp(_double TimeDelta, _float fSpeed);
+	void	Go_SwinDown(_double TimeDelta, _float fSpeed, _float fDeep);
+
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);
 
@@ -107,8 +109,6 @@ public: // sh
 private:	
 	_float4x4				m_WorldMatrix;
 	TRANSFORMDESC			m_TransformDesc;
-
-	_float					m_fMyDeep = 0.0f;
 
 private:
 	// Jump()

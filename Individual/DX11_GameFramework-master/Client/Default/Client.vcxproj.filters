@@ -142,6 +142,12 @@
     <Filter Include="02.GameObjects\PlayerSkill\Magic">
       <UniqueIdentifier>{6f7a346b-b41f-4fce-8af0-c2a772e94af3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\NPC\Bubblegum">
+      <UniqueIdentifier>{ab0fabf6-d608-484e-8be0-60b3a93a57f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Talk">
+      <UniqueIdentifier>{7d04eab4-a120-4cbf-81ab-41d00d142fbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -297,6 +303,12 @@
     <ClInclude Include="..\public\Effect_Point_Instancing.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\N_Bubblegum.h">
+      <Filter>02.GameObjects\NPC\Bubblegum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Talk.h">
+      <Filter>02.GameObjects\UI\Talk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -433,6 +445,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Effect_Point_Instancing.cpp">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_Bubblegum.cpp">
+      <Filter>02.GameObjects\NPC\Bubblegum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Talk.cpp">
+      <Filter>02.GameObjects\UI\Talk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

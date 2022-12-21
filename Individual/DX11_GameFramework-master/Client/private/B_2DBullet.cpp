@@ -195,8 +195,6 @@ HRESULT CB_2DBullet::SetUp_Components()
 			return E_FAIL;
 	}
 
-	
-
 	CCollider::COLLIDERDESC			ColliderDesc;
 
 	/* For.Com_SPHERE */

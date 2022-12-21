@@ -109,6 +109,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 {
 	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
+	Key_Input();				// Npc 와의 대화창
 
 	//cout << "HP : " << m_tPlayerInfo.iHp << " | MAXHP : " << m_tPlayerInfo.iHpMax <<
 	//	" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
@@ -126,9 +127,17 @@ void		CObj_Manager::Tick(_double TimeDelta)
 		}
 	}
 
+}
 
+void		CObj_Manager::Key_Input()
+{
 	// TODO : 무기변경
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_X))
+		m_bIsTalk = true;
+	if (pGameInstance->Key_Up(DIK_X))
+		m_bIsTalk = false;
 
 	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
 	{

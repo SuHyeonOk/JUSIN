@@ -15,13 +15,13 @@ BEGIN(Client)
 class CN_NPC abstract : public CGameObject
 {
 public:
-	typedef struct tagNpcInfo
+	typedef struct tagNpcInfo : public CGameObject::GAMEOBJECTDESC
 	{
 		enum NPC { BUBBLEGUM, NPC_END };
 
 		NPC		eNpcType = NPC_END;
 
-	}NPCINFO;
+	}NPCDESC;
 
 protected:
 	CN_NPC(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -42,10 +42,17 @@ protected:	// 자식에게 거의 필수적인 함수
 	virtual HRESULT		SetUp_ShaderResources() { return S_OK; }
 
 protected:
+	virtual void		Help_UI() = 0;
+	virtual void		Talk_UI() = 0;
+
+protected:
 	CRenderer*			m_pRendererCom = nullptr;
 	CShader*			m_pShaderCom = nullptr;
 	CModel*				m_pModelCom = nullptr;
 	CCollider*			m_pColliderCom = nullptr;
+
+protected:
+	_bool				m_bIsTalk = false;
 
 public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

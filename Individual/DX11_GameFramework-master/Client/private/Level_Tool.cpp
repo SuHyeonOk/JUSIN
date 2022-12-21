@@ -9,6 +9,7 @@
 #include "M_Magic_Man.h"
 
 #include "S_Change_Magic.h"
+#include "N_Bubblegum.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -21,8 +22,8 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 	
-	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
 		return E_FAIL;
@@ -129,12 +130,11 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//CS_Change_Magic::CHANGEINFO		tChangeInfo;
-	//tChangeInfo.eChange = tChangeInfo.FINN;
-	//tChangeInfo.f3Pos = _float3(0.f, 0.f, 10.f);
-
-	//if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN0"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
-	//	return E_FAIL;
+	CN_NPC::NPCDESC					tNpcDesc;
+	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
+	tNpcDesc.TransformDesc.f3Pos = _float3(10.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+		return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);

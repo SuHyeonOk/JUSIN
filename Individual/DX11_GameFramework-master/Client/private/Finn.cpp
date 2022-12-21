@@ -355,8 +355,15 @@ void CFinn::Player_Tick(_double TimeDelta)
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
+
 	if (1 == m_pNavigationCom->Get_CellType())
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::SWIM);
+		m_bIsSwim = true;
+
+	if (m_bIsSwim)
+	{
+		Swim_Tick(TimeDelta);
+		return;
+	}
 
 	// 내가 플레이어 일 때 만 할 행동	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
@@ -378,10 +385,6 @@ void CFinn::Player_Tick(_double TimeDelta)
 
 	case CObj_Manager::PLAYERINFO::STUN:
 		Stun_Tick();
-		break;
-
-	case CObj_Manager::PLAYERINFO::SWIM:
-		Swim_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::TREEWITCH:
@@ -648,7 +651,15 @@ void CFinn::Stun_Tick()
 
 void CFinn::Swim_Tick(_double TimeDelta)
 {
-	m_pTransformCom->Go_Down(TimeDelta, 1.f, -0.7f);
+	m_tPlayerInfo.eState = m_tPlayerInfo.SWIM;
+
+	// CellType 이 1 이라면 내라가다가.
+	m_pTransformCom->Go_SwinDown(TimeDelta, 1.f, -0.8f);
+
+	// CellType 이 0 이되면 올라간다.
+	if (0 == m_pNavigationCom->Get_CellType())
+		if (m_pTransformCom->Go_SwinUp(TimeDelta, 1.f))	// 0 까지 올라왔다면
+			m_bIsSwim = false;
 }
 
 void CFinn::Change_Tick()

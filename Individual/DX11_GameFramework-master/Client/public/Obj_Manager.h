@@ -75,6 +75,9 @@ public:
 	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
 	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
 
+	// UI Talk
+	_bool				Get_IsTalk() { return m_bIsTalk; }
+
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.
 	_vector				CObj_Manager::Get_Player_Transform();					// 현재 Player 의 POS 를 가져온다.
@@ -93,6 +96,9 @@ private:
 	void		CObj_Manager::Player_Exp();		// 현재 플레이어의 경험치를 Tick
 
 private:
+	void		CObj_Manager::Key_Input();
+
+private:
 	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
 
@@ -100,6 +106,8 @@ private:
 	_bool			m_bShield = false;
 
 	_float			m_fAngle = 0.f;
+
+	_bool			m_bIsTalk = false;
 
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn

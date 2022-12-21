@@ -200,6 +200,7 @@
     <ClInclude Include="..\public\M_Pigs.h" />
     <ClInclude Include="..\public\M_PigWarrior.h" />
     <ClInclude Include="..\public\M_Tree_Witch.h" />
+    <ClInclude Include="..\public\N_Bubblegum.h" />
     <ClInclude Include="..\public\N_NPC.h" />
     <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\Page.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="..\public\UI_3DTexture.h" />
     <ClInclude Include="..\public\UI_HPGauge.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
+    <ClInclude Include="..\public\UI_Talk.h" />
     <ClInclude Include="..\public\Utilities_Manager.h" />
     <ClInclude Include="..\public\W_PigWarrior.h" />
     <ClInclude Include="Client.h" />
@@ -249,6 +251,7 @@
     <ClCompile Include="..\private\M_Pigs.cpp" />
     <ClCompile Include="..\private\M_PigWarrior.cpp" />
     <ClCompile Include="..\private\M_Tree_Witch.cpp" />
+    <ClCompile Include="..\private\N_Bubblegum.cpp" />
     <ClCompile Include="..\private\N_NPC.cpp" />
     <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\Page.cpp" />
@@ -262,6 +265,7 @@
     <ClCompile Include="..\private\UI_3DTexture.cpp" />
     <ClCompile Include="..\private\UI_HPGauge.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
+    <ClCompile Include="..\private\UI_Talk.cpp" />
     <ClCompile Include="..\private\Utilities_Manager.cpp" />
     <ClCompile Include="..\private\W_PigWarrior.cpp" />
     <ClCompile Include="Client.cpp" />
