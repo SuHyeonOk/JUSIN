@@ -152,7 +152,7 @@ HRESULT CN_Bubblegum::SetUp_ShaderResources()
 
 void CN_Bubblegum::Help_UI()
 {
-	if (m_bHelp_UI)
+	if (m_bHelp_UI)	
 		return;
 
 	m_bHelp_UI = true;
@@ -175,10 +175,10 @@ void CN_Bubblegum::Help_UI()
 
 void CN_Bubblegum::Talk_UI()
 {
-	if (!m_bIsTalk)
+	if (!m_bIsTalk || m_bTalk_UI)
 		return;
 
-	m_bTemp = true;
+	m_bTalk_UI = true;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -190,24 +190,29 @@ void CN_Bubblegum::Talk_UI()
 
 HRESULT CN_Bubblegum::UI_Dead()
 {
-	if (!m_bTemp)
+	if (!m_bTalk_UI)
 		return S_OK;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
-	if (nullptr == pGameObject_UI_3DTexture)
-		return E_FAIL;
-	
-	pGameObject_UI_3DTexture->Set_Dead();
+	// 물음표 : 한 번 생성되고, 대화를 했다면 삭제된다.
+	if (m_bHelp_UI && !m_bIsTalk)
+	{
+		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
+		if (nullptr != pGameObject_UI_3DTexture)
+			pGameObject_UI_3DTexture->Set_Dead();
+	}
+
 
 	CUI_Talk * pGameObject_UI_Talk = dynamic_cast<CUI_Talk*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"), 0));
-	if (nullptr == pGameObject_UI_Talk)
-		return E_FAIL;
+	if (nullptr != pGameObject_UI_Talk)
+		pGameObject_UI_Talk->Set_Dead();
 	
-	pGameObject_UI_Talk->Set_Dead();
+	
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
 }
 
 CN_Bubblegum * CN_Bubblegum::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

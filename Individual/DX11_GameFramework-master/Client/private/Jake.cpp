@@ -598,9 +598,6 @@ void CJake::Swim_Tick(_double TimeDelta)
 	if (!m_bDiving)
 		m_pModelCom->Set_AnimIndex(43, false);	// DIVING
 
-	if (43 == m_pModelCom->Get_AnimIndex())
-		cout << m_pModelCom->Get_Keyframes() << endl;
-
 	if (43 == m_pModelCom->Get_AnimIndex() && 25 <= m_pModelCom->Get_AnimIndex())
 		m_bDiving = true;
 

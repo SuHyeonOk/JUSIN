@@ -33,8 +33,8 @@ private:
 
 private:
 	_bool		m_bHelp_UI = false;
+	_bool		m_bTalk_UI = false;
 	_int		m_iTalk_Count = 0;
-	_bool		m_bTemp = false;
 
 public:
 	static	CN_Bubblegum*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
