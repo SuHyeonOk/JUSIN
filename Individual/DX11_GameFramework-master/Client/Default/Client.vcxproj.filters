@@ -139,14 +139,14 @@
     <Filter Include="02.GameObjects\UI\Talk">
       <UniqueIdentifier>{7d04eab4-a120-4cbf-81ab-41d00d142fbd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Camera\Effect">
-      <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\NPC">
       <UniqueIdentifier>{d03630e5-bedb-4a71-ba9b-324f4de70d57}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\NPC\Bubblegum">
       <UniqueIdentifier>{ab0fabf6-d608-484e-8be0-60b3a93a57f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Effect">
+      <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -295,13 +295,13 @@
       <Filter>02.GameObjects\Sky</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Rect_Instancing.h">
-      <Filter>02.GameObjects\Camera\Effect</Filter>
+      <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_Change_Magic.h">
       <Filter>02.GameObjects\PlayerSkill\Magic</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Point_Instancing.h">
-      <Filter>02.GameObjects\Camera\Effect</Filter>
+      <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\N_Bubblegum.h">
       <Filter>02.GameObjects\NPC\Bubblegum</Filter>
@@ -438,13 +438,13 @@
       <Filter>02.GameObjects\Sky</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Rect_Instancing.cpp">
-      <Filter>02.GameObjects\Camera\Effect</Filter>
+      <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_Change_Magic.cpp">
       <Filter>02.GameObjects\PlayerSkill\Magic</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Point_Instancing.cpp">
-      <Filter>02.GameObjects\Camera\Effect</Filter>
+      <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\N_Bubblegum.cpp">
       <Filter>02.GameObjects\NPC\Bubblegum</Filter>
@@ -488,7 +488,10 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRect_Instancing.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTex_Bullet.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

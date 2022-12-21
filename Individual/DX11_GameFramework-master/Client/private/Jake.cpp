@@ -159,7 +159,7 @@ HRESULT CJake::SetUp_Components()
 	CNavigation::NAVIDESC			NaviDesc;
 	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
 
-	NaviDesc.iCurrentIndex = 0;
+	NaviDesc.iCurrentIndex = 2;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
@@ -288,6 +288,8 @@ void CJake::Player_Tick(_double TimeDelta)
 	// Player 가 아닐 때 계속 확인해야하는 기능
 	Change_Tick();
 	Cheering_Tick();
+
+	cout << m_pNavigationCom->Get_CellType() << endl;
 
 	// 수영!!
 	if (m_bIsSwim)

@@ -520,7 +520,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta/*, m_pNavigationCom*/);
+		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
@@ -663,7 +663,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(52);
 
 		// CellType 이 1 이라면 내라가다가.
-		m_pTransformCom->Go_SwinDown(TimeDelta, 1.5f, -0.8f);
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);
 
 		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())

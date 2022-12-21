@@ -89,15 +89,16 @@ void CB_2DBullet::Tick(_double TimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
 
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector vDistance;
-	vDistance = XMLoadFloat4(&m_f4Distance);
+	_vector vDistance = XMLoadFloat4(&m_f4Distance);
 	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
  	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
-
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		// 충돌처리
+	// 충돌처리
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)
