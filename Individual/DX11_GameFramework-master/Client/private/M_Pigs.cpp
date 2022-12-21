@@ -230,6 +230,9 @@ void CM_Pigs::Idle_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
+	if (m_bAttack && 70 <= m_pModelCom->Get_Keyframes())
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
@@ -242,8 +245,8 @@ void CM_Pigs::Move_Tick(const _double& TimeDelta)
 
 	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 2.5))
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = false;
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}
 }
 
@@ -278,7 +281,7 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	if (0 != iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
 		return;
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	m_bAttack = true;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
