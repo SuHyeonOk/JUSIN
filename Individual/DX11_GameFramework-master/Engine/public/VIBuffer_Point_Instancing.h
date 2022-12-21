@@ -4,12 +4,12 @@
 
 BEGIN(Engine)
 
-class ENGINE_DLL CVIBuffer_Rect_Instancing final : public CVIBuffer_Instancing
+class ENGINE_DLL CVIBuffer_Point_Instancing final : public CVIBuffer_Instancing
 {
 public:
-	CVIBuffer_Rect_Instancing(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CVIBuffer_Rect_Instancing(const CVIBuffer_Rect_Instancing& rhs);
-	virtual ~CVIBuffer_Rect_Instancing() = default;
+	CVIBuffer_Point_Instancing(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CVIBuffer_Point_Instancing(const CVIBuffer_Point_Instancing& rhs);
+	virtual ~CVIBuffer_Point_Instancing() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype(_uint iNumInstance);
@@ -21,7 +21,7 @@ private:
 	_double*				m_pSpeeds = nullptr;
 
 public:
-	static CVIBuffer_Rect_Instancing* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iNumInstance = 1);
+	static CVIBuffer_Point_Instancing* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iNumInstance = 1);
 	virtual CComponent* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 };

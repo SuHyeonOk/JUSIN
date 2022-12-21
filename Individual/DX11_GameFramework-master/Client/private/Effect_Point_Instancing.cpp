@@ -1,18 +1,18 @@
 #include "stdafx.h"
-#include "..\public\Effect_Rect_Instancing.h"
+#include "..\public\Effect_Point_Instancing.h"
 #include "GameInstance.h"
 
-CEffect_Rect_Instancing::CEffect_Rect_Instancing(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CEffect_Point_Instancing::CEffect_Point_Instancing(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 }
 
-CEffect_Rect_Instancing::CEffect_Rect_Instancing(const CEffect_Rect_Instancing & rhs)
+CEffect_Point_Instancing::CEffect_Point_Instancing(const CEffect_Point_Instancing & rhs)
 	: CGameObject(rhs)
 {
 }
 
-HRESULT CEffect_Rect_Instancing::Initialize_Prototype()
+HRESULT CEffect_Point_Instancing::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -20,7 +20,7 @@ HRESULT CEffect_Rect_Instancing::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CEffect_Rect_Instancing::Initialize(void * pArg)
+HRESULT CEffect_Point_Instancing::Initialize(void * pArg)
 {
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));	
@@ -34,20 +34,20 @@ HRESULT CEffect_Rect_Instancing::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;	
 
-	// 오른짝으로 이동! 애니메이션이 있는 모델의 경우 사용하기 어렵다.
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(5.f, 0.f, 0.f, 1.f));	
+	m_pTransformCom->Set_Scaled(_float3(0.2f, 0.2f, 0.2f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(5.f, 0.f, 0.f, 1.f));
 
 	return S_OK;
 }
 
-void CEffect_Rect_Instancing::Tick(_double TimeDelta)
+void CEffect_Point_Instancing::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pVIBufferCom->Tick(TimeDelta); // 위에서 아래로 이동한다.
+	m_pVIBufferCom->Tick(TimeDelta);
 }
 
-void CEffect_Rect_Instancing::Late_Tick(_double TimeDelta)
+void CEffect_Point_Instancing::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);	
 
@@ -55,7 +55,7 @@ void CEffect_Rect_Instancing::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CEffect_Rect_Instancing::Render()
+HRESULT CEffect_Point_Instancing::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -70,7 +70,7 @@ HRESULT CEffect_Rect_Instancing::Render()
 	return S_OK;
 }
 
-HRESULT CEffect_Rect_Instancing::SetUp_Components()
+HRESULT CEffect_Point_Instancing::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -78,28 +78,31 @@ HRESULT CEffect_Rect_Instancing::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxRectInstance"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxPointInstance"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
+
 	/* For.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect_Instancing"), TEXT("Com_VIBuffer"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Point_Instancing"), TEXT("Com_VIBuffer"),
 		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"), TEXT("Com_Texture"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"), TEXT("Com_Texture"),
 		(CComponent**)&m_pTextureCom)))
 		return E_FAIL;
+
 
 	return S_OK;
 }
 
-HRESULT CEffect_Rect_Instancing::SetUp_ShaderResources()
+HRESULT CEffect_Point_Instancing::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 
+	// m_pShaderCom->Set_Matrix("g_WorldMatrix", &m_WorldMatrix);
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -107,6 +110,9 @@ HRESULT CEffect_Rect_Instancing::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -117,31 +123,31 @@ HRESULT CEffect_Rect_Instancing::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CEffect_Rect_Instancing * CEffect_Rect_Instancing::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CEffect_Point_Instancing * CEffect_Point_Instancing::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CEffect_Rect_Instancing*		pInstance = new CEffect_Rect_Instancing(pDevice, pContext);
+ 	CEffect_Point_Instancing*		pInstance = new CEffect_Point_Instancing(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CEffect_Rect_Instancing");
+		MSG_BOX("Failed to Created : CEffect_Point_Instancing");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CEffect_Rect_Instancing::Clone(void * pArg)
+CGameObject * CEffect_Point_Instancing::Clone(void * pArg)
 {
-	CEffect_Rect_Instancing*		pInstance = new CEffect_Rect_Instancing(*this);
+	CEffect_Point_Instancing*		pInstance = new CEffect_Point_Instancing(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CEffect_Rect_Instancing");
+		MSG_BOX("Failed to Cloned : CEffect_Point_Instancing");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CEffect_Rect_Instancing::Free()
+void CEffect_Point_Instancing::Free()
 {
 	__super::Free();
 

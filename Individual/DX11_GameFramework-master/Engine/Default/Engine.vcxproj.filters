@@ -348,11 +348,14 @@
     <ClInclude Include="..\public\VIBuffer_Cube.h">
       <Filter>01.Utility\03.Components\02.VIBuffer\Cobe</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\VIBuffer_Rect_Instancing.h">
-      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Rect</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Instancing.h">
       <Filter>01.Utility\03.Components\02.VIBuffer\Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Point_Instancing.h">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Rect_Instancing.h">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Rect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +535,9 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Rect_Instancing.cpp">
       <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Point_Instancing.cpp">
+      <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Point</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

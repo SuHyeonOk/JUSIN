@@ -1,18 +1,18 @@
-#include "..\public\VIBuffer_Rect_Instancing.h"
+#include "..\public\VIBuffer_Point_Instancing.h"
 
-CVIBuffer_Rect_Instancing::CVIBuffer_Rect_Instancing(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CVIBuffer_Point_Instancing::CVIBuffer_Point_Instancing(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CVIBuffer_Instancing(pDevice, pContext)
 {
 }
 
-CVIBuffer_Rect_Instancing::CVIBuffer_Rect_Instancing(const CVIBuffer_Rect_Instancing & rhs)
+CVIBuffer_Point_Instancing::CVIBuffer_Point_Instancing(const CVIBuffer_Point_Instancing & rhs)
 	: CVIBuffer_Instancing(rhs)
 	, m_pSpeeds(rhs.m_pSpeeds)
 {
 
 }
 
-HRESULT CVIBuffer_Rect_Instancing::Initialize_Prototype(_uint iNumInstance)
+HRESULT CVIBuffer_Point_Instancing::Initialize_Prototype(_uint iNumInstance)
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -23,15 +23,15 @@ HRESULT CVIBuffer_Rect_Instancing::Initialize_Prototype(_uint iNumInstance)
 		m_pSpeeds[i] = rand() % 5 + 1.0;
 
 	m_iNumInstance = iNumInstance;
-	m_iIndexCountPerInstance = 6;
+	m_iIndexCountPerInstance = 1;
 	m_iNumVertexBuffers = 2;
-	m_iStride = sizeof(VTXTEX);
-	m_iNumVertices = 4;
-	m_iNumPrimitive = 2 * iNumInstance;
-	m_eTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	m_iStride = sizeof(VTXPOINT);
+	m_iNumVertices = 1;
+	m_iNumPrimitive = iNumInstance;
+	m_eTopology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
 	m_eIndexFormat = DXGI_FORMAT_R16_UINT;
-	m_iIndicesSizePerPrimitive = sizeof(FACEINDICES16);
-	m_iNumIndicesPerPrimitive = 3;
+	m_iIndicesSizePerPrimitive = sizeof(_ushort);		// 점 하나만 그리니
+	m_iNumIndicesPerPrimitive = 1;
 	m_iNumIndices = m_iNumIndicesPerPrimitive * m_iNumPrimitive;
 
 #pragma region VERTEX_BUFFER
@@ -45,20 +45,11 @@ HRESULT CVIBuffer_Rect_Instancing::Initialize_Prototype(_uint iNumInstance)
 	m_BufferDesc.CPUAccessFlags = 0;
 	m_BufferDesc.MiscFlags = 0;
 
-	VTXTEX*			pVertices = new VTXTEX[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXTEX));
+	VTXPOINT*			pVertices = new VTXPOINT;
+	ZeroMemory(pVertices, sizeof(VTXPOINT));
 
-	pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.5f);
-	pVertices[0].vTexUV = _float2(0.0f, 0.f);
-
-	pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.5f);
-	pVertices[1].vTexUV = _float2(1.0f, 0.f);
-
-	pVertices[2].vPosition = _float3(0.5f, -0.5f, 0.5f);
-	pVertices[2].vTexUV = _float2(1.0f, 1.f);
-
-	pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.5f);
-	pVertices[3].vTexUV = _float2(0.0f, 1.f);
+	pVertices->vPosition = _float3(0.0f, 0.0f, 0.0f);
+	pVertices->vPSize = _float2(0.2f, 0.2f);
 
 	ZeroMemory(&m_SubResourceData, sizeof m_SubResourceData);
 	m_SubResourceData.pSysMem = pVertices;
@@ -81,25 +72,8 @@ HRESULT CVIBuffer_Rect_Instancing::Initialize_Prototype(_uint iNumInstance)
 	m_BufferDesc.CPUAccessFlags = 0;
 	m_BufferDesc.MiscFlags = 0;
 
-	FACEINDICES16*		pIndices = new FACEINDICES16[m_iNumPrimitive];
-	ZeroMemory(pIndices, sizeof(FACEINDICES16) * m_iNumPrimitive);
-
-	_uint		iNumFaces = 0;
-
-	for (_uint i = 0; i < iNumInstance; ++i)
-	{
-		pIndices[iNumFaces]._0 = 0;
-		pIndices[iNumFaces]._1 = 1;
-		pIndices[iNumFaces]._2 = 2;
-		++iNumFaces;
-
-		pIndices[iNumFaces]._0 = 0;
-		pIndices[iNumFaces]._1 = 2;
-		pIndices[iNumFaces]._2 = 3;
-		++iNumFaces;
-	}
-
-
+	_ushort*		pIndices = new _ushort[m_iNumPrimitive];
+	ZeroMemory(pIndices, sizeof(_ushort) * m_iNumPrimitive);
 
 	ZeroMemory(&m_SubResourceData, sizeof m_SubResourceData);
 	m_SubResourceData.pSysMem = pIndices;
@@ -132,7 +106,7 @@ HRESULT CVIBuffer_Rect_Instancing::Initialize_Prototype(_uint iNumInstance)
 		pInstanceVertices[i].vRight = _float4(1.0f, 0.f, 0.f, 0.f);
 		pInstanceVertices[i].vUp = _float4(0.0f, 1.f, 0.f, 0.f);
 		pInstanceVertices[i].vLook = _float4(0.0f, 0.f, 1.f, 0.f);
-		pInstanceVertices[i].vPosition = _float4(_float(rand() % 5), 0.f, _float(rand() % 5), 1.f);
+		pInstanceVertices[i].vPosition = _float4(rand() % 5, 3.0f, rand() % 5, 1.f);	// 높이 올려두었다.
 	}
 
 	ZeroMemory(&m_SubResourceData, sizeof m_SubResourceData);
@@ -146,12 +120,12 @@ HRESULT CVIBuffer_Rect_Instancing::Initialize_Prototype(_uint iNumInstance)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Rect_Instancing::Initialize(void * pArg)
+HRESULT CVIBuffer_Point_Instancing::Initialize(void * pArg)
 {
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Rect_Instancing::Tick(_double TimeDelta)
+HRESULT CVIBuffer_Point_Instancing::Tick(_double TimeDelta)
 {
 	D3D11_MAPPED_SUBRESOURCE			SubResource;
 	ZeroMemory(&SubResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
@@ -160,12 +134,11 @@ HRESULT CVIBuffer_Rect_Instancing::Tick(_double TimeDelta)
 
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
-		// TODO : vPosition.y 을 방향벡터로 만들어서 자연스럽게 만들기!
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.y += _float(m_pSpeeds[i] * TimeDelta);
+		((VTXMATRIX*)SubResource.pData)[i].vPosition.y -= m_pSpeeds[i] * TimeDelta;
 
-		// 위에서 아래로 떨어지는 코드
-		if (((VTXMATRIX*)SubResource.pData)[i].vPosition.y > 3.f)
-			((VTXMATRIX*)SubResource.pData)[i].vPosition.y = 0.f;
+		// 아래에서 위로 올라가는 코드
+		if (((VTXMATRIX*)SubResource.pData)[i].vPosition.y < 0.f)
+			((VTXMATRIX*)SubResource.pData)[i].vPosition.y = 3.f;
 	}
 
 	m_pContext->Unmap(m_pInstanceBuffer, 0);
@@ -173,7 +146,7 @@ HRESULT CVIBuffer_Rect_Instancing::Tick(_double TimeDelta)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Rect_Instancing::Render()
+HRESULT CVIBuffer_Point_Instancing::Render()
 {
 	if (nullptr == m_pContext)
 		return E_FAIL;
@@ -208,31 +181,31 @@ HRESULT CVIBuffer_Rect_Instancing::Render()
 	return S_OK;
 }
 
-CVIBuffer_Rect_Instancing * CVIBuffer_Rect_Instancing::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iNumInstance)
+CVIBuffer_Point_Instancing * CVIBuffer_Point_Instancing::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iNumInstance)
 {
-	CVIBuffer_Rect_Instancing*		pInstance = new CVIBuffer_Rect_Instancing(pDevice, pContext);
+	CVIBuffer_Point_Instancing*		pInstance = new CVIBuffer_Point_Instancing(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(iNumInstance)))
 	{
-		MSG_BOX("Failed to Created : CVIBuffer_Rect_Instancing");
+		MSG_BOX("Failed to Created : CVIBuffer_Point_Instancing");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CComponent * CVIBuffer_Rect_Instancing::Clone(void * pArg)
+CComponent * CVIBuffer_Point_Instancing::Clone(void * pArg)
 {
-	CVIBuffer_Rect_Instancing*		pInstance = new CVIBuffer_Rect_Instancing(*this);
+	CVIBuffer_Point_Instancing*		pInstance = new CVIBuffer_Point_Instancing(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CVIBuffer_Rect_Instancing");
+		MSG_BOX("Failed to Cloned : CVIBuffer_Point_Instancing");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CVIBuffer_Rect_Instancing::Free()
+void CVIBuffer_Point_Instancing::Free()
 {
 	__super::Free();
 

@@ -15,6 +15,7 @@
 
 // Effect
 #include "Effect_Rect_Instancing.h"
+#include "Effect_Point_Instancing.h"
 
 // Weapon
 #include "W_PigWarrior.h"
@@ -97,6 +98,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_Component_Texture_Brush*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Brush.png"), 1))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_Snow */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
 		return E_FAIL;
 
 	// 2D Bullet
@@ -304,9 +309,15 @@ HRESULT CLoader::Loading_Tool()
 		CM_Magic_Man::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Effect
 	/* For.Prototype_GameObject_Effect_Rect_Instancing */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Rect_Instancing"),
 		CEffect_Rect_Instancing::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Effect_Point_Instancing */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Point_Instancing"),
+		CEffect_Point_Instancing::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("·Îµù³¡. "));

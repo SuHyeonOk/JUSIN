@@ -134,7 +134,7 @@ namespace Engine
 		static D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXANIMMODEL_DECLARATION;
 
-
+	
 
 	typedef struct tagVertexModel
 	{
