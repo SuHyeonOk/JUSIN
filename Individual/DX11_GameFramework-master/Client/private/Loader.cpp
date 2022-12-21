@@ -156,12 +156,6 @@ HRESULT CLoader::Loading_Tool()
 
 	_matrix			PivotMatrix = XMMatrixIdentity();
 
-	// NPC
-	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	// Player
 	/* For.Prototype_Component_Model_S_StunChick */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_StunChick"),
@@ -209,6 +203,12 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// NPC
+	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	//// Monster 180
 	/* For.Prototype_Component_Model_M_PigWarrior_BEE */

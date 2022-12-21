@@ -73,6 +73,7 @@ void CN_NPC::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		m_bIsTalk = CObj_Manager::GetInstance()->Get_IsTalk();
 	}
 }

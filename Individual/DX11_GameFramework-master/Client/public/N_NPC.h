@@ -44,6 +44,7 @@ protected:	// 자식에게 거의 필수적인 함수
 protected:
 	virtual void		Help_UI() = 0;
 	virtual void		Talk_UI() = 0;
+	virtual HRESULT		UI_Dead() = 0;
 
 protected:
 	CRenderer*			m_pRendererCom = nullptr;

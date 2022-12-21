@@ -60,6 +60,7 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 
 	Help_UI();
 	Talk_UI();
+	UI_Dead();
 }
 
 void CN_Bubblegum::Late_Tick(_double TimeDelta)
@@ -151,10 +152,10 @@ HRESULT CN_Bubblegum::SetUp_ShaderResources()
 
 void CN_Bubblegum::Help_UI()
 {
-	if (m_bTalk_UI)
+	if (m_bHelp_UI)
 		return;
 
-	m_bTalk_UI = true;
+	m_bHelp_UI = true;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -177,10 +178,34 @@ void CN_Bubblegum::Talk_UI()
 	if (!m_bIsTalk)
 		return;
 
+	m_bTemp = true;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"))))
 		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+HRESULT CN_Bubblegum::UI_Dead()
+{
+	if (!m_bTemp)
+		return S_OK;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
+	if (nullptr == pGameObject_UI_3DTexture)
+		return E_FAIL;
+	
+	pGameObject_UI_3DTexture->Set_Dead();
+
+	CUI_Talk * pGameObject_UI_Talk = dynamic_cast<CUI_Talk*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"), 0));
+	if (nullptr == pGameObject_UI_Talk)
+		return E_FAIL;
+	
+	pGameObject_UI_Talk->Set_Dead();
 
 	RELEASE_INSTANCE(CGameInstance);
 }

@@ -59,6 +59,7 @@ public: /* For.Level_Manager */
 
 public: /* For.Object_Manager */
 	class CComponent*	Get_ComponentPtr(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pComponentTag, _uint iLayerIndex); // ¢Â
+	class CGameObject*	Get_GameObjectPtr(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pGameObjectTag, _uint iLayerIndex); // ¢Â
 	HRESULT				Add_Prototype(const _tchar* pPrototypeTag, class CGameObject* pPrototype);
 	HRESULT				Clone_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pPrototypeTag, void* pArg = nullptr);
 	CGameObject*		Clone_GameObject(const _tchar* pPrototypeTag, void* pArg = nullptr);

@@ -20,7 +20,8 @@ public:
 	HRESULT Clear(_uint iLevelIndex);
 
 public:
-	class CComponent* Get_ComponentPtr(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pComponentTag, _uint iLayerIndex); // ¢Â
+	class CComponent*	Get_ComponentPtr(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pComponentTag, _uint iLayerIndex); // ¢Â
+	class CGameObject*	Get_GameObjectPtr(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pGameObjectTag, _uint iLayerIndex); // ¢Â
 
 public:
 	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CGameObject* pPrototype);

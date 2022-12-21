@@ -47,6 +47,19 @@ CComponent * CObject_Manager::Get_ComponentPtr(_uint iLevelIndex, const _tchar *
 	return pLayer->Get_ComponentPtr(pComponentTag, iLayerIndex);
 }
 
+CGameObject * CObject_Manager::Get_GameObjectPtr(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pGameObjectTag, _uint iLayerIndex) // ¢Â
+{
+	if (iLevelIndex >= m_iNumLevels)
+		return nullptr;
+
+	CLayer*	pLayer = Find_Layer(iLevelIndex, pLayerTag);
+
+	if (nullptr == pLayer)
+		return nullptr;
+
+	return pLayer->Get_GameObject(pGameObjectTag, iLayerIndex);
+}
+
 HRESULT CObject_Manager::Add_Prototype(const _tchar * pPrototypeTag, CGameObject * pPrototype)
 {
 	if (nullptr != Find_Prototype(pPrototypeTag))

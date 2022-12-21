@@ -121,17 +121,11 @@
     <Filter Include="02.GameObjects\UI\3DTexture">
       <UniqueIdentifier>{352e6a8d-765b-4250-b2bb-35b391327d7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\NPC">
-      <UniqueIdentifier>{d03630e5-bedb-4a71-ba9b-324f4de70d57}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Monster\Magic_Man">
       <UniqueIdentifier>{e335d783-7ccf-419c-b0a6-83860d25423f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Sky">
       <UniqueIdentifier>{8655c6ab-9198-4bdc-aae8-93973bbffeba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Effect">
-      <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\PlayerSkill">
       <UniqueIdentifier>{2b45075f-075f-4884-a753-ab10792ce700}</UniqueIdentifier>
@@ -142,11 +136,17 @@
     <Filter Include="02.GameObjects\PlayerSkill\Magic">
       <UniqueIdentifier>{6f7a346b-b41f-4fce-8af0-c2a772e94af3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\NPC\Bubblegum">
-      <UniqueIdentifier>{ab0fabf6-d608-484e-8be0-60b3a93a57f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Talk">
       <UniqueIdentifier>{7d04eab4-a120-4cbf-81ab-41d00d142fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Effect">
+      <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC">
+      <UniqueIdentifier>{d03630e5-bedb-4a71-ba9b-324f4de70d57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\Bubblegum">
+      <UniqueIdentifier>{ab0fabf6-d608-484e-8be0-60b3a93a57f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -295,13 +295,13 @@
       <Filter>02.GameObjects\Sky</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Rect_Instancing.h">
-      <Filter>02.GameObjects\Effect</Filter>
+      <Filter>02.GameObjects\Camera\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_Change_Magic.h">
       <Filter>02.GameObjects\PlayerSkill\Magic</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Point_Instancing.h">
-      <Filter>02.GameObjects\Effect</Filter>
+      <Filter>02.GameObjects\Camera\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\N_Bubblegum.h">
       <Filter>02.GameObjects\NPC\Bubblegum</Filter>
@@ -438,13 +438,13 @@
       <Filter>02.GameObjects\Sky</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Rect_Instancing.cpp">
-      <Filter>02.GameObjects\Effect</Filter>
+      <Filter>02.GameObjects\Camera\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_Change_Magic.cpp">
       <Filter>02.GameObjects\PlayerSkill\Magic</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Point_Instancing.cpp">
-      <Filter>02.GameObjects\Effect</Filter>
+      <Filter>02.GameObjects\Camera\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\N_Bubblegum.cpp">
       <Filter>02.GameObjects\NPC\Bubblegum</Filter>
