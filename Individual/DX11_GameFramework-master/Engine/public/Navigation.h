@@ -7,6 +7,16 @@ BEGIN(Engine)
 class ENGINE_DLL CNavigation final : public CComponent
 {
 public:
+	typedef struct tagCellInfo
+	{
+		_int		iCellType = 0;
+		_float3		Point_A;
+		_float3		Point_B;
+		_float3		Point_C;
+
+	}CELLINFO;
+
+public:
 	typedef struct tagNavigationDesc
 	{
 		_int		iCurrentIndex = -1;
@@ -25,6 +35,7 @@ public:
 
 public:
 	_int	Get_CellType();
+	HRESULT	Cell_Create(CELLINFO tCellInfo);
 
 public:
 	_bool isMove_OnNavigation(_fvector TargetPos);

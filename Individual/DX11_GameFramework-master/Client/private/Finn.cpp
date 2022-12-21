@@ -64,6 +64,8 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
 {
+	cout << m_pNavigationCom->Get_CellType() << endl;
+	
 	__super::Tick(TimeDelta);
 
 	//Player_Info();

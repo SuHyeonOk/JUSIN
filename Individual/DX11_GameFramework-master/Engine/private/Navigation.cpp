@@ -129,8 +129,6 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar * pNavigationDataFilePath
 	return S_OK;
 }
 
-
-
 HRESULT CNavigation::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
@@ -146,6 +144,25 @@ _int CNavigation::Get_CellType()
 	// 내가 위치한 곳의 셀 타입을 받아오고 싶다.
 
 	return m_NaviDesc.iCellType = m_Cells[m_NaviDesc.iCurrentIndex]->Get_CellType();
+}
+
+HRESULT CNavigation::Cell_Create(CELLINFO tCellInfo)
+{
+	_float3		vPoints[CCell::POINT_END];
+
+	vPoints[0] = tCellInfo.Point_A;
+	vPoints[1] = tCellInfo.Point_B;
+	vPoints[2] = tCellInfo.Point_C;
+
+	CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size(), tCellInfo.iCellType);
+	if (nullptr == pCell)
+	{
+		MSG_BOX("Failed to Put Into Cell Vector.");
+		return E_FAIL;
+	}
+
+	m_Cells.push_back(pCell);
+	return S_OK;
 }
 
 _bool CNavigation::isMove_OnNavigation(_fvector TargetPos)

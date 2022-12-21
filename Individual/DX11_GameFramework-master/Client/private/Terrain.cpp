@@ -338,6 +338,14 @@ void CTerrain::ImGui_Navigation()
 			 << m_f3Points[2].x << "|" << m_f3Points[2].y << L"|" << m_f3Points[2].z << "\n";
 
 		fout.close();
+
+		// 셀 실시간으로 생성하기
+		CNavigation::CELLINFO tCellInfo;
+		tCellInfo.iCellType = m_iCellType;
+		tCellInfo.Point_A = _float3(m_f3Points[0].x, m_f3Points[0].y, m_f3Points[0].z);
+		tCellInfo.Point_B = _float3(m_f3Points[1].x, m_f3Points[1].y, m_f3Points[1].z);
+		tCellInfo.Point_C = _float3(m_f3Points[2].x, m_f3Points[2].y, m_f3Points[2].z);
+		m_pNavigationCom->Cell_Create(tCellInfo);
 	}
 
 	if (pGameInstance->Key_Down(DIK_4)) // (ImGui::Button("Data_txt"))
