@@ -121,6 +121,8 @@ HRESULT CJake::Render()
 #ifdef _DEBUG
 	if (nullptr != m_pColliderCom)
 		m_pColliderCom->Render();
+
+	m_pNavigationCom->Render();
 #endif
 	return S_OK;
 }
@@ -151,6 +153,16 @@ HRESULT CJake::SetUp_Components()
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
+
+	/* For.Com_Navigation */
+	CNavigation::NAVIDESC			NaviDesc;
+	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
+
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
+		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -276,6 +288,16 @@ void CJake::Player_Tick(_double TimeDelta)
 	// Player 가 아닐 때 계속 확인해야하는 기능
 	Change_Tick();
 	Cheering_Tick();
+
+	// 수영!!
+	if (m_bIsSwim)
+	{
+		Swim_Tick(TimeDelta);
+		return;
+	}
+	else
+		if (1 == m_pNavigationCom->Get_CellType())
+			m_bIsSwim = true;
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
@@ -440,7 +462,7 @@ void CJake::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta);
+		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
@@ -525,7 +547,7 @@ void CJake::Roolling_Tick(_double TimeDelta)
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
 
 	if (!m_pModelCom->Get_Finished())
-		m_pTransformCom->Go_Straight(TimeDelta, 4.f);
+		m_pTransformCom->Go_Straight(TimeDelta, 4.f, m_pNavigationCom);
 	else
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 }
@@ -568,6 +590,37 @@ void CJake::Stun_Tick()
 		m_bStru = false;
 		m_iStun_Count = 0;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
+}
+
+void CJake::Swim_Tick(_double TimeDelta)
+{
+	if (!m_bDiving)
+		m_pModelCom->Set_AnimIndex(43, false);	// DIVING
+
+	if (43 == m_pModelCom->Get_AnimIndex())
+		cout << m_pModelCom->Get_Keyframes() << endl;
+
+	if (43 == m_pModelCom->Get_AnimIndex() && 25 <= m_pModelCom->Get_AnimIndex())
+		m_bDiving = true;
+
+	if (m_bDiving)
+	{
+		m_pModelCom->Set_AnimIndex(57);			// SWIM
+
+		// CellType 이 1 이라면 내라가다가.
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.f, -0.6f);
+
+		// CellType 이 0 이되면 올라간다.
+		if (0 == m_pNavigationCom->Get_CellType())
+		{
+			m_pModelCom->Set_AnimIndex(42);		// IDLE
+			if (m_pTransformCom->Go_SwinUp(TimeDelta, 5.f))	// 0 까지 올라왔다면
+			{
+				m_bDiving = false;
+				m_bIsSwim = false;
+			}
+		}
 	}
 }
 
@@ -730,6 +783,7 @@ void CJake::Free()
 		Safe_Release(pPart);
 	m_PlayerParts.clear();
 
+	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);

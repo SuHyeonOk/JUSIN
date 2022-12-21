@@ -9,6 +9,7 @@ class CModel;
 class CShader;
 class CCollider;
 class CRenderer;
+class CNavigation;
 END
 
 BEGIN(Client)
@@ -32,6 +33,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
+	CNavigation*			m_pNavigationCom = nullptr;
 
 private:
 	HRESULT SetUp_Components();
@@ -55,6 +57,8 @@ private:
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
+
+	void	Swim_Tick(_double TimeDelta);
 	void	Change_Tick();
 	void	Cheering_Tick();
 
@@ -73,6 +77,9 @@ private:
 	//////////////////////////// 플레이어 일 때
 	_bool		m_bStru = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
+
+	_bool		m_bDiving = false;			// 수영
+	_bool		m_bIsSwim = false;
 
 	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
 	_double		m_bSkillClone_TimeAcc = 0;

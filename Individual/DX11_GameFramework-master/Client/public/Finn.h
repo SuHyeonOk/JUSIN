@@ -61,6 +61,7 @@ private:
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
+
 	void	Swim_Tick(_double TimeDelta);
 	void	Change_Tick();
 	void	Cheering_Tick();
@@ -87,6 +88,7 @@ private:
 	_bool		m_bStun = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
+	_bool		m_bDiving = false;			// 수영
 	_bool		m_bIsSwim = false;
 
 	_bool		m_bSkill_Clone = false;		// 몬스터 Magic 공격

@@ -351,19 +351,20 @@ void CFinn::Parts_LateTick(const _double & TimeDelta)
 }
 
 void CFinn::Player_Tick(_double TimeDelta)
-{
+{	
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
 
-	if (1 == m_pNavigationCom->Get_CellType())
-		m_bIsSwim = true;
-
+	// 수영!!
 	if (m_bIsSwim)
 	{
 		Swim_Tick(TimeDelta);
 		return;
 	}
+	else
+		if (1 == m_pNavigationCom->Get_CellType())
+			m_bIsSwim = true;
 
 	// 내가 플레이어 일 때 만 할 행동	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
@@ -519,7 +520,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
+		m_pTransformCom->Go_Straight(TimeDelta/*, m_pNavigationCom*/);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
@@ -599,7 +600,7 @@ void CFinn::Roolling_Tick(_double TimeDelta)
 	m_OnMove = false;	// 이동 누르고 shift 누르면 계속 직진해서 flase 로 바꿈
 
 	if (!m_pModelCom->Get_Finished())
-		m_pTransformCom->Go_Straight(TimeDelta, 4.f, m_pNavigationCom);
+		m_pTransformCom->Go_Straight(TimeDelta, 4.f/*, m_pNavigationCom*/);
 	else
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
@@ -651,15 +652,30 @@ void CFinn::Stun_Tick()
 
 void CFinn::Swim_Tick(_double TimeDelta)
 {
-	m_tPlayerInfo.eState = m_tPlayerInfo.SWIM;
+	if(!m_bDiving)
+		m_pModelCom->Set_AnimIndex(40, false);
 
-	// CellType 이 1 이라면 내라가다가.
-	m_pTransformCom->Go_SwinDown(TimeDelta, 1.f, -0.8f);
+	if (40 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		m_bDiving = true;
+		
+	if (m_bDiving)
+	{
+		m_pModelCom->Set_AnimIndex(52);
 
-	// CellType 이 0 이되면 올라간다.
-	if (0 == m_pNavigationCom->Get_CellType())
-		if (m_pTransformCom->Go_SwinUp(TimeDelta, 1.f))	// 0 까지 올라왔다면
-			m_bIsSwim = false;
+		// CellType 이 1 이라면 내라가다가.
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.5f, -0.8f);
+
+		// CellType 이 0 이되면 올라간다.
+		if (0 == m_pNavigationCom->Get_CellType())
+		{
+			m_pModelCom->Set_AnimIndex(39);
+			if (m_pTransformCom->Go_SwinUp(TimeDelta, 5.f))	// 0 까지 올라왔다면
+			{
+				m_bDiving = false;
+				m_bIsSwim = false;
+			}
+		}
+	}
 }
 
 void CFinn::Change_Tick()
@@ -794,10 +810,6 @@ void CFinn::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::STUN:
 			m_pModelCom->Set_AnimIndex(51, false);
-			break;
-
-		case CObj_Manager::PLAYERINFO::STATE::SWIM:
-			m_pModelCom->Set_AnimIndex(52);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::CHANGE:

@@ -232,7 +232,7 @@ void CM_Gronmes::Idle_Tick(const _double& TimeDelta)
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-	cout << m_pModelCom->Get_Keyframes() << endl;
+
 	if (m_bAttack && 70 <= m_pModelCom->Get_Keyframes())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
