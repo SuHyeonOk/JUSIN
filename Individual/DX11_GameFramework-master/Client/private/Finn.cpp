@@ -64,8 +64,6 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
 {
-	cout << m_pNavigationCom->Get_CellType() << endl;
-	
 	__super::Tick(TimeDelta);
 
 	//Player_Info();
@@ -357,8 +355,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
-	
-	// 내가 플레이어 일 때 만 할 행동
+	if (1 == m_pNavigationCom->Get_CellType())
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::SWIM);
+
+	// 내가 플레이어 일 때 만 할 행동	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
 
@@ -378,6 +378,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 
 	case CObj_Manager::PLAYERINFO::STUN:
 		Stun_Tick();
+		break;
+
+	case CObj_Manager::PLAYERINFO::SWIM:
+		Swim_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::TREEWITCH:
@@ -642,6 +646,11 @@ void CFinn::Stun_Tick()
 	}
 }
 
+void CFinn::Swim_Tick(_double TimeDelta)
+{
+	m_pTransformCom->Go_Down(TimeDelta, 1.f, -0.7f);
+}
+
 void CFinn::Change_Tick()
 {
 	if (CObj_Manager::PLAYERINFO::STATE::CHANGE != CObj_Manager::GetInstance()->Get_Current_Player().eState)
@@ -774,6 +783,10 @@ void CFinn::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::STUN:
 			m_pModelCom->Set_AnimIndex(51, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::SWIM:
+			m_pModelCom->Set_AnimIndex(52);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::CHANGE:

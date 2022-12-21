@@ -65,6 +65,7 @@ HRESULT CTransform::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&m_TransformDesc, pArg, sizeof(TRANSFORMDESC));
 
+	// 더 이상 어떤 깊이로 떨어지지 말아라 m_fMyDeep = 
 
 	return S_OK;
 }
@@ -179,6 +180,21 @@ void CTransform::Go_Straight(_double TimeDelta, _float fSpeed, CNavigation* pNav
 		if (true == pNaviCom->isMove_OnNavigation(vPosition))
 			Set_State(CTransform::STATE_TRANSLATION, vPosition);
 	}
+}
+
+void CTransform::Go_Down(_double TimeDelta, _float fSpeed, _float fDeep)
+{
+	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
+	_vector	vUp = Get_State(CTransform::STATE_UP);
+
+	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함한다. */
+	vPosition -= XMVector3Normalize(vUp) * fSpeed * _float(TimeDelta);
+
+	// 내가 지정한 깊이 까지만 내려가야 한다.
+	_float MyDeep = m_TransformDesc.f3Pos.y * -0.7f;
+
+	if(MyDeep >= fDeep)
+		Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
 
 void CTransform::Go_Backward(_double TimeDelta)

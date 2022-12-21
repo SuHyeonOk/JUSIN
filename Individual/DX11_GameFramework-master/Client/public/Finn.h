@@ -61,6 +61,7 @@ private:
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
+	void	Swim_Tick(_double TimeDelta);
 	void	Change_Tick();
 	void	Cheering_Tick();
 
