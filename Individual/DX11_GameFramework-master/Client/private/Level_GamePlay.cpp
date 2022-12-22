@@ -447,6 +447,10 @@ void CLevel_GamePlay::ImGui_Page()
 		WinExec("notepad.exe ../../Data/Page.txt", SW_SHOW);
 }
 
+void CLevel_GamePlay::ImGui_Npc()
+{
+}
+
 void CLevel_GamePlay::ImGui_Monster()
 {
 	const _char* szObjName[] = { 
@@ -877,6 +881,10 @@ void CLevel_GamePlay::Load_Page()
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CLevel_GamePlay::Load_Npc()
+{
 }
 
 void CLevel_GamePlay::Load_Monster()

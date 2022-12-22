@@ -32,12 +32,14 @@ private:
 	void	ImGui_Food();
 	void	ImGui_Coin();
 	void	ImGui_Page();
+	void	ImGui_Npc();
 	void	ImGui_Monster();
 
 private:
 	void	Load_Food();
 	void	Load_Coin();
 	void	Load_Page();
+	void	Load_Npc();
 	void	Load_Monster();
 
 private:

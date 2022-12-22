@@ -435,10 +435,20 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
 
-	// 2D UI
+	// UI
+	/* For.Prototype_Component_Texture_UI_Talk */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
+		return E_FAIL;
+
+	// 3D UI
 	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
 		return E_FAIL;
 #pragma endregion
 
@@ -507,6 +517,16 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/Cylinder/Cylinder.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// 3D Bullet
+	/* For.Prototype_Component_Model_B_FireDragon_Area_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_FireDragon_Area_FX"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/FireDragon_Area_FX/FireDragon_Area_FX.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_B_Tree_Witch_Roots_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Tree_Witch_Roots_FX"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Tree_Witch_Roots_FX/Tree_Witch_Roots_FX.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	///////////////////////////////////////////////////////////// ANIM
 
 	// NPC
@@ -529,13 +549,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
-	// Player
-	/* For.Prototype_Component_Model_Fiona */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Fiona/Fiona.fbx", PivotMatrix))))
-		return E_FAIL;
+	//// Fiona
+	///* For.Prototype_Component_Model_Fiona */
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Fiona/Fiona.fbx", PivotMatrix))))
+	//	return E_FAIL;
 
-	// Monster 
 	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx", PivotMatrix))))
@@ -576,7 +595,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 #pragma region ¼ÎÀÌ´õ
 	lstrcpy(m_szLoadingText, TEXT("¼ÎÀÌ´õ¸¦ ·ÎµùÁßÀÔ´Ï´Ù. ")); ////////////////////////////////////////////////////////////////// ¼ÎÀÌ´õ
-													 /* For.Prototype_Component_Shader_VtxNorTex */
+	/* For.Prototype_Component_Shader_VtxNorTex */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
 		return E_FAIL;
@@ -610,6 +629,24 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Player */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	//UI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
+		CUI_Talk::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// 3DUI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
+		CUI_3DTexture::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// NPC
+	/* For.Prototype_GameObject_N_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
+		CN_Bubblegum::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Map
@@ -650,12 +687,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_PigWarrior_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
 		CW_PigWarrior::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	// 3DUI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
-		CUI_3DTexture::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill
