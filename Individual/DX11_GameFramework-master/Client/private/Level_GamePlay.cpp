@@ -28,6 +28,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Npc()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
 		return E_FAIL;
 
@@ -53,7 +56,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Food();
 	Load_Coin();
 	Load_Page();
-	Load_Npc();
+	//Load_Npc();
 	Load_Monster();
 
 
@@ -114,6 +117,21 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
 	//	return E_FAIL;
 
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Npc()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CN_NPC::NPCDESC					tNpcDesc;
+	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
+	tNpcDesc.TransformDesc.f3Pos = _float3(-13.5848f, 0.f, -6.57509f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 

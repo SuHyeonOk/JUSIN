@@ -342,7 +342,6 @@ void CJake::Current_Player(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
-		Check_Follow(TimeDelta);
 
 		// 플레이어의 스킬 때 키 입력을 받지 않는다.
 		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
@@ -351,7 +350,10 @@ void CJake::Current_Player(_double TimeDelta)
 			m_OnMove = false;
 	}
 	else
+	{
 		Player_Follow(TimeDelta);
+		Check_Follow(TimeDelta);
+	}
 }
 
 void CJake::Player_Follow(_double TimeDelta)
@@ -408,21 +410,20 @@ void CJake::Player_Follow(_double TimeDelta)
 
 void CJake::Check_Follow(_double TimeDelta)
 {
-	// 일정시간 동안 Jake 가 근처에 있지 않다면 Jake 를 내 근처로 이동시킨다.
-
+	// 일정 시간 동안 내가 플레이어를 따라가지 않으면 플레이어 근처로 이동한다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 	_vector vPlayerPos;
-	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn 좌표 받아옴
+	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
 	_vector		vDir = vPlayerPos - vMyPos; // 내 좌표가 객체를 바라보는 방향 벡터 (Finn <- Jake)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (5.f < fDistanceX)
+	if (3.f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
@@ -442,17 +443,59 @@ void CJake::Check_Follow(_double TimeDelta)
 			else
 				fAddZ = -1.2f;
 
-			CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_Jake"), TEXT("Prototype_Component_Navigation"), 0));
-
 			_float4 f4MyPos;
-			XMStoreFloat4(&f4MyPos, vMyPos);
-			pJakeTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), pNavigationCom);	// 내 옆으로 옮김
-			
+			XMStoreFloat4(&f4MyPos, vPlayerPos);
+			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), m_pNavigationCom);	// 플레이어 근처로 이동
+
 			m_dNotfollow_TimeAcc = 0;
 		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	//// 일정시간 동안 Jake 가 근처에 있지 않다면 Jake 를 내 근처로 이동시킨다.
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
+
+	//_vector vPlayerPos;
+	//vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn 좌표 받아옴
+
+	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	//_vector		vDir = vPlayerPos - vMyPos; // 내 좌표가 객체를 바라보는 방향 벡터 (Finn <- Jake)
+
+	//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	//if (5.f < fDistanceX)
+	//{
+	//	m_dNotfollow_TimeAcc += TimeDelta;
+	//	if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
+	//	{
+	//		_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	//		_float fLookX = XMVectorGetX(vMyLook);
+	//		_float fLookZ = XMVectorGetZ(vMyLook);
+
+	//		_float fAddX, fAddZ;
+	//		if (0 < fLookX)		// +
+	//			fAddX = 1.2f;
+	//		else				// -
+	//			fAddX = -1.2f;
+
+	//		if (0 < fLookZ)
+	//			fAddZ = 1.2f;
+	//		else
+	//			fAddZ = -1.2f;
+
+	//		CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Jake"), TEXT("Prototype_Component_Navigation"), 0));
+
+	//		_float4 f4MyPos;
+	//		XMStoreFloat4(&f4MyPos, vMyPos);
+	//		pJakeTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), pNavigationCom);	// 내 옆으로 옮김
+	//		
+	//		m_dNotfollow_TimeAcc = 0;
+	//	}
+	//}
+
 }
 
 void CJake::Key_Input(_double TimeDelta)

@@ -130,11 +130,11 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CN_NPC::NPCDESC					tNpcDesc;
-	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
-		return E_FAIL;
+	//CN_NPC::NPCDESC					tNpcDesc;
+	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
+	//tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+	//	return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);

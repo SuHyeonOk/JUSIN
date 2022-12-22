@@ -50,7 +50,7 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 0.5f));
 
 	// 처음 한 번만 플레이어를 향하는 벡터를 구한다.
-	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z, 1.f);
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = vPlayerPos - vMyPos;
 	XMStoreFloat4(&m_f4Distance, vDistance);
