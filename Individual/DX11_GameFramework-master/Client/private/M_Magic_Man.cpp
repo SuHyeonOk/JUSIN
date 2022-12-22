@@ -62,7 +62,7 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 void CM_Magic_Man::Tick(_double TimeDelta)
 {
 	//__super::Tick(TimeDelta);
-	cout << m_tMonsterInfo.iHp << endl;
+
 	if (m_bPlayer_Attack)
 	{
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
@@ -284,7 +284,7 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 		_float4	f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
+		cout << "ÃÑ¾Ë »ý¼º" << endl;
 		CB_3DBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_MAGIC;

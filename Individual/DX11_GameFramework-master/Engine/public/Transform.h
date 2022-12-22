@@ -48,11 +48,7 @@ public:
 			XMVectorGetX(XMVector3Length(Get_State(STATE_LOOK))));
 	}
 
-	void Set_State(STATE eState, _fvector vState) {
-		_float4		vTmp;
-		XMStoreFloat4(&vTmp, vState);
-		memcpy(&m_WorldMatrix.m[eState][0], &vTmp, sizeof vTmp);			
-	}
+	void Set_State(STATE eState, _fvector vState, class CNavigation* pNaviCom = nullptr);
 
 	void Set_Pos();
 	void Set_Pos(_float _vPosY) { m_WorldMatrix.m[STATE_TRANSLATION][1] = _vPosY; }

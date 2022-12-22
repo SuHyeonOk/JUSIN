@@ -60,16 +60,6 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	_matrix PlayerWorld;
-	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	_float4x4 f44PlayerWorld;
-	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	cout << "----------------------" << m_pNavigationCom->Get_CellType() << endl;
-
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
 
@@ -173,7 +163,7 @@ HRESULT CS_Change_Magic::SetUp_Components()
 	CNavigation::NAVIDESC			NaviDesc;
 	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
 
-	NaviDesc.iCurrentIndex = 0;
+	NaviDesc.iCurrentIndex = 5;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))

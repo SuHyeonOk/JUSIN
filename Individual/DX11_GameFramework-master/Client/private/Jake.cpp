@@ -681,7 +681,7 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
-
+		cout << "葛胆 积己" << endl;
 		// Magic 葛胆 积己
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;

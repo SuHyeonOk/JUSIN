@@ -19,6 +19,21 @@ CTransform::CTransform(const CTransform & rhs)
 	
 }
 
+void CTransform::Set_State(STATE eState, _fvector vState, CNavigation * pNaviCom)
+{
+	_float4		vTmp;
+	XMStoreFloat4(&vTmp, vState);
+
+	if (nullptr == pNaviCom)	// 네비 안 쓰는 객체
+		memcpy(&m_WorldMatrix.m[eState][0], &vTmp, sizeof vTmp);
+
+	else	 // 네비 쓰는 객체
+	{
+		if (true == pNaviCom->isMove_OnNavigation(vState))
+			memcpy(&m_WorldMatrix.m[eState][0], &vTmp, sizeof vTmp);
+	}
+}
+
 void CTransform::Set_Pos()
 {
 	m_WorldMatrix.m[STATE_TRANSLATION][0] = m_TransformDesc.f3Pos.x;

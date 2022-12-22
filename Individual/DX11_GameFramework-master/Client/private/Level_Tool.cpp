@@ -174,9 +174,9 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	//tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
-	//	return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+		return E_FAIL;
 
 	tMonsterDesc.f3Pos = _float3(-2.f, 0.f, 3.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Magic_Man"), TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
