@@ -93,7 +93,7 @@ public:
 	void LookAtForLandObject(_fvector vTargetPos);
 
 	/* 추적한다 .*/
-	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f);
+	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f, class CNavigation* pNaviCom = nullptr);
 	void Speed_Chase(_fvector vTargetPos, _float fSpeed, _double TimeDelta, _float fLimit = 0.1f);
 
 	_bool	Go_SwinUp(_double TimeDelta, _float fSpeed);

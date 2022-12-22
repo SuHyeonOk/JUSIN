@@ -437,11 +437,17 @@ void CFinn::Player_Follow(_double TimeDelta)
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
 
 	if (2.2f > fDistanceX)
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f, m_pNavigationCom);
 	else
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f, m_pNavigationCom);
 
-	m_pTransformCom->LookAt(vPlayerPos);
+	_float4 f4PlayerPos;
+	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+	// 수영 중 일 때는 Look 을 변경해서 따라간다. (플레이어가 수영 중 일 때는 Look 이 아래를 따라가서..)
+	if (1 == m_pNavigationCom->Get_CellType())
+		m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.6f, f4PlayerPos.z, f4PlayerPos.w));
+	else
+		m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, 0.f, f4PlayerPos.z, f4PlayerPos.w));
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
@@ -663,7 +669,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(52);
 
 		// CellType 이 1 이라면 내라가다가.
-		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);	// -0.8 변경하면 Player Flolow() 에서도 변경
 
 		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())
