@@ -290,8 +290,6 @@ void CJake::Player_Tick(_double TimeDelta)
 	Change_Tick();
 	Cheering_Tick();
 
-	cout << m_pNavigationCom->Get_CellType() << endl;
-
 	// 수영!!
 	if (m_bIsSwim)
 	{
@@ -460,7 +458,8 @@ void CJake::Key_Input(_double TimeDelta)
 		CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST);
 	}
 
-	if (m_tPlayerInfo.eState == m_tPlayerInfo.CONTROL||
+	if (true == CObj_Manager::GetInstance()->Get_IsTalk() ||	// jake 의 경우 control 을 누를 수 있는데 그냥 그렇게 하장..
+		m_tPlayerInfo.eState == m_tPlayerInfo.CONTROL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)

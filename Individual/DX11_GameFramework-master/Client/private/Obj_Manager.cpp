@@ -136,7 +136,7 @@ void		CObj_Manager::Key_Input()
 
 	if (pGameInstance->Key_Down(DIK_X))
 		m_bIsTalk = true;
-	if (pGameInstance->Key_Up(DIK_X))
+	if (pGameInstance->Key_Up(DIK_B))
 		m_bIsTalk = false;
 
 	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
