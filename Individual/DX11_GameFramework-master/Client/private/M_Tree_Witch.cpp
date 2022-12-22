@@ -242,6 +242,9 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 
 		if (2.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 		{
+			_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+			XMStoreFloat4(&m_f4PlayerPos, vPlayerPos);
+
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 			m_pModelCom->Set_AnimIndex(0, false);
 		}
@@ -270,15 +273,11 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 		m_bAttack = true;
 		
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		
-		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-		_float4	f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CB_AnimBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
 		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
-		tBulletInfo.f3Start_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
+		tBulletInfo.f3Start_Pos = _float3(m_f4PlayerPos.x, m_f4PlayerPos.y, m_f4PlayerPos.z);
 		
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_AnimBullet"), &tBulletInfo)))
 			return;

@@ -30,6 +30,9 @@ private:
 	virtual			HRESULT SetUp_Components() override;
 	virtual			HRESULT SetUp_ShaderResources() override;
 
+private:
+	_bool			m_bIsTalk = false;
+
 public:
 	static CUI_Talk*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

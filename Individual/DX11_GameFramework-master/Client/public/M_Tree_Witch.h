@@ -36,16 +36,12 @@ private:
 	virtual	void		Die_Tick()								override;
 
 private:
-	_float4				m_f4First_Pos;
-	_float4				m_f4RandomPos;
-	_bool				m_bRandomPos = false;
+	_float4				m_f4PlayerPos;
 
 	_int				m_iRandomNum = 0;
 
 	_bool				m_bAttack = false;
 	_double				m_dBullet_TimeAcc = 0;
-
-	_int	m_i = 0;
 
 public:
 	static	CM_Tree_Witch*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

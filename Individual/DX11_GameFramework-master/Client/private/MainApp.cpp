@@ -109,21 +109,21 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Render_Update_ImGui();
 
-	m_pGameInstance->Render_Level();
-
 #ifdef  _DEBUG
 	++m_iNumDraw;
 
 	if (m_dTimeAcc >= _double(1))
 	{
-		wsprintf(m_szFPS, TEXT("FPS 한글 : %d"), m_iNumDraw);
+		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iNumDraw);
 		m_iNumDraw = 0;
 		m_dTimeAcc = 0;
 	}
 
 	SetWindowText(g_hWnd, m_szFPS);
-	m_pGameInstance->Render_Font(TEXT("Font_Comic"), m_szFPS, _float2(100.f, 0.f), 0.f, _float2(1.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
+	//pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Font_한글"), _float2(100.f, 0.f), 0.f, _float2(1.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
 #endif //  _DEBUG
+
+	m_pGameInstance->Render_Level();
 
 	m_pGameInstance->Present();
 
@@ -172,7 +172,7 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		return E_FAIL;
 
 	// MakeSpriteFont "폰트이름" /FontSize:32 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 출력파일이름.spritefont
-	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Comic"), TEXT("../Bin/Resources/Fonts/130.spritefont"))))
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Comic"), TEXT("../Bin/Resources/Fonts/131.spritefont"))))
 		return E_FAIL;
 
 #pragma region	Buffer
@@ -206,6 +206,11 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_Component_Shader_VtxTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTex.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxTex_Billboard */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex_Billboard"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTex_Billboard.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Shader_VtxAnimModel*/

@@ -132,8 +132,8 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 
 	CN_NPC::NPCDESC					tNpcDesc;
 	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	tNpcDesc.TransformDesc.f3Pos = _float3(10.f, 0.f, 0.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+	tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
 		return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
