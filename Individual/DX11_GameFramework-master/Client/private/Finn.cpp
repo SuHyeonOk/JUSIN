@@ -447,7 +447,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 		if (1 == m_pNavigationCom->Get_CellType())
-			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.8f, f4PlayerPos.z, f4PlayerPos.w));	// 나도 수영 중 이라면 낮게 보고,
+			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.6f, f4PlayerPos.z, f4PlayerPos.w));	// 나도 수영 중 이라면 낮게 보고,
 		else
 			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, 0.f, f4PlayerPos.z, f4PlayerPos.w));		// 난 수영 중이 아니라면 0 을 본다.
 	}
@@ -533,7 +533,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		if (CObj_Manager::PLAYERINFO::SWIM == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			m_pTransformCom->Go_Straight(TimeDelta, 2.5f, m_pNavigationCom);
+			m_pTransformCom->Go_Straight(TimeDelta, 2.f, m_pNavigationCom);
 		else
 			m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
 
@@ -682,7 +682,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(52);
 
 		// CellType 이 1 이라면 내려가다가
-		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);	// -0.8 변경하면 Player Flolow() 에서도 변경
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.6f);	// -0.6 변경하면 Player Flolow() 에서도 변경
 
 		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())

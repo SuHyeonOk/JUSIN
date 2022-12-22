@@ -134,7 +134,7 @@ void		CObj_Manager::Key_Input()
 	// TODO : 무기변경
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_X))
+	if (pGameInstance->Key_Down(DIK_V))
 		m_bIsTalk = true;
 	if (pGameInstance->Key_Up(DIK_B))
 		m_bIsTalk = false;
