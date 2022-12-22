@@ -53,7 +53,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Food();
 	Load_Coin();
 	Load_Page();
-	//Load_Npc();
+	Load_Npc();
 	Load_Monster();
 
 
@@ -479,7 +479,7 @@ void CLevel_GamePlay::ImGui_Npc()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Npc"), &tNpcInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
 				return;
 
 			m_iNpc_Count++;
@@ -989,14 +989,14 @@ void CLevel_GamePlay::Load_Npc()
 			tNpcInfo.eNpcType = tNpcInfo.BUBBLEGUM;
 			tNpcInfo.TransformDesc.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Npc_1__";
+			m_wstObjName = L"Bubblegum__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Npc"), &tNpcInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
 					return;
 			}
 		}
