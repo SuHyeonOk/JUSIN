@@ -382,7 +382,7 @@ void CJake::Player_Follow(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 		if (1 == m_pNavigationCom->Get_CellType())
-			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.6f, f4PlayerPos.z, f4PlayerPos.w));	// 나도 수영 중 이라면 낮게 보고,
+			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.8f, f4PlayerPos.z, f4PlayerPos.w));	// 나도 수영 중 이라면 낮게 보고,
 		else
 			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, 0.f, f4PlayerPos.z, f4PlayerPos.w));		// 난 수영 중이 아니라면 0 을 본다.
 	}
@@ -442,10 +442,12 @@ void CJake::Check_Follow(_double TimeDelta)
 			else
 				fAddZ = -1.2f;
 
+			CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_Jake"), TEXT("Prototype_Component_Navigation"), 0));
+
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vMyPos);
-			pJakeTransformCom->Set_Pos(_float3(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ));	// 내 옆으로 옮김
-
+			pJakeTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), pNavigationCom);	// 내 옆으로 옮김
+			
 			m_dNotfollow_TimeAcc = 0;
 		}
 	}

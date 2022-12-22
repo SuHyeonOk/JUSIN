@@ -130,49 +130,49 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//CN_NPC::NPCDESC					tNpcDesc;
-	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	//tNpcDesc.TransformDesc.f3Pos = _float3(10.f, 0.f, 0.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
-	//	return E_FAIL;
+	CN_NPC::NPCDESC					tNpcDesc;
+	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
+	tNpcDesc.TransformDesc.f3Pos = _float3(10.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+		return E_FAIL;
 
-	//CCoin::COININFO					tObjInfo;
-	//tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
-	//tObjInfo.eState = tObjInfo.IDLE;
-	//tObjInfo.eCoinKind = tObjInfo.COIN_BRONZE;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Coin"), &tObjInfo)))
-	//	return E_FAIL;
+	CCoin::COININFO					tObjInfo;
+	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
+	tObjInfo.eState = tObjInfo.IDLE;
+	tObjInfo.eCoinKind = tObjInfo.COIN_BRONZE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, pLayerTag, TEXT("Prototype_GameObject_Coin"), &tObjInfo)))
+		return E_FAIL;
 
 	CM_Monster::MONSTERDESC		tMonsterDesc;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 0.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
-	//	return E_FAIL;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 2.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_1"), TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
-	//	return E_FAIL;
-	//tMonsterDesc.f3Pos = _float3(-7.f, 0.f, 0.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
-	//	return E_FAIL;
-	//tMonsterDesc.f3Pos = _float3(-7.f, 0.f, 2.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
-	//	return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 0.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_1"), TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-7.f, 0.f, 0.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-7.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+		return E_FAIL;
 
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 2.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_0"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-	//	return E_FAIL;
-	//tMonsterDesc.f3Pos = _float3(-3.f, 0.f, 2.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-	//	return E_FAIL;
-	//tMonsterDesc.f3Pos = _float3(-1.f, 0.f, 2.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-	//	return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_0"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-3.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+		return E_FAIL;
+	tMonsterDesc.f3Pos = _float3(-1.f, 0.f, 2.f);
+	tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+		return E_FAIL;
 
 	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 2.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))

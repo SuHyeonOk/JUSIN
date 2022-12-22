@@ -60,8 +60,8 @@ private:
 	// Page
 	_uint			m_iPage_1_Count = 0;
 
-	// Monster
 	_uint			m_iMonster_Count = 0;
+	_uint			m_iNpc_Count = 0;
 
 	// ¢º ³¡
 

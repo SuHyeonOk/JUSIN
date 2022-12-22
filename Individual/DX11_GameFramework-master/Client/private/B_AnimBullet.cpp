@@ -47,6 +47,9 @@ HRESULT CB_AnimBullet::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
+		m_pTransformCom->Rotation(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(-90.f));
+
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 
@@ -66,7 +69,7 @@ void CB_AnimBullet::Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
@@ -139,7 +142,7 @@ HRESULT CB_AnimBullet::SetUp_Components()
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		ColliderDesc.vSize = _float3(2.f, 2.f, 2.f);
+		ColliderDesc.vSize = _float3(3.f, 3.f, 3.f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
 

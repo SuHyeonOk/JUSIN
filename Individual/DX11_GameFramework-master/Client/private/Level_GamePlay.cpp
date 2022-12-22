@@ -9,6 +9,7 @@
 #include "Camera_Dynamic.h"
 
 #include "M_Monster.h"
+#include "N_NPC.h"
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
@@ -210,7 +211,7 @@ void CLevel_GamePlay::ImGui()
 {
 	ImGui::Begin("GamePlayTool");
 
-	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Monster" };
+	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Npc", "Monster" };
 	static int iItemNum = 0;
 	ImGui::Combo("##2", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
@@ -221,6 +222,8 @@ void CLevel_GamePlay::ImGui()
 	else if (3 == iItemNum)
 		ImGui_Page();
 	else if (4 == iItemNum)
+		ImGui_Npc();
+	else if (5 == iItemNum)
 		ImGui_Monster();
 
 	ImGui::End();
@@ -450,6 +453,57 @@ void CLevel_GamePlay::ImGui_Page()
 
 void CLevel_GamePlay::ImGui_Npc()
 {
+	const _char* szObjName[] = { "Bubblegum" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_Npc", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CN_NPC::NPCDESC		tNpcInfo;
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
+
+		if (0 == iObjNum)
+		{
+			tNpcInfo.eNpcType = tNpcInfo.BUBBLEGUM;
+			tNpcInfo.TransformDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Bubblegum__";
+			m_wstObjName += to_wstring(m_iNpc_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Npc"), &tNpcInfo)))
+				return;
+
+			m_iNpc_Count++;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Npc Save"))
+	{
+		wofstream fout("../../Data/Npc.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Npc.txt", SW_SHOW);
 }
 
 void CLevel_GamePlay::ImGui_Monster()
@@ -917,31 +971,32 @@ void CLevel_GamePlay::Load_Npc()
 		fObjPosY = (_float)_tstof(szObjPosY);
 		fObjPosZ = (_float)_tstof(szObjPosZ);
 
-		CDataManager::GetInstance()->Set_PageInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+		CDataManager::GetInstance()->Set_NpcInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
 	}
 
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CPage::PAGEINFO					tPageInfo;
-	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
+	CN_NPC::NPCDESC					tNpcInfo;
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_NpcInfo();
 	_int iFoodVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
-			tPageInfo.fPos = pObjInfo.ObjPos;
+			tNpcInfo.eNpcType = tNpcInfo.BUBBLEGUM;
+			tNpcInfo.TransformDesc.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Page_1__";
+			m_wstObjName = L"Npc_1__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Npc"), &tNpcInfo)))
 					return;
 			}
 		}

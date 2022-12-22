@@ -507,9 +507,11 @@ void CFinn::Check_Follow(_double TimeDelta)
 			else
 				fAddZ = -1.2f;
 
+			CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CObj_Manager::GetInstance()->Get_Current_Level(),	TEXT("Layer_Jake"), TEXT("Prototype_Component_Navigation"), 0));
+
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vMyPos);
-			pJakeTransformCom->Set_Pos(_float3(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ));	// 내 옆으로 옮김
+			pJakeTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), pNavigationCom);	// 내 옆으로 옮김
 
 			m_dNotfollow_TimeAcc = 0;
 		}
@@ -682,7 +684,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(52);
 
 		// CellType 이 1 이라면 내려가다가
-		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.6f);	// -0.6 변경하면 Player Flolow() 에서도 변경
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);	// -0.6 변경하면 Player Flolow() 에서도 변경
 
 		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())
