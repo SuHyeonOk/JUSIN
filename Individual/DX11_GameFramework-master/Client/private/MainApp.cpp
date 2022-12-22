@@ -77,7 +77,9 @@ void CMainApp::Tick(_double TimeDelta)
 
 	CObj_Manager::GetInstance()->Tick(TimeDelta);
 
+#ifdef _DEBUG
 	m_dTimeAcc += TimeDelta;	// FPS 를 위한 시간
+#endif 
 
 	// Collider _R, _L
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_COIN);
@@ -109,22 +111,21 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Render_Level();
 
-	m_pGameInstance->Present();
-
 #ifdef  _DEBUG
-
 	++m_iNumDraw;
 
 	if (m_dTimeAcc >= _double(1))
 	{
-		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iNumDraw);
+		wsprintf(m_szFPS, TEXT("FPS 한글 : %d"), m_iNumDraw);
 		m_iNumDraw = 0;
 		m_dTimeAcc = 0;
 	}
 
 	SetWindowText(g_hWnd, m_szFPS);
-
+	m_pGameInstance->Render_Font(TEXT("Font_Comic"), m_szFPS, _float2(100.f, 0.f), 0.f, _float2(1.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
 #endif //  _DEBUG
+
+	m_pGameInstance->Present();
 
 	return S_OK;
 }
@@ -168,6 +169,10 @@ HRESULT CMainApp::Start_Level(LEVEL eLevelID)
 HRESULT CMainApp::Ready_Prototype_Component()
 {
 	if (nullptr == m_pGameInstance)
+		return E_FAIL;
+
+	// MakeSpriteFont "폰트이름" /FontSize:32 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 출력파일이름.spritefont
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Comic"), TEXT("../Bin/Resources/Fonts/130.spritefont"))))
 		return E_FAIL;
 
 #pragma region	Buffer

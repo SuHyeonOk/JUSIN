@@ -41,10 +41,12 @@ private:
 	HRESULT Ready_Prototype_Component();
 	HRESULT Ready_Prototype_GameObject();
 
+#ifdef _DEBUG
 private: // FPS 띄우기 위한 변수
+	_tchar	m_szFPS[17] = L"";
 	_int	m_iNumDraw = 0;
 	_double	m_dTimeAcc = 0;
-	TCHAR	m_szFPS[17] = L"";
+#endif
 
 private:
 	_float4	m_PickingPos;

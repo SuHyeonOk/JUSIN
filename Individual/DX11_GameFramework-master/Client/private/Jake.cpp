@@ -128,6 +128,10 @@ HRESULT CJake::Render()
 	return S_OK;
 }
 
+void CJake::On_Collision(CGameObject * pOther)
+{
+}
+
 HRESULT CJake::SetUp_Components()
 {
 	/* For.Com_Renderer */
@@ -160,7 +164,7 @@ HRESULT CJake::SetUp_Components()
 	CNavigation::NAVIDESC			NaviDesc;
 	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
 
-	NaviDesc.iCurrentIndex = 2;
+	NaviDesc.iCurrentIndex = 0;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
@@ -372,13 +376,18 @@ void CJake::Player_Follow(_double TimeDelta)
 	else
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f, m_pNavigationCom);
 
-	_float4 f4PlayerPos;
-	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 	// 수영 중 일 때는 Look 을 변경해서 따라간다. (플레이어가 수영 중 일 때는 Look 이 아래를 따라가서..)
-	if (1 == m_pNavigationCom->Get_CellType())
-		m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.8f, f4PlayerPos.z, f4PlayerPos.w));
+	if (CObj_Manager::PLAYERINFO::SWIM == CObj_Manager::GetInstance()->Get_Current_Player().eState)		// 플레이어가 수영 중 인데
+	{
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		if (1 == m_pNavigationCom->Get_CellType())
+			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.8f, f4PlayerPos.z, f4PlayerPos.w));	// 나도 수영 중 이라면 낮게 보고,
+		else
+			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, 0.f, f4PlayerPos.z, f4PlayerPos.w));		// 난 수영 중이 아니라면 0 을 본다.
+	}
 	else
-		m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, 0.f, f4PlayerPos.z, f4PlayerPos.w));
+		m_pTransformCom->LookAt(vPlayerPos);
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
@@ -470,7 +479,11 @@ void CJake::Key_Input(_double TimeDelta)
 
 	if (m_OnMove)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
+		if (CObj_Manager::PLAYERINFO::SWIM == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			m_pTransformCom->Go_Straight(TimeDelta, 2.5f, m_pNavigationCom); 
+		else
+			m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
+
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::RUN);
 	}
 
@@ -542,7 +555,7 @@ void CJake::Space_Attack_Tick(_double TimeDelta)
 
 void CJake::Control_Tick(_double TimeDelta)
 {
-	m_pTransformCom->Go_Straight(0);
+	m_pTransformCom->Go_Straight(0, m_pNavigationCom);
 	
 	CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE);
 }
@@ -603,6 +616,9 @@ void CJake::Stun_Tick()
 
 void CJake::Swim_Tick(_double TimeDelta)
 {
+	if (m_tPlayerInfo.ePlayer ==  CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::SWIM);
+
 	if (!m_bDiving)
 		m_pModelCom->Set_AnimIndex(43, false);	// DIVING
 
@@ -614,12 +630,12 @@ void CJake::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(57);			// SWIM
 
 		// CellType 이 1 이라면 내라가다가.
-		m_pTransformCom->Go_SwinDown(TimeDelta, 1.f, -0.6f);	// -0.6 변경하면 Player Follow 에서도 변경
+		m_pTransformCom->Go_SwinDown(TimeDelta, 1.f, -0.8f);	// -0.6 변경하면 Player Follow 에서도 변경
 
 		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())
 		{
-			m_pModelCom->Set_AnimIndex(42);		// IDLE
+			m_pModelCom->Set_AnimIndex(53);		// RUN
 			if (m_pTransformCom->Go_SwinUp(TimeDelta, 5.f))	// 0 까지 올라왔다면
 			{
 				m_bDiving = false;
@@ -635,6 +651,7 @@ void CJake::Change_Tick()
 		return;
 
 	m_OnMove = false;
+	m_bIsSwim = false;
 	m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
 
 	if (m_pModelCom->Get_Finished())
@@ -657,6 +674,9 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
+	if (m_bIsSwim)
+		return S_OK;
+
 	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
 	if (!m_bSkill_Clone)
 	{
@@ -672,6 +692,7 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
 			return E_FAIL;
 		RELEASE_INSTANCE(CGameInstance);
@@ -680,28 +701,26 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	// Magic 모델을 따라간다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Com_Transform"), 0));
+	RELEASE_INSTANCE(CGameInstance);
 
-	m_bSkillClone_TimeAcc += TimeDelta;
-	if (nullptr == pChangeTransformCom)
-	{
-		// 변신 되었다가 바로 생성 하려고 할 때 문제가 주소를 찾아오지 못 하는 문제가 있어서 일정 시간을 준 다음 따라 가도록 한다.
-		if (0.5 < m_bSkillClone_TimeAcc)
-			_int a = 0;
-	}
-	else
+	if (nullptr != pChangeTransformCom)
 	{
 		_vector vChangePos;
 		vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
-		RELEASE_INSTANCE(CGameInstance);
 	}
 
 	// Get_Dead 가 true 라면 아이들로 변경한다.
-	if(15 < m_bSkillClone_TimeAcc)
+	CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), 
+		TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
+
+	if (nullptr != pGameObject)
 	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;	// 상태 변경
-		m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
-		m_bSkillClone_TimeAcc = 0;
+		if (pGameObject->Get_Dead())
+		{
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경
+			m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
+		}
 	}
 
 	return S_OK;

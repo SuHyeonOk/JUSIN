@@ -61,6 +61,7 @@ private:
 	CHANGEINFO				m_tChangeInfo;
 	
 	_bool					m_OnMove = false;
+	_double					m_dSkill_TimaAcc = 0;
 
 public:
 	static CS_Change_Magic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

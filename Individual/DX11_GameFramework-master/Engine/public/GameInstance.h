@@ -94,11 +94,14 @@ public: // for imgui manager
 public: // For.Picking
 	_float4		Get_MousePos();
 
-
 public: // For. Collider_Manager
 	HRESULT Add_ColGroup(CCollider_Manager::COL_TYPE eColType, class CGameObject* pGameObject);
 	void Update_Col(CCollider_Manager::COL_TYPE eColType_L, CCollider_Manager::COL_TYPE eColType_R);
 	void Reset_Col();
+
+public: /* For.Font_Manager */
+	HRESULT Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontTag, const _tchar* pFontFilePath);
+	HRESULT Render_Font(const _tchar* pFontTag, const _tchar* pText, const _float2& vPos, _float fRadian, _float2 vScale, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f));
 
 private:
 	static _uint					m_iStaticLevelIndex;
@@ -116,6 +119,7 @@ private:
 	class CImgui_Manager*			m_pImgui_Manager = nullptr;
 	class CPicking*					m_pPicking = nullptr;
 	class CCollider_Manager*		m_pCollider_Manager = nullptr;
+	class CFont_Manager*			m_pFont_Manager = nullptr;
 
 public:
 	static void Release_Engine();

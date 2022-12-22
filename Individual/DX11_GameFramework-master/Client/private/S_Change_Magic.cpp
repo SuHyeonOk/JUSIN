@@ -60,6 +60,16 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	_matrix PlayerWorld;
+	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
+	_float4x4 f44PlayerWorld;
+	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
+	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
+	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
+	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
+	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
+	cout << "----------------------" << m_pNavigationCom->Get_CellType() << endl;
+
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
 
@@ -73,9 +83,13 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	// 만약 플레이어의 상태가 MAGIC 가 아니라면 사라진다.
-	if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	// 변한 시간이 지나면 사라진다.
+	m_dSkill_TimaAcc += TimeDelta;
+	if (15 < m_dSkill_TimaAcc)
+	{
 		CGameObject::Set_Dead();
+		m_dSkill_TimaAcc = 0;
+	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -235,9 +249,9 @@ void CS_Change_Magic::KeyInput(const _double & TimeDelta)
 	}
 
 	if (m_OnMove && 15 <= m_pModelCom->Get_Keyframes())
-		m_pTransformCom->Go_Straight(TimeDelta/*, m_pNavigationCom*/);
+		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
 	else if (m_OnMove && 15 >= m_pModelCom->Get_Keyframes())
-		m_pTransformCom->Go_Straight(TimeDelta * 0.5/*, m_pNavigationCom*/);
+		m_pTransformCom->Go_Straight(TimeDelta * 0.5, m_pNavigationCom);
 		
 #pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))

@@ -24,8 +24,6 @@ HRESULT CB_3DBullet::Initialize_Prototype()
 
 HRESULT CB_3DBullet::Initialize(void * pArg)
 {
-	m_wsTag = L"3DBullet";
-
 	if (nullptr != pArg)
 		memcpy(&m_tBulletInfo, pArg, sizeof(ANIMBULLETINFO));
 
@@ -34,12 +32,14 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)	// 요기 (검색해서 각기 설정해 주면 된다.)
 	{
+		m_wsTag = L"3DBullet_Roots";
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 	}
 	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 요기 (검색해서 각기 설정해 주면 된다.)
 	{
+		m_wsTag = L"3DBullet_Magic";
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
@@ -216,12 +216,14 @@ HRESULT CB_3DBullet::SetUp_ShaderResources()
 }
 void CB_3DBullet::Magic_Tick(const _double & TimeDelta)
 {
+	// Look 양의 방향으로 회전한다.
 	m_pTransformCom->Go_Straight(TimeDelta * 2);
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 2);
 }
 
 void CB_3DBullet::Magic_LateTick(const _double & TimeDelta)
 {
+	// 10 초가 지나면 삭제한다.
 	m_dBullet_TimeAcc += TimeDelta;
 	if (10 < m_dBullet_TimeAcc)
 	{

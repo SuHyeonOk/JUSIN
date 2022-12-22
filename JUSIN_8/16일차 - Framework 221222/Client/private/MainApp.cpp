@@ -97,8 +97,6 @@ HRESULT CMainApp::Render()
 	}
 
 	m_pGameInstance->Render_Font(TEXT("Font_Comic"), m_szFPS, _float2(100.f, 0.f), 0.f, _float2(1.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
-
-
 #endif
 
 	m_pGameInstance->Present();
@@ -246,7 +244,6 @@ HRESULT CMainApp::Ready_Gara()
 	CloseHandle(hFile);
 	
 	// MakeSpriteFont "폰트이름" /FontSize:32 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 출력파일이름.spritefont
-
 	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Comic"), TEXT("../Bin/Resources/fonts/131.SpriteFont"))))
 		return E_FAIL;
 

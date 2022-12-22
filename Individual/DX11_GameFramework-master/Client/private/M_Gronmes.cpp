@@ -233,7 +233,7 @@ void CM_Gronmes::Idle_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	if (m_bAttack && 70 <= m_pModelCom->Get_Keyframes())
+	if (m_bAttack && 50 <= m_pModelCom->Get_Keyframes())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 	if (m_pModelCom->Get_Finished())
@@ -321,7 +321,7 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 void CM_Gronmes::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
 void CM_Gronmes::Die_Tick()

@@ -61,9 +61,24 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 
 void CM_Magic_Man::Tick(_double TimeDelta)
 {
-	__super::Tick(TimeDelta);
+	//__super::Tick(TimeDelta);
+	cout << m_tMonsterInfo.iHp << endl;
+	if (m_bPlayer_Attack)
+	{
+		m_dPlayer_Attack_TimeAcc += TimeDelta;
+		if (1.5 < m_dPlayer_Attack_TimeAcc)
+		{
+			m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+			m_bPlayer_Attack = false;
+			m_dPlayer_Attack_TimeAcc = 0;
+		}
+	}
 
 	Monster_Tick(TimeDelta);
+
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CM_Magic_Man::Late_Tick(_double TimeDelta)
@@ -100,6 +115,10 @@ void CM_Magic_Man::On_Collision(CGameObject * pOther)
 	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
 		if (L"Finn_Magic" == pOther->Get_Tag() || L"Jake_Magic" == pOther->Get_Tag())
 			m_bPlayer_Attack = true;
+
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		if (L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag())
+ 			m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
 
 	//CM_Monster::On_Collision(pOther);
 }
@@ -185,6 +204,11 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 	case MONSTERINFO::STATE::HIT:
 		m_pModelCom->Set_AnimIndex(4, false);
 		Hit_Tick();
+		break;
+
+	case MONSTERINFO::STATE::ADD_1:
+		m_pModelCom->Set_AnimIndex(3, false);
+		NoHit_Tick();
 		break;
 
 	case MONSTERINFO::STATE::DIE:
@@ -274,6 +298,12 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 }
 
 void CM_Magic_Man::Hit_Tick()
+{
+	if (m_pModelCom->Get_Finished())
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+}
+
+void CM_Magic_Man::NoHit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;

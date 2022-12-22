@@ -100,9 +100,6 @@
     <Filter Include="01.Utility\06.Light\Manager">
       <UniqueIdentifier>{7e5e67e5-4e43-4186-a768-f51c1bb9184a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\77. Picking">
-      <UniqueIdentifier>{da175690-3d23-4715-9074-b6e7d6c36736}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\77.FSM">
       <UniqueIdentifier>{3d143b25-3ee1-48bc-aabf-7084d9bb13ce}</UniqueIdentifier>
     </Filter>
@@ -150,6 +147,15 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\02.VIBuffer\Instancing\Rect">
       <UniqueIdentifier>{097716ef-c503-4a4e-b850-b7427ec1e432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\07.Fonts">
+      <UniqueIdentifier>{b590f9a6-a2d1-446b-b28b-64a4a2669499}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\77.Picking">
+      <UniqueIdentifier>{da175690-3d23-4715-9074-b6e7d6c36736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\07.Fonts\Manager">
+      <UniqueIdentifier>{2ea85e2c-0d70-4c33-a4df-fd0e852ec092}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -310,7 +316,7 @@
       <Filter>00.System\00.Device\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Picking.h">
-      <Filter>01.Utility\77. Picking</Filter>
+      <Filter>01.Utility\77.Picking</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh.h">
       <Filter>01.Utility\03.Components\06. Model\Mesh</Filter>
@@ -356,6 +362,12 @@
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Rect_Instancing.h">
       <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Font_Manager.h">
+      <Filter>01.Utility\07.Fonts\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\CustomFont.h">
+      <Filter>01.Utility\07.Fonts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -492,7 +504,7 @@
       <Filter>00.System\00.Device\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Picking.cpp">
-      <Filter>01.Utility\77. Picking</Filter>
+      <Filter>01.Utility\77.Picking</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>01.Utility\03.Components\06. Model</Filter>
@@ -538,6 +550,12 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Point_Instancing.cpp">
       <Filter>01.Utility\03.Components\02.VIBuffer\Instancing\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Font_Manager.cpp">
+      <Filter>01.Utility\07.Fonts\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CustomFont.cpp">
+      <Filter>01.Utility\07.Fonts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

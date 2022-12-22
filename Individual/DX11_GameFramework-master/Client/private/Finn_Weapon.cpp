@@ -60,11 +60,12 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 	SocketMatrix = SocketMatrix * m_WeaponDesc.pTargetTransform->Get_WorldMatrix();
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
-	
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
 
 	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
+		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix() * SocketMatrix);
+	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
