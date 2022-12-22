@@ -309,6 +309,9 @@
     <ClInclude Include="..\public\UI_Talk.h">
       <Filter>02.GameObjects\UI\Talk</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\B_AnimBullet.h">
+      <Filter>02.GameObjects\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -401,9 +404,6 @@
     <ClCompile Include="..\private\UI_.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\M_Tree_Witch.cpp">
-      <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\UI_3DTexture.cpp">
       <Filter>02.GameObjects\UI\3DTexture</Filter>
     </ClCompile>
@@ -451,6 +451,12 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_Talk.cpp">
       <Filter>02.GameObjects\UI\Talk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\B_AnimBullet.cpp">
+      <Filter>02.GameObjects\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Tree_Witch.cpp">
+      <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

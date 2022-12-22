@@ -285,7 +285,7 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 		_float4	f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 		cout << "ÃÑ¾Ë »ý¼º" << endl;
-		CB_3DBullet::ANIMBULLETINFO	tBulletInfo;
+		CB_3DBullet::NONANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_MAGIC;
 		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);

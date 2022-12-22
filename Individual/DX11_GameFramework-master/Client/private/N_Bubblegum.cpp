@@ -65,12 +65,8 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 
 void CN_Bubblegum::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
+	CN_NPC::Late_Tick(TimeDelta);
 
-	m_pModelCom->Play_Animation(TimeDelta);
-
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CN_Bubblegum::Render()

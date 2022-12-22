@@ -34,6 +34,7 @@
 // Bullet
 #include "B_2DBullet.h"
 #include "B_3DBullet.h"
+#include "B_AnimBullet.h"
 
 // Stun
 #include "S_StunChick.h"
@@ -307,6 +308,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_B_AnimBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
+		CB_AnimBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	//UI
@@ -680,6 +685,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_B_AnimBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
+		CB_AnimBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Monster Weapon

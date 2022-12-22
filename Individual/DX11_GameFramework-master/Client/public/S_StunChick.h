@@ -6,18 +6,13 @@
 BEGIN(Engine)
 class CModel;
 class CShader;
-class CCollider;
 class CRenderer;
 END
-
 
 BEGIN(Client)
 
 class CS_StunChick final : public CGameObject
 {
-public:
-	enum COLLIDERTYPE { COLLTYPE_AABB, COLLTYPE_OBB, COLLTYPE_SPHERE, COLLTYPE_END };
-
 private:
 	CS_StunChick(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CS_StunChick(const CS_StunChick& rhs);
@@ -34,7 +29,6 @@ private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
-	CCollider*				m_pColliderCom[COLLTYPE_END] = { nullptr };
 
 private:
 	HRESULT			SetUp_Components();
@@ -46,7 +40,7 @@ private:
 public:
 	static	CS_StunChick* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
-	virtual void Free() override;
+	virtual void		Free() override;
 };
 
 END

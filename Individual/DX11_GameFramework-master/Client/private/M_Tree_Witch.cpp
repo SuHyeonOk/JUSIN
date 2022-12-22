@@ -8,7 +8,7 @@
 #include "Utilities_Manager.h"	// ·£´ý°ª ¾²·Á°í..
 
 #include "UI_3DTexture.h"		// ´À³¦Ç¥ ¶ç¿ì·Á°í...
-#include "B_3DBullet.h"			// µ¢±¼
+#include "B_AnimBullet.h"		// µ¢±¼
 
 CM_Tree_Witch::CM_Tree_Witch(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -235,7 +235,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 25);
-
+	iRandomNum = 0;
 	if (0 == iRandomNum)		// µ¢±¼ »ý¼º
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -275,12 +275,12 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 		_float4	f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CB_3DBullet::ANIMBULLETINFO	tBulletInfo;
-		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+		CB_AnimBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
+		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
 		tBulletInfo.f3Start_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z);
 		
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_AnimBullet"), &tBulletInfo)))
 			return;
 		
 		RELEASE_INSTANCE(CGameInstance);
