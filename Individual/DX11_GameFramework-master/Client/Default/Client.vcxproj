@@ -205,6 +205,7 @@
     <ClInclude Include="..\public\N_NPC.h" />
     <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\O_Box.h" />
+    <ClInclude Include="..\public\O_TextureObject.h" />
     <ClInclude Include="..\public\Page.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Skill_Manager.h" />
@@ -258,6 +259,7 @@
     <ClCompile Include="..\private\N_NPC.cpp" />
     <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\O_Box.cpp" />
+    <ClCompile Include="..\private\O_TextureObject.cpp" />
     <ClCompile Include="..\private\Page.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Skill_Manager.cpp" />

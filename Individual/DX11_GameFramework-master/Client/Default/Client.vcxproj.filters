@@ -151,6 +151,9 @@
     <Filter Include="02.GameObjects\Object">
       <UniqueIdentifier>{bc717a54-beef-4b1e-a30a-dc48f5fed3f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Object\TextureObject">
+      <UniqueIdentifier>{506b263f-6acf-498f-9336-e29589148843}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -318,6 +321,9 @@
     <ClInclude Include="..\public\O_Box.h">
       <Filter>02.GameObjects\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\O_TextureObject.h">
+      <Filter>02.GameObjects\Object\TextureObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -466,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="..\private\O_Box.cpp">
       <Filter>02.GameObjects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\O_TextureObject.cpp">
+      <Filter>02.GameObjects\Object\TextureObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

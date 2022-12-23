@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "PipeLine.h"
 
 CB_2DBullet::CB_2DBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -90,28 +91,54 @@ void CB_2DBullet::Tick(_double TimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
 
 	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
-	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector vDistance = XMLoadFloat4(&m_f4Distance);
-	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
+	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//_vector vDistance = XMLoadFloat4(&m_f4Distance);
+	//vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
- 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
+ //	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
-	// 충돌처리
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		
+
+
+	
+	// 카메라 위치
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//_float4 f4CamPos = pGameInstance->Get_CamPosition();
+	//_vector vCameraPos = XMLoadFloat4(&f4CamPos);
+	//RELEASE_INSTANCE(CGameInstance);
+
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//RELEASE_INSTANCE(CGameInstance);
+
+	//// 내 위치
+	//_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	//_vector	vRight, vUp, vLook;
+	//vLook = XMVector3Normalize(vCameraPos - vPlayerPos);
+	//vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), vLook));
+	//vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+
+	//_float3 f3Scaled = m_pTransformCom->Get_Scaled();
+
+	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight * f3Scaled.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, vUp * f3Scaled.y);
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook * f3Scaled.z);
+
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	// 총알이 생성된 뒤 1초가 지나면 삭제한다.
-	m_dBullet_TimeAcc += TimeDelta;
-	if (1 < m_dBullet_TimeAcc)
-	{
-		CGameObject::Set_Dead();
-		m_dBullet_TimeAcc = 0;
-	}
+	//// 총알이 생성된 뒤 1초가 지나면 삭제한다.
+	//m_dBullet_TimeAcc += TimeDelta;
+	//if (1 < m_dBullet_TimeAcc)
+	//{
+	//	CGameObject::Set_Dead();
+	//	m_dBullet_TimeAcc = 0;
+	//}
 
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	CGameObject::Set_Dead();
@@ -134,16 +161,16 @@ HRESULT CB_2DBullet::Render()
 
 	m_pVIBufferCom->Render();
 
-//#ifdef _DEBUG
-//	if (nullptr != m_pColliderCom)
-//		m_pColliderCom->Render();
-//#endif
+#ifdef _DEBUG
+	if (nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
 	return S_OK;
 }
 
 void CB_2DBullet::On_Collision(CGameObject * pOther)
 {
-	CGameObject::Set_Dead();
+	//CGameObject::Set_Dead();
 
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 	{
@@ -170,7 +197,7 @@ HRESULT CB_2DBullet::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex_Billboard"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxTex"), TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
@@ -200,7 +227,7 @@ HRESULT CB_2DBullet::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.03f, 0.03f, 0.03f);
+	ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

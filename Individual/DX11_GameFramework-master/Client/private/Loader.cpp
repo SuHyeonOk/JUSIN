@@ -17,6 +17,7 @@
 #include "UI_3DTexture.h"
 
 // Obj
+#include "O_TextureObject.h"
 #include "O_Box.h"
 
 // NPC
@@ -128,6 +129,12 @@ HRESULT CLoader::Loading_Tool()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
 	
+	// 2D Object
+	/* For.Prototype_Component_Texture_O_TextureObject */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_O_TextureObject"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Portal/Portal.png")))))
+		return E_FAIL;
+
 	// UI
 	/* For.Prototype_Component_Texture_UI_Talk */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
@@ -374,6 +381,12 @@ HRESULT CLoader::Loading_Tool()
 		CN_Bubblegum::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// 2D Obj
+	/* For.Prototype_GameObject_O_TextureObject */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_TextureObject"),
+		CO_TextureObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// Obj
 	/* For.Prototype_GameObject_O_Box */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Box"),
@@ -458,6 +471,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Texture_B_Magic */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
+		return E_FAIL;
+
+	// 2D Object
+	/* For.Prototype_Component_Texture_O_TextureObject */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_O_TextureObject"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Portal/Portal.png")))))
 		return E_FAIL;
 
 	// UI
@@ -566,6 +585,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// 2D Obj
+	/* For.Prototype_GameObject_O_TextureObject */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_TextureObject"),
+		CO_TextureObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Obj

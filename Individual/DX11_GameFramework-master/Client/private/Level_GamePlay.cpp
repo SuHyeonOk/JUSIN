@@ -8,6 +8,8 @@
 #include "DataManager.h"
 #include "Camera_Dynamic.h"
 
+#include "O_TextureObject.h"
+
 #include "M_Monster.h"
 #include "N_NPC.h"
 #include "Food.h"
@@ -529,7 +531,7 @@ void CLevel_GamePlay::ImGui_Npc()
 
 void CLevel_GamePlay::ImGui_Object()
 {
-	const _char* szObjName[] = { "Box" };
+	const _char* szObjName[] = { "Box", "Portal" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Object", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -551,6 +553,22 @@ void CLevel_GamePlay::ImGui_Object()
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
+				return;
+
+			m_iObject_Count++;
+		}
+		else if (1 == iObjNum)	// 2D 오브젝트
+		{
+			CO_TextureObject::TEXTUREOBJECT		tTextureObject;
+			tTextureObject.eTextureType = tTextureObject.PORTAL;
+			tTextureObject.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Portal__";
+			m_wstObjName += to_wstring(m_iObject_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
 				return;
 
 			m_iObject_Count++;
@@ -1134,8 +1152,26 @@ void CLevel_GamePlay::Load_Object()
 					return;
 			}
 		}
-	}
 
+		for (_int i = 0; i < iVecCount; i++)
+		{
+			CO_TextureObject::TEXTUREOBJECT		tTextureObject;
+			tTextureObject.eTextureType = tTextureObject.PORTAL;
+			tTextureObject.f3Pos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Layer_Portal__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+					return;
+			}
+		}
+	}
+	
 	RELEASE_INSTANCE(CGameInstance);
 }
 

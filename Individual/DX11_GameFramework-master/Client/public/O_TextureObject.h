@@ -13,25 +13,22 @@ END
 
 BEGIN(Client)
 
-class CB_2DBullet final : public CGameObject
+class CO_TextureObject final : public CGameObject
 {
 public:
-	typedef struct tagBulletInfo
+	typedef struct tagTextureObjectInfo
 	{
-		enum TOODYBULLET { STAR_BULLET, CIRCLE_BULLET, MAGIC_BULLET, TOODYBULLET_END };
-		TOODYBULLET	eToodyBullet;
+		enum TEXTURETYPE { PORTAL, TEXTURETYPE_END };
+		TEXTURETYPE		eTextureType;
+		
+		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
 
-		_float3		f3Start_Pos;
-		_float3		f3Target_Pos;
-
-		_int		iMonsterAttack = 0;
-
-	}BULLETINFO;
+	}TEXTUREOBJECT;
 
 private:
-	CB_2DBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CB_2DBullet(const CB_2DBullet& rhs);
-	virtual ~CB_2DBullet() = default;
+	CO_TextureObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CO_TextureObject(const CO_TextureObject& rhs);
+	virtual ~CO_TextureObject() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -54,13 +51,10 @@ private:
 	CCollider*				m_pColliderCom = nullptr;
 
 private:
-	BULLETINFO				m_tBulletInfo;
-
-	_float4					m_f4Distance;
-	_double					m_dBullet_TimeAcc = 0;
+	TEXTUREOBJECT			m_TextureObject;
 
 public:
-	static	CB_2DBullet*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CO_TextureObject*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };
