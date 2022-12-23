@@ -443,8 +443,11 @@ void CJake::Check_Follow(_double TimeDelta)
 			else
 				fAddZ = -1.2f;
 
+			CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vPlayerPos);
+			m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
 			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), m_pNavigationCom);	// 플레이어 근처로 이동
 
 			m_dNotfollow_TimeAcc = 0;

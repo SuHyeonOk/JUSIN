@@ -148,6 +148,9 @@
     <Filter Include="02.GameObjects\Effect">
       <UniqueIdentifier>{ca7c3622-8d51-4808-822e-ea7a15e6d0c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Object">
+      <UniqueIdentifier>{bc717a54-beef-4b1e-a30a-dc48f5fed3f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -312,6 +315,9 @@
     <ClInclude Include="..\public\B_AnimBullet.h">
       <Filter>02.GameObjects\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\O_Box.h">
+      <Filter>02.GameObjects\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -457,6 +463,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Tree_Witch.cpp">
       <Filter>02.GameObjects\Monster\Tree_Witch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\O_Box.cpp">
+      <Filter>02.GameObjects\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

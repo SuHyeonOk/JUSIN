@@ -28,7 +28,7 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 		memcpy(&m_tBulletInfo, pArg, sizeof(NONANIMBULLETINFO));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	ZeroMemory(&GameObjectDesc, sizeof(NONANIMBULLETINFO));
+	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 요기 (검색해서 각기 설정해 주면 된다.)
 	{

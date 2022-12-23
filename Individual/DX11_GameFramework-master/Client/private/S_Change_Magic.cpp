@@ -75,7 +75,7 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 
 	// 변한 시간이 지나면 사라진다.
 	m_dSkill_TimaAcc += TimeDelta;
-	if (15 < m_dSkill_TimaAcc)
+	if (10 < m_dSkill_TimaAcc)
 	{
 		CGameObject::Set_Dead();
 		m_dSkill_TimaAcc = 0;

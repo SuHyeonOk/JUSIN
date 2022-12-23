@@ -146,6 +146,19 @@ _int CNavigation::Get_CellType()
 	return m_NaviDesc.iCellType = m_Cells[m_NaviDesc.iCurrentIndex]->Get_CellType();
 }
 
+_int CNavigation::Get_CellIndex()
+{
+	return m_NaviDesc.iCurrentIndex;
+}
+
+void CNavigation::Set_CellIndex(_int iCellIndex)
+{
+	if (-1 == iCellIndex)
+		return;
+
+	m_NaviDesc.iCurrentIndex = iCellIndex;
+}
+
 HRESULT CNavigation::Cell_Create(CELLINFO tCellInfo)
 {
 	_float3		vPoints[CCell::POINT_END];

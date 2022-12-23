@@ -35,6 +35,9 @@ public:
 
 public:
 	_int	Get_CellType();
+	_int	Get_CellIndex();
+	void	Set_CellIndex(_int iCellIndex);
+
 	HRESULT	Cell_Create(CELLINFO tCellInfo);
 
 public:

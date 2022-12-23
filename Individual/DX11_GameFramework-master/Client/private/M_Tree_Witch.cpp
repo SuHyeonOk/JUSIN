@@ -49,7 +49,7 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
+	
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.iHp		= 70;
 	m_tMonsterInfo.iExp		= 50;
@@ -61,7 +61,7 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 void CM_Tree_Witch::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
+	
 	Monster_Tick(TimeDelta);
 }
 
@@ -232,6 +232,9 @@ void CM_Tree_Witch::Find_Tick()
 
 void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 {
+	if (4.f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 25);
@@ -240,7 +243,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
 
-		if (2.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		if (3.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 		{
 			_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 			XMStoreFloat4(&m_f4PlayerPos, vPlayerPos);
@@ -287,7 +290,7 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 	else
 	{
 		// 깔아 뭉개기 
-		if (m_pModelCom->Animation_Check(8) && m_pModelCom->Get_Finished())
+		if (m_pModelCom->Animation_Check(8) && 20 <= m_pModelCom->Get_Keyframes())
 		{
 			//cout << "888888" << endl;
 			m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프

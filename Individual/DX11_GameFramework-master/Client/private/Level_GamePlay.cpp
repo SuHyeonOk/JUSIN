@@ -129,7 +129,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Npc()
 
 	CN_NPC::NPCDESC					tNpcDesc;
 	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	tNpcDesc.TransformDesc.f3Pos = _float3(-13.5848f, 0.f, -6.57509f);
+	tNpcDesc.TransformDesc.f3Pos = _float3(-9.8105f, 0.f, -5.1134f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
 		return E_FAIL;
 

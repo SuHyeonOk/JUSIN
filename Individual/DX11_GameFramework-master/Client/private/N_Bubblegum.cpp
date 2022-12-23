@@ -48,7 +48,6 @@ HRESULT CN_Bubblegum::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(270.f));
 	m_pModelCom->Set_AnimIndex(0);
 
 	return S_OK;
@@ -71,7 +70,7 @@ void CN_Bubblegum::Late_Tick(_double TimeDelta)
 
 HRESULT CN_Bubblegum::Render()
 {
-	if (FAILED(__super::Render()))
+	if (FAILED(CN_NPC::Render()))
 		return E_FAIL;
 
 	if (FAILED(SetUp_ShaderResources()))
