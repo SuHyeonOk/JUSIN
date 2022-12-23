@@ -34,6 +34,7 @@ private:
 	void	ImGui_Coin();
 	void	ImGui_Page();
 	void	ImGui_Npc();
+	void	ImGui_Object();
 	void	ImGui_Monster();
 
 private:
@@ -41,6 +42,7 @@ private:
 	void	Load_Coin();
 	void	Load_Page();
 	void	Load_Npc();
+	void	Load_Object();
 	void	Load_Monster();
 
 private:
@@ -61,8 +63,9 @@ private:
 	// Page
 	_uint			m_iPage_1_Count = 0;
 
-	_uint			m_iMonster_Count = 0;
 	_uint			m_iNpc_Count = 0;
+	_uint			m_iObject_Count = 0;
+	_uint			m_iMonster_Count = 0;
 
 	// ¢º ³¡
 

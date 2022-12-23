@@ -48,7 +48,7 @@ HRESULT CO_Box::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(45.f));
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(-120.f));
 	m_eState = IDLE;
 
 	return S_OK;
@@ -59,7 +59,7 @@ void CO_Box::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
+
 	switch (m_eState)
 	{
 	case Client::CO_Box::IDLE:
@@ -73,6 +73,7 @@ void CO_Box::Tick(_double TimeDelta)
 		break;
 	}
 
+	// 객체의 상태가 OPEN 이면서, 애니메이션이 끝나면 STOP 으로 변경한다.
 	if (3 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
 		m_eState = STOP;

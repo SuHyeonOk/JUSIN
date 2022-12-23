@@ -60,6 +60,11 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	RELEASE_INSTANCE(CGameInstance);
+	m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
+
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
 
@@ -163,7 +168,7 @@ HRESULT CS_Change_Magic::SetUp_Components()
 	CNavigation::NAVIDESC			NaviDesc;
 	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
 
-	NaviDesc.iCurrentIndex = 5;
+	NaviDesc.iCurrentIndex = 0;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))

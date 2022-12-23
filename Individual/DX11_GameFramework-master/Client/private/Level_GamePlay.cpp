@@ -57,6 +57,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Coin();
 	Load_Page();
 	//Load_Npc();
+	Load_Object();
 	Load_Monster();
 
 
@@ -229,7 +230,7 @@ void CLevel_GamePlay::ImGui()
 {
 	ImGui::Begin("GamePlayTool");
 
-	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Npc", "Monster" };
+	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Npc", "Object", "Monster" };
 	static int iItemNum = 0;
 	ImGui::Combo("##2", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
@@ -242,6 +243,8 @@ void CLevel_GamePlay::ImGui()
 	else if (4 == iItemNum)
 		ImGui_Npc();
 	else if (5 == iItemNum)
+		ImGui_Object();
+	else if (6 == iItemNum)
 		ImGui_Monster();
 
 	ImGui::End();
@@ -522,6 +525,56 @@ void CLevel_GamePlay::ImGui_Npc()
 
 	if (ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/Npc.txt", SW_SHOW);
+}
+
+void CLevel_GamePlay::ImGui_Object()
+{
+	const _char* szObjName[] = { "Box" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_Object", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
+
+		if (0 == iObjNum)
+		{
+			m_wstObjName = L"Layer_Box__";
+			m_wstObjName += to_wstring(m_iObject_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
+				return;
+
+			m_iObject_Count++;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Object Save"))
+	{
+		wofstream fout("../../Data/Object.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Object.txt", SW_SHOW);
 }
 
 void CLevel_GamePlay::ImGui_Monster()
@@ -932,11 +985,11 @@ void CLevel_GamePlay::Load_Page()
 
 	CPage::PAGEINFO					tPageInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
-	_int iFoodVecCount = _int(eVecObjInfo.size());
+	_int iPageVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
-		for (_int i = 0; i < iFoodVecCount; i++)
+		for (_int i = 0; i < iPageVecCount; i++)
 		{
 			tPageInfo.fPos = pObjInfo.ObjPos;
 
@@ -998,11 +1051,11 @@ void CLevel_GamePlay::Load_Npc()
 
 	CN_NPC::NPCDESC					tNpcInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_NpcInfo();
-	_int iFoodVecCount = _int(eVecObjInfo.size());
+	_int iNpcVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
-		for (_int i = 0; i < iFoodVecCount; i++)
+		for (_int i = 0; i < iNpcVecCount; i++)
 		{
 			tNpcInfo.eNpcType = tNpcInfo.BUBBLEGUM;
 			tNpcInfo.TransformDesc.f3Pos = pObjInfo.ObjPos;
@@ -1015,6 +1068,69 @@ void CLevel_GamePlay::Load_Npc()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
+					return;
+			}
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CLevel_GamePlay::Load_Object()
+{
+	wifstream		fin("../../Data/Object.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		CDataManager::GetInstance()->Set_ObjectInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_ObjectInfo();
+	_int iVecCount = _int(eVecObjInfo.size());
+
+	for (auto& pObjInfo : eVecObjInfo)
+	{
+		for (_int i = 0; i < iVecCount; i++)
+		{
+			m_wstObjName = L"Layer_Box__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_Box"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}

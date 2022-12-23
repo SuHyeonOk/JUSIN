@@ -554,12 +554,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 	///////////////////////////////////////////////////////////// ANIM
 
-	// NPC
-	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	// Skill
 	/* For.Prototype_Component_Model_S_StunChick */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_StunChick"),
@@ -567,6 +561,18 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// NPC
+	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// Obj
+	/* For.Prototype_Component_Model_O_Box*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Box"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Box/Box.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	//// Fiona
 	///* For.Prototype_Component_Model_Fiona */
@@ -660,6 +666,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_UI_3DTexture */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
 		CUI_3DTexture::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Obj
+	/* For.Prototype_GameObject_O_Box */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Box"),
+		CO_Box::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// NPC

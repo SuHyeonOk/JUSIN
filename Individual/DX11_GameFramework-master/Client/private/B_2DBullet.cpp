@@ -81,37 +81,37 @@ void CB_2DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날린다.
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//RELEASE_INSTANCE(CGameInstance);
+	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날린다.
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	RELEASE_INSTANCE(CGameInstance);
 
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 카메라를 바라본다.
 
-	////m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
-	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//_vector vDistance = XMLoadFloat4(&m_f4Distance);
-	//vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vDistance = XMLoadFloat4(&m_f4Distance);
+	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
- //	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
+ 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
-	//// 충돌처리
-	////m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
-	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		
+	// 충돌처리
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());		
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//// 총알이 생성된 뒤 1초가 지나면 삭제한다.
-	//m_dBullet_TimeAcc += TimeDelta;
-	//if (1 < m_dBullet_TimeAcc)
-	//{
-	//	CGameObject::Set_Dead();
-	//	m_dBullet_TimeAcc = 0;
-	//}
+	// 총알이 생성된 뒤 1초가 지나면 삭제한다.
+	m_dBullet_TimeAcc += TimeDelta;
+	if (1 < m_dBullet_TimeAcc)
+	{
+		CGameObject::Set_Dead();
+		m_dBullet_TimeAcc = 0;
+	}
 
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	CGameObject::Set_Dead();
@@ -134,10 +134,10 @@ HRESULT CB_2DBullet::Render()
 
 	m_pVIBufferCom->Render();
 
-#ifdef _DEBUG
-	if (nullptr != m_pColliderCom)
-		m_pColliderCom->Render();
-#endif
+//#ifdef _DEBUG
+//	if (nullptr != m_pColliderCom)
+//		m_pColliderCom->Render();
+//#endif
 	return S_OK;
 }
 

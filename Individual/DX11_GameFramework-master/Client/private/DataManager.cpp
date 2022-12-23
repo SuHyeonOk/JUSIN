@@ -43,6 +43,15 @@ void CDataManager::Set_NpcInfo(const _tchar & ObjName, const _float3 & ObjPos)
 	m_vecNpcInfo.push_back(eObjInfo);
 }
 
+void CDataManager::Set_ObjectInfo(const _tchar & ObjName, const _float3 & ObjPos)
+{
+	OBJINFO		eObjInfo;
+	memcpy(eObjInfo.ObjName, &ObjName, sizeof(_char[MAX_PATH]));
+	eObjInfo.ObjPos = ObjPos;
+
+	m_vecObjectInfo.push_back(eObjInfo);
+}
+
 void CDataManager::Set_MonsterInfo(const _tchar & ObjName, const _float3 & ObjPos)
 {
 	OBJINFO		eObjInfo;
