@@ -17,6 +17,8 @@
 #include "Finn_Change.h"
 #include "S_Change_Magic.h"
 
+#include "O_TextureObject.h"
+
 #include "UI_Informacion.h"
 #include "UI_HPGauge.h"
 
@@ -85,9 +87,7 @@ void CMainApp::Tick(_double TimeDelta)
 #endif 
 
 	// Collider _R, _L
-	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_COIN);
-	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_FOOD);
-	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_PAGE);
+	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_ITME);
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_NPC);
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_OBJ);
 
@@ -371,6 +371,17 @@ HRESULT CMainApp::Ready_Prototype_Component()
 HRESULT CMainApp::Ready_Prototype_GameObject()
 {
 	if (nullptr == m_pGameInstance)
+		return E_FAIL;
+
+	// 2D Object
+	/* For.Prototype_Component_Texture_O_TextureObject */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_O_TextureObject"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Portal/Portal.png")))))
+		return E_FAIL;
+	// 2D Obj
+	/* For.Prototype_GameObject_O_TextureObject */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_TextureObject"),
+		CO_TextureObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Camera_Dynamic */

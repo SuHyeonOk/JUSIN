@@ -76,6 +76,9 @@ public:
 	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
 	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
 
+	void				Set_Key() { m_tPlayerInfo.iKey += 1; }
+	void				Set_Heart() { m_tPlayerInfo.iHeart += 1; }
+
 	// UI Talk
 	_bool				Get_Interaction() { return m_bInteraction; }
 

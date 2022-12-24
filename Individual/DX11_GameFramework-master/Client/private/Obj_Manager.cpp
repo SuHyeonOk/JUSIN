@@ -22,6 +22,9 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.iHeart	= 0;
 	m_tPlayerInfo.iCoin		= 0;
 
+	m_tPlayerInfo.iKey = 0;
+	m_tPlayerInfo.iHeart = 0;
+
 	m_tPlayerInfo.ePlayer = PLAYERINFO::PLAYER::FINN;
 	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
 	m_tPlayerInfo.eJakeWeapon = PLAYERINFO::JAKEWEAPON::LFIST;

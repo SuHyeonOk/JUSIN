@@ -44,7 +44,7 @@ private:
 	STATE			m_eState;
 
 	_bool			m_bOneCoin = false;
-
+	
 public:
 	static	CO_Box*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

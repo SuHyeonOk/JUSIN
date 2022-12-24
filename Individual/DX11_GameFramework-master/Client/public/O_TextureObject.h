@@ -18,7 +18,7 @@ class CO_TextureObject final : public CGameObject
 public:
 	typedef struct tagTextureObjectInfo
 	{
-		enum TEXTURETYPE { PORTAL, TEXTURETYPE_END };
+		enum TEXTURETYPE { PORTAL, MOVE_PORTAL, TEXTURETYPE_END };
 		TEXTURETYPE		eTextureType;
 		
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -51,7 +51,12 @@ private:
 	CCollider*				m_pColliderCom = nullptr;
 
 private:
+	void					MovePortal(const _double & TimeDelta);
+
+private:
 	TEXTUREOBJECT			m_TextureObject;
+
+	_double					m_bMovePortal = 0;
 
 public:
 	static	CO_TextureObject*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -129,10 +129,13 @@ HRESULT CLevel_Tool::Ready_Layer_Jake(const _tchar * pLayerTag)
 HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Box"), TEXT("Prototype_GameObject_Key"), &_float3(-7.f, 0.f, -3.f))))
+		return E_FAIL;
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Box"), TEXT("Prototype_GameObject_O_Box"), &_float3(-5.f, 0.f, 0.f))))
 			return E_FAIL;
-
+	               
 	//CN_NPC::NPCDESC					tNpcDesc;
 	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
 	//tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
@@ -179,6 +182,11 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 
 	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 5.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Tree_Witch__0"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+		return E_FAIL;
+
+	tMonsterDesc.eMonsterKind = tMonsterDesc.MIMIC;
+	tMonsterDesc.f3Pos = _float3(0.f, 0.f, -5.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("mimic"), TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))
 		return E_FAIL;
 
 	//tMonsterDesc.f3Pos = _float3(-2.f, 0.f, 3.f);

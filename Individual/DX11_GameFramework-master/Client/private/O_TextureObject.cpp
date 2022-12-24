@@ -34,7 +34,8 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL ||
+		m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
@@ -49,7 +50,8 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL ||
+		m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
 		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 0.f));
 
 	return S_OK;
@@ -60,6 +62,11 @@ void CO_TextureObject::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
+
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+		MovePortal(TimeDelta);
+
+
 }
 
 void CO_TextureObject::Late_Tick(_double TimeDelta)
@@ -116,10 +123,11 @@ HRESULT CO_TextureObject::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL ||
+		m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
 	{
 		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_O_TextureObject"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_O_TextureObject"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
 
@@ -158,6 +166,16 @@ HRESULT CO_TextureObject::SetUp_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CO_TextureObject::MovePortal(const _double & TimeDelta)
+{
+	m_bMovePortal += TimeDelta;
+	if (1 < m_bMovePortal)
+	{
+		CGameObject::Set_Dead();
+		m_bMovePortal = 0;
+	}
 }
 
 CO_TextureObject * CO_TextureObject::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

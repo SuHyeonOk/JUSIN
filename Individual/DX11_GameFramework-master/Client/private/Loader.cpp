@@ -17,7 +17,6 @@
 #include "UI_3DTexture.h"
 
 // Obj
-#include "O_TextureObject.h"
 #include "O_Box.h"
 
 // NPC
@@ -34,6 +33,7 @@
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
+#include "Key.h"
 
 // Bullet
 #include "B_2DBullet.h"
@@ -49,6 +49,7 @@
 #include "M_Gronmes.h"
 #include "M_Tree_Witch.h"
 #include "M_Magic_Man.h"
+#include "M_Mimic.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -128,12 +129,6 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
-	
-	// 2D Object
-	/* For.Prototype_Component_Texture_O_TextureObject */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_O_TextureObject"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Portal/Portal.png")))))
-		return E_FAIL;
 
 	// UI
 	/* For.Prototype_Component_Texture_UI_Talk */
@@ -178,7 +173,10 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
 		return E_FAIL;
-
+	/* For.Prototype_Component_Model_Key */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Key"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Key/Key.fbx", PivotMatrix))))
+		return E_FAIL;
 	// Coin
 	/* For.Prototype_Component_Model_CoinBronze */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
@@ -264,8 +262,12 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Magic_Man"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Magic_Man/Magic_Man.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Mimic */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Mimic"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Mimic_Monster/Mimic_Monster.fbx", PivotMatrix))))
+		return E_FAIL;
 
-
+	
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 	/* For.Prototype_Component_Shader_VtxNorTex */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
@@ -297,7 +299,10 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PigWarrior_Weapon"),
 		CW_PigWarrior::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	/* For.Prototype_GameObject_Key */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
+		CKey::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	// Page
 	/* For.Prototype_GameObject_Page */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
@@ -363,8 +368,12 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Magic_Man"),
 		CM_Magic_Man::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_M_Mimic */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Mimic"),
+		CM_Mimic::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
-	// Effect
+	// Effect 
 	/* For.Prototype_GameObject_Effect_Rect_Instancing */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Rect_Instancing"),
 		CEffect_Rect_Instancing::Create(m_pDevice, m_pContext))))
@@ -379,12 +388,6 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_N_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
 		CN_Bubblegum::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	// 2D Obj
-	/* For.Prototype_GameObject_O_TextureObject */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_TextureObject"),
-		CO_TextureObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Obj
@@ -473,12 +476,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
 
-	// 2D Object
-	/* For.Prototype_Component_Texture_O_TextureObject */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_O_TextureObject"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Portal/Portal.png")))))
-		return E_FAIL;
-
 	// UI
 	/* For.Prototype_Component_Texture_UI_Talk */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
@@ -524,7 +521,15 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Burrito/Burrito.fbx", PivotMatrix))))
 		return E_FAIL;
-
+	// Cyclop
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cyclop_Tears"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Cyclop_Tears/Cyclop_Tears.fbx", PivotMatrix))))
+		return E_FAIL;
+	// Key
+	/* For.Prototype_Component_Model_Key */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Key"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Key/Key.fbx", PivotMatrix))))
+		return E_FAIL;
 	// Coin
 	/* For.Prototype_Component_Model_CoinBronze */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
@@ -538,13 +543,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinGold"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx", PivotMatrix))))
 		return E_FAIL;
-
-	// Hp
-	///* For.Prototype_Component_Model_Cyclop_Tears */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cyclop_Tears"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Hp/Cyclop_Tears/Cyclop_Tears.fbx"))))
-	//	return E_FAIL;
-
 	// Page
 	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
@@ -585,12 +583,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
-		return E_FAIL;
-
-	// 2D Obj
-	/* For.Prototype_GameObject_O_TextureObject */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_TextureObject"),
-		CO_TextureObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Obj
@@ -640,6 +632,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Model_M_Magic_Man */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Magic_Man"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Magic_Man/Magic_Man.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Mimic */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Mimic"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Mimic_Monster/Mimic_Monster.fbx", PivotMatrix))))
 		return E_FAIL;
 #pragma endregion
 
@@ -711,19 +707,23 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CMap_Garden::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Food
+	// Item
 	/* For.Prototype_GameObject_Food */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
 		CFood::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-	// Coin
+	/* For.Prototype_GameObject_Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Hp"),
+		CFood::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Key */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
+		CKey::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* For.Prototype_GameObject_Coin */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
 		CCoin::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-	// Page
 	/* For.Prototype_GameObject_Page */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
 		CPage::Create(m_pDevice, m_pContext))))
@@ -775,6 +775,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_M_Magic_Man */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Magic_Man"),
 		CM_Magic_Man::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Mimic */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Mimic"),
+		CM_Mimic::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

@@ -26,7 +26,7 @@ HRESULT CFood::Initialize_Prototype()
 
 HRESULT CFood::Initialize(void * pArg)
 {	
-	m_wsTag = L"Food";
+	m_wsTag = L"Item_Food";
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -72,7 +72,7 @@ void CFood::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_FOOD, this);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

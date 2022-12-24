@@ -185,9 +185,11 @@
     <ClInclude Include="..\public\Finn_Change.h" />
     <ClInclude Include="..\public\Finn_Weapon.h" />
     <ClInclude Include="..\public\Food.h" />
+    <ClInclude Include="..\public\Heart.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
     <ClInclude Include="..\public\Jake.h" />
     <ClInclude Include="..\public\Jake_Weapon.h" />
+    <ClInclude Include="..\public\Key.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="..\public\Map_Garden.h" />
     <ClInclude Include="..\public\M_Gronmes.h" />
     <ClInclude Include="..\public\M_Magic_Man.h" />
+    <ClInclude Include="..\public\M_Mimic.h" />
     <ClInclude Include="..\public\M_Monster.h" />
     <ClInclude Include="..\public\M_Pigs.h" />
     <ClInclude Include="..\public\M_PigWarrior.h" />
@@ -239,9 +242,11 @@
     <ClCompile Include="..\private\Finn_Change.cpp" />
     <ClCompile Include="..\private\Finn_Weapon.cpp" />
     <ClCompile Include="..\private\Food.cpp" />
+    <ClCompile Include="..\private\Heart.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
     <ClCompile Include="..\private\Jake.cpp" />
     <ClCompile Include="..\private\Jake_Weapon.cpp" />
+    <ClCompile Include="..\private\Key.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
@@ -251,6 +256,7 @@
     <ClCompile Include="..\private\Map_Garden.cpp" />
     <ClCompile Include="..\private\M_Gronmes.cpp" />
     <ClCompile Include="..\private\M_Magic_Man.cpp" />
+    <ClCompile Include="..\private\M_Mimic.cpp" />
     <ClCompile Include="..\private\M_Monster.cpp" />
     <ClCompile Include="..\private\M_Pigs.cpp" />
     <ClCompile Include="..\private\M_PigWarrior.cpp" />

@@ -6,6 +6,7 @@
 #include "Bone.h"
 #include "Jake_Weapon.h"
 #include "S_Change_Magic.h"
+#include "O_TextureObject.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -443,12 +444,20 @@ void CJake::Check_Follow(_double TimeDelta)
 			else
 				fAddZ = -1.2f;
 
+			// 좌표 이동
 			CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
 
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vPlayerPos);
 			m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
 			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), m_pNavigationCom);	// 플레이어 근처로 이동
+
+			// 오브젝트 포탈 생성
+			CO_TextureObject::TEXTUREOBJECT tTextureObject;
+			tTextureObject.eTextureType = tTextureObject.MOVE_PORTAL;
+			tTextureObject.f3Pos = _float3(f4MyPos.x - fAddX, f4MyPos.y, (f4MyPos.z - fAddZ) - 0.5f);
+			if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Portal_Jake"), TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+				return;
 
 			m_dNotfollow_TimeAcc = 0;
 		}

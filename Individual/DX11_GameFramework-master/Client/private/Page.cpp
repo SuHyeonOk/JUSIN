@@ -26,7 +26,7 @@ HRESULT CPage::Initialize_Prototype()
 
 HRESULT CPage::Initialize(void * pArg)
 {
-	m_wsTag = L"Page";
+	m_wsTag = L"Item_Page";
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -71,14 +71,13 @@ void CPage::Tick(_double TimeDelta)
 	//		m_bIdle = true;
 	//}
 
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CPage::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PAGE, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

@@ -26,7 +26,7 @@ HRESULT CCoin::Initialize_Prototype()
 
 HRESULT CCoin::Initialize(void * pArg)
 {
-	m_wsTag = L"Coin";
+	m_wsTag = L"Item_Coin";
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -70,6 +70,7 @@ void CCoin::Tick(_double TimeDelta)
 
 	CurrentState(TimeDelta);
 
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
@@ -91,8 +92,6 @@ void CCoin::Late_Tick(_double TimeDelta)
 			m_dDead_TimeAcc = 0;
 		}
 	}
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_COIN, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
