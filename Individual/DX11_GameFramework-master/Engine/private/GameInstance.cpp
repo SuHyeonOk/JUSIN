@@ -150,6 +150,14 @@ HRESULT CGameInstance::Update_SwapChain(HWND hWnd, _uint iWinCX, _uint iWinCY, _
 	return m_pGraphic_Device->Update_SwapChain(hWnd, iWinCX, iWinCY, bIsFullScreen, bNeedUpdate);
 }
 
+_int CGameInstance::Key_OneUpDwon(_uchar eKeyID)
+{
+	if (nullptr == m_pInput_Device)
+		return 2;
+
+	return m_pInput_Device->Key_OneUpDwon(eKeyID);
+}
+
 _bool CGameInstance::Key_Down(_uchar eKeyID)
 {
 	if (nullptr == m_pInput_Device)

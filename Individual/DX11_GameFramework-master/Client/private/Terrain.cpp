@@ -93,9 +93,8 @@ HRESULT CTerrain::Render()
 
 	m_pVIBufferCom->Render();
 
-#ifdef _DEBUG
+//if(g_bNavigationRender)
 	m_pNavigationCom->Render();
-#endif
 
 	return S_OK;
 }

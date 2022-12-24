@@ -134,6 +134,11 @@ void		CObj_Manager::Key_Input()
 	// TODO : 무기변경
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	if (1 == pGameInstance->Key_OneUpDwon(DIK_0))
+		cout << "1" << endl;
+	if (0 == pGameInstance->Key_OneUpDwon(DIK_0))
+		cout << "0" << endl;
+
 	if (pGameInstance->Key_Down(DIK_V))
 		m_bIsTalk = true;
 	if (pGameInstance->Key_Up(DIK_B))

@@ -77,6 +77,9 @@ void CMainApp::Tick(_double TimeDelta)
 
 	CObj_Manager::GetInstance()->Tick(TimeDelta);
 
+	//if(m_pGameInstance->Key_Down(DIK_F12))
+	//	g_bNavigationRender = true;
+
 #ifdef _DEBUG
 	m_dTimeAcc += TimeDelta;	// FPS 를 위한 시간
 #endif 
