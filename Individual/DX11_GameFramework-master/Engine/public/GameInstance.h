@@ -41,7 +41,7 @@ public: /* For.Graphic_Device */
 	HRESULT		Update_SwapChain(HWND hWnd, _uint iWinCX, _uint iWinCY, _bool bIsFullScreen, _bool bNeedUpdate);
 
 public: /* For.Input_Device */
-	_int		Key_OneUpDwon(_uchar eKeyID);
+	_int		Key_DwonUp(_uchar eKeyID);
 
 	_bool		Key_Down(_uchar eKeyID);
 	_bool		Key_Up(_uchar eKeyID);

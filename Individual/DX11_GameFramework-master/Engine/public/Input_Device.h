@@ -29,7 +29,7 @@ public:
 		return ((_long*)&m_MouseState)[eMouseMoveID];
 	}
 
-	_int		Key_OneUpDwon(_uchar eKeyID);
+	_int		Key_DwonUp(_uchar eKeyID);
 	_bool		Key_Down(_uchar eKeyID);
 	_bool		Key_Up(_uchar eKeyID);
 	_bool		Key_Pressing(_uchar eKeyID);
@@ -54,7 +54,7 @@ private:
 	DIMOUSESTATE				m_PreMouseState;
 	DIMOUSESTATE				m_MouseState;
 
-	_int						m_OneUpDown = false;
+	_int						m_DownCount = 0;
 
 public:
 	virtual void		Free(void);

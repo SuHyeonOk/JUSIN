@@ -77,7 +77,7 @@ public:
 	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
 
 	// UI Talk
-	_bool				Get_IsTalk() { return m_bIsTalk; }
+	_bool				Get_Interaction() { return m_bInteraction; }
 
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.
@@ -108,7 +108,7 @@ private:
 
 	_float			m_fAngle = 0.f;
 
-	_bool			m_bIsTalk = false;
+	_bool			m_bInteraction = false;
 
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn

@@ -515,7 +515,7 @@ void CJake::Key_Input(_double TimeDelta)
 		CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST);
 	}
 
-	if (true == CObj_Manager::GetInstance()->Get_IsTalk() ||	// jake 의 경우 control 을 누를 수 있는데 그냥 그렇게 하장..
+	if (true == CObj_Manager::GetInstance()->Get_Interaction() ||	// jake 의 경우 control 을 누를 수 있는데 그냥 그렇게 하장..
 		m_tPlayerInfo.eState == m_tPlayerInfo.CONTROL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||

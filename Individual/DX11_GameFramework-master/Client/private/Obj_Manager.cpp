@@ -134,15 +134,12 @@ void		CObj_Manager::Key_Input()
 	// TODO : 무기변경
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (1 == pGameInstance->Key_OneUpDwon(DIK_0))
-		cout << "1" << endl;
-	if (0 == pGameInstance->Key_OneUpDwon(DIK_0))
-		cout << "0" << endl;
-
-	if (pGameInstance->Key_Down(DIK_V))
-		m_bIsTalk = true;
-	if (pGameInstance->Key_Up(DIK_B))
-		m_bIsTalk = false;
+	// 대화 움직이지 못함.
+	_int iResult = pGameInstance->Key_DwonUp(DIK_F);	
+	if (1 == iResult)
+		m_bInteraction = true;
+	else if (0 == iResult)
+		m_bInteraction = false;
 
 	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
 	{

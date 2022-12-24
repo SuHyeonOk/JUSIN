@@ -58,10 +58,11 @@ void CUI_Talk::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CN_Bubblegum * pGameObject = dynamic_cast<CN_Bubblegum*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), 0));
-	m_bIsTalk = pGameObject->m_bTalk_UI;
-	RELEASE_INSTANCE(CGameInstance);
+	// TODO : NPC 수정할 때 같이 수정하기
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//CN_Bubblegum * pGameObject = dynamic_cast<CN_Bubblegum*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), 0));
+	//m_bIsTalk = pGameObject->m_bTalk_UI;
+	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CUI_Talk::Late_Tick(_double TimeDelta)

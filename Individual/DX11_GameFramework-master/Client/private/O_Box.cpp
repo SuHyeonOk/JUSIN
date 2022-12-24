@@ -132,7 +132,7 @@ HRESULT CO_Box::Render()
 void CO_Box::On_Collision(CGameObject * pOther)
 {
 	if(IDLE == m_eState)
-		if (CObj_Manager::GetInstance()->Get_IsTalk())
+		if (CObj_Manager::GetInstance()->Get_Interaction())
 			if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 				m_eState = OPEN;
 }

@@ -568,7 +568,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 
 void CFinn::Key_Input(_double TimeDelta)
 {
-	if (true == CObj_Manager::GetInstance()->Get_IsTalk() ||
+	if (true == CObj_Manager::GetInstance()->Get_Interaction() ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL	||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT	||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN	||
