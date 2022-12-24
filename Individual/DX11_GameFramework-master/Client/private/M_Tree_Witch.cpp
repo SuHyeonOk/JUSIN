@@ -4,7 +4,6 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"		// 플레이어 정보 얻어오려고..
 #include "ItemManager.h"		// 죽을 때 동전 터트릴려고..
-#include "Skill_Manager.h"		// 스킬 플레이어와 공유하려고..
 #include "Utilities_Manager.h"	// 랜덤값 쓰려고..
 
 #include "UI_3DTexture.h"		// 느낌표 띄우려고...
@@ -198,7 +197,7 @@ void CM_Tree_Witch::Idle_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 4.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	if (m_bAttack && 10 == m_pModelCom->Get_Keyframes())
+	if (m_bAttack && m_pModelCom->Get_Finished())
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 		m_bAttack = false;
@@ -238,7 +237,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 25);
-	iRandomNum = 0;
+	iRandomNum = 1;
 	if (0 == iRandomNum)		// 덩굴 생성
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -260,6 +259,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 			m_pModelCom->Set_AnimIndex(8, false);
+			m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP;
 
 			// 플레이어의 애니메이션 상태 변경하기
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH);
@@ -269,11 +269,12 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 
 void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 {
+	m_bAttack = true;
+
 	// 덩굴
 	if (m_pModelCom->Animation_Check(0) && m_pModelCom->Get_Finished())
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		m_bAttack = true;
 		
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -287,36 +288,44 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 		
 		RELEASE_INSTANCE(CGameInstance);
 	}
+	// 깔아 뭉개기
 	else
 	{
-		// 깔아 뭉개기 
-		if (m_pModelCom->Animation_Check(8) && 20 <= m_pModelCom->Get_Keyframes())
-		{
-			//cout << "888888" << endl;
-			m_pModelCom->Set_AnimIndex(9, false);	// 누르기 위해 점프
-			CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP);
-		}
-		if (m_pModelCom->Animation_Check(9) && m_pModelCom->Get_Finished())
-		{
-			//cout << "9999999" << endl;
-			m_pModelCom->Set_AnimIndex(7, false);	// 누르기
-			CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE);
-		}
-		if (m_pModelCom->Animation_Check(7) && m_pModelCom->Get_Finished())
-		{
-			//cout << "7777777" << endl;
-			m_pModelCom->Set_AnimIndex(6, false);	// 일어나기
-			CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE);
-		}
-		if (m_pModelCom->Animation_Check(6) && m_pModelCom->Get_Finished())
-		{
-			//cout << "666666" << endl;
-			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-			m_bAttack = true;
+		Attack_Tick2(TimeDelta);
+	}
+}
 
-			// 플레이어의 애니메이션 상태 변경하기
-			//CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		}
+void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
+{
+	switch (m_eState)
+	{
+	case CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP:
+		m_pModelCom->Set_AnimIndex(9, false, false);   // 누르기 위해 점프
+		break;
+
+	case CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE:
+		m_pModelCom->Set_AnimIndex(7, false);   // 누르기
+		break;
+
+	case CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE:
+		m_pModelCom->Set_AnimIndex(6, false);   // 일어나기
+		break;
+	}
+
+	CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(m_eState);
+
+
+
+	//if (9 == m_pModelCom->Get_AnimIndex())
+	//	cout << m_pModelCom->Get_Keyframes() << endl;
+	if (9 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE;
+	if (7 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE;
+	if (6 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	{
+		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END);
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}
 }
 

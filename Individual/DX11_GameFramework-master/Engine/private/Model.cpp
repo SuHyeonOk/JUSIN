@@ -62,13 +62,16 @@ CBone * CModel::Get_BonePtr(const char * pBoneName)
 	return nullptr;
 }
 
-void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition)
+void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition, _bool bBlending)
 {
 	if (m_iCurrentAnimIndex == iAnimIndex)
 		return;
 
-	m_iPreAnimIndex = m_iCurrentAnimIndex;					// 애니 인덱스를 현재 인덱스로 초기화
-	m_fBlendCurTime = 0.f;									// 블렌딩 시간을 초기화
+	if (bBlending)
+	{
+		m_iPreAnimIndex = m_iCurrentAnimIndex;					// 애니 인덱스를 현재 인덱스로 초기화
+		m_fBlendCurTime = 0.f;									// 블렌딩 시간을 초기화
+	}
 
 	m_Animations[m_iCurrentAnimIndex]->Reset_Channel();		// 이전 애니메이션의 키프레임, 재생 시간 초기화
 	m_iCurrentAnimIndex = iAnimIndex;						// 이제 실행할 애니메이션 대입

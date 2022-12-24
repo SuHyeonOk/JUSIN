@@ -28,7 +28,7 @@ public:
 
 	class CBone* Get_BonePtr(const char* pBoneName);
 
-	void		Set_AnimIndex(_uint iAnimIndex, _bool	bRepetition = true);
+	void		Set_AnimIndex(_uint iAnimIndex, _bool bRepetition = true, _bool bBlending = true);
 	_bool		Get_Finished();		// 애니메이션이 끝났는지
 	_int		Get_Keyframes();	// 현재 재생중인 애니메이션의 Frames
 	_int		Get_AnimIndex() { return m_iCurrentAnimIndex; }

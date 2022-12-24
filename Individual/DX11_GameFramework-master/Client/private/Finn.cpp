@@ -779,20 +779,16 @@ void CFinn::TreeWitch_Tick()
 
 	// 할머니 스킬
 	// [핀] 55 : 눌리기 직전 54 : 눌리기 53 : 일어나기
-
-	CSkill_Manager::MONSTERSKILL tMonsterSkill;
-	tMonsterSkill.eTreeWitch = CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch;
-
+	cout << "할머니 스킬" << endl;
+	cout << CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch << endl;
 	if(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 		m_pModelCom->Set_AnimIndex(55, false);
 	else if(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
 		m_pModelCom->Set_AnimIndex(54, false);
 	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
-	{
 		m_pModelCom->Set_AnimIndex(53, false);
-		if (m_pModelCom->Get_Finished())
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-	}
+	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
 }
 
 HRESULT CFinn::Magic_Tick(_double TimeDelta)

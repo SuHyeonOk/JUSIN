@@ -3,6 +3,8 @@
 #include "Client_Defines.h"
 #include "M_Monster.h"
 
+#include "Skill_Manager.h"
+
 BEGIN(Client)
 
 class CM_Tree_Witch final : public CM_Monster
@@ -31,7 +33,7 @@ private:
 	virtual void		Move_Tick(const _double& TimeDelta)		override;
 	virtual void		Find_Tick()								override;
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
-	//virtual void		Attack2_Tick(const _double& TimeDelta);
+	void				Attack_Tick2(const _double& TimeDelta);
 	virtual void		Hit_Tick()								override;
 	virtual	void		Die_Tick()								override;
 
@@ -40,8 +42,9 @@ private:
 
 	_int				m_iRandomNum = 0;
 
-	_bool				m_bAttack = false;
-	_double				m_dBullet_TimeAcc = 0;
+	CSkill_Manager::MONSTERSKILL::TREEWITCH		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP;
+	_bool										m_bAttack = false;
+	_double										m_dBullet_TimeAcc = 0;
 
 public:
 	static	CM_Tree_Witch*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

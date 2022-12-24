@@ -133,11 +133,11 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Box"), TEXT("Prototype_GameObject_O_Box"), &_float3(-5.f, 0.f, 0.f))))
 			return E_FAIL;
 
-	CN_NPC::NPCDESC					tNpcDesc;
-	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("MiMic"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
-		return E_FAIL;
+	//CN_NPC::NPCDESC					tNpcDesc;
+	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
+	//tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("MiMic"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+	//	return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);

@@ -20,7 +20,6 @@ public:
 	typedef struct tagMonsterSkill
 	{
 		enum TREEWITCH { JUMP, PRESSURE, RISE, TREEWITCH_END };
-
 		TREEWITCH		eTreeWitch;
 
 	}MONSTERSKILL;
