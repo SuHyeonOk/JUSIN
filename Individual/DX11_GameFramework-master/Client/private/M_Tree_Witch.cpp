@@ -259,7 +259,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 			m_pModelCom->Set_AnimIndex(8, false);
-			m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP;
+			m_eSkill_AnimState = JUMP;
 
 			// 플레이어의 애니메이션 상태 변경하기
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH);
@@ -297,36 +297,59 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 
 void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 {
-	switch (m_eState)
+	switch (m_eSkill_AnimState)
 	{
-	case CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP:
+	case Client::CM_Tree_Witch::JUMP:
 		m_pModelCom->Set_AnimIndex(9, false, false);   // 누르기 위해 점프
 		break;
-
-	case CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE:
+	case Client::CM_Tree_Witch::PRESSURE:
 		m_pModelCom->Set_AnimIndex(7, false);   // 누르기
 		break;
-
-	case CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE:
+	case Client::CM_Tree_Witch::RISE:
 		m_pModelCom->Set_AnimIndex(6, false);   // 일어나기
 		break;
 	}
 
-	CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(m_eState);
-
-
-
-	//if (9 == m_pModelCom->Get_AnimIndex())
-	//	cout << m_pModelCom->Get_Keyframes() << endl;
 	if (9 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE;
+		m_eSkill_AnimState = PRESSURE;
 	if (7 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE;
+		m_eSkill_AnimState = RISE;
 	if (6 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
-		CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END);
+		m_eSkill_AnimState = STATE_END;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}
+
+	//switch (m_eState)
+	//{
+	//case CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP:
+	//	m_pModelCom->Set_AnimIndex(9, false, false);   // 누르기 위해 점프
+	//	break;
+
+	//case CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE:
+	//	m_pModelCom->Set_AnimIndex(7, false);   // 누르기
+	//	break;
+
+	//case CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE:
+	//	m_pModelCom->Set_AnimIndex(6, false);   // 일어나기
+	//	break;
+	//}
+
+	//CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(m_eState);
+
+
+
+	////if (9 == m_pModelCom->Get_AnimIndex())
+	////	cout << m_pModelCom->Get_Keyframes() << endl;
+	//if (9 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	//	m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE;
+	//if (7 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	//	m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE;
+	//if (6 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	//{
+	//	CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END);
+	//	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	//}
 }
 
 void CM_Tree_Witch::Hit_Tick()

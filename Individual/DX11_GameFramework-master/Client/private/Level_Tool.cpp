@@ -178,7 +178,7 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	//	return E_FAIL;
 
 	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 5.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Tree_Witch__0"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
 		return E_FAIL;
 
 	//tMonsterDesc.f3Pos = _float3(-2.f, 0.f, 3.f);

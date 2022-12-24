@@ -125,7 +125,7 @@ void CB_2DBullet::Tick(_double TimeDelta)
 	//m_pTransformCom->Set_State(CTransform::STATE_UP, vUp * f3Scaled.y);
 	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook * f3Scaled.z);
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)

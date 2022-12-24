@@ -9,10 +9,16 @@ BEGIN(Client)
 
 class CM_Tree_Witch final : public CM_Monster
 {
+public:
+	enum SKILLANIMSTATE { JUMP, PRESSURE, RISE, STATE_END };
+
 private:
 	CM_Tree_Witch(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CM_Tree_Witch(const CM_Tree_Witch& rhs);
 	virtual ~CM_Tree_Witch() = default;
+
+public:
+	SKILLANIMSTATE		Get_MonsterSkill() { return m_eSkill_AnimState; }
 
 public:
 	virtual HRESULT		Initialize_Prototype()					override;
@@ -42,7 +48,8 @@ private:
 
 	_int				m_iRandomNum = 0;
 
-	CSkill_Manager::MONSTERSKILL::TREEWITCH		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP;
+	SKILLANIMSTATE		m_eSkill_AnimState;
+	//CSkill_Manager::MONSTERSKILL::TREEWITCH		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP;
 	_bool										m_bAttack = false;
 	_double										m_dBullet_TimeAcc = 0;
 

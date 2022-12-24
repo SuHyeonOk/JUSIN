@@ -2,7 +2,8 @@
 #include "..\public\Finn.h"
 
 #include "GameInstance.h"
-#include "Skill_Manager.h"	// 몬스터 스킬 알려고
+//#include "Skill_Manager.h"	// 몬스터 스킬 알려고
+#include "M_Tree_Witch.h"
 
 #include "Bone.h"
 #include "Finn_Weapon.h"
@@ -476,7 +477,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 	// 일정 시간 동안 내가 플레이어를 따라가지 않으면 플레이어 근처로 이동한다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
+	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 	_vector vPlayerPos;
 	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
@@ -779,16 +780,30 @@ void CFinn::TreeWitch_Tick()
 
 	// 할머니 스킬
 	// [핀] 55 : 눌리기 직전 54 : 눌리기 53 : 일어나기
-	cout << "할머니 스킬" << endl;
-	cout << CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch << endl;
-	if(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CM_Tree_Witch * pGameObject = dynamic_cast<CM_Tree_Witch*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Tree_Witch__0"), TEXT("Prototype_GameObject_M_Tree_Witch"), 0));
+	RELEASE_INSTANCE(CGameInstance);
+
+	if(CM_Tree_Witch::SKILLANIMSTATE::JUMP == pGameObject->Get_MonsterSkill())
 		m_pModelCom->Set_AnimIndex(55, false);
-	else if(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	else if (CM_Tree_Witch::SKILLANIMSTATE::PRESSURE == pGameObject->Get_MonsterSkill())
 		m_pModelCom->Set_AnimIndex(54, false);
-	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	else if (CM_Tree_Witch::SKILLANIMSTATE::RISE == pGameObject->Get_MonsterSkill())
 		m_pModelCom->Set_AnimIndex(53, false);
-	else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
+	else if (CM_Tree_Witch::SKILLANIMSTATE::STATE_END == pGameObject->Get_MonsterSkill())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	//cout << "할머니 스킬" << endl;
+	//cout << CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch << endl;
+	//if(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	//	m_pModelCom->Set_AnimIndex(55, false);
+	//else if(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	//	m_pModelCom->Set_AnimIndex(54, false);
+	//else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	//	m_pModelCom->Set_AnimIndex(53, false);
+	//else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
+	//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
 }
 
 HRESULT CFinn::Magic_Tick(_double TimeDelta)
@@ -845,10 +860,7 @@ HRESULT CFinn::Magic_Tick(_double TimeDelta)
 }
 
 void CFinn::Anim_Change(_double TimeDelta)
-{   
-	if (m_tPlayerInfo.TREEWITCH == m_tPlayerInfo.eState)
-		return;
-
+{
 	if (m_tPlayerInfo.ePreState != m_tPlayerInfo.eState)
 	{
 		switch (m_tPlayerInfo.eState)

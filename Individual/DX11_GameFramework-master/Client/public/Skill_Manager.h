@@ -17,12 +17,12 @@ public:
 
 	}MAGICSKILL;
 
-	typedef struct tagMonsterSkill
-	{
-		enum TREEWITCH { JUMP, PRESSURE, RISE, TREEWITCH_END };
-		TREEWITCH		eTreeWitch;
+	//typedef struct tagMonsterSkill
+	//{
+	//	enum TREEWITCH { JUMP, PRESSURE, RISE, TREEWITCH_END };
+	//	TREEWITCH		eTreeWitch;
 
-	}MONSTERSKILL;
+	//}MONSTERSKILL;
 
 public:
 	CSkill_Manager();
@@ -34,16 +34,16 @@ public:		// 플레이어
 
 
 public:		// 몬스터
-	MONSTERSKILL				Get_Monster_Skill() { return m_tMonsterSkill; }
-	MONSTERSKILL::TREEWITCH		Get_TreeWitch_Skill() { return m_tMonsterSkill.eTreeWitch; }
-	void						Set_TreeWitch_Skill(MONSTERSKILL::TREEWITCH eTreeWitch) { m_tMonsterSkill.eTreeWitch = eTreeWitch; }
+	//MONSTERSKILL				Get_Monster_Skill() { return m_tMonsterSkill; }
+	//MONSTERSKILL::TREEWITCH		Get_TreeWitch_Skill() { return m_tMonsterSkill.eTreeWitch; }
+	//void						Set_TreeWitch_Skill(MONSTERSKILL::TREEWITCH eTreeWitch) { m_tMonsterSkill.eTreeWitch = eTreeWitch; }
 
 private:	// 플레이어
 	MAGICSKILL		m_tMagicSkill;
 
 
 private:	// 몬스터
-	MONSTERSKILL	m_tMonsterSkill;
+	//MONSTERSKILL	m_tMonsterSkill;
 
 public:
 	virtual void Free() override;	
