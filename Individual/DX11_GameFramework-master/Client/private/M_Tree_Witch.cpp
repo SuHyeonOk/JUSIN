@@ -237,7 +237,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 25);
-	iRandomNum = 1;
+	iRandomNum = 0;
 	if (0 == iRandomNum)		// 덩굴 생성
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -303,10 +303,10 @@ void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 		m_pModelCom->Set_AnimIndex(9, false, false);   // 누르기 위해 점프
 		break;
 	case Client::CM_Tree_Witch::PRESSURE:
-		m_pModelCom->Set_AnimIndex(7, false);   // 누르기
+		m_pModelCom->Set_AnimIndex(7, false, false);   // 누르기
 		break;
 	case Client::CM_Tree_Witch::RISE:
-		m_pModelCom->Set_AnimIndex(6, false);   // 일어나기
+		m_pModelCom->Set_AnimIndex(6, false, false);   // 일어나기
 		break;
 	}
 

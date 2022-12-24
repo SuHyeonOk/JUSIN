@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "..\public\Terrain.h"
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 #include <fstream> // @
 #include "Imgui_PropertyEditor.h"	// @
@@ -70,7 +71,8 @@ void CTerrain::Tick(_double TimeDelta)
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	ImGui_Navigation();
+	if (CObj_Manager::GetInstance()->Get_NavigationRender())
+		ImGui_Navigation();
 }
 
 void CTerrain::Late_Tick(_double TimeDelta)
@@ -93,7 +95,7 @@ HRESULT CTerrain::Render()
 
 	m_pVIBufferCom->Render();
 
-//if(g_bNavigationRender)
+if(CObj_Manager::GetInstance()->Get_NavigationRender())
 	m_pNavigationCom->Render();
 
 	return S_OK;

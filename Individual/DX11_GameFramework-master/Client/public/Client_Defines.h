@@ -16,7 +16,6 @@ extern bool			g_bFullScreen;
 extern bool			g_bNeedResizeSwapChain;
 extern unsigned int	g_iWinSizeX;
 extern unsigned int	g_iWinSizeY;
-extern bool			g_bNavigationRender;
 
 using namespace Client;
 

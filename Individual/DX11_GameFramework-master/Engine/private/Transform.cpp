@@ -255,11 +255,16 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
 	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 }
 
-void CTransform::LookAt(_fvector vTargetPos)
+void CTransform::LookAt(_fvector vTargetPos, _bool bIsInv)
 {
 	_float3		vScale = Get_Scaled();
 
-	_vector		vLook = XMVector3Normalize(vTargetPos - Get_State(CTransform::STATE_TRANSLATION)) * vScale.z;
+	_vector		vLook;
+	if(bIsInv)
+		vLook = -1.f * XMVector3Normalize(vTargetPos - Get_State(CTransform::STATE_TRANSLATION)) * vScale.z;
+	else
+		vLook = XMVector3Normalize(vTargetPos - Get_State(CTransform::STATE_TRANSLATION)) * vScale.z;
+
 	_vector		vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook)) * vScale.x;
 	_vector		vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight)) * vScale.y;
 

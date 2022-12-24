@@ -131,15 +131,17 @@ HRESULT CFinn::Render()
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
-#ifdef _DEBUG
-	for (_uint i = 0; i < COLLTYPE_END; ++i)
+	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
-		if (nullptr != m_pColliderCom[i])
-			m_pColliderCom[i]->Render();
+		for (_uint i = 0; i < COLLTYPE_END; ++i)
+		{
+			if (nullptr != m_pColliderCom[i])
+				m_pColliderCom[i]->Render();
+		}
+
+		m_pNavigationCom->Render();
 	}
 
-	m_pNavigationCom->Render();
-#endif
 	return S_OK;
 }
 

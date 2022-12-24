@@ -110,6 +110,15 @@ void		CObj_Manager::Set_Player_MinusHp(_int eHp)
 
 void		CObj_Manager::Tick(_double TimeDelta)
 {
+	// 전역적으로 네이게이션, 충돌체를 껐다가 켤 수 있다.
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance); 
+	_int iResult = pGameInstance->Key_DwonUp(DIK_F12);
+	if (1 == iResult)
+		g_bNavigationRender = true;
+	else if (0 == iResult)
+		g_bNavigationRender = false;
+	RELEASE_INSTANCE(CGameInstance);
+
 	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 	Key_Input();				// Npc 와의 대화창
@@ -134,6 +143,8 @@ void		CObj_Manager::Tick(_double TimeDelta)
 
 void		CObj_Manager::Key_Input()
 {
+	// TODO : 전역변수로 네비게이션 메시 지우기
+
 	// TODO : 무기변경
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

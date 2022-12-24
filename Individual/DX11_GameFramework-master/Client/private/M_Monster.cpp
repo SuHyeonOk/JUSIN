@@ -76,10 +76,12 @@ HRESULT CM_Monster::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	if (nullptr != m_pColliderCom[COLLTYPE_AABB])
-		m_pColliderCom[COLLTYPE_AABB]->Render();
-#endif
+	if (CObj_Manager::GetInstance()->Get_NavigationRender())
+	{
+		if (nullptr != m_pColliderCom[COLLTYPE_AABB])
+			m_pColliderCom[COLLTYPE_AABB]->Render();
+	}
+
 	return S_OK;
 }
 

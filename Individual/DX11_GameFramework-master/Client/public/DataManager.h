@@ -25,6 +25,7 @@ public:
 	vector<OBJINFO>	CDataManager::Get_FoodInfo() { return m_vecFoodInfo; }
 	vector<OBJINFO>	CDataManager::Get_CoinInfo() { return m_vecCoinInfo; }
 	vector<OBJINFO>	CDataManager::Get_PageInfo() { return m_vecPageInfo; }
+	vector<OBJINFO>	CDataManager::Get_ItemInfo() { return m_vecItemInfo; }
 	vector<OBJINFO>	CDataManager::Get_NpcInfo() { return m_vecNpcInfo; }
 	vector<OBJINFO>	CDataManager::Get_ObjectInfo() { return m_vecObjectInfo; }
 	vector<OBJINFO>	CDataManager::Get_MonsterInfo() { return m_vecMonsterInfo; }
@@ -32,6 +33,7 @@ public:
 	void			CDataManager::Set_FoodInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_CoinInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_PageInfo(const _tchar& ObjName, const _float3& ObjPos);
+	void			CDataManager::Set_ItemInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_NpcInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_ObjectInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_MonsterInfo(const _tchar& ObjName, const _float3& ObjPos);
@@ -40,6 +42,7 @@ private:
 	vector<OBJINFO>	m_vecFoodInfo;
 	vector<OBJINFO>	m_vecCoinInfo;
 	vector<OBJINFO>	m_vecPageInfo;
+	vector<OBJINFO>	m_vecItemInfo;
 	vector<OBJINFO>	m_vecNpcInfo;
 	vector<OBJINFO> m_vecObjectInfo;
 	vector<OBJINFO>	m_vecMonsterInfo;

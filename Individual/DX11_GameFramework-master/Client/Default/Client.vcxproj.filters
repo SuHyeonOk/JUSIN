@@ -82,9 +82,6 @@
     <Filter Include="77.Manager\Skill">
       <UniqueIdentifier>{0a55d0a0-fc0e-4c57-94f0-c7db11241467}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Gonmes_RED">
-      <UniqueIdentifier>{739d5a27-9686-45a1-bf45-67009983ed65}</UniqueIdentifier>
-    </Filter>
     <Filter Include="77.Manager\Utilities">
       <UniqueIdentifier>{49b40824-f224-43bb-97ba-78310e3fbe65}</UniqueIdentifier>
     </Filter>
@@ -147,6 +144,9 @@
     </Filter>
     <Filter Include="02.GameObjects\Monster\Mimic">
       <UniqueIdentifier>{e4f94acd-b364-4846-989f-bc34c89a7158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Gonmes">
+      <UniqueIdentifier>{739d5a27-9686-45a1-bf45-67009983ed65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -256,7 +256,7 @@
       <Filter>02.GameObjects\Monster\PigWarrior</Filter>
     </ClInclude>
     <ClInclude Include="..\public\M_Gronmes.h">
-      <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
+      <Filter>02.GameObjects\Monster\Gonmes</Filter>
     </ClInclude>
     <ClInclude Include="..\public\B_2DBullet.h">
       <Filter>02.GameObjects\Bullet</Filter>
@@ -417,7 +417,7 @@
       <Filter>02.GameObjects\Monster\PigWarrior</Filter>
     </ClCompile>
     <ClCompile Include="..\private\M_Gronmes.cpp">
-      <Filter>02.GameObjects\Monster\Gonmes_RED</Filter>
+      <Filter>02.GameObjects\Monster\Gonmes</Filter>
     </ClCompile>
     <ClCompile Include="..\private\B_2DBullet.cpp">
       <Filter>02.GameObjects\Bullet</Filter>

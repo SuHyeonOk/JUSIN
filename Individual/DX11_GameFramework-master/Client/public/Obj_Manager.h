@@ -14,6 +14,9 @@ class CObj_Manager : public CBase
 	DECLARE_SINGLETON(CObj_Manager)
 
 public:
+	_bool	Get_NavigationRender() { return g_bNavigationRender; }
+
+public:
 	typedef struct tagPlayerInfo
 	{
 		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
@@ -103,6 +106,8 @@ private:
 	void		CObj_Manager::Key_Input();
 
 private:
+	_bool			g_bNavigationRender = false;
+
 	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
 

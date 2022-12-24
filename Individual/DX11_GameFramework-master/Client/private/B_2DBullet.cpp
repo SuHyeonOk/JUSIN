@@ -82,25 +82,31 @@ void CB_2DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	//しししししししししししししししししししし Look 焼掘稽 鎧形亜澗暗 痕井馬奄
+
 	// 巴傾戚嬢税 護 峠 穿税 疎妊研 閤焼人辞 恥硝聖 劾鍵陥.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vCameraPos);		// 朝五虞研 郊虞沙陥.
+	m_pTransformCom->LookAt(vCameraPos, true);		// 朝五虞研 郊虞沙陥.
 
 	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
-	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//_vector vDistance = XMLoadFloat4(&m_f4Distance);
-	//vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vDistance = XMLoadFloat4(&m_f4Distance);
+	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
- //	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 巴傾戚嬢税 戚穿 覗傾績生稽 劾虞娃陥.
+ 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 巴傾戚嬢税 戚穿 覗傾績生稽 劾虞娃陥.
 
+	//if (K)
+	//{
+	//	m_b = !m_b;
+	//}
 
 
 	
-	// 朝五虞 是帖
+	//// 朝五虞 是帖
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	//_float4 f4CamPos = pGameInstance->Get_CamPosition();
 	//_vector vCameraPos = XMLoadFloat4(&f4CamPos);
@@ -132,13 +138,13 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//// 恥硝戚 持失吉 及 1段亜 走蟹檎 肢薦廃陥.
-	//m_dBullet_TimeAcc += TimeDelta;
-	//if (1 < m_dBullet_TimeAcc)
-	//{
-	//	CGameObject::Set_Dead();
-	//	m_dBullet_TimeAcc = 0;
-	//}
+	// 恥硝戚 持失吉 及 1段亜 走蟹檎 肢薦廃陥.
+	m_dBullet_TimeAcc += TimeDelta;
+	if (1 < m_dBullet_TimeAcc)
+	{
+		CGameObject::Set_Dead();
+		m_dBullet_TimeAcc = 0;
+	}
 
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	CGameObject::Set_Dead();
@@ -161,10 +167,12 @@ HRESULT CB_2DBullet::Render()
 
 	m_pVIBufferCom->Render();
 
-#ifdef _DEBUG
-	if (nullptr != m_pColliderCom)
-		m_pColliderCom->Render();
-#endif
+	if (CObj_Manager::GetInstance()->Get_NavigationRender())
+	{
+		if (nullptr != m_pColliderCom)
+			m_pColliderCom->Render();
+	}
+
 	return S_OK;
 }
 

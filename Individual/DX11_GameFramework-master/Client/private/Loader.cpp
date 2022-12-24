@@ -34,6 +34,7 @@
 #include "Coin.h"
 #include "Page.h"
 #include "Key.h"
+#include "Heart.h"
 
 // Bullet
 #include "B_2DBullet.h"
@@ -719,6 +720,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Key */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
 		CKey::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Heart */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Heart"),
+		CHeart::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_Coin */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),

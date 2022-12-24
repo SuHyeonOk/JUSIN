@@ -17,7 +17,6 @@ bool			g_bFullScreen = false;
 bool			g_bNeedResizeSwapChain = false;
 unsigned int	g_iWinSizeX = 1280;
 unsigned int	g_iWinSizeY = 720;
-static bool		g_bNavigationRender = false;
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM                MyRegisterClass(HINSTANCE hInstance);

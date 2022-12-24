@@ -107,12 +107,14 @@ HRESULT CS_Change_Magic::Render()
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
-#ifdef _DEBUG
-	if (nullptr != m_pColliderCom)
-		m_pColliderCom->Render();
+	if (CObj_Manager::GetInstance()->Get_NavigationRender())
+	{
+		if (nullptr != m_pColliderCom)
+			m_pColliderCom->Render();
 
-	m_pNavigationCom->Render();
-#endif
+		m_pNavigationCom->Render();
+	}
+
 	return S_OK;
 }
 

@@ -80,7 +80,7 @@ public:
 
 	/* 쳐다본다. */
 	/*void LookAt(const CTransform* pTarget);*/
-	void LookAt(_fvector vTargetPos);
+	void LookAt(_fvector vTargetPos, _bool bIsInv = false);
 
 	/* LookAt 함수의 경우에 포인트가 하늘에 있다면, 오브젝트가 위로 기울여서 바라보게 된다.
 	비행 슈팅 게임의 경우에 상관없지만, 지금처럼 바닥을 타고 다니는 오브젝트에게 이런 LookAt 함수를 사용하면 어색하게 된다.
