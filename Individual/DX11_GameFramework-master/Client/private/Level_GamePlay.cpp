@@ -58,7 +58,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Food();
 	Load_Coin();
 	Load_Page();
-	//Load_Item();
+	Load_Item();
 	//Load_Npc();
 	Load_Object();
 	Load_Monster();

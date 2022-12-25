@@ -30,6 +30,9 @@ HRESULT CHeart::Initialize(void * pArg)
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
@@ -43,6 +46,7 @@ HRESULT CHeart::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
 	m_pTransformCom->Set_Pos();
 
 	return S_OK;
@@ -59,6 +63,18 @@ void CHeart::Tick(_double TimeDelta)
 void CHeart::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (m_bPlayer_Collider)
+	{
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
+
+		m_dDead_TimeAcc += TimeDelta;
+		if (1 < m_dDead_TimeAcc)
+		{
+			CGameObject::Set_Dead();
+			m_dDead_TimeAcc = 0;
+		}
+	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -95,7 +111,7 @@ void CHeart::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		CGameObject::Set_Dead();
+		m_bPlayer_Collider = true;
 		CObj_Manager::GetInstance()->Set_Heart();
 	}
 }
@@ -121,7 +137,7 @@ HRESULT CHeart::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+	ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

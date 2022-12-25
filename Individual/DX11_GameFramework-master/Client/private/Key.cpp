@@ -30,6 +30,9 @@ HRESULT CKey::Initialize(void * pArg)
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
+	if (nullptr != pArg)
+		memcpy(&f3Pos, pArg, sizeof(_float3));
+
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
