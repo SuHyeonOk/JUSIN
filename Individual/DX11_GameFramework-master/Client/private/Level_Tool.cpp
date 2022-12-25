@@ -136,11 +136,11 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Box"), TEXT("Prototype_GameObject_O_Box"), &_float3(-5.f, 0.f, 0.f))))
 			return E_FAIL;
 	               
-	//CN_NPC::NPCDESC					tNpcDesc;
-	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	//tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("MiMic"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
-	//	return E_FAIL;
+	CN_NPC::NPCDESC					tNpcDesc;
+	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
+	tNpcDesc.TransformDesc.f3Pos = _float3(0.f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("MiMic"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+		return E_FAIL;
 
 	CCoin::COININFO					tObjInfo;
 	tObjInfo.fPos = _float3(2.f, 0.f, 0.f);
@@ -180,18 +180,18 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_Gronmes_RED_1"), TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	tMonsterDesc.f3Pos = _float3(0.f, 0.f, 5.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Tree_Witch__0"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
-		return E_FAIL;
+	//tMonsterDesc.f3Pos = _float3(0.f, 0.f, 5.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Tree_Witch__0"), TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+	//	return E_FAIL;
 
 	//tMonsterDesc.eMonsterKind = tMonsterDesc.MIMIC;
 	//tMonsterDesc.f3Pos = _float3(0.f, 0.f, -5.f);
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("mimic"), TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	tMonsterDesc.f3Pos = _float3(-2.f, 0.f, 3.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Magic_Man"), TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
-		return E_FAIL;
+	//tMonsterDesc.f3Pos = _float3(-2.f, 0.f, 3.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Magic_Man"), TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
+	//	return E_FAIL;
 
 	//// 스카이 박스
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("Layer_M_Tree_Witch"), TEXT("Prototype_GameObject_Sky"), &tMonsterDesc)))

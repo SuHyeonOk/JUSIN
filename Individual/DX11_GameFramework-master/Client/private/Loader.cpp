@@ -21,6 +21,7 @@
 
 // NPC
 #include "N_Bubblegum.h"
+#include "N_KeyMan.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -585,6 +586,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_N_KeyPerGarden */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_KeyPerGarden"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Key Per Garden/Key Per Garden.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// Obj
 	/* For.Prototype_Component_Model_O_Box*/
@@ -700,6 +705,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_N_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
 		CN_Bubblegum::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_N_KeyMan */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_KeyMan"),
+		CN_KeyMan::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Map

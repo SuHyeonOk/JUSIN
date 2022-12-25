@@ -204,6 +204,7 @@
     <ClInclude Include="..\public\M_PigWarrior.h" />
     <ClInclude Include="..\public\M_Tree_Witch.h" />
     <ClInclude Include="..\public\N_Bubblegum.h" />
+    <ClInclude Include="..\public\N_KeyMan.h" />
     <ClInclude Include="..\public\N_NPC.h" />
     <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\O_Box.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="..\private\M_PigWarrior.cpp" />
     <ClCompile Include="..\private\M_Tree_Witch.cpp" />
     <ClCompile Include="..\private\N_Bubblegum.cpp" />
+    <ClCompile Include="..\private\N_KeyMan.cpp" />
     <ClCompile Include="..\private\N_NPC.cpp" />
     <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\O_Box.cpp" />

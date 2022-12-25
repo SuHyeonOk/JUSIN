@@ -17,7 +17,7 @@ class CN_NPC abstract : public CGameObject
 public:
 	typedef struct tagNpcInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum NPC { BUBBLEGUM, NPC_END };
+		enum NPC { BUBBLEGUM, KEYMAN, NPC_END };
 
 		NPC		eNpcType = NPC_END;
 
@@ -53,7 +53,10 @@ protected:
 	CCollider*			m_pColliderCom = nullptr;
 
 protected:
-	_bool				m_bInteraction = false;
+	_bool			m_bInteraction = false;
+
+	_tchar			m_szScript[MAX_PATH];
+	_int			m_Script_Count = 0;
 
 public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

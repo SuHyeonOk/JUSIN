@@ -82,8 +82,6 @@ void CB_2DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//しししししししししししししししししししし Look 焼掘稽 鎧形亜澗暗 痕井馬奄
-
 	// 巴傾戚嬢税 護 峠 穿税 疎妊研 閤焼人辞 恥硝聖 劾鍵陥.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
@@ -92,7 +90,6 @@ void CB_2DBullet::Tick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(vCameraPos, true);		// 朝五虞研 郊虞沙陥.
 
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, CObj_Manager::GetInstance()->Get_Player_Transform());
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = XMLoadFloat4(&m_f4Distance);
 	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
@@ -146,7 +143,7 @@ HRESULT CB_2DBullet::Render()
 
 void CB_2DBullet::On_Collision(CGameObject * pOther)
 {
-	//CGameObject::Set_Dead();
+	CGameObject::Set_Dead();
 
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 	{

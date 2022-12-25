@@ -260,6 +260,7 @@ void CTransform::LookAt(_fvector vTargetPos, _bool bIsInv)
 	_float3		vScale = Get_Scaled();
 
 	_vector		vLook;
+
 	if(bIsInv)
 		vLook = -1.f * XMVector3Normalize(vTargetPos - Get_State(CTransform::STATE_TRANSLATION)) * vScale.z;
 	else

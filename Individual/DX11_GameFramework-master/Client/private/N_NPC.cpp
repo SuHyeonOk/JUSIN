@@ -44,6 +44,13 @@ void CN_NPC::Tick(const _double& TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_G))
+		++m_Script_Count;
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_NPC, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }

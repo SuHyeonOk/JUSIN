@@ -34,12 +34,17 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL ||
-		m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y + 1.f, m_TextureObject.f3Pos.z);
+	}
+	else if(m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+	{
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
+		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y, m_TextureObject.f3Pos.z);
 	}
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -50,9 +55,10 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL ||
-		m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
 		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 0.f));
+	else if(m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 0.f));
 
 	return S_OK;
 }
@@ -61,19 +67,24 @@ void CO_TextureObject::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 회전한다.
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
-		MovePortal(TimeDelta);
 
+	//if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+	//	MovePortal(TimeDelta);
 
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
+	{
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
+		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	}
 }
 
 void CO_TextureObject::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);

@@ -57,12 +57,6 @@ void CUI_Talk::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-
-	// TODO : NPC 수정할 때 같이 수정하기
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//CN_Bubblegum * pGameObject = dynamic_cast<CN_Bubblegum*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), 0));
-	//m_bIsTalk = pGameObject->m_bTalk_UI;
-	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CUI_Talk::Late_Tick(_double TimeDelta)
@@ -84,13 +78,6 @@ HRESULT CUI_Talk::Render()
 	m_pShaderCom->Begin(0);
 
 	m_pVIBufferCom->Render();
-
-	if (m_bIsTalk)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("버블검 공주 : 안녕!"), _float2(500.f, 100.f), 0.f, _float2(0.5f, 0.5f));
-		RELEASE_INSTANCE(CGameInstance);
-	}
 
 	return S_OK;
 }

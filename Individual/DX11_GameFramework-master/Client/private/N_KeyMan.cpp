@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\public\N_Bubblegum.h"
+#include "..\public\N_KeyMan.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
@@ -7,19 +7,19 @@
 #include "UI_3DTexture.h"
 #include "UI_Talk.h"
 
-CN_Bubblegum::CN_Bubblegum(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CN_KeyMan::CN_KeyMan(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CN_NPC(pDevice, pContext)
 {
 
 }
 
-CN_Bubblegum::CN_Bubblegum(const CN_Bubblegum & rhs)
+CN_KeyMan::CN_KeyMan(const CN_KeyMan & rhs)
 	: CN_NPC(rhs)
 {
 
 }
 
-HRESULT CN_Bubblegum::Initialize_Prototype()
+HRESULT CN_KeyMan::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -27,9 +27,9 @@ HRESULT CN_Bubblegum::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CN_Bubblegum::Initialize(void * pArg)
+HRESULT CN_KeyMan::Initialize(void * pArg)
 {
-	m_wsTag = L"NPC_Bubblegum";
+	m_wsTag = L"NPC_KeyMan";
 
 	CN_NPC::NPCDESC		NpcDesc;
 	ZeroMemory(&NpcDesc, sizeof(NPCDESC));
@@ -37,7 +37,7 @@ HRESULT CN_Bubblegum::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&NpcDesc, pArg, sizeof(NPCDESC));
 
-	NpcDesc.eNpcType = NpcDesc.BUBBLEGUM;
+	NpcDesc.eNpcType = NpcDesc.KEYMAN;
 	NpcDesc.TransformDesc.fSpeedPerSec = 0.f;
 	NpcDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	NpcDesc.TransformDesc.f3Pos = _float3(NpcDesc.TransformDesc.f3Pos.x, NpcDesc.TransformDesc.f3Pos.y, NpcDesc.TransformDesc.f3Pos.z);
@@ -48,13 +48,13 @@ HRESULT CN_Bubblegum::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(180.f));
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(220.f));
 	m_pModelCom->Set_AnimIndex(0);
 
 	return S_OK;
 }
 
-void CN_Bubblegum::Tick(_double TimeDelta)
+void CN_KeyMan::Tick(_double TimeDelta)
 {
 	CN_NPC::Tick(TimeDelta);
 
@@ -69,15 +69,15 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			lstrcpy(m_szScript, TEXT("핀! 큰일났어!! 누군가 우리 왕국을 망쳐놓고 있어!"));
+			lstrcpy(m_szScript, TEXT("핀님! 큰일났어요!!"));
 			break;
 
 		case 1:
-			lstrcpy(m_szScript, TEXT("일단 여기에 있는 모든 몬스터를 처치하고, \n열쇠 3개를 찾아서 다른 차원으로 넘어가다 보면 \n우리 왕국을 이렇게 만든 놈을 찾을 수 있을 거야"));
+			lstrcpy(m_szScript, TEXT("제가 가지고 있던 열쇠를 어떤 마법사가 빼앗아 갔어요!!"));
 			break;
 
 		case 2:
-			lstrcpy(m_szScript, TEXT("앗 참고로 이 차원의 마지막 열쇠는 열쇠 친구가 가지고 있을거야! \n부탁할게 핀!"));
+			lstrcpy(m_szScript, TEXT("부탁드려요 꼭 열쇠를 찾아서 저희 왕국을 지켜주세요!"));
 			break;
 
 		default:
@@ -89,13 +89,13 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(0);
 }
 
-void CN_Bubblegum::Late_Tick(_double TimeDelta)
+void CN_KeyMan::Late_Tick(_double TimeDelta)
 {
 	CN_NPC::Late_Tick(TimeDelta);
 
 }
 
-HRESULT CN_Bubblegum::Render()
+HRESULT CN_KeyMan::Render()
 {
 	if (FAILED(CN_NPC::Render()))
 		return E_FAIL;
@@ -124,12 +124,12 @@ HRESULT CN_Bubblegum::Render()
 	return S_OK;
 }
 
-void CN_Bubblegum::On_Collision(CGameObject * pOther)
+void CN_KeyMan::On_Collision(CGameObject * pOther)
 {
 	CN_NPC::On_Collision(pOther);
 }
 
-HRESULT CN_Bubblegum::SetUp_Components()
+HRESULT CN_KeyMan::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -142,7 +142,7 @@ HRESULT CN_Bubblegum::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_KeyPerGarden"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -160,7 +160,7 @@ HRESULT CN_Bubblegum::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CN_Bubblegum::SetUp_ShaderResources()
+HRESULT CN_KeyMan::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -180,7 +180,7 @@ HRESULT CN_Bubblegum::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CN_Bubblegum::Help_UI()
+void CN_KeyMan::Help_UI()
 {
 	if (m_bHelp_UI)	
 		return;
@@ -196,14 +196,14 @@ void CN_Bubblegum::Help_UI()
 	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
 	tTextureInfo.eTextureType = tTextureInfo.TYPE_TALK;
 	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 2.f, f4MyPos.z - 0.5f);
+	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.7f, f4MyPos.z - 0.5f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CN_Bubblegum::Talk_UI()
+void CN_KeyMan::Talk_UI()
 {
 	if (m_bTalk_UI || !m_bInteraction)
 		return;
@@ -218,7 +218,7 @@ void CN_Bubblegum::Talk_UI()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-HRESULT CN_Bubblegum::UI_Dead()
+HRESULT CN_KeyMan::UI_Dead()
 {
 	if (!m_bTalk_UI)
 		return S_OK;
@@ -246,31 +246,31 @@ HRESULT CN_Bubblegum::UI_Dead()
 	return S_OK;
 }
 
-CN_Bubblegum * CN_Bubblegum::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CN_KeyMan * CN_KeyMan::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CN_Bubblegum*		pInstance = new CN_Bubblegum(pDevice, pContext);
+	CN_KeyMan*		pInstance = new CN_KeyMan(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CN_Bubblegum");
+		MSG_BOX("Failed to Created : CN_KeyMan");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CN_Bubblegum::Clone(void * pArg)
+CGameObject * CN_KeyMan::Clone(void * pArg)
 {
-	CN_Bubblegum*		pInstance = new CN_Bubblegum(*this);
+	CN_KeyMan*		pInstance = new CN_KeyMan(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CN_Bubblegum");
+		MSG_BOX("Failed to Cloned : CN_KeyMan");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CN_Bubblegum::Free()
+void CN_KeyMan::Free()
 {
 	__super::Free();
 
