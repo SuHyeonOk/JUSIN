@@ -9,25 +9,6 @@ CInput_Device::CInput_Device()
 	ZeroMemory(&m_MouseState, sizeof(m_MouseState));
 }
 
-_int CInput_Device::Key_DwonUp(_uchar eKeyID)
-{
-	// 1 : 지금 한 번 눌렀다. / 0 : 지금 두번째 눌렀다. / 2 : 아무것도 아닌 상태 / 3 : 이전에 누른키다.
-
-	if (m_preKeyState[eKeyID] != m_byKeyState[eKeyID])
-	{
-		if (m_byKeyState[eKeyID] & 0x80)
-			m_DownCount++;
-	}
-
-	if (1 == m_DownCount)
-		return 1;
-	else if (2 == m_DownCount)
-	{
-		m_DownCount = 0;
-		return 0;
-	}
-}
-
 _bool CInput_Device::Key_Down(_uchar eKeyID)
 {
 	if (m_preKeyState[eKeyID] != m_byKeyState[eKeyID])

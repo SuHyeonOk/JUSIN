@@ -106,17 +106,17 @@ private:
 	void		CObj_Manager::Key_Input();
 
 private:
-	_bool			g_bNavigationRender = false;
-
 	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
+
+private: // KeyInput
+	_bool			g_bNavigationRender = false;
+	_bool			m_bInteraction = false;
 
 private:
 	_bool			m_bShield = false;
 
 	_float			m_fAngle = 0.f;
-
-	_bool			m_bInteraction = false;
 
 private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn

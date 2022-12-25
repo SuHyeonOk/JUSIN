@@ -110,18 +110,9 @@ void		CObj_Manager::Set_Player_MinusHp(_int eHp)
 
 void		CObj_Manager::Tick(_double TimeDelta)
 {
-	// 전역적으로 네이게이션, 충돌체를 껐다가 켤 수 있다.
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance); 
-	_int iResult = pGameInstance->Key_DwonUp(DIK_F12);
-	if (1 == iResult)
-		g_bNavigationRender = true;
-	else if (0 == iResult)
-		g_bNavigationRender = false;
-	RELEASE_INSTANCE(CGameInstance);
-
 	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
-	Key_Input();				// Npc 와의 대화창
+	Key_Input();				// 전체적인 키 입력
 
 	//cout << "HP : " << m_tPlayerInfo.iHp << " | MAXHP : " << m_tPlayerInfo.iHpMax <<
 	//	" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
@@ -143,18 +134,17 @@ void		CObj_Manager::Tick(_double TimeDelta)
 
 void		CObj_Manager::Key_Input()
 {
-	// TODO : 전역변수로 네비게이션 메시 지우기
-
-	// TODO : 무기변경
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	// 대화 움직이지 못함.
-	_int iResult = pGameInstance->Key_DwonUp(DIK_F);	
-	if (1 == iResult)
-		m_bInteraction = true;
-	else if (0 == iResult)
-		m_bInteraction = false;
+	// 전역적으로 네이게이션, 충돌체를 껐다가 켤 수 있다.
+	if (pGameInstance->Key_Down(DIK_F11))
+		g_bNavigationRender = !g_bNavigationRender;
 
+	// 대화 움직이지 못함.
+	if (pGameInstance->Key_Down(DIK_F))
+		m_bInteraction = !m_bInteraction;
+
+	// TODO : 무기변경
 	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
 	{
 		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_DOLDEN;
@@ -163,7 +153,6 @@ void		CObj_Manager::Key_Input()
 	{
 		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_FAMILY;
 	}
-
 
 	RELEASE_INSTANCE(CGameInstance);
 }

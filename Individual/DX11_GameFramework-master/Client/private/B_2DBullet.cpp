@@ -99,39 +99,9 @@ void CB_2DBullet::Tick(_double TimeDelta)
 
  	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
-	//if (K)
-	//{
-	//	m_b = !m_b;
-	//}
-
-
-	
-	//// 카메라 위치
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//_float4 f4CamPos = pGameInstance->Get_CamPosition();
-	//_vector vCameraPos = XMLoadFloat4(&f4CamPos);
-	//RELEASE_INSTANCE(CGameInstance);
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//RELEASE_INSTANCE(CGameInstance);
-
-	//// 내 위치
-	//_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	//_vector	vRight, vUp, vLook;
-	//vLook = XMVector3Normalize(vCameraPos - vPlayerPos);
-	//vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), vLook));
-	//vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
-
-	//_float3 f3Scaled = m_pTransformCom->Get_Scaled();
-
-	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight * f3Scaled.x);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, vUp * f3Scaled.y);
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook * f3Scaled.z);
-
-	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	// 충돌 처리
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)
@@ -148,8 +118,6 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	CGameObject::Set_Dead();
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);

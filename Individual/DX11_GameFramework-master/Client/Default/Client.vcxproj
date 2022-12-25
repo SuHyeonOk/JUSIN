@@ -304,7 +304,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPoint_Instance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRect_Instancing.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTex.hlsl" />
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTex_Billboard.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

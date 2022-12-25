@@ -29,7 +29,6 @@ public:
 		return ((_long*)&m_MouseState)[eMouseMoveID];
 	}
 
-	_int		Key_DwonUp(_uchar eKeyID);
 	_bool		Key_Down(_uchar eKeyID);
 	_bool		Key_Up(_uchar eKeyID);
 	_bool		Key_Pressing(_uchar eKeyID);
