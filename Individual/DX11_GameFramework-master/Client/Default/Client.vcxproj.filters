@@ -276,9 +276,6 @@
     <ClInclude Include="..\public\M_Magic_Man.h">
       <Filter>02.GameObjects\Monster\Magic_Man</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Finn_Change.h">
-      <Filter>02.GameObjects\Player\Finn</Filter>
-    </ClInclude>
     <ClInclude Include="..\Bin\ShaderFiles\Shader_Client_Defines.h">
       <Filter>97.ShaderFiles</Filter>
     </ClInclude>
@@ -436,9 +433,6 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Magic_Man.cpp">
       <Filter>02.GameObjects\Monster\Magic_Man</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Finn_Change.cpp">
-      <Filter>02.GameObjects\Player\Finn</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Sky.cpp">
       <Filter>02.GameObjects\Sky</Filter>

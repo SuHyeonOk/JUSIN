@@ -171,7 +171,7 @@ void CN_Bubblegum::Help_UI()
 
 void CN_Bubblegum::Talk_UI()
 {
-	if (m_bTalk_UI || !m_bIsTalk)
+	if (m_bTalk_UI || !m_bInteraction)
 		return;
 
 	m_bTalk_UI = true;
@@ -192,7 +192,7 @@ HRESULT CN_Bubblegum::UI_Dead()
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// 물음표 : 한 번 생성되고, 대화를 했다면 삭제된다.
-	if (m_bHelp_UI && m_bIsTalk)
+	if (m_bHelp_UI && m_bInteraction)
 	{
 		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
 		if (nullptr != pGameObject_UI_3DTexture)
@@ -200,7 +200,7 @@ HRESULT CN_Bubblegum::UI_Dead()
 	}
 
 	// 대화창 : 한 번 생성되고, 플레이어가 거리가 멀어지거나, B 키를 누르면 삭제되어야 한다.
-	if (m_bTalk_UI && !m_bIsTalk)
+	if (m_bTalk_UI && !m_bInteraction)
 	{
 		CUI_Talk * pGameObject_UI_Talk = dynamic_cast<CUI_Talk*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"), 0));
 		if (nullptr != pGameObject_UI_Talk)

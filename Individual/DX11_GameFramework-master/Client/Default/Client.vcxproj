@@ -182,7 +182,6 @@
     <ClInclude Include="..\public\Effect_Point_Instancing.h" />
     <ClInclude Include="..\public\Effect_Rect_Instancing.h" />
     <ClInclude Include="..\public\Finn.h" />
-    <ClInclude Include="..\public\Finn_Change.h" />
     <ClInclude Include="..\public\Finn_Weapon.h" />
     <ClInclude Include="..\public\Food.h" />
     <ClInclude Include="..\public\Heart.h" />
@@ -239,7 +238,6 @@
     <ClCompile Include="..\private\Effect_Point_Instancing.cpp" />
     <ClCompile Include="..\private\Effect_Rect_Instancing.cpp" />
     <ClCompile Include="..\private\Finn.cpp" />
-    <ClCompile Include="..\private\Finn_Change.cpp" />
     <ClCompile Include="..\private\Finn_Weapon.cpp" />
     <ClCompile Include="..\private\Food.cpp" />
     <ClCompile Include="..\private\Heart.cpp" />

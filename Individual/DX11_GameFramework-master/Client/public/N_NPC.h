@@ -53,7 +53,7 @@ protected:
 	CCollider*			m_pColliderCom = nullptr;
 
 protected:
-	_bool				m_bIsTalk = false;
+	_bool				m_bInteraction = false;
 
 public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

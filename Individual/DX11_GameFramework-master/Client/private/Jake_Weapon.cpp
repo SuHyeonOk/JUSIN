@@ -95,10 +95,12 @@ HRESULT   CJake_Weapon::Render()
 		}
 	}
 
-#ifdef _DEBUG
-	if (nullptr != m_pColliderCom)
-		m_pColliderCom->Render();
-#endif
+	if (CObj_Manager::GetInstance()->Get_NavigationRender())
+	{
+		if (nullptr != m_pColliderCom)
+			m_pColliderCom->Render();
+	}
+
 	return S_OK;
 }
 
