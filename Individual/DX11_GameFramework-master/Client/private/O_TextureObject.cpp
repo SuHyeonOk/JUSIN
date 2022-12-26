@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "PipeLine.h"
 
 CO_TextureObject::CO_TextureObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -32,7 +33,7 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 		memcpy(&m_TextureObject, pArg, sizeof(TEXTUREOBJECT));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
+	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
 	{
@@ -40,11 +41,11 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y + 1.f, m_TextureObject.f3Pos.z);
 	}
-	else if(m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+	else if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y, m_TextureObject.f3Pos.z);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y + 1.f, m_TextureObject.f3Pos.z);
 	}
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -56,9 +57,9 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
-		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 0.f));
-	else if(m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
-		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 0.f));
+		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.f));
+	else if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, m_TextureObject.f3Pos.z - 1.f));
 
 	return S_OK;
 }
@@ -67,13 +68,21 @@ void CO_TextureObject::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 회전한다.
+	//// 카메라를 바라본다.
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//RELEASE_INSTANCE(CGameInstance);
+
+	//m_pTransformCom->LookAt(vCameraPos, true);	
+
+	//// 회전한다.
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
 
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)	// 일정 시간 뒤 삭제
+		MovePortal(TimeDelta);
 
-	//if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
-	//	MovePortal(TimeDelta);
-
+	// 충돌 처리
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
 	{
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
@@ -84,7 +93,6 @@ void CO_TextureObject::Tick(_double TimeDelta)
 void CO_TextureObject::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
@@ -107,7 +115,7 @@ HRESULT CO_TextureObject::Render()
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
 	}
-	
+
 	return S_OK;
 }
 

@@ -20,7 +20,7 @@ public:
 	{
 		enum TEXTURETYPE { PORTAL, MOVE_PORTAL, TEXTURETYPE_END };
 		TEXTURETYPE		eTextureType;
-		
+
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
 
 	}TEXTUREOBJECT;

@@ -18,6 +18,7 @@
 
 // Obj
 #include "O_Box.h"
+#include "O_BearTrap.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -217,6 +218,10 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_Component_Model_O_Box*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Box"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Box/Box.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_O_BearTrap*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/BearTrap/BearTrap.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -596,6 +601,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Box"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Box/Box.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_O_BearTrap*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/BearTrap/BearTrap.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	//// Fiona
 	///* For.Prototype_Component_Model_Fiona */
@@ -699,6 +708,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_O_Box */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Box"),
 		CO_Box::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_O_BearTrap */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
+		CO_BearTrap::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// NPC

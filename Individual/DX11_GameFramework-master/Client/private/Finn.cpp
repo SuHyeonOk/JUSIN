@@ -676,11 +676,11 @@ void CFinn::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	//m_dHit_TimeAcc += TimeDelta;
-	//if (0.3 < m_dHit_TimeAcc)
-	//	m_pTransformCom->Go_Backward(0);
-	//else
-	//	m_pTransformCom->Go_Backward(TimeDelta);
+	m_dHit_TimeAcc += TimeDelta;
+	if (0.22 < m_dHit_TimeAcc)
+		m_pTransformCom->Go_Backward(0);
+	else
+		m_pTransformCom->Go_Backward(TimeDelta);
 
 	if (m_pModelCom->Get_Finished())
 	{

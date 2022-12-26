@@ -1,23 +1,22 @@
 #include "stdafx.h"
-#include "..\public\O_Box.h"
+#include "..\public\O_BearTrap.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
-#include "ItemManager.h"
 
-CO_Box::CO_Box(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CO_BearTrap::CO_BearTrap(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CO_Box::CO_Box(const CO_Box & rhs)
+CO_BearTrap::CO_BearTrap(const CO_BearTrap & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CO_Box::Initialize_Prototype()
+HRESULT CO_BearTrap::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,9 +24,9 @@ HRESULT CO_Box::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CO_Box::Initialize(void * pArg)
+HRESULT CO_BearTrap::Initialize(void * pArg)
 {	
-	m_wsTag = L"Object_Box";
+	m_wsTag = L"Object_BeapTrap";
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
@@ -48,56 +47,23 @@ HRESULT CO_Box::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(-120.f));
-	m_eState = IDLE;
 
 	m_pModelCom->Set_AnimIndex(0);
 	return S_OK;
 }
 
-void CO_Box::Tick(_double TimeDelta)
+void CO_BearTrap::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	switch (m_eState)
-	{
-	case Client::CO_Box::IDLE:
-		m_pModelCom->Set_AnimIndex(1);
-		break;
-	case Client::CO_Box::OPEN:
-		m_pModelCom->Set_AnimIndex(3, false);
-		break;
-	case Client::CO_Box::STOP:
-		m_pModelCom->Set_AnimIndex(2);
-		break;
-	}
-
-	// 객체의 상태가 OPEN 이면서, 애니메이션이 끝나면 STOP 으로 변경한다.
-	if (3 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-	{
-		m_eState = STOP;
-
-		if (!m_bOneCoin)	// 동전 생성
-		{
-			m_bOneCoin = true;
-
-			// Item
-			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-			_float4 vf4MyPos;
-			XMStoreFloat4(&vf4MyPos, vMyPos);
-
-			CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 0, 0, 10);
-		}
-	}
-	RELEASE_INSTANCE(CGameInstance);
+	if(1 == m_pModelCom->Get_AnimIndex(), m_pModelCom->Get_Finished())
+		m_pModelCom->Set_AnimIndex(0);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CO_Box::Late_Tick(_double TimeDelta)
+void CO_BearTrap::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -107,7 +73,7 @@ void CO_Box::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CO_Box::Render()
+HRESULT CO_BearTrap::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -135,15 +101,16 @@ HRESULT CO_Box::Render()
 	return S_OK;
 }
 
-void CO_Box::On_Collision(CGameObject * pOther)
+void CO_BearTrap::On_Collision(CGameObject * pOther)
 {
-	if(IDLE == m_eState)
-		if (CObj_Manager::GetInstance()->Get_Interaction())
-			if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-				m_eState = OPEN;
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	{
+		m_pModelCom->Set_AnimIndex(1, false);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+	}
 }
 
-HRESULT CO_Box::SetUp_Components()
+HRESULT CO_BearTrap::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -156,7 +123,7 @@ HRESULT CO_Box::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Box"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -164,7 +131,7 @@ HRESULT CO_Box::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(3.f, 3.f, 3.f);
+	ColliderDesc.vSize = _float3(1.f, 1.f, 1.f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -174,7 +141,7 @@ HRESULT CO_Box::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CO_Box::SetUp_ShaderResources()
+HRESULT CO_BearTrap::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -194,31 +161,31 @@ HRESULT CO_Box::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CO_Box * CO_Box::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CO_BearTrap * CO_BearTrap::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CO_Box*		pInstance = new CO_Box(pDevice, pContext);
+	CO_BearTrap*		pInstance = new CO_BearTrap(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CO_Box");
+		MSG_BOX("Failed to Created : CO_BearTrap");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CO_Box::Clone(void * pArg)
+CGameObject * CO_BearTrap::Clone(void * pArg)
 {
-	CO_Box*		pInstance = new CO_Box(*this);
+	CO_BearTrap*		pInstance = new CO_BearTrap(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CO_Box");
+		MSG_BOX("Failed to Cloned : CO_BearTrap");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CO_Box::Free()
+void CO_BearTrap::Free()
 {
 	__super::Free();
 

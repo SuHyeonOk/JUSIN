@@ -601,7 +601,7 @@ void CLevel_GamePlay::ImGui_Npc()
 
 void CLevel_GamePlay::ImGui_Object()
 {
-	const _char* szObjName[] = { "Box", "Portal" };
+	const _char* szObjName[] = { "Box", "Portal", "BearTrap" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Object", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -639,6 +639,18 @@ void CLevel_GamePlay::ImGui_Object()
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+				return;
+
+			m_iObject_Count++;
+		}
+		else if (2 == iObjNum)	// 2D 오브젝트
+		{
+			m_wstObjName = L"Layer_BearTrap__";
+			m_wstObjName += to_wstring(m_iObject_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -1094,6 +1106,7 @@ void CLevel_GamePlay::Load_Page()
 	{
 		for (_int i = 0; i < iPageVecCount; i++)
 		{
+			tPageInfo.ePageKind = tPageInfo.MOVE;
 			tPageInfo.fPos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Page_1__";
@@ -1329,6 +1342,20 @@ void CLevel_GamePlay::Load_Object()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pObjInfo.ObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+					return;
+			}
+		}
+
+		for (_int i = 0; i < iVecCount; i++)
+		{
+			m_wstObjName = L"Layer_BearTrap__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_BearTrap"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
