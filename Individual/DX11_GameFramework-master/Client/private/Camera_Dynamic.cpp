@@ -40,7 +40,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
-	if(m_eCameraInfo.eLevel == LEVEL_GAMEPLAY)
+	if (m_eCameraInfo.eLevel != LEVEL_TOOL)
 		m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
 
 	if (FAILED(CCamera::Initialize(&m_CameraDesc)))
@@ -60,17 +60,6 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 {
 	if(m_eCameraInfo.eLevel != LEVEL_TOOL)
 		ToFollow(TimeDelta);
-
-	////////////////////////////// 디버그용
-	//_vector vddMyPos;
-	//vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	//_float4	f4ddMyPos;
-	//XMStoreFloat4(&f4ddMyPos, vddMyPos);
-
-	//cout << "카메라 위치 " << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
-	////////////////////////////// 디버그용
-
 
 
 
@@ -159,7 +148,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	
 	if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)
 	{
-		// Finnxx 에게로
+		// Finn 에게로
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 		_vector vPlayerPos, vTargetPos;
@@ -173,7 +162,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
 
 		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터aaaaaa
 
 		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X 값을 뽑아와 거리 확인
 		

@@ -36,6 +36,7 @@ public:
 	HRESULT	Loading_Tool();
 	HRESULT Loading_ForLogo();
 	HRESULT Loading_ForGamePlay();
+	HRESULT Loading_ForSkeleton();
 
 private:
 	ID3D11Device*			m_pDevice = nullptr;

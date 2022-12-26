@@ -1,22 +1,20 @@
 #include "stdafx.h"
-#include "..\public\S_StunChick.h"
-
+#include "..\public\Map_Skeleton.h"
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 
-CS_StunChick::CS_StunChick(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CMap_Skeleton::CMap_Skeleton(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CS_StunChick::CS_StunChick(const CS_StunChick & rhs)
+CMap_Skeleton::CMap_Skeleton(const CMap_Skeleton & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CS_StunChick::Initialize_Prototype()
+HRESULT CMap_Skeleton::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,54 +22,32 @@ HRESULT CS_StunChick::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CS_StunChick::Initialize(void * pArg)
-{	
-	m_wsTag = L"StenChick";
-
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
-	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
-
-	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
-
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(100.0f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
-
-	if (FAILED(__super::Initialize(&GameObjectDesc)))
+HRESULT CMap_Skeleton::Initialize(void * pArg)
+{
+	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Pos();
-
 	return S_OK;
 }
 
-void CS_StunChick::Tick(_double TimeDelta)
+void CMap_Skeleton::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-
-	if (CObj_Manager::PLAYERINFO::STATE::STUN != CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		CGameObject::Set_Dead();
 }
 
-void CS_StunChick::Late_Tick(_double TimeDelta)
+void CMap_Skeleton::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CS_StunChick::Render()
+HRESULT CMap_Skeleton::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -83,19 +59,15 @@ HRESULT CS_StunChick::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (0 == i || 1 == i || 2 == i)	// 이상한 네모들 건너 뜀
-			continue;
-
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		m_pModelCom->Render(m_pShaderCom, i);
 	}
 
 	return S_OK;
 }
 
-HRESULT CS_StunChick::SetUp_Components()
+HRESULT CMap_Skeleton::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -103,19 +75,19 @@ HRESULT CS_StunChick::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(LEVEL_SKELETON, TEXT("Prototype_Component_Shader_VtxModel_Map"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_StunChick"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Skeleton"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CS_StunChick::SetUp_ShaderResources()
+HRESULT CMap_Skeleton::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -135,31 +107,31 @@ HRESULT CS_StunChick::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CS_StunChick * CS_StunChick::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CMap_Skeleton * CMap_Skeleton::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CS_StunChick*		pInstance = new CS_StunChick(pDevice, pContext);
+	CMap_Skeleton*		pInstance = new CMap_Skeleton(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CS_StunChick");
+		MSG_BOX("Failed to Created : CMap_Skeleton");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CS_StunChick::Clone(void * pArg)
+CGameObject * CMap_Skeleton::Clone(void * pArg)
 {
-	CS_StunChick*		pInstance = new CS_StunChick(*this);
+	CMap_Skeleton*		pInstance = new CMap_Skeleton(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CS_StunChick");
+		MSG_BOX("Failed to Cloned : CMap_Skeleton");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CS_StunChick::Free()
+void CMap_Skeleton::Free()
 {
 	__super::Free();
 

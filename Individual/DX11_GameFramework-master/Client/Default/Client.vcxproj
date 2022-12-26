@@ -192,10 +192,12 @@
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
+    <ClInclude Include="..\public\Level_Skeleton.h" />
     <ClInclude Include="..\public\Level_Tool.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
+    <ClInclude Include="..\public\Map_Skeleton.h" />
     <ClInclude Include="..\public\M_Gronmes.h" />
     <ClInclude Include="..\public\M_Magic_Man.h" />
     <ClInclude Include="..\public\M_Mimic.h" />
@@ -250,10 +252,12 @@
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
+    <ClCompile Include="..\private\Level_Skeleton.cpp" />
     <ClCompile Include="..\private\Level_Tool.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />
+    <ClCompile Include="..\private\Map_Skeleton.cpp" />
     <ClCompile Include="..\private\M_Gronmes.cpp" />
     <ClCompile Include="..\private\M_Magic_Man.cpp" />
     <ClCompile Include="..\private\M_Mimic.cpp" />

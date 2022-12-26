@@ -152,7 +152,7 @@ HRESULT CS_Change_Magic::SetUp_Components()
 	else if (CHANGEINFO::CHANGE::JAKE == m_tChangeInfo.eChange)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Jake"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 

@@ -67,7 +67,6 @@ private:
 	void	Cheering_Tick();
 
 	void	TreeWitch_Tick();
-	HRESULT	Magic_Tick(_double TimeDelsdta);
 
 	void	Anim_Change(_double TimeDelta);
 

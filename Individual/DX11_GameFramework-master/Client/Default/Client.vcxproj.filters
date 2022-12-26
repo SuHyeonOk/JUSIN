@@ -49,9 +49,6 @@
     <Filter Include="02.GameObjects\Map">
       <UniqueIdentifier>{7c83f2f1-d10e-45a7-9d0b-8751ff0bb839}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Map\Garden">
-      <UniqueIdentifier>{c6df6361-d7a3-419a-8fb8-b4e5a8cb1e14}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Monster">
       <UniqueIdentifier>{fd15bb03-f55a-4792-beaf-83947147a9b8}</UniqueIdentifier>
     </Filter>
@@ -151,6 +148,9 @@
     <Filter Include="02.GameObjects\NPC\KeyMan">
       <UniqueIdentifier>{34505c58-077b-467d-9b68-a63dad6f7241}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\03.Skeleton">
+      <UniqueIdentifier>{cc3e2287-42e1-4d72-b5ed-d07acf538ef3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -203,9 +203,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Map_Garden.h">
-      <Filter>02.GameObjects\Map\Garden</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DataManager.h">
       <Filter>77.Manager\Data</Filter>
@@ -333,6 +330,15 @@
     <ClInclude Include="..\public\O_BearTrap.h">
       <Filter>02.GameObjects\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_Skeleton.h">
+      <Filter>01.Levels\03.Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Map_Garden.h">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Map_Skeleton.h">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -370,9 +376,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Map_Garden.cpp">
-      <Filter>02.GameObjects\Map\Garden</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DataManager.cpp">
       <Filter>77.Manager\Data</Filter>
@@ -496,6 +499,15 @@
     </ClCompile>
     <ClCompile Include="..\private\O_Box.cpp">
       <Filter>02.GameObjects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Skeleton.cpp">
+      <Filter>01.Levels\03.Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Map_Skeleton.cpp">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Map_Garden.cpp">
+      <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
