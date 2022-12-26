@@ -40,7 +40,9 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
-	if (m_eCameraInfo.eLevel != LEVEL_TOOL)
+	if (m_eCameraInfo.eLevel == LEVEL_GAMEPLAY)
+		m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
+	if (m_eCameraInfo.eLevel == LEVEL_SKELETON)
 		m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
 
 	if (FAILED(CCamera::Initialize(&m_CameraDesc)))
@@ -60,8 +62,6 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 {
 	if(m_eCameraInfo.eLevel != LEVEL_TOOL)
 		ToFollow(TimeDelta);
-
-
 
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{

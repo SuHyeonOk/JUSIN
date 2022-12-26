@@ -246,7 +246,7 @@ void CTerrain::ImGui_Navigation()
 		_float fRange_B = XMVectorGetX(XMVector3Length(vDistance_B));												
 		_float fRange_C = XMVectorGetX(XMVector3Length(vDistance_C));												
 
-		_float fSaveRange = 0.3f;
+		_float fSaveRange = 0.1f;
 
 		if (fSaveRange < fRange_A)
 			m_f4PickingPos = _float4(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z, m_f4PickingPos.w);	
@@ -277,8 +277,6 @@ void CTerrain::ImGui_Navigation()
 		m_iButtonCount = 0;
 		m_f3Points[2] = _float3(m_f4PickingPos.x, m_f4PickingPos.y, m_f4PickingPos.z);
 	}
-
-	// -40.4735|0|29.9112|-38.6497|0|29.9748|-38.0559|0|27.6982
 
 	//// 벡터 노멀라이즈 하고, 내적
 	//// 양수, 음수 음수일 경우 두 점의 위치를 바꿔주면 된다.

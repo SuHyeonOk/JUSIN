@@ -45,7 +45,7 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y + 1.f, m_TextureObject.f3Pos.z);
+		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y, m_TextureObject.f3Pos.z);
 	}
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -59,7 +59,7 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
 		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.f));
 	else if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
-		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, m_TextureObject.f3Pos.z - 1.f));
+		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
 
 	return S_OK;
 }

@@ -128,7 +128,7 @@ HRESULT CB_3DBullet::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -146,8 +146,8 @@ HRESULT CB_3DBullet::SetUp_Components()
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// ¿ä±â
 	{
-		ColliderDesc.vSize = _float3(1.f, 1.5f, 1.f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		ColliderDesc.vSize = _float3(1.5f, 1.5f, 1.5f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

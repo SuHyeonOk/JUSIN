@@ -511,6 +511,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Garden/Garden.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// Skell
+	/* For.Prototype_Component_Model_S_Magic_Man_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
@@ -716,6 +722,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CMap_Garden::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Skill
+	/* For.Prototype_GameObject_Magic_Man_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Change_Magic"),
+		CS_Change_Magic::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// Item
 	/* For.Prototype_GameObject_Food */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
@@ -848,12 +860,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton/Skeleton.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	// Skell
-	/* For.Prototype_Component_Model_S_Magic_Man_Jake */
-	if (FAILED(pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Royal_Tart"),
@@ -981,12 +987,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_Map_Skeleton */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton"),
 		CMap_Skeleton::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	// Skill
-	/* For.Prototype_GameObject_Magic_Man_Jake */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Change_Magic"),
-		CS_Change_Magic::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Item
