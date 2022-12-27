@@ -211,6 +211,7 @@
     <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\O_BearTrap.h" />
     <ClInclude Include="..\public\O_Box.h" />
+    <ClInclude Include="..\public\O_Portal.h" />
     <ClInclude Include="..\public\O_TextureObject.h" />
     <ClInclude Include="..\public\Page.h" />
     <ClInclude Include="..\public\Player.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\O_BearTrap.cpp" />
     <ClCompile Include="..\private\O_Box.cpp" />
+    <ClCompile Include="..\private\O_Portal.cpp" />
     <ClCompile Include="..\private\O_TextureObject.cpp" />
     <ClCompile Include="..\private\Page.cpp" />
     <ClCompile Include="..\private\Player.cpp" />

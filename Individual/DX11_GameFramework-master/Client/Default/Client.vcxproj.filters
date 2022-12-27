@@ -339,6 +339,9 @@
     <ClInclude Include="..\public\Map_Skeleton.h">
       <Filter>02.GameObjects\Map</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\O_Portal.h">
+      <Filter>02.GameObjects\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -508,6 +511,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Map_Garden.cpp">
       <Filter>02.GameObjects\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\O_Portal.cpp">
+      <Filter>02.GameObjects\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

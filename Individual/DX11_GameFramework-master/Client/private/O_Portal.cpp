@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "..\public\Key.h"
+#include "..\public\O_Portal.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-CKey::CKey(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CO_Portal::CO_Portal(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CKey::CKey(const CKey & rhs)
+CO_Portal::CO_Portal(const CO_Portal & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CKey::Initialize_Prototype()
+HRESULT CO_Portal::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,9 +24,9 @@ HRESULT CKey::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CKey::Initialize(void * pArg)
-{
-	m_wsTag = L"Item_Key";
+HRESULT CO_Portal::Initialize(void * pArg)
+{	
+	m_wsTag = L"Object_Portal";
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
@@ -37,7 +37,7 @@ HRESULT CKey::Initialize(void * pArg)
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(50.f);
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -51,25 +51,21 @@ HRESULT CKey::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CKey::Tick(_double TimeDelta)
+void CO_Portal::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CKey::Late_Tick(_double TimeDelta)
+void CO_Portal::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
 
-HRESULT CKey::Render()
+HRESULT CO_Portal::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -83,29 +79,18 @@ HRESULT CKey::Render()
 	{
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
 		m_pModelCom->Render(m_pShaderCom, i);
-	}
-
-	if (CObj_Manager::GetInstance()->Get_NavigationRender())
-	{
-		if (nullptr != m_pColliderCom)
-			m_pColliderCom->Render();
 	}
 
 	return S_OK;
 }
 
-void CKey::On_Collision(CGameObject * pOther)
+void CO_Portal::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-	{
-		CGameObject::Set_Dead();
-		CObj_Manager::GetInstance()->Set_Key();
-	}
+
 }
 
-HRESULT CKey::SetUp_Components()
+HRESULT CO_Portal::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -118,25 +103,14 @@ HRESULT CKey::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Model_Key"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Model_O_Portal_Off"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
-	CCollider::COLLIDERDESC			ColliderDesc;
-
-	/* For.Com_SPHERE */
-	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
-		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CKey::SetUp_ShaderResources()
+HRESULT CO_Portal::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -156,35 +130,34 @@ HRESULT CKey::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CKey * CKey::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CO_Portal * CO_Portal::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CKey*		pInstance = new CKey(pDevice, pContext);
+	CO_Portal*		pInstance = new CO_Portal(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CKey");
+		MSG_BOX("Failed to Created : CO_Portal");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CKey::Clone(void * pArg)
+CGameObject * CO_Portal::Clone(void * pArg)
 {
-	CKey*		pInstance = new CKey(*this);
+	CO_Portal*		pInstance = new CO_Portal(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CKey");
+		MSG_BOX("Failed to Cloned : CO_Portal");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CKey::Free()
+void CO_Portal::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

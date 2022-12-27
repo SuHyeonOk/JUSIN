@@ -20,6 +20,7 @@
 // Obj
 #include "O_Box.h"
 #include "O_BearTrap.h"
+#include "O_Portal.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -596,6 +597,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/BearTrap/BearTrap.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_O_Portal_Off*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Portal_Off"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Object/Portal_Off/Portal_Off.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	//// Fiona
 	///* For.Prototype_Component_Model_Fiona */
@@ -698,6 +703,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_O_BearTrap */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
 		CO_BearTrap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_O_Portal */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_PortalOff"),
+		CO_Portal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// NPC
@@ -912,6 +921,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_O_BearTrap"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/BearTrap/BearTrap.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_O_Portal_Off*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_O_Portal_Off"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Object/Portal_Off/Portal_Off.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// Monster
 	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
@@ -969,6 +982,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_O_BearTrap */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
 		CO_BearTrap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_O_Portal */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_PortalOff"),
+		CO_Portal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// NPC

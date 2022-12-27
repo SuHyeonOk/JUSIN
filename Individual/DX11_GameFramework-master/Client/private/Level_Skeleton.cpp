@@ -561,7 +561,7 @@ void CLevel_Skleton::ImGui_Npc()
 
 void CLevel_Skleton::ImGui_Object()
 {
-	const _char* szObjName[] = { "Box", "Portal", "BearTrap" };
+	const _char* szObjName[] = { "Box", "Portal", "BearTrap", "PortalOff" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Object", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -603,7 +603,7 @@ void CLevel_Skleton::ImGui_Object()
 
 			m_iObject_Count++;
 		}
-		else if (2 == iObjNum)	// 2D 오브젝트
+		else if (2 == iObjNum)
 		{
 			m_wstObjName = L"Layer_BearTrap__";
 			m_wstObjName += to_wstring(m_iObject_Count);
@@ -611,6 +611,18 @@ void CLevel_Skleton::ImGui_Object()
 			m_szObjName = m_wstObjName.c_str();
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
+				return;
+
+			m_iObject_Count++;
+		}
+		else if (3 == iObjNum)
+		{
+			m_wstObjName = L"Layer_PortalOff__";
+			m_wstObjName += to_wstring(m_iObject_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_O_PortalOff"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -1177,6 +1189,20 @@ void CLevel_Skleton::Load_Object()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_BearTrap"), &pObjInfo.ObjPos)))
+					return;
+			}
+		}
+
+		for (_int i = 0; i < iVecCount; i++)
+		{
+			m_wstObjName = L"Layer_PortalOff__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_PortalOff"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
