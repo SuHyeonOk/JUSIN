@@ -125,7 +125,17 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 	{
 		if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+			if (pGameInstance->Key_Down(DIK_RETURN))
+			{
+				if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+				{
+					CGameObject::Set_Dead();
+					CObj_Manager::GetInstance()->Set_NextLevel(true);
+				}
+			}
+			RELEASE_INSTANCE(CGameInstance);
 		}
 	}
 }

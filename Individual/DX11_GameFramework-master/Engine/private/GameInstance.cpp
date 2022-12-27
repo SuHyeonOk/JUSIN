@@ -259,7 +259,7 @@ HRESULT CGameInstance::Add_Prototype(const _tchar * pPrototypeTag, CGameObject *
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Add_Prototype(pPrototypeTag, pPrototype);	
+ 	return m_pObject_Manager->Add_Prototype(pPrototypeTag, pPrototype);	
 }
 
 HRESULT CGameInstance::Clone_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pPrototypeTag, void * pArg)

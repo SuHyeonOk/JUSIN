@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 #include "..\public\Level_Logo.h"
 
@@ -31,9 +32,7 @@ void CLevel_Logo::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//ImGui::Begin("FullscrrenTest");
-	//ImGui::Text("%d", g_bFullScreen);
-	//ImGui::End();
+
 		
 }
 
@@ -63,7 +62,6 @@ void CLevel_Logo::Late_Tick(_double TimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
-
 }
 
 HRESULT CLevel_Logo::Render()

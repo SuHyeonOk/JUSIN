@@ -961,38 +961,38 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
-	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	///* For.Prototype_GameObject_Terrain */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+	//	CTerrain::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	//
+	////UI
+	///* For.Prototype_GameObject_UI_3DTexture */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
+	//	CUI_Talk::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
-	//UI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	//// 3DUI
+	///* For.Prototype_GameObject_UI_3DTexture */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
+	//	CUI_3DTexture::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
-	// 3DUI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
-		CUI_3DTexture::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	//// Obj
+	///* For.Prototype_GameObject_O_BearTrap */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
+	//	CO_BearTrap::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	///* For.Prototype_GameObject_O_Portal */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_PortalOff"),
+	//	CO_Portal::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
-	// Obj
-	/* For.Prototype_GameObject_O_BearTrap */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
-		CO_BearTrap::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_O_Portal */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_PortalOff"),
-		CO_Portal::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	// NPC
-	/* For.Prototype_GameObject_N_Bubblegum */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
-		CN_Bubblegum::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	//// NPC
+	///* For.Prototype_GameObject_N_Bubblegum */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
+	//	CN_Bubblegum::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 	// Map
 	/* For.Prototype_GameObject_Map_Skeleton */
@@ -1000,37 +1000,37 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CMap_Skeleton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Item
-	/* For.Prototype_GameObject_Food */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
-		CFood::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_Hp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Hp"),
-		CFood::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_Key */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
-		CKey::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_Heart */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Heart"),
-		CHeart::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_Coin */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
-		CCoin::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_Page */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
-		CPage::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	//// Item
+	///* For.Prototype_GameObject_Food */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
+	//	CFood::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	///* For.Prototype_GameObject_Hp */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Hp"),
+	//	CFood::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	///* For.Prototype_GameObject_Key */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
+	//	CKey::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	///* For.Prototype_GameObject_Heart */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Heart"),
+	//	CHeart::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	///* For.Prototype_GameObject_Coin */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
+	//	CCoin::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	///* For.Prototype_GameObject_Page */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
+	//	CPage::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
-	// Bullet
-	/* For.Prototype_GameObject_B_AnimBullet */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
-		CB_AnimBullet::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	//// Bullet
+	///* For.Prototype_GameObject_B_AnimBullet */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
+	//	CB_AnimBullet::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 #pragma endregion
 

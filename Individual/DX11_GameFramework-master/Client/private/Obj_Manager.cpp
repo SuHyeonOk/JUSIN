@@ -29,6 +29,8 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
 	m_tPlayerInfo.eJakeWeapon = PLAYERINFO::JAKEWEAPON::LFIST;
 
+
+
 	return S_OK;
 }
 
@@ -39,16 +41,19 @@ void CObj_Manager::Tick_Player_Transform()
 
 _vector			CObj_Manager::Get_Player_Transform()
 {
+	if (m_bNextLevel)
+		return;
+
 	// 현재 Player 를 확인하고 그 Player 의 Transform 을 넘겨준다.
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINN)
 	{
-		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
 
 		_vector vPlayerPos;
-		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn 좌표 받아옴
+		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn 좌표 받아옴
 		return vPlayerPos;
 	}
 	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)

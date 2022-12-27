@@ -23,7 +23,6 @@ private:
 	HRESULT Ready_Layer_UI_Informacion(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
-	HRESULT Ready_Layer_Player(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Finn(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Jake(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Map_Garden(const _tchar* pLayerTag);

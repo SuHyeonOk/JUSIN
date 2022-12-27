@@ -7,9 +7,9 @@
 #include "GameInstance.h"
 #include "DataManager.h"
 #include "Camera_Dynamic.h"
+#include "Obj_Manager.h"
 
 #include "O_TextureObject.h"
-
 #include "M_Monster.h"
 #include "N_NPC.h"
 #include "Food.h"
@@ -39,26 +39,42 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
-	// 파일 읽기
-	Load_Food();
-	Load_Coin();
-	Load_Page();
-	Load_Item();
-	//Load_Npc();
-	Load_Object();
-	//Load_Monster();
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CTransform * pObjTransformCom;
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 6.f));
+
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-6.f, 0.f, 6.f));
+
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
+
+	CObj_Manager::GetInstance()->Set_NextLevel(false);
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	//// 파일 읽기
+	//Load_Food();
+	//Load_Coin();
+	//Load_Page();
+	//Load_Item();
+	////Load_Npc();
+	//Load_Object();
+	////Load_Monster();
 
 
 	return S_OK;
@@ -68,7 +84,7 @@ void CLevel_Skleton::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
+	//ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
 }
 
 void CLevel_Skleton::Late_Tick(_double TimeDelta)
@@ -109,6 +125,11 @@ HRESULT CLevel_Skleton::Ready_Lights()
 	return S_OK;
 }
 
+HRESULT CLevel_Skleton::Ready_PreviousData()
+{
+	return S_OK;
+}
+
 HRESULT CLevel_Skleton::Ready_Layer_Npc()
 {
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -140,7 +161,7 @@ HRESULT CLevel_Skleton::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

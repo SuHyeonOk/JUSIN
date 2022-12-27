@@ -52,6 +52,7 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 	{
 		CLevel*		pLevel = nullptr;
 
+	
 		switch (m_eNextLevelID)
 		{
 		case LEVEL_TOOL:

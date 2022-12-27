@@ -7,9 +7,10 @@
 #include "GameInstance.h"
 #include "DataManager.h"
 #include "Camera_Dynamic.h"
+#include "Level_Loading.h"
 
+#include "Obj_Manager.h"
 #include "O_TextureObject.h"
-
 #include "M_Monster.h"
 #include "N_NPC.h"
 #include "Food.h"
@@ -78,6 +79,13 @@ void CLevel_GamePlay::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
+	if (CObj_Manager::GetInstance()->Get_NextLevel())
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
+			return;
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -178,19 +186,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
 	eCameraInfo.eLevel = LEVEL_GAMEPLAY;
 	eCameraInfo.f3Pos = _float3(-10.f, 0.f, -10.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Player"))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

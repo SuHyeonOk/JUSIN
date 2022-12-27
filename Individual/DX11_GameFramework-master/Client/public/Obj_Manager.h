@@ -58,6 +58,9 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
+	// 다음 레벨로 넘어갈 것 인지.
+	_bool				Get_NextLevel() { return m_bNextLevel; }
+	void				Set_NextLevel(_bool bNext) { m_bNextLevel = bNext; }
 	// 현재 Level
 	LEVEL				Get_Current_Level() { return m_eCurrent_Level; }
 	void				Set_Current_Level(LEVEL eLevelID) { m_eCurrent_Level = eLevelID; }
@@ -106,6 +109,7 @@ private:
 	void		CObj_Manager::Key_Input();
 
 private:
+	_bool			m_bNextLevel = false;
 	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
 
