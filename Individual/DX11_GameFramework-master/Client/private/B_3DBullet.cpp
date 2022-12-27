@@ -115,7 +115,9 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
 		{
 			CGameObject::Set_Dead();				// 플레이어랑 닿으면 사라진다.
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::MAGIC);	// 플레이어 State 을 변경한다.
+			
+			if(CObj_Manager::PLAYERINFO::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::MAGIC);	// 플레이어 State 을 변경한다.
 		}
 	}
 }

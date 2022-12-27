@@ -272,7 +272,6 @@ HRESULT CLoader::Loading_Tool()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Mimic_Monster/Mimic_Monster.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 	/* For.Prototype_Component_Shader_VtxNorTex */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxNorTex"),
@@ -511,12 +510,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Garden/Garden.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	// Skell
-	/* For.Prototype_Component_Model_S_Magic_Man_Jake */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
@@ -577,6 +570,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	///////////////////////////////////////////////////////////// ANIM
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// Skell
+	/* For.Prototype_Component_Model_S_Magic_Man_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
@@ -677,11 +676,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Player */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
-		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	//UI

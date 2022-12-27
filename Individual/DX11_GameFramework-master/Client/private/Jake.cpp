@@ -732,14 +732,14 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
-	if (m_bIsSwim)
+	if (m_bIsSwim)		// 예외처리 수영 중일 때는 변하지 말기
 		return S_OK;
 
 	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
 	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
-		cout << "모델 생성" << endl;
+
 		// Magic 모델 생성
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
@@ -758,29 +758,29 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 
 	// Magic 모델을 따라간다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Com_Transform"), 0));
-	RELEASE_INSTANCE(CGameInstance);
+	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Com_Transform"), 0));
 
 	if (nullptr != pChangeTransformCom)
 	{
-		_vector vChangePos;
-		vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
 	}
 
-	// Get_Dead 가 true 라면 아이들로 변경한다.
-	CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), 
-		TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
-
-	if (nullptr != pGameObject)
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (10 < m_bSkillClone_TimeAcc)
 	{
-		if (pGameObject->Get_Dead())
-		{
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경
-			m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
-		}
+		// Get_Dead 가 true 라면 아이들로 변경한다.
+		CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
+		pGameObject->Set_Dead();
+
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경
+		m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
+		
+		m_bSkillClone_TimeAcc = 0;
 	}
 
+	RELEASE_INSTANCE(CGameInstance);
+	
 	return S_OK;
 }
 

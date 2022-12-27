@@ -47,7 +47,7 @@ HRESULT CS_Change_Magic::Initialize(void * pArg)
 		m_wsTag = L"Finn_Magic";
 	else if (CHANGEINFO::CHANGE::JAKE == m_tChangeInfo.eChange)
 		m_wsTag = L"Jake_Magic";
-
+	cout << "제이크 생성" << endl;
 	CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 
 	m_pTransformCom->Set_Pos();
@@ -77,14 +77,6 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 void CS_Change_Magic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	// 변한 시간이 지나면 사라진다.
-	m_dSkill_TimaAcc += TimeDelta;
-	if (10 < m_dSkill_TimaAcc)
-	{
-		CGameObject::Set_Dead();
-		m_dSkill_TimaAcc = 0;
-	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
