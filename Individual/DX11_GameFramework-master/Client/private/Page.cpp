@@ -33,7 +33,7 @@ HRESULT CPage::Initialize(void * pArg)
 
 	if (nullptr != pArg)
 		memcpy(&m_tinPageInfo, pArg, sizeof(PAGEINFO));
-
+	
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinPageInfo.fPos.x, m_tinPageInfo.fPos.y, m_tinPageInfo.fPos.z);
@@ -53,11 +53,8 @@ void CPage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (m_tPageInfo.IDLE == m_tPageInfo.ePageKind)	// IDLE : Page 제자리에서 위, 아래로 움직이며 회전
-	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-		m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
-	}
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
 
 	// 제 자리에서 뛰었다가 회전하고 반복 그런데 자연스럽지가 않음 (사용 안 할듯? 그래둥..)
 	//if (m_bIdle) 

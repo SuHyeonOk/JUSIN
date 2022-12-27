@@ -52,12 +52,12 @@ HRESULT CLevel_Skleton::Initialize()
 		return E_FAIL;
 
 	// 파일 읽기
-	//Load_Food();
-	//Load_Coin();
-	//Load_Page();
-	//Load_Item();
-	////Load_Npc();
-	//Load_Object();
+	Load_Food();
+	Load_Coin();
+	Load_Page();
+	Load_Item();
+	//Load_Npc();
+	Load_Object();
 	//Load_Monster();
 
 
@@ -283,16 +283,12 @@ void CLevel_Skleton::ImGui_Food()
 
 	if (ImGui::Button("Food Save"))
 	{
-		wofstream fout("../../Data/Food.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Food.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
 			return;
 		}
-
-		// fouttream 은 string 전용 / wfouttream 은 wstring 전용
-		//std::string str = "";
-		//str.assign(m_wstObjName.begin(), m_wstObjName.end());
 
 		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
 
@@ -300,7 +296,7 @@ void CLevel_Skleton::ImGui_Food()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Food.txt", SW_SHOW);
 #pragma endregion Food
 }
 
@@ -376,7 +372,7 @@ void CLevel_Skleton::ImGui_Coin()
 
 	if (ImGui::Button("Coin Save"))
 	{
-		wofstream fout("../../Data/Coin.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Coin.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -389,7 +385,7 @@ void CLevel_Skleton::ImGui_Coin()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Coin.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Coin.txt", SW_SHOW);
 }
 
 void CLevel_Skleton::ImGui_Page()
@@ -412,7 +408,6 @@ void CLevel_Skleton::ImGui_Page()
 
 		if (0 == iObjNum)
 		{
-			tPageInfo.ePageKind = tPageInfo.MOVE;
 			tPageInfo.fPos = m_f3ClickPos;
 
 			m_wstObjName = L"Page_1__";
@@ -431,7 +426,7 @@ void CLevel_Skleton::ImGui_Page()
 
 	if (ImGui::Button("Page Save"))
 	{
-		wofstream fout("../../Data/Page.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Page.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -444,7 +439,7 @@ void CLevel_Skleton::ImGui_Page()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Page.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Page.txt", SW_SHOW);
 }
 
 void CLevel_Skleton::ImGui_Item()
@@ -493,7 +488,7 @@ void CLevel_Skleton::ImGui_Item()
 
 	if (ImGui::Button("Item Save"))
 	{
-		wofstream fout("../../Data/Item.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Item.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -506,12 +501,12 @@ void CLevel_Skleton::ImGui_Item()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Item.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Item.txt", SW_SHOW);
 }
 
 void CLevel_Skleton::ImGui_Npc()
 {
-	const _char* szObjName[] = { "Bubblegum" };
+	const _char* szObjName[] = { "" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Npc", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -523,32 +518,32 @@ void CLevel_Skleton::ImGui_Npc()
 	f4MousePos = pGameInstance->Get_MousePos();
 
 
-	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	{
-		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
+	//if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	//{
+	//	m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
 
-		if (0 == iObjNum)
-		{
-			tNpcInfo.eNpcType = tNpcInfo.BUBBLEGUM;
-			tNpcInfo.TransformDesc.f3Pos = m_f3ClickPos;
+	//	if (0 == iObjNum)
+	//	{
+	//		tNpcInfo.eNpcType = tNpcInfo.BUBBLEGUM;
+	//		tNpcInfo.TransformDesc.f3Pos = m_f3ClickPos;
 
-			m_wstObjName = L"Bubblegum__";
-			m_wstObjName += to_wstring(m_iNpc_Count);
+	//		m_wstObjName = L"Bubblegum__";
+	//		m_wstObjName += to_wstring(m_iNpc_Count);
 
-			m_szObjName = m_wstObjName.c_str();
+	//		m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
-				return;
+	//		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
+	//			return;
 
-			m_iNpc_Count++;
-		}
-	}
+	//		m_iNpc_Count++;
+	//	}
+	//}
 
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (ImGui::Button("Npc Save"))
 	{
-		wofstream fout("../../Data/Npc.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Npc.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -561,7 +556,7 @@ void CLevel_Skleton::ImGui_Npc()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Npc.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Npc.txt", SW_SHOW);
 }
 
 void CLevel_Skleton::ImGui_Object()
@@ -626,7 +621,7 @@ void CLevel_Skleton::ImGui_Object()
 
 	if (ImGui::Button("Object Save"))
 	{
-		wofstream fout("../../Data/Object.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Object.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -639,16 +634,12 @@ void CLevel_Skleton::ImGui_Object()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Object.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Object.txt", SW_SHOW);
 }
 
 void CLevel_Skleton::ImGui_Monster()
 {
-	const _char* szObjName[] = { 
-		"PigWarrior_BEE", "PigWarrior_WORKER", 
-		"Pigs_COWBOY", "Pigs_SR", 
-		"Gronmes_BULE", "Gronmes_RED", "Gronmes_YELLOW", 
-		"Tree_Witch", "Magic_Man", "Mimix" };
+	const _char* szObjName[] = { "" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -678,148 +669,14 @@ void CLevel_Skleton::ImGui_Monster()
 
 			m_iMonster_Count++;
 		}
-		if (1 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_PigWarrior_WORKER__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (2 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Pigs_COWBOY__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (3 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-			
-			m_wstObjName = L"Layer_Pigs_SR__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (4 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Gronmes_BLUE__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (5 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Gronmes_RED__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (6 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Gronmes_YELLOW__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (7 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.TREE_WITCH;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Tree_Witch__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (8 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.MAGIC_MAN;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Magic_Man__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
-		if (9 == iObjNum)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.MAGIC_MAN;
-			tMonsterDesc.f3Pos = m_f3ClickPos;
-
-			m_wstObjName = L"Layer_Mimic__";
-			m_wstObjName += to_wstring(m_iMonster_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))
-				return;
-
-			m_iMonster_Count++;
-		}
+		
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (ImGui::Button("Monster Save"))
 	{
-		wofstream fout("../../Data/Monster.txt", ios::out | ios::app);
+		wofstream fout("../../Data/Skeleton_Monster.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -832,12 +689,12 @@ void CLevel_Skleton::ImGui_Monster()
 	}
 
 	if(ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Monster.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/Skeleton_Monster.txt", SW_SHOW);
 }
 
 void CLevel_Skleton::Load_Food()
 {
-	wifstream		fin("../../Data/Food.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Food.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -921,7 +778,7 @@ void CLevel_Skleton::Load_Food()
 
 void CLevel_Skleton::Load_Coin()
 {
-	wifstream		fin("../../Data/Coin.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Coin.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1025,7 +882,7 @@ void CLevel_Skleton::Load_Coin()
 
 void CLevel_Skleton::Load_Page()
 {
-	wifstream		fin("../../Data/Page.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Page.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1071,7 +928,6 @@ void CLevel_Skleton::Load_Page()
 	{
 		for (_int i = 0; i < iPageVecCount; i++)
 		{
-			tPageInfo.ePageKind = tPageInfo.MOVE;
 			tPageInfo.fPos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Page_1__";
@@ -1092,7 +948,7 @@ void CLevel_Skleton::Load_Page()
 
 void CLevel_Skleton::Load_Item()
 {
-	wifstream		fin("../../Data/Item.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Item.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1169,7 +1025,7 @@ void CLevel_Skleton::Load_Item()
 
 void CLevel_Skleton::Load_Npc()
 {
-	wifstream		fin("../../Data/Npc.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Npc.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1236,7 +1092,7 @@ void CLevel_Skleton::Load_Npc()
 
 void CLevel_Skleton::Load_Object()
 {
-	wifstream		fin("../../Data/Object.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Object.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1331,7 +1187,7 @@ void CLevel_Skleton::Load_Object()
 
 void CLevel_Skleton::Load_Monster()
 {
-	wifstream		fin("../../Data/Monster.txt", ios::in);
+	wifstream		fin("../../Data/Skeleton_Monster.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1391,150 +1247,7 @@ void CLevel_Skleton::Load_Monster()
 					return;
 			}
 		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
-			m_wstObjName = L"Layer_PigWarrior_WORKER__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.S_COWBOY;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Pigs_COWBOY__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.S_SR;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Pigs_SR__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.G_BLUE;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Gronmes_BLUE__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.G_RED;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Gronmes_RED__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.G_YELLOW;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Gronmes_YELLOW__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.TREE_WITCH;	// 요기
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Tree_Witch__";	// 요기
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))	// 요기
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.MAGIC_MAN;	// 요기
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Magic_Man__";	// 요기
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))	// 요기
-					return;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.MIMIC;	// 요기
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
-
-			m_wstObjName = L"Layer_Mimic__";	// 요기
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))	// 요기
-					return;
-			}
-		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

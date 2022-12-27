@@ -75,7 +75,6 @@ HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos)
 
 	CPage::PAGEINFO tPageInfo;
 	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
-	tPageInfo.ePageKind = tPageInfo.MOVE;
 
 	if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
 		return E_FAIL;

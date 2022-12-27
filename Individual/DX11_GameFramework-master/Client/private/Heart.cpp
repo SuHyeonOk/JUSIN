@@ -64,18 +64,6 @@ void CHeart::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (m_bPlayer_Collider)
-	{
-		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
-
-		m_dDead_TimeAcc += TimeDelta;
-		if (1 < m_dDead_TimeAcc)
-		{
-			CGameObject::Set_Dead();
-			m_dDead_TimeAcc = 0;
-		}
-	}
-
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -111,7 +99,7 @@ void CHeart::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		m_bPlayer_Collider = true;
+		CGameObject::Set_Dead();
 		CObj_Manager::GetInstance()->Set_Heart();
 	}
 }
@@ -138,7 +126,7 @@ HRESULT CHeart::SetUp_Components()
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 	ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))

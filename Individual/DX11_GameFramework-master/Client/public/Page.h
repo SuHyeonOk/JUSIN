@@ -17,10 +17,7 @@ class CPage final : public CGameObject
 public:
 	typedef struct tagPageInfo
 	{
-		enum PAGEKIND { IDLE, MOVE, PAGE_END };
-
 		_float3		fPos = _float3(0.f, 0.f, 0.f);
-		PAGEKIND	ePageKind;
 		
 	}PAGEINFO;
 

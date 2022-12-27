@@ -37,7 +37,7 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
 	if (nullptr != pArg)
-		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
+		memcpy(&MonsterDesc, pArg, sizeof(CM_Monster::MONSTERDESC));
 
 	m_tMonsterDesc.eMonsterKind = MonsterDesc.eMonsterKind;
 

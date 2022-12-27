@@ -37,7 +37,7 @@ HRESULT CKey::Initialize(void * pArg)
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(30.f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -54,6 +54,8 @@ HRESULT CKey::Initialize(void * pArg)
 void CKey::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
