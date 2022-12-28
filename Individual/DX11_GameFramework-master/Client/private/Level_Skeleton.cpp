@@ -30,8 +30,8 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_PreviousData()))
-		return E_FAIL;
+	//if (FAILED(Ready_PreviousData()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
@@ -45,23 +45,23 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
+		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+		return E_FAIL;
 
-	//// 파일 읽기
-	//Load_Food();
-	//Load_Coin();
-	//Load_Page();
-	//Load_Item();
-	////Load_Npc();
-	//Load_Object();
-	////Load_Monster();
+	// 파일 읽기
+	Load_Food();
+	Load_Coin();
+	Load_Page();
+	Load_Item();
+	//Load_Npc();
+	Load_Object();
+	//Load_Monster();
 
 
 	return S_OK;
@@ -153,7 +153,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Npc()
 	//CN_NPC::NPCDESC					tNpcDesc;
 	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
 	//tNpcDesc.TransformDesc.f3Pos = _float3(-9.8105f, 0.f, -5.1134f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
 	//	return E_FAIL;
 
 	//RELEASE_INSTANCE(CGameInstance);
@@ -190,7 +190,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
-	eCameraInfo.eLevel = LEVEL_SKELETON;
+	eCameraInfo.eLevel = LEVEL_GAMEPLAY;
 	eCameraInfo.f3Pos = _float3(-5.f, 0.f, 1.f);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
@@ -293,7 +293,7 @@ void CLevel_Skleton::ImGui_Food()
 
 			m_szObjName = m_wstObjName.c_str();	// wstring -> conat wchar*
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iRoyal_Tart_Count++;
@@ -309,7 +309,7 @@ void CLevel_Skleton::ImGui_Food()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iBurrito_Count++;
@@ -366,7 +366,7 @@ void CLevel_Skleton::ImGui_Coin()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
 
 			m_iCoinBronze_Count++;
@@ -382,7 +382,7 @@ void CLevel_Skleton::ImGui_Coin()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
 
 			m_iCoinSilver_Count++;
@@ -398,7 +398,7 @@ void CLevel_Skleton::ImGui_Coin()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
 
 			m_iCoinGold_Count++;
@@ -452,7 +452,7 @@ void CLevel_Skleton::ImGui_Page()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
 				return;
 
 			m_iPage_1_Count++;
@@ -502,7 +502,7 @@ void CLevel_Skleton::ImGui_Item()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Key"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Key"), &m_f3ClickPos)))
 				return;
 
 			m_iItem_Count++;
@@ -514,7 +514,7 @@ void CLevel_Skleton::ImGui_Item()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Heart"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Heart"), &m_f3ClickPos)))
 				return;
 
 			m_iItem_Count++;
@@ -569,7 +569,7 @@ void CLevel_Skleton::ImGui_Npc()
 
 	//		m_szObjName = m_wstObjName.c_str();
 
-	//		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
+	//		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
 	//			return;
 
 	//		m_iNpc_Count++;
@@ -619,7 +619,7 @@ void CLevel_Skleton::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -635,7 +635,7 @@ void CLevel_Skleton::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
 				return;
 
 			m_iObject_Count++;
@@ -647,7 +647,7 @@ void CLevel_Skleton::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -659,7 +659,7 @@ void CLevel_Skleton::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_O_PortalOff"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_PortalOff"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -713,7 +713,7 @@ void CLevel_Skleton::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -799,7 +799,7 @@ void CLevel_Skleton::Load_Food()
 
 			if (m_wstObjName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
 			}
 		}
@@ -816,7 +816,7 @@ void CLevel_Skleton::Load_Food()
 
 			if (m_wstObjName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return;
 			}
 		}
@@ -884,7 +884,7 @@ void CLevel_Skleton::Load_Coin()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 					return;
 			}
 		}
@@ -902,7 +902,7 @@ void CLevel_Skleton::Load_Coin()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 					return;
 			}
 		}
@@ -920,7 +920,7 @@ void CLevel_Skleton::Load_Coin()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 					return;
 			}
 		}
@@ -986,7 +986,7 @@ void CLevel_Skleton::Load_Page()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
 					return;
 			}
 		}
@@ -1049,7 +1049,7 @@ void CLevel_Skleton::Load_Item()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Key"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Key"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
@@ -1063,7 +1063,7 @@ void CLevel_Skleton::Load_Item()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Heart"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Heart"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
@@ -1130,7 +1130,7 @@ void CLevel_Skleton::Load_Npc()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcInfo)))
 					return;
 			}
 		}
@@ -1193,7 +1193,7 @@ void CLevel_Skleton::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_Box"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_Box"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
@@ -1225,7 +1225,7 @@ void CLevel_Skleton::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_BearTrap"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_BearTrap"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
@@ -1239,7 +1239,7 @@ void CLevel_Skleton::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_PortalOff"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_PortalOff"), &pObjInfo.ObjPos)))
 					return;
 			}
 		}
@@ -1306,7 +1306,7 @@ void CLevel_Skleton::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 					return;
 			}
 		}

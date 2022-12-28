@@ -141,28 +141,28 @@ HRESULT CCoin::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Model_CoinBronze"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Model_CoinSilver"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinSilver"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
 	{
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Model_CoinGold"), TEXT("Com_Model"),
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinGold"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}

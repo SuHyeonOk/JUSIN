@@ -818,6 +818,8 @@ HRESULT CLoader::Loading_ForSkeleton()
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	SkeletonTemp();
+
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
 
@@ -826,10 +828,7 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 #pragma region 버퍼
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 버퍼
-	/* For.Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
-		return E_FAIL;
+
 #pragma endregion
 
 #pragma region 모델
@@ -843,100 +842,29 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton/Skeleton.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	// Food
-	/* For.Prototype_Component_Model_Royal_Tart */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Royal_Tart"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Royal_Tart/Royal_Tart.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_Burrito */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Burrito"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Burrito/Burrito.fbx", PivotMatrix))))
-		return E_FAIL;
-	// Cyclop
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Cyclop_Tears"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Cyclop_Tears/Cyclop_Tears.fbx", PivotMatrix))))
-		return E_FAIL;
-	// Key
-	/* For.Prototype_Component_Model_Key */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Key"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Key/Key.fbx", PivotMatrix))))
-		return E_FAIL;
-	// Coin
-	/* For.Prototype_Component_Model_CoinBronze */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_CoinBronze"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_1_Bronze/Coin_1_Bronze.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_CoinSilver */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_CoinSilver"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_2_Silver/Coin_2_Silver.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_CoinGold */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_CoinGold"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx", PivotMatrix))))
-		return E_FAIL;
-	// Page
-	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
-		return E_FAIL;
 
-	// 3D Bullet
-	/* For.Prototype_Component_Model_B_Tree_Witch_Roots_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_B_Tree_Witch_Roots_FX"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Tree_Witch_Roots_FX/Tree_Witch_Roots_FX.fbx", PivotMatrix))))
-		return E_FAIL;
 
 	///////////////////////////////////////////////////////////// ANIM
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
-	// NPC
-	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
-		return E_FAIL;
 
-	// Obj
-	/* For.Prototype_Component_Model_O_BearTrap*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_O_BearTrap"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/BearTrap/BearTrap.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_O_Portal_Off*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_O_Portal_Off"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Object/Portal_Off/Portal_Off.fbx", PivotMatrix))))
-		return E_FAIL;
 
-	// Monster
-	/* For.Prototype_Component_Model_M_PigWarrior_BEE */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx", PivotMatrix))))
-		return E_FAIL;
+	//// Monster
+	///* For.Prototype_Component_Model_M_PigWarrior_BEE */
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx", PivotMatrix))))
+	//	return E_FAIL;
 #pragma endregion
 
 #pragma region 셰이더
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 셰이더
-	/* For.Prototype_Component_Shader_VtxNorTex */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
-		return E_FAIL;
 
-	/* For.Prototype_Component_Shader_VtxModel*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Shader_VtxModel"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxModel_Map*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Shader_VtxModel_Map"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_Map.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
-		return E_FAIL;
 #pragma endregion
 
 #pragma region 네비게이션
 	lstrcpy(m_szLoadingText, TEXT("네비게이션정보생성중"));
-	///* For.Prototype_Component_Navigation */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Navigation"),
-	//	CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
-	//	return E_FAIL;
+
 #pragma endregion
 
 #pragma region 객체
@@ -947,70 +875,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CMap_Skeleton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 													  
-	///* For.Prototype_GameObject_Terrain */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
-	//	CTerrain::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	//
-	////UI
-	///* For.Prototype_GameObject_UI_3DTexture */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-	//	CUI_Talk::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
-	//// 3DUI
-	///* For.Prototype_GameObject_UI_3DTexture */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
-	//	CUI_3DTexture::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
-	//// Obj
-	///* For.Prototype_GameObject_O_BearTrap */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
-	//	CO_BearTrap::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_O_Portal */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_PortalOff"),
-	//	CO_Portal::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
-	//// NPC
-	///* For.Prototype_GameObject_N_Bubblegum */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
-	//	CN_Bubblegum::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
-	//// Item
-	///* For.Prototype_GameObject_Food */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
-	//	CFood::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_Hp */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Hp"),
-	//	CFood::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_Key */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
-	//	CKey::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_Heart */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Heart"),
-	//	CHeart::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_Coin */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
-	//	CCoin::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_Page */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
-	//	CPage::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
-	//// Bullet
-	///* For.Prototype_GameObject_B_AnimBullet */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
-	//	CB_AnimBullet::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
 
 #pragma endregion
 
@@ -1023,8 +887,200 @@ HRESULT CLoader::Loading_ForSkeleton()
 	return S_OK;
 }
 
-void CLoader::SkeletonTemp()
+HRESULT CLoader::SkeletonTemp()
 {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	/* For.Prototype_Component_Navigation */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
+		return E_FAIL;
+
+	// 2D Bullet
+	/* For.Prototype_Component_Texture_B_Star */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Star/Star.png")))))
+		return E_FAIL;
+
+	// UI
+	/* For.Prototype_Component_Texture_UI_Talk */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
+		return E_FAIL;
+
+	// 3D UI
+	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
+		return E_FAIL;
+
+
+
+	/* For.Prototype_Component_VIBuffer_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+
+	_matrix			PivotMatrix = XMMatrixIdentity();
+
+	// Food
+	/* For.Prototype_Component_Model_Royal_Tart */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Royal_Tart/Royal_Tart.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Burrito */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Burrito/Burrito.fbx", PivotMatrix))))
+		return E_FAIL;
+	// Cyclop
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cyclop_Tears"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Cyclop_Tears/Cyclop_Tears.fbx", PivotMatrix))))
+		return E_FAIL;
+	// Key
+	/* For.Prototype_Component_Model_Key */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Key"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Key/Key.fbx", PivotMatrix))))
+		return E_FAIL;
+	// Coin
+	/* For.Prototype_Component_Model_CoinBronze */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinBronze"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_1_Bronze/Coin_1_Bronze.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_CoinSilver */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinSilver"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_2_Silver/Coin_2_Silver.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_CoinGold */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinGold"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx", PivotMatrix))))
+		return E_FAIL;
+	// Page
+	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// 3D Bullet
+	/* For.Prototype_Component_Model_B_Tree_Witch_Roots_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_Tree_Witch_Roots_FX"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Tree_Witch_Roots_FX/Tree_Witch_Roots_FX.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// NPC
+	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// Obj
+	/* For.Prototype_Component_Model_O_BearTrap*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/BearTrap/BearTrap.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_O_Portal_Off*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Portal_Off"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Object/Portal_Off/Portal_Off.fbx", PivotMatrix))))
+		return E_FAIL;
+
+
+
+
+
+	/* For.Prototype_Component_Shader_VtxNorTex */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxModel*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxModel_Map*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel_Map"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_Map.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
+		return E_FAIL;
+
+
+
+
+
+
+	/* For.Prototype_GameObject_Terrain */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	//UI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
+		CUI_Talk::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// 3DUI
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
+		CUI_3DTexture::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Obj
+	/* For.Prototype_GameObject_O_BearTrap */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
+		CO_BearTrap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_O_Portal */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_PortalOff"),
+		CO_Portal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// NPC
+	/* For.Prototype_GameObject_N_Bubblegum */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
+		CN_Bubblegum::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Item
+	/* For.Prototype_GameObject_Food */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Food"),
+		CFood::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Hp"),
+		CFood::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Key */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Key"),
+		CKey::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Heart */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Heart"),
+		CHeart::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Coin */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Coin"),
+		CCoin::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Page */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Page"),
+		CPage::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Bullet
+	/* For.Prototype_GameObject_B_AnimBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
+		CB_AnimBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
 }
 
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVEL eNextLevelID)

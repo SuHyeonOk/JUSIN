@@ -30,7 +30,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		m_szObjName = m_wstObjName.c_str(); // wstring -> conat wchar*
 
-		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 
@@ -45,7 +45,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		m_szObjName = m_wstObjName.c_str(); 
 
-		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 
@@ -60,7 +60,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		m_szObjName = m_wstObjName.c_str(); 
 
-		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
 	}
 
@@ -76,7 +76,7 @@ HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos)
 	CPage::PAGEINFO tPageInfo;
 	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
