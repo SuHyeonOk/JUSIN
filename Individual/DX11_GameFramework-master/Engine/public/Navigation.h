@@ -39,6 +39,7 @@ public:
 	void	Set_CellIndex(_int iCellIndex);
 
 	HRESULT	Cell_Create(CELLINFO tCellInfo);
+	HRESULT Ready_NextLevel(const _tchar* pNavigationDataFilePath);
 
 public:
 	_bool isMove_OnNavigation(_fvector TargetPos);

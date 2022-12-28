@@ -42,7 +42,7 @@ void CObj_Manager::Tick_Player_Transform()
 _vector			CObj_Manager::Get_Player_Transform()
 {
 	if (m_bNextLevel)
-		return;
+		return _vector();
 
 	// 현재 Player 를 확인하고 그 Player 의 Transform 을 넘겨준다.
 

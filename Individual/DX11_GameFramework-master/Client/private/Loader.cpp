@@ -821,27 +821,7 @@ HRESULT CLoader::Loading_ForSkeleton()
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
 
-	// 2D Bullet
-	/* For.Prototype_Component_Texture_B_Star */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_B_Star"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Star/Star.png")))))
-		return E_FAIL;
 
-	// UI
-	/* For.Prototype_Component_Texture_UI_Talk */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_UI_Talk"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
-		return E_FAIL;
-
-	// 3D UI
-	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
-		return E_FAIL;
 #pragma endregion
 
 #pragma region 버퍼
@@ -953,14 +933,20 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 #pragma region 네비게이션
 	lstrcpy(m_szLoadingText, TEXT("네비게이션정보생성중"));
-	/* For.Prototype_Component_Navigation */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
-		return E_FAIL;
+	///* For.Prototype_Component_Navigation */
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Navigation"),
+	//	CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
+	//	return E_FAIL;
 #pragma endregion
 
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
+	 // Map
+	 /* For.Prototype_GameObject_Map_Skeleton */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton"),
+		CMap_Skeleton::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+													  
 	///* For.Prototype_GameObject_Terrain */
 	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 	//	CTerrain::Create(m_pDevice, m_pContext))))
@@ -993,12 +979,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
 	//	CN_Bubblegum::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
-
-	// Map
-	/* For.Prototype_GameObject_Map_Skeleton */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton"),
-		CMap_Skeleton::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 
 	//// Item
 	///* For.Prototype_GameObject_Food */
@@ -1041,6 +1021,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+void CLoader::SkeletonTemp()
+{
 }
 
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVEL eNextLevelID)

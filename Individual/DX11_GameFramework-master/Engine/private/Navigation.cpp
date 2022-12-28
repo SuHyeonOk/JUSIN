@@ -282,6 +282,87 @@ HRESULT CNavigation::Ready_Neighbor()
 	return S_OK;
 }
 
+HRESULT CNavigation::Ready_NextLevel(const _tchar * pNavigationDataFilePath)
+{
+	m_Cells.clear();
+
+	wifstream		fin(pNavigationDataFilePath, ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load Navigation");
+		return E_FAIL;
+	}
+
+	_tchar szNavigatType[MAX_PATH] = L"";
+
+	_tchar szPosX_0[MAX_PATH] = L"";
+	_tchar szPosY_0[MAX_PATH] = L"";
+	_tchar szPosZ_0[MAX_PATH] = L"";
+
+	_tchar szPosX_1[MAX_PATH] = L"";
+	_tchar szPosY_1[MAX_PATH] = L"";
+	_tchar szPosZ_1[MAX_PATH] = L"";
+
+	_tchar szPosX_2[MAX_PATH] = L"";
+	_tchar szPosY_2[MAX_PATH] = L"";
+	_tchar szPosZ_2[MAX_PATH] = L"";
+
+	_int		iNavigatType = 0;
+	_float3		vPoints[CCell::POINT_END];
+
+	while (true)
+	{
+		fin.getline(szNavigatType, MAX_PATH, '|');
+
+		fin.getline(szPosX_0, MAX_PATH, '|');
+		fin.getline(szPosY_0, MAX_PATH, '|');
+		fin.getline(szPosZ_0, MAX_PATH, '|');
+
+		fin.getline(szPosX_1, MAX_PATH, '|');
+		fin.getline(szPosY_1, MAX_PATH, '|');
+		fin.getline(szPosZ_1, MAX_PATH, '|');
+
+		fin.getline(szPosX_2, MAX_PATH, '|');
+		fin.getline(szPosY_2, MAX_PATH, '|');
+		fin.getline(szPosZ_2, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		iNavigatType = (_int)_wtof(szNavigatType);
+
+		vPoints[0].x = (_float)_wtof(szPosX_0);
+		vPoints[0].y = (_float)_wtof(szPosY_0);
+		vPoints[0].z = (_float)_wtof(szPosZ_0);
+
+		vPoints[1].x = (_float)_wtof(szPosX_1);
+		vPoints[1].y = (_float)_wtof(szPosY_1);
+		vPoints[1].z = (_float)_wtof(szPosZ_1);
+
+		vPoints[2].x = (_float)_wtof(szPosX_2);
+		vPoints[2].y = (_float)_wtof(szPosY_2);
+		vPoints[2].z = (_float)_wtof(szPosZ_2);
+
+		if (813 <= m_Cells.size())
+			_int a = 0;
+		CCell*	pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size(), iNavigatType);
+		if (nullptr == pCell)
+			return E_FAIL;
+
+		m_Cells.push_back(pCell);
+	}
+
+	if (FAILED(Ready_Neighbor()))
+		return E_FAIL;
+
+	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Navigation.hlsl"), VTXPOS_DECLARATION::Elements, VTXPOS_DECLARATION::iNumElements);
+	if (nullptr == m_pShader)
+		return E_FAIL;
+
+	return S_OK;
+}
+
 #endif // _DEBUG
 
 CNavigation * CNavigation::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pNavigationDataFilePath)

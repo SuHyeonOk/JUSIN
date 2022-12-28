@@ -169,7 +169,7 @@ HRESULT CJake::SetUp_Components()
 
 	NaviDesc.iCurrentIndex = 0;
 
-	if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
 
@@ -365,7 +365,7 @@ void CJake::Player_Follow(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	// Finnxx 에게로
+	// Finn 에게로
 	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 	_vector vPlayerPos;

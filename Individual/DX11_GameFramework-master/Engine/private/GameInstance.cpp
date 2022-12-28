@@ -117,7 +117,6 @@ void CGameInstance::Clear_Level(_uint iLevelIndex)
 		return;
 
 	m_pObject_Manager->Clear(iLevelIndex);
-
 }
 
 HRESULT CGameInstance::Clear_Graphic_Device(const _float4 * pColor)

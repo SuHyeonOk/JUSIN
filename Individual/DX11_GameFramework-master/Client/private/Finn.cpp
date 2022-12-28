@@ -188,7 +188,7 @@ HRESULT CFinn::SetUp_Components()
 
 	NaviDesc.iCurrentIndex = 0;
 
-	if (FAILED(__super::Add_Component(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
 

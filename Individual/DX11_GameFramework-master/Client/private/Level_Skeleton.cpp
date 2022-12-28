@@ -30,6 +30,9 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_PreviousData()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
 
@@ -37,6 +40,9 @@ HRESULT CLevel_Skleton::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
 	//if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -47,25 +53,6 @@ HRESULT CLevel_Skleton::Initialize()
 
 	//if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
 	//	return E_FAIL;
-
-	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
-		return E_FAIL;
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CTransform * pObjTransformCom;
-	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 6.f));
-
-	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-6.f, 0.f, 6.f));
-
-	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
-
-	CObj_Manager::GetInstance()->Set_NextLevel(false);
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	//// 파일 읽기
 	//Load_Food();
@@ -127,6 +114,35 @@ HRESULT CLevel_Skleton::Ready_Lights()
 
 HRESULT CLevel_Skleton::Ready_PreviousData()
 {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CNavigation * pObjNavigationCom = nullptr;
+
+	CTransform * pObjTransformCom;
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 6.f));
+
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-6.f, 0.f, 6.f));
+
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
+
+	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));	
+	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
+	pObjNavigationCom->Set_CellIndex(2);
+
+	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
+	pObjNavigationCom->Set_CellIndex(2);
+
+	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_BackGround"), TEXT("Com_Navigation"), 0));
+	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
+
+	CObj_Manager::GetInstance()->Set_NextLevel(false);
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
@@ -161,7 +177,7 @@ HRESULT CLevel_Skleton::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -176,7 +192,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
 	eCameraInfo.eLevel = LEVEL_SKELETON;
 	eCameraInfo.f3Pos = _float3(-5.f, 0.f, 1.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
