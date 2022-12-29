@@ -348,6 +348,9 @@
     <ClInclude Include="..\public\M_Ghost.h">
       <Filter>02.GameObjects\Monster\Ghost</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\W_GhostFist.h">
+      <Filter>02.GameObjects\Monster\Ghost</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -522,6 +525,9 @@
       <Filter>02.GameObjects\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\private\M_Ghost.cpp">
+      <Filter>02.GameObjects\Monster\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\W_GhostFist.cpp">
       <Filter>02.GameObjects\Monster\Ghost</Filter>
     </ClCompile>
   </ItemGroup>

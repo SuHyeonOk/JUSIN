@@ -25,6 +25,8 @@ private:
 	virtual HRESULT		SetUp_Components()						override;
 	virtual HRESULT		SetUp_ShaderResources()					override;
 
+	HRESULT				Ready_Parts();
+
 private:
 	virtual void		Monster_Tick(const _double& TimeDelta)	override;
 	virtual void		Idle_Tick(const _double& TimeDelta)		override;
@@ -35,10 +37,11 @@ private:
 	virtual	void		Die_Tick()								override;
 
 private:
-	_float4				m_f4CenterPos;
+	vector<CGameObject*>	m_MonsterParts;
+	_float4					m_f4CenterPos;
 
-	_bool				m_bAttack = false;
-	_double				m_dBullet_TimeAcc = 0;
+	_bool					m_bAttack = false;
+	_double					m_dBullet_TimeAcc = 0;
 	_int m_i = 0;
 public:
 	static	CM_Ghost*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

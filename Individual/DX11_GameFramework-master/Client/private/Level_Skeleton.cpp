@@ -125,6 +125,16 @@ HRESULT CLevel_Skleton::Ready_TestLevel()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
 		return E_FAIL;
 
+	tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_2;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 7.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+		return E_FAIL;
+
+	tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_3;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 9.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

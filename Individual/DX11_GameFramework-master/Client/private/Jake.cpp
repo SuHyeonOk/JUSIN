@@ -117,7 +117,7 @@ HRESULT CJake::Render()
 
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+ 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -636,9 +636,9 @@ void CJake::Hit_Tick(_double TimeDelta)
 	m_OnMove = false;
 
 	if (7 <= m_pModelCom->Get_Keyframes())
-		m_pTransformCom->Go_Backward(0);
+		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
 	else
-		m_pTransformCom->Go_Backward(TimeDelta);
+		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
 
 	if (m_pModelCom->Get_Finished())
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);

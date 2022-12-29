@@ -35,6 +35,7 @@
 
 // Weapon
 #include "W_PigWarrior.h"
+#include "W_GhostFist.h"
 
 // Item
 #include "Food.h"
@@ -890,6 +891,12 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_M_Ghost */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Ghost"),
 		CM_Ghost::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// MonsterWeapon
+	/* For.Prototype_GameObject_W_GhostFist */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_W_GhostFist"),
+		CW_GhostFist::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

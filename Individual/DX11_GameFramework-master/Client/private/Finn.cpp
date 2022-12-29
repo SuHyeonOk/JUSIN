@@ -676,9 +676,9 @@ void CFinn::Hit_Tick(_double TimeDelta)
 
 	m_dHit_TimeAcc += TimeDelta;
 	if (0.22 < m_dHit_TimeAcc)
-		m_pTransformCom->Go_Backward(0);
+		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
 	else
-		m_pTransformCom->Go_Backward(TimeDelta);
+		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
 
 	if (m_pModelCom->Get_Finished())
 	{

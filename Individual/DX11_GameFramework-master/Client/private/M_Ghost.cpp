@@ -6,6 +6,9 @@
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
 
+#include "Bone.h"
+#include "W_GhostFist.h"
+
 CM_Ghost::CM_Ghost(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
 {
@@ -54,6 +57,9 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 	m_tMonsterInfo.iExp		= 60;
 	m_tMonsterInfo.iAttack	= 20;
 
+	if (FAILED(Ready_Parts()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -61,8 +67,10 @@ void CM_Ghost::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if(m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
+		m_MonsterParts[0]->Tick(TimeDelta);
 
-
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 
 	Monster_Tick(TimeDelta);
 }
@@ -70,6 +78,9 @@ void CM_Ghost::Tick(_double TimeDelta)
 void CM_Ghost::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
+		m_MonsterParts[0]->Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -166,6 +177,33 @@ HRESULT CM_Ghost::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CM_Ghost::Ready_Parts()
+{
+	CGameObject*		pPartObject = nullptr;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CW_GhostFist::WEAPONDESC			WeaponDesc;
+	ZeroMemory(&WeaponDesc, sizeof(CW_GhostFist::WEAPONDESC));
+
+	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("R_Arm_03");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_W_GhostFist"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+	
+	m_MonsterParts.push_back(pPartObject);
+	
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -283,11 +321,8 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 		_float4 f4PlaterPos;
 		XMStoreFloat4(&f4PlaterPos, vPlayerPos);
 
-		_float fRandomNum;
-		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.2f);
-		f4PlaterPos.x += fRandomNum;
-		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.2f);
-		f4PlaterPos.z += fRandomNum;
+		f4PlaterPos.x += 0.7f;
+		f4PlaterPos.z += 0.7f;
 
 		vPlayerPos = XMLoadFloat4(&f4PlaterPos);
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPlayerPos);
@@ -351,5 +386,7 @@ void CM_Ghost::Free()
 {
 	__super::Free();
 
-
+	for (auto& pPart : m_MonsterParts)
+		Safe_Release(pPart);
+	m_MonsterParts.clear();
 }

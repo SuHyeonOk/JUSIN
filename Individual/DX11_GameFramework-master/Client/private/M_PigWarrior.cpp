@@ -97,7 +97,6 @@ void CM_PigWarrior::Late_Tick(_double TimeDelta)
 
 	m_MonsterParts[0]->Late_Tick(TimeDelta);
 	m_MonsterParts[1]->Late_Tick(TimeDelta);
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

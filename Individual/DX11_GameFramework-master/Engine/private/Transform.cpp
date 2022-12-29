@@ -195,7 +195,7 @@ void CTransform::Go_Straight(_double TimeDelta, _float fSpeed, CNavigation* pNav
 	}
 }
 
-void CTransform::Go_Backward(_double TimeDelta)
+void CTransform::Go_Backward(_double TimeDelta, CNavigation* pNaviCom)
 {
 	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
 	_vector	vLook = Get_State(CTransform::STATE_LOOK);
@@ -203,7 +203,14 @@ void CTransform::Go_Backward(_double TimeDelta)
 	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
 	vPosition -= XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
 
-	Set_State(CTransform::STATE_TRANSLATION, vPosition);
+	if (nullptr == pNaviCom)	// 네비 안 쓰는 객체
+		Set_State(CTransform::STATE_TRANSLATION, vPosition);
+
+	else	 // 네비 쓰는 객체
+	{
+		if (true == pNaviCom->isMove_OnNavigation(vPosition))
+			Set_State(CTransform::STATE_TRANSLATION, vPosition);
+	}
 }
 
 void CTransform::Go_Left(_double TimeDelta)
