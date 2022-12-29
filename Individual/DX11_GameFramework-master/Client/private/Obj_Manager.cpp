@@ -128,7 +128,8 @@ void		CObj_Manager::Tick(_double TimeDelta)
 		m_dPlayerAttck_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayerAttck_TimeAcc)
 		{
-			if (0 < m_tPlayerInfo.iHp) m_tPlayerInfo.iHp -= m_iMonster_Attck;
+			if (0 < m_tPlayerInfo.iHp) 
+				m_tPlayerInfo.iHp -= m_iMonster_Attck;
 			
 			m_iMonster_Attck = 0;
 			m_dPlayerAttck_TimeAcc = 0;

@@ -55,6 +55,7 @@
 #include "M_Tree_Witch.h"
 #include "M_Magic_Man.h"
 #include "M_Mimic.h"
+#include "M_Ghost.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -846,15 +847,25 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 	///////////////////////////////////////////////////////////// ANIM
 
+
+
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
+	// Monster
+	/* For.Prototype_Component_Model_M_Ghost_1 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Ghost/Ghost_1/Ghost_1.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Ghost_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Ghost/Ghost_2/Ghost_2.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Ghost_3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Ghost/Ghost_3/Ghost_3.fbx", PivotMatrix))))
+		return E_FAIL;
 
 
-	//// Monster
-	///* For.Prototype_Component_Model_M_PigWarrior_BEE */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_PigWarrior_BEE"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Pig/PigWarrior_BEE/PigWarrior_BEE.fbx", PivotMatrix))))
-	//	return E_FAIL;
 #pragma endregion
 
 #pragma region ¼ÎÀÌ´õ
@@ -875,6 +886,12 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CMap_Skeleton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 													  
+	// Monster
+	/* For.Prototype_GameObject_M_Ghost */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Ghost"),
+		CM_Ghost::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 #pragma endregion
 

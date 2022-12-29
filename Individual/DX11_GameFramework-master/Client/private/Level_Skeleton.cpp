@@ -30,6 +30,9 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_TestLevel()))
+		return E_FAIL;
+
 	//if (FAILED(Ready_PreviousData()))
 	//	return E_FAIL;
 
@@ -105,6 +108,21 @@ HRESULT CLevel_Skleton::Ready_Lights()
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Skleton::Ready_TestLevel()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CM_Monster::MONSTERDESC tMonsterDesc;
+	tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_1;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

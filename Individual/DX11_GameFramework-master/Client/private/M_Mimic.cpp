@@ -101,6 +101,14 @@ void CM_Mimic::On_Collision(CGameObject * pOther)
 {
 	CM_Monster::On_Collision(pOther);
 
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	{
+		if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
+		{
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+			CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tMonsterInfo.iAttack);
+		}
+	}
 }
 
 HRESULT CM_Mimic::SetUp_Components()

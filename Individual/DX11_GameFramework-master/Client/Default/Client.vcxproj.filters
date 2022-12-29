@@ -151,6 +151,9 @@
     <Filter Include="01.Levels\03.Skeleton">
       <UniqueIdentifier>{cc3e2287-42e1-4d72-b5ed-d07acf538ef3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Ghost">
+      <UniqueIdentifier>{a10ea468-e9ed-4109-a1c7-6df0b2c6c816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -342,6 +345,9 @@
     <ClInclude Include="..\public\O_Portal.h">
       <Filter>02.GameObjects\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Ghost.h">
+      <Filter>02.GameObjects\Monster\Ghost</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -514,6 +520,9 @@
     </ClCompile>
     <ClCompile Include="..\private\O_Portal.cpp">
       <Filter>02.GameObjects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Ghost.cpp">
+      <Filter>02.GameObjects\Monster\Ghost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

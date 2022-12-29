@@ -109,15 +109,6 @@ HRESULT CW_PigWarrior::Render()
 
 void CW_PigWarrior::On_Collision(CGameObject * pOther)
 {
-	//if (L"PigWarrior_Cylinder" == m_wsTag)
-	//{
-
-	//}
-	//else
-	//{
-
-	//}
-
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
