@@ -36,6 +36,7 @@
 // Weapon
 #include "W_PigWarrior.h"
 #include "W_GhostFist.h"
+#include "W_Skeleton_Shield.h"
 
 // Item
 #include "Food.h"
@@ -57,6 +58,7 @@
 #include "M_Magic_Man.h"
 #include "M_Mimic.h"
 #include "M_Ghost.h"
+#include "M_Skeleton_Shield.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -865,6 +867,32 @@ HRESULT CLoader::Loading_ForSkeleton()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_3"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Ghost/Ghost_3/Ghost_3.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Archer_3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_3/Skeleton_Archer_3.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Archer_4 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_4/Skeleton_Archer_4.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Shield_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Shield_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Shield_2/Skeleton_Shield_2.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Shield_4 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Shield_4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Shield_4/Skeleton_Shield_4.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// Weapon
+	/* For.Prototype_Component_Model_W_skeleton_sword */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_W_skeleton_sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/skeleton_sword/skeleton_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_skeleton_shield */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_W_skeleton_shield"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/skeleton_shield/skeleton_shield.fbx", PivotMatrix))))
+		return E_FAIL;
 
 
 #pragma endregion
@@ -892,11 +920,19 @@ HRESULT CLoader::Loading_ForSkeleton()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Ghost"),
 		CM_Ghost::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_M_Skeleton_Shield */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Skeleton_Shield"),
+		CM_Skeleton_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// MonsterWeapon
 	/* For.Prototype_GameObject_W_GhostFist */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_W_GhostFist"),
 		CW_GhostFist::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_W_Skeleton_Shield */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_W_Skeleton_Shield"),
+		CW_Skeleton_Shield::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

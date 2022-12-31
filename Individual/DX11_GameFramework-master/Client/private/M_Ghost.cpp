@@ -85,7 +85,7 @@ void CM_Ghost::Late_Tick(_double TimeDelta)
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CM_Ghost::Render()
@@ -96,6 +96,8 @@ HRESULT CM_Ghost::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
+	m_pShaderCom->Begin(1);
+
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
@@ -103,7 +105,7 @@ HRESULT CM_Ghost::Render()
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 	}
 
 	return S_OK;
@@ -321,8 +323,11 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 		_float4 f4PlaterPos;
 		XMStoreFloat4(&f4PlaterPos, vPlayerPos);
 
-		f4PlaterPos.x += 0.7f;
-		f4PlaterPos.z += 0.7f;
+		_float fRandomNum;
+		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		f4PlaterPos.x += fRandomNum;
+		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		f4PlaterPos.z += fRandomNum;
 
 		vPlayerPos = XMLoadFloat4(&f4PlaterPos);
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPlayerPos);

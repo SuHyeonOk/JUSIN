@@ -84,7 +84,7 @@ void CB_2DBullet::Tick(_double TimeDelta)
 
 	// 플레이어의 몇 틱 전의 좌표를 받아와서 총알을 날린다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 

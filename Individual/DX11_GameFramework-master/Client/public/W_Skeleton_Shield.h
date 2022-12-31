@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CW_PigWarrior final : public CGameObject
+class CW_Skeleton_Shield final : public CGameObject
 {
 public:
 	typedef struct tagWeaponDesc
@@ -22,7 +22,7 @@ public:
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
 		
-		enum WARRIORTYPE { SWORD, CYLINDER, WARRIORTYPE_END };
+		enum WARRIORTYPE { SWORD, SHIELD, WARRIORTYPE_END };
 
 		WARRIORTYPE			eWarriorType = WARRIORTYPE_END;
 		_int				iAttack;
@@ -30,9 +30,9 @@ public:
 	}WEAPONDESC;
 
 private:
-	CW_PigWarrior(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CW_PigWarrior(const CW_PigWarrior& rhs);
-	virtual ~CW_PigWarrior() = default;
+	CW_Skeleton_Shield(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CW_Skeleton_Shield(const CW_Skeleton_Shield& rhs);
+	virtual ~CW_Skeleton_Shield() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -42,6 +42,9 @@ public:
 	virtual HRESULT Render() override;
 
 	virtual void	On_Collision(CGameObject* pOther) override;
+
+public:
+	void			Set_Attack_Collision(_bool bAttack) { m_bAttack = bAttack; }
 
 private:
 	CShader*				m_pShaderCom = nullptr;
@@ -54,13 +57,16 @@ private:
 	_float4x4				m_SocketMatrix;
 
 private:
-	HRESULT			SetUp_Components();
-	HRESULT			SetUp_ShaderResources();
+	HRESULT SetUp_Components();
+	HRESULT SetUp_ShaderResources();
+
+private:
+	_bool					m_bAttack = false;
 
 public:
-	static CW_PigWarrior*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject*	Clone(void* pArg = nullptr) override;
-	virtual void			Free() override;
+	static CW_Skeleton_Shield* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject* Clone(void* pArg = nullptr) override;
+	virtual void Free() override;
 };
 
 END

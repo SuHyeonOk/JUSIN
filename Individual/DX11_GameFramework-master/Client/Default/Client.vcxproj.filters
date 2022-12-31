@@ -154,6 +154,12 @@
     <Filter Include="02.GameObjects\Monster\Ghost">
       <UniqueIdentifier>{a10ea468-e9ed-4109-a1c7-6df0b2c6c816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Skeleton_Shield">
+      <UniqueIdentifier>{caf37783-85e4-45da-9594-19abb2749b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Skeleton_Archer">
+      <UniqueIdentifier>{b19ab74e-108f-421b-873e-f66cc82ebc8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -351,6 +357,15 @@
     <ClInclude Include="..\public\W_GhostFist.h">
       <Filter>02.GameObjects\Monster\Ghost</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Skeleton_Shield.h">
+      <Filter>02.GameObjects\Monster\Skeleton_Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\W_Skeleton_Shield.h">
+      <Filter>02.GameObjects\Monster\Skeleton_Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\M_Skeleton_Archer.h">
+      <Filter>02.GameObjects\Monster\Skeleton_Archer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -529,6 +544,15 @@
     </ClCompile>
     <ClCompile Include="..\private\W_GhostFist.cpp">
       <Filter>02.GameObjects\Monster\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Skeleton_Shield.cpp">
+      <Filter>02.GameObjects\Monster\Skeleton_Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\W_Skeleton_Shield.cpp">
+      <Filter>02.GameObjects\Monster\Skeleton_Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Skeleton_Archer.cpp">
+      <Filter>02.GameObjects\Monster\Skeleton_Archer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

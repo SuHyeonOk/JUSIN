@@ -70,7 +70,7 @@ void CO_TextureObject::Tick(_double TimeDelta)
 
 	//// 카메라를 바라본다.
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	//RELEASE_INSTANCE(CGameInstance);
 

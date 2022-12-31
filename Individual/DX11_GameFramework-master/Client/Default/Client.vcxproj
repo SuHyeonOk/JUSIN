@@ -205,6 +205,8 @@
     <ClInclude Include="..\public\M_Monster.h" />
     <ClInclude Include="..\public\M_Pigs.h" />
     <ClInclude Include="..\public\M_PigWarrior.h" />
+    <ClInclude Include="..\public\M_Skeleton_Archer.h" />
+    <ClInclude Include="..\public\M_Skeleton_Shield.h" />
     <ClInclude Include="..\public\M_Tree_Witch.h" />
     <ClInclude Include="..\public\N_Bubblegum.h" />
     <ClInclude Include="..\public\N_KeyMan.h" />
@@ -229,6 +231,7 @@
     <ClInclude Include="..\public\Utilities_Manager.h" />
     <ClInclude Include="..\public\W_GhostFist.h" />
     <ClInclude Include="..\public\W_PigWarrior.h" />
+    <ClInclude Include="..\public\W_Skeleton_Shield.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -268,6 +271,8 @@
     <ClCompile Include="..\private\M_Monster.cpp" />
     <ClCompile Include="..\private\M_Pigs.cpp" />
     <ClCompile Include="..\private\M_PigWarrior.cpp" />
+    <ClCompile Include="..\private\M_Skeleton_Archer.cpp" />
+    <ClCompile Include="..\private\M_Skeleton_Shield.cpp" />
     <ClCompile Include="..\private\M_Tree_Witch.cpp" />
     <ClCompile Include="..\private\N_Bubblegum.cpp" />
     <ClCompile Include="..\private\N_KeyMan.cpp" />
@@ -292,6 +297,7 @@
     <ClCompile Include="..\private\Utilities_Manager.cpp" />
     <ClCompile Include="..\private\W_GhostFist.cpp" />
     <ClCompile Include="..\private\W_PigWarrior.cpp" />
+    <ClCompile Include="..\private\W_Skeleton_Shield.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
