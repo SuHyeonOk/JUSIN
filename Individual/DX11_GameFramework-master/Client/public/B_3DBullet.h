@@ -17,7 +17,7 @@ class CB_3DBullet final : public CGameObject
 public:
 	typedef struct tagRandomBulletInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum ANIMBULLETTYPE { TYPE_MAGIC, TYPE_END };
+		enum ANIMBULLETTYPE { TYPE_MAGIC, TYPE_SKELETON, TYPE_END };
 
 		ANIMBULLETTYPE	eBulletType = TYPE_END;
 

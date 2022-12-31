@@ -16,6 +16,8 @@
 #include "Coin.h"
 #include "Page.h"
 
+#include "B_3DBullet.h"
+
 CLevel_Skleton::CLevel_Skleton(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -135,15 +137,27 @@ HRESULT CLevel_Skleton::Ready_TestLevel()
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
+	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
+	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+	//	return E_FAIL;
+
+	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
+	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+	//	return E_FAIL;
+
+	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
 	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
 		return E_FAIL;
 
-	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
+	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
 	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
 		return E_FAIL;
+
+
 
 	RELEASE_INSTANCE(CGameInstance);
 

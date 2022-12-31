@@ -59,6 +59,7 @@
 #include "M_Mimic.h"
 #include "M_Ghost.h"
 #include "M_Skeleton_Shield.h"
+#include "M_Skeleton_Archer.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -894,6 +895,12 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/skeleton_shield/skeleton_shield.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// Bullet
+	/* For.Prototype_Component_Model_B_Bone */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_B_Bone"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Bone/Bone.fbx", PivotMatrix))))
+		return E_FAIL;
+
 
 #pragma endregion
 
@@ -923,6 +930,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_M_Skeleton_Shield */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Skeleton_Shield"),
 		CM_Skeleton_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Skeleton_Archer */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Skeleton_Archer"),
+		CM_Skeleton_Archer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// MonsterWeapon
@@ -1136,7 +1147,10 @@ HRESULT CLoader::SkeletonTemp()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
 		CB_AnimBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	/* For.Prototype_GameObject_B_RandomBullet */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
+		CB_3DBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 

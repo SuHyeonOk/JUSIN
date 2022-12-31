@@ -62,39 +62,8 @@ HRESULT CM_Skeleton_Archer::Initialize(void * pArg)
 void CM_Skeleton_Archer::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	cout << m_i << endl;
-
-	if (pGameInstance->Key_Down(DIK_P))
-	{
-		m_i++;
-	}
-	if (pGameInstance->Key_Down(DIK_O))
-	{
-		m_i--;
-	}
-	m_pModelCom->Set_AnimIndex(m_i, false);
-
-	// 0 : 발견
-	// 1 : 조이기
-	// 2 : 놓치기
-	// 3 : 발 춤추기
-	// 4 : 뒤로 넘어갈랑
-	// 5 : 오 Hit
-	// 6 : 왼 Hit
-	// 7 : IDLE
-	// 8 : MOVE
-	// 9 : 조이기2
-	// 10 : 앞으로 한 발 뛰고 공중
-	// 11 : 뒤로 한 발 뛰고 공중
-	// 12 : 황소 뒤로 발차듯이
-	// 13 : 이상한 껑충
-	// 14 : 막기
-	// 15 : 막다가 Hit
-
-	RELEASE_INSTANCE(CGameInstance);
-//	Monster_Tick(TimeDelta);
+	Monster_Tick(TimeDelta);
 }
 
 void CM_Skeleton_Archer::Late_Tick(_double TimeDelta)
@@ -160,6 +129,8 @@ HRESULT CM_Skeleton_Archer::SetUp_Components()
 			return E_FAIL;
 	}
 
+
+
 	CCollider::COLLIDERDESC			ColliderDesc;
 
 	/* For.Com_AABB */
@@ -199,21 +170,33 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 	if (0 >= m_tMonsterInfo.iHp)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
+	// 0 : 안 에서 던지기
+	// 1 : 밖에서 던지기
+	// 2 : 죽음
+	// 3 : 넘어져 있음
+	// 4 : 일어남
+	// 5 : 춤ㅈㅁ
+	// 6 : 목돌아감
+	// 7 : 히트
+	// 8 : 이거 히트
+	// 9 : 아이들
+	// 10 : 걷기
+
 	switch (m_tMonsterInfo.eState)
 	{
 	case MONSTERINFO::STATE::IDLE:
 		Idle_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(7, false);
+		m_pModelCom->Set_AnimIndex(9, false);
 		break;
 
 	case MONSTERINFO::STATE::MOVE:
 		Move_Tick(TimeDelta);
-		m_pModelCom->Set_AnimIndex(9, false);
+		m_pModelCom->Set_AnimIndex(10, false);
 		break;
 
 	case MONSTERINFO::STATE::FIND:
 		Find_Tick();
-		m_pModelCom->Set_AnimIndex(4, false);
+		m_pModelCom->Set_AnimIndex(6, false);
 		break;
 
 	case MONSTERINFO::STATE::ATTACK:
@@ -223,12 +206,12 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::HIT:
 		Hit_Tick();
-		m_pModelCom->Set_AnimIndex(5, false);
+		m_pModelCom->Set_AnimIndex(8, false);
 		break;
 
 	case MONSTERINFO::STATE::DIE:
 		Die_Tick();
-		m_pModelCom->Set_AnimIndex(3, false);
+		m_pModelCom->Set_AnimIndex(2, false);
 		break;
 	}
 }
@@ -236,11 +219,11 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 void CM_Skeleton_Archer::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 3.f > fDistance)
+	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	if (m_bAttack && 50 <= m_pModelCom->Get_Keyframes())
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	//if (m_bAttack && 50 <= m_pModelCom->Get_Keyframes())
+	//	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
@@ -249,7 +232,7 @@ void CM_Skeleton_Archer::Idle_Tick(const _double& TimeDelta)
 void CM_Skeleton_Archer::Move_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 3.f > fDistance)
+	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
 	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 2.5))
@@ -269,34 +252,33 @@ void CM_Skeleton_Archer::Find_Tick()
 
 void CM_Skeleton_Archer::Attack_Tick(const _double& TimeDelta)
 {
-	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
-	if (0 != iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
-		return;
+	if (m_pModelCom->Get_Finished())
+	{
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_bAttack = true;
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	m_bAttack = true;
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		// 내 좌표
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
 
-	// 내 좌표
-	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4	f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
+		// 플레이어 좌표
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4	f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-	// 플레이어 좌표
-	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-	_float4	f4PlayerPos;
-	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		CB_3DBullet::NONANIMBULLETINFO	tBulletInfo;
+		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+		tBulletInfo.eBulletType = tBulletInfo.TYPE_SKELETON;
+		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
+		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_B_RandomBullet_Skeleton_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+			return;
 
-	CB_3DBullet::NONANIMBULLETINFO	tBulletInfo;
-	tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
-	tBulletInfo.eBulletType = tBulletInfo.TYPE_MAGIC;
-	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
-	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Magic_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
-		return;
-
-	RELEASE_INSTANCE(CGameInstance);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 void CM_Skeleton_Archer::Hit_Tick()
