@@ -265,7 +265,6 @@ void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::HIT:
 		Hit_Tick();
-		m_pModelCom->Set_AnimIndex(2, false);
 		break;
 
 	case MONSTERINFO::STATE::DIE:
@@ -335,9 +334,7 @@ void CM_Skeleton_Shield::Attack_Tick(const _double& TimeDelta)
 {
 	m_bFind = false;
 
-	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
-
-	if (0 == iRandomNum && m_pModelCom->Get_Finished())	// 랜덤으로 0이 들어오면 바로 MOVE로 가고, 1일 때는 ATTACK 이다.
+	if (m_pModelCom->Get_Finished())
 	{
 		m_bAttack = true;
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
@@ -346,8 +343,30 @@ void CM_Skeleton_Shield::Attack_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Hit_Tick()
 {
-	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	if (!m_bDefense)
+	{
+		m_bDefense = true;
+		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
+	}
+
+	if (0 == m_iRandomNum)
+	{
+		m_pModelCom->Set_AnimIndex(2, false);
+		if (m_pModelCom->Get_Finished())
+		{
+			m_bDefense = false;
+			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+		}
+	}
+	else
+	{
+		m_pModelCom->Set_AnimIndex(3, false);
+		if (m_pModelCom->Get_Finished())
+		{
+			m_bDefense = false;
+			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+		}
+	}
 }
 
 void CM_Skeleton_Shield::Die_Tick()

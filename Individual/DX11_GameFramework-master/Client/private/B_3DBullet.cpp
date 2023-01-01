@@ -31,7 +31,7 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
 
 	m_wsTag = L"3DBullet";
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 
@@ -59,23 +59,15 @@ void CB_3DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-
-
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
 	{
-		_vector	vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_vector	vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		m_pTransformCom->Go_Straight(TimeDelta);
 
-		/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함한다. */
-		vPosition += XMVector3Normalize(vLook) * 5.f * _float(TimeDelta);
-
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPosition);
+		//m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.f, 0.0f, 1.f), 0.f);
 	}
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 플레이어를 향해 회전하며 날아가는 총알
 		Magic_Tick(TimeDelta);
-
-
 }
 
 void CB_3DBullet::Late_Tick(_double TimeDelta)

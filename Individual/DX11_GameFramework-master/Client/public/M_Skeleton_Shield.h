@@ -43,6 +43,9 @@ private:
 	_bool					m_bFind = false;
 	_bool					m_bAttack = false;
 
+	_int					m_iRandomNum = 0;
+	_bool					m_bDefense = false;
+
 public:
 	static	CM_Skeleton_Shield*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;

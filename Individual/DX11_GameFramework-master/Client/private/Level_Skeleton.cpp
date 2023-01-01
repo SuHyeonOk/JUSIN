@@ -142,20 +142,20 @@ HRESULT CLevel_Skleton::Ready_TestLevel()
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
+	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
+	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+		return E_FAIL;
+
+	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
 	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
-	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
-		return E_FAIL;
-
-	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
-	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
-		return E_FAIL;
+	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
+	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
+	//	return E_FAIL;
 
 
 
