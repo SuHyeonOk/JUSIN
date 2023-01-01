@@ -160,6 +160,9 @@
     <Filter Include="02.GameObjects\Monster\Skeleton_Archer">
       <UniqueIdentifier>{b19ab74e-108f-421b-873e-f66cc82ebc8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\NPC\Doctor">
+      <UniqueIdentifier>{d64680aa-4922-48dc-90fd-50e3d4fcadcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -366,6 +369,9 @@
     <ClInclude Include="..\public\M_Skeleton_Archer.h">
       <Filter>02.GameObjects\Monster\Skeleton_Archer</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\N_Doctor.h">
+      <Filter>02.GameObjects\NPC\Doctor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -553,6 +559,9 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Skeleton_Archer.cpp">
       <Filter>02.GameObjects\Monster\Skeleton_Archer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_Doctor.cpp">
+      <Filter>02.GameObjects\NPC\Doctor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -200,15 +200,15 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 
 HRESULT CLevel_Skleton::Ready_Layer_Npc()
 {
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//CN_NPC::NPCDESC					tNpcDesc;
-	//tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	//tNpcDesc.TransformDesc.f3Pos = _float3(-9.8105f, 0.f, -5.1134f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
-	//	return E_FAIL;
+	CN_NPC::NPCDESC					tNpcDesc;
+	tNpcDesc.eNpcType = tNpcDesc.DOCTOR;
+	tNpcDesc.TransformDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Doctor__0"), TEXT("Prototype_GameObject_N_Doctor"), &tNpcDesc)))
+		return E_FAIL;
 
-	//RELEASE_INSTANCE(CGameInstance);
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }

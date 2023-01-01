@@ -111,6 +111,9 @@ HRESULT CM_Skeleton_Shield::Render()
 
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
+	if (0 == m_iRandomNum)
+		return;
+
 	CM_Monster::On_Collision(pOther);
 }
 
@@ -351,7 +354,7 @@ void CM_Skeleton_Shield::Hit_Tick()
 
 	if (0 == m_iRandomNum)
 	{
-		m_pModelCom->Set_AnimIndex(2, false);
+		m_pModelCom->Set_AnimIndex(3, false);
 		if (m_pModelCom->Get_Finished())
 		{
 			m_bDefense = false;
@@ -360,7 +363,7 @@ void CM_Skeleton_Shield::Hit_Tick()
 	}
 	else
 	{
-		m_pModelCom->Set_AnimIndex(3, false);
+		m_pModelCom->Set_AnimIndex(2, false);
 		if (m_pModelCom->Get_Finished())
 		{
 			m_bDefense = false;

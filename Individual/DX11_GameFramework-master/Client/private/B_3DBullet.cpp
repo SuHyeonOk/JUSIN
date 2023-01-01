@@ -61,7 +61,7 @@ void CB_3DBullet::Tick(_double TimeDelta)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta);
+		m_pTransformCom->Go_Straight(TimeDelta, 7.f);
 
 		//m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.f, 0.0f, 1.f), 0.f);
 	}

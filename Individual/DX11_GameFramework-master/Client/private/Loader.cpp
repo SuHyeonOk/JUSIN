@@ -25,6 +25,7 @@
 // NPC
 #include "N_Bubblegum.h"
 #include "N_KeyMan.h"
+#include "N_Doctor.h"
 
 // Skill
 #include "S_Change_Magic.h"
@@ -901,6 +902,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Bone/Bone.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// Npc
+	/* For.Prototype_Component_Model_N_Doctor_Princess */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_N_Doctor_Princess"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Doctor Princess/Doctor Princess.fbx", PivotMatrix))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -946,6 +952,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 		CW_Skeleton_Shield::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Npc
+	/* For.Prototype_GameObject_N_Doctor */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Doctor"),
+		CN_Doctor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 

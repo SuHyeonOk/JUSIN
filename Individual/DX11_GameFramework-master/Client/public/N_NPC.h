@@ -17,7 +17,7 @@ class CN_NPC abstract : public CGameObject
 public:
 	typedef struct tagNpcInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum NPC { BUBBLEGUM, KEYMAN, NPC_END };
+		enum NPC { BUBBLEGUM, KEYMAN, DOCTOR, NPC_END };
 
 		NPC		eNpcType = NPC_END;
 
