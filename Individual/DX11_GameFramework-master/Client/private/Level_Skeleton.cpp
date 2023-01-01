@@ -66,7 +66,7 @@ HRESULT CLevel_Skleton::Initialize()
 	Load_Item();
 	//Load_Npc();
 	Load_Object();
-	//Load_Monster();
+	Load_Monster();
 
 
 	return S_OK;
@@ -76,7 +76,7 @@ void CLevel_Skleton::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
+	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
 }
 
 void CLevel_Skleton::Late_Tick(_double TimeDelta)
@@ -142,10 +142,10 @@ HRESULT CLevel_Skleton::Ready_TestLevel()
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
 	//	return E_FAIL;
 
-	tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
-	tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
-		return E_FAIL;
+	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
+	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+	//	return E_FAIL;
 
 	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
 	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
@@ -740,7 +740,9 @@ void CLevel_Skleton::ImGui_Object()
 
 void CLevel_Skleton::ImGui_Monster()
 {
-	const _char* szObjName[] = { "" };
+	const _char* szObjName[] = { "Ghost_1", "Ghost_2", "Ghost_3", 
+		"Skeleton_Archer_1", "Skeleton_Archer_2", 
+		"Skeleton_Shield_1", "Skeleton_Shield_2" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -757,15 +759,107 @@ void CLevel_Skleton::ImGui_Monster()
 
 		if (0 == iObjNum)
 		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
+			tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_1;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
-			m_wstObjName = L"Layer_PigWarrior_BEE__";
+			m_wstObjName = L"Layer_Ghost_1__";
 			m_wstObjName += to_wstring(m_iMonster_Count);
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (1 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_2;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Ghost_2__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (2 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_3;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Ghost_3__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+
+		if (3 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Skeleton_Archer_1__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (4 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Skeleton_Archer_2__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+
+		if (5 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Skeleton_Shield_1__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
+		if (6 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Skeleton_Shield_2__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -1348,21 +1442,118 @@ void CLevel_Skleton::Load_Monster()
 	{
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.W_BEE;
+			tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_1;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
-			m_wstObjName = L"Layer_PigWarrior_BEE__";
+			m_wstObjName = L"Layer_Ghost_1__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_2;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Ghost_2__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_3;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Ghost_3__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
 					return;
 			}
 		}
 
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Skeleton_Archer_1__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Skeleton_Archer_2__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
+					return;
+			}
+		}
+
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Skeleton_Shield_1__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
+			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+
+			m_wstObjName = L"Layer_Skeleton_Shield_2__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+					return;
+			}
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

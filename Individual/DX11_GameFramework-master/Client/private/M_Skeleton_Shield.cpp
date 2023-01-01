@@ -324,7 +324,7 @@ void CM_Skeleton_Shield::Find_Tick()
 {
 	m_bFind = true;	// 플레이어를 찾았다면 플레이어에게 다가가기 위해서 MOVE로 이동한다.
 
-	if(m_pModelCom->Get_Finished())//if (25 == m_pModelCom->Get_Keyframes())
+	if(m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
