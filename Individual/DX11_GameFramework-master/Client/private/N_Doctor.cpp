@@ -48,7 +48,7 @@ HRESULT CN_Doctor::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(45.f));
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(-45.f));
 	m_pModelCom->Set_AnimIndex(0);
 
 	return S_OK;

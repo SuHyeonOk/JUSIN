@@ -48,8 +48,13 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
 	{
-		_vector vTargetPos = XMLoadFloat4(&_float4(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f));
-		m_pTransformCom->LookAt(vTargetPos);
+		//_vector vTargetPos = XMLoadFloat4(&_float4(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f));
+		//m_pTransformCom->LookAt(vTargetPos);
+
+		_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vDistance = vPlayerPos - vMyPos;
+		XMStoreFloat4(&m_f4Distance, vDistance);
 	}
 
 	return S_OK;
@@ -61,9 +66,15 @@ void CB_3DBullet::Tick(_double TimeDelta)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
 	{
-		m_pTransformCom->Go_Straight(TimeDelta, 7.f);
+		m_pTransformCom->Turn(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), TimeDelta * 15);
 
-		//m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.f, 0.0f, 1.f), 0.f);
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vDistance = XMLoadFloat4(&m_f4Distance);
+		vMyPos += XMVector3Normalize(vDistance) * 7.f * _float(TimeDelta);
+
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
+
+		//m_pTransformCom->Go_Straight(TimeDelta, 7.f);
 	}
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 플레이어를 향해 회전하며 날아가는 총알
@@ -78,7 +89,7 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 		Magic_LateTick(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());

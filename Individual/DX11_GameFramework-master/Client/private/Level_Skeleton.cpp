@@ -1540,7 +1540,7 @@ void CLevel_Skleton::Load_Monster()
 		}
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
+			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
 			m_wstObjName = L"Layer_Skeleton_Shield_2__";

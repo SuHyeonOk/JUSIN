@@ -111,10 +111,10 @@ HRESULT CM_Skeleton_Shield::Render()
 
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
-	if (0 == m_iRandomNum)
-		return;
-
-	CM_Monster::On_Collision(pOther);
+  	if (!m_bDefense)
+		CM_Monster::On_Collision(pOther);
+	else
+		m_bDefense = false;
 }
 
 HRESULT CM_Skeleton_Shield::SetUp_Components()
@@ -346,27 +346,25 @@ void CM_Skeleton_Shield::Attack_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Hit_Tick()
 {
-	if (!m_bDefense)
-	{
-		m_bDefense = true;
-		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
-	}
-
 	if (0 == m_iRandomNum)
+		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(1, 2);
+
+	if (1 == m_iRandomNum)
 	{
-		m_pModelCom->Set_AnimIndex(3, false);
+		m_pModelCom->Set_AnimIndex(3, false);	// ¹æ¾î
 		if (m_pModelCom->Get_Finished())
 		{
-			m_bDefense = false;
+			m_iRandomNum = 0;
+			m_bDefense = true;
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}
 	}
 	else
 	{
-		m_pModelCom->Set_AnimIndex(2, false);
+		m_pModelCom->Set_AnimIndex(2, false);	// Hit
 		if (m_pModelCom->Get_Finished())
 		{
-			m_bDefense = false;
+			m_iRandomNum = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}
 	}

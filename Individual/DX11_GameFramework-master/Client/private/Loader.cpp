@@ -90,6 +90,9 @@ _uint APIENTRY LoadingThread(void* pArg)
 	case LEVEL_SKELETON:
 		pLoader->Loading_ForSkeleton();
 		break;
+	case LEVEL_SKELETON_BOSS:
+		pLoader->Loading_ForSkeleton_Boss();
+		break;
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -959,6 +962,40 @@ HRESULT CLoader::Loading_ForSkeleton()
 		return E_FAIL;
 
 #pragma endregion
+
+	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
+
+	m_isFinished = true;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForSkeleton_Boss()
+{
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
+
+	_matrix			PivotMatrix = XMMatrixIdentity();
+
+	// Map
+	/* For.Prototype_Component_Model_Skeleton_Boss */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Skeleton_Boss"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 

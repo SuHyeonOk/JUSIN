@@ -9,4 +9,3 @@ Layer_BearTrap__3|-29.9113|0|54.2462
 Layer_BearTrap__4|-3.80544|0|42.158
 Layer_BearTrap__5|-21.5377|0|40.7809
 Layer_BearTrap__6|-33.3288|0|42.9744
-Layer_Portal__1|-9.34006|0|-9.16281

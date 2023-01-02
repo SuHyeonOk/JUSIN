@@ -117,7 +117,7 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 	//	CGameObject::Set_Dead();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CB_2DBullet::Render()
