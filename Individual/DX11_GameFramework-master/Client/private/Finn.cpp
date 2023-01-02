@@ -7,6 +7,9 @@
 #include "Bone.h"
 #include "Finn_Weapon.h"
 
+#include "Skill_Manager.h"
+#include "S_PaintWork.h"
+
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -377,6 +380,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Space_Attack_Tick(TimeDelta);
 		break;
 
+	case CObj_Manager::PLAYERINFO::PAINT: // 11
+		Attack_Paint_Tick(TimeDelta);
+		break;
+
 	case CObj_Manager::PLAYERINFO::ROLL:
 		Roolling_Tick(TimeDelta);
 		break;
@@ -406,6 +413,7 @@ void CFinn::Current_Player(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)					// Player 나라면
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
+		Player_Skill_Tick(TimeDelta);
 
 		// 플레이어의 스킬 때 키 입력을 받지 않는다.
 		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
@@ -417,6 +425,26 @@ void CFinn::Current_Player(_double TimeDelta)
 	{
 		Player_Follow(TimeDelta);									// Player 가 내가 아니라면 따라간다.								
 		Check_Follow(TimeDelta);									// Player 근처에 내가 있는지 확인한다. 수정 : 내 주변 셀을 입력한다.
+	}
+}
+
+void CFinn::Player_Skill_Tick(_double TimeDelta)
+{
+	cout << CObj_Manager::GetInstance()->Get_Current_Player().eState << endl;
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_bSkill = true;
+	}
+
+	if (m_bSkill)
+	{
+		m_dSkill_TimeAcc += TimeDelta;
+		if (7 < m_dSkill_TimeAcc)
+		{
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+			m_bSkill = false;
+			m_dSkill_TimeAcc = 0;
+		}
 	}
 }
 
@@ -519,52 +547,6 @@ void CFinn::Check_Follow(_double TimeDelta)
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
-
-	//// 일정시간 동안 Jake 가 근처에 있지 않다면 Jake 를 내 근처로 이동시킨다.
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
-
-	//_vector vPlayerPos;
-	//vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake 좌표 받아옴
-
-	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-	//_vector		vDir = vPlayerPos - vMyPos; // 내 좌표가 객체를 바라보는 방향 벡터 (Jaek <- Finn)
-
-	//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
-
-	//if (5.f < fDistanceX)	// 거리가 5이상일 때
-	//{
-	//	m_dNotfollow_TimeAcc += TimeDelta;
-	//	if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
-	//	{
-	//		_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	//		_float		fLookX = XMVectorGetX(vMyLook);
-	//		_float		fLookZ = XMVectorGetZ(vMyLook);
-
-	//		_float fAddX, fAddZ;
-	//		if (0 < fLookX)		// +
-	//			fAddX = 1.2f;
-	//		else				// -
-	//			fAddX = -1.2f;
-
-	//		if (0 < fLookZ)
-	//			fAddZ = 1.2f;
-	//		else
-	//			fAddZ = -1.2f;
-
-	//		CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY,	TEXT("Layer_Jake"), TEXT("Prototype_Component_Navigation"), 0));
-
-	//		_float4 f4MyPos;
-	//		XMStoreFloat4(&f4MyPos, vMyPos);
- //			pJakeTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), pNavigationCom);	// 내 옆으로 옮김
-
-	//		m_dNotfollow_TimeAcc = 0;
-	//	}
-	//}
-
-	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFinn::Key_Input(_double TimeDelta)
@@ -640,8 +622,22 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 #pragma endregion
 
+	if (pGameInstance->Key_Down(DIK_T))
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
+
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+	{
+		if (m_bSkill)
+		{
+			if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			{
+				m_bPaint = false;
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::PAINT);
+			}
+		}
+		else
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+	}
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -655,6 +651,36 @@ void CFinn::Space_Attack_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+}
+
+void CFinn::Attack_Paint_Tick(_double TimeDelta)
+{
+	m_OnMove = false;
+
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	// 1) 총 스킬이 재생되어야 하는 시간을 체크하는 Tick
+	// 2) 스페이스바를 누르면 그 때 마다 객체가 생성되어야 하는 Tick
+
+	if (!m_bPaint)
+	{
+		m_bPaint = true;
+
+		// 스킬 생성
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CS_PaintWork::PAINTWORKINFO		tPaintWorkInfo;
+		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+			return;
+		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+			return;
+		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+			return;
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 void CFinn::Roolling_Tick(_double TimeDelta)
@@ -879,6 +905,10 @@ void CFinn::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::ATTACK:
 			m_pModelCom->Set_AnimIndex(5, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::PAINT:
+			m_pModelCom->Set_AnimIndex(18, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:

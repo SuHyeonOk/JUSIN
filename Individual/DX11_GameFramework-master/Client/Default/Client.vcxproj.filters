@@ -166,6 +166,9 @@
     <Filter Include="01.Levels\04. Skeleton_Boss">
       <UniqueIdentifier>{c977b577-42fa-42e1-b162-6f240b368d9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\PaintWork">
+      <UniqueIdentifier>{8c412210-a00d-4c07-bc9e-2529ba8361ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -381,6 +384,9 @@
     <ClInclude Include="..\public\Map_Skeleton_Boss.h">
       <Filter>02.GameObjects\Map</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_PaintWork.h">
+      <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -577,6 +583,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Map_Skeleton_Boss.cpp">
       <Filter>02.GameObjects\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_PaintWork.cpp">
+      <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

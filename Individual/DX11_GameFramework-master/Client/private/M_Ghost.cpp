@@ -70,8 +70,6 @@ void CM_Ghost::Tick(_double TimeDelta)
 	if(m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		m_MonsterParts[0]->Tick(TimeDelta);
 
-	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
-
 	Monster_Tick(TimeDelta);
 }
 

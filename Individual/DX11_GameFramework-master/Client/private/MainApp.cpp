@@ -15,6 +15,7 @@
 #include "Finn_Weapon.h"
 #include "Jake_Weapon.h"
 #include "S_StunChick.h"
+#include "S_PaintWork.h"
 
 #include "O_TextureObject.h"
 
@@ -317,6 +318,23 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_GameObject_S_StunChick */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_StunChick"),
 		CS_StunChick::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_S_PaintWork_Blue */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_PaintWork_Blue"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Skill/PaintWork/PaintWork_Blue/PaintWork_Blue.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_PaintWork_Magenta */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_PaintWork_Magenta"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Skill/PaintWork/PaintWork_Magenta/PaintWork_Magenta.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_PaintWork_Yellow */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_PaintWork_Yellow"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Skill/PaintWork/PaintWork_Yellow/PaintWork_Yellow.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_S_PaintWork */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_PaintWork"),
+		CS_PaintWork::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

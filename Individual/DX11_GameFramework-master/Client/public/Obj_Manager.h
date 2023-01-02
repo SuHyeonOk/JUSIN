@@ -24,7 +24,7 @@ public:
 
 		enum STATE {
 			IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, STUN, DIE, CHANGE, CHEERING, 
-			SWIM,
+			SWIM, PAINT,
 			TREEWITCH, MAGIC, STATE_END
 		};
 		STATE		eState;		// 현재 상태

@@ -10,6 +10,13 @@ class CSkill_Manager : public CBase
 	DECLARE_SINGLETON(CSkill_Manager)
 
 public:
+	typedef struct tagPlyaerSkill
+	{
+		enum SKILL { PAINT, SKILL_END };
+		SKILL		eSkill;
+
+	}PLAYERSKILL;
+
 	typedef struct tagPlayerMagicSkill
 	{
 		enum SKILLSTATE { IDLE, RUN, ATTACK, HIT, SKILLSTATE_END };
@@ -29,6 +36,9 @@ public:
 	virtual ~CSkill_Manager() = default;
 
 public:		// 플레이어
+	PLAYERSKILL					Get_Player_Skill() { return m_tPlayerSkill; }
+	void						Set_Player_Skill(PLAYERSKILL::SKILL eSkillState) { m_tPlayerSkill.eSkill = eSkillState; }
+
 	MAGICSKILL					Get_Magic_Skill() { return m_tMagicSkill; }
 	void						Set_Magic_Skill(MAGICSKILL::SKILLSTATE eSkillState) { m_tMagicSkill.eSkill = eSkillState; }
 
@@ -39,6 +49,7 @@ public:		// 몬스터
 	//void						Set_TreeWitch_Skill(MONSTERSKILL::TREEWITCH eTreeWitch) { m_tMonsterSkill.eTreeWitch = eTreeWitch; }
 
 private:	// 플레이어
+	PLAYERSKILL		m_tPlayerSkill;
 	MAGICSKILL		m_tMagicSkill;
 
 
