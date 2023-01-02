@@ -10,6 +10,7 @@
 // Map
 #include "Map_Garden.h"
 #include "Map_Skeleton.h"
+#include "Map_Skeleton_Boss.h"
 
 // UI
 #include "UI_Talk.h"
@@ -161,12 +162,6 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
-		return E_FAIL;
-
-	// SktBox
-	/* For.Prototype_Component_Texture_Sky */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
@@ -455,20 +450,11 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
-	///* For.Prototype_Component_Texture_Terrain */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile%d.dds"), 2))))
-	//	return E_FAIL;
-
-	///* For.Prototype_Component_Texture_Brush*/
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Brush.png"), 1))))
-	//	return E_FAIL;
-
-	///* For.Prototype_Component_Texture_Filter */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Filter"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Filter.bmp"), 1))))
-	//	return E_FAIL;
+	// SktBox
+	/* For.Prototype_Component_Texture_Sky_Garden */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky_Garden"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Garden.dds")))))
+		return E_FAIL;
 
 	// 2D Bullet
 	/* For.Prototype_Component_Texture_B_Star */
@@ -831,7 +817,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
-
+	 // SktBox
+	 /* For.Prototype_Component_Texture_Sky_Garden_Night */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_Sky_Garden_Night"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Garden_Night.dds")))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -977,7 +967,14 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	SkeletonTemp();
+
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+	// SktBox
+	/* For.Prototype_Component_Texture_Sky_Dead */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Texture_Sky_Dead"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Dead.dds")))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
 
@@ -987,7 +984,7 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 
 	// Map
 	/* For.Prototype_Component_Model_Skeleton_Boss */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_Skeleton_Boss"),
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_Skeleton_Boss"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
 		return E_FAIL;
 
@@ -996,6 +993,11 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+	// Map
+	/* For.Prototype_GameObject_Map_Skeleton */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton_Boss"),
+		CMap_Skleton_Boss::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 

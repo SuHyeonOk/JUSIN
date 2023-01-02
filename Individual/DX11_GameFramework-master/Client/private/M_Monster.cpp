@@ -45,8 +45,6 @@ void CM_Monster::Tick(const _double& TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
-
 	if (m_bPlayer_Attack)
 	{
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
@@ -66,6 +64,7 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

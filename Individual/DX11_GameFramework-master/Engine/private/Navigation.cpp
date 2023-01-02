@@ -228,13 +228,13 @@ HRESULT CNavigation::Render()
 
 	if (-1 == m_NaviDesc.iCurrentIndex)
 	{
-		fHeight = 0.1f;
+		fHeight = 0.05f;
 		HRESULT hr = m_pShader->Set_RawValue("g_fHeight", &fHeight, sizeof(_float));
 		m_pShader->Set_RawValue("g_vColor", &_float4(0.f, 1.f, 0.f, 1.f), sizeof(_float4));
 	}
 	else
 	{
-		fHeight = 0.12f;
+		fHeight = 0.1f;
 		HRESULT hr = m_pShader->Set_RawValue("g_fHeight", &fHeight, sizeof(_float));
 		m_pShader->Set_RawValue("g_vColor", &_float4(1.f, 0.f, 0.f, 1.f), sizeof(_float4));
 

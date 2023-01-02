@@ -2,6 +2,8 @@
 #include "..\public\Sky.h"
 #include "GameInstance.h"
 
+#include "Obj_Manager.h"
+
 CSky::CSky(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -80,10 +82,27 @@ HRESULT CSky::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky"), TEXT("Com_Texture"),
-		(CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky_Garden"), TEXT("Com_Texture"),
+			(CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_Sky_Garden_Night"), TEXT("Com_Texture"),
+			(CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Texture_Sky_Dead"), TEXT("Com_Texture"),
+			(CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Cube"), TEXT("Com_VIBuffer"),
@@ -101,7 +120,7 @@ HRESULT CSky::SetUp_ShaderResources()
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 2)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

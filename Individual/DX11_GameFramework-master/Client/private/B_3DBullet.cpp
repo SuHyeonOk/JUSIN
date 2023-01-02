@@ -85,8 +85,18 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
+	// 积己 饶 老历矫埃 第 昏力
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	
 		Magic_LateTick(TimeDelta);
+	else
+	{
+		m_dBullet_TimeAcc += TimeDelta;
+		if (1 < m_dBullet_TimeAcc)
+		{
+			CGameObject::Set_Dead();
+			m_dBullet_TimeAcc = 0;
+		}
+	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

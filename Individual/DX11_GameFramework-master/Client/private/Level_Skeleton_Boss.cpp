@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\public\Level_Skeleton.h"
+#include "..\public\Level_Skeleton_Boss.h"
 
 #include <fstream> // @
 #include "Imgui_PropertyEditor.h"	// @
@@ -18,13 +18,13 @@
 
 #include "B_3DBullet.h"
 
-CLevel_Skleton::CLevel_Skleton(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CLevel_Skleton_Boss::CLevel_Skleton_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
 
 }
 
-HRESULT CLevel_Skleton::Initialize()
+HRESULT CLevel_Skleton_Boss::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -32,14 +32,8 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TestLevel()))
-		return E_FAIL;
-
 	//if (FAILED(Ready_PreviousData()))
 	//	return E_FAIL;
-
-	if (FAILED(Ready_Layer_Npc()))
-		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
 		return E_FAIL;
@@ -47,10 +41,10 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
+	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton_Boss"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
+	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton_Boss"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -62,33 +56,32 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
 		return E_FAIL;
 
-	// 파일 읽기
-	Load_Food();
-	Load_Coin();
-	Load_Page();
-	Load_Item();
-	//Load_Npc();
-	Load_Object();
-	Load_Monster();
+	//// 파일 읽기
+	//Load_Food();
+	//Load_Coin();
+	//Load_Page();
+	//Load_Item();
+	//Load_Object();
+	//Load_Monster();
 
 
 	return S_OK;
 }
 
-void CLevel_Skleton::Tick(_double TimeDelta)
+void CLevel_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
+	//ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
 }
 
-void CLevel_Skleton::Late_Tick(_double TimeDelta)
+void CLevel_Skleton_Boss::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
 }
 
-HRESULT CLevel_Skleton::Render()
+HRESULT CLevel_Skleton_Boss::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -98,7 +91,7 @@ HRESULT CLevel_Skleton::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Lights()
+HRESULT CLevel_Skleton_Boss::Ready_Lights()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -120,54 +113,7 @@ HRESULT CLevel_Skleton::Ready_Lights()
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_TestLevel()
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CM_Monster::MONSTERDESC tMonsterDesc;
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_1;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_2;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 7.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_3;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 9.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_Skleton::Ready_PreviousData()
+HRESULT CLevel_Skleton_Boss::Ready_PreviousData()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -201,22 +147,7 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_Npc()
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CN_NPC::NPCDESC					tNpcDesc;
-	tNpcDesc.eNpcType = tNpcDesc.DOCTOR;
-	tNpcDesc.TransformDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Doctor__0"), TEXT("Prototype_GameObject_N_Doctor"), &tNpcDesc)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_Skleton::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -228,7 +159,7 @@ HRESULT CLevel_Skleton::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_BackGround(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -240,11 +171,11 @@ HRESULT CLevel_Skleton::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_SkyBox(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_SkyBox(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_Sky"))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, pLayerTag, TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -252,7 +183,7 @@ HRESULT CLevel_Skleton::Ready_Layer_SkyBox(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_Camera(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -267,7 +198,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Camera(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_Finn(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_Finn(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -279,7 +210,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Finn(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_Jake(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_Jake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -291,11 +222,11 @@ HRESULT CLevel_Skleton::Ready_Layer_Jake(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_Map_Skeleton"))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, pLayerTag, TEXT("Prototype_GameObject_Map_Skeleton_Boss"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -303,7 +234,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-void CLevel_Skleton::ImGui()
+void CLevel_Skleton_Boss::ImGui()
 {
 	ImGui::Begin("GamePlayTool");
 
@@ -331,7 +262,7 @@ void CLevel_Skleton::ImGui()
 	return;
 }
 
-void CLevel_Skleton::ImGui_Food()
+void CLevel_Skleton_Boss::ImGui_Food()
 {
 #pragma region Food
 	const _char* szObjName[] = { "Royal_Tart", "Burrito" };
@@ -404,7 +335,7 @@ void CLevel_Skleton::ImGui_Food()
 #pragma endregion Food
 }
 
-void CLevel_Skleton::ImGui_Coin()
+void CLevel_Skleton_Boss::ImGui_Coin()
 {
 	const _char* szObjName[] = { "CoinBronze", "CoinSilver", "CoinGold" };
 	static int iObjNum = 0;
@@ -492,7 +423,7 @@ void CLevel_Skleton::ImGui_Coin()
 		WinExec("notepad.exe ../../Data/Skeleton_Coin.txt", SW_SHOW);
 }
 
-void CLevel_Skleton::ImGui_Page()
+void CLevel_Skleton_Boss::ImGui_Page()
 {
 	const _char* szObjName[] = { "Page_1" };
 	static int iObjNum = 0;
@@ -546,7 +477,7 @@ void CLevel_Skleton::ImGui_Page()
 		WinExec("notepad.exe ../../Data/Skeleton_Page.txt", SW_SHOW);
 }
 
-void CLevel_Skleton::ImGui_Item()
+void CLevel_Skleton_Boss::ImGui_Item()
 {
 	const _char* szObjName[] = { "Key", "Heart" };
 	static int iObjNum = 0;
@@ -608,7 +539,7 @@ void CLevel_Skleton::ImGui_Item()
 		WinExec("notepad.exe ../../Data/Skeleton_Item.txt", SW_SHOW);
 }
 
-void CLevel_Skleton::ImGui_Npc()
+void CLevel_Skleton_Boss::ImGui_Npc()
 {
 	const _char* szObjName[] = { "" };
 	static int iObjNum = 0;
@@ -663,7 +594,7 @@ void CLevel_Skleton::ImGui_Npc()
 		WinExec("notepad.exe ../../Data/Skeleton_Npc.txt", SW_SHOW);
 }
 
-void CLevel_Skleton::ImGui_Object()
+void CLevel_Skleton_Boss::ImGui_Object()
 {
 	const _char* szObjName[] = { "Box", "Portal", "BearTrap", "PortalOff" };
 	static int iObjNum = 0;
@@ -753,7 +684,7 @@ void CLevel_Skleton::ImGui_Object()
 		WinExec("notepad.exe ../../Data/Skeleton_Object.txt", SW_SHOW);
 }
 
-void CLevel_Skleton::ImGui_Monster()
+void CLevel_Skleton_Boss::ImGui_Monster()
 {
 	const _char* szObjName[] = { "Ghost_1", "Ghost_2", "Ghost_3", 
 		"Skeleton_Archer_1", "Skeleton_Archer_2", 
@@ -902,7 +833,7 @@ void CLevel_Skleton::ImGui_Monster()
 		WinExec("notepad.exe ../../Data/Skeleton_Monster.txt", SW_SHOW);
 }
 
-void CLevel_Skleton::Load_Food()
+void CLevel_Skleton_Boss::Load_Food()
 {
 	wifstream		fin("../../Data/Skeleton_Food.txt", ios::in);
 
@@ -986,7 +917,7 @@ void CLevel_Skleton::Load_Food()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_Skleton::Load_Coin()
+void CLevel_Skleton_Boss::Load_Coin()
 {
 	wifstream		fin("../../Data/Skeleton_Coin.txt", ios::in);
 
@@ -1090,7 +1021,7 @@ void CLevel_Skleton::Load_Coin()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_Skleton::Load_Page()
+void CLevel_Skleton_Boss::Load_Page()
 {
 	wifstream		fin("../../Data/Skeleton_Page.txt", ios::in);
 
@@ -1156,7 +1087,7 @@ void CLevel_Skleton::Load_Page()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_Skleton::Load_Item()
+void CLevel_Skleton_Boss::Load_Item()
 {
 	wifstream		fin("../../Data/Skeleton_Item.txt", ios::in);
 
@@ -1233,7 +1164,7 @@ void CLevel_Skleton::Load_Item()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_Skleton::Load_Npc()
+void CLevel_Skleton_Boss::Load_Npc()
 {
 	wifstream		fin("../../Data/Skeleton_Npc.txt", ios::in);
 
@@ -1300,7 +1231,7 @@ void CLevel_Skleton::Load_Npc()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_Skleton::Load_Object()
+void CLevel_Skleton_Boss::Load_Object()
 {
 	wifstream		fin("../../Data/Skeleton_Object.txt", ios::in);
 
@@ -1409,7 +1340,7 @@ void CLevel_Skleton::Load_Object()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_Skleton::Load_Monster()
+void CLevel_Skleton_Boss::Load_Monster()
 {
 	wifstream		fin("../../Data/Skeleton_Monster.txt", ios::in);
 
@@ -1574,19 +1505,19 @@ void CLevel_Skleton::Load_Monster()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-CLevel_Skleton * CLevel_Skleton::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CLevel_Skleton_Boss * CLevel_Skleton_Boss::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CLevel_Skleton*		pInstance = new CLevel_Skleton(pDevice, pContext);
+	CLevel_Skleton_Boss*		pInstance = new CLevel_Skleton_Boss(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX("Failed to Created : CLevel_Skleton");
+		MSG_BOX("Failed to Created : CLevel_Skleton_Boss");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CLevel_Skleton::Free()
+void CLevel_Skleton_Boss::Free()
 {
 	__super::Free();
 

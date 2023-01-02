@@ -9,6 +9,7 @@
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
 #include "Level_Skeleton.h"
+#include "Level_Skeleton_Boss.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -73,6 +74,11 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 		case LEVEL_SKELETON:
 			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_SKELETON);
 			pLevel = CLevel_Skleton::Create(m_pDevice, m_pContext);
+			break;
+
+		case LEVEL_SKELETON_BOSS:
+			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_SKELETON_BOSS);
+			pLevel = CLevel_Skleton_Boss::Create(m_pDevice, m_pContext);
 			break;
 		}
 

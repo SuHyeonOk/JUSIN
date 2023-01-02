@@ -163,6 +163,9 @@
     <Filter Include="02.GameObjects\NPC\Doctor">
       <UniqueIdentifier>{d64680aa-4922-48dc-90fd-50e3d4fcadcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\04. Skeleton_Boss">
+      <UniqueIdentifier>{c977b577-42fa-42e1-b162-6f240b368d9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -372,6 +375,12 @@
     <ClInclude Include="..\public\N_Doctor.h">
       <Filter>02.GameObjects\NPC\Doctor</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_Skeleton_Boss.h">
+      <Filter>01.Levels\04. Skeleton_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Map_Skeleton_Boss.h">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -562,6 +571,12 @@
     </ClCompile>
     <ClCompile Include="..\private\N_Doctor.cpp">
       <Filter>02.GameObjects\NPC\Doctor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Skeleton_Boss.cpp">
+      <Filter>01.Levels\04. Skeleton_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Map_Skeleton_Boss.cpp">
+      <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

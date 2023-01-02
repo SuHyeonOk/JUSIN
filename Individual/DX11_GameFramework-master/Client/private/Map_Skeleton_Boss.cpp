@@ -1,22 +1,20 @@
 #include "stdafx.h"
-#include "..\public\O_Portal.h"
-
+#include "..\public\Map_Skeleton_Boss.h"
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 
-CO_Portal::CO_Portal(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CMap_Skleton_Boss::CMap_Skleton_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CO_Portal::CO_Portal(const CO_Portal & rhs)
+CMap_Skleton_Boss::CMap_Skleton_Boss(const CMap_Skleton_Boss & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CO_Portal::Initialize_Prototype()
+HRESULT CMap_Skleton_Boss::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,40 +22,24 @@ HRESULT CO_Portal::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CO_Portal::Initialize(void * pArg)
-{	
-	m_wsTag = L"Object_Portal";
-
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
-	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
-
-	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
-
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
-	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
-
-	if (FAILED(__super::Initialize(&GameObjectDesc)))
+HRESULT CMap_Skleton_Boss::Initialize(void * pArg)
+{
+	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Pos();
-
 	return S_OK;
 }
 
-void CO_Portal::Tick(_double TimeDelta)
+void CMap_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 }
 
-void CO_Portal::Late_Tick(_double TimeDelta)
+void CMap_Skleton_Boss::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -65,7 +47,7 @@ void CO_Portal::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CO_Portal::Render()
+HRESULT CMap_Skleton_Boss::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -85,12 +67,7 @@ HRESULT CO_Portal::Render()
 	return S_OK;
 }
 
-void CO_Portal::On_Collision(CGameObject * pOther)
-{
-
-}
-
-HRESULT CO_Portal::SetUp_Components()
+HRESULT CMap_Skleton_Boss::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -98,19 +75,19 @@ HRESULT CO_Portal::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel_Map"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Portal_Off"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_Skeleton_Boss"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CO_Portal::SetUp_ShaderResources()
+HRESULT CMap_Skleton_Boss::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -130,31 +107,31 @@ HRESULT CO_Portal::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CO_Portal * CO_Portal::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CMap_Skleton_Boss * CMap_Skleton_Boss::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CO_Portal*		pInstance = new CO_Portal(pDevice, pContext);
+	CMap_Skleton_Boss*		pInstance = new CMap_Skleton_Boss(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CO_Portal");
+		MSG_BOX("Failed to Created : CMap_Skleton_Boss");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CO_Portal::Clone(void * pArg)
+CGameObject * CMap_Skleton_Boss::Clone(void * pArg)
 {
-	CO_Portal*		pInstance = new CO_Portal(*this);
+	CMap_Skleton_Boss*		pInstance = new CMap_Skleton_Boss(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CO_Portal");
+		MSG_BOX("Failed to Cloned : CMap_Skleton_Boss");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CO_Portal::Free()
+void CMap_Skleton_Boss::Free()
 {
 	__super::Free();
 

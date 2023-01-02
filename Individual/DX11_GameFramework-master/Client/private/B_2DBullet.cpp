@@ -107,7 +107,7 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 
 	// 총알이 생성된 뒤 1초가 지나면 삭제한다.
 	m_dBullet_TimeAcc += TimeDelta;
-	if (1.5 < m_dBullet_TimeAcc)
+	if (1 < m_dBullet_TimeAcc)
 	{
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
