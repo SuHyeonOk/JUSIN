@@ -69,9 +69,6 @@ void CCoin::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	CurrentState(TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CCoin::Late_Tick(_double TimeDelta)
@@ -81,7 +78,7 @@ void CCoin::Late_Tick(_double TimeDelta)
 	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
 	//	m_bPlayer_Collider = true;
 
-	if(m_bPlayer_Collider)
+	if(m_bPlayer_Collider)	// 충돌 하면 일정시간 후 삭제
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
@@ -92,6 +89,9 @@ void CCoin::Late_Tick(_double TimeDelta)
 			m_dDead_TimeAcc = 0;
 		}
 	}
+
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

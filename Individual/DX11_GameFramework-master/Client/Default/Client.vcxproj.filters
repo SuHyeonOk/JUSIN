@@ -387,6 +387,9 @@
     <ClInclude Include="..\public\S_PaintWork.h">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_PaintWork_Parents.h">
+      <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -585,6 +588,9 @@
       <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_PaintWork.cpp">
+      <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_PaintWork_Parents.cpp">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
     </ClCompile>
   </ItemGroup>

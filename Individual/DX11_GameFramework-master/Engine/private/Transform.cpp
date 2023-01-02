@@ -250,14 +250,14 @@ void CTransform::Turn(_fvector vAxis, _double TimeDelta)
 
 void CTransform::Rotation(_fvector vAxis, _float fRadian)
 {
-	_float3		vScale = Get_Scaled();
-	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
+	_float3		vScale = Get_Scaled();	// 스케일을 가져온다.
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);	// 임의의 축을 기준으로 회전시킨 행렬
 
-	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScale.x;
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScale.x;	// 각각의 벡터에 스케일을 위해 곱해준다.
 	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScale.y;
 	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;
 
-	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
+	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));	// ㄱ
 	Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
 	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 }

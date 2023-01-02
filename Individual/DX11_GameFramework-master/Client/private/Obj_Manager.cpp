@@ -52,16 +52,14 @@ _vector			CObj_Manager::Get_Player_Transform()
 	{
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
 
-		_vector vPlayerPos;
-		vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn ÁÂÇ¥ ¹Þ¾Æ¿È
+		_vector vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn ÁÂÇ¥ ¹Þ¾Æ¿È
 		return vPlayerPos;
 	}
 	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
 	{
 		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 
-		_vector vPlayerPos;
-		vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
+		_vector vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
 		return vPlayerPos;
 	}
 

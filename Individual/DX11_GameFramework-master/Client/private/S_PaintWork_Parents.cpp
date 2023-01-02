@@ -1,20 +1,20 @@
 #include "stdafx.h"
-#include "..\public\S_PaintWork.h"
+#include "..\public\S_PaintWork_Parents.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-CS_PaintWork::CS_PaintWork(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CS_PaintWork_Parents::CS_PaintWork_Parents(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 }
 
-CS_PaintWork::CS_PaintWork(const CS_PaintWork & rhs)
+CS_PaintWork_Parents::CS_PaintWork_Parents(const CS_PaintWork_Parents & rhs)
 	: CGameObject(rhs)
 {
 }
 
-HRESULT CS_PaintWork::Initialize_Prototype()
+HRESULT CS_PaintWork_Parents::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -22,9 +22,9 @@ HRESULT CS_PaintWork::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CS_PaintWork::Initialize(void * pArg)
+HRESULT CS_PaintWork_Parents::Initialize(void * pArg)
 {
-	m_wsTag = L"Skill_PaintWork";
+	m_wsTag = L"Skill_PaintWork_Parents";
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
@@ -35,6 +35,13 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Pos.x, m_tBulletInfo.f3Pos.y, m_tBulletInfo.f3Pos.z);
+
+	if (m_tBulletInfo.ePaintWork == m_tBulletInfo.BLUE)
+		m_f4Blue_Look = m_tBulletInfo.f4Look;
+	else if (m_tBulletInfo.ePaintWork == m_tBulletInfo.MAGENTA)
+		m_f4Maenta_Look = m_tBulletInfo.f4Look;
+	else if (m_tBulletInfo.ePaintWork == m_tBulletInfo.YELLOW)
+		m_f4Yellow_Look = m_tBulletInfo.f4Look;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -47,30 +54,37 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CS_PaintWork::Tick(_double TimeDelta)
+void CS_PaintWork_Parents::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (m_tBulletInfo.ePaintWork == m_tBulletInfo.BLUE)
+	{
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vLook = XMLoadFloat4(&m_f4Blue_Look);
+		vMyPos += XMVector3Normalize(vLook) * 4.f * _float(TimeDelta);
 
-	CTransform * pParents_0_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),
-		TEXT("Layer_S_Paint_Parents_0"), TEXT("Com_Transform"), 0));
-	_vector vParents_0 = pParents_0_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+	}
+	else if (m_tBulletInfo.ePaintWork == m_tBulletInfo.MAGENTA)
+	{
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vLook = XMLoadFloat4(&m_f4Maenta_Look);
+		vMyPos += XMVector3Normalize(vLook) * 4.f * _float(TimeDelta);
 
-	CTransform * pParents_1_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),
-		TEXT("Layer_S_Paint_Parents_1"), TEXT("Com_Transform"), 0));
-	_vector vParents_1 = pParents_1_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+	}
+	else if (m_tBulletInfo.ePaintWork == m_tBulletInfo.YELLOW)
+	{
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vLook = XMLoadFloat4(&m_f4Yellow_Look);
+		vMyPos += XMVector3Normalize(vLook) * 4.f * _float(TimeDelta);
 
-	CTransform * pParents_2_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),
-		TEXT("Layer_S_Paint_Parents_2"), TEXT("Com_Transform"), 0));
-	_vector vParents_2 = pParents_2_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->Turn(vParents_0, TimeDelta);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+	}
 }
 
-void CS_PaintWork::Late_Tick(_double TimeDelta)
+void CS_PaintWork_Parents::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -82,14 +96,13 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 	//	m_dBullet_TimeAcc = 0;
 	//}
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CS_PaintWork::Render()
+HRESULT CS_PaintWork_Parents::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -115,12 +128,12 @@ HRESULT CS_PaintWork::Render()
 	return S_OK;
 }
 
-void CS_PaintWork::On_Collision(CGameObject * pOther)
+void CS_PaintWork_Parents::On_Collision(CGameObject * pOther)
 {
 
 }
 
-HRESULT CS_PaintWork::SetUp_Components()
+HRESULT CS_PaintWork_Parents::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -168,7 +181,7 @@ HRESULT CS_PaintWork::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CS_PaintWork::SetUp_ShaderResources()
+HRESULT CS_PaintWork_Parents::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -188,31 +201,31 @@ HRESULT CS_PaintWork::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CS_PaintWork * CS_PaintWork::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CS_PaintWork_Parents * CS_PaintWork_Parents::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CS_PaintWork*		pInstance = new CS_PaintWork(pDevice, pContext);
+	CS_PaintWork_Parents*		pInstance = new CS_PaintWork_Parents(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CS_PaintWork");
+		MSG_BOX("Failed to Created : CS_PaintWork_Parents");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CS_PaintWork::Clone(void * pArg)
+CGameObject * CS_PaintWork_Parents::Clone(void * pArg)
 {
-	CS_PaintWork*		pInstance = new CS_PaintWork(*this);
+	CS_PaintWork_Parents*		pInstance = new CS_PaintWork_Parents(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CS_PaintWork");
+		MSG_BOX("Failed to Cloned : CS_PaintWork_Parents");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CS_PaintWork::Free()
+void CS_PaintWork_Parents::Free()
 {
 	__super::Free();
 

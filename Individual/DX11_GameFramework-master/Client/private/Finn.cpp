@@ -9,6 +9,7 @@
 
 #include "Skill_Manager.h"
 #include "S_PaintWork.h"
+#include "S_PaintWork_Parents.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -430,7 +431,6 @@ void CFinn::Current_Player(_double TimeDelta)
 
 void CFinn::Player_Skill_Tick(_double TimeDelta)
 {
-	cout << CObj_Manager::GetInstance()->Get_Current_Player().eState << endl;
 	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		m_bSkill = true;
@@ -439,7 +439,7 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 	if (m_bSkill)
 	{
 		m_dSkill_TimeAcc += TimeDelta;
-		if (7 < m_dSkill_TimeAcc)
+		if (150 < m_dSkill_TimeAcc)
 		{
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 			m_bSkill = false;
@@ -667,18 +667,62 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 	{
 		m_bPaint = true;
 
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
 		// 스킬 생성
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 		CS_PaintWork::PAINTWORKINFO		tPaintWorkInfo;
+		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
+		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
+		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
+
+		CS_PaintWork_Parents::PAINTWORKINFO tPaintWork_ParentsInfo;
+		
+		_matrix		RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_LOOK), (-45.f));
+		_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+		vLook = XMVector4Transform(vLook, RotationMatrix);		// 회전행렬의 look 을 가져온다.
+		XMStoreFloat4(&tPaintWork_ParentsInfo.f4Look, vLook);	// 넘긴다.
+
+		
+
+		tPaintWork_ParentsInfo.ePaintWork = tPaintWork_ParentsInfo.BLUE;
+		tPaintWork_ParentsInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_Parents_0"), TEXT("Prototype_GameObject_S_PaintWork_Parents"), &tPaintWork_ParentsInfo)))
+			return;
+
+		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		XMStoreFloat4(&tPaintWork_ParentsInfo.f4Look, vLook);
+
+		tPaintWork_ParentsInfo.ePaintWork = tPaintWork_ParentsInfo.MAGENTA;
+		tPaintWork_ParentsInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_Parents_1"), TEXT("Prototype_GameObject_S_PaintWork_Parents"), &tPaintWork_ParentsInfo)))
+			return;
+
+		RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_LOOK), (45.f));
+		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+		vLook = XMVector4Transform(vLook, RotationMatrix);
+		XMStoreFloat4(&tPaintWork_ParentsInfo.f4Look, vLook);
+
+		tPaintWork_ParentsInfo.ePaintWork = tPaintWork_ParentsInfo.YELLOW;
+		tPaintWork_ParentsInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_Parents_2"), TEXT("Prototype_GameObject_S_PaintWork_Parents"), &tPaintWork_ParentsInfo)))
+			return;
+
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
