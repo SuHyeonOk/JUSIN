@@ -157,6 +157,9 @@
     <Filter Include="01.Utility\07.Fonts\Manager">
       <UniqueIdentifier>{2ea85e2c-0d70-4c33-a4df-fd0e852ec092}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\08.Frustum">
+      <UniqueIdentifier>{efdc4cda-48a3-4b8e-b8ca-dde0f95a8343}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\GameInstance.h">
@@ -369,6 +372,9 @@
     <ClInclude Include="..\public\CustomFont.h">
       <Filter>01.Utility\07.Fonts</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Frustum.h">
+      <Filter>01.Utility\08.Frustum</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\GameInstance.cpp">
@@ -556,6 +562,9 @@
     </ClCompile>
     <ClCompile Include="..\private\CustomFont.cpp">
       <Filter>01.Utility\07.Fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Frustum.cpp">
+      <Filter>01.Utility\08.Frustum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

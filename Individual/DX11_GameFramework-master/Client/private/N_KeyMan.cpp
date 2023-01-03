@@ -92,7 +92,6 @@ void CN_KeyMan::Tick(_double TimeDelta)
 void CN_KeyMan::Late_Tick(_double TimeDelta)
 {
 	CN_NPC::Late_Tick(TimeDelta);
-
 }
 
 HRESULT CN_KeyMan::Render()
