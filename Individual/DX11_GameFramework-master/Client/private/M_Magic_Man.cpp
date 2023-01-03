@@ -78,17 +78,13 @@ void CM_Magic_Man::Tick(_double TimeDelta)
 
 	Monster_Tick(TimeDelta);
 
-	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CM_Magic_Man::Late_Tick(_double TimeDelta)
 {
+
+
 	__super::Late_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
-
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CM_Magic_Man::Render()

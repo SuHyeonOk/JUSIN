@@ -95,10 +95,6 @@ void CB_2DBullet::Tick(_double TimeDelta)
 	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
  	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
-
-	// 충돌 처리
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)
@@ -113,11 +109,16 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 		m_dBullet_TimeAcc = 0;
 	}
 
-	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
-	//	CGameObject::Set_Dead();
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
-	if (nullptr != m_pRendererCom)
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CB_2DBullet::Render()

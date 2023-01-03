@@ -90,15 +90,11 @@ void CM_PigWarrior::Tick(_double TimeDelta)
 
 void CM_PigWarrior::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
 
 	m_MonsterParts[0]->Late_Tick(TimeDelta);
 	m_MonsterParts[1]->Late_Tick(TimeDelta);
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	__super::Late_Tick(TimeDelta);
 }
 
 HRESULT CM_PigWarrior::Render()

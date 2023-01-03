@@ -76,16 +76,11 @@ void CM_Skeleton_Shield::Tick(_double TimeDelta)
 
 void CM_Skeleton_Shield::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
-	
 	if(m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		m_MonsterParts[0]->Late_Tick(TimeDelta);
 	m_MonsterParts[1]->Late_Tick(TimeDelta);
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	__super::Late_Tick(TimeDelta);
 }
 
 HRESULT CM_Skeleton_Shield::Render()

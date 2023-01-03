@@ -58,9 +58,6 @@ void CO_BearTrap::Tick(_double TimeDelta)
 
 	if(1 == m_pModelCom->Get_AnimIndex(), m_pModelCom->Get_Finished())
 		m_pModelCom->Set_AnimIndex(0);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CO_BearTrap::Late_Tick(_double TimeDelta)
@@ -69,8 +66,16 @@ void CO_BearTrap::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	if (nullptr != m_pRendererCom)
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CO_BearTrap::Render()

@@ -66,8 +66,15 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
 	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 
-	//if (nullptr != m_pRendererCom)
-	//	m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	m_pModelCom->Play_Animation(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CM_Monster::Render()

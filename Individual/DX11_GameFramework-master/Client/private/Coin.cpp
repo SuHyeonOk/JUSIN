@@ -93,8 +93,13 @@ void CCoin::Late_Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
-	if (nullptr != m_pRendererCom)
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CCoin::Render()

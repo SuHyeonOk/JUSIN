@@ -56,17 +56,22 @@ void CKey::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CKey::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (nullptr != m_pRendererCom)
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CKey::Render()

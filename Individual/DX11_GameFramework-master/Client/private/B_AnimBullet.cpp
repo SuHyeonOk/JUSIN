@@ -68,9 +68,6 @@ void CB_AnimBullet::Tick(_double TimeDelta)
 
 
 	m_pModelCom->Play_Animation(TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CB_AnimBullet::Late_Tick(_double TimeDelta)
@@ -80,8 +77,16 @@ void CB_AnimBullet::Late_Tick(_double TimeDelta)
 	if (m_pModelCom->Get_Finished())		// 플레이어랑 충돌하면 애니메이션이 끝나고 사라진다.
 		CGameObject::Set_Dead();
 
-	if (nullptr != m_pRendererCom)
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CB_AnimBullet::Render()

@@ -92,9 +92,6 @@ void CO_Box::Tick(_double TimeDelta)
 		}
 	}
 	RELEASE_INSTANCE(CGameInstance);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CO_Box::Late_Tick(_double TimeDelta)
@@ -103,8 +100,16 @@ void CO_Box::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	if (nullptr != m_pRendererCom)
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CO_Box::Render()

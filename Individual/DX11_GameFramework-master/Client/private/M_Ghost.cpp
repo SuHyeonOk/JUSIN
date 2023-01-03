@@ -75,20 +75,20 @@ void CM_Ghost::Tick(_double TimeDelta)
 
 void CM_Ghost::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
-
 	if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		m_MonsterParts[0]->Late_Tick(TimeDelta);
+
+	// Ghost 의 경우 Renderer 그룹이 다르기 때문에 부모의 Lata_Tick 을 호출하지 않는다.
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
+	m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-	{
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	}
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }

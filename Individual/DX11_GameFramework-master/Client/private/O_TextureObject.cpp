@@ -81,6 +81,11 @@ void CO_TextureObject::Tick(_double TimeDelta)
 
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)	// 老沥 矫埃 第 昏力
 		MovePortal(TimeDelta);
+}
+
+void CO_TextureObject::Late_Tick(_double TimeDelta)
+{
+	__super::Late_Tick(TimeDelta);
 
 	// 面倒 贸府
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
@@ -88,14 +93,14 @@ void CO_TextureObject::Tick(_double TimeDelta)
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 	}
-}
 
-void CO_TextureObject::Late_Tick(_double TimeDelta)
-{
-	__super::Late_Tick(TimeDelta);
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (nullptr != m_pRendererCom)
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CO_TextureObject::Render()

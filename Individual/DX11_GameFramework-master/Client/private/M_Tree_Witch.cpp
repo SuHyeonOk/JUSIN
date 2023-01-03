@@ -66,12 +66,9 @@ void CM_Tree_Witch::Tick(_double TimeDelta)
 
 void CM_Tree_Witch::Late_Tick(_double TimeDelta)
 {
+
+
 	__super::Late_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
-
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CM_Tree_Witch::Render()

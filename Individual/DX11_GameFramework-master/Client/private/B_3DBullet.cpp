@@ -98,11 +98,16 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 		}
 	}
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CB_3DBullet::Render()
