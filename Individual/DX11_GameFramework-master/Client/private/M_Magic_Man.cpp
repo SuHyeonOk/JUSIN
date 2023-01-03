@@ -219,6 +219,7 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::DANCE:
+		CM_Monster::Dance_Time();
 		m_pModelCom->Set_AnimIndex(2);
 		break;
 	}

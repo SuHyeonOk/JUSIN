@@ -185,6 +185,7 @@ void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::DANCE:
+		CM_Monster::Dance_Time();
 		m_pModelCom->Set_AnimIndex(1);
 		break;
 	}

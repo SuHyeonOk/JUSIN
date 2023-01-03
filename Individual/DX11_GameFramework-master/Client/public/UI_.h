@@ -11,38 +11,28 @@ END
 
 BEGIN(Client)
 
-class CUI_ abstract : public CGameObject
+class CUI_ : public CGameObject
 {
-public:
-	typedef struct tagUIDesc : public CGameObject::GAMEOBJECTDESC
-	{
-		_float3			f3Pos = _float3(1.f, 1.f, 1.f);
-
-	}UIDESC;
-
 protected:
 	CUI_(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUI_(const CUI_& rhs);
 	virtual ~CUI_() = default;
 
-public:		// 걍 필수
-	virtual HRESULT		Initialize_Prototype();
-	virtual HRESULT		Initialize(void* pArg);
-	virtual void		Tick(const _double& TimeDelta);
-	virtual void		Late_Tick(const _double& TimeDelta);
-	virtual HRESULT		Render();
+public:
+	virtual HRESULT			Initialize_Prototype() override;
+	virtual HRESULT			Initialize(void* pArg) override;
+	virtual void			Tick(_double TimeDelta) override;
+	virtual void			Late_Tick(_double TimeDelta) override;
+	virtual HRESULT			Render() override;
 
 protected:
-	CRenderer*			m_pRendererCom = nullptr;
-	CShader*			m_pShaderCom = nullptr;
-	CVIBuffer_Rect*		m_pVIBufferCom = nullptr;
-
-protected:	// 자식에게 거의 필수적인 함수
-	virtual HRESULT		SetUp_Components()		{ return S_OK; }
+	virtual HRESULT		SetUp_Components() { return S_OK; }
 	virtual HRESULT		SetUp_ShaderResources() { return S_OK; }
-	
+
 protected:
-	UIDESC				m_tUI_Desc;
+	CShader*				m_pShaderCom = nullptr;
+	CRenderer*				m_pRendererCom = nullptr;
+	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;	
 
 protected:
 	_float4x4				m_ViewMatrix;
@@ -50,11 +40,12 @@ protected:
 
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 
-protected:
+private:
 	vector<CUI_*>			m_vecUI;
 
 public:
-	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;
+	static CUI_*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };
 

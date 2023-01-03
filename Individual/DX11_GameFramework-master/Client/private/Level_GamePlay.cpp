@@ -64,7 +64,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Object();
 	Load_Monster();
 
-
 	return S_OK;
 }
 

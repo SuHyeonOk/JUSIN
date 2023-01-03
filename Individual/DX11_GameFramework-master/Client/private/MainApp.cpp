@@ -20,6 +20,7 @@
 
 #include "O_TextureObject.h"
 
+#include "UI_.h"
 #include "UI_Informacion.h"
 #include "UI_HPGauge.h"
 
@@ -355,6 +356,12 @@ HRESULT CMainApp::Ready_Prototype_Component()
 #pragma endregion
 
 #pragma region	UI
+	//UI
+	/* For.Prototype_GameObject_UI */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
+		CUI_::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_UI_Finn_Informacion */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_UI_Finn_Informacion"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/Finn_informacion.dds")))))

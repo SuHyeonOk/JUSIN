@@ -212,6 +212,7 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::DANCE:
+		CM_Monster::Dance_Time();
 		m_pModelCom->Set_AnimIndex(5);
 		break;
 	}

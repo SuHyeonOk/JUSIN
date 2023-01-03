@@ -54,12 +54,12 @@ HRESULT CUI_Informacion::Initialize(void * pArg)
 
 void CUI_Informacion::Tick(_double TimeDelta)
 {
-	__super::Tick(TimeDelta);
+
 }
 
 void CUI_Informacion::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
+
 
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
@@ -67,9 +67,6 @@ void CUI_Informacion::Late_Tick(_double TimeDelta)
 
 HRESULT CUI_Informacion::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 

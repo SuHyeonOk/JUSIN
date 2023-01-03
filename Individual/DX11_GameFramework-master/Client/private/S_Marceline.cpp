@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Skill_Manager.h"
 
 CS_Marceline::CS_Marceline(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -193,7 +194,10 @@ void CS_Marceline::State_Tick()
 	case Client::CS_Marceline::UP:
 	{
 		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		{
 			CGameObject::Set_Dead();
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+		}
 	}
 		break;
 	}

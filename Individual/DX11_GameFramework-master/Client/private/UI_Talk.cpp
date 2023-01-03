@@ -18,8 +18,8 @@ CUI_Talk::CUI_Talk(const CUI_Talk & rhs)
 
 HRESULT CUI_Talk::Initialize_Prototype()
 {
-	if (FAILED(__super::Initialize_Prototype()))
-		return E_FAIL;
+	//if (FAILED(__super::Initialize_Prototype()))
+	//	return E_FAIL;
 	
 	return S_OK;
 }
@@ -50,18 +50,20 @@ HRESULT CUI_Talk::Initialize(void * pArg)
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));
 
+	m_pTransformCom->Set_Pos();
+
 	return S_OK;
 }
 
 void CUI_Talk::Tick(_double TimeDelta)
 {
-	__super::Tick(TimeDelta);
+	//__super::Tick(TimeDelta);
 
 }
 
 void CUI_Talk::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
+	//__super::Late_Tick(TimeDelta);
 
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);

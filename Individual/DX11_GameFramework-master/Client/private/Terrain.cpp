@@ -49,7 +49,7 @@ HRESULT CTerrain::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	m_vecPoints.resize(200);
+	m_vecPoints.resize(700);
 
 	Lode_Navigation(TEXT("../../Data/Navigation.txt"));
 

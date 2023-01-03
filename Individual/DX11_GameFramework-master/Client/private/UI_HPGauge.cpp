@@ -53,7 +53,6 @@ HRESULT CUI_HPGauge::Initialize(void * pArg)
 
 void CUI_HPGauge::Tick(_double TimeDelta)
 {
-	__super::Tick(TimeDelta);
 
 //CObj_Manager::GetInstance()->Get_Current_Player()
 
@@ -61,7 +60,6 @@ void CUI_HPGauge::Tick(_double TimeDelta)
 
 void CUI_HPGauge::Late_Tick(_double TimeDelta)
 {
-	__super::Late_Tick(TimeDelta);
 
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
@@ -69,9 +67,6 @@ void CUI_HPGauge::Late_Tick(_double TimeDelta)
 
 HRESULT CUI_HPGauge::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 

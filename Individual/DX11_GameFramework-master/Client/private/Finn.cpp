@@ -443,32 +443,15 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 
 	if (m_bSkill)
 	{
-		if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_dSkill_TimeAcc += TimeDelta;
+		if (20 < m_dSkill_TimeAcc)
 		{
-			m_dSkill_TimeAcc += TimeDelta;
-			if (20 < m_dSkill_TimeAcc)
-			{
-				// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
-				m_bSkill_Clone = false;
+			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
+			m_bSkill_Clone = false;
 
-				CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-				m_bSkill = false;
-				m_dSkill_TimeAcc = 0;
-			}
-		}
-		else if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		{
-			// 마르셀린의 경우 알아서 애니메이션이 끝나면 삭제하도록 해서 m_bSkill 이 딱히 필요 없음
-			m_dSkill_TimeAcc += TimeDelta;
-			if (12 < m_dSkill_TimeAcc)
-			{
-				// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
-				m_bSkill_Clone = false;
-
-				CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-				m_bSkill = false;
-				m_dSkill_TimeAcc = 0;
-			}
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+			m_bSkill = false;
+			m_dSkill_TimeAcc = 0;
 		}
 	}
 
@@ -744,7 +727,7 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
-
+		cout << "생성 " << endl;
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4	f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);

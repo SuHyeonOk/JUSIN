@@ -61,7 +61,7 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 void CS_PaintWork::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	cout << m_tBulletInfo.iAttack << endl;
+
 	if (!m_bMove)
 	{
 		m_pTransformCom->Go_Right(TimeDelta);

@@ -13,9 +13,7 @@
 #include "Map_Skeleton_Boss.h"
 
 // UI
-#include "UI_Talk.h"
-
-// 3DUI
+#include "UI_.h"
 #include "UI_3DTexture.h"
 
 // Obj
@@ -336,12 +334,6 @@ HRESULT CLoader::Loading_Tool()
 	/* For.Prototype_GameObject_B_AnimBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_AnimBullet"),
 		CB_AnimBullet::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	//UI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 3DUI
@@ -676,12 +668,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	//UI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 3DUI
@@ -1128,20 +1114,9 @@ HRESULT CLoader::SkeletonTemp()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_Map.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
 		return E_FAIL;
 
-
-
-
-
-
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	//UI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 3DUI

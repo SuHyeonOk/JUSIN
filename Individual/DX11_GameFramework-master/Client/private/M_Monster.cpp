@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Utilities_Manager.h"
+#include "Skill_Manager.h"
 
 CM_Monster::CM_Monster(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -191,6 +192,12 @@ _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float 
 	}
 	else
 		return false;
+}
+
+void CM_Monster::Dance_Time()
+{
+	if (CSkill_Manager::PLAYERSKILL::MARCELINT != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
 void CM_Monster::Free()
