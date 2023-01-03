@@ -48,7 +48,7 @@ HRESULT CS_Marceline::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	m_pModelCom->Set_AnimIndex(0);
+	m_eState = DOWN;
 
 	return S_OK;
 }
@@ -57,15 +57,21 @@ void CS_Marceline::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-
+	Animation_Tick();
+	State_Tick();
 }
 
 void CS_Marceline::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
+	//// 애니메이션이 끝나면 Set_Dead
+	//if (STATE_END == m_eState)
+	//	CGameObject::Set_Dead();
+
 	m_pModelCom->Play_Animation(TimeDelta);
 
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
@@ -84,12 +90,8 @@ HRESULT CS_Marceline::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (0 == i || 1 == i || 2 == i)	// 이상한 네모들 건너 뜀
-			continue;
-
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
@@ -119,10 +121,10 @@ HRESULT CS_Marceline::SetUp_Components()
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
-	CCollider::COLLIDERDESC			ColliderDesc;
 	/* For.Com_SPHERE */
+	CCollider::COLLIDERDESC			ColliderDesc;
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(3.0f, 3.0f, 3.0f);
+	ColliderDesc.vSize = _float3(5.0f, 5.0f, 5.0f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -150,6 +152,60 @@ HRESULT CS_Marceline::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CS_Marceline::Animation_Tick()
+{
+	switch (m_eState)
+	{
+	case Client::CS_Marceline::DOWN:
+		m_pModelCom->Set_AnimIndex(0, false);
+		break;
+	case Client::CS_Marceline::SONG:
+		m_pModelCom->Set_AnimIndex(1, false);
+		break;
+	case Client::CS_Marceline::UP:
+		m_pModelCom->Set_AnimIndex(2, false);
+		break;
+	case Client::CS_Marceline::STATE_END:
+		break;
+	}
+}
+
+void CS_Marceline::State_Tick()
+{
+	switch (m_eState)
+	{
+	case Client::CS_Marceline::DOWN:
+	{
+		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+			m_eState = SONG;
+	}
+		break;
+	case Client::CS_Marceline::SONG:
+	{
+		if (1 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		{
+			m_eAnim_Count++;	// 애니메이션 2 번 재생하기 위해서
+
+			if (2 <= m_eAnim_Count)
+			{
+				m_eState = UP;
+				m_eAnim_Count = 0;
+			}
+		}
+	}
+		break;
+	case Client::CS_Marceline::UP:
+	{
+		if (2 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+			m_eState = STATE_END;
+	}
+		break;
+	case Client::CS_Marceline::STATE_END:
+		CGameObject::Set_Dead();
+		break;
+	}
 }
 
 CS_Marceline * CS_Marceline::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

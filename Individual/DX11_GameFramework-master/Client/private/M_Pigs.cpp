@@ -218,6 +218,10 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 		Die_Tick();
 		m_pModelCom->Set_AnimIndex(3, false);
 		break;
+
+	case MONSTERINFO::STATE::DANCE:
+		m_pModelCom->Set_AnimIndex(2);
+		break;
 	}
 }
 

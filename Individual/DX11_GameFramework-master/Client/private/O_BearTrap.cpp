@@ -90,7 +90,7 @@ HRESULT CO_BearTrap::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i)
+		if (1 == i)		// 안 해도 되는데 그냥 굳이 할 필요도 없어서 없애도 차이 없음
 			continue;
 
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -127,14 +127,8 @@ HRESULT CO_BearTrap::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	///* For.Com_Model */
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"), TEXT("Com_Model"),
-	//	(CComponent**)&m_pModelCom)))
-	//	return E_FAIL;
-
-	// 마르셀린 모델 테스트 중 안 보임!!
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Marceline"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 

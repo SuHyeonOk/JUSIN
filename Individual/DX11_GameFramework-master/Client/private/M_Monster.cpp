@@ -101,6 +101,9 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 
 	if (L"Skill_PaintWork" == pOther->Get_Tag())
 		m_bPlayer_Attack = true;
+
+	if (L"Skill_Marceline" == pOther->Get_Tag())
+		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
 }
 
 _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _double TimeDelta, _double dMoveTime, _float fRange)

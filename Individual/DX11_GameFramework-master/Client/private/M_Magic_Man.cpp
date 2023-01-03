@@ -119,6 +119,9 @@ void CM_Magic_Man::On_Collision(CGameObject * pOther)
 	if(L"Skill_PaintWork" == pOther->Get_Tag())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
 
+	if (L"Skill_Marceline" == pOther->Get_Tag())
+		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
+
 	//CM_Monster::On_Collision(pOther);
 }
 
@@ -213,6 +216,10 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 	case MONSTERINFO::STATE::DIE:
 		m_pModelCom->Set_AnimIndex(7, false);	// 무언갈 뿌리면서 사라진다.
 		Die_Tick();
+		break;
+
+	case MONSTERINFO::STATE::DANCE:
+		m_pModelCom->Set_AnimIndex(2);
 		break;
 	}
 }

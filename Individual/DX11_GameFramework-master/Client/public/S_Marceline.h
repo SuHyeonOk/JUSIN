@@ -14,6 +14,8 @@ BEGIN(Client)
 
 class CS_Marceline final : public CGameObject
 {
+	enum STATE { DOWN, SONG, UP, STATE_END };
+
 private:
 	CS_Marceline(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CS_Marceline(const CS_Marceline& rhs);
@@ -37,7 +39,12 @@ private:
 	HRESULT			SetUp_ShaderResources();
 
 private:
-	_bool			m_Player_Strun = false;
+	void			Animation_Tick();
+	void			State_Tick();
+
+private:
+	STATE			m_eState = STATE_END;
+	_int			m_eAnim_Count = 0;
 
 public:
 	static	CS_Marceline* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

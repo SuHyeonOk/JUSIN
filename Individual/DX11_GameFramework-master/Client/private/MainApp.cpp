@@ -340,6 +340,8 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		CS_PaintWork::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(0.0f));
+
 	// ¸¶¸£¼¿¸°
 	/* For.Prototype_Component_Model_S_Marceline */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Marceline"),

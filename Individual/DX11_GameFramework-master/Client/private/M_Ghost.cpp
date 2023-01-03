@@ -109,7 +109,6 @@ HRESULT CM_Ghost::Render()
 	{
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 	}
 
@@ -118,7 +117,7 @@ HRESULT CM_Ghost::Render()
 
 void CM_Ghost::On_Collision(CGameObject * pOther)
 {
-	__super::On_Collision(pOther);
+	CM_Monster::On_Collision(pOther);
 }
 
 HRESULT CM_Ghost::SetUp_Components()
@@ -263,6 +262,10 @@ void CM_Ghost::Monster_Tick(const _double& TimeDelta)
 	case MONSTERINFO::STATE::DIE:
 		Die_Tick();
 		m_pModelCom->Set_AnimIndex(8, false);
+		break;
+
+	case MONSTERINFO::STATE::DANCE:
+		m_pModelCom->Set_AnimIndex(2);
 		break;
 	}
 }

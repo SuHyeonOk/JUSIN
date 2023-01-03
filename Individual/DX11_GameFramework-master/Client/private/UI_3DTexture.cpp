@@ -54,7 +54,6 @@ void CUI_3DTexture::Tick(_double TimeDelta)
 	
 	if (m_tTextureInfo.eTextureType == m_tTextureInfo.TYPE_FIND)
 		Find_Tick(TimeDelta);
-
 }
 
 void CUI_3DTexture::Late_Tick(_double TimeDelta)

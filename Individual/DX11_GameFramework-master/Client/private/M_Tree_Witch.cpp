@@ -183,6 +183,10 @@ void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 		m_pModelCom->Set_AnimIndex(2, false);
 		Die_Tick();
 		break;
+
+	case MONSTERINFO::STATE::DANCE:
+		m_pModelCom->Set_AnimIndex(1);
+		break;
 	}
 
 	// 1 : 춤 / 6 일어나기 / 7 : 누르기 / 8 : 뛸준비 / 9 : 누르기 위해 뛴다.
