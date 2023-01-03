@@ -56,13 +56,11 @@ HRESULT CUI_Talk::Initialize(void * pArg)
 
 void CUI_Talk::Tick(_double TimeDelta)
 {
-	//__super::Tick(TimeDelta);
 
 }
 
 void CUI_Talk::Late_Tick(_double TimeDelta)
 {
-	//__super::Late_Tick(TimeDelta);
 
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
@@ -80,8 +78,9 @@ HRESULT CUI_Talk::Render()
 
 	m_pVIBufferCom->Render();
 
+	// 대본
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 너에게 주려고 준비한 칼이 있는데 \n해골 몬스터가 완성된 무기를 가져가 버렸어"), _float2(500.f, 75.f), 0.f, _float2(0.4f, 0.37f));
+	pGameInstance->Render_Font(TEXT("Font_Comic"), CUI_Manager::GetInstance()->Get_Text(), _float2(500.f, 75.f), 0.f, _float2(0.4f, 0.37f));
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

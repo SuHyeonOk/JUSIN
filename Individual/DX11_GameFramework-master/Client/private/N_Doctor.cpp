@@ -73,19 +73,19 @@ void CN_Doctor::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			lstrcpy(m_szScript, TEXT("핀! 여기까지 오느라 고생했어"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("핀! 여기까지 오느라 고생했어"));
 			break;
 
 		case 1:
-			lstrcpy(m_szScript, TEXT("핀 너에게 주려고 준비한 칼이 있는데 \n해골 몬스터가 완성된 무기를 가져가 버렸어"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("핀 너에게 주려고 준비한 칼이 있는데 \n어떤 해골 몬스터가 완성된 무기를 가져가 버렸어"));
 			break;
 
 		case 2:
-			lstrcpy(m_szScript, TEXT("그 자식을 찾아서 꼭 칼을 되찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("그 자식을 찾아서 꼭 칼을 되찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
 			break;
 
 		default:
-			lstrcpy(m_szScript, TEXT(""));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("핀, 제이크 화이팅!"));
 			break;
 		}
 	}
@@ -115,14 +115,6 @@ HRESULT CN_Doctor::Render()
 
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
-
-	//// 대본
-	//if (m_bInteraction)
-	//{
-	//	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//	pGameInstance->Render_Font(TEXT("Font_Comic"), m_szScript, _float2(500.f, 100.f), 0.f, _float2(0.3f, 0.3f));
-	//	RELEASE_INSTANCE(CGameInstance);
-	//}
 
 	return S_OK;
 }

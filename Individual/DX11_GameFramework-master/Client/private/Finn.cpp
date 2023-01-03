@@ -636,7 +636,8 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_T))
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::MARCELINT);
-		//CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
+	if (pGameInstance->Key_Down(DIK_Y))
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{

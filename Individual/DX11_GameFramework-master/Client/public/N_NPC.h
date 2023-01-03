@@ -55,7 +55,6 @@ protected:
 protected:
 	_bool			m_bInteraction = false;
 	
-	_tchar			m_szScript[MAX_PATH];
 	_int			m_Script_Count = 0;
 
 public:		

@@ -22,14 +22,15 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
-	void		CUI_Manager::Add_Text(TEXTINFO::NPCTEXT eNpcText, const _tchar & cText);
+	_tchar*		Get_Text() { return m_szText; }
+	void		Set_Text(const _tchar * szText) { memcpy(m_szText, szText, sizeof(_tchar[MAX_PATH])); }
 
 	_bool		Get_Talk() { return m_bisTalk; }
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
-	vector<TEXTINFO>			m_vecTalkText;
-	_bool						m_bisTalk = false;
+	_tchar			m_szText[MAX_PATH] = L"";
+	_bool			m_bisTalk = false;
 
 public:
 	virtual void Free() override;
