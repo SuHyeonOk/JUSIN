@@ -72,6 +72,8 @@ private:
 	_float								m_fBlendCurTime = 0.2f;
 	_uint								m_iPreAnimIndex = 0;
 
+	_bool								m_bBlending = true;			// 기본적으로 모두 블렌딩을 사용한다.
+
 public:
 	HRESULT Ready_Bones(aiNode* pNode, class CBone* pParent);
 	HRESULT Ready_MeshContainers();

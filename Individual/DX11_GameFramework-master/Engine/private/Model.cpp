@@ -67,6 +67,8 @@ void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition, _bool bBlending)
 	if (m_iCurrentAnimIndex == iAnimIndex)
 		return;
 
+	m_bBlending = bBlending;
+
 	if (bBlending)
 	{
 		m_iPreAnimIndex = m_iCurrentAnimIndex;					// 애니 인덱스를 현재 인덱스로 초기화
@@ -156,13 +158,18 @@ void CModel::Play_Animation(_double TimeDelta)
 	if (TYPE_NONANIM == m_eType)
 		return;
 
-	if (m_fBlendCurTime < m_fBlendDuration)
+	if (m_bBlending)
 	{
-		_float fBlendRatio = m_fBlendCurTime / m_fBlendDuration;
-		m_Animations[m_iPreAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
-		m_Animations[m_iCurrentAnimIndex]->Update_Bones_Blend(TimeDelta, fBlendRatio);
+		if (m_fBlendCurTime < m_fBlendDuration)
+		{
+			_float fBlendRatio = m_fBlendCurTime / m_fBlendDuration;
+			m_Animations[m_iPreAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
+			m_Animations[m_iCurrentAnimIndex]->Update_Bones_Blend(TimeDelta, fBlendRatio);
 
-		m_fBlendCurTime += _float(TimeDelta);
+			m_fBlendCurTime += _float(TimeDelta);
+		}
+		else
+			m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);
 	}
 	else
 		m_Animations[m_iCurrentAnimIndex]->Update_Bones(TimeDelta, m_bRepetition);

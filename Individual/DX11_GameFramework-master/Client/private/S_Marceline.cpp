@@ -65,10 +65,6 @@ void CS_Marceline::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//// 애니메이션이 끝나면 Set_Dead
-	//if (STATE_END == m_eState)
-	//	CGameObject::Set_Dead();
-
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
@@ -124,7 +120,7 @@ HRESULT CS_Marceline::SetUp_Components()
 	/* For.Com_SPHERE */
 	CCollider::COLLIDERDESC			ColliderDesc;
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(5.0f, 5.0f, 5.0f);
+	ColliderDesc.vSize = _float3(7.0f, 7.0f, 7.0f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -159,15 +155,13 @@ void CS_Marceline::Animation_Tick()
 	switch (m_eState)
 	{
 	case Client::CS_Marceline::DOWN:
-		m_pModelCom->Set_AnimIndex(0, false);
+		m_pModelCom->Set_AnimIndex(2, false, false);
 		break;
 	case Client::CS_Marceline::SONG:
-		m_pModelCom->Set_AnimIndex(1, false);
+		m_pModelCom->Set_AnimIndex(1, false, false);
 		break;
 	case Client::CS_Marceline::UP:
-		m_pModelCom->Set_AnimIndex(2, false);
-		break;
-	case Client::CS_Marceline::STATE_END:
+		m_pModelCom->Set_AnimIndex(0, false, false);
 		break;
 	}
 }
@@ -178,7 +172,7 @@ void CS_Marceline::State_Tick()
 	{
 	case Client::CS_Marceline::DOWN:
 	{
-		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		if (2 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 			m_eState = SONG;
 	}
 		break;
@@ -198,12 +192,9 @@ void CS_Marceline::State_Tick()
 		break;
 	case Client::CS_Marceline::UP:
 	{
-		if (2 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-			m_eState = STATE_END;
+		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+			CGameObject::Set_Dead();
 	}
-		break;
-	case Client::CS_Marceline::STATE_END:
-		CGameObject::Set_Dead();
 		break;
 	}
 }

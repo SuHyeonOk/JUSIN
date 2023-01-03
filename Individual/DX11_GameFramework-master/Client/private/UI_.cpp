@@ -36,6 +36,19 @@ HRESULT CUI_::Initialize(void * pArg)
 	
 	m_pTransformCom->Set_Pos();
 
+	CUI_*		pUI = nullptr;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Talk")));
+	
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 

@@ -16,7 +16,7 @@ class CUI_ abstract : public CGameObject
 public:
 	typedef struct tagUIDesc : public CGameObject::GAMEOBJECTDESC
 	{
-		_float3			f3Pos;
+		_float3			f3Pos = _float3(1.f, 1.f, 1.f);
 
 	}UIDESC;
 
@@ -49,6 +49,9 @@ protected:
 	_float4x4				m_ProjMatrix;
 
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
+
+protected:
+	vector<CUI_*>			m_vecUI;
 
 public:
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

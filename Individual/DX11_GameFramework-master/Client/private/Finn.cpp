@@ -741,9 +741,6 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	if (m_pModelCom->Get_Finished())
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-
 	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
@@ -754,7 +751,7 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Marceline_0"), TEXT("Prototype_GameObject_S_Marceline"),
-			&_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))
+			&_float3(f4MyPos.x + 1.0f, f4MyPos.y, f4MyPos.z + 1.0f))))
 			return;
 		RELEASE_INSTANCE(CGameInstance);
 	}
@@ -969,11 +966,11 @@ void CFinn::Anim_Change(_double TimeDelta)
 		switch (m_tPlayerInfo.eState)
 		{
 		case CObj_Manager::PLAYERINFO::STATE::IDLE:
-			m_pModelCom->Set_AnimIndex(39);
+			m_pModelCom->Set_AnimIndex(39, true, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::RUN:
-			m_pModelCom->Set_AnimIndex(49);
+			m_pModelCom->Set_AnimIndex(49, true, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::ROLL:
@@ -981,7 +978,7 @@ void CFinn::Anim_Change(_double TimeDelta)
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::ATTACK:
-			m_pModelCom->Set_AnimIndex(5, false);
+			m_pModelCom->Set_AnimIndex(5, false, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::PAINT:
@@ -989,7 +986,7 @@ void CFinn::Anim_Change(_double TimeDelta)
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::MARCELINE:
-			m_pModelCom->Set_AnimIndex(25, false);
+			m_pModelCom->Set_AnimIndex(25);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:

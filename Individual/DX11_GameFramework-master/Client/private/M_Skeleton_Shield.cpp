@@ -256,11 +256,6 @@ void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 		m_pModelCom->Set_AnimIndex(0, false);
 		break;
 
-	case MONSTERINFO::STATE::DANCE:
-		
-		m_pModelCom->Set_AnimIndex(7, false);
-		break;
-
 	case MONSTERINFO::STATE::HIT:
 		Hit_Tick();
 		break;
