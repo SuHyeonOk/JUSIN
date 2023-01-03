@@ -33,7 +33,6 @@ private:
 
 public:
 	_bool		m_bHelp_UI = false;
-	_bool		m_bTalk_UI = false;
 	_int		m_iTalk_Count = 0;
 
 public:

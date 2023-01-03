@@ -5,7 +5,7 @@
 
 BEGIN(Client)
 
-class CItemManager : public CBase
+class CItemManager final : public CBase
 {
 	DECLARE_SINGLETON(CItemManager)
 

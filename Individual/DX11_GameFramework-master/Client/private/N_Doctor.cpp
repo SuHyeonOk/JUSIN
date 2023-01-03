@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 #include "UI_3DTexture.h"
 #include "UI_Talk.h"
@@ -204,22 +205,15 @@ void CN_Doctor::Help_UI()
 
 void CN_Doctor::Talk_UI()
 {
-	if (m_bTalk_UI || !m_bInteraction)
+	if (true == CUI_Manager::GetInstance()->Get_Talk() || !m_bInteraction)
 		return;
 
-	m_bTalk_UI = true;
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"))))
-	//	return;
-
-	//RELEASE_INSTANCE(CGameInstance);
+	CUI_Manager::GetInstance()->Set_Talk(true);
 }
 
 HRESULT CN_Doctor::UI_Dead()
 {
-	if (!m_bTalk_UI)
+	if (false == CUI_Manager::GetInstance()->Get_Talk())
 		return S_OK;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -233,11 +227,9 @@ HRESULT CN_Doctor::UI_Dead()
 	}
 
 	// 대화창 : 한 번 생성되고, 플레이어가 거리가 멀어지거나, B 키를 누르면 삭제되어야 한다.
-	if (m_bTalk_UI && !m_bInteraction)
+	if (true == CUI_Manager::GetInstance()->Get_Talk() && !m_bInteraction)
 	{
-		//CUI_Talk * pGameObject_UI_Talk = dynamic_cast<CUI_Talk*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"), 0));
-		//if (nullptr != pGameObject_UI_Talk)
-		//	pGameObject_UI_Talk->Set_Dead();
+		CUI_Manager::GetInstance()->Set_Talk(false);
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

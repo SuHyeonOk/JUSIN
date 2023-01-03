@@ -172,6 +172,9 @@
     <Filter Include="02.GameObjects\PlayerSkill\Marceline">
       <UniqueIdentifier>{2bddfe42-3a7a-4ca0-9c50-e1f8f3031141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="77.Manager\UI">
+      <UniqueIdentifier>{6a8c8993-f749-414a-80da-4b8900c696b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -393,6 +396,9 @@
     <ClInclude Include="..\public\UI_.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Manager.h">
+      <Filter>77.Manager\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -595,6 +601,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_.cpp">
       <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Manager.cpp">
+      <Filter>77.Manager\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

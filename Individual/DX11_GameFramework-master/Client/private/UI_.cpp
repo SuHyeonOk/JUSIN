@@ -2,6 +2,7 @@
 #include "..\public\UI_.h"
 #include "GameInstance.h"
 
+#include "UI_Manager.h"
 #include "UI_Talk.h"
 
 CUI_::CUI_(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -57,20 +58,16 @@ HRESULT CUI_::Initialize(void * pArg)
 
 void CUI_::Tick(_double TimeDelta)
 {
-	if (0 != m_vecUI.size())
-	{
+	if(CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Tick(TimeDelta);
-	}
 
 	__super::Tick(TimeDelta);
 }
 
 void CUI_::Late_Tick(_double TimeDelta)
 {
-	if (0 != m_vecUI.size())
-	{
+	if (CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Late_Tick(TimeDelta);
-	}
 
 	__super::Late_Tick(TimeDelta);
 
