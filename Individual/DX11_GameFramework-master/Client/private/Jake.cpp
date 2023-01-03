@@ -2,11 +2,14 @@
 #include "..\public\Jake.h"
 
 #include "GameInstance.h"
+#include "Skill_Manager.h"
 
 #include "Bone.h"
 #include "Jake_Weapon.h"
-#include "S_Change_Magic.h"
+
 #include "O_TextureObject.h"
+#include "S_Change_Magic.h"
+#include "S_PaintWork.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -316,6 +319,10 @@ void CJake::Player_Tick(_double TimeDelta)
 		Space_Attack_Tick(TimeDelta);
 		break;
 
+	case CObj_Manager::PLAYERINFO::PAINT: // 11
+		Attack_Paint_Tick(TimeDelta);
+		break;
+
 	case CObj_Manager::PLAYERINFO::CONTROL:
 		Control_Tick(TimeDelta);
 		break;
@@ -345,6 +352,7 @@ void CJake::Current_Player(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
+		Player_Skill_Tick(TimeDelta);
 
 		// 플레이어의 스킬 때 키 입력을 받지 않는다.
 		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
@@ -358,6 +366,26 @@ void CJake::Current_Player(_double TimeDelta)
 		Check_Follow(TimeDelta);
 	}
 }
+
+void CJake::Player_Skill_Tick(_double TimeDelta)
+{
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_bSkill = true;
+	}
+
+	if (m_bSkill)
+	{
+		m_dSkill_TimeAcc += TimeDelta;
+		if (15 < m_dSkill_TimeAcc)
+		{
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+			m_bSkill = false;
+			m_dSkill_TimeAcc = 0;
+		}
+	}
+}
+
 
 void CJake::Player_Follow(_double TimeDelta)
 {
@@ -595,7 +623,18 @@ void CJake::Key_Input(_double TimeDelta)
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+	{
+		if (m_bSkill)
+		{
+			if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			{
+				m_bPaint = false;
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::PAINT);
+			}
+		}
+		else
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+	}
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
@@ -609,6 +648,61 @@ void CJake::Space_Attack_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+}
+
+void CJake::Attack_Paint_Tick(_double TimeDelta)
+{
+	m_OnMove = false;
+
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	if (!m_bPaint)
+	{
+		m_bPaint = true;
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		// 스킬 생성
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		CS_PaintWork::PAINTWORKINFO		tPaintWorkInfo;
+
+		_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(-15.f));
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		vLook = XMVector4Transform(vLook, RotationMatrix);		// 회전행렬의 look 을 가져온다.
+		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);			// 넘긴다.
+
+		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
+		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+			return;
+
+		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
+
+		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
+		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+			return;
+
+		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(15.f));
+		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		vLook = XMVector4Transform(vLook, RotationMatrix);
+		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
+
+		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
+		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+			return;
+
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 void CJake::Control_Tick(_double TimeDelta)
@@ -806,8 +900,8 @@ void CJake::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(4, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STATE::CONTROL:
-			m_pModelCom->Set_AnimIndex(6);
+		case CObj_Manager::PLAYERINFO::STATE::PAINT:
+			m_pModelCom->Set_AnimIndex(18, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:
@@ -816,6 +910,10 @@ void CJake::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::STUN:
 			m_pModelCom->Set_AnimIndex(56, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::CONTROL:
+			m_pModelCom->Set_AnimIndex(6);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::CHANGE:

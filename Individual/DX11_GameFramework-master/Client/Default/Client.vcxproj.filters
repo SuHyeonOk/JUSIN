@@ -169,6 +169,9 @@
     <Filter Include="02.GameObjects\PlayerSkill\PaintWork">
       <UniqueIdentifier>{8c412210-a00d-4c07-bc9e-2529ba8361ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\Marceline">
+      <UniqueIdentifier>{2bddfe42-3a7a-4ca0-9c50-e1f8f3031141}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -387,9 +390,6 @@
     <ClInclude Include="..\public\S_PaintWork.h">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\S_PaintWork_Parents.h">
-      <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -588,9 +588,6 @@
       <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_PaintWork.cpp">
-      <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\S_PaintWork_Parents.cpp">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
     </ClCompile>
   </ItemGroup>

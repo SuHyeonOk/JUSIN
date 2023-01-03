@@ -225,7 +225,6 @@
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\public\S_Change_Magic.h" />
     <ClInclude Include="..\public\S_PaintWork.h" />
-    <ClInclude Include="..\public\S_PaintWork_Parents.h" />
     <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_.h" />
@@ -296,7 +295,6 @@
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\private\S_Change_Magic.cpp" />
     <ClCompile Include="..\private\S_PaintWork.cpp" />
-    <ClCompile Include="..\private\S_PaintWork_Parents.cpp" />
     <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\UI_.cpp" />

@@ -49,12 +49,15 @@ private:
 
 private:
 	void	Player_Tick(_double TimeDelta);
+	void	Player_Skill_Tick(_double TimeDelta);
 	void	Current_Player(_double TimeDelta);
 	void	Player_Follow(_double TimeDelta);
 	void	Check_Follow(_double TimeDelta);
 	void	Key_Input(_double TimeDelta);
 
 	void	Space_Attack_Tick(_double TimeDelta);
+	void	Attack_Paint_Tick(_double TimeDelta);
+
 	void	Control_Tick(_double TimeDelta);
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);
@@ -85,6 +88,12 @@ private:
 
 	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
 	_double		m_bSkillClone_TimeAcc = 0;
+
+	// Skill
+	_bool		m_bSkill = false;
+	_double		m_dSkill_TimeAcc = 0;
+
+	_bool		m_bPaint = false;
 
 	//////////////////////////// 플레이어가 아닐 때
 

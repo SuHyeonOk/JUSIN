@@ -22,7 +22,7 @@ public:
 		PAINTWORK	ePaintWork = TYPE_END;
 
 		_float3		f3Pos;
-
+		_float4		f4Look;
 		_int		iAttack = 0;
 
 	}PAINTWORKINFO;
@@ -56,6 +56,9 @@ private:
 	
 	_float4				m_f4Distance;
 	_double				m_dBullet_TimeAcc = 0;
+
+	_bool				m_bMove = false;
+	_double				m_dMove_TimeAcc = 0;
 
 public:
 	static	CS_PaintWork*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

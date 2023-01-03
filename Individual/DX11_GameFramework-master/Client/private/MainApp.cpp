@@ -16,7 +16,6 @@
 #include "Jake_Weapon.h"
 #include "S_StunChick.h"
 #include "S_PaintWork.h"
-#include "S_PaintWork_Parents.h"
 
 #include "O_TextureObject.h"
 
@@ -336,10 +335,6 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_GameObject_S_PaintWork */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_PaintWork"),
 		CS_PaintWork::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_S_PaintWork_Parents */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_PaintWork_Parents"),
-		CS_PaintWork_Parents::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

@@ -248,16 +248,17 @@ void CTransform::Turn(_fvector vAxis, _double TimeDelta)
 	Set_State(CTransform::STATE_LOOK , XMVector4Transform(vLook, RotationMatrix));
 }
 
-void CTransform::Rotation(_fvector vAxis, _float fRadian)
+void CTransform::Rotation(_fvector vAxis, _float fRadian) //임 의의 축을 기준으로 내가 입력한 각도만큼회전 시키는 함수
 {
 	_float3		vScale = Get_Scaled();	// 스케일을 가져온다.
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);	// 임의의 축을 기준으로 회전시킨 행렬
 
-	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScale.x;	// 각각의 벡터에 스케일을 위해 곱해준다.
-	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScale.y;
-	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScale.x;	// Right 벡터에 스케일을 유지하기 위해서 x, y, z, w 에 스케일을 곱한다.
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScale.y;		// Up 벡터에 스케일을 유지하기 위해서 x, y, z, w 에 스케일을 곱한다.
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;		// Look 벡터에 스케일을 유지하기 위해서 x, y, z, w 에 스케일을 곱한다.
 
-	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));	// ㄱ
+	// XMVector4Transform() : 이 함수는 모르겠다.
+	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));	// Set_State() 는 1인자로 몇번째에 해당하는 벡터인지 넣고, 2인자에 벡터를 넣어주면 그 값으로 해당 행렬의 벡터값이 변경된다.
 	Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
 	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 }

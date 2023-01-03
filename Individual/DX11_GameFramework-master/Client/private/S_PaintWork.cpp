@@ -44,6 +44,14 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	_vector vLook = XMLoadFloat4(&m_tBulletInfo.f4Look);
+	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	_vector vUp = XMVector3Cross(vLook, vRight);
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+
 	return S_OK;
 }
 
@@ -51,36 +59,51 @@ void CS_PaintWork::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (!m_bMove)
+	{
+		m_pTransformCom->Go_Right(TimeDelta);
 
-	CTransform * pParents_0_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),
-		TEXT("Layer_S_Paint_Parents_0"), TEXT("Com_Transform"), 0));
-	_vector vParents_0 = pParents_0_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_dMove_TimeAcc += TimeDelta;
+		if (0.25 < m_dMove_TimeAcc)
+		{
+			m_bMove = true;
 
-	CTransform * pParents_1_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),
-		TEXT("Layer_S_Paint_Parents_1"), TEXT("Com_Transform"), 0));
-	_vector vParents_1 = pParents_1_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+			m_dMove_TimeAcc = 0;
+		}
+	}
+	else
+	{
+		m_pTransformCom->Go_Left(TimeDelta);
 
-	CTransform * pParents_2_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),
-		TEXT("Layer_S_Paint_Parents_2"), TEXT("Com_Transform"), 0));
-	_vector vParents_2 = pParents_2_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_dMove_TimeAcc += TimeDelta;
+		if (0.25 < m_dMove_TimeAcc)
+		{
+			m_bMove = false;
 
-	RELEASE_INSTANCE(CGameInstance);
+			m_dMove_TimeAcc = 0;
+		}
+	}
 
-	m_pTransformCom->Turn(vParents_0, TimeDelta);
+	m_pTransformCom->Go_Straight(TimeDelta);
+
+	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//_vector vLook = XMLoadFloat4(&m_tBulletInfo.f4Look);
+	//vMyPos += XMVector3Normalize(vLook) * 0.f * _float(TimeDelta);
+
+	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
 }
 
 void CS_PaintWork::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//// 일정시간 뒤 삭제
-	//m_dBullet_TimeAcc += TimeDelta;
-	//if (1 < m_dBullet_TimeAcc)
-	//{
-	//	CGameObject::Set_Dead();
-	//	m_dBullet_TimeAcc = 0;
-	//}
+	// 일정시간 뒤 삭제
+	m_dBullet_TimeAcc += TimeDelta;
+	if (1.25 < m_dBullet_TimeAcc)
+	{
+		CGameObject::Set_Dead();
+		m_dBullet_TimeAcc = 0;
+	}
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
