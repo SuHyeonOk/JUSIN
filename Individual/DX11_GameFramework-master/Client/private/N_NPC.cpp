@@ -44,13 +44,6 @@ void CN_NPC::Tick(const _double& TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_G))
-		++m_Script_Count;
-
-	RELEASE_INSTANCE(CGameInstance);
-
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_NPC, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
@@ -90,6 +83,14 @@ void CN_NPC::On_Collision(CGameObject * pOther)
 	{
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		m_bInteraction = CObj_Manager::GetInstance()->Get_Interaction();
+
+		// 플레이어와 충돌하고 있는 상태에서 'G' 를 누르면 대화가 넘어간다.
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		if (pGameInstance->Key_Down(DIK_G))
+			++m_Script_Count;
+
+		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 

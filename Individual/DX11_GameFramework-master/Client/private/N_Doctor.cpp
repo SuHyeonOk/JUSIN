@@ -52,6 +52,9 @@ HRESULT CN_Doctor::Initialize(void * pArg)
 	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(-45.f));
 	m_pModelCom->Set_AnimIndex(0);
 
+	// 대본 준비
+
+
 	return S_OK;
 }
 
@@ -113,13 +116,13 @@ HRESULT CN_Doctor::Render()
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
-	// 대본
-	if (m_bInteraction)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Render_Font(TEXT("Font_Comic"), m_szScript, _float2(500.f, 100.f), 0.f, _float2(0.3f, 0.3f));
-		RELEASE_INSTANCE(CGameInstance);
-	}
+	//// 대본
+	//if (m_bInteraction)
+	//{
+	//	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//	pGameInstance->Render_Font(TEXT("Font_Comic"), m_szScript, _float2(500.f, 100.f), 0.f, _float2(0.3f, 0.3f));
+	//	RELEASE_INSTANCE(CGameInstance);
+	//}
 
 	return S_OK;
 }
