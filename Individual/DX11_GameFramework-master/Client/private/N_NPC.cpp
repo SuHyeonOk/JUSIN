@@ -92,6 +92,8 @@ void CN_NPC::On_Collision(CGameObject * pOther)
 
 		RELEASE_INSTANCE(CGameInstance);
 	}
+	else
+		m_bInteraction = false;
 }
 
 void CN_NPC::Free()

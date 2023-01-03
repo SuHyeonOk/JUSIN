@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 #include "UI_3DTexture.h"
 #include "UI_Talk.h"
@@ -69,19 +70,19 @@ void CN_KeyMan::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			lstrcpy(m_szScript, TEXT("ÇÉ´Ô! Å«ÀÏ³µ¾î¿ä!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("ÇÉ´Ô! Å«ÀÏ³µ¾î¿ä!!"));
 			break;
 
 		case 1:
-			lstrcpy(m_szScript, TEXT("Á¦°¡ °¡Áö°í ÀÖ´ø ¿­¼è¸¦ ¾î¶² ¸¶¹ý»ç°¡ »©¾Ñ¾Æ °¬¾î¿ä!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("Á¦°¡ °¡Áö°í ÀÖ´ø ¿­¼è¸¦ ¾î¶² ¸¶¹ý»ç°¡ »©¾Ñ¾Æ °¬¾î¿ä!!"));
 			break;
 
 		case 2:
-			lstrcpy(m_szScript, TEXT("ºÎÅ¹µå·Á¿ä ²À ¿­¼è¸¦ Ã£¾Æ¼­ ÀúÈñ ¿Õ±¹À» ÁöÄÑÁÖ¼¼¿ä!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("ºÎÅ¹µå·Á¿ä ²À ¿­¼è¸¦ Ã£¾Æ¼­ ÀúÈñ ¿Õ±¹À» ÁöÄÑÁÖ¼¼¿ä!"));
 			break;
 
 		default:
-			lstrcpy(m_szScript, TEXT(""));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("ÇÉ´Ô, Á¦ÀÌÅ©´Ô °¨»çÇÕ´Ï´Ù!"));
 			break;
 		}
 	}
@@ -110,14 +111,6 @@ HRESULT CN_KeyMan::Render()
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
-	}
-
-	// ´ëº»
-	if (m_bInteraction)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Render_Font(TEXT("Font_Comic"), m_szScript, _float2(500.f, 100.f), 0.f, _float2(0.3f, 0.3f));
-		RELEASE_INSTANCE(CGameInstance);
 	}
 
 	return S_OK;
