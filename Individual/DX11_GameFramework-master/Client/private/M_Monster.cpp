@@ -91,6 +91,9 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 		if(L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag())
 			m_bPlayer_Attack = true;
 	}
+
+	if (L"Skill_PaintWork" == pOther->Get_Tag())
+		m_bPlayer_Attack = true;
 }
 
 _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _double TimeDelta, _double dMoveTime, _float fRange)

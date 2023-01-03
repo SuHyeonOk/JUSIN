@@ -384,6 +384,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Attack_Paint_Tick(TimeDelta);
 		break;
 
+	case CObj_Manager::PLAYERINFO::MARCELINE: // 12
+		Skill_Marceline_Tick(TimeDelta);
+		break;
+
 	case CObj_Manager::PLAYERINFO::ROLL:
 		Roolling_Tick(TimeDelta);
 		break;
@@ -430,7 +434,9 @@ void CFinn::Current_Player(_double TimeDelta)
 
 void CFinn::Player_Skill_Tick(_double TimeDelta)
 {
-	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	// 전체적으로 스킬을 on 한다.
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		m_bSkill = true;
 	}
@@ -438,13 +444,20 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 	if (m_bSkill)
 	{
 		m_dSkill_TimeAcc += TimeDelta;
-		if (15 < m_dSkill_TimeAcc)
+		if (20 < m_dSkill_TimeAcc)
 		{
+			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 따로 처리)
+			m_bSkill_Clone = false;
+
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 			m_bSkill = false;
 			m_dSkill_TimeAcc = 0;
 		}
 	}
+
+	// 스킬 한 번만 실행할 때
+	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::MARCELINE);
 }
 
 void CFinn::Player_Follow(_double TimeDelta)
@@ -622,7 +635,8 @@ void CFinn::Key_Input(_double TimeDelta)
 #pragma endregion
 
 	if (pGameInstance->Key_Down(DIK_T))
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::MARCELINT);
+		//CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
@@ -630,7 +644,7 @@ void CFinn::Key_Input(_double TimeDelta)
 		{
 			if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			{
-				m_bPaint = false;
+				m_bSkill_Clone = false;
 				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::PAINT);
 			}
 		}
@@ -662,9 +676,9 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 	// 1) 총 스킬이 재생되어야 하는 시간을 체크하는 Tick
 	// 2) 스페이스바를 누르면 그 때 마다 객체가 생성되어야 하는 Tick
 
-	if (!m_bPaint)
+	if (!m_bSkill_Clone)
 	{
-		m_bPaint = true;
+		m_bSkill_Clone = true;
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
@@ -680,7 +694,7 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 		vLook = XMVector4Transform(vLook, RotationMatrix);		// 회전행렬의 look 을 가져온다.
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);			// 넘긴다.
 
-		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
+		tPaintWorkInfo.iAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
@@ -689,7 +703,6 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
 
-		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
@@ -700,12 +713,34 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 		vLook = XMVector4Transform(vLook, RotationMatrix);
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
 
-		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
 
+		RELEASE_INSTANCE(CGameInstance);
+	}
+}
+
+void CFinn::Skill_Marceline_Tick(_double TimeDelta)
+{
+	m_OnMove = false;
+
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	if (!m_bSkill_Clone)
+	{
+		m_bSkill_Clone = true;
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Marceline_0"), TEXT("Prototype_GameObject_S_Marceline"),
+			&_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))
+			return;
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
@@ -936,6 +971,10 @@ void CFinn::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::PAINT:
 			m_pModelCom->Set_AnimIndex(18, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::MARCELINE:
+			m_pModelCom->Set_AnimIndex(25, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:

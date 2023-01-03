@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "..\public\O_BearTrap.h"
+#include "..\public\S_Marceline.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-CO_BearTrap::CO_BearTrap(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CS_Marceline::CS_Marceline(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CO_BearTrap::CO_BearTrap(const CO_BearTrap & rhs)
+CS_Marceline::CS_Marceline(const CS_Marceline & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CO_BearTrap::Initialize_Prototype()
+HRESULT CS_Marceline::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,9 +24,9 @@ HRESULT CO_BearTrap::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CO_BearTrap::Initialize(void * pArg)
+HRESULT CS_Marceline::Initialize(void * pArg)
 {	
-	m_wsTag = L"Object_BeapTrap";
+	m_wsTag = L"Skill_Marceline";
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
@@ -49,31 +49,30 @@ HRESULT CO_BearTrap::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	m_pModelCom->Set_AnimIndex(0);
+
 	return S_OK;
 }
 
-void CO_BearTrap::Tick(_double TimeDelta)
+void CS_Marceline::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if(1 == m_pModelCom->Get_AnimIndex(), m_pModelCom->Get_Finished())
-		m_pModelCom->Set_AnimIndex(0);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CO_BearTrap::Late_Tick(_double TimeDelta)
+void CS_Marceline::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CO_BearTrap::Render()
+HRESULT CS_Marceline::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -85,11 +84,13 @@ HRESULT CO_BearTrap::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i)
+		if (0 == i || 1 == i || 2 == i)	// 이상한 네모들 건너 뜀
 			continue;
 
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 0);
+
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -101,16 +102,7 @@ HRESULT CO_BearTrap::Render()
 	return S_OK;
 }
 
-void CO_BearTrap::On_Collision(CGameObject * pOther)
-{
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-	{
-		m_pModelCom->Set_AnimIndex(1, false);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
-	}
-}
-
-HRESULT CO_BearTrap::SetUp_Components()
+HRESULT CS_Marceline::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -122,22 +114,15 @@ HRESULT CO_BearTrap::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	///* For.Com_Model */
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"), TEXT("Com_Model"),
-	//	(CComponent**)&m_pModelCom)))
-	//	return E_FAIL;
-
-	// 마르셀린 모델 테스트 중 안 보임!!
 	/* For.Com_Model */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Marceline"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	CCollider::COLLIDERDESC			ColliderDesc;
-
-	/* For.Com_AABB */
+	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.f, 1.f, 1.f);
+	ColliderDesc.vSize = _float3(3.0f, 3.0f, 3.0f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -147,7 +132,7 @@ HRESULT CO_BearTrap::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CO_BearTrap::SetUp_ShaderResources()
+HRESULT CS_Marceline::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -167,35 +152,34 @@ HRESULT CO_BearTrap::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CO_BearTrap * CO_BearTrap::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CS_Marceline * CS_Marceline::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CO_BearTrap*		pInstance = new CO_BearTrap(pDevice, pContext);
+	CS_Marceline*		pInstance = new CS_Marceline(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CO_BearTrap");
+		MSG_BOX("Failed to Created : CS_Marceline");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CO_BearTrap::Clone(void * pArg)
+CGameObject * CS_Marceline::Clone(void * pArg)
 {
-	CO_BearTrap*		pInstance = new CO_BearTrap(*this);
+	CS_Marceline*		pInstance = new CS_Marceline(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CO_BearTrap");
+		MSG_BOX("Failed to Cloned : CS_Marceline");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CO_BearTrap::Free()
+void CS_Marceline::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

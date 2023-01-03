@@ -628,7 +628,7 @@ void CJake::Key_Input(_double TimeDelta)
 		{
 			if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			{
-				m_bPaint = false;
+				m_bSkill_Clone = false;
 				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::PAINT);
 			}
 		}
@@ -657,9 +657,9 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
-	if (!m_bPaint)
+	if (!m_bSkill_Clone)
 	{
-		m_bPaint = true;
+		m_bSkill_Clone = true;
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
@@ -675,7 +675,7 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		vLook = XMVector4Transform(vLook, RotationMatrix);		// 회전행렬의 look 을 가져온다.
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);			// 넘긴다.
 
-		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
+		tPaintWorkInfo.iAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
@@ -684,7 +684,6 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
 
-		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
@@ -695,7 +694,6 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		vLook = XMVector4Transform(vLook, RotationMatrix);
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
 
-		tPaintWorkInfo.iAttack = m_tPlayerInfo.iAttack;
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))

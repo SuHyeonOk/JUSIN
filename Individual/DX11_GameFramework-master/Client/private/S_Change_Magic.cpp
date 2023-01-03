@@ -69,14 +69,14 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 	Skill_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CS_Change_Magic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

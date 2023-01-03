@@ -24,7 +24,7 @@ public:
 
 		enum STATE {
 			IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, STUN, DIE, CHANGE, CHEERING, 
-			SWIM, PAINT,
+			SWIM, PAINT, MARCELINE, 
 			TREEWITCH, MAGIC, STATE_END
 		};
 		STATE		eState;		// 현재 상태
@@ -76,6 +76,7 @@ public:
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
 	_int				Get_Player_Attack() { return m_tPlayerInfo.iAttack; }
+	void				Set_Player_Attack(_int iAttack) { m_tPlayerInfo.iAttack = iAttack; } // 스킬의 경우 잠시 공격력을 올렸다가 내리도록 하기 위해서
 
 	// UI 관련
 	void				Set_Player_Exp(_int eExp) { m_tPlayerInfo.iExp += eExp; }

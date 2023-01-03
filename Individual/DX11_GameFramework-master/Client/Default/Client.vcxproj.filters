@@ -390,6 +390,9 @@
     <ClInclude Include="..\public\S_PaintWork.h">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_Marceline.h">
+      <Filter>02.GameObjects\PlayerSkill\Marceline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -589,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="..\private\S_PaintWork.cpp">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_Marceline.cpp">
+      <Filter>02.GameObjects\PlayerSkill\Marceline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

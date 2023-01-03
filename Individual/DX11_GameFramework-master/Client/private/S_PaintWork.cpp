@@ -52,13 +52,16 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 
+	// 총알 공격력 다르게 설정
+	CObj_Manager::GetInstance()->Set_Player_Attack(20);
+
 	return S_OK;
 }
 
 void CS_PaintWork::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
+	cout << m_tBulletInfo.iAttack << endl;
 	if (!m_bMove)
 	{
 		m_pTransformCom->Go_Right(TimeDelta);
@@ -101,6 +104,9 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 	m_dBullet_TimeAcc += TimeDelta;
 	if (1.25 < m_dBullet_TimeAcc)
 	{
+		// 죽을 때 원래 공격력으로 변경
+		CObj_Manager::GetInstance()->Set_Player_Attack(m_tBulletInfo.iAttack);
+
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
 	}

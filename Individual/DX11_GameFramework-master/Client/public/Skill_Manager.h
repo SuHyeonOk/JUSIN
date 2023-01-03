@@ -12,7 +12,7 @@ class CSkill_Manager : public CBase
 public:
 	typedef struct tagPlyaerSkill
 	{
-		enum SKILL { PAINT, SKILL_END };
+		enum SKILL { PAINT, MARCELINT, SKILL_END };
 		SKILL		eSkill;
 
 	}PLAYERSKILL;
