@@ -72,13 +72,13 @@ protected:	// 자식이 자주 사용할 함수
 	virtual void			Find_Tick() {};
 	virtual void			Attack_Tick(const _double& TimeDelta) {};
 	virtual void			Hit_Tick() {};
-	virtual	void			Die_Tick() {};
+	virtual	void			Die_Tick(const _double& TimeDelta) {};
 
-protected:	
+protected:	// 자식에서 가져다 쓰는 함수
 	_bool				Random_Move(CTransform* pTransform, _float4 f4CenterPos, _double TimeDelta, _double dMoveTime, _float fRange = 2.f);
 	_bool				RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.7f, _float fEnd = 3.f);	// 랜덤 위치로 이동하는 기능.
-	_bool				Collision_ToPlayer() {};
 
+	void				Die(const _double& TimeDelta, _float fPlusY, _uint iBronzeCount = 0, _uint iSilverCount = 0, _uint iGoldCount = 0);
 	void				Dance_Time();
 
 protected:
@@ -96,12 +96,16 @@ protected:	// Shader
 	_double				m_dAlpha_TimeAcc = 0;
 
 protected:	
-	_bool				m_bPlayer_Attack = false; // On_Collision();
+	// On_Collision();
+	_bool				m_bPlayer_Attack = false; 
 	_double				m_dPlayer_Attack_TimeAcc = 0;
 
-	_bool				m_OneCoin = false;	// Monster_Die();
+	// Monster_Die();
+	_bool				m_OneCoin = false;	
+	_int				m_iDieEffect_Count = 0;
 
-private:	// RandomMove();
+private:	
+	// RandomMove();
 	_float4				m_f4RandomPos;
 	
 	// Random_Move();

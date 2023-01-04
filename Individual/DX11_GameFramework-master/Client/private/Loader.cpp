@@ -36,6 +36,7 @@
 // Effect
 #include "Effect_Rect_Instancing.h"
 #include "Effect_Point_Instancing.h"
+#include "E_DieCenter.h"
 
 // Weapon
 #include "W_PigWarrior.h"
@@ -450,6 +451,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	UI_Texture();
+	Effect_Texture();
 
 #pragma endregion
 
@@ -632,6 +634,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	UI_Create();
+	Effect_Create();
 
 	// Obj
 	/* For.Prototype_GameObject_O_Box */
@@ -1022,6 +1025,36 @@ HRESULT CLoader::UI_Create()
 	return S_OK;
 }
 
+HRESULT CLoader::Effect_Texture()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	/* For.Prototype_Component_Texture_E_DieCenter */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_DieCenter"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect_DieCenter/DieCenter_%d.png"), 9))))
+		return E_FAIL;
+
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLoader::Effect_Create()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	/* For.Prototype_GameObject_E_DieCenter */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_DieCenter"),
+		CE_DieCenter::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLoader::SkeletonTemp()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -1038,6 +1071,7 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
 
 	UI_Texture();
+	Effect_Texture();
 
 	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
@@ -1165,6 +1199,7 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
 
 	UI_Create();
+	Effect_Create();
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI"), TEXT("Prototype_GameObject_UI"))))
 		return E_FAIL;

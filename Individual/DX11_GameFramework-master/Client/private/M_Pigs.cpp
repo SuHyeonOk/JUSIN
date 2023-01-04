@@ -94,6 +94,21 @@ HRESULT CM_Pigs::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+
+			if (i == 0)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+		}
+
+		return S_OK;	// 죽었다면, 여기까지 진행하고 return
+	}
+
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -181,6 +196,12 @@ HRESULT CM_Pigs::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -217,7 +238,7 @@ void CM_Pigs::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::DIE:
-		Die_Tick();
+		Die_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(3, false);
 		break;
 
@@ -317,24 +338,9 @@ void CM_Pigs::Hit_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
-void CM_Pigs::Die_Tick()
+void CM_Pigs::Die_Tick(const _double& TimeDelta)
 {
-	// 몬스터가 죽고 나면 할 행동
-
-	CGameObject::Set_Dead();
-	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
-
-	if (!m_OneCoin)	// 동전 생성
-	{
-		// Item
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 vf4MyPos;
-		XMStoreFloat4(&vf4MyPos, vMyPos);
-
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 5, 2, 0);
-
-		m_OneCoin = true;
-	}
+	CM_Monster::Die(TimeDelta, 1.0f, 5, 2, 0);
 }
 
 CM_Pigs * CM_Pigs::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

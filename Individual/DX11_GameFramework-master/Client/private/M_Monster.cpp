@@ -5,6 +5,9 @@
 #include "Obj_Manager.h"
 #include "Utilities_Manager.h"
 #include "Skill_Manager.h"
+#include "ItemManager.h"
+#include "Effect_Manager.h"
+#include "E_DieCenter.h"
 
 CM_Monster::CM_Monster(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -51,7 +54,8 @@ void CM_Monster::Tick(const _double& TimeDelta)
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayer_Attack_TimeAcc)
 		{
-			m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			m_tMonsterInfo.iHp = 0;
+			//m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
 			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 
 			m_bPlayer_Attack = false;
@@ -127,16 +131,23 @@ _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _dou
 	if (fRange < fDiatance)	// 일정 범위를 나가면
 	{
 		pTransform->Chase(vCenterPos, TimeDelta);	// 원점으로 돌아가고
-
-		if (!m_bRandomPos)	// 추가 일정 범위로 나가면 계속 랜덤값을 주는 것이 아닌 한 번! 만 준다.
-		{
-			m_bRandomPos = true;
-			m_fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-		}
-		pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), m_fRandomAxis);	// Look 을 변경한다.
+		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+		pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), fRandomAxis);	// Look 을 변경한다.
 	}
-	else
-		m_bRandomPos = false;
+
+	//if (fRange < fDiatance)	// 일정 범위를 나가면
+	//{
+	//	pTransform->Chase(vCenterPos, TimeDelta);	// 원점으로 돌아가고
+
+	//	if (!m_bRandomPos)	// 추가 일정 범위로 나가면 계속 랜덤값을 주는 것이 아닌 한 번! 만 준다.
+	//	{
+	//		m_bRandomPos = true;
+	//		m_fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	//	}
+	//	pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), m_fRandomAxis);	// Look 을 변경한다.
+	//}
+	//else
+	//	m_bRandomPos = false;
 
 	return true;
 }
@@ -199,6 +210,73 @@ _bool CM_Monster::RandomMove(CTransform* pTransform, _float4 f4FirstPos, _float 
 	}
 	else
 		return false;
+}
+
+void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCount, _uint iSilverCount, _uint iGoldCount)
+{
+	// 몬스터가 죽고 나면 할 행동
+
+	if (0 >= m_fAlpha)
+		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
+
+	m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
+	if (0.01 < m_dAlpha_TimeAcc)
+	{
+		m_fAlpha -= 0.01f;
+		m_dAlpha_TimeAcc = 0;
+	}
+
+	if (5 != m_iDieEffect_Count)													// 이펙트 5개
+	{
+		++m_iDieEffect_Count;
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vf4MyPos;
+		XMStoreFloat4(&vf4MyPos, vMyPos);
+
+		CE_DieCenter::DIECENTERINFO tDieCenterInfo;
+
+		if(MONSTERDESC::MONSTERKIND::W_BEE == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::W_WORKE == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::GHOST_1 == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::GHOST_2 == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::GHOST_3 == m_tMonsterDesc.eMonsterKind)
+  			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::SKY;
+		else if (MONSTERDESC::MONSTERKIND::S_COWBOY == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::S_SR == m_tMonsterDesc.eMonsterKind)
+			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::BLUE;
+		else if (MONSTERDESC::MONSTERKIND::G_BLUE == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::G_RED == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::G_YELLOW == m_tMonsterDesc.eMonsterKind)
+			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::YELLOW;
+		else if (MONSTERDESC::MONSTERKIND::TREE_WITCH == m_tMonsterDesc.eMonsterKind)
+			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::BROWN;
+		else if (MONSTERDESC::MONSTERKIND::MAGIC_MAN == m_tMonsterDesc.eMonsterKind)
+			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::PURPLE;
+		else if (MONSTERDESC::MONSTERKIND::MIMIC == m_tMonsterDesc.eMonsterKind)
+			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::RED;
+		if (MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_1 == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_2 == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::SKELETON_ARCHER_1 == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::SKELETON_ARCHER_2 == m_tMonsterDesc.eMonsterKind)
+			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::GRAY;
+
+  		tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + fPlusY, vf4MyPos.z - 0.7f);
+		CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
+	}
+
+	if (!m_OneCoin)															// 한 번만
+	{
+		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vf4MyPos;
+		XMStoreFloat4(&vf4MyPos, vMyPos);
+
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), iBronzeCount, iSilverCount, iGoldCount); 	// 동전 생성
+
+		m_OneCoin = true;
+	}
 }
 
 void CM_Monster::Dance_Time()

@@ -38,8 +38,12 @@ public:
 	HRESULT Loading_ForGamePlay();
 	HRESULT Loading_ForSkeleton();
 	HRESULT Loading_ForSkeleton_Boss();
+
 	HRESULT	UI_Texture();
 	HRESULT	UI_Create();
+	HRESULT	Effect_Texture();
+	HRESULT	Effect_Create();
+
 	HRESULT	SkeletonTemp();
 
 private:

@@ -5,7 +5,9 @@
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
+#include "Effect_Manager.h"
 
+#include "E_DieCenter.h"
 #include "B_3DBullet.h"
 
 CM_Skeleton_Archer::CM_Skeleton_Archer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -96,6 +98,12 @@ HRESULT CM_Skeleton_Archer::Render()
 		}
 
 		return S_OK;	// 죽었다면, 여기까지 진행하고 return
+	}
+
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
 	}
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
@@ -314,30 +322,46 @@ void CM_Skeleton_Archer::Hit_Tick()
 
 void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)
 {
-	// 몬스터가 죽고 나면 할 행동 Lubglubs_Explosion__D
+	CM_Monster::Die(TimeDelta, 1.1f, 6, 4, 2);
 
-	if(0 >= m_fAlpha)			
-		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
+	// 몬스터가 죽고 나면 할 행동
 
-	m_dAlpha_TimeAcc += TimeDelta;											// 셰이더
-	if (0.01 < m_dAlpha_TimeAcc)
-	{
-		m_fAlpha -= 0.01f;
-		m_dAlpha_TimeAcc = 0;
-	}
+	//if(0 >= m_fAlpha)			
+	//	CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
 
-	if (!m_OneCoin)															// 한 번만
-	{
-		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+	//m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
+	//if (0.01 < m_dAlpha_TimeAcc)
+	//{
+	//	m_fAlpha -= 0.01f;
+	//	m_dAlpha_TimeAcc = 0;
+	//}
 
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 동전 생성
-		_float4 vf4MyPos;
-		XMStoreFloat4(&vf4MyPos, vMyPos);
+	//if (5 != m_iDieEffect_Count)													// 이펙트 5개
+	//{
+	//	++m_iDieEffect_Count;
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 6, 4, 2);
+	//	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//	_float4 vf4MyPos;
+	//	XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		m_OneCoin = true;
-	}
+	//	CE_DieCenter::DIECENTERINFO tDieCenterInfo;									
+	//	tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::SKELETON;
+	//	tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + 0.7f, vf4MyPos.z - 0.5f);
+	//	CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
+	//}
+
+	//if (!m_OneCoin)															// 한 번만
+	//{
+	//	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+
+	//	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//	_float4 vf4MyPos;
+	//	XMStoreFloat4(&vf4MyPos, vMyPos);
+
+	//	CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 6, 4, 2); 	// 동전 생성
+
+	//	m_OneCoin = true;
+	//}
 }
 
 CM_Skeleton_Archer * CM_Skeleton_Archer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

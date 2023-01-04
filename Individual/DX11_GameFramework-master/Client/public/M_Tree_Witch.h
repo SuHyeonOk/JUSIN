@@ -41,7 +41,7 @@ private:
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
 	void				Attack_Tick2(const _double& TimeDelta);
 	virtual void		Hit_Tick()								override;
-	virtual	void		Die_Tick()								override;
+	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
 private:
 	_float4				m_f4PlayerPos;

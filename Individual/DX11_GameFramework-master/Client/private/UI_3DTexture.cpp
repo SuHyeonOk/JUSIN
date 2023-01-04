@@ -34,7 +34,7 @@ HRESULT CUI_3DTexture::Initialize(void * pArg)
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tTextureInfo.f3Pos.x, m_tTextureInfo.f3Pos.y, m_tTextureInfo.f3Pos.z);
+	GameObjectDesc.TransformDesc.f3Pos = m_tTextureInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;

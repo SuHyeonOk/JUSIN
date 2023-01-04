@@ -96,6 +96,22 @@ HRESULT CM_Magic_Man::Render()
 		return E_FAIL;
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+
+			if (i == 0)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+		}
+
+		return S_OK;	// 죽었다면, 여기까지 진행하고 return
+	}
+
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -177,6 +193,12 @@ HRESULT CM_Magic_Man::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -219,7 +241,7 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::DIE:
 		m_pModelCom->Set_AnimIndex(7, false);	// 무언갈 뿌리면서 사라진다.
-		Die_Tick();
+		Die_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::DANCE:
@@ -320,14 +342,11 @@ void CM_Magic_Man::NoHit_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
 
-void CM_Magic_Man::Die_Tick()
+void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 {
-	// 몬스터가 죽고 나면 할 행동
+	CM_Monster::Die(TimeDelta, 1.2f);
 
-	CGameObject::Set_Dead();
-	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
-
-	if (!m_OneCoin)	// 동전 생성
+	if (!m_OneCoin)	// 종이 생성
 	{
 		// Item
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);

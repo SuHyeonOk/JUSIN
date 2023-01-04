@@ -55,14 +55,8 @@
     <Filter Include="77.Manager">
       <UniqueIdentifier>{fbd8c078-e35b-49eb-8785-af09916df527}</UniqueIdentifier>
     </Filter>
-    <Filter Include="77.Manager\Data">
-      <UniqueIdentifier>{4ac3433c-2755-403a-9a53-b6e2aec60f3a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Item">
       <UniqueIdentifier>{13a1b3ec-172d-4603-ae9f-9cac93f48232}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="77.Manager\Item">
-      <UniqueIdentifier>{f16a8539-5b22-448a-9df1-88a15a183fa4}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Player\Finn">
       <UniqueIdentifier>{1667692c-e214-4161-8941-505a3084acf6}</UniqueIdentifier>
@@ -70,17 +64,8 @@
     <Filter Include="02.GameObjects\Player\Jake">
       <UniqueIdentifier>{a7ce69b3-14b2-414f-92c6-c6d17d452ff5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="77.Manager\Obj">
-      <UniqueIdentifier>{dc42a624-63c8-4d30-908b-1d92b6f43a3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Bullet">
       <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="77.Manager\Skill">
-      <UniqueIdentifier>{0a55d0a0-fc0e-4c57-94f0-c7db11241467}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="77.Manager\Utilities">
-      <UniqueIdentifier>{49b40824-f224-43bb-97ba-78310e3fbe65}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Monster\PigWarrior">
       <UniqueIdentifier>{c75bc1ea-60f0-4e59-93cd-b6df6396624b}</UniqueIdentifier>
@@ -172,9 +157,6 @@
     <Filter Include="02.GameObjects\PlayerSkill\Marceline">
       <UniqueIdentifier>{2bddfe42-3a7a-4ca0-9c50-e1f8f3031141}</UniqueIdentifier>
     </Filter>
-    <Filter Include="77.Manager\UI">
-      <UniqueIdentifier>{6a8c8993-f749-414a-80da-4b8900c696b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Monster">
       <UniqueIdentifier>{49d71e50-188b-41e4-aebe-76cb320f0606}</UniqueIdentifier>
     </Filter>
@@ -231,32 +213,17 @@
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\Player</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\DataManager.h">
-      <Filter>77.Manager\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ItemManager.h">
-      <Filter>77.Manager\Item</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Finn.h">
       <Filter>02.GameObjects\Player\Finn</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Jake.h">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Obj_Manager.h">
-      <Filter>77.Manager\Obj</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\M_Monster.h">
       <Filter>02.GameObjects\Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_StunChick.h">
       <Filter>02.GameObjects\PlayerSkill\Stun</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Skill_Manager.h">
-      <Filter>77.Manager\Skill</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Utilities_Manager.h">
-      <Filter>77.Manager\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\public\M_PigWarrior.h">
       <Filter>02.GameObjects\Monster\PigWarrior</Filter>
@@ -399,9 +366,6 @@
     <ClInclude Include="..\public\UI_.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\UI_Manager.h">
-      <Filter>77.Manager\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\UI_Monster.h">
       <Filter>02.GameObjects\UI\Monster</Filter>
     </ClInclude>
@@ -410,6 +374,30 @@
     </ClInclude>
     <ClInclude Include="..\public\UI_Monster_BarBack.h">
       <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\E_DieCenter.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DataManager.h">
+      <Filter>77.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ItemManager.h">
+      <Filter>77.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Obj_Manager.h">
+      <Filter>77.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Skill_Manager.h">
+      <Filter>77.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Manager.h">
+      <Filter>77.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Utilities_Manager.h">
+      <Filter>77.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect_Manager.h">
+      <Filter>77.Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -449,32 +437,17 @@
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\Player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\DataManager.cpp">
-      <Filter>77.Manager\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ItemManager.cpp">
-      <Filter>77.Manager\Item</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Finn.cpp">
       <Filter>02.GameObjects\Player\Finn</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Jake.cpp">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Obj_Manager.cpp">
-      <Filter>77.Manager\Obj</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\M_Monster.cpp">
       <Filter>02.GameObjects\Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_StunChick.cpp">
       <Filter>02.GameObjects\PlayerSkill\Stun</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Skill_Manager.cpp">
-      <Filter>77.Manager\Skill</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Utilities_Manager.cpp">
-      <Filter>77.Manager\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\private\M_PigWarrior.cpp">
       <Filter>02.GameObjects\Monster\PigWarrior</Filter>
@@ -614,9 +587,6 @@
     <ClCompile Include="..\private\UI_.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\UI_Manager.cpp">
-      <Filter>77.Manager\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\UI_Monster.cpp">
       <Filter>02.GameObjects\UI\Monster</Filter>
     </ClCompile>
@@ -625,6 +595,30 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_Monster_BarBack.cpp">
       <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_DieCenter.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DataManager.cpp">
+      <Filter>77.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ItemManager.cpp">
+      <Filter>77.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Obj_Manager.cpp">
+      <Filter>77.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Skill_Manager.cpp">
+      <Filter>77.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Manager.cpp">
+      <Filter>77.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Utilities_Manager.cpp">
+      <Filter>77.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Manager.cpp">
+      <Filter>77.Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

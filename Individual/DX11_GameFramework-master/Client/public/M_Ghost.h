@@ -34,7 +34,7 @@ private:
 	virtual void		Find_Tick()								override;
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
 	virtual void		Hit_Tick()								override;
-	virtual	void		Die_Tick()								override;
+	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
 private:
 	vector<CGameObject*>	m_MonsterParts;

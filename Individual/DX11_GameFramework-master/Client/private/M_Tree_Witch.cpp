@@ -81,6 +81,21 @@ HRESULT CM_Tree_Witch::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+
+			if (i == 0)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+		}
+
+		return S_OK;	// 죽었다면, 여기까지 진행하고 return
+	}
+
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -147,6 +162,12 @@ HRESULT CM_Tree_Witch::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -183,7 +204,7 @@ void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::DIE:
 		m_pModelCom->Set_AnimIndex(2, false);
-		Die_Tick();
+		Die_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::DANCE:
@@ -324,37 +345,6 @@ void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 		m_eSkill_AnimState = STATE_END;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}
-
-	//switch (m_eState)
-	//{
-	//case CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP:
-	//	m_pModelCom->Set_AnimIndex(9, false, false);   // 누르기 위해 점프
-	//	break;
-
-	//case CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE:
-	//	m_pModelCom->Set_AnimIndex(7, false);   // 누르기
-	//	break;
-
-	//case CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE:
-	//	m_pModelCom->Set_AnimIndex(6, false);   // 일어나기
-	//	break;
-	//}
-
-	//CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(m_eState);
-
-
-
-	////if (9 == m_pModelCom->Get_AnimIndex())
-	////	cout << m_pModelCom->Get_Keyframes() << endl;
-	//if (9 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-	//	m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE;
-	//if (7 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-	//	m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE;
-	//if (6 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-	//{
-	//	CSkill_Manager::GetInstance()->Set_TreeWitch_Skill(CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END);
-	//	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	//}
 }
 
 void CM_Tree_Witch::Hit_Tick()
@@ -363,24 +353,9 @@ void CM_Tree_Witch::Hit_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
-void CM_Tree_Witch::Die_Tick()
+void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 {
-	// 몬스터가 죽고 나면 할 행동
-
-	CGameObject::Set_Dead();
-	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
-
-	if (!m_OneCoin)	// 동전 생성
-	{
-		// Item
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 vf4MyPos;
-		XMStoreFloat4(&vf4MyPos, vMyPos);
-
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 3, 2);
-
-		m_OneCoin = true;
-	}
+	CM_Monster::Die(TimeDelta, 1.2f, 10, 3, 2);
 }
 
 CM_Tree_Witch * CM_Tree_Witch::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

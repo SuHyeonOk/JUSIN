@@ -4,6 +4,8 @@
 #include "Base.h"
 #include "GameObject.h"
 
+BEGIN(Client)
+
 class CUI_Manager final : public CBase
 {
 	DECLARE_SINGLETON(CUI_Manager)
@@ -51,3 +53,4 @@ public:
 	virtual void Free() override;
 };
 
+END

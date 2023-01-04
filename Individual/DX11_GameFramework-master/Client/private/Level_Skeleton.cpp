@@ -208,7 +208,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Npc()
 
 	CN_NPC::NPCDESC					tNpcDesc;
 	tNpcDesc.eNpcType = tNpcDesc.DOCTOR;
-	tNpcDesc.TransformDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
+	tNpcDesc.TransformDesc.f3Pos = _float3(-36.f, 0.f, 12.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Doctor__0"), TEXT("Prototype_GameObject_N_Doctor"), &tNpcDesc)))
 		return E_FAIL;
 
