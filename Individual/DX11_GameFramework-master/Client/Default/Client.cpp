@@ -89,7 +89,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			TimerAcc += pGameInstance->Get_TimeDelta(TEXT("Timer_Default"));
 
-			if (TimerAcc > OneFrameSec)
+			if (/*TimerAcc > OneFrameSec*/true)
 			{
 				pGameInstance->Update_Timer(TEXT("Timer_60"));
 
