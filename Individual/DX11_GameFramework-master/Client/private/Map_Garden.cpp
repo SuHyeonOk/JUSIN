@@ -62,8 +62,7 @@ HRESULT CMap_Garden::Render()
 	{
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
-		m_pModelCom->Render(m_pShaderCom, i);
+		m_pModelCom->Render(m_pShaderCom, i, nullptr, 3);
 	}
 
 	return S_OK;
@@ -77,7 +76,7 @@ HRESULT CMap_Garden::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel_Map"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 

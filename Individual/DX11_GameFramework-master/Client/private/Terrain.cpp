@@ -109,7 +109,7 @@ HRESULT CTerrain::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxNorTex"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 

@@ -280,15 +280,6 @@ HRESULT CLoader::Loading_Tool()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
-	/* For.Prototype_Component_Shader_VtxNorTex */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxModel*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxModel"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
-		return E_FAIL;
 
 #pragma region 네비게이션
 	lstrcpy(m_szLoadingText, TEXT("네비게이션정보생성중"));
@@ -630,20 +621,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 
 #pragma region 셰이더
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 셰이더
-	/* For.Prototype_Component_Shader_VtxNorTex */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
-		return E_FAIL;
 
-	/* For.Prototype_Component_Shader_VtxModel*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxModel_Map*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel_Map"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_Map.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
-		return E_FAIL;
 #pragma endregion
 
 #pragma region 네비게이션
@@ -786,7 +764,7 @@ HRESULT CLoader::Loading_ForSkeleton()
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	SkeletonTemp();
+	//SkeletonTemp();
 
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
@@ -1135,22 +1113,6 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_Component_Model_O_Portal_Off*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Portal_Off"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Object/Portal_Off/Portal_Off.fbx", PivotMatrix))))
-		return E_FAIL;
-
-
-	/* For.Prototype_Component_Shader_VtxNorTex */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECLARATION::Elements, VTXNORTEX_DECLARATION::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxModel*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxModel_Map*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel_Map"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_Map.hlsl"), VTXMODEL_DECLARATION::Elements, VTXMODEL_DECLARATION::iNumElements))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Terrain */
