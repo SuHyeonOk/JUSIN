@@ -45,7 +45,7 @@ void CFinn_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼
+	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
 	if (CObj_Manager::PLAYERINFO::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer && 
 		CObj_Manager::PLAYERINFO::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		m_bMonster_Crash = false;

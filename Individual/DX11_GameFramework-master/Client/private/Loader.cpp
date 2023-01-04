@@ -465,6 +465,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 		return E_FAIL;
 
 	// UI
+	/* For.Prototype_Component_Texture_UI_Talk */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
+		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Monster */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/UI_Monster_%d.dds"), 14))))
