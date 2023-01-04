@@ -95,7 +95,7 @@ HRESULT CW_Skeleton_Shield::Render()
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");		
 
-		m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
+		m_pModelCom->Render(m_pShaderCom, i, nullptr, 2);
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())

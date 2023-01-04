@@ -114,10 +114,12 @@ HRESULT CM_PigWarrior::Render()
 		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
 			if (1 == i) continue;	// 노동자 칼 없애기
 
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		if (i == 0)
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
+		else
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;

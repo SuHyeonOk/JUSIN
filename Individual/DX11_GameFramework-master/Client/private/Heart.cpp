@@ -68,7 +68,7 @@ void CHeart::Late_Tick(_double TimeDelta)
 
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }
@@ -85,10 +85,12 @@ HRESULT CHeart::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		m_pModelCom->Render(m_pShaderCom, i);
+		if (i == 0)
+			m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
+		else
+			m_pModelCom->Render(m_pShaderCom, i, nullptr);
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
