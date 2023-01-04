@@ -45,8 +45,24 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 
-	// [0] : Monster 공격시 UI
+	// [1] : Monster 공격시 UI
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Monster")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [2] : Monster 공격시 UI
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Monster_HealthBar_Bar")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [3] : Monster 공격시 UI
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Monster_HealthBar_BarBack")));
 
 	if (nullptr == pUI)
 		return E_FAIL;
@@ -64,8 +80,12 @@ void CUI_::Tick(_double TimeDelta)
 	if(CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Tick(TimeDelta);
 
-	if(CUI_Manager::GetInstance()->Get_UI_Monster())
+	if (0 != m_vecUI.size()/*CUI_Manager::GetInstance()->Get_UI_Monster()*/)
+	{
 		m_vecUI[1]->Tick(TimeDelta);
+		m_vecUI[3]->Tick(TimeDelta);
+		m_vecUI[2]->Tick(TimeDelta);
+	}
 
 	__super::Tick(TimeDelta);
 }
@@ -75,8 +95,12 @@ void CUI_::Late_Tick(_double TimeDelta)
 	if (CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Late_Tick(TimeDelta);
 
-	if (CUI_Manager::GetInstance()->Get_UI_Monster())
+	if (0 != m_vecUI.size()/*CUI_Manager::GetInstance()->Get_UI_Monster()*/)
+	{
 		m_vecUI[1]->Late_Tick(TimeDelta);
+		m_vecUI[3]->Late_Tick(TimeDelta);
+		m_vecUI[2]->Late_Tick(TimeDelta);
+	}
 
 	__super::Late_Tick(TimeDelta);
 

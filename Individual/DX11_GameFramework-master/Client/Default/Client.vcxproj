@@ -234,6 +234,8 @@
     <ClInclude Include="..\public\UI_Informacion.h" />
     <ClInclude Include="..\public\UI_Manager.h" />
     <ClInclude Include="..\public\UI_Monster.h" />
+    <ClInclude Include="..\public\UI_Monster_Bar.h" />
+    <ClInclude Include="..\public\UI_Monster_BarBack.h" />
     <ClInclude Include="..\public\UI_Talk.h" />
     <ClInclude Include="..\public\Utilities_Manager.h" />
     <ClInclude Include="..\public\W_GhostFist.h" />
@@ -307,6 +309,8 @@
     <ClCompile Include="..\private\UI_Informacion.cpp" />
     <ClCompile Include="..\private\UI_Manager.cpp" />
     <ClCompile Include="..\private\UI_Monster.cpp" />
+    <ClCompile Include="..\private\UI_Monster_Bar.cpp" />
+    <ClCompile Include="..\private\UI_Monster_BarBack.cpp" />
     <ClCompile Include="..\private\UI_Talk.cpp" />
     <ClCompile Include="..\private\Utilities_Manager.cpp" />
     <ClCompile Include="..\private\W_GhostFist.cpp" />

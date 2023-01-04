@@ -405,6 +405,12 @@
     <ClInclude Include="..\public\UI_Monster.h">
       <Filter>02.GameObjects\UI\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Monster_Bar.h">
+      <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Monster_BarBack.h">
+      <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -612,6 +618,12 @@
       <Filter>77.Manager\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_Monster.cpp">
+      <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Monster_Bar.cpp">
+      <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Monster_BarBack.cpp">
       <Filter>02.GameObjects\UI\Monster</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,6 +17,8 @@
 #include "UI_3DTexture.h"
 #include "UI_Talk.h"
 #include "UI_Monster.h"
+#include "UI_Monster_Bar.h"
+#include "UI_Monster_BarBack.h"
 
 // Obj
 #include "O_Box.h"
@@ -464,24 +466,8 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
 
-	// UI
-	/* For.Prototype_Component_Texture_UI_Talk */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UI_Monster */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/UI_Monster_%d.dds"), 14))))
-		return E_FAIL;
+	UI_Texture();
 
-	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
-		return E_FAIL;
 #pragma endregion
 
 #pragma region ¹öÆÛ
@@ -675,19 +661,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// UI
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
-		CUI_3DTexture::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster"),
-		CUI_Monstser::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	UI_Create();
 
 	// Obj
 	/* For.Prototype_GameObject_O_Box */
@@ -1007,64 +981,71 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	return S_OK;
 }
 
-HRESULT CLoader::UI_Monster()
+HRESULT CLoader::UI_Texture()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	/* For.Prototype_Component_Texture_UIMonster_Ghost_1 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Ghost_1"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Ghost_1.dds")))))
+	// 3D UI
+	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
 		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Ghost_2 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Ghost_2"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Ghost_2.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Ghost_3 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Ghost_3"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Ghost_3.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Skeleton */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Skeleton"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Skeleton.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Gnome_Blue */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Gnome_Blue"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Gnome_Blue.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Gnome_Red */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Gnome_Red"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Gnome_Red.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Mimic_Monster */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Mimic_Monster"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Mimic_Monster.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Pig_Bee */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Pig_Bee"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Pig_Bee.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Pig_Chef */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Pig_Chef"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Pig_Chef.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Pig_Cowboy */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Pig_Cowboy"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Pig_Cowboy.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Pig_Sr */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Pig_Sr"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Pig_Sr.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_Pig_Worker */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_Pig_Worker"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Pig_Worker.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UIMonster_TreeWitch */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UIMonster_TreeWitch"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/TreeWitch.dds")))))
+	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
 		return E_FAIL;
 
+	// Npc
+	/* For.Prototype_Component_Texture_UI_Talk */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
+		return E_FAIL;
 
+	// Monster
+	/* For.Prototype_Component_Texture_UI_Monster */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/UI_Monster_%d.dds"), 14))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Monster_HealthBar_Bar */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster_HealthBar_Bar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Enemies_HealthBar_Bar.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Monster_HealthBar_BarBack */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster_HealthBar_BarBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Enemies_HealthBar_BarBack.png")))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLoader::UI_Create()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
+		CUI_3DTexture::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
+		CUI_Talk::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Monster
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster"),
+		CUI_Monstser::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster_HealthBar_Bar"),
+		CUI_Monstser_Bar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_3DTexture */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster_HealthBar_BarBack"),
+		CUI_Monstser_BarBack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1086,23 +1067,7 @@ HRESULT CLoader::SkeletonTemp()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Star/Star.png")))))
 		return E_FAIL;
 
-	// UI
-	/* For.Prototype_Component_Texture_UI_Talk */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Talk"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Talk/Talk.png")))))
-		return E_FAIL;
-
-	// 3D UI
-	/* For.Prototype_Component_Texture_UI_FindEnemy_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_FindEnemy_FX"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/FindEnemy_FX.png")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UI_LooseEnemy_FX */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
-		return E_FAIL;
-
-
+	UI_Texture();
 
 	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
@@ -1245,24 +1210,7 @@ HRESULT CLoader::SkeletonTemp()
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// UI
-	/* For.Prototype_Component_Texture_UI_Monster */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/UI_Monster_%d.dds"), 14))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
-		CUI_3DTexture::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster"),
-		CUI_Monstser::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	UI_Create();
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI"), TEXT("Prototype_GameObject_UI"))))
 		return E_FAIL;
