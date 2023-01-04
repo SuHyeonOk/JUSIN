@@ -43,11 +43,8 @@ HRESULT CS_Change_Magic::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	if (CHANGEINFO::CHANGE::FINN == m_tChangeInfo.eChange)
-		m_wsTag = L"Finn_Magic";
-	else if (CHANGEINFO::CHANGE::JAKE == m_tChangeInfo.eChange)
-		m_wsTag = L"Jake_Magic";
-	
+	m_wsTag = L"Jake_Magic";
+
 	CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 
 	m_pTransformCom->Set_Pos();

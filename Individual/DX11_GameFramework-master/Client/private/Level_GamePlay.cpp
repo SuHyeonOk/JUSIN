@@ -738,7 +738,7 @@ void CLevel_GamePlay::ImGui_Monster()
 		}
 		if (1 == iObjNum)
 		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
+			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKE;
 			tMonsterDesc.f3Pos = m_f3ClickPos;
 
 			m_wstObjName = L"Layer_PigWarrior_WORKER__";
@@ -1464,7 +1464,7 @@ void CLevel_GamePlay::Load_Monster()
 		}
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
+			tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKE;
 			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
 
 			m_wstObjName = L"Layer_PigWarrior_WORKER__";

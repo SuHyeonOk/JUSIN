@@ -31,8 +31,6 @@ HRESULT CM_Gronmes::Initialize_Prototype()
 
 HRESULT CM_Gronmes::Initialize(void * pArg)
 {
-	m_wsTag = L"Monster__Gronmes";
-
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -43,6 +41,7 @@ HRESULT CM_Gronmes::Initialize(void * pArg)
 
 	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_BLUE)
 	{
+		m_wsTag = L"Monster__Gronmes_Blue";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
@@ -50,6 +49,7 @@ HRESULT CM_Gronmes::Initialize(void * pArg)
 	}
 	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_RED)
 	{
+		m_wsTag = L"Monster__Gronmes_Red";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
@@ -57,6 +57,7 @@ HRESULT CM_Gronmes::Initialize(void * pArg)
 	}
 	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_YELLOW)
 	{
+		m_wsTag = L"Monster__Gronmes_Yellow";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);

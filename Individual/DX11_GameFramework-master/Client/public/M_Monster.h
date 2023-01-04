@@ -18,7 +18,7 @@ public:
 	typedef struct tagMonsterDesc : public CGameObject::GAMEOBJECTDESC
 	{
 		enum MONSTERKIND { 
-			W_BEE, W_WORKER, 
+			W_BEE, W_WORKE, 
 			S_COWBOY, S_SR, 
 			G_BLUE, G_RED, G_YELLOW,
 			TREE_WITCH, MAGIC_MAN, MIMIC,

@@ -155,7 +155,7 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar * pLayerTag)
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_0"), TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 	//	return E_FAIL;
 	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 2.f);
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKER;
+	//tMonsterDesc.eMonsterKind = tMonsterDesc.W_WORKE;
 	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_TOOL, TEXT("M_PigWarrior_BEE_1"), TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 	//	return E_FAIL;
 	//tMonsterDesc.f3Pos = _float3(-7.f, 0.f, 0.f);

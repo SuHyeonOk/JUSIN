@@ -31,8 +31,6 @@ HRESULT CM_Pigs::Initialize_Prototype()
 
 HRESULT CM_Pigs::Initialize(void * pArg)
 {
-	m_wsTag = L"Monster__Pigs";
-
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -43,6 +41,7 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 
 	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_COWBOY)
 	{
+		m_wsTag = L"Monster__Pigs_Cowboy";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
@@ -50,6 +49,7 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 	}
 	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.S_SR)
 	{
+		m_wsTag = L"Monster__Pigs_Sr";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);

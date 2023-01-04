@@ -32,8 +32,6 @@ HRESULT CM_PigWarrior::Initialize_Prototype()
 
 HRESULT CM_PigWarrior::Initialize(void * pArg)
 {
-	m_wsTag = L"Monster__PigWarrior";
-
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -44,13 +42,15 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 
 	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
 	{
+		m_wsTag = L"Monster__PigWarrior_Bee";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 1.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
 		m_f4CenterPos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
 	}
-	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
 	{
+		m_wsTag = L"Monster__PigWarrior_Worke";
 		MonsterDesc.TransformDesc.fSpeedPerSec = 1.5f;
 		MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 		MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
@@ -111,7 +111,7 @@ HRESULT CM_PigWarrior::Render()
 	{
 		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
 			if (2 == i)	continue;	// ²Ü¹ú Ä® ¾ø¾Ö±â
-		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
+		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
 			if (1 == i) continue;	// ³ëµ¿ÀÚ Ä® ¾ø¾Ö±â
 
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -151,7 +151,7 @@ HRESULT CM_PigWarrior::SetUp_Components()
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKER)
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_PigWarrior_WORKER"), TEXT("Com_Model"),

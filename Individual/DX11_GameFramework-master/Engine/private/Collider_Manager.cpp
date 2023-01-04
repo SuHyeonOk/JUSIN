@@ -25,7 +25,6 @@ HRESULT CCollider_Manager::Add_ColGroup(COL_TYPE eColType, CGameObject * pGameOb
 
 void CCollider_Manager::Update_Col(COL_TYPE eColType_L, COL_TYPE eColType_R)
 {
-
 	for (auto& pObj_L : m_ColliderObjects[eColType_L])
 	{
 		for (auto& pObj_R : m_ColliderObjects[eColType_R])
@@ -41,7 +40,6 @@ void CCollider_Manager::Update_Col(COL_TYPE eColType_L, COL_TYPE eColType_R)
 			}
 		}
 	}
-
 }
 
 void CCollider_Manager::Reset_Col()
@@ -52,7 +50,6 @@ void CCollider_Manager::Reset_Col()
 			Safe_Release(pObj);
 		m_ColliderObjects[i].clear();
 	}
-
 }
 
 void CCollider_Manager::Free()

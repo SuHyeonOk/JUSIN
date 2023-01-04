@@ -38,6 +38,7 @@ public:
 	HRESULT Loading_ForGamePlay();
 	HRESULT Loading_ForSkeleton();
 	HRESULT Loading_ForSkeleton_Boss();
+	HRESULT	UI_Monster();
 	HRESULT	SkeletonTemp();
 
 private:

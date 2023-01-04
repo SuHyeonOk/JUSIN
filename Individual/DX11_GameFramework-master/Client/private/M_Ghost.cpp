@@ -31,8 +31,6 @@ HRESULT CM_Ghost::Initialize_Prototype()
 
 HRESULT CM_Ghost::Initialize(void * pArg)
 {
-	m_wsTag = L"Monster__Ghost";
-
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -51,6 +49,13 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+
+	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.GHOST_1)
+		m_wsTag = L"Monster__Ghost_0";
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.GHOST_2)
+		m_wsTag = L"Monster__Ghost_1";
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.GHOST_3)
+		m_wsTag = L"Monster__Ghost_2";
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.iHp		= 60;

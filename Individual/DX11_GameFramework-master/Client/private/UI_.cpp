@@ -3,7 +3,6 @@
 #include "GameInstance.h"
 
 #include "UI_Manager.h"
-#include "UI_Talk.h"
 
 CUI_::CUI_(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -38,12 +37,16 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	/* For.Prototype_GameObject_UI_3DTexture */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
-		CUI_Talk::Create(m_pDevice, m_pContext))))
+	// [0] : Npc 와의 대화창
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Talk")));
+
+	if (nullptr == pUI)
 		return E_FAIL;
 
-	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Talk")));
+	m_vecUI.push_back(pUI);
+
+	// [0] : Monster 공격시 UI
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Monster")));
 
 	if (nullptr == pUI)
 		return E_FAIL;
@@ -61,6 +64,9 @@ void CUI_::Tick(_double TimeDelta)
 	if(CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Tick(TimeDelta);
 
+	if(CUI_Manager::GetInstance()->Get_UI_Monster())
+		m_vecUI[1]->Tick(TimeDelta);
+
 	__super::Tick(TimeDelta);
 }
 
@@ -68,6 +74,9 @@ void CUI_::Late_Tick(_double TimeDelta)
 {
 	if (CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Late_Tick(TimeDelta);
+
+	if (CUI_Manager::GetInstance()->Get_UI_Monster())
+		m_vecUI[1]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);
 
