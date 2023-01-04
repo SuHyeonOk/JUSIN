@@ -799,7 +799,7 @@ HRESULT CLoader::Loading_ForSkeleton()
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	SkeletonTemp();
+	//SkeletonTemp();
 
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
@@ -998,6 +998,8 @@ HRESULT CLoader::SkeletonTemp()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+
+
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
@@ -1175,6 +1177,9 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI"), TEXT("Prototype_GameObject_UI"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

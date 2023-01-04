@@ -156,12 +156,12 @@ void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 	switch (m_tMonsterInfo.eState)
 	{
 	case MONSTERINFO::STATE::IDLE:
-		m_pModelCom->Set_AnimIndex(5, false);
+		m_pModelCom->Set_AnimIndex(5, false, false);
 		Idle_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::MOVE:
-		m_pModelCom->Set_AnimIndex(10, false);
+		m_pModelCom->Set_AnimIndex(10, false, false);
 		Move_Tick(TimeDelta);
 		break;
 
@@ -239,7 +239,7 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	_int iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 25);
-	iRandomNum = 0;
+
 	if (0 == iRandomNum)		// 덩굴 생성
 	{
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 2.f);
@@ -260,11 +260,8 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 		if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-			m_pModelCom->Set_AnimIndex(8, false);
+			m_pModelCom->Set_AnimIndex(8, false, false);
 			m_eSkill_AnimState = JUMP;
-
-			// 플레이어의 애니메이션 상태 변경하기
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH);
 		}
 	}
 }
@@ -302,12 +299,15 @@ void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 	switch (m_eSkill_AnimState)
 	{
 	case Client::CM_Tree_Witch::JUMP:
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH_0);
 		m_pModelCom->Set_AnimIndex(9, false, false);   // 누르기 위해 점프
 		break;
 	case Client::CM_Tree_Witch::PRESSURE:
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH_1);
 		m_pModelCom->Set_AnimIndex(7, false, false);   // 누르기
 		break;
 	case Client::CM_Tree_Witch::RISE:
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::TREEWITCH_2);
 		m_pModelCom->Set_AnimIndex(6, false, false);   // 일어나기
 		break;
 	}
@@ -318,6 +318,7 @@ void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 		m_eSkill_AnimState = RISE;
 	if (6 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
 		m_eSkill_AnimState = STATE_END;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}

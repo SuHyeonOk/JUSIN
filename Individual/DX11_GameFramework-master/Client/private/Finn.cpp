@@ -400,10 +400,6 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Stun_Tick();
 		break;
 
-	case CObj_Manager::PLAYERINFO::TREEWITCH:
-		TreeWitch_Tick();
-		break;
-
 	case CObj_Manager::PLAYERINFO::MAGIC:
 		//Magic_Tick(TimeDelta);
 		break;
@@ -467,10 +463,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// Jake ¿¡°Ô·Î
-	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
-
-	_vector vPlayerPos;
-	vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();			// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// ³» ÁÂÇ¥
 	_vector		vDir = vPlayerPos - vMyPos;												// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ
@@ -567,7 +560,7 @@ void CFinn::Key_Input(_double TimeDelta)
 		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL	||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT	||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN	||
-		m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH)
+		m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH_0 || m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH_1 || m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH_2)
 	{
 		m_OnMove = false;
 		return;
@@ -728,7 +721,7 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
-		cout << "»ý¼º " << endl;
+
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4	f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
@@ -870,7 +863,7 @@ void CFinn::TreeWitch_Tick()
 	RELEASE_INSTANCE(CGameInstance);
 
 	if(CM_Tree_Witch::SKILLANIMSTATE::JUMP == pGameObject->Get_MonsterSkill())
-		m_pModelCom->Set_AnimIndex(55, false);
+		m_pModelCom->Set_AnimIndex(55, false, false);
 	else if (CM_Tree_Witch::SKILLANIMSTATE::PRESSURE == pGameObject->Get_MonsterSkill())
 		m_pModelCom->Set_AnimIndex(54, false);
 	else if (CM_Tree_Witch::SKILLANIMSTATE::RISE == pGameObject->Get_MonsterSkill())
@@ -967,6 +960,18 @@ void CFinn::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::PAINT:
 			m_pModelCom->Set_AnimIndex(18, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_0:
+			m_pModelCom->Set_AnimIndex(55, false, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_1:
+			m_pModelCom->Set_AnimIndex(54, false, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_2:
+			m_pModelCom->Set_AnimIndex(53, false, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::MARCELINE:

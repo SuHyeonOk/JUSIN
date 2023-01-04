@@ -79,8 +79,8 @@ HRESULT CUI_Talk::Render()
 	m_pVIBufferCom->Render();
 
 	// ´ëº»
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Render_Font(TEXT("Font_Comic"), CUI_Manager::GetInstance()->Get_Text(), _float2(500.f, 75.f), 0.f, _float2(0.4f, 0.37f));
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);	
+	pGameInstance->Render_Font(TEXT("Font_Comic"), CUI_Manager::GetInstance()->Get_Text(), _float2(460.f, 75.f), 0.f, _float2(0.4f, 0.37f));
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

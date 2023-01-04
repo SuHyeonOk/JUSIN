@@ -43,7 +43,6 @@ protected:	// 자식에게 거의 필수적인 함수
 
 protected:
 	virtual void		Help_UI() = 0;
-	virtual void		Talk_UI() = 0;
 	virtual HRESULT		UI_Dead() = 0;
 
 protected:
@@ -53,9 +52,9 @@ protected:
 	CCollider*			m_pColliderCom = nullptr;
 
 protected:
-	_bool			m_bInteraction = false;
-	
-	_int			m_Script_Count = 0;
+	_bool			m_bInteraction = false;		// 상호 작용을 하고 있는지
+	_bool			m_bHelp_UI = false;			// 물음표가 한 번만 생성되기 위해
+	_int			m_Script_Count = 0;			// 'G' 를 누를 때 마다 증가하여 다음 텍스트로 넘어가기 위해
 
 public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

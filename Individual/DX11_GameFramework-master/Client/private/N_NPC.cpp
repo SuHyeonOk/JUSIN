@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 CN_NPC::CN_NPC(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -91,9 +92,13 @@ void CN_NPC::On_Collision(CGameObject * pOther)
 			++m_Script_Count;
 
 		RELEASE_INSTANCE(CGameInstance);
+
+		// Talk Ã¢ ¶ç¿ì±â, ¶çÀ§Áö ¾Ê±â
+		if(m_bInteraction)
+			CUI_Manager::GetInstance()->Set_Talk(true);
+		else
+			CUI_Manager::GetInstance()->Set_Talk(false);
 	}
-	else
-		m_bInteraction = false;
 }
 
 void CN_NPC::Free()

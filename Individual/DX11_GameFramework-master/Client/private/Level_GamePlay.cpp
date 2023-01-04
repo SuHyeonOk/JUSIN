@@ -64,6 +64,11 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Object();
 	Load_Monster();
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI"), TEXT("Prototype_GameObject_UI"))))
+		return E_FAIL;
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 

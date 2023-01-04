@@ -60,7 +60,6 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 	CN_NPC::Tick(TimeDelta);
 
 	Help_UI();
-	Talk_UI();
 	UI_Dead();
 
 	if (m_bInteraction)
@@ -70,19 +69,19 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀! 큰일났어!! 누군가 우리 왕국을 망쳐놓고 있어!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n핀! 큰일났어!! 누군가 우리 왕국을 망쳐놓고 있어!"));
 			break;
 
 		case 1:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("일단 여기에 있는 모든 몬스터를 처치하고, \n열쇠 3개를 찾아서 다른 차원으로 넘어가다 보면 \n우리 왕국을 이렇게 만든 놈을 찾을 수 있을 거야"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n일단 여기에 있는 모든 몬스터를 처치하고, \n열쇠 3개를 찾아서 다른 차원으로 넘어가다 보면 \n우리 왕국을 이렇게 만든 놈을 찾을 수 있을 거야"));
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("앗 참고로 이 차원의 마지막 열쇠는 열쇠 친구가 가지고 있을거야! \n부탁할게 핀!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n앗 참고로 이 차원의 마지막 열쇠는 \n열쇠 친구가 가지고 있을거야! \n부탁할게 핀!"));
 			break;
 
 		default:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀, 제이크 화이팅!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n핀, 제이크 화이팅!"));
 			break;
 		}
 	}
@@ -195,42 +194,19 @@ void CN_Bubblegum::Help_UI()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CN_Bubblegum::Talk_UI()
-{
-	if (m_bTalk_UI || !m_bInteraction)
-		return;
-
-	m_bTalk_UI = true;
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"))))
-		return;
-
-	RELEASE_INSTANCE(CGameInstance);
-}
-
 HRESULT CN_Bubblegum::UI_Dead()
 {
-	if (!m_bTalk_UI)
+	if (!m_bHelp_UI)
 		return S_OK;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// 물음표 : 한 번 생성되고, 대화를 했다면 삭제된다.
-	if (m_bHelp_UI && m_bInteraction)
+	if (m_bInteraction)
 	{
 		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
 		if (nullptr != pGameObject_UI_3DTexture)
 			pGameObject_UI_3DTexture->Set_Dead();
-	}
-
-	// 대화창 : 한 번 생성되고, 플레이어가 거리가 멀어지거나, B 키를 누르면 삭제되어야 한다.
-	if (m_bTalk_UI && !m_bInteraction)
-	{
-		CUI_Talk * pGameObject_UI_Talk = dynamic_cast<CUI_Talk*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"), 0));
-		if (nullptr != pGameObject_UI_Talk)
-			pGameObject_UI_Talk->Set_Dead();
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -63,7 +63,6 @@ void CN_Doctor::Tick(_double TimeDelta)
 	CN_NPC::Tick(TimeDelta);
 
 	Help_UI();
-	Talk_UI();
 	UI_Dead();
 
 	if (m_bInteraction)
@@ -73,19 +72,19 @@ void CN_Doctor::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀! 여기까지 오느라 고생했어"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀! 여기까지 오느라 고생했어"));
 			break;
 
 		case 1:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀 너에게 주려고 준비한 칼이 있는데 \n어떤 해골 몬스터가 완성된 무기를 가져가 버렸어"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀 너에게 주려고 준비한 칼이 있는데 \n어떤 해골 몬스터가 완성된 무기를 가져가 버렸어"));
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("그 자식을 찾아서 꼭 칼을 되찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n그 자식을 찾아서 꼭 칼을 되찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
 			break;
 
 		default:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀, 제이크 화이팅!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀, 제이크 화이팅!"));
 			break;
 		}
 	}
@@ -198,33 +197,19 @@ void CN_Doctor::Help_UI()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CN_Doctor::Talk_UI()
-{
-	if (true == CUI_Manager::GetInstance()->Get_Talk() || !m_bInteraction)
-		return;
-
-	CUI_Manager::GetInstance()->Set_Talk(true);
-}
-
 HRESULT CN_Doctor::UI_Dead()
 {
-	if (false == CUI_Manager::GetInstance()->Get_Talk())
+	if (!m_bHelp_UI)
 		return S_OK;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// 물음표 : 한 번 생성되고, 대화를 했다면 삭제된다.
-	if (m_bHelp_UI && m_bInteraction)
+	if (m_bInteraction)
 	{
 		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
 		if (nullptr != pGameObject_UI_3DTexture)
 			pGameObject_UI_3DTexture->Set_Dead();
-	}
-
-	// 대화창 : 한 번 생성되고, 플레이어가 거리가 멀어지거나, B 키를 누르면 삭제되어야 한다.
-	if (true == CUI_Manager::GetInstance()->Get_Talk() && !m_bInteraction)
-	{
-		CUI_Manager::GetInstance()->Set_Talk(false);
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

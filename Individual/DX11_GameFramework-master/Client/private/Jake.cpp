@@ -407,10 +407,10 @@ void CJake::Player_Follow(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// Finn ¿¡°Ô·Î
-	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
+	//CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
-	_vector vPlayerPos;
-	vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// Finn ÁÂÇ¥ ¹Þ¾Æ¿È
+	//_vector vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// Finn ÁÂÇ¥ ¹Þ¾Æ¿È
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();	// Finn ÁÂÇ¥ ¹Þ¾Æ¿È
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ³» ÁÂÇ¥
 	_vector		vDir = vPlayerPos - vMyPos;											// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ

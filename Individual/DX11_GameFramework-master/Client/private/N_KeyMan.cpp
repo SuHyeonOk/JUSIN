@@ -60,7 +60,6 @@ void CN_KeyMan::Tick(_double TimeDelta)
 	CN_NPC::Tick(TimeDelta);
 
 	Help_UI();
-	Talk_UI();
 	UI_Dead();
 
 	if (m_bInteraction)
@@ -70,19 +69,19 @@ void CN_KeyMan::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀님! 큰일났어요!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n핀님! 큰일났어요!!"));
 			break;
 
 		case 1:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("제가 가지고 있던 열쇠를 어떤 마법사가 빼앗아 갔어요!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n제가 가지고 있던 열쇠를 어떤 마법사가 빼앗아 갔어요!!"));
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("부탁드려요 꼭 열쇠를 찾아서 저희 왕국을 지켜주세요!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n부탁드려요 꼭 열쇠를 찾아서 저희 왕국을 지켜주세요!"));
 			break;
 
 		default:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("핀님, 제이크님 감사합니다!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n핀님, 제이크님 감사합니다!"));
 			break;
 		}
 	}
@@ -195,42 +194,19 @@ void CN_KeyMan::Help_UI()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CN_KeyMan::Talk_UI()
-{
-	if (m_bTalk_UI || !m_bInteraction)
-		return;
-
-	m_bTalk_UI = true;
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"))))
-		return;
-
-	RELEASE_INSTANCE(CGameInstance);
-}
-
 HRESULT CN_KeyMan::UI_Dead()
 {
-	if (!m_bTalk_UI)
+	if (!m_bHelp_UI)
 		return S_OK;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// 물음표 : 한 번 생성되고, 대화를 했다면 삭제된다.
-	if (m_bHelp_UI && m_bInteraction)
+	if (m_bInteraction)
 	{
 		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
 		if (nullptr != pGameObject_UI_3DTexture)
 			pGameObject_UI_3DTexture->Set_Dead();
-	}
-
-	// 대화창 : 한 번 생성되고, 플레이어가 거리가 멀어지거나, B 키를 누르면 삭제되어야 한다.
-	if (m_bTalk_UI && !m_bInteraction)
-	{
-		CUI_Talk * pGameObject_UI_Talk = dynamic_cast<CUI_Talk*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Talk_0"), TEXT("Prototype_GameObject_UI_Talk"), 0));
-		if (nullptr != pGameObject_UI_Talk)
-			pGameObject_UI_Talk->Set_Dead();
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
