@@ -302,7 +302,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 
 		CE_DieCenter::DIECENTERINFO tDieCenterInfo;
 		tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::RED;
-		tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + 0.7f, vf4MyPos.z - 0.5f);
+		tDieCenterInfo.f3Pos = _float3(vf4MyPos.x - 3.6f, vf4MyPos.y + 0.7f, vf4MyPos.z - 0.5f);
 		CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
 	}
 
