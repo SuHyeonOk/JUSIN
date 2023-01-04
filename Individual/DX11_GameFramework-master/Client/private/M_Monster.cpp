@@ -128,7 +128,7 @@ _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _dou
 	{
 		pTransform->Chase(vCenterPos, TimeDelta);	// 원점으로 돌아가고
 
-		if (!m_bRandomPos)
+		if (!m_bRandomPos)	// 추가 일정 범위로 나가면 계속 랜덤값을 주는 것이 아닌 한 번! 만 준다.
 		{
 			m_bRandomPos = true;
 			m_fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로

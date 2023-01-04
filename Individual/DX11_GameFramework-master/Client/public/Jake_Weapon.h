@@ -52,6 +52,9 @@ private:
 	_float4x4				m_SocketMatrix;
 
 private:
+	_bool					m_bMonster_Crash = false;
+
+private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 

@@ -312,10 +312,23 @@ void CM_Skeleton_Shield::Move_Tick(const _double& TimeDelta)
 		if (!m_bAttack && 3.5f > fDistance)	// ※ 플레이어 탐색 범위
 			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
+		// 내 원점 거리와 내 위치가 멀다면! 무조건 원점으로 돌아간다.
+		_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
+		_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
+
+		if (2.1f < fDiatance)
 		{
-			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-			m_bAttack = false;
+			m_pTransformCom->Chase(vCenterPos, TimeDelta);
+			m_pTransformCom->LookAt(vCenterPos);
+		}
+		else
+		{
+			if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
+			{
+				m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+				m_bAttack = false;
+			}
 		}
 	}
 }

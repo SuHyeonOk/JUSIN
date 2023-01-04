@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Bone.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 CJake_Weapon::CJake_Weapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -49,6 +50,18 @@ void CJake_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 현재 플레이어가 무기의 주인일 때
+	if (CObj_Manager::PLAYERINFO::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
+		if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			m_bMonster_Crash = false;
+
+		if (m_bMonster_Crash)
+			CUI_Manager::GetInstance()->Set_Ui_Monster(true);
+		else
+			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+	}
 }
 
 void CJake_Weapon::Late_Tick(_double TimeDelta)
@@ -106,7 +119,17 @@ HRESULT   CJake_Weapon::Render()
 
 void CJake_Weapon::On_Collision(CGameObject * pOther)
 {
+	// 내가 플레이어 일 때만 체크할거야
+	if (CObj_Manager::PLAYERINFO::JAKE != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		return;
+
 	CObj_Manager::GetInstance()->Set_Jake_Shield();
+
+	// 나 지금 몬스터랑 충돌 했어
+	m_bMonster_Crash = true;
+
+	// 그 몬스터는 이거야
+	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
 }
 
 HRESULT CJake_Weapon::SetUp_Components()

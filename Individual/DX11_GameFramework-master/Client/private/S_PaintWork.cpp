@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 CS_PaintWork::CS_PaintWork(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -94,6 +95,15 @@ void CS_PaintWork::Tick(_double TimeDelta)
 	//vMyPos += XMVector3Normalize(vLook) * 0.f * _float(TimeDelta);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+
+	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
+	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		m_bMonster_Crash = false;
+
+	if (m_bMonster_Crash)
+		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
+	else
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 }
 
 void CS_PaintWork::Late_Tick(_double TimeDelta)
@@ -146,7 +156,13 @@ HRESULT CS_PaintWork::Render()
 
 void CS_PaintWork::On_Collision(CGameObject * pOther)
 {
+	CObj_Manager::GetInstance()->Set_Jake_Shield();
 
+	// 나 지금 몬스터랑 충돌 했어
+	m_bMonster_Crash = true;
+
+	// 그 몬스터는 이거야
+	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
 }
 
 HRESULT CS_PaintWork::SetUp_Components()

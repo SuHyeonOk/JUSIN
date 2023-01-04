@@ -317,19 +317,23 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 		if (!m_bAttack && 3.f > fDistance)	// ※ 플레이어 탐색 범위
 			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-		//// 없다면 IDLE 과 MOVE 를 번갈아 가며 실행한다.
-		//CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta);
-		//m_dMove_TimeAcc += TimeDelta;	// MOVE 한지 3초가 지나면 Idle 상태로
-		//if (3 < m_dMove_TimeAcc)		// ※ 몬스터 MOVE 시간
-		//{
-		//	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		//	m_bAttack = false;
-		//	m_dMove_TimeAcc = 0;
-		//}
-		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
+		// 내 원점 거리와 내 위치가 멀다면! 무조건 원점으로 돌아간다.
+		_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
+		_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
+
+		if (2.1f < fDiatance)
 		{
-			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-			m_bAttack = false;
+			m_pTransformCom->Chase(vCenterPos, TimeDelta);
+			m_pTransformCom->LookAt(vCenterPos);
+		}
+		else
+		{
+			if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
+			{
+				m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+				m_bAttack = false;
+			}
 		}
 	}
 }
