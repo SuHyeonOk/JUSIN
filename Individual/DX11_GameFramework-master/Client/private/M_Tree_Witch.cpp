@@ -5,7 +5,9 @@
 #include "Obj_Manager.h"		// 플레이어 정보 얻어오려고..
 #include "ItemManager.h"		// 죽을 때 동전 터트릴려고..
 #include "Utilities_Manager.h"	// 랜덤값 쓰려고..
+#include "Effect_Manager.h"
 
+#include "E_DieCenter.h"
 #include "UI_3DTexture.h"		// 느낌표 띄우려고...
 #include "B_AnimBullet.h"		// 덩굴
 
@@ -39,6 +41,7 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
+	m_tMonsterDesc.eMonsterKind					= MonsterDesc.eMonsterKind;
 	MonsterDesc.TransformDesc.fSpeedPerSec		= 2.f;
 	MonsterDesc.TransformDesc.fRotationPerSec	= XMConvertToRadians(90.0f);
 	MonsterDesc.TransformDesc.f3Pos				= _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
@@ -355,7 +358,49 @@ void CM_Tree_Witch::Hit_Tick()
 
 void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.2f, 10, 3, 2);
+	//CM_Monster::Die(TimeDelta, 1.2f, 10, 3, 2);
+
+	// 몬스터가 죽고 나면 할 행동
+
+	if (0 >= m_fAlpha)
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
+		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
+	}
+
+	m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
+	if (0.01 < m_dAlpha_TimeAcc)
+	{
+		m_fAlpha -= 0.01f;
+		m_dAlpha_TimeAcc = 0;
+	}
+
+	if (5 != m_iDieEffect_Count)													// 이펙트 5개
+	{
+		++m_iDieEffect_Count;
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vf4MyPos;
+		XMStoreFloat4(&vf4MyPos, vMyPos);
+
+		CE_DieCenter::DIECENTERINFO tDieCenterInfo;									
+		tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::BROWN;
+		tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + 0.7f, vf4MyPos.z - 0.5f);
+		CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
+	}
+
+	if (!m_OneCoin)															// 한 번만
+	{
+		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 vf4MyPos;
+		XMStoreFloat4(&vf4MyPos, vMyPos);
+
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 3, 2); 	// 동전 생성
+
+		m_OneCoin = true;
+	}
 }
 
 CM_Tree_Witch * CM_Tree_Witch::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

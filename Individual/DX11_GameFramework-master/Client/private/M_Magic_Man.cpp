@@ -38,6 +38,7 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&MonsterDesc, pArg, sizeof(MonsterDesc));
 
+	m_tMonsterDesc.eMonsterKind					= MonsterDesc.eMonsterKind;
 	MonsterDesc.TransformDesc.fSpeedPerSec		= 3.f;
 	MonsterDesc.TransformDesc.fRotationPerSec	= XMConvertToRadians(90.0f);
 	MonsterDesc.TransformDesc.f3Pos				= _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);

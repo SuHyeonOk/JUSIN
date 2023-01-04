@@ -255,7 +255,7 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::PURPLE;
 		else if (MONSTERDESC::MONSTERKIND::MIMIC == m_tMonsterDesc.eMonsterKind)
 			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::RED;
-		if (MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_1 == m_tMonsterDesc.eMonsterKind ||
+		else if (MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_1 == m_tMonsterDesc.eMonsterKind ||
 			MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_2 == m_tMonsterDesc.eMonsterKind ||
 			MONSTERDESC::MONSTERKIND::SKELETON_ARCHER_1 == m_tMonsterDesc.eMonsterKind ||
 			MONSTERDESC::MONSTERKIND::SKELETON_ARCHER_2 == m_tMonsterDesc.eMonsterKind)

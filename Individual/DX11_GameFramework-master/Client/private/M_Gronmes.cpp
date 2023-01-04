@@ -352,7 +352,7 @@ void CM_Gronmes::Hit_Tick()
 
 void CM_Gronmes::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.0f, 5, 2, 1);
+	CM_Monster::Die(TimeDelta, 1.2f, 5, 2, 1);
 }
 
 CM_Gronmes * CM_Gronmes::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

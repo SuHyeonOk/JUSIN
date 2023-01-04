@@ -57,7 +57,7 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
-		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(0.4f, 0.4f, 1.f));
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
