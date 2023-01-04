@@ -119,7 +119,7 @@ _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _dou
 
 	_vector	vMyPos = pTransform->Get_State(CTransform::STATE_TRANSLATION);
 	_vector	vCenterPos = XMLoadFloat4(&f4CenterPos);
-	_vector vDistance = vCenterPos - vMyPos;
+	_vector vDistance = vCenterPos - vMyPos;	// 내 원점 - 현재 위치
 	_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
 
 	pTransform->Go_Straight(TimeDelta);
@@ -127,9 +127,16 @@ _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _dou
 	if (fRange < fDiatance)	// 일정 범위를 나가면
 	{
 		pTransform->Chase(vCenterPos, TimeDelta);	// 원점으로 돌아가고
-		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-		pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), fRandomAxis);	// Look 을 변경한다.
+
+		if (!m_bRandomPos)
+		{
+			m_bRandomPos = true;
+			m_fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+		}
+		pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), m_fRandomAxis);	// Look 을 변경한다.
 	}
+	else
+		m_bRandomPos = false;
 
 	return true;
 }

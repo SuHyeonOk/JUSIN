@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Base.h"
+#include "GameObject.h"
 
 class CUI_Manager final : public CBase
 {
@@ -24,7 +25,8 @@ public:
 public:
 	// UI 몬스터 인덱스
 	_int		Get_UI_Monster_Index() { return m_iUI_Monster_Index; }
-	void		Set_UI_Monster_Index(_int iIndex) { m_iUI_Monster_Index = iIndex; }
+	//void		Set_UI_Monster_Index(_int iIndex) { m_iUI_Monster_Index = iIndex; }
+	void		CUI_Manager::UI_Monster_Index(CGameObject * pOther);
 
 	// UI 몬스터 
 	_bool		Get_UI_Monster() { return m_bUI_Monster; }
