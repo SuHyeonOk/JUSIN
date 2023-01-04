@@ -145,10 +145,6 @@ HRESULT CLoader::Loading_Tool()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Circle/Circle.png")))))
 		return E_FAIL;
-	/* For.Prototype_Component_Texture_B_Magic */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
-		return E_FAIL;
 
 	// UI
 	/* For.Prototype_Component_Texture_UI_Talk */
@@ -451,10 +447,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Texture_B_Circle */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Circle/Circle.png")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_B_Magic */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Magic/Magic.png")))))
 		return E_FAIL;
 
 	UI_Texture();

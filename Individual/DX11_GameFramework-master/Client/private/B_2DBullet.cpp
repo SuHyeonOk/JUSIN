@@ -47,12 +47,6 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 	}
-	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::MAGIC_BULLET)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 500.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
-	}
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -63,11 +57,9 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
-		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
-	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::MAGIC_BULLET)
-		m_pTransformCom->Set_Scaled(_float3(0.7f, 0.7f, 1.f));
 
 	// 처음 한 번만 플레이어를 향하는 벡터를 구한다.
 	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
@@ -188,12 +180,6 @@ HRESULT CB_2DBullet::SetUp_Components()
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
-	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::MAGIC_BULLET)
-	{
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Magic"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
 

@@ -113,7 +113,7 @@ HRESULT CM_Ghost::Render()
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 	}
 
 	return S_OK;

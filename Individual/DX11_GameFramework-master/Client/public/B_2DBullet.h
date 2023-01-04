@@ -18,7 +18,7 @@ class CB_2DBullet final : public CGameObject
 public:
 	typedef struct tagBulletInfo
 	{
-		enum TOODYBULLET { STAR_BULLET, CIRCLE_BULLET, MAGIC_BULLET, TOODYBULLET_END };
+		enum TOODYBULLET { STAR_BULLET, CIRCLE_BULLET, TOODYBULLET_END };
 		TOODYBULLET	eToodyBullet;
 
 		_float3		f3Start_Pos;

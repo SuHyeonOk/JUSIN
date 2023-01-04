@@ -68,7 +68,7 @@ HRESULT CUI_Monstser_BarBack::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);
+	m_pShaderCom->Begin(3);
 
 	m_pVIBufferCom->Render();
 

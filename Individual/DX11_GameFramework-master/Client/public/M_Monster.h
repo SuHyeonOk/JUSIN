@@ -91,6 +91,10 @@ protected:	// 멤버 변수로 쓰이는 것
 	MONSTERINFO			m_tMonsterInfo;
 	MONSTERDESC			m_tMonsterDesc;
 
+protected:	// Shader
+	_float				m_fAlpha = 1.f;
+	_double				m_dAlpha_TimeAcc = 0;
+
 protected:	
 	_bool				m_bPlayer_Attack = false; // On_Collision();
 	_double				m_dPlayer_Attack_TimeAcc = 0;

@@ -83,6 +83,21 @@ HRESULT CM_Skeleton_Archer::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)	
+	{
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+			
+			if (i == 0)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1); 
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+		}
+
+		return S_OK;	// 죽었다면, 여기까지 진행하고 return
+	}
+
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -161,6 +176,12 @@ HRESULT CM_Skeleton_Archer::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -209,7 +230,7 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::DIE:
-		Die_Tick();
+		Die_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(2, false);
 		break;
 
@@ -291,17 +312,25 @@ void CM_Skeleton_Archer::Hit_Tick()
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
 
-void CM_Skeleton_Archer::Die_Tick()
+void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)
 {
-	// 몬스터가 죽고 나면 할 행동
+	// 몬스터가 죽고 나면 할 행동 Lubglubs_Explosion__D
 
-	CGameObject::Set_Dead();
-	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+	if(0 >= m_fAlpha)			
+		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
 
-	if (!m_OneCoin)	// 동전 생성
+	m_dAlpha_TimeAcc += TimeDelta;											// 셰이더
+	if (0.01 < m_dAlpha_TimeAcc)
 	{
-		// Item
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_fAlpha -= 0.01f;
+		m_dAlpha_TimeAcc = 0;
+	}
+
+	if (!m_OneCoin)															// 한 번만
+	{
+		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 동전 생성
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
