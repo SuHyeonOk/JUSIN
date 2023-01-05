@@ -22,7 +22,8 @@ public:
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
 
-		_int				iAttack;
+		_float				fAttack = 0.0f;
+		_float				fExp = 0.0f;
 
 	}WEAPONDESC;
 

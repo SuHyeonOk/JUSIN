@@ -65,8 +65,8 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 30.0f;
 	m_tMonsterInfo.fMaxHP	= 30.0f;
-	m_tMonsterInfo.iExp		= 30;
-	m_tMonsterInfo.iAttack	= 10;
+	m_tMonsterInfo.fExp		= 30.0f;
+	m_tMonsterInfo.fAttack	= 20.0f;
 
 	return S_OK;
 }
@@ -323,7 +323,7 @@ void CM_Pigs::Attack_Tick(const _double& TimeDelta)
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 	CB_2DBullet::BULLETINFO		tBulletInfo;
-	tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+	tBulletInfo.fMonsterAttack = m_tMonsterInfo.fAttack;
 	tBulletInfo.eToodyBullet = tBulletInfo.STAR_BULLET;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.5f, f4PlayerPos.z);

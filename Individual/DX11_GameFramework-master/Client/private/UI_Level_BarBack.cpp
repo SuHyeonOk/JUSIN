@@ -51,17 +51,7 @@ HRESULT CUI_Level_BarBack::Initialize(void * pArg)
 
 void CUI_Level_BarBack::Tick(_double TimeDelta)
 {
-	// BarBack
- 	_float fHPGauge = CUI_Manager::GetInstance()->Get_LevelGauge_Player();
 
-	m_dHPGauge_TimeAcc += TimeDelta;
-	if (0.03 < m_dHPGauge_TimeAcc)
-	{
-		if (fHPGauge <= m_fHPGauge)
-			m_fHPGauge -= 0.005f;
-
-		m_dHPGauge_TimeAcc = 0;
-	}
 }
 
 void CUI_Level_BarBack::Late_Tick(_double TimeDelta)
@@ -125,7 +115,8 @@ HRESULT CUI_Level_BarBack::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fHPGauge", &m_fHPGauge, sizeof _float)))
+	_float fHPGauge = CUI_Manager::GetInstance()->Get_LevelGauge_Player();
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fHPGauge", &fHPGauge, sizeof _float)))
 		return E_FAIL;
 
 	return S_OK;

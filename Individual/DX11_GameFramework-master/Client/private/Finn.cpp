@@ -329,7 +329,7 @@ void CFinn::Player_Info()
 	//	// TODO : Get_Object 를 만들거나, 충돌처리 하여 객체를 받아올 수 있으면 수정
 
 	//	CM_Monster* pMonster = dynamic_cast<CM_Monster*>(pObj);
-	//	CObj_Manager::GetInstance()->Set_Player_PushHp(pMonster->Get_Monster_Attack());
+	//	CObj_Manager::GetInstance()->Set_Player_PlusHp(pMonster->Get_Monster_Attack());
 	//}
 
 	//RELEASE_INSTANCE(CGameInstance);

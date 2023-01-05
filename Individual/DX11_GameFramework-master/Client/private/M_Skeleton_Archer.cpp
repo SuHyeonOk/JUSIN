@@ -56,8 +56,8 @@ HRESULT CM_Skeleton_Archer::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 70.0f;
 	m_tMonsterInfo.fMaxHP	= 70.0f;
-	m_tMonsterInfo.iExp		= 70;
-	m_tMonsterInfo.iAttack	= 20;
+	m_tMonsterInfo.fExp		= 70.0f;
+	m_tMonsterInfo.fAttack	= 20.0f;
 
 	return S_OK;
 }
@@ -304,7 +304,7 @@ void CM_Skeleton_Archer::Attack_Tick(const _double& TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CB_3DBullet::NONANIMBULLETINFO	tBulletInfo;
-		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+		tBulletInfo.fMonsterAttack = m_tMonsterInfo.fAttack;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_SKELETON;
 		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);
@@ -353,8 +353,6 @@ void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)
 
 	//if (!m_OneCoin)															// 한 번만
 	//{
-	//	CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
-
 	//	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	//	_float4 vf4MyPos;
 	//	XMStoreFloat4(&vf4MyPos, vMyPos);

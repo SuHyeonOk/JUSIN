@@ -43,8 +43,8 @@ public:
 		_float	fHP;		// 몬스터"가" 체력을 깍을 때 필요
 		_float	fHPMax;
 		_int	iAttack;	// 몬스터"의" 체력을 깍을 때 필요
-		_int	iExp;		// 몬스터가 죽으면 증가
-		_int	iExpMax;
+		_float	fExp;		// 몬스터가 죽으면 증가
+		_float	fExpMax;
 		_int	iLevel;		// iExp가 가득차면 +1 증가
 		_int	iCoin;		// Coin 과 충돌하면 증가
 
@@ -61,6 +61,7 @@ public:
 	// 다음 레벨로 넘어갈 것 인지.
 	_bool				Get_NextLevel() { return m_bNextLevel; }
 	void				Set_NextLevel(_bool bNext) { m_bNextLevel = bNext; }
+
 	// 현재 Level
 	LEVEL				Get_Current_Level() { return m_eCurrent_Level; }
 	void				Set_Current_Level(LEVEL eLevelID) { m_eCurrent_Level = eLevelID; }
@@ -79,9 +80,9 @@ public:
 	void				Set_Player_Attack(_int iAttack) { m_tPlayerInfo.iAttack = iAttack; } // 스킬의 경우 잠시 공격력을 올렸다가 내리도록 하기 위해서
 
 	// UI 관련
-	void				Set_Player_Exp(_int eExp) { m_tPlayerInfo.iExp += eExp; }
-	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax) m_tPlayerInfo.fHP += eHp; }
-	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
+	void				Set_Player_PlusExp(_float fExp) { m_tPlayerInfo.fExp += fExp; }
+	void				Set_Player_PlusHP(_int eHp) { if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax) m_tPlayerInfo.fHP += eHp; }
+	void				CObj_Manager::Set_Player_MinusHP(_float fAttack);
 
 	void				Set_Key() { m_tPlayerInfo.iKey += 1; }
 	void				Set_Heart() { m_tPlayerInfo.iHeart += 1; }
@@ -127,7 +128,7 @@ private:
 	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
 	_uint			m_ChangeTarget = 0;
 
-	_int			m_iMonster_Attck = 0;
+	_float			m_fMonster_Attck = 0;
 	_double			m_dPlayerAttck_TimeAcc = 0;
 
 public:

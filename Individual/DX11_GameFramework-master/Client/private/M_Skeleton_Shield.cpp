@@ -55,8 +55,8 @@ HRESULT CM_Skeleton_Shield::Initialize(void * pArg)
 	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 80.0f;
 	m_tMonsterInfo.fMaxHP	= 80.0f;
-	m_tMonsterInfo.iExp		= 70;
-	m_tMonsterInfo.iAttack	= 25;
+	m_tMonsterInfo.fExp		= 70.0f;
+	m_tMonsterInfo.fAttack	= 25.0f;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -207,7 +207,8 @@ HRESULT CM_Skeleton_Shield::Ready_Parts()
 	ZeroMemory(&WeaponDesc, sizeof(CW_Skeleton_Shield::WEAPONDESC));
 
 	WeaponDesc.eWarriorType = WeaponDesc.SWORD;
-	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.fAttack = m_tMonsterInfo.fAttack;
+	WeaponDesc.fExp = m_tMonsterInfo.fExp;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bone_sword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -221,7 +222,8 @@ HRESULT CM_Skeleton_Shield::Ready_Parts()
 	m_MonsterParts.push_back(pPartObject);
 
 	WeaponDesc.eWarriorType = WeaponDesc.SHIELD;
-	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.fAttack = m_tMonsterInfo.fAttack;
+	WeaponDesc.fExp = m_tMonsterInfo.fExp;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bone_shield");
 	WeaponDesc.pTargetTransform = m_pTransformCom;

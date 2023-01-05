@@ -30,10 +30,6 @@ private:
 	virtual			HRESULT SetUp_Components() override;
 	virtual			HRESULT SetUp_ShaderResources() override;
 
-private:
-	_float			m_fAlpha = 1.f;
-	_double			m_dAlpha_TimeAcc = 0;
-
 public:
 	static CUI_Monstser_Bar*Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

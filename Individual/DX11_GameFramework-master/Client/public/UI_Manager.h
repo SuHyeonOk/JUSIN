@@ -27,11 +27,11 @@ public:
 public:
 	// 플레이어 레벨 게이지
 	_float		Get_LevelGauge_Player() { return m_LevelGauge_Player; }
-	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
+  	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
 
 	// 플레이어 체력 게이지
-	_float		Get_HPGauge_Player() { return m_LevelGauge_Player; }
-	void		Set_HPGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
+	_float		Get_HPGauge_Player() { return m_HpGauge_Player; }
+	void		Set_HPGauge_Player(_float fGauge) { m_HpGauge_Player = fGauge; }
 
 	// 몬스터 체력 게이지
 	_float		Get_HPGauge_Monster() { return m_HpGauge_Monster; }

@@ -25,7 +25,8 @@ public:
 		enum WARRIORTYPE { SWORD, SHIELD, WARRIORTYPE_END };
 
 		WARRIORTYPE			eWarriorType = WARRIORTYPE_END;
-		_int				iAttack;
+		_float				fAttack = 0.0f;
+		_float				fExp = 0.0f;
 
 	}WEAPONDESC;
 

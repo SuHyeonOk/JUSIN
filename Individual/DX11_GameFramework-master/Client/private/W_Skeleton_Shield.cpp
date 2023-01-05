@@ -40,7 +40,8 @@ HRESULT CW_Skeleton_Shield::Initialize(void * pArg)
 	if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)	// 요기
 	{
 		m_wsTag = L"PigWarrior_Sword";
-		m_WeaponDesc.iAttack = m_WeaponDesc.iAttack;
+		m_WeaponDesc.fAttack = m_WeaponDesc.fAttack;
+		m_WeaponDesc.fExp = m_WeaponDesc.fExp;
 	}
 	else if (WEAPONDESC::WARRIORTYPE::SHIELD == m_WeaponDesc.eWarriorType)	// 요기
 	{
@@ -114,7 +115,7 @@ void CW_Skeleton_Shield::On_Collision(CGameObject * pOther)
 		if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)
 		{
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
-			CObj_Manager::GetInstance()->Set_Player_MinusHp(m_WeaponDesc.iAttack);
+			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_WeaponDesc.fAttack);
 		}
 	}
 }

@@ -40,8 +40,8 @@ public:
 
 		_float	fHP			= 0.0f;
 		_float	fMaxHP		= 0.0f;
-		_int	iAttack		= 0;
-		_int	iExp		= 0;
+		_float	fAttack		= 0.0f;
+		_float	fExp		= 0.0f;
 
 	}MONSTERINFO;
 
@@ -51,7 +51,7 @@ protected:
 	virtual ~CM_Monster() = default;
 
 public:
-	_int		Get_Monster_Attack() { return m_tMonsterInfo.iAttack; }
+	_float		Get_Monster_Attack() { return m_tMonsterInfo.fAttack; }
 
 public:		// °Á ÇÊ¼ö
 	virtual HRESULT		Initialize_Prototype();

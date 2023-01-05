@@ -38,7 +38,8 @@ HRESULT CW_GhostFist::Initialize(void * pArg)
 		return E_FAIL;	
 
 	m_wsTag = L"Ghost_Fist";
-	m_WeaponDesc.iAttack = m_WeaponDesc.iAttack;
+	m_WeaponDesc.fAttack = m_WeaponDesc.fAttack;
+	m_WeaponDesc.fExp = m_WeaponDesc.fExp;
 
 	return S_OK;
 }
@@ -93,7 +94,7 @@ void CW_GhostFist::On_Collision(CGameObject * pOther)
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
-		CObj_Manager::GetInstance()->Set_Player_MinusHp(m_WeaponDesc.iAttack);
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_WeaponDesc.fAttack);
 	}
 }
 

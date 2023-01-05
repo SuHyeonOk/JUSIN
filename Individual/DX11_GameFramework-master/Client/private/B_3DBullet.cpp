@@ -141,7 +141,7 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
 		CGameObject::Set_Dead();
-		CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tBulletInfo.iMonsterAttack);
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 
 		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
 		{

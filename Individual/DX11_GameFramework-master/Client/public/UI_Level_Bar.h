@@ -31,8 +31,8 @@ private:
 	virtual			HRESULT SetUp_ShaderResources() override;
 
 private:
-	_float			m_fAlpha = 1.f;
-	_double			m_dAlpha_TimeAcc = 0;
+	_float			m_fHPGauge = 0.0f;
+	_double			m_dHPGauge_TimeAcc = 0;
 
 public:
 	static CUI_Level_Bar*Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -73,8 +73,8 @@ HRESULT CM_Gronmes::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 40.0f;
 	m_tMonsterInfo.fMaxHP	= 40.0f;
-	m_tMonsterInfo.iExp		= 40;
-	m_tMonsterInfo.iAttack	= 10;
+	m_tMonsterInfo.fExp		= 40.0f;
+	m_tMonsterInfo.fAttack	= 10.0f;
 
 	return S_OK;
 }
@@ -335,7 +335,7 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 	CB_2DBullet::BULLETINFO		tBulletInfo;
-	tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+	tBulletInfo.fMonsterAttack = m_tMonsterInfo.fAttack;
 	tBulletInfo.eToodyBullet = tBulletInfo.CIRCLE_BULLET;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);

@@ -16,8 +16,8 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.fHP		= 100.0f;
 	m_tPlayerInfo.fHPMax	= 100.0f;
 	m_tPlayerInfo.iAttack	= 10;
-	m_tPlayerInfo.iExp		= 0;
-	m_tPlayerInfo.iExpMax	= 100;
+	m_tPlayerInfo.fExp		= 0.0f;
+	m_tPlayerInfo.fExpMax	= 100.0f;
 	m_tPlayerInfo.iLevel	= 1;
 	m_tPlayerInfo.iKey		= 0;
 	m_tPlayerInfo.iHeart	= 0;
@@ -97,7 +97,7 @@ _vector			CObj_Manager::Get_Player_Transform()
 //	return false;	// 없다면 쓰레기 값을 넘김
 //}
 
-void		CObj_Manager::Set_Player_MinusHp(_int eHp)
+void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 {
 	if (m_bShield)
 	{
@@ -105,7 +105,7 @@ void		CObj_Manager::Set_Player_MinusHp(_int eHp)
 		return;
 	}
 
-	m_iMonster_Attck = eHp;
+	m_fMonster_Attck = fAttack;
 }
 
 void		CObj_Manager::Tick(_double TimeDelta)
@@ -118,18 +118,18 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	//	" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
 	//	" | EXP : " << m_tPlayerInfo.iExp << " | MAXEXP : " << m_tPlayerInfo.iExpMax << endl;
 
-	if (0 < m_iMonster_Attck)
+	if (0 < m_fMonster_Attck)
 	{
 		m_dPlayerAttck_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayerAttck_TimeAcc)
 		{
 			if (0 < m_tPlayerInfo.fHP)
 			{
-				m_tPlayerInfo.fHP -= m_iMonster_Attck;
+				m_tPlayerInfo.fHP -= m_fMonster_Attck;
 				CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 			}
 			
-			m_iMonster_Attck = 0;
+			m_fMonster_Attck = 0;
 			m_dPlayerAttck_TimeAcc = 0;
 		}
 	}
@@ -194,12 +194,12 @@ void		CObj_Manager::Current_Player()
 
 void		CObj_Manager::Player_Exp()
 {
-	if (m_tPlayerInfo.iExp >= m_tPlayerInfo.iExpMax)
+	if (m_tPlayerInfo.fExp >= m_tPlayerInfo.fExpMax)
 	{
 		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
 		m_tPlayerInfo.iLevel++;							// 레벨 증가
-		m_tPlayerInfo.iExp = 0;							// 경험치 0 으로 초기화
-		m_tPlayerInfo.iExpMax += 50;					// 최대 경험치 증가
+		m_tPlayerInfo.fExp = 0.0f;							// 경험치 0 으로 초기화
+		m_tPlayerInfo.fExpMax += 50.0f;					// 최대 경험치 증가
 		m_tPlayerInfo.iAttack += 10;					// 공격력 증가
 		m_tPlayerInfo.fHPMax += 10.0f;					// 공격력 증가
 

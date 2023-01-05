@@ -60,8 +60,8 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.fHP		= 60.0f;
 	m_tMonsterInfo.fMaxHP	= 60.0f;
-	m_tMonsterInfo.iExp		= 60;
-	m_tMonsterInfo.iAttack	= 20;
+	m_tMonsterInfo.fExp		= 60.0f;
+	m_tMonsterInfo.fAttack	= 20.0f;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -221,7 +221,8 @@ HRESULT CM_Ghost::Ready_Parts()
 	CW_GhostFist::WEAPONDESC			WeaponDesc;
 	ZeroMemory(&WeaponDesc, sizeof(CW_GhostFist::WEAPONDESC));
 
-	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.fAttack = m_tMonsterInfo.fAttack;
+	WeaponDesc.fExp = m_tMonsterInfo.fExp;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("R_Arm_03");
 	WeaponDesc.pTargetTransform = m_pTransformCom;

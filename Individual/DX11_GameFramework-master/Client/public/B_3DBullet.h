@@ -24,7 +24,7 @@ public:
 		_float3		f3Start_Pos;
 		_float3		f3Target_Pos;
 
-		_int		iMonsterAttack = 0;
+		_float		fMonsterAttack = 0.0f;
 
 	}NONANIMBULLETINFO;
 

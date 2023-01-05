@@ -6,6 +6,7 @@
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
 #include "Effect_Manager.h"
+#include "UI_Manager.h"
 
 #include "E_DieCenter.h"
 #include "B_2DBullet.h"
@@ -55,8 +56,8 @@ HRESULT CM_Mimic::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.fHP		= 50.0f;
 	m_tMonsterInfo.fMaxHP	= 50.0f;
-	m_tMonsterInfo.iExp		= 50;
-	m_tMonsterInfo.iAttack	= 15;
+	m_tMonsterInfo.fExp		= 50.0f;
+	m_tMonsterInfo.fAttack	= 15.0f;
 
 	return S_OK;
 }
@@ -120,7 +121,7 @@ void CM_Mimic::On_Collision(CGameObject * pOther)
 		if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		{
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
-			CObj_Manager::GetInstance()->Set_Player_MinusHp(m_tMonsterInfo.iAttack);
+			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tMonsterInfo.fAttack);
 		}
 	}
 }
@@ -309,7 +310,8 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 
 	if (!m_OneCoin)															// 한 번만
 	{
-		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
+		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;

@@ -53,8 +53,8 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
 	m_tMonsterInfo.fHP		= 70.0f;
 	m_tMonsterInfo.fMaxHP	= 70.0f;
-	m_tMonsterInfo.iExp		= 70;
-	m_tMonsterInfo.iAttack	= 20;
+	m_tMonsterInfo.fExp		= 70.0f;
+	m_tMonsterInfo.fAttack	= 20.0f;
 
 	//m_pTransformCom->Set_Pos(_float3(MonsterDesc.f3Pos.x, 100.f, MonsterDesc.f3Pos.z));	// 처음에는 높이 있어서 보이지 않는다.
 
@@ -321,7 +321,8 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CB_3DBullet::NONANIMBULLETINFO	tBulletInfo;
-		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+		tBulletInfo.fMonsterAttack = m_tMonsterInfo.fAttack;
+
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_MAGIC;
 		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);

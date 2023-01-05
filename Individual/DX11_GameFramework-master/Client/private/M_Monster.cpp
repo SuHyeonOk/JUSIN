@@ -211,7 +211,14 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 	// 몬스터가 죽고 나면 할 행동
 
 	if (0 >= m_fAlpha)
-		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
+	{
+		// 몬스터 죽으면 UI 초기화
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(0.0f);
+		
+		// 알파값이 다 사라지면 죽음
+		CGameObject::Set_Dead();	
+	}
 
 	m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
 	if (0.01 < m_dAlpha_TimeAcc)
@@ -261,7 +268,9 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 
 	if (!m_OneCoin)															// 한 번만
 	{
-		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+		// 플레이어 UI 관리
+		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
+  		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;

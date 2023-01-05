@@ -6,6 +6,7 @@
 #include "ItemManager.h"		// 죽을 때 동전 터트릴려고..
 #include "Utilities_Manager.h"	// 랜덤값 쓰려고..
 #include "Effect_Manager.h"
+#include "UI_Manager.h"
 
 #include "E_DieCenter.h"
 #include "UI_3DTexture.h"		// 느낌표 띄우려고...
@@ -55,8 +56,8 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.fHP		= 70.0f;
 	m_tMonsterInfo.fMaxHP	= 70.0f;
-	m_tMonsterInfo.iExp		= 50;
-	m_tMonsterInfo.iAttack	= 15;
+	m_tMonsterInfo.fExp		= 50.0f;
+	m_tMonsterInfo.fAttack	= 12.0f;
 
 	return S_OK;
 }
@@ -306,7 +307,7 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 
 		CB_AnimBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
-		tBulletInfo.iMonsterAttack = m_tMonsterInfo.iAttack;
+		tBulletInfo.fMonsterAttack = m_tMonsterInfo.fAttack;
 		tBulletInfo.f3Start_Pos = _float3(m_f4PlayerPos.x, m_f4PlayerPos.y, m_f4PlayerPos.z);
 		
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_AnimBullet"), &tBulletInfo)))
@@ -392,7 +393,8 @@ void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 
 	if (!m_OneCoin)															// 한 번만
 	{
-		CObj_Manager::GetInstance()->Set_Player_Exp(m_tMonsterInfo.iExp);	// 플레이어에게 경험치 증가
+		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
+		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;

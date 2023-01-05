@@ -66,8 +66,8 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 50.0f;
 	m_tMonsterInfo.fMaxHP	= 50.0f;
-	m_tMonsterInfo.iExp		= 25;
-	m_tMonsterInfo.iAttack	= 5;
+	m_tMonsterInfo.fExp		= 25.0f;
+	m_tMonsterInfo.fAttack	= 5.0f;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -230,7 +230,8 @@ HRESULT CM_PigWarrior::Ready_Parts()
 	ZeroMemory(&WeaponDesc, sizeof(CW_PigWarrior::WEAPONDESC));
 
 	WeaponDesc.eWarriorType = WeaponDesc.SWORD;
-	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.fAttack = m_tMonsterInfo.fAttack;
+	WeaponDesc.fExp = m_tMonsterInfo.fExp;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("woodenSword");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -244,7 +245,8 @@ HRESULT CM_PigWarrior::Ready_Parts()
 	m_MonsterParts.push_back(pPartObject);
 
 	WeaponDesc.eWarriorType = WeaponDesc.CYLINDER;
-	WeaponDesc.iAttack = m_tMonsterInfo.iAttack;
+	WeaponDesc.fAttack = m_tMonsterInfo.fAttack;
+	WeaponDesc.fExp = m_tMonsterInfo.fExp;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bone001_shield");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
