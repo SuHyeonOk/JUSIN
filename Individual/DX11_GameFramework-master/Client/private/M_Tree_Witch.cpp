@@ -53,7 +53,8 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 		return E_FAIL;
 	
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp		= 70;
+	m_tMonsterInfo.fHP		= 70.0f;
+	m_tMonsterInfo.fMaxHP	= 70.0f;
 	m_tMonsterInfo.iExp		= 50;
 	m_tMonsterInfo.iAttack	= 15;
 
@@ -176,7 +177,7 @@ HRESULT CM_Tree_Witch::SetUp_ShaderResources()
 
 void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	switch (m_tMonsterInfo.eState)

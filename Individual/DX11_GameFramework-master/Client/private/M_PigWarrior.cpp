@@ -64,9 +64,10 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.iHp = 50;
-	m_tMonsterInfo.iExp = 25;
-	m_tMonsterInfo.iAttack = 5;
+	m_tMonsterInfo.fHP		= 50.0f;
+	m_tMonsterInfo.fMaxHP	= 50.0f;
+	m_tMonsterInfo.iExp		= 25;
+	m_tMonsterInfo.iAttack	= 5;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -263,7 +264,7 @@ HRESULT CM_PigWarrior::Ready_Parts()
 
 void CM_PigWarrior::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	switch (m_tMonsterInfo.eState)

@@ -5,6 +5,7 @@
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
+#include "UI_Manager.h"
 
 #include "Bone.h"
 #include "W_GhostFist.h"
@@ -58,7 +59,8 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 		m_wsTag = L"Monster__Ghost_2";
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp		= 60;
+	m_tMonsterInfo.fHP		= 60.0f;
+	m_tMonsterInfo.fMaxHP	= 60.0f;
 	m_tMonsterInfo.iExp		= 60;
 	m_tMonsterInfo.iAttack	= 20;
 
@@ -72,9 +74,14 @@ void CM_Ghost::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// UI 에 내 체력 넘겨주기
+	CUI_Manager::GetInstance()->Set_HPGauge(_float(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP));
+
+	// 주먹 무기
 	if(m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		m_MonsterParts[0]->Tick(TimeDelta);
 
+	// 전체적인 몬스터 상태
 	Monster_Tick(TimeDelta);
 }
 
@@ -238,7 +245,7 @@ HRESULT CM_Ghost::Ready_Parts()
 
 void CM_Ghost::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	// 0 : 왼쪽공격

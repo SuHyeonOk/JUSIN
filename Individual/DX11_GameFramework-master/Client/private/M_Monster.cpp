@@ -54,8 +54,8 @@ void CM_Monster::Tick(const _double& TimeDelta)
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayer_Attack_TimeAcc)
 		{
-			m_tMonsterInfo.iHp = 0;
-			//m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			m_tMonsterInfo.fHP = 0.0f;
+			//m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
 			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 
 			m_bPlayer_Attack = false;

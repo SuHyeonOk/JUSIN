@@ -51,7 +51,7 @@ HRESULT CUI_Monstser_Bar::Initialize(void * pArg)
 
 void CUI_Monstser_Bar::Tick(_double TimeDelta)
 {
-	// TODO : Set_HPGauge() 으로 몬스터 에서 HP 조절 해야한다.
+
 }
 
 void CUI_Monstser_Bar::Late_Tick(_double TimeDelta)

@@ -71,7 +71,8 @@ HRESULT CM_Gronmes::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.iHp		= 40;
+	m_tMonsterInfo.fHP		= 40.0f;
+	m_tMonsterInfo.fMaxHP	= 40.0f;
 	m_tMonsterInfo.iExp		= 40;
 	m_tMonsterInfo.iAttack	= 10;
 
@@ -211,7 +212,7 @@ HRESULT CM_Gronmes::SetUp_ShaderResources()
 
 void CM_Gronmes::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	switch (m_tMonsterInfo.eState)

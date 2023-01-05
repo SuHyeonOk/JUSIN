@@ -53,7 +53,8 @@ HRESULT CM_Mimic::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.iHp		= 50;
+	m_tMonsterInfo.fHP		= 50.0f;
+	m_tMonsterInfo.fMaxHP	= 50.0f;
 	m_tMonsterInfo.iExp		= 50;
 	m_tMonsterInfo.iAttack	= 15;
 
@@ -183,7 +184,7 @@ HRESULT CM_Mimic::SetUp_ShaderResources()
 
 void CM_Mimic::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	// 0 : ¿ÞÂÊ °ø°Ý¤±

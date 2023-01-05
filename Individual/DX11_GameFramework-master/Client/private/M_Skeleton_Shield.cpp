@@ -53,9 +53,10 @@ HRESULT CM_Skeleton_Shield::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.iHp = 80;
-	m_tMonsterInfo.iExp = 70;
-	m_tMonsterInfo.iAttack = 25;
+	m_tMonsterInfo.fHP		= 80.0f;
+	m_tMonsterInfo.fMaxHP	= 80.0f;
+	m_tMonsterInfo.iExp		= 70;
+	m_tMonsterInfo.iAttack	= 25;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -240,7 +241,7 @@ HRESULT CM_Skeleton_Shield::Ready_Parts()
 
 void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	// 0 : ATTACK

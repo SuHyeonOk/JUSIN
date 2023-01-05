@@ -38,7 +38,8 @@ public:
 
 		STATE			eState			= STATE_END;
 
-		_int	iHp			= 0;
+		_float	fHP			= 0.0f;
+		_float	fMaxHP		= 0.0f;
 		_int	iAttack		= 0;
 		_int	iExp		= 0;
 

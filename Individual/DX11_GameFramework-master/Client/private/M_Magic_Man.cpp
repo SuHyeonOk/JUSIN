@@ -51,7 +51,8 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
-	m_tMonsterInfo.iHp		= 70;
+	m_tMonsterInfo.fHP		= 70.0f;
+	m_tMonsterInfo.fMaxHP	= 70.0f;
 	m_tMonsterInfo.iExp		= 70;
 	m_tMonsterInfo.iAttack	= 20;
 
@@ -69,7 +70,7 @@ void CM_Magic_Man::Tick(_double TimeDelta)
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (1.5 < m_dPlayer_Attack_TimeAcc)
 		{
-			m_tMonsterInfo.iHp -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
 			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 
 			m_bPlayer_Attack = false;
@@ -205,7 +206,7 @@ HRESULT CM_Magic_Man::SetUp_ShaderResources()
 
 void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	switch (m_tMonsterInfo.eState)

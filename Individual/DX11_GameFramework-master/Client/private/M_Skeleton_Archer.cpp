@@ -54,7 +54,8 @@ HRESULT CM_Skeleton_Archer::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.iHp		= 70;
+	m_tMonsterInfo.fHP		= 70.0f;
+	m_tMonsterInfo.fMaxHP	= 70.0f;
 	m_tMonsterInfo.iExp		= 70;
 	m_tMonsterInfo.iAttack	= 20;
 
@@ -195,7 +196,7 @@ HRESULT CM_Skeleton_Archer::SetUp_ShaderResources()
 
 void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 {
-	if (0 >= m_tMonsterInfo.iHp)
+	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	// 0 : 안 에서 던지기
