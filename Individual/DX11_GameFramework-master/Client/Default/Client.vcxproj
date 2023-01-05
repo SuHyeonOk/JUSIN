@@ -233,6 +233,8 @@
     <ClInclude Include="..\public\UI_.h" />
     <ClInclude Include="..\public\UI_3DTexture.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
+    <ClInclude Include="..\public\UI_Level_Bar.h" />
+    <ClInclude Include="..\public\UI_Level_BarBack.h" />
     <ClInclude Include="..\public\UI_Manager.h" />
     <ClInclude Include="..\public\UI_Monster.h" />
     <ClInclude Include="..\public\UI_Monster_Bar.h" />
@@ -311,6 +313,8 @@
     <ClCompile Include="..\private\UI_.cpp" />
     <ClCompile Include="..\private\UI_3DTexture.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
+    <ClCompile Include="..\private\UI_Level_Bar.cpp" />
+    <ClCompile Include="..\private\UI_Level_BarBack.cpp" />
     <ClCompile Include="..\private\UI_Manager.cpp" />
     <ClCompile Include="..\private\UI_Monster.cpp" />
     <ClCompile Include="..\private\UI_Monster_Bar.cpp" />

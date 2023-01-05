@@ -22,6 +22,8 @@
 #include "UI_Informacion.h"
 #include "UI_Player_Bar.h"
 #include "UI_Player_BarBack.h"
+#include "UI_Level_Bar.h"
+#include "UI_Level_BarBack.h"
 
 // Obj
 #include "O_Box.h"
@@ -1062,6 +1064,17 @@ HRESULT CLoader::UI_Create()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Player_HPBarBack"),
 		CUI_Player_BarBack::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_Level_HPBar */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Level_HPBar"),
+		CUI_Level_Bar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Level_HPBarBack */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Level_HPBarBack"),
+		CUI_Level_BarBack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
 
 	/* For.Prototype_GameObject_UI */ // 최상위 부모
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),

@@ -25,17 +25,17 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
-	// 플레이어 체력 게이지
-	_float		Get_HPGauge_Player() { return m_HpGauge_Player; }
-	void		Set_HPGauge_Player(_float fHPGauge) { m_HpGauge_Player = fHPGauge; }
+	// 플레이어 레벨 게이지
+	_float		Get_LevelGauge_Player() { return m_LevelGauge_Player; }
+	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
 
-	// UI 플레이어 인덱스
-	_bool		Get_UI_Player() { return m_bUI_Player; }
-	void		Set_Ui_Player(_bool bUI) { m_bUI_Player = bUI; }
+	// 플레이어 체력 게이지
+	_float		Get_HPGauge_Player() { return m_LevelGauge_Player; }
+	void		Set_HPGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
 
 	// 몬스터 체력 게이지
 	_float		Get_HPGauge_Monster() { return m_HpGauge_Monster; }
-	void		Set_HPGauge_Monster(_float fHPGauge) { m_HpGauge_Monster = fHPGauge; }
+	void		Set_HPGauge_Monster(_float fGauge) { m_HpGauge_Monster = fGauge; }
 
 	// UI 몬스터 인덱스
 	_int		Get_UI_Monster_Index() { return m_iUI_Monster_Index; }
@@ -54,8 +54,8 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_float			m_LevelGauge_Player = 0.0f;
 	_float			m_HpGauge_Player = 1.0f;
-	_bool			m_bUI_Player = false;
 
 	_float			m_HpGauge_Monster = 1.0f;
 	_int			m_iUI_Monster_Index = 0;

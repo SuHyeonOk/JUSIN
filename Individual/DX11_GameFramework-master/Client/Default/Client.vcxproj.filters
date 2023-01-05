@@ -154,6 +154,12 @@
     <Filter Include="02.GameObjects\UI\Monster">
       <UniqueIdentifier>{49d71e50-188b-41e4-aebe-76cb320f0606}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Informacion\HP">
+      <UniqueIdentifier>{0cad3595-f47c-4c80-8654-8e9978387a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Informacion\LEVEL">
+      <UniqueIdentifier>{9c48b06a-e889-4603-b029-0357140cf7ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -391,10 +397,16 @@
       <Filter>77.Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UI_Player_Bar.h">
-      <Filter>02.GameObjects\UI\Informacion</Filter>
+      <Filter>02.GameObjects\UI\Informacion\HP</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UI_Player_BarBack.h">
-      <Filter>02.GameObjects\UI\Informacion</Filter>
+      <Filter>02.GameObjects\UI\Informacion\HP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Level_Bar.h">
+      <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Level_BarBack.h">
+      <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -615,10 +627,16 @@
       <Filter>77.Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_Player_Bar.cpp">
-      <Filter>02.GameObjects\UI\Informacion</Filter>
+      <Filter>02.GameObjects\UI\Informacion\HP</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_Player_BarBack.cpp">
-      <Filter>02.GameObjects\UI\Informacion</Filter>
+      <Filter>02.GameObjects\UI\Informacion\HP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Level_Bar.cpp">
+      <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Level_BarBack.cpp">
+      <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
