@@ -160,6 +160,9 @@
     <Filter Include="02.GameObjects\UI\Informacion\LEVEL">
       <UniqueIdentifier>{9c48b06a-e889-4603-b029-0357140cf7ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Weapon">
+      <UniqueIdentifier>{42689183-7d18-4b67-be72-02203bf81ab1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -411,6 +414,12 @@
     <ClInclude Include="..\public\UI_Level_Number.h">
       <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Weapon.h">
+      <Filter>02.GameObjects\UI\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Weapons.h">
+      <Filter>02.GameObjects\UI\Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -643,6 +652,12 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_Monster_BarBack.cpp">
       <Filter>02.GameObjects\UI\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Weapon.cpp">
+      <Filter>02.GameObjects\UI\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Weapons.cpp">
+      <Filter>02.GameObjects\UI\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

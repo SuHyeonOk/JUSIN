@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Transform.h"
 #include "UI_Manager.h"
+#include "Skill_Manager.h"
 
 IMPLEMENT_SINGLETON(CObj_Manager)
 
@@ -27,7 +28,7 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.iHeart = 0;
 
 	m_tPlayerInfo.ePlayer = PLAYERINFO::PLAYER::FINN;
-	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
+	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_DOLDEN;
 	m_tPlayerInfo.eJakeWeapon = PLAYERINFO::JAKEWEAPON::LFIST;
 
 	CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);
@@ -69,33 +70,12 @@ _vector			CObj_Manager::Get_Player_Transform()
 	return _vector();	// 없다면 쓰레기 값을 넘김
 }
 
-//_bool	CObj_Manager::Get_Player_Collider(CCollider* pColliderCom[COLLTYPE_END])
-//{
-//	// 현재 Player 를 확인하고, 그 Player 의 Collider 를 넘겨준다.
-//
-//	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-//
-//	if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINN)
-//	{
-//		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Collider"), 0);
-//		if (nullptr == pTargetCollider)
-//			return false;
-//
-//		return pColliderCom[COLLTYPE_AABB]->Collision(pTargetCollider);
-//	}
-//	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
-//	{
-//		CCollider*		pTargetCollider = (CCollider*)pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Collider"), 0);
-//		if (nullptr == pTargetCollider)
-//			return false;
-//
-//		return pColliderCom[COLLTYPE_AABB]->Collision(pTargetCollider);
-//	}
-//
-//	RELEASE_INSTANCE(CGameInstance);
-//
-//	return false;	// 없다면 쓰레기 값을 넘김
-//}
+_float		CObj_Manager::Get_Player_Distance(_fvector	_MyPos)
+{
+	_vector	vDistance = CObj_Manager::GetInstance()->Get_Player_Transform() - _MyPos;
+
+	return XMVectorGetX(XMVector3Length(vDistance));
+}
 
 void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 {
@@ -113,6 +93,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 	Key_Input();				// 전체적인 키 입력
+	Player_Weapon();			// 현재 플레이어의 무기를 출력한다.
 
 	cout << "HP : " << m_tPlayerInfo.fHP << " / " << m_tPlayerInfo.fHPMax << " | HP% : " << m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax <<
 		" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
@@ -151,7 +132,7 @@ void		CObj_Manager::Key_Input()
 	// TODO : 무기변경
 	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
 	{
-		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_DOLDEN;
+		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
 	}
 	if (pGameInstance->Key_Down(DIK_I))	// TODO : 중간 보스 잡으면 변경
 	{
@@ -213,11 +194,28 @@ void		CObj_Manager::Player_Exp()
 	}
 }
 
-_float		CObj_Manager::Get_Player_Distance(_fvector	_MyPos)
+void		CObj_Manager::Player_Weapon()
 {
-	_vector	vDistance = CObj_Manager::GetInstance()->Get_Player_Transform() - _MyPos;
+	// 스킬 사용? 무기사용?
+	if(CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CUI_Manager::GetInstance()->Set_Weapons(0);
+	else
+		CUI_Manager::GetInstance()->Set_Weapons(1);
 
-	return XMVectorGetX(XMVector3Length(vDistance));
+	// 무기
+	if (CObj_Manager::PLAYERINFO::FINN == m_tPlayerInfo.ePlayer)
+	{
+		if (CObj_Manager::PLAYERINFO::F_DOLDEN == m_tPlayerInfo.ePlayerWeapon)
+			CUI_Manager::GetInstance()->Set_Weapon_index(0);
+		else if (CObj_Manager::PLAYERINFO::F_ROOT == m_tPlayerInfo.ePlayerWeapon)
+			CUI_Manager::GetInstance()->Set_Weapon_index(1);
+		else
+			CUI_Manager::GetInstance()->Set_Weapon_index(2);
+	}
+	else
+	{
+		CUI_Manager::GetInstance()->Set_Weapon_index(3);
+	}
 }
 
 void		CObj_Manager::Free()

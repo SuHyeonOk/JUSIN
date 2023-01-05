@@ -25,6 +25,8 @@
 #include "UI_Level_Bar.h"
 #include "UI_Level_BarBack.h"
 #include "UI_Level_Number.h"
+#include "UI_Weapon.h"
+#include "UI_Weapons.h"
 
 // Obj
 #include "O_Box.h"
@@ -1024,7 +1026,16 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LevlNumber/lvl%d.png"), 16))))
 		return E_FAIL;
 
-	
+	// Weapon
+	/* For.Prototype_Component_Texture_UI_Weapons */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Weapons"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/weapons_%d.png"), 2))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Weapon */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Weapon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/Weapon_%d.png"), 4))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1082,6 +1093,19 @@ HRESULT CLoader::UI_Create()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Level_Number"),
 		CUI_Level_Number::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Weapon
+	/* For.Prototype_GameObject_Player_Weapon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Weapon"),
+		CUI_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Player_Weapons */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Weapons"),
+		CUI_Weapons::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
 
 
 

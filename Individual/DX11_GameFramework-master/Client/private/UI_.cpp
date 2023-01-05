@@ -118,6 +118,23 @@ HRESULT CUI_::Initialize(void * pArg)
 	m_vecUI.push_back(pUI);
 
 
+	// [10] : Weapons
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Weapons")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [11] : Weapon
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Weapon")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+
 
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -145,6 +162,9 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[7]->Tick(TimeDelta);
 	m_vecUI[9]->Tick(TimeDelta);
 
+	m_vecUI[10]->Tick(TimeDelta);
+	m_vecUI[11]->Tick(TimeDelta);
+
 	__super::Tick(TimeDelta);
 }
 
@@ -166,6 +186,9 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[8]->Late_Tick(TimeDelta);
 	m_vecUI[7]->Late_Tick(TimeDelta);
 	m_vecUI[9]->Late_Tick(TimeDelta);
+
+	m_vecUI[10]->Late_Tick(TimeDelta);
+	m_vecUI[11]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);
 

@@ -30,7 +30,7 @@ public:
 		STATE		eState;		// 현재 상태
 		STATE		ePreState;	// 이전 상태
 
-		enum PLAYERWEAPON { F_ROOT, F_DOLDEN, F_FAMILY, SHIELD_END };
+		enum PLAYERWEAPON { F_DOLDEN, F_ROOT, F_FAMILY, SHIELD_END };
 		PLAYERWEAPON		ePlayerWeapon = SHIELD_END;
 
 		enum JAKEWEAPON { LFIST, RFIST, SHLDE, JAKEWERPON_END };
@@ -110,6 +110,7 @@ public:
 private:
 	void		CObj_Manager::Current_Player();	// 현재 플레이어가 누구인지 Tick
 	void		CObj_Manager::Player_Exp();		// 현재 플레이어의 경험치를 Tick
+	void		CObj_Manager::Player_Weapon();	// 현재 플레이어의 무기 출력
 
 private:
 	void		CObj_Manager::Key_Input();

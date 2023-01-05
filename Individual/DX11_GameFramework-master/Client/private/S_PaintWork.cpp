@@ -65,10 +65,10 @@ void CS_PaintWork::Tick(_double TimeDelta)
 
 	if (!m_bMove)
 	{
-		m_pTransformCom->Go_Right(TimeDelta * 0.3);
+		m_pTransformCom->Go_Right(TimeDelta * 0.4);
 
 		m_dMove_TimeAcc += TimeDelta;
-		if (0.25 < m_dMove_TimeAcc)
+		if (0.4 < m_dMove_TimeAcc)
 		{
 			m_bMove = true;
 
@@ -77,10 +77,10 @@ void CS_PaintWork::Tick(_double TimeDelta)
 	}
 	else
 	{
-		m_pTransformCom->Go_Left(TimeDelta * 0.3);
+		m_pTransformCom->Go_Left(TimeDelta * 0.4);
 
 		m_dMove_TimeAcc += TimeDelta;
-		if (0.25 < m_dMove_TimeAcc)
+		if (0.4 < m_dMove_TimeAcc)
 		{
 			m_bMove = false;
 
