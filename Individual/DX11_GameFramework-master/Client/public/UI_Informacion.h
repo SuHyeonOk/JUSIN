@@ -33,6 +33,9 @@ private:
 	virtual			HRESULT SetUp_Components() override;
 	virtual			HRESULT SetUp_ShaderResources() override;
 
+	_float	m_fXm_fX = 0.f;
+	_float	m_fXm_fT = 0.f;
+
 public:
 	static CUI_Informacion* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

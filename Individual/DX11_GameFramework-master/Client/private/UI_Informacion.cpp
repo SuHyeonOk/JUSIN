@@ -59,8 +59,6 @@ void CUI_Informacion::Tick(_double TimeDelta)
 
 void CUI_Informacion::Late_Tick(_double TimeDelta)
 {
-
-
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
@@ -73,6 +71,16 @@ HRESULT CUI_Informacion::Render()
 	m_pShaderCom->Begin(0);
 
 	m_pVIBufferCom->Render();
+
+	// Key Count
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_int iCount = CObj_Manager::GetInstance()->Get_Current_Player().iKey;
+	_tchar szCount[5];
+	_itow_s(iCount, szCount, sizeof(szCount));
+
+	pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(118.f, 113.f), 0.f, _float2(0.33f, 0.3f), XMVectorSet(0.7f, 0.7f, 0.7f, 1.f));
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }

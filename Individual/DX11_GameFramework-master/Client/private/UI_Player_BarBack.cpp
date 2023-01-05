@@ -56,9 +56,7 @@ void CUI_Player_BarBack::Tick(_double TimeDelta)
 
 	// BarBack
  	_float	fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge_Player();
-	_int	iPlayer_Level = CObj_Manager::GetInstance()->Get_Current_Player().iLevel;
-
-
+//	_int	iPlayer_Level = CObj_Manager::GetInstance()->Get_Current_Player().iLevel;
 
 	if (0.0f > fHPGauge)
 		m_fHPGauge = 1.0f;

@@ -87,6 +87,7 @@ public:
 	void				Set_Player_PlusHP(_int eHp) { if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax) m_tPlayerInfo.fHP += eHp; }
 	void				CObj_Manager::Set_Player_MinusHP(_float fAttack);
 
+	void				Set_Coin(_int iCount) { m_tPlayerInfo.iCoin += iCount; }
 	void				Set_Key() { m_tPlayerInfo.iKey += 1; }
 	void				Set_Heart() { m_tPlayerInfo.iHeart += 1; }
 

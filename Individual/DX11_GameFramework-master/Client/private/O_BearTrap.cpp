@@ -112,6 +112,7 @@ void CO_BearTrap::On_Collision(CGameObject * pOther)
 	{
 		m_pModelCom->Set_AnimIndex(1, false);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
 	}
 }
 

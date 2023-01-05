@@ -642,7 +642,7 @@
       <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_Monster_BarBack.cpp">
-      <Filter>77.Manager</Filter>
+      <Filter>02.GameObjects\UI\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

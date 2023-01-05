@@ -75,16 +75,26 @@ void CCoin::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//if (CObj_Manager::GetInstance()->Get_Player_Collider(&m_pColliderCom))
-	//	m_bPlayer_Collider = true;
-
 	if(m_bPlayer_Collider)	// 충돌 하면 일정시간 후 삭제
 	{
+		if (!m_bOneCheck)
+		{
+			m_bOneCheck = true;
+	
+			if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
+				CObj_Manager::GetInstance()->Set_Coin(1);
+			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
+				CObj_Manager::GetInstance()->Set_Coin(2);
+			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
+				CObj_Manager::GetInstance()->Set_Coin(5);
+		}
+
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
 		m_dDead_TimeAcc += TimeDelta;
 		if (1 < m_dDead_TimeAcc)
 		{
+			m_bOneCheck = false;
 			CGameObject::Set_Dead();
 			m_dDead_TimeAcc = 0;
 		}

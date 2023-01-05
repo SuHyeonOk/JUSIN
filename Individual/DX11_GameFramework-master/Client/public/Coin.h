@@ -61,6 +61,8 @@ private:
 	_bool		m_bPlayer_Collider = false;
 	_double		m_dDead_TimeAcc = 0;	// 코인은 바로 사라 지지 않고, 자연스럽게 플레이어를 따라가다가 사라짐
 
+	_bool		m_bOneCheck = false;
+
 public:
 	static	CCoin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
