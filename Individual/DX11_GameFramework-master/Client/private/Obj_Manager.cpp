@@ -114,9 +114,9 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 	Key_Input();				// 전체적인 키 입력
 
-	cout << "HP : " << m_tPlayerInfo.fHP << " | MAXHP : " << m_tPlayerInfo.fHPMax <<
+	cout << "HP : " << m_tPlayerInfo.fHP << " | MAXHP : " << m_tPlayerInfo.fHPMax << " | HP % : " << m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax <<
 		" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
-		" | EXP : " << m_tPlayerInfo.fExp << " | MAXEXP : " << m_tPlayerInfo.fExpMax << endl;
+		" | EXP : " << m_tPlayerInfo.fExp << " | MAXEXP : " << m_tPlayerInfo.fExpMax << " | EXP % : " << m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax << endl;
 
 	if (0 < m_fMonster_Attck)
 	{

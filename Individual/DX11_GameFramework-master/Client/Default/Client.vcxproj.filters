@@ -602,9 +602,6 @@
     <ClCompile Include="..\private\UI_Monster_Bar.cpp">
       <Filter>02.GameObjects\UI\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\UI_Monster_BarBack.cpp">
-      <Filter>02.GameObjects\UI\Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\E_DieCenter.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
@@ -643,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_Level_Number.cpp">
       <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Monster_BarBack.cpp">
+      <Filter>77.Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
