@@ -51,17 +51,7 @@ HRESULT CUI_Monstser_Bar::Initialize(void * pArg)
 
 void CUI_Monstser_Bar::Tick(_double TimeDelta)
 {
-
-	//if (0.0f <= m_fAlpha)
-	//{
-	//	m_dAlpha_TimeAcc += TimeDelta;
-	//	if (0.01 < m_dAlpha_TimeAcc)
-	//	{
-	//		m_fAlpha -= 0.01f;
-	//		m_dAlpha_TimeAcc = 0;
-	//	}
-	//}
-
+	// TODO : Set_HPGauge() 으로 몬스터 에서 HP 조절 해야한다.
 }
 
 void CUI_Monstser_Bar::Late_Tick(_double TimeDelta)
@@ -125,8 +115,9 @@ HRESULT CUI_Monstser_Bar::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
-	//	return E_FAIL;
+	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge();
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fHPGauge", &fHPGauge, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }

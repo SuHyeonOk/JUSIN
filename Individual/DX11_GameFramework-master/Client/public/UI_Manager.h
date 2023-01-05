@@ -25,9 +25,12 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 몬스터 체력 게이지
+	_float		Get_HPGauge() { return m_HpGauge; }
+	void		Set_HPGauge(_float fHPGauge) { m_HpGauge = fHPGauge; }
+
 	// UI 몬스터 인덱스
 	_int		Get_UI_Monster_Index() { return m_iUI_Monster_Index; }
-	//void		Set_UI_Monster_Index(_int iIndex) { m_iUI_Monster_Index = iIndex; }
 	void		CUI_Manager::UI_Monster_Index(CGameObject * pOther);
 
 	// UI 몬스터 
@@ -43,6 +46,8 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_float			m_HpGauge = 1.0f;
+
 	_int			m_iUI_Monster_Index = 0;
 	_bool			m_bUI_Monster = false;
 
