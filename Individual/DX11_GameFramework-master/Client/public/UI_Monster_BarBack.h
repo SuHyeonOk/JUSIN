@@ -31,7 +31,7 @@ private:
 	virtual			HRESULT SetUp_ShaderResources() override;
 
 private:
-	_float			m_fHPGauge = 0.0f;
+	_float			m_fHPGauge = 1.0f;
 	_double			m_dHPGauge_TimeAcc = 0;
 
 public:

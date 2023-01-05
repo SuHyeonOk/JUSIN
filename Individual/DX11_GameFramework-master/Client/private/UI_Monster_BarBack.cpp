@@ -51,12 +51,12 @@ HRESULT CUI_Monstser_BarBack::Initialize(void * pArg)
 
 void CUI_Monstser_BarBack::Tick(_double TimeDelta)
 {
-	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge();
+ 	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge();
 
 	m_dHPGauge_TimeAcc += TimeDelta;
-	if (0.01 < m_dHPGauge_TimeAcc)
+	if (0.03 < m_dHPGauge_TimeAcc)
 	{
-		if (0.0f < fHPGauge)
+		if (fHPGauge <= m_fHPGauge)
 			m_fHPGauge -= 0.01f;
 
 		m_dHPGauge_TimeAcc = 0;
