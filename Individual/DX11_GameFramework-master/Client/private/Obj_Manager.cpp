@@ -30,7 +30,7 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
 	m_tPlayerInfo.eJakeWeapon = PLAYERINFO::JAKEWEAPON::LFIST;
 
-
+	CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);
 
 	return S_OK;
 }
@@ -204,8 +204,9 @@ void		CObj_Manager::Player_Exp()
 		m_tPlayerInfo.iAttack += 10;					// 공격력 증가
 
 		// UI 초기화
-		CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP);
-		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tPlayerInfo.fExp);
+		CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);
+		CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
+		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax);
 
 		return;
 	}

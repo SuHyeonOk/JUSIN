@@ -25,6 +25,10 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 레벨 숫자
+	_int		Get_Level_Number() { return m_iUI_Level_Number; }
+	void		Set_Level_Number(_int iNumber) { m_iUI_Level_Number = iNumber; }
+
 	// 플레이어 레벨 게이지
 	_float		Get_LevelGauge_Player() { return m_LevelGauge_Player; }
   	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
@@ -54,6 +58,8 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_int			m_iUI_Level_Number = 0;
+
 	_float			m_LevelGauge_Player = 0.0f;
 	_float			m_HpGauge_Player = 1.0f;
 

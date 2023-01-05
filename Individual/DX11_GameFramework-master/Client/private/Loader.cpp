@@ -24,6 +24,7 @@
 #include "UI_Player_BarBack.h"
 #include "UI_Level_Bar.h"
 #include "UI_Level_BarBack.h"
+#include "UI_Level_Number.h"
 
 // Obj
 #include "O_Box.h"
@@ -1018,7 +1019,12 @@ HRESULT CLoader::UI_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LEVELBarBack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_amarilla_white.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Level_Number */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Level_Number"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LevlNumber/lvl%d.png"), 16))))
+		return E_FAIL;
 
+	
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1068,11 +1074,14 @@ HRESULT CLoader::UI_Create()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Level_HPBar"),
 		CUI_Level_Bar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_Level_HPBarBack */
+	/* For.Prototype_GameObject_Player_Level_HPBarBack */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Level_HPBarBack"),
 		CUI_Level_BarBack::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	/* For.Prototype_GameObject_Player_Level_Number */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Level_Number"),
+		CUI_Level_Number::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 

@@ -408,6 +408,9 @@
     <ClInclude Include="..\public\UI_Level_BarBack.h">
       <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Level_Number.h">
+      <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -636,6 +639,9 @@
       <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_Level_BarBack.cpp">
+      <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Level_Number.cpp">
       <Filter>02.GameObjects\UI\Informacion\LEVEL</Filter>
     </ClCompile>
   </ItemGroup>
