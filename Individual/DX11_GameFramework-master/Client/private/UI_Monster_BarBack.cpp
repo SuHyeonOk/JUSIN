@@ -51,7 +51,16 @@ HRESULT CUI_Monstser_BarBack::Initialize(void * pArg)
 
 void CUI_Monstser_BarBack::Tick(_double TimeDelta)
 {
+	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge();
 
+	m_dHPGauge_TimeAcc += TimeDelta;
+	if (0.01 < m_dHPGauge_TimeAcc)
+	{
+		if (0.0f < fHPGauge)
+			m_fHPGauge -= 0.01f;
+
+		m_dHPGauge_TimeAcc = 0;
+	}
 }
 
 void CUI_Monstser_BarBack::Late_Tick(_double TimeDelta)
@@ -113,6 +122,9 @@ HRESULT CUI_Monstser_BarBack::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fHPGauge", &m_fHPGauge, sizeof _float)))
 		return E_FAIL;
 
 	return S_OK;

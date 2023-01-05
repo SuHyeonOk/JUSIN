@@ -30,10 +30,14 @@ private:
 	virtual			HRESULT SetUp_Components() override;
 	virtual			HRESULT SetUp_ShaderResources() override;
 
+private:
+	_float			m_fHPGauge = 0.0f;
+	_double			m_dHPGauge_TimeAcc = 0;
+
 public:
 	static CUI_Monstser_BarBack*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject*	Clone(void* pArg = nullptr) override;
-	virtual void			Free() override;
+	virtual CGameObject*			Clone(void* pArg = nullptr) override;
+	virtual void					Free() override;
 };
 
 END

@@ -8,6 +8,7 @@
 #include "ItemManager.h"
 #include "Effect_Manager.h"
 #include "E_DieCenter.h"
+#include "UI_Manager.h"
 
 CM_Monster::CM_Monster(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -54,14 +55,21 @@ void CM_Monster::Tick(const _double& TimeDelta)
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayer_Attack_TimeAcc)
 		{
-			m_tMonsterInfo.fHP = 0.0f;
-			//m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			// 몬스터 상태 변경
 			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+			// 플레이어의 공격력 깍기
+			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+
+			// UI 에 내 체력 넘겨주기
+			CUI_Manager::GetInstance()->Set_HPGauge(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 			m_bPlayer_Attack = false;
 			m_dPlayer_Attack_TimeAcc = 0;
 		}
 	}
+
+	HPGauge(TimeDelta);
 }
 
 void CM_Monster::Late_Tick(const _double& TimeDelta)
@@ -100,7 +108,7 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 {
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
-		if(L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag())
+		if (L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag())
 			m_bPlayer_Attack = true;
 	}
 
@@ -134,20 +142,6 @@ _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _dou
 		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
 		pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), fRandomAxis);	// Look 을 변경한다.
 	}
-
-	//if (fRange < fDiatance)	// 일정 범위를 나가면
-	//{
-	//	pTransform->Chase(vCenterPos, TimeDelta);	// 원점으로 돌아가고
-
-	//	if (!m_bRandomPos)	// 추가 일정 범위로 나가면 계속 랜덤값을 주는 것이 아닌 한 번! 만 준다.
-	//	{
-	//		m_bRandomPos = true;
-	//		m_fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-	//	}
-	//	pTransform->Rotation(pTransform->Get_State(CTransform::STATE_UP), m_fRandomAxis);	// Look 을 변경한다.
-	//}
-	//else
-	//	m_bRandomPos = false;
 
 	return true;
 }
@@ -283,6 +277,11 @@ void CM_Monster::Dance_Time()
 {
 	if (CSkill_Manager::PLAYERSKILL::MARCELINT != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+}
+
+void CM_Monster::HPGauge(const _double & TimeDelta)
+{
+
 }
 
 void CM_Monster::Free()

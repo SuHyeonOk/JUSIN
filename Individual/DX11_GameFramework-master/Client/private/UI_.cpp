@@ -80,7 +80,7 @@ void CUI_::Tick(_double TimeDelta)
 	if(CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Tick(TimeDelta);
 
-	if (0 != m_vecUI.size()/*CUI_Manager::GetInstance()->Get_UI_Monster()*/)
+	if (CUI_Manager::GetInstance()->Get_UI_Monster())
 	{
 		m_vecUI[1]->Tick(TimeDelta);
 		m_vecUI[3]->Tick(TimeDelta);
@@ -95,7 +95,7 @@ void CUI_::Late_Tick(_double TimeDelta)
 	if (CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Late_Tick(TimeDelta);
 
-	if (0 != m_vecUI.size()/*CUI_Manager::GetInstance()->Get_UI_Monster()*/)
+	if (CUI_Manager::GetInstance()->Get_UI_Monster())
 	{
 		m_vecUI[1]->Late_Tick(TimeDelta);
 		m_vecUI[3]->Late_Tick(TimeDelta);

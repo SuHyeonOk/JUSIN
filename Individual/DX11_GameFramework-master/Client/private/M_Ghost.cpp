@@ -5,7 +5,6 @@
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
-#include "UI_Manager.h"
 
 #include "Bone.h"
 #include "W_GhostFist.h"
@@ -73,9 +72,6 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 void CM_Ghost::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-	// UI 에 내 체력 넘겨주기
-	CUI_Manager::GetInstance()->Set_HPGauge(_float(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP));
 
 	// 주먹 무기
 	if(m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
