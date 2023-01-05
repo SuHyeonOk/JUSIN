@@ -70,9 +70,9 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 
 	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
 	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		m_bMonster_Crash = false;
+		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
-	if (m_bMonster_Crash)
+	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
 		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
 	else
 		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
@@ -125,7 +125,7 @@ void CS_Change_Magic::On_Collision(CGameObject * pOther)
 	CObj_Manager::GetInstance()->Set_Jake_Shield();
 
 	// 나 지금 몬스터랑 충돌 했어
-	m_bMonster_Crash = true;
+	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
 
 	// 그 몬스터는 이거야
 	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);

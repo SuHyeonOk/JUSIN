@@ -58,10 +58,10 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 		m_wsTag = L"Monster__Ghost_2";
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= 60.0f;
+	m_tMonsterInfo.fHP		= 6.0f;
 	m_tMonsterInfo.fMaxHP	= 60.0f;
-	m_tMonsterInfo.fExp		= 60.0f;
-	m_tMonsterInfo.fAttack	= 20.0f;
+	m_tMonsterInfo.fExp		= 100.0f;
+	m_tMonsterInfo.fAttack	= 10.0f;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -311,7 +311,7 @@ void CM_Ghost::Move_Tick(const _double& TimeDelta)
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 4.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
-
+	
 	// 내 원점 거리와 내 위치가 멀다면! 무조건 원점으로 돌아간다.
 	_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
 	_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);

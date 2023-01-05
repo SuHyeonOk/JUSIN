@@ -60,8 +60,6 @@ private:
 	_bool				m_bMove = false;
 	_double				m_dMove_TimeAcc = 0;
 
-	_bool				m_bMonster_Crash = false;
-
 public:
 	static	CS_PaintWork*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;

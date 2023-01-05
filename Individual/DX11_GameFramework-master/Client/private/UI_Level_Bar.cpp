@@ -53,6 +53,9 @@ void CUI_Level_Bar::Tick(_double TimeDelta)
 {
 	_float fHPGauge = CUI_Manager::GetInstance()->Get_LevelGauge_Player();
 
+	if (0.0f > fHPGauge)
+		m_fHPGauge = 1.0f;
+
 	m_dHPGauge_TimeAcc += TimeDelta;
 	if (0.03 < m_dHPGauge_TimeAcc)
 	{

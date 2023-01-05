@@ -58,6 +58,9 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
+	_bool				Get_Monster_Crash() { return m_bMonster_Crash; }
+	void				Set_Monster_Crash(_bool bCrash) { m_bMonster_Crash = bCrash; }
+
 	// 다음 레벨로 넘어갈 것 인지.
 	_bool				Get_NextLevel() { return m_bNextLevel; }
 	void				Set_NextLevel(_bool bNext) { m_bNextLevel = bNext; }
@@ -121,6 +124,7 @@ private: // KeyInput
 
 private:
 	_bool			m_bShield = false;
+	_bool			m_bMonster_Crash = false;	// 플레이어가 지금 몬스터와 충돌 했는지
 
 	_float			m_fAngle = 0.f;
 

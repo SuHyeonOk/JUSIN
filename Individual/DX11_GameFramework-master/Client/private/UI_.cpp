@@ -123,7 +123,7 @@ void CUI_::Tick(_double TimeDelta)
 	if (CUI_Manager::GetInstance()->Get_UI_Monster())
 	{
 		m_vecUI[1]->Tick(TimeDelta);
-		m_vecUI[3]->Tick(TimeDelta);
+ 		m_vecUI[3]->Tick(TimeDelta);
 		m_vecUI[2]->Tick(TimeDelta);
 	}
 

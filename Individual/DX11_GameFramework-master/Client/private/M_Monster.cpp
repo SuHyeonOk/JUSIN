@@ -213,9 +213,9 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 	if (0 >= m_fAlpha)
 	{
 		// 몬스터 죽으면 UI 초기화
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
-		CUI_Manager::GetInstance()->Set_HPGauge_Monster(0.0f);
-		
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
+		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+
 		// 알파값이 다 사라지면 죽음
 		CGameObject::Set_Dead();	
 	}
@@ -270,7 +270,7 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 	{
 		// 플레이어 UI 관리
 		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
-  		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
+		CUI_Manager::GetInstance()->Set_LevelGauge_Player(CObj_Manager::GetInstance()->Get_Current_Player().fExp / CObj_Manager::GetInstance()->Get_Current_Player().fExpMax);
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;
