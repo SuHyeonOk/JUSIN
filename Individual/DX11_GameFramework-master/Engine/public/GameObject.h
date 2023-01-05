@@ -22,6 +22,7 @@ public:
 
 public:
 	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // ◈
+	_float Get_CamDistance() const { return m_fCamDistance; }
 
 	_bool		Get_Dead() { return m_bDead; }
 	void		Set_Dead() { m_bDead = true; }
@@ -59,9 +60,11 @@ protected:
 protected:	
 	HRESULT				Add_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, class CComponent** ppOut, void* pArg = nullptr);
 	class CComponent*	Find_Component(const _tchar* pComponentTag);
+	HRESULT				Compute_CamZ(_fvector vWorldPos);
 
 private:
-	_bool		m_bDead = false;	// 객체가 사라져야 한다면 , true
+	_float		m_fCamDistance = 0.0f;	// 객체와 카메라의 거리
+	_bool		m_bDead = false;		// 객체가 사라져야 한다면 , true
 
 public:	
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;

@@ -85,6 +85,8 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
+	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }

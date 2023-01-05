@@ -96,6 +96,8 @@ void CE_DieCenter::Late_Tick(_double TimeDelta)
 		m_dAlpha_TimeAcc = 0;
 	}
 
+	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
