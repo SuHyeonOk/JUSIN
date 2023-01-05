@@ -9,12 +9,12 @@ END
 
 BEGIN(Client)
 
-class CUI_HPGauge final : public CUI_
+class CUI_Player_Bar final : public CUI_
 {
 private:
-	CUI_HPGauge(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUI_HPGauge(const CUI_HPGauge& rhs);
-	virtual ~CUI_HPGauge() = default;
+	CUI_Player_Bar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUI_Player_Bar(const CUI_Player_Bar& rhs);
+	virtual ~CUI_Player_Bar() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -24,16 +24,20 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	CTexture*				m_pTextureCom = nullptr;
+	CTexture*			m_pTextureCom = { nullptr };
 
 private:
 	virtual			HRESULT SetUp_Components() override;
 	virtual			HRESULT SetUp_ShaderResources() override;
 
+private:
+	_float			m_fAlpha = 1.f;
+	_double			m_dAlpha_TimeAcc = 0;
+
 public:
-	static		CUI_HPGauge* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual		CGameObject* Clone(void* pArg = nullptr) override;
-	virtual void Free() override;
+	static CUI_Player_Bar*Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject*	Clone(void* pArg = nullptr) override;
+	virtual void			Free() override;
 };
 
 END

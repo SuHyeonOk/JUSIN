@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Transform.h"
+#include "UI_Manager.h"
 
 IMPLEMENT_SINGLETON(CObj_Manager)
 
@@ -12,8 +13,8 @@ CObj_Manager::CObj_Manager()
 
 HRESULT		CObj_Manager::Initialized()
 {
-	m_tPlayerInfo.iHp		= 100;
-	m_tPlayerInfo.iHpMax	= 100;
+	m_tPlayerInfo.fHP		= 100.0f;
+	m_tPlayerInfo.fHPMax	= 100.0f;
 	m_tPlayerInfo.iAttack	= 10;
 	m_tPlayerInfo.iExp		= 0;
 	m_tPlayerInfo.iExpMax	= 100;
@@ -98,10 +99,6 @@ _vector			CObj_Manager::Get_Player_Transform()
 
 void		CObj_Manager::Set_Player_MinusHp(_int eHp)
 {
-	//if (PLAYERINFO::PLAYER::JAKE == m_tPlayerInfo.ePlayer &&
-	//	PLAYERINFO::STATE::CONTROL == m_tPlayerInfo.eJakeWeapon)
-	//	return;
-
 	if (m_bShield)
 	{
 		m_bShield = false;
@@ -126,14 +123,16 @@ void		CObj_Manager::Tick(_double TimeDelta)
 		m_dPlayerAttck_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayerAttck_TimeAcc)
 		{
-			if (0 < m_tPlayerInfo.iHp) 
-				m_tPlayerInfo.iHp -= m_iMonster_Attck;
+			if (0 < m_tPlayerInfo.fHP)
+			{
+				m_tPlayerInfo.fHP -= m_iMonster_Attck;
+				CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
+			}
 			
 			m_iMonster_Attck = 0;
 			m_dPlayerAttck_TimeAcc = 0;
 		}
 	}
-
 }
 
 void		CObj_Manager::Key_Input()
@@ -197,11 +196,12 @@ void		CObj_Manager::Player_Exp()
 {
 	if (m_tPlayerInfo.iExp >= m_tPlayerInfo.iExpMax)
 	{
-		m_tPlayerInfo.iHp = m_tPlayerInfo.iHpMax;		// 체력 꽉 채워주기
+		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
 		m_tPlayerInfo.iLevel++;							// 레벨 증가
 		m_tPlayerInfo.iExp = 0;							// 경험치 0 으로 초기화
 		m_tPlayerInfo.iExpMax += 50;					// 최대 경험치 증가
 		m_tPlayerInfo.iAttack += 10;					// 공격력 증가
+		m_tPlayerInfo.fHPMax += 10.0f;					// 공격력 증가
 
 		return;
 	}

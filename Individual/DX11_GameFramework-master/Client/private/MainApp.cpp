@@ -20,11 +20,6 @@
 
 #include "O_TextureObject.h"
 
-#include "UI_.h"
-#include "UI_Informacion.h"
-#include "UI_HPGauge.h"
-
-
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
 {
@@ -365,44 +360,6 @@ HRESULT CMainApp::Ready_Prototype_Component()
 
 #pragma endregion
 
-#pragma region	UI
-	//UI
-	/* For.Prototype_GameObject_UI */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
-		CUI_::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_UI_Finn_Informacion */
-	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_UI_Finn_Informacion"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/Finn_informacion.dds")))))
-		return E_FAIL;
-	/* For.Prototype_Component_Texture_UI_Jake_Informacion */
-	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_UI_Jake_Informacion"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/Jake_informacion.dds")))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_UI_Informacion */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Informacion"),
-		CUI_Informacion::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_UI_HPGauge */
-	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_UI_HPGauge"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_verde.png")))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_UI_HPGauge */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_HPGauge"),
-		CUI_HPGauge::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	///* For.Prototype_Component_Texture_UI_LEVELGauge */
-	//if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_UI_LEVELGauge"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_amarilla.png")))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_UI_Informacion */
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Informacion"),
-	//	CUI_Informacion::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-#pragma endregion
 
 	Safe_AddRef(m_pRenderer);
 

@@ -40,8 +40,8 @@ public:
 		ITEM		eItem = ITEM_END;
 
 
-		_int	iHp;		// 몬스터"가" 체력을 깍을 때 필요
-		_int	iHpMax;
+		_float	fHP;		// 몬스터"가" 체력을 깍을 때 필요
+		_float	fHPMax;
 		_int	iAttack;	// 몬스터"의" 체력을 깍을 때 필요
 		_int	iExp;		// 몬스터가 죽으면 증가
 		_int	iExpMax;
@@ -80,7 +80,7 @@ public:
 
 	// UI 관련
 	void				Set_Player_Exp(_int eExp) { m_tPlayerInfo.iExp += eExp; }
-	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.iHp <= m_tPlayerInfo.iHpMax) m_tPlayerInfo.iHp += eHp; }
+	void				Set_Player_PushHp(_int eHp) { if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax) m_tPlayerInfo.fHP += eHp; }
 	void				CObj_Manager::Set_Player_MinusHp(_int eHp);
 
 	void				Set_Key() { m_tPlayerInfo.iKey += 1; }

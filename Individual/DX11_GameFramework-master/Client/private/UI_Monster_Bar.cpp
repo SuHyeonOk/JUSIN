@@ -115,7 +115,7 @@ HRESULT CUI_Monstser_Bar::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge();
+	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge_Monster();
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fHPGauge", &fHPGauge, sizeof _float)))
 		return E_FAIL;
 

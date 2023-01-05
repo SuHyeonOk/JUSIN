@@ -34,9 +34,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -152,18 +149,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Npc()
 	tNpcDesc.eNpcType = tNpcDesc.KEYMAN;
 	tNpcDesc.TransformDesc.f3Pos = _float3(3.53753f, 0.f, 56.2821f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_KeyMan__0"), TEXT("Prototype_GameObject_N_KeyMan"), &tNpcDesc)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_UI_Informacion"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

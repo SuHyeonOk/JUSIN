@@ -62,7 +62,7 @@ void CM_Monster::Tick(const _double& TimeDelta)
 			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
 
 			// UI 에 내 체력 넘겨주기
-			CUI_Manager::GetInstance()->Set_HPGauge(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+			CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 			m_bPlayer_Attack = false;
 			m_dPlayer_Attack_TimeAcc = 0;

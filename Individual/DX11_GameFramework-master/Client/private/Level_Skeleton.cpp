@@ -41,9 +41,6 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -70,8 +67,6 @@ HRESULT CLevel_Skleton::Initialize()
 	//Load_Npc();
 	Load_Object();
 	Load_Monster();
-
-
 
 	return S_OK;
 }
@@ -210,18 +205,6 @@ HRESULT CLevel_Skleton::Ready_Layer_Npc()
 	tNpcDesc.eNpcType = tNpcDesc.DOCTOR;
 	tNpcDesc.TransformDesc.f3Pos = _float3(-36.f, 0.f, 12.f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Doctor__0"), TEXT("Prototype_GameObject_N_Doctor"), &tNpcDesc)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_Skleton::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_UI_Informacion"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -19,6 +19,9 @@
 #include "UI_Monster.h"
 #include "UI_Monster_Bar.h"
 #include "UI_Monster_BarBack.h"
+#include "UI_Informacion.h"
+#include "UI_Player_Bar.h"
+#include "UI_Player_BarBack.h"
 
 // Obj
 #include "O_Box.h"
@@ -988,6 +991,32 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Enemies_HealthBar_BarBack.png")))))
 		return E_FAIL;
 
+	// Player 
+	/* For.Prototype_Component_Texture_UI_Finn_Informacion */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Finn_Informacion"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/Finn_informacion.dds")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Jake_Informacion */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Jake_Informacion"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/Jake_informacion.dds")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_HPBar */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_HPBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_verde.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_HPBarBack */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_HPBarBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_verde_White.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_LEVELBar */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LEVELBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_amarilla.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_LEVELBar */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LEVELBarBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Informacion/barra_amarilla_white.png")))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1018,6 +1047,25 @@ HRESULT CLoader::UI_Create()
 	/* For.Prototype_GameObject_UI_3DTexture */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster_HealthBar_BarBack"),
 		CUI_Monstser_BarBack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Player
+	/* For.Prototype_GameObject_UI_Informacion */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Player_Informacion"),
+		CUI_Informacion::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_HPBar */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Player_HPBar"),
+		CUI_Player_Bar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_HPBarBack */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Player_HPBarBack"),
+		CUI_Player_BarBack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UI */ // 최상위 부모
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
+		CUI_::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

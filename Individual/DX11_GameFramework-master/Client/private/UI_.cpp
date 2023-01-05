@@ -69,6 +69,30 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 
+	// [4] : Player Indormacion
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Player_Informacion")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [5] : Player HpBar
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Player_HPBar")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [6] : Player HpBarBack
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Player_HPBarBack")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
 	RELEASE_INSTANCE(CGameInstance);
 
 
@@ -87,6 +111,10 @@ void CUI_::Tick(_double TimeDelta)
 		m_vecUI[2]->Tick(TimeDelta);
 	}
 
+	m_vecUI[4]->Tick(TimeDelta);
+	m_vecUI[6]->Tick(TimeDelta);
+	m_vecUI[5]->Tick(TimeDelta);
+
 	__super::Tick(TimeDelta);
 }
 
@@ -101,6 +129,10 @@ void CUI_::Late_Tick(_double TimeDelta)
 		m_vecUI[3]->Late_Tick(TimeDelta);
 		m_vecUI[2]->Late_Tick(TimeDelta);
 	}
+
+	m_vecUI[4]->Late_Tick(TimeDelta);
+	m_vecUI[6]->Late_Tick(TimeDelta);
+	m_vecUI[5]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);
 

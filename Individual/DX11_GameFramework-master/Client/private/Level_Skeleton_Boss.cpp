@@ -35,9 +35,6 @@ HRESULT CLevel_Skleton_Boss::Initialize()
 	//if (FAILED(Ready_PreviousData()))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Layer_UI_Informacion(TEXT("Layer_UI_Informacion"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -140,18 +137,6 @@ HRESULT CLevel_Skleton_Boss::Ready_PreviousData()
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_Skleton_Boss::Ready_Layer_UI_Informacion(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_UI_Informacion"))))
-		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
