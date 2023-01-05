@@ -58,20 +58,24 @@ void CUI_Player_BarBack::Tick(_double TimeDelta)
  	_float	fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge_Player();
 //	_int	iPlayer_Level = CObj_Manager::GetInstance()->Get_Current_Player().iLevel;
 
-	if (0.0f > fHPGauge)
+	if (0.0f > m_fHPGauge || 1.0 == m_fHPGauge)
 		m_fHPGauge = 1.0f;
 
-
-
-	m_dHPGauge_TimeAcc += TimeDelta;
-	if ((fHPGauge * 0.01f) < m_dHPGauge_TimeAcc)
+	if (fHPGauge <= m_fHPGauge)
 	{
-		if (fHPGauge <= m_fHPGauge)
-			m_fHPGauge -= fHPGauge * 0.01f;
-			//m_fHPGauge -= 0.05f;
-
-		m_dHPGauge_TimeAcc = 0;
+		m_fHPGauge -= _float(TimeDelta) * fHPGauge * 0.5f;
 	}
+
+
+	//m_dHPGauge_TimeAcc += TimeDelta;
+	//if ((fHPGauge * 0.01f) < m_dHPGauge_TimeAcc)
+	//{
+	//	if (fHPGauge <= m_fHPGauge)
+	//		m_fHPGauge -= fHPGauge * 0.01f;
+	//		//m_fHPGauge -= 0.05f;
+
+	//	m_dHPGauge_TimeAcc = 0;
+	//}
 }
 
 void CUI_Player_BarBack::Late_Tick(_double TimeDelta)

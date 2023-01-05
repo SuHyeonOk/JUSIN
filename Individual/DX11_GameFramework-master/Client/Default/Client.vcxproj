@@ -242,6 +242,7 @@
     <ClInclude Include="..\public\UI_Monster_BarBack.h" />
     <ClInclude Include="..\public\UI_Player_Bar.h" />
     <ClInclude Include="..\public\UI_Player_BarBack.h" />
+    <ClInclude Include="..\public\UI_Scroll.h" />
     <ClInclude Include="..\public\UI_Talk.h" />
     <ClInclude Include="..\public\UI_Weapon.h" />
     <ClInclude Include="..\public\UI_Weapons.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="..\private\UI_Monster_BarBack.cpp" />
     <ClCompile Include="..\private\UI_Player_Bar.cpp" />
     <ClCompile Include="..\private\UI_Player_BarBack.cpp" />
+    <ClCompile Include="..\private\UI_Scroll.cpp" />
     <ClCompile Include="..\private\UI_Talk.cpp" />
     <ClCompile Include="..\private\UI_Weapon.cpp" />
     <ClCompile Include="..\private\UI_Weapons.cpp" />

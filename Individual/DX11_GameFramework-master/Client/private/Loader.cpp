@@ -27,6 +27,7 @@
 #include "UI_Level_Number.h"
 #include "UI_Weapon.h"
 #include "UI_Weapons.h"
+#include "UI_Scroll.h"
 
 // Obj
 #include "O_Box.h"
@@ -1036,6 +1037,12 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/Weapon_%d.png"), 4))))
 		return E_FAIL;
 
+	// Skill
+	/* For.Prototype_Component_Texture_UI_Skill_Scroll */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Skill_Scroll"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/Scroll.png")))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1104,6 +1111,11 @@ HRESULT CLoader::UI_Create()
 		CUI_Weapons::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Skill
+	/* For.Prototype_GameObject_Player_Skill_Scroll */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Skill_Scroll"),
+		CUI_Scroll::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 
