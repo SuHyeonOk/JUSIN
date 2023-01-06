@@ -68,7 +68,7 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
+	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼
 	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
@@ -124,6 +124,9 @@ HRESULT CS_Change_Magic::Render()
 
 void CS_Change_Magic::On_Collision(CGameObject * pOther)
 {
+	// 지금 충돌한 Page 관리
+	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
+
 	CObj_Manager::GetInstance()->Set_Jake_Shield();
 
 	// 나 지금 몬스터랑 충돌 했어

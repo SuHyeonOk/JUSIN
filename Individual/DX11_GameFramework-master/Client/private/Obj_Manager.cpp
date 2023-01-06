@@ -123,12 +123,13 @@ void		CObj_Manager::Key_Input()
 
 	// 아이템 사용
 	if (pGameInstance->Key_Down(DIK_1))
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::MARCELINT);
+		CSkill_Manager::GetInstance()->Page_Use(ITEM_ONE);
 	if (pGameInstance->Key_Down(DIK_2))
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
+		CSkill_Manager::GetInstance()->Page_Use(ITEM_TWO);
 	if (pGameInstance->Key_Down(DIK_3))
-
-		if (pGameInstance->Key_Down(DIK_4))
+		CSkill_Manager::GetInstance()->Page_Use(ITEM_THREE);
+	if (pGameInstance->Key_Down(DIK_4))
+		CSkill_Manager::GetInstance()->Page_Use(ITEM_FOUR);
 
 	// 전역적으로 네이게이션, 충돌체를 껐다가 켤 수 있다.
 	if (pGameInstance->Key_Down(DIK_F11))

@@ -103,8 +103,10 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
+	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CFinn::Render()
@@ -148,13 +150,7 @@ HRESULT CFinn::Render()
 
 void CFinn::On_Collision(CGameObject * pOther)
 {
-	//wstring wsMonsterTagFind = pOther->Get_Tag();
-	//wstring TagTemp = wsMonsterTagFind.substr(10);
-
-	//if (L"Monster__" == TagTemp)
-	//{
-	//	CObj_Manager::Set_Player_MinusHp()
-	//}
+	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
 }
 
 HRESULT CFinn::SetUp_Components()
@@ -219,24 +215,6 @@ HRESULT CFinn::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
-
-
-	///* For.Lights */
-	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	//if (nullptr == pLightDesc)
-	//	return E_FAIL;
-	//
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
-	//	return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -625,7 +603,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		if (m_bSkill && 
+		if (m_bSkill &&
 			CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
 			m_bSkill_Clone = false;
@@ -655,6 +633,9 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	if (18 == m_pModelCom->Get_AnimIndex() && 0 <= m_pModelCom->Get_Keyframes())
+		return;
 
 	// 1) 총 스킬이 재생되어야 하는 시간을 체크하는 Tick
 	// 2) 스페이스바를 누르면 그 때 마다 객체가 생성되어야 하는 Tick

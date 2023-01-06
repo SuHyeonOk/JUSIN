@@ -41,7 +41,7 @@ HRESULT CUI_Player_BarBack::Initialize(void * pArg)
 	m_fSizeY = 21.f / 1.5f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-448.f, 263.f, 0.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-448.f, 262.f, 0.f, 1.f));
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));

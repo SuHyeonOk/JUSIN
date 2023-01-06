@@ -145,32 +145,32 @@ HRESULT CUI_::Initialize(void * pArg)
 	m_vecUI.push_back(pUI);
 
 	// [13] : Skill_Icon_One
-	CUI_SkillIcon::SKILLICON	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_ONE;
-	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+	ITEMINDEX eItemIndex = ITEM_ONE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &eItemIndex));
 
 	if (nullptr == pUI)
 		return E_FAIL;
 
 	m_vecUI.push_back(pUI);
 	// [14] : Skill_Icon_Two
-	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_TWO;
-	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+	eItemIndex = ITEM_TWO;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &eItemIndex));
 
 	if (nullptr == pUI)
 		return E_FAIL;
 
 	m_vecUI.push_back(pUI);
 	// [15] : Skill_Icon_Three
-	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_THREE;
-	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+	eItemIndex = ITEM_THREE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &eItemIndex));
 
 	if (nullptr == pUI)
 		return E_FAIL;
 
 	m_vecUI.push_back(pUI);
 	// [16] : Skill_Icon_Four
-	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_FOUR;
-	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+	eItemIndex = ITEM_FOUR;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &eItemIndex));
 
 	if (nullptr == pUI)
 		return E_FAIL;
@@ -207,14 +207,40 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[11]->Tick(TimeDelta);
 
 	m_vecUI[12]->Tick(TimeDelta);
-	if(CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if(true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
 		m_vecUI[13]->Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
 		m_vecUI[14]->Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
 		m_vecUI[15]->Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
 		m_vecUI[16]->Tick(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_P))
+	{
+		cout << "전체적인 상태 } " << 0 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << " || " <<
+		1 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << " || " <<
+		2 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << " || " <<
+		3 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
+
+		cout << "전체적인 상태 형변환 안 한 것 } " << 0 << " : " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " || " <<
+			1 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO) << " || " <<
+			2 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE) << " || " <<
+			3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
+
+		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
+			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << endl;
+		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
+			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << endl;
+		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
+			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << endl;
+		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
+			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	__super::Tick(TimeDelta);
 }
@@ -242,13 +268,13 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[11]->Late_Tick(TimeDelta);
 
 	m_vecUI[12]->Late_Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
 		m_vecUI[13]->Late_Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
 		m_vecUI[14]->Late_Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
 		m_vecUI[15]->Late_Tick(TimeDelta);
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
 		m_vecUI[16]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);

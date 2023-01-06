@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 #include "Base.h"
 #include "GameObject.h"
+#include "Skill_Manager.h"
 
 BEGIN(Client)
 
@@ -26,8 +27,15 @@ public:
 
 public:
 	// 스킬
-	_int		Get_SkillIcon(_int iIndex) { return m_iUI_Skill_Index[iIndex]; }
-	void		Set_SkillIcon(_int iIndex, _int iIcon) { m_iUI_Skill_Index[iIndex] = iIcon; }
+	_bool		Get_IsIcon_Index(ITEMINDEX iIndex) { return m_bIsSkill_Index[iIndex]; }
+	void		Set_IsIcon_Index(ITEMINDEX iIndex, _bool bIsIndex) { m_bIsSkill_Index[iIndex] = bIsIndex; }
+
+	CSkill_Manager::PLAYERSKILL::SKILL		Get_SkillIcon(ITEMINDEX iIndex) { 
+		return m_iUI_Skill_Index[iIndex];
+	}
+	void									Set_SkillIcon(ITEMINDEX iIndex, CSkill_Manager::PLAYERSKILL::SKILL iSkill) { 
+		m_iUI_Skill_Index[iIndex] = iSkill;
+	}
 
 	// 무기
 	_int		Get_Weapons() { return m_iUI_Weapons; }
@@ -69,7 +77,8 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
-	_int			m_iUI_Skill_Index[4] = { 0 };
+	_bool										m_bIsSkill_Index[ITEMINDEX_END] = { false };
+	CSkill_Manager::PLAYERSKILL::SKILL			m_iUI_Skill_Index[ITEMINDEX_END] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
 
 	_int			m_iUI_Weapon_index = 0;
 	_int			m_iUI_Weapons = 0;

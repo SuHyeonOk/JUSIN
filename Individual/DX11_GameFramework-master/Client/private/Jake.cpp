@@ -93,8 +93,10 @@ void CJake::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
+	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CJake::Render()
@@ -138,6 +140,7 @@ HRESULT CJake::Render()
 
 void CJake::On_Collision(CGameObject * pOther)
 {
+	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
 }
 
 HRESULT CJake::SetUp_Components()

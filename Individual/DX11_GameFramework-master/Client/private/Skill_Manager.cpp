@@ -10,13 +10,51 @@ CSkill_Manager::CSkill_Manager()
 {
 }
 
-void	CSkill_Manager::SkillIcon_Tick()
+void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 {
-	if (PLAYERSKILL::PAINT == m_tPlayerSkill.eSkill)
-		CUI_Manager::GetInstance()->Set_SkillIcon(0, 1);
+	m_tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(iIndex);	// 현재 내가 누른 인덱스
 
+	if(0 < m_arrPageCount[m_tPlayerSkill.eSkill])								// 예외처리 0보다 클때, 즉 스킬이 있을 때 사용 가능하다.
+		m_arrPageCount[m_tPlayerSkill.eSkill] -= 1;								// 아이템 하나 감소
 
+	CUI_Manager::GetInstance()->Set_IsIcon_Index(iIndex, false);
 
+	cout <<  0 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " | " <<
+			 1 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO) << " | " <<
+			 2 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE) << " | " <<
+			 3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
+}
+
+void	CSkill_Manager::Page_PickUp(CGameObject * pOther)
+{
+	if (L"Item_Page_Paint" == pOther->Get_Tag())
+	{
+		m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;		// 충돌한 객체의 개수 관리
+		SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기
+	}
+	else if (L"Item_Page_Marcelint" == pOther->Get_Tag())
+	{
+		m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] += 1;
+		SkillIcon(PLAYERSKILL::SKILL::MARCELINT);
+	}
+
+	cout << "PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<
+		 "MARCELINT : " << m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] << " | " <<
+
+		endl;
+}
+
+void	CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill)
+{
+	for (_int i = 0; i < ITEMINDEX_END; ++i)
+	{
+		if (false == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEMINDEX(i)))	// 현재 IconIndex 가 비어있다면!
+		{
+			CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEMINDEX(i), true);		// 해당 창을 그린다.
+			CUI_Manager::GetInstance()->Set_SkillIcon(ITEMINDEX(i), eSkill);		// 그 곳에 내가 지금 획득한 아이템을 넣어라
+			break;
+		}
+	}
 }
 
 void CSkill_Manager::Free()

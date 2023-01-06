@@ -26,7 +26,7 @@ HRESULT CUI_SkillIcon::Initialize_Prototype()
 HRESULT CUI_SkillIcon::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
-		memcpy(&m_eSkillIcon, pArg, sizeof(SKILLICON));
+		memcpy(&m_eItemIndex, pArg, sizeof(ITEMINDEX));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -48,13 +48,13 @@ HRESULT CUI_SkillIcon::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
-	if(ICON_ONE == m_eSkillIcon)
+	if(ITEM_ONE == m_eItemIndex)
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-581.f, -287.f, 0.f, 1.f));
-	else if (ICON_TWO == m_eSkillIcon)
+	else if (ITEM_TWO == m_eItemIndex)
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-526.f, -287.f, 0.f, 1.f));
-	else if (ICON_THREE == m_eSkillIcon)
+	else if (ITEM_THREE == m_eItemIndex)
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-472.f, -287.f, 0.f, 1.f));
-	else if (ICON_FOUR == m_eSkillIcon)
+	else if (ITEM_FOUR == m_eItemIndex)
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-417.f, -287.f, 0.f, 1.f));
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -126,24 +126,25 @@ HRESULT CUI_SkillIcon::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (ICON_ONE == m_eSkillIcon)
+
+	if (ITEM_ONE == m_eItemIndex)
 	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", CUI_Manager::GetInstance()->Get_SkillIcon(0))))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)))))
 			return E_FAIL;
 	}
-	else if (ICON_TWO == m_eSkillIcon)
+	else if (ITEM_TWO == m_eItemIndex)
 	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", CUI_Manager::GetInstance()->Get_SkillIcon(1))))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)))))
 			return E_FAIL;
 	}
-	else if (ICON_THREE == m_eSkillIcon)
+	else if (ITEM_THREE == m_eItemIndex)
 	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", CUI_Manager::GetInstance()->Get_SkillIcon(2))))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)))))
 			return E_FAIL;
 	}
-	else if (ICON_FOUR == m_eSkillIcon)
+	else if (ITEM_FOUR == m_eItemIndex)
 	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", CUI_Manager::GetInstance()->Get_SkillIcon(3))))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)))))
 			return E_FAIL;
 	}
 
