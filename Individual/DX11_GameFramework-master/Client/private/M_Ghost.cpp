@@ -314,7 +314,7 @@ void CM_Ghost::Move_Tick(const _double& TimeDelta)
 	}
 	else
 	{
-		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
+		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta))
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 			//m_fAlpha = 0.0f;

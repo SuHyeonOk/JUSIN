@@ -273,15 +273,7 @@ void CM_Gronmes::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	_double dMoveTime;
-	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_BLUE)
-		dMoveTime = 2;
-	else  if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_RED)
-		dMoveTime = 2.2;
-	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.G_YELLOW)
-		dMoveTime = 2.4;
-
-	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, dMoveTime))
+	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta))
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = false;

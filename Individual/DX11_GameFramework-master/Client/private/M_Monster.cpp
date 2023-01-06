@@ -119,13 +119,20 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
 }
 
-_bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _double TimeDelta, _double dMoveTime, _float fRange)
+_bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _double TimeDelta, _float fRange)
 {
+	if (!m_bRandomTime)
+	{
+		m_bRandomTime = true;
+		m_bRandom_TimeAcc = _double(CUtilities_Manager::GetInstance()->Get_Random(1.5f, 3.0f));
+	}
+
 	// 이동 시킬 시간을 담는다.
 	m_bRandomMove_TimeAcc += TimeDelta;
-	if (dMoveTime < m_bRandomMove_TimeAcc)
+	if (m_bRandom_TimeAcc < m_bRandomMove_TimeAcc)
 	{
 		m_bRandomMove_TimeAcc = 0;
+		m_bRandomTime = false;
 		return false;
 	}
 
