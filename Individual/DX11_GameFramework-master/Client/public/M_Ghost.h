@@ -31,7 +31,7 @@ private:
 	virtual void		Monster_Tick(const _double& TimeDelta)	override;
 	virtual void		Idle_Tick(const _double& TimeDelta)		override;
 	virtual void		Move_Tick(const _double& TimeDelta)		override;
-	virtual void		Find_Tick()								override;
+	virtual void		Find_Tick(const _double& TimeDelta);
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
 	virtual void		Hit_Tick()								override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;

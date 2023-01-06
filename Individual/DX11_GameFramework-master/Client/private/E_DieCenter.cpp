@@ -78,23 +78,39 @@ void CE_DieCenter::Late_Tick(_double TimeDelta)
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
-	m_dAlpha_TimeAcc += TimeDelta;	
-	if (0.01 < m_dAlpha_TimeAcc)
+	if (0.01 < m_fAlpha)
 	{
 		// 랜덤하게 사이즈가 커지고, 작아지기를 위해서
 		_int iRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
 
-		if (0 == iRandomNumber)
+ 		if (0 == iRandomNumber)
 		{
 			// 스케일
-			m_fSizeX += 0.03f;
-			m_fSizeY += 0.03f;
+			m_fSizeX += _float(TimeDelta) * 3.f;
+			m_fSizeY += _float(TimeDelta) * 3.f;
 		}
 
 		// 셰이더
-		m_fAlpha -= 0.01f;
-		m_dAlpha_TimeAcc = 0;
+		m_fAlpha -= _float(TimeDelta);
 	}
+
+	//m_dAlpha_TimeAcc += TimeDelta;	
+	//if (0.01 < m_dAlpha_TimeAcc)
+	//{
+	//	// 랜덤하게 사이즈가 커지고, 작아지기를 위해서
+	//	_int iRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
+
+	//	if (0 == iRandomNumber)
+	//	{
+	//		// 스케일
+	//		m_fSizeX += 0.03f;
+	//		m_fSizeY += 0.03f;
+	//	}
+
+	//	// 셰이더
+	//	m_fAlpha -= 0.01f;
+	//	m_dAlpha_TimeAcc = 0;
+	//}
 
 	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 

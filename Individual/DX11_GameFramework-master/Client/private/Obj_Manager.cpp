@@ -95,10 +95,10 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	Key_Input();				// 전체적인 키 입력
 	Player_Weapon();			// 현재 플레이어의 무기를 출력한다.
 
-	cout << "HP : " << m_tPlayerInfo.fHP << " / " << m_tPlayerInfo.fHPMax << " | HP% : " << m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax <<
-		" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
-		" | EXP : " << m_tPlayerInfo.fExp << " / : " << m_tPlayerInfo.fExpMax << " | EXP% : " << m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax <<
-		" | KEY : " << m_tPlayerInfo.iKey << " | COIN : " << m_tPlayerInfo.iCoin << " | HEART: " << m_tPlayerInfo.iHeart << endl;
+	//cout << "HP : " << m_tPlayerInfo.fHP << " / " << m_tPlayerInfo.fHPMax << " | HP% : " << m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax <<
+	//	" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
+	//	" | EXP : " << m_tPlayerInfo.fExp << " / : " << m_tPlayerInfo.fExpMax << " | EXP% : " << m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax <<
+	//	" | KEY : " << m_tPlayerInfo.iKey << " | COIN : " << m_tPlayerInfo.iCoin << " | HEART: " << m_tPlayerInfo.iHeart << endl;
 
 	if (0 < m_fMonster_Attck)
 	{

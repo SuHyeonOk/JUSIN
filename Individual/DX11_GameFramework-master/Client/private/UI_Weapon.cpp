@@ -44,7 +44,7 @@ HRESULT CUI_Weapon::Initialize(void * pArg)
 	m_fY = m_fSizeY * 0.7f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(586.f, -275.f, 0.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(577.f, -280.f, 0.f, 1.f));
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));

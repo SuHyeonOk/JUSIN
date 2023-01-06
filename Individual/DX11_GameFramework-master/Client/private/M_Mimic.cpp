@@ -279,20 +279,18 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 {
 	//CM_Monster::Die(TimeDelta, 0.7f, 0, 0, 7);
 
-	// 몬스터가 죽고 나면 할 행동
-
-	if (0 >= m_fAlpha)
+	if (0.0f >= m_fAlpha)
 	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
-		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
+		// 몬스터 죽으면 UI 초기화
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
+		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+
+		// 알파값이 다 사라지면 죽음
+		CGameObject::Set_Dead();
 	}
 
-	m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
-	if (0.01 < m_dAlpha_TimeAcc)
-	{
-		m_fAlpha -= 0.01f;
-		m_dAlpha_TimeAcc = 0;
-	}
+	if (0.0f < m_fAlpha)															// 알파값 줄어 들도록
+		m_fAlpha -= _float(TimeDelta);
 
 	if (5 != m_iDieEffect_Count)													// 이펙트 5개
 	{

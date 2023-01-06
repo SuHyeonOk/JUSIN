@@ -82,9 +82,6 @@ protected:	// 자식에서 가져다 쓰는 함수
 	void				Die(const _double& TimeDelta, _float fPlusY, _uint iBronzeCount = 0, _uint iSilverCount = 0, _uint iGoldCount = 0);
 	void				Dance_Time();
 
-private:	// 자식의 Tick 에서 돌 함수
-	void				HPGauge(const _double& TimeDelta);
-
 protected:
 	CRenderer*			m_pRendererCom = nullptr;
 	CShader*			m_pShaderCom = nullptr;
@@ -97,7 +94,6 @@ protected:	// 멤버 변수로 쓰이는 것
 
 protected:	// Shader
 	_float				m_fAlpha = 1.f;
-	_double				m_dAlpha_TimeAcc = 0;
 
 protected:	
 	// On_Collision();

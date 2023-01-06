@@ -63,6 +63,8 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 	m_tMonsterInfo.fExp		= 30.0f;
 	m_tMonsterInfo.fAttack	= 10.0f;
 
+	m_fAlpha = 0.7f;
+
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
 
@@ -74,7 +76,7 @@ void CM_Ghost::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	// 주먹 무기
-	if(m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
+	if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		m_MonsterParts[0]->Tick(TimeDelta);
 
 	// 전체적인 몬스터 상태
@@ -83,7 +85,7 @@ void CM_Ghost::Tick(_double TimeDelta)
 
 void CM_Ghost::Late_Tick(_double TimeDelta)
 {
-	if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
+	if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		m_MonsterParts[0]->Late_Tick(TimeDelta);
 
 	// Ghost 의 경우 Renderer 그룹이 다르기 때문에 부모의 Lata_Tick 을 호출하지 않는다.
@@ -115,21 +117,10 @@ HRESULT CM_Ghost::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
-	{
-		for (_uint i = 0; i < iNumMeshes; ++i)
-		{
-			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
-		}
-
-		return S_OK;	// 죽었다면, 여기까지 진행하고 return
-	}
-
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
 	}
 
 	return S_OK;
@@ -178,8 +169,8 @@ HRESULT CM_Ghost::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.5f, 0.7f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.7f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
@@ -205,11 +196,8 @@ HRESULT CM_Ghost::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
-	{
-		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
-			return E_FAIL;
-	}
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -272,7 +260,7 @@ void CM_Ghost::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::FIND:
-		Find_Tick();
+		Find_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(9, false);
 		break;
 
@@ -329,34 +317,20 @@ void CM_Ghost::Move_Tick(const _double& TimeDelta)
 		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3))
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+			//m_fAlpha = 0.0f;
 			m_bAttack = false;
 		}
 	}
 }
 
-void CM_Ghost::Find_Tick()
+void CM_Ghost::Find_Tick(const _double& TimeDelta)
 {
-	if (m_pModelCom->Get_Finished())
+	if (0.0f < m_fAlpha)															// 알파값 줄어 들도록
+		m_fAlpha -= _float(TimeDelta);
+	else
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//_vector	vMyPos;
-	//vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	//_float4	f4MyPos;
-	//XMStoreFloat4(&f4MyPos, vMyPos);
-
-	//CUI_3DTexture::TEXTUREINFO	tTextureInfo;
-	//tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
-	//tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-	//tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
-	//	return;
-
-	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Ghost::Attack_Tick(const _double& TimeDelta)
@@ -372,8 +346,7 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 		_float4 f4PlaterPos;
 		XMStoreFloat4(&f4PlaterPos, vPlayerPos);
 
-		_float fRandomNum;
-		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		_float fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
 		f4PlaterPos.x += fRandomNum;
 		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
 		f4PlaterPos.z += fRandomNum;
@@ -381,9 +354,16 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 		vPlayerPos = XMLoadFloat4(&f4PlaterPos);
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPlayerPos);
 	}
-
-	if(0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	else
+	{
+		if (0.7f > m_fAlpha)															// 알파값 늘어 나도록
+			m_fAlpha += _float(TimeDelta);
+		else
+		{
+			if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+				m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		}
+	}
 }
 
 void CM_Ghost::Hit_Tick()

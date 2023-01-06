@@ -324,43 +324,6 @@ void CM_Skeleton_Archer::Hit_Tick()
 void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.1f, 6, 4, 2);
-
-	// 몬스터가 죽고 나면 할 행동
-
-	//if(0 >= m_fAlpha)			
-	//	CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
-
-	//m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
-	//if (0.01 < m_dAlpha_TimeAcc)
-	//{
-	//	m_fAlpha -= 0.01f;
-	//	m_dAlpha_TimeAcc = 0;
-	//}
-
-	//if (5 != m_iDieEffect_Count)													// 이펙트 5개
-	//{
-	//	++m_iDieEffect_Count;
-
-	//	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//	_float4 vf4MyPos;
-	//	XMStoreFloat4(&vf4MyPos, vMyPos);
-
-	//	CE_DieCenter::DIECENTERINFO tDieCenterInfo;									
-	//	tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::SKELETON;
-	//	tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + 0.7f, vf4MyPos.z - 0.5f);
-	//	CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
-	//}
-
-	//if (!m_OneCoin)															// 한 번만
-	//{
-	//	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//	_float4 vf4MyPos;
-	//	XMStoreFloat4(&vf4MyPos, vMyPos);
-
-	//	CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 6, 4, 2); 	// 동전 생성
-
-	//	m_OneCoin = true;
-	//}
 }
 
 CM_Skeleton_Archer * CM_Skeleton_Archer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

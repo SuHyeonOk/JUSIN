@@ -68,8 +68,6 @@ void CM_Monster::Tick(const _double& TimeDelta)
 			m_dPlayer_Attack_TimeAcc = 0;
 		}
 	}
-
-	HPGauge(TimeDelta);
 }
 
 void CM_Monster::Late_Tick(const _double& TimeDelta)
@@ -212,7 +210,7 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 {
 	// 몬스터가 죽고 나면 할 행동
 
-	if (0 >= m_fAlpha)
+	if (0.0f >= m_fAlpha)
 	{
 		// 몬스터 죽으면 UI 초기화
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
@@ -222,12 +220,8 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 		CGameObject::Set_Dead();	
 	}
 
-	m_dAlpha_TimeAcc += TimeDelta;													// 셰이더
-	if (0.01 < m_dAlpha_TimeAcc)
-	{
-		m_fAlpha -= 0.01f;
-		m_dAlpha_TimeAcc = 0;
-	}
+	if (0.0f < m_fAlpha)															// 알파값 줄어 들도록
+		m_fAlpha -= _float(TimeDelta);
 
 	if (5 != m_iDieEffect_Count)													// 이펙트 5개
 	{
@@ -288,11 +282,6 @@ void CM_Monster::Dance_Time()
 {
 	if (CSkill_Manager::PLAYERSKILL::MARCELINT != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-}
-
-void CM_Monster::HPGauge(const _double & TimeDelta)
-{
-
 }
 
 void CM_Monster::Free()

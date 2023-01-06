@@ -54,7 +54,6 @@ private:	// Shader
 	_float				m_fAlpha = 1.0f;
 	_float				m_fSizeX = 0.0f;
 	_float				m_fSizeY = 0.0f;
-	_double				m_dAlpha_TimeAcc = 0;
 
 public:
 	static	CE_DieCenter*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
