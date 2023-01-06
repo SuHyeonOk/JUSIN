@@ -121,15 +121,18 @@ void		CObj_Manager::Key_Input()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	// 아이템 사용
-	if (pGameInstance->Key_Down(DIK_1))
-		CSkill_Manager::GetInstance()->Page_Use(ITEM_ONE);
-	if (pGameInstance->Key_Down(DIK_2))
-		CSkill_Manager::GetInstance()->Page_Use(ITEM_TWO);
-	if (pGameInstance->Key_Down(DIK_3))
-		CSkill_Manager::GetInstance()->Page_Use(ITEM_THREE);
-	if (pGameInstance->Key_Down(DIK_4))
-		CSkill_Manager::GetInstance()->Page_Use(ITEM_FOUR);
+	// 아이템 사용은 SKILL_END 일 때만 사용할 수 있다.
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		if (pGameInstance->Key_Down(DIK_1))
+			CSkill_Manager::GetInstance()->Page_Use(ITEM_ONE);
+		if (pGameInstance->Key_Down(DIK_2))
+			CSkill_Manager::GetInstance()->Page_Use(ITEM_TWO);
+		if (pGameInstance->Key_Down(DIK_3))
+			CSkill_Manager::GetInstance()->Page_Use(ITEM_THREE);
+		if (pGameInstance->Key_Down(DIK_4))
+			CSkill_Manager::GetInstance()->Page_Use(ITEM_FOUR);
+	}
 
 	// 전역적으로 네이게이션, 충돌체를 껐다가 켤 수 있다.
 	if (pGameInstance->Key_Down(DIK_F11))

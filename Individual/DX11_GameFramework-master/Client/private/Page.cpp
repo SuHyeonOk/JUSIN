@@ -49,6 +49,8 @@ HRESULT CPage::Initialize(void * pArg)
 		m_wsTag = L"Item_Page_Paint";
 	else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
 		m_wsTag = L"Item_Page_Marcelint";
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
+		m_wsTag = L"Item_Page_Coin";
 	else
 		m_wsTag = L"Item_Page_End";
 
@@ -145,6 +147,13 @@ HRESULT CPage::SetUp_Components()
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_3"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_4"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}

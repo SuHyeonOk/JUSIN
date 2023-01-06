@@ -66,11 +66,6 @@ HRESULT CJake::Initialize(void * pArg)
 
 void CJake::Tick(_double TimeDelta)
 {
-	// 28 : 할머니 한테 뒤집혀 지려고
-	// 58 : 굴러나오기
-	// 59 : 눌려있기
-	// 60 : 어어 ㅓ 두로 넘어간다.
-
 	__super::Tick(TimeDelta);
 
 	Sword_Tick(TimeDelta);
@@ -324,11 +319,11 @@ void CJake::Player_Tick(_double TimeDelta)
 		Space_Attack_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::PAINT: // 11
+	case CObj_Manager::PLAYERINFO::S_PAINT: // 11
 		Attack_Paint_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::MARCELINE: // 12
+	case CObj_Manager::PLAYERINFO::S_MARCELINE: // 12
 		Skill_Marceline_Tick(TimeDelta);
 		break;
 
@@ -380,7 +375,8 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 {
 	// 전체적으로 스킬을 on 한다.
 	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		m_bSkill = true;
 	}
@@ -401,7 +397,7 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 
 	// 스킬 한 번만 실행할 때
 	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::MARCELINE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);
 }
 
 void CJake::Player_Follow(_double TimeDelta)
@@ -646,7 +642,7 @@ void CJake::Key_Input(_double TimeDelta)
 			if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			{
 				m_bSkill_Clone = false;
-				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::PAINT);
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::S_PAINT);
 			}
 		}
 		else
@@ -935,11 +931,17 @@ void CJake::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(4, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STATE::PAINT:
+		case CObj_Manager::PLAYERINFO::STATE::S_PAINT:
 			m_pModelCom->Set_AnimIndex(18, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STATE::MARCELINE:
+		case CObj_Manager::PLAYERINFO::STATE::S_MARCELINE:
+			m_pModelCom->Set_AnimIndex(27, false);
+			break;
+
+			// Level Up : 50
+
+		case CObj_Manager::PLAYERINFO::STATE::S_COIN:
 			m_pModelCom->Set_AnimIndex(25);
 			break;
 

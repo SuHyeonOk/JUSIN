@@ -7,6 +7,7 @@
 
 #include "Skill_Manager.h"
 #include "S_PaintWork.h"
+#include "ItemManager.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -358,12 +359,16 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Space_Attack_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::PAINT: // 11
+	case CObj_Manager::PLAYERINFO::S_PAINT: // 11
 		Attack_Paint_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::MARCELINE: // 12
+	case CObj_Manager::PLAYERINFO::S_MARCELINE: // 12
 		Skill_Marceline_Tick(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::S_COIN:
+		Skill_Coin_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::ROLL:
@@ -406,14 +411,16 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 {
 	// 전체적으로 스킬을 on 한다.
 	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		m_bSkill = true;
 	}
 
+	// 아침에 할 일 : COIN의 경우 아이템을 사용하자 마자 바로 모든 정보를 초기화 시켜도 된다.
 	if (m_bSkill)
 	{
-		m_dSkill_TimeAcc += TimeDelta;
+		m_dSkill_TimeAcc += TimeDelta;																// 스킬 사용 후 일정시간 뒤 초기화
 		if (20 < m_dSkill_TimeAcc)
 		{
 			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
@@ -427,7 +434,10 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 
 	// 스킬 한 번만 실행할 때
 	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::MARCELINE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);
+
+	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
 }
 
 void CFinn::Player_Follow(_double TimeDelta)
@@ -607,7 +617,7 @@ void CFinn::Key_Input(_double TimeDelta)
 			CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
 			m_bSkill_Clone = false;
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::PAINT);
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::S_PAINT);
 		}
 		else
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
@@ -703,6 +713,23 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 			&_float3(f4MyPos.x + 1.0f, f4MyPos.y, f4MyPos.z + 1.0f))))
 			return;
 		RELEASE_INSTANCE(CGameInstance);
+	}
+}
+
+void CFinn::Skill_Coin_Tick(_double TimeDelta)
+{
+	if (m_pModelCom->Get_Finished())
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	if (!m_bSkill_Clone)
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 10); 	// 동전 생성
+		
+		m_bSkill_Clone = true;
 	}
 }
 
@@ -844,8 +871,16 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(5, false, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STATE::PAINT:
+		case CObj_Manager::PLAYERINFO::STATE::S_PAINT:
 			m_pModelCom->Set_AnimIndex(18, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::S_MARCELINE:
+			m_pModelCom->Set_AnimIndex(25);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::S_COIN:
+			m_pModelCom->Set_AnimIndex(23, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_0:
@@ -858,10 +893,6 @@ void CFinn::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_2:
 			m_pModelCom->Set_AnimIndex(53, false, false);
-			break;
-
-		case CObj_Manager::PLAYERINFO::STATE::MARCELINE:
-			m_pModelCom->Set_AnimIndex(25);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:
