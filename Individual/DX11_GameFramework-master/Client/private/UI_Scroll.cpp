@@ -2,7 +2,6 @@
 #include "..\public\UI_Scroll.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 #include "UI_Manager.h"
 
 CUI_Scroll::CUI_Scroll(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

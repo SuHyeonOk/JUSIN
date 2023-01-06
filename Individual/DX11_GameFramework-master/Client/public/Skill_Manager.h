@@ -50,7 +50,6 @@ public:
 
 public:		// 유아이 관련
 	_int		Get_PageCount(PLAYERSKILL::SKILL iIndex) { return m_arrPageCount[iIndex]; }				
-	void		Set_PageCount_Minus(PLAYERSKILL::SKILL iIndex) { m_arrPageCount[iIndex] -= 1; }				// 스킬을 사용하면 줄어든다.
 
 	void		CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill);										// IconIndex가 비어있는지 확인하고, 인덱스에 값을 채운다.
 

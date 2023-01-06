@@ -429,6 +429,9 @@
     <ClInclude Include="..\public\UI_SkillIcon.h">
       <Filter>02.GameObjects\UI\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Scroll_Count.h">
+      <Filter>02.GameObjects\UI\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -672,6 +675,9 @@
       <Filter>02.GameObjects\UI\Skill</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_SkillIcon.cpp">
+      <Filter>02.GameObjects\UI\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Scroll_Count.cpp">
       <Filter>02.GameObjects\UI\Skill</Filter>
     </ClCompile>
   </ItemGroup>

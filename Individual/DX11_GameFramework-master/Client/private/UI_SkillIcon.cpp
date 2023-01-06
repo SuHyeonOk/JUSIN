@@ -2,7 +2,6 @@
 #include "..\public\UI_SkillIcon.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 #include "UI_Manager.h"
 
 CUI_SkillIcon::CUI_SkillIcon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

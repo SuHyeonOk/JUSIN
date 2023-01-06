@@ -48,7 +48,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 		return E_FAIL;	
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -12.f);
+	m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
 
 	m_vMinCamPos = _float4(0.f, 4.5f, -5.f, 1.f);
 
@@ -139,6 +139,21 @@ void CCamera_Dynamic::Key_Input(_double TimeDelta)
 void CCamera_Dynamic::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Pressing(DIK_UP))
+	{
+		if (-12.1f < m_fYZ_Move)
+			m_fYZ_Move -= _float(TimeDelta) * 0.2f;
+
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+	}
+	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	{
+		if (-11.9f > m_fYZ_Move)
+			m_fYZ_Move += _float(TimeDelta) * 0.2f;
+	
+		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+	}
 
 	CObj_Manager::PLAYERINFO	ePlayerInfo;
 	ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();

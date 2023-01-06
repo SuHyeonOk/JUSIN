@@ -60,8 +60,7 @@ private:
 
 	_float4		m_vMinCamPos;
 
-	_float ddada= 0.f;
-	_float ddsdf = 0.f;
+	_float		m_fYZ_Move = -12.0f;
 
 public:
 	static CCamera_Dynamic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

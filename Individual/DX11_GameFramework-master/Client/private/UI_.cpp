@@ -176,7 +176,42 @@ HRESULT CUI_::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_vecUI.push_back(pUI);
-	
+
+	// [17] : Skill_Scroll_Count_One
+	ITEMINDEX eItemCount = ITEM_ONE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Scroll_Count"), &eItemCount));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [18] : Skill_Scroll_Count_Two
+	eItemCount = ITEM_TWO;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Scroll_Count"), &eItemCount));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [19] : Skill_Scroll_Count_Three
+	eItemCount = ITEM_THREE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Scroll_Count"), &eItemCount));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [20] : Skill_Scroll_Count_Four
+	eItemCount = ITEM_FOUR;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Scroll_Count"), &eItemCount));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+
+
 	
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -196,6 +231,7 @@ void CUI_::Tick(_double TimeDelta)
 		m_vecUI[2]->Tick(TimeDelta);
 	}
 
+	// 플레이어 Hp, Level 등등..
 	m_vecUI[4]->Tick(TimeDelta);
 	m_vecUI[6]->Tick(TimeDelta);
 	m_vecUI[5]->Tick(TimeDelta);
@@ -203,18 +239,33 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[7]->Tick(TimeDelta);
 	m_vecUI[9]->Tick(TimeDelta);
 
+	// 무기
 	m_vecUI[10]->Tick(TimeDelta);
 	m_vecUI[11]->Tick(TimeDelta);
 
+	// 스킬
 	m_vecUI[12]->Tick(TimeDelta);
-	if(true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
+	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
+	{
 		m_vecUI[13]->Tick(TimeDelta);
+		m_vecUI[17]->Tick(TimeDelta);
+	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
+	{
 		m_vecUI[14]->Tick(TimeDelta);
+		m_vecUI[18]->Tick(TimeDelta);
+	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
+	{
 		m_vecUI[15]->Tick(TimeDelta);
+		m_vecUI[19]->Tick(TimeDelta);
+	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
+	{
 		m_vecUI[16]->Tick(TimeDelta);
+		m_vecUI[20]->Tick(TimeDelta);
+	}
+
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -269,13 +320,29 @@ void CUI_::Late_Tick(_double TimeDelta)
 
 	m_vecUI[12]->Late_Tick(TimeDelta);
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
+	{
 		m_vecUI[13]->Late_Tick(TimeDelta);
+		m_vecUI[17]->Late_Tick(TimeDelta);
+	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
+	{
 		m_vecUI[14]->Late_Tick(TimeDelta);
+		m_vecUI[18]->Late_Tick(TimeDelta);
+	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
+	{
 		m_vecUI[15]->Late_Tick(TimeDelta);
+		m_vecUI[19]->Late_Tick(TimeDelta);
+	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
+	{
 		m_vecUI[16]->Late_Tick(TimeDelta);
+		m_vecUI[20]->Late_Tick(TimeDelta);
+	}
+
+
+
+
 
 	__super::Late_Tick(TimeDelta);
 
