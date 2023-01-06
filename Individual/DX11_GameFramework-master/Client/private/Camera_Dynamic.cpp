@@ -39,11 +39,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-
-	//if (m_eCameraInfo.eLevel == LEVEL_GAMEPLAY)
-		m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
-	//if (m_eCameraInfo.eLevel == LEVEL_SKELETON)
-	//	m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
+	m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
 
 	if (FAILED(CCamera::Initialize(&m_CameraDesc)))
 		return E_FAIL;
@@ -52,6 +48,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 		return E_FAIL;	
 
 	m_pTransformCom->Set_Pos();
+	m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), -12.f);
 
 	m_vMinCamPos = _float4(0.f, 4.5f, -5.f, 1.f);
 
@@ -156,7 +153,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4TargetPos;
 		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 4.5f, vf4TargetPos.z - 5.f, 1.f);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 4.f, vf4TargetPos.z - 6.f, 1.f);
 		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 		
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
@@ -181,7 +178,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4TargetPos;
 		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 4.7f, vf4TargetPos.z - 5.f, 1.f);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.5f, vf4TargetPos.z - 6.3f, 1.f);
 		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
