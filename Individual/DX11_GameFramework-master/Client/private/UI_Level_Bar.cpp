@@ -51,25 +51,12 @@ HRESULT CUI_Level_Bar::Initialize(void * pArg)
 
 void CUI_Level_Bar::Tick(_double TimeDelta)
 {
-	_float fHPGauge = CUI_Manager::GetInstance()->Get_LevelGauge_Player();
+	_float	fHPGauge = CUI_Manager::GetInstance()->Get_LevelGauge_Player();
 
-	if (0.0f > fHPGauge || 0.0f == m_fHPGauge)
-		m_fHPGauge = 0.0f;
-
-	if (fHPGauge >= m_fHPGauge)
-		m_fHPGauge += _float(TimeDelta) * fHPGauge * 0.5f;
-
-	//if (0.0f > fHPGauge)
-	//	m_fHPGauge = 0.0f;
-
-	//m_dHPGauge_TimeAcc += TimeDelta;
-	//if (0.03 < m_dHPGauge_TimeAcc)
-	//{
-	//	if (fHPGauge > m_fHPGauge)
-	//		m_fHPGauge += 0.005f;
-
-	//	m_dHPGauge_TimeAcc = 0;
-	//}
+	if (fHPGauge > m_fHPGauge)
+		m_fHPGauge += _float(TimeDelta) * 0.3f;
+	else
+		m_fHPGauge = fHPGauge;
 }
 
 void CUI_Level_Bar::Late_Tick(_double TimeDelta)

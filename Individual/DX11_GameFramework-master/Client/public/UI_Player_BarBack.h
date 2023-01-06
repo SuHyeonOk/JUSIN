@@ -32,7 +32,6 @@ private:
 
 private:
 	_float			m_fHPGauge = 1.0f;
-	_double			m_dHPGauge_TimeAcc = 0;
 
 public:
 	static CUI_Player_BarBack*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

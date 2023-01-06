@@ -13,14 +13,14 @@ public:
 	typedef struct tagPlyaerSkill
 	{
 		enum SKILL { PAINT, MARCELINT, SKILL_END };
-		SKILL		eSkill;
+		SKILL		eSkill = SKILL_END;
 
 	}PLAYERSKILL;
 
 	typedef struct tagPlayerMagicSkill
 	{
 		enum SKILLSTATE { IDLE, RUN, ATTACK, HIT, SKILLSTATE_END };
-		SKILLSTATE		eSkill;
+		SKILLSTATE		eSkill = SKILLSTATE_END;
 
 	}MAGICSKILL;
 
@@ -47,6 +47,9 @@ public:		// 몬스터
 	//MONSTERSKILL				Get_Monster_Skill() { return m_tMonsterSkill; }
 	//MONSTERSKILL::TREEWITCH		Get_TreeWitch_Skill() { return m_tMonsterSkill.eTreeWitch; }
 	//void						Set_TreeWitch_Skill(MONSTERSKILL::TREEWITCH eTreeWitch) { m_tMonsterSkill.eTreeWitch = eTreeWitch; }
+
+public:		// 스킬 유아이
+	void						CSkill_Manager::SkillIcon_Tick();
 
 private:	// 플레이어
 	PLAYERSKILL		m_tPlayerSkill;

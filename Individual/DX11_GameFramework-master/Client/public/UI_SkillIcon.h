@@ -9,12 +9,15 @@ END
 
 BEGIN(Client)
 
-class CUI_Level_Bar final : public CUI_
+class CUI_SkillIcon final : public CUI_
 {
+public:
+	enum SKILLICON { ICON_ONE, ICON_TWO, ICON_THREE, ICON_FOUR, SKILLICON_END };
+
 private:
-	CUI_Level_Bar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUI_Level_Bar(const CUI_Level_Bar& rhs);
-	virtual ~CUI_Level_Bar() = default;
+	CUI_SkillIcon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUI_SkillIcon(const CUI_SkillIcon& rhs);
+	virtual ~CUI_SkillIcon() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -31,10 +34,10 @@ private:
 	virtual			HRESULT SetUp_ShaderResources() override;
 
 private:
-	_float			m_fHPGauge = 0.0f;
+	SKILLICON		m_eSkillIcon = SKILLICON_END;
 
 public:
-	static CUI_Level_Bar*Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUI_SkillIcon*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };

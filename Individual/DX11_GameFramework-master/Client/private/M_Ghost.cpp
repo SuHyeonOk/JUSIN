@@ -58,9 +58,9 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 		m_wsTag = L"Monster__Ghost_2";
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= 6.0f;
+	m_tMonsterInfo.fHP		= 30.0f;
 	m_tMonsterInfo.fMaxHP	= 60.0f;
-	m_tMonsterInfo.fExp		= 100.0f;
+	m_tMonsterInfo.fExp		= 30.0f;
 	m_tMonsterInfo.fAttack	= 10.0f;
 
 	if (FAILED(Ready_Parts()))

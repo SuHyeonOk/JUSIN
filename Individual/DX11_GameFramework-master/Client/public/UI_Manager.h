@@ -25,6 +25,10 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 스킬
+	_int		Get_SkillIcon(_int iIndex) { return m_iUI_Skill_Index[iIndex]; }
+	void		Set_SkillIcon(_int iIndex, _int iIcon) { m_iUI_Skill_Index[iIndex] = iIcon; }
+
 	// 무기
 	_int		Get_Weapons() { return m_iUI_Weapons; }
 	void		Set_Weapons(_int iIndex) { m_iUI_Weapons = iIndex; }
@@ -38,7 +42,7 @@ public:
 
 	// 플레이어 레벨 게이지
 	_float		Get_LevelGauge_Player() { return m_LevelGauge_Player; }
-  	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
+	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
 
 	// 플레이어 체력 게이지
 	_float		Get_HPGauge_Player() { return m_HpGauge_Player; }
@@ -65,6 +69,8 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_int			m_iUI_Skill_Index[4] = { 0 };
+
 	_int			m_iUI_Weapon_index = 0;
 	_int			m_iUI_Weapons = 0;
 

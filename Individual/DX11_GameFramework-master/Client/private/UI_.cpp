@@ -3,6 +3,8 @@
 #include "GameInstance.h"
 
 #include "UI_Manager.h"
+#include "UI_SkillIcon.h"
+#include "Skill_Manager.h"
 
 CUI_::CUI_(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -142,6 +144,39 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 
+	// [13] : Skill_Icon_One
+	CUI_SkillIcon::SKILLICON	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_ONE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [14] : Skill_Icon_Two
+	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_TWO;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [15] : Skill_Icon_Three
+	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_THREE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [16] : Skill_Icon_Four
+	tSkillIcon = CUI_SkillIcon::SKILLICON::ICON_FOUR;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Player_Skill_Icon"), &tSkillIcon));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	
 	
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -172,6 +207,14 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[11]->Tick(TimeDelta);
 
 	m_vecUI[12]->Tick(TimeDelta);
+	if(CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[13]->Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[14]->Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[15]->Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[16]->Tick(TimeDelta);
 
 	__super::Tick(TimeDelta);
 }
@@ -199,6 +242,14 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[11]->Late_Tick(TimeDelta);
 
 	m_vecUI[12]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[13]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[14]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[15]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_vecUI[16]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);
 

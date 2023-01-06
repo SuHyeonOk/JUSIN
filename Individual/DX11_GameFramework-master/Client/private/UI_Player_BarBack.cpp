@@ -51,31 +51,12 @@ HRESULT CUI_Player_BarBack::Initialize(void * pArg)
 
 void CUI_Player_BarBack::Tick(_double TimeDelta)
 {
-	// fHPGauge 와 m_fHPGauge 에 따라 비율이 달라지는데
-	// 항상 0.005f 을 유지해야 한다.
-
-	// BarBack
  	_float	fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge_Player();
-//	_int	iPlayer_Level = CObj_Manager::GetInstance()->Get_Current_Player().iLevel;
 
-	if (0.0f > m_fHPGauge || 1.0 == m_fHPGauge)
-		m_fHPGauge = 1.0f;
-
-	if (fHPGauge <= m_fHPGauge)
-	{
-		m_fHPGauge -= _float(TimeDelta) * fHPGauge * 0.5f;
-	}
-
-
-	//m_dHPGauge_TimeAcc += TimeDelta;
-	//if ((fHPGauge * 0.01f) < m_dHPGauge_TimeAcc)
-	//{
-	//	if (fHPGauge <= m_fHPGauge)
-	//		m_fHPGauge -= fHPGauge * 0.01f;
-	//		//m_fHPGauge -= 0.05f;
-
-	//	m_dHPGauge_TimeAcc = 0;
-	//}
+	if (fHPGauge < m_fHPGauge)
+		m_fHPGauge -= _float(TimeDelta) * 0.3f;
+	else
+		m_fHPGauge = fHPGauge;
 }
 
 void CUI_Player_BarBack::Late_Tick(_double TimeDelta)
