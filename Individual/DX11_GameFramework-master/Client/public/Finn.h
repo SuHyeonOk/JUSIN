@@ -70,8 +70,6 @@ private:
 	void	Change_Tick();
 	void	Cheering_Tick();
 
-	void	TreeWitch_Tick();
-
 	void	Anim_Change(_double TimeDelta);
 
 private:

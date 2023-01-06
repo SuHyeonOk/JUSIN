@@ -2,8 +2,6 @@
 #include "..\public\Finn.h"
 
 #include "GameInstance.h"
-#include "M_Tree_Witch.h"
-
 #include "Bone.h"
 #include "Finn_Weapon.h"
 
@@ -401,10 +399,6 @@ void CFinn::Player_Tick(_double TimeDelta)
 	case CObj_Manager::PLAYERINFO::STUN:
 		Stun_Tick();
 		break;
-
-	case CObj_Manager::PLAYERINFO::MAGIC:
-		//Magic_Tick(TimeDelta);
-		break;
 	}
 
 	Anim_Change(TimeDelta);
@@ -629,11 +623,6 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 #pragma endregion
 
-	if (pGameInstance->Key_Down(DIK_T))
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::MARCELINT);
-	if (pGameInstance->Key_Down(DIK_Y))
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
-
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
 		if (m_bSkill && 
@@ -851,92 +840,6 @@ void CFinn::Cheering_Tick()
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
-
-void CFinn::TreeWitch_Tick()
-{
-	if (m_tPlayerInfo.ePlayer != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-		return;
-
-	// 할머니 스킬
-	// [핀] 55 : 눌리기 직전 54 : 눌리기 53 : 일어나기
-	
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CM_Tree_Witch * pGameObject = dynamic_cast<CM_Tree_Witch*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Tree_Witch__0"), TEXT("Prototype_GameObject_M_Tree_Witch"), 0));
-	RELEASE_INSTANCE(CGameInstance);
-
-	if(CM_Tree_Witch::SKILLANIMSTATE::JUMP == pGameObject->Get_MonsterSkill())
-		m_pModelCom->Set_AnimIndex(55, false, false);
-	else if (CM_Tree_Witch::SKILLANIMSTATE::PRESSURE == pGameObject->Get_MonsterSkill())
-		m_pModelCom->Set_AnimIndex(54, false);
-	else if (CM_Tree_Witch::SKILLANIMSTATE::RISE == pGameObject->Get_MonsterSkill())
-		m_pModelCom->Set_AnimIndex(53, false);
-	else if (CM_Tree_Witch::SKILLANIMSTATE::STATE_END == pGameObject->Get_MonsterSkill())
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-
-	//cout << "할머니 스킬" << endl;
-	//cout << CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch << endl;
-	//if(CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
-	//	m_pModelCom->Set_AnimIndex(55, false);
-	//else if(CSkill_Manager::MONSTERSKILL::TREEWITCH::PRESSURE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
-	//	m_pModelCom->Set_AnimIndex(54, false);
-	//else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::RISE == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
-	//	m_pModelCom->Set_AnimIndex(53, false);
-	//else if (CSkill_Manager::MONSTERSKILL::TREEWITCH::TREEWITCH_END == CSkill_Manager::GetInstance()->Get_Monster_Skill().eTreeWitch)
-	//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
-}
-
-//HRESULT CFinn::Magic_Tick(_double TimeDelta)
-//{
-//	if (m_bIsSwim)
-//		return S_OK;
-//
-//	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
-//	if (!m_bSkill_Clone)
-//	{
-//		m_bSkill_Clone = true;
-//
-//		// Magic 모델 생성
-//		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-//		_float4 f4MyPos;
-//		XMStoreFloat4(&f4MyPos, vMyPos);
-//
-//		CS_Change_Magic::CHANGEINFO		tChangeInfo;
-//		tChangeInfo.eChange = tChangeInfo.FINN;
-//		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
-//
-//		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-//		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_FINN"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
-//			return E_FAIL;
-//		RELEASE_INSTANCE(CGameInstance);
-//	}
-//
-//	// Magic 모델을 따라간다.
-//	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-//	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Change_Magic_FINN"), TEXT("Com_Transform"), 0));
-//	RELEASE_INSTANCE(CGameInstance);
-//
-//	if (nullptr != pChangeTransformCom)
-//	{
-//		_vector vChangePos;
-//		vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-//		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
-//	}
-//
-//	// Get_Dead 가 true 라면 아이들로 변경한다.
-//	CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(),
-//		TEXT("Layer_S_Change_Magic_FINN"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
-//
-//	if (nullptr != pGameObject)
-//	{
-//		if (pGameObject->Get_Dead())
-//		{
-//			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경
-//			m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
-//		}
-//	}
-//
-//	return S_OK;
-//}
 
 void CFinn::Anim_Change(_double TimeDelta)
 {

@@ -121,6 +121,15 @@ void		CObj_Manager::Key_Input()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	// 아이템 사용
+	if (pGameInstance->Key_Down(DIK_1))
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::MARCELINT);
+	if (pGameInstance->Key_Down(DIK_2))
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::PAINT);
+	if (pGameInstance->Key_Down(DIK_3))
+
+		if (pGameInstance->Key_Down(DIK_4))
+
 	// 전역적으로 네이게이션, 충돌체를 껐다가 켤 수 있다.
 	if (pGameInstance->Key_Down(DIK_F11))
 		g_bNavigationRender = !g_bNavigationRender;

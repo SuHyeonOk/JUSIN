@@ -26,15 +26,13 @@ HRESULT CPage::Initialize_Prototype()
 
 HRESULT CPage::Initialize(void * pArg)
 {
-	m_wsTag = L"Item_Page";
-
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	if (nullptr != pArg)
 		memcpy(&m_tinPageInfo, pArg, sizeof(PAGEINFO));
 	
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinPageInfo.fPos.x, m_tinPageInfo.fPos.y, m_tinPageInfo.fPos.z);
 
@@ -45,6 +43,14 @@ HRESULT CPage::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
+	m_pModelCom->Set_AnimIndex(0);
+
+	if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
+		m_wsTag = L"Item_Page_Paint";
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
+		m_wsTag = L"Item_Page_Marcelint";
+	else
+		m_wsTag = L"Item_Page_End";
 
 	return S_OK;
 }
@@ -53,25 +59,19 @@ void CPage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-	m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
+	// 만약 점프 상태라면 뛰어서 떨어져야 함
+	if (true == m_tinPageInfo.bJemp)
+		m_pTransformCom->RandomJump(900, 6.f, 0.5f, TimeDelta);
 
-	// 제 자리에서 뛰었다가 회전하고 반복 그런데 자연스럽지가 않음 (사용 안 할듯? 그래둥..)
-	//if (m_bIdle) 
-	//{
-	//	if (Rotation(0.3, 2, TimeDelta))
-	//		m_bIdle = false;
-	//}
-	//else
-	//{
-	//	if (m_pTransformCom->Jump(1.f, 2.f, TimeDelta))
-	//		m_bIdle = true;
-	//}
+	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	//m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
 }
 
 void CPage::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	m_pModelCom->Play_Animation(TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
@@ -102,9 +102,9 @@ HRESULT CPage::Render()
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
 		if (i == 1)
-			m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, nullptr);
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -130,14 +130,24 @@ HRESULT CPage::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"), TEXT("Com_Model"),
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
+	if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_3"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
@@ -173,38 +183,38 @@ HRESULT CPage::SetUp_ShaderResources()
 	return S_OK;
 }
 
-_bool CPage::Rotation(_double dStartTime, _double dStopTime, _double TimeDelta)
-{
-	// y 축을 기준으로 회전하고 있으며, dStartTime 에 시작하고, dStopTime 때 멈춘다.
-
-	if (!m_bRotation_Stop)
-	{
-		m_dRotation_Start_TimeAcc += TimeDelta;
-		if (dStartTime < m_dRotation_Start_TimeAcc)
-		{
-			m_bRotation_Start = true;
-			m_bRotation_Stop = true;
-			m_dRotation_Start_TimeAcc = 0;
-
-			return true;
-		}
-	}
-
-	if (m_bRotation_Start)
-	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 4);
-
-		m_dRotation_Stop_TimeAcc += TimeDelta;
-		if (dStopTime < m_dRotation_Stop_TimeAcc)
-		{
-			m_bRotation_Start = false;
-			m_bRotation_Stop = false;
-			m_dRotation_Stop_TimeAcc = 0;
-		}
-	}
-
-	return false;
-}
+//_bool CPage::Rotation(_double dStartTime, _double dStopTime, _double TimeDelta)
+//{
+//	// y 축을 기준으로 회전하고 있으며, dStartTime 에 시작하고, dStopTime 때 멈춘다.
+//
+//	if (!m_bRotation_Stop)
+//	{
+//		m_dRotation_Start_TimeAcc += TimeDelta;
+//		if (dStartTime < m_dRotation_Start_TimeAcc)
+//		{
+//			m_bRotation_Start = true;
+//			m_bRotation_Stop = true;
+//			m_dRotation_Start_TimeAcc = 0;
+//
+//			return true;
+//		}
+//	}
+//
+//	if (m_bRotation_Start)
+//	{
+//		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta * 4);
+//
+//		m_dRotation_Stop_TimeAcc += TimeDelta;
+//		if (dStopTime < m_dRotation_Stop_TimeAcc)
+//		{
+//			m_bRotation_Start = false;
+//			m_bRotation_Stop = false;
+//			m_dRotation_Stop_TimeAcc = 0;
+//		}
+//	}
+//
+//	return false;
+//}
 
 CPage * CPage::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {

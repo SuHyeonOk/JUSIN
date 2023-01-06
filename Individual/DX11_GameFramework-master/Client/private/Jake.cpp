@@ -2,12 +2,11 @@
 #include "..\public\Jake.h"
 
 #include "GameInstance.h"
-#include "Skill_Manager.h"
-
 #include "Bone.h"
 #include "Jake_Weapon.h"
 
 #include "O_TextureObject.h"
+#include "Skill_Manager.h"
 #include "S_Change_Magic.h"
 #include "S_PaintWork.h"
 
@@ -401,7 +400,6 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::MARCELINE);
 }
-
 
 void CJake::Player_Follow(_double TimeDelta)
 {

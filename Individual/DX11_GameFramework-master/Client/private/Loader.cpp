@@ -186,7 +186,7 @@ HRESULT CLoader::Loading_Tool()
 	// Page
 	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
 		return E_FAIL;
 	/* For.Prototype_Component_Model_Key */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Key"),
@@ -518,7 +518,31 @@ HRESULT CLoader::Loading_ForGamePlay()
 	// Page
 	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_3/Enchiridion_Page_3.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_4 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_4/Enchiridion_Page_4.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_5 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_5"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_5/Enchiridion_Page_5.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_6 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_6"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_6/Enchiridion_Page_6.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_7 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_7"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_7/Enchiridion_Page_7.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_8 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_8"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_8/Enchiridion_Page_8.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	// Weapon
@@ -1226,10 +1250,35 @@ HRESULT CLoader::SkeletonTemp()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CoinGold"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Coin/Coin_3_Gold/Coin_3_Gold.fbx", PivotMatrix))))
 		return E_FAIL;
+
 	// Page
 	/* For.Prototype_Component_Model_Enchiridion_Page_2 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_2/Enchiridion_Page_2.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_3/Enchiridion_Page_3.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_4 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_4/Enchiridion_Page_4.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_5 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_5"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_5/Enchiridion_Page_5.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_6 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_6"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_6/Enchiridion_Page_6.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_7 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_7"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_7/Enchiridion_Page_7.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Enchiridion_Page_8 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_8"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Item/Page/Enchiridion_Page_8/Enchiridion_Page_8.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	// 3D Bullet

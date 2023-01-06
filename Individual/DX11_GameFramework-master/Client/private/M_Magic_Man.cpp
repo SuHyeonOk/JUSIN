@@ -4,7 +4,8 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"		
 #include "ItemManager.h"		
-#include "Skill_Manager.h"		
+#include "Skill_Manager.h"	
+#include "UI_Manager.h"
 	
 #include "B_3DBullet.h"
 
@@ -68,24 +69,26 @@ void CM_Magic_Man::Tick(_double TimeDelta)
 	if (m_bPlayer_Attack)
 	{
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
-		if (1.5 < m_dPlayer_Attack_TimeAcc)
+		if (0.7 < m_dPlayer_Attack_TimeAcc)
 		{
-			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+			// 몬스터 상태 변경
 			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+			// 플레이어의 공격력 깍기
+			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+
+			// UI 에 내 체력 넘겨주기
+			CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 			m_bPlayer_Attack = false;
 			m_dPlayer_Attack_TimeAcc = 0;
 		}
 	}
-
 	Monster_Tick(TimeDelta);
-
 }
 
 void CM_Magic_Man::Late_Tick(_double TimeDelta)
 {
-
-
 	__super::Late_Tick(TimeDelta);
 }
 

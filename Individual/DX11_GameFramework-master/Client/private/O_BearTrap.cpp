@@ -47,7 +47,6 @@ HRESULT CO_BearTrap::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-
 	m_pModelCom->Set_AnimIndex(0);
 	return S_OK;
 }

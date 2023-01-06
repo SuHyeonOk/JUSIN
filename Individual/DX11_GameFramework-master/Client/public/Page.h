@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "Skill_Manager.h"
 
 BEGIN(Engine)
 class CShader;
@@ -17,8 +18,11 @@ class CPage final : public CGameObject
 public:
 	typedef struct tagPageInfo
 	{
+		CSkill_Manager::PLAYERSKILL::SKILL		ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END;
+
 		_float3		fPos = _float3(0.f, 0.f, 0.f);
-		
+		_bool		bJemp = false;
+
 	}PAGEINFO;
 
 private:
@@ -45,8 +49,8 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
-private:
-	_bool		Rotation(_double dStartTime, _double dStopTime, _double TimeDelta);
+//private:
+//	_bool		Rotation(_double dStartTime, _double dStopTime, _double TimeDelta);
 
 private:
 	PAGEINFO	m_tinPageInfo;
@@ -54,12 +58,10 @@ private:
 
 private:
 	// Rotation()
-	_bool		m_bRotation_Stop = false;
-	_bool		m_bRotation_Start = false;
-	_double		m_dRotation_Stop_TimeAcc = 0;
-	_double		m_dRotation_Start_TimeAcc = 0;
-
-	_bool		m_bIdle = false;
+	//_bool		m_bRotation_Stop = false;
+	//_bool		m_bRotation_Start = false;
+	//_double		m_dRotation_Stop_TimeAcc = 0;
+	//_double		m_dRotation_Start_TimeAcc = 0;
 	
 public:
 	static	CPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
