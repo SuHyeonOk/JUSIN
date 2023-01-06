@@ -248,22 +248,42 @@ void CUI_::Tick(_double TimeDelta)
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
 	{
 		m_vecUI[13]->Tick(TimeDelta);
-		m_vecUI[17]->Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if(1 < iCount)
+			m_vecUI[17]->Tick(TimeDelta);
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
 	{
 		m_vecUI[14]->Tick(TimeDelta);
-		m_vecUI[18]->Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[18]->Tick(TimeDelta);
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
 	{
 		m_vecUI[15]->Tick(TimeDelta);
-		m_vecUI[19]->Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[19]->Tick(TimeDelta);
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
 	{
 		m_vecUI[16]->Tick(TimeDelta);
-		m_vecUI[20]->Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[20]->Tick(TimeDelta);
 	}
 
 
@@ -282,13 +302,13 @@ void CUI_::Tick(_double TimeDelta)
 			3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
 
 		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
-			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << endl;
+			cout << 1 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << endl;
 		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
-			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << endl;
+			cout << 2 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << endl;
 		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
-			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << endl;
+			cout << 3 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << endl;
 		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
-			cout << 1 << " : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
+			cout << 4 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -322,22 +342,42 @@ void CUI_::Late_Tick(_double TimeDelta)
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
 	{
 		m_vecUI[13]->Late_Tick(TimeDelta);
-		m_vecUI[17]->Late_Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[17]->Late_Tick(TimeDelta);
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
 	{
 		m_vecUI[14]->Late_Tick(TimeDelta);
-		m_vecUI[18]->Late_Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[18]->Late_Tick(TimeDelta);
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
 	{
 		m_vecUI[15]->Late_Tick(TimeDelta);
-		m_vecUI[19]->Late_Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[19]->Late_Tick(TimeDelta);
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
 	{
 		m_vecUI[16]->Late_Tick(TimeDelta);
-		m_vecUI[20]->Late_Tick(TimeDelta);
+
+		CSkill_Manager::PLAYERSKILL tPlayerSkill;
+		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR);
+		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
+		if (1 < iCount)
+			m_vecUI[20]->Late_Tick(TimeDelta);
 	}
 
 

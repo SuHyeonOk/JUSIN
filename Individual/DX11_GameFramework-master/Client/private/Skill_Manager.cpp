@@ -17,9 +17,10 @@ void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 	if(0 < m_arrPageCount[m_tPlayerSkill.eSkill])								// 예외처리 0보다 클때, 즉 스킬이 있을 때 사용 가능하다.
 		m_arrPageCount[m_tPlayerSkill.eSkill] -= 1;								// 아이템 하나 감소
 
-	CUI_Manager::GetInstance()->Set_IsIcon_Index(iIndex, false);
+	if(0 >= m_arrPageCount[m_tPlayerSkill.eSkill])								// 스킬이 0개 이하이면 스킬창 에서 삭제한다.
+		CUI_Manager::GetInstance()->Set_IsIcon_Index(iIndex, false);
 
-	cout <<  0 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " | " <<
+	cout <<  "칸에 어떤 스킬이 있는지 : " << 0 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " | " <<
 			 1 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO) << " | " <<
 			 2 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE) << " | " <<
 			 3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
@@ -30,16 +31,21 @@ void	CSkill_Manager::Page_PickUp(CGameObject * pOther)
 	if (L"Item_Page_Paint" == pOther->Get_Tag())
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;		// 충돌한 객체의 개수 관리
-		SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기
+
+		if(1 == m_arrPageCount[PLAYERSKILL::SKILL::PAINT])		// 아이템 개수가 1개 일 때만 스킬창에 추가할 수 있다.
+			SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기
 	}
 	else if (L"Item_Page_Marcelint" == pOther->Get_Tag())
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] += 1;
-		SkillIcon(PLAYERSKILL::SKILL::MARCELINT);
+
+		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT])
+			SkillIcon(PLAYERSKILL::SKILL::MARCELINT);
 	}
 
-	cout << "PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<
-		 "MARCELINT : " << m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] << " | " <<
+	cout << "스킬 개수 : " << 
+		"PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<
+		"MARCELINT : " << m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] << " | " <<
 
 		endl;
 }

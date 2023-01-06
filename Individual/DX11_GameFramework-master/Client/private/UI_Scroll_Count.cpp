@@ -94,7 +94,7 @@ HRESULT CUI_Scroll_Count::Render()
 		_tchar szCount[5];
 		_itow_s(iCount, szCount, sizeof(szCount));
 
-		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(34.f, 655.f), 0.f, _float2(0.3f, 0.25f));
+		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(34.f, 650.f), 0.f, _float2(0.3f, 0.25f));
 	}
 	else if (ITEM_TWO == m_eItemCount)
 	{
@@ -103,7 +103,7 @@ HRESULT CUI_Scroll_Count::Render()
 		_tchar szCount[5];
 		_itow_s(iCount, szCount, sizeof(szCount));
 
-		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(90.f, 655.f), 0.f, _float2(0.3f, 0.25f));
+		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(90.f, 650.f), 0.f, _float2(0.3f, 0.25f));
 	}
 	else if (ITEM_THREE == m_eItemCount)
 	{
@@ -112,7 +112,7 @@ HRESULT CUI_Scroll_Count::Render()
 		_tchar szCount[5];
 		_itow_s(iCount, szCount, sizeof(szCount));
 
-		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(144.f, 655.f), 0.f, _float2(0.3f, 0.25f));
+		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(144.f, 650.f), 0.f, _float2(0.3f, 0.25f));
 	}
 	else if (ITEM_FOUR == m_eItemCount)
 	{
@@ -121,7 +121,7 @@ HRESULT CUI_Scroll_Count::Render()
 		_tchar szCount[5];
 		_itow_s(iCount, szCount, sizeof(szCount));
 
-		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(199.f, 655.f), 0.f, _float2(0.3f, 0.25f));
+		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(199.f, 650.f), 0.f, _float2(0.3f, 0.25f));
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
