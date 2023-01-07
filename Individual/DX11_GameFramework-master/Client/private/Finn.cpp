@@ -415,34 +415,17 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 
 	if (m_bSkill)
 	{
-		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_dSkill_TimeAcc += TimeDelta;	// 스킬 사용 후 일정시간 뒤 초기화 (COIN 스킬의 경우 한 번만 사용하기 때문에 함수 안 에서 바로 초기화 했다.)
+		if (20 < m_dSkill_TimeAcc)
 		{
-			if (m_bSkill_Clone)																			// 객체가 한 번 생성됨이 끝나면! 초기화
-			{
-				m_bSkill_Clone = false;
+			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
+			m_bSkill_Clone = false;
 
-				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-				CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-				m_bSkill = false;
-			}
-		}
-		else
-		{
-			m_dSkill_TimeAcc += TimeDelta;																// 스킬 사용 후 일정시간 뒤 초기화
-			if (20 < m_dSkill_TimeAcc)
-			{
-				// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
-				m_bSkill_Clone = false;
-
-				CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-				m_bSkill = false;
-				m_dSkill_TimeAcc = 0;
-			}
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+			m_bSkill = false;
+			m_dSkill_TimeAcc = 0;
 		}
 	}
-
-	cout << "스킬 : " << CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill <<		// 2
-		" | 내 상태 " << CObj_Manager::GetInstance()->Get_Current_Player().eState << endl;	// 14
 
 	// 스킬 한 번만 실행할 때
 	if (!m_bSkill_Clone)																							// 처음 상태임! 객체를 생성하지 않았을 때
@@ -733,16 +716,15 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 
 void CFinn::Skill_Coin_Tick(_double TimeDelta)
 {
-	if (!m_bSkill_Clone)
-	{
-		m_bSkill_Clone = true;
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
 
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
+	CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 7); 	// 동전 생성
-	}
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+	m_bSkill = false;
 }
 
 void CFinn::Roolling_Tick(_double TimeDelta)

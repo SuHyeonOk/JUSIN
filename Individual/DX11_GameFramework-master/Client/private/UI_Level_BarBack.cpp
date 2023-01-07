@@ -75,11 +75,10 @@ HRESULT CUI_Level_BarBack::Render()
 	// Coin Count
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_int iCount = CObj_Manager::GetInstance()->Get_Current_Player().iCoin;
 	_tchar szCount[10];
-	_itow_s(iCount, szCount, sizeof(szCount));
+	wsprintf(szCount, TEXT("%d"), CObj_Manager::GetInstance()->Get_Current_Player().iCoin);
 
-	pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(182.f, 113.f), 0.f, _float2(0.33f, 0.3f), XMVectorSet(1.0f, 0.84f, 0.0f, 1.f));
+	pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(174.f, 113.f), 0.f, _float2(0.33f, 0.3f), XMVectorSet(1.0f, 0.84f, 0.0f, 1.f));
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
