@@ -28,6 +28,8 @@ HRESULT		CObj_Manager::Initialized()
 	m_tPlayerInfo.iHeart = 0;
 
 	m_tPlayerInfo.ePlayer = PLAYERINFO::PLAYER::FINN;
+	m_tPlayerInfo.eState = PLAYERINFO::STATE::IDLE;
+	m_tPlayerInfo.ePreState = PLAYERINFO::STATE::STATE_END;
 	m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_DOLDEN;
 	m_tPlayerInfo.eJakeWeapon = PLAYERINFO::JAKEWEAPON::LFIST;
 

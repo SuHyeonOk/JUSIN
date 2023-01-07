@@ -27,8 +27,8 @@ public:
 			SWIM, S_PAINT, S_MARCELINE, S_COIN, 
 			TREEWITCH_0, TREEWITCH_1, TREEWITCH_2, MAGIC, STATE_END
 		};
-		STATE		eState;		// 현재 상태
-		STATE		ePreState;	// 이전 상태
+		STATE		eState = STATE_END;		// 현재 상태
+		STATE		ePreState = STATE_END;	// 이전 상태
 
 		enum PLAYERWEAPON { F_DOLDEN, F_ROOT, F_FAMILY, SHIELD_END };
 		PLAYERWEAPON		ePlayerWeapon = SHIELD_END;

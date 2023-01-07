@@ -410,34 +410,49 @@ void CFinn::Current_Player(_double TimeDelta)
 void CFinn::Player_Skill_Tick(_double TimeDelta)
 {
 	// 전체적으로 스킬을 on 한다.
-	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkill = true;
-	}
 
-	// 아침에 할 일 : COIN의 경우 아이템을 사용하자 마자 바로 모든 정보를 초기화 시켜도 된다.
 	if (m_bSkill)
 	{
-		m_dSkill_TimeAcc += TimeDelta;																// 스킬 사용 후 일정시간 뒤 초기화
-		if (20 < m_dSkill_TimeAcc)
+		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
-			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
-			m_bSkill_Clone = false;
+			if (m_bSkill_Clone)																			// 객체가 한 번 생성됨이 끝나면! 초기화
+			{
+				m_bSkill_Clone = false;
 
-			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-			m_bSkill = false;
-			m_dSkill_TimeAcc = 0;
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+				CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+				m_bSkill = false;
+			}
+		}
+		else
+		{
+			m_dSkill_TimeAcc += TimeDelta;																// 스킬 사용 후 일정시간 뒤 초기화
+			if (20 < m_dSkill_TimeAcc)
+			{
+				// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
+				m_bSkill_Clone = false;
+
+				CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+				m_bSkill = false;
+				m_dSkill_TimeAcc = 0;
+			}
 		}
 	}
 
-	// 스킬 한 번만 실행할 때
-	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);
+	cout << "스킬 : " << CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill <<		// 2
+		" | 내 상태 " << CObj_Manager::GetInstance()->Get_Current_Player().eState << endl;	// 14
 
-	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
+	// 스킬 한 번만 실행할 때
+	if (!m_bSkill_Clone)																							// 처음 상태임! 객체를 생성하지 않았을 때
+	{
+		if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)		// 해당 스킬을
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);			// 실행 시킨다.
+	
+		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
+	}
 }
 
 void CFinn::Player_Follow(_double TimeDelta)
@@ -718,18 +733,15 @@ void CFinn::Skill_Marceline_Tick(_double TimeDelta)
 
 void CFinn::Skill_Coin_Tick(_double TimeDelta)
 {
-	if (m_pModelCom->Get_Finished())
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-
 	if (!m_bSkill_Clone)
 	{
+		m_bSkill_Clone = true;
+
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 10); 	// 동전 생성
-		
-		m_bSkill_Clone = true;
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 7); 	// 동전 생성
 	}
 }
 
@@ -879,9 +891,9 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(25);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STATE::S_COIN:
-			m_pModelCom->Set_AnimIndex(23, false);
-			break;
+		//case CObj_Manager::PLAYERINFO::STATE::S_COIN:
+		//	m_pModelCom->Set_AnimIndex(23, false);
+		//	break;
 
 		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_0:
 			m_pModelCom->Set_AnimIndex(55, false, false);
