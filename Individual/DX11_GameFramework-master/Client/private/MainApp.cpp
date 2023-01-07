@@ -17,6 +17,7 @@
 #include "S_StunChick.h"
 #include "S_PaintWork.h"
 #include "S_Marceline.h"
+#include "S_Fiona.h"
 
 #include "O_TextureObject.h"
 
@@ -356,6 +357,18 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_GameObject_S_Marceline */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Marceline"),
 		CS_Marceline::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// ÇÇ¿À³ª
+	/* For.Prototype_Component_Model_S_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Fiona"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Fiona/Fiona.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_S_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Fiona"),
+		CS_Fiona::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

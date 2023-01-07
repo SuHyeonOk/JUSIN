@@ -49,11 +49,19 @@ void	CSkill_Manager::Page_PickUp(CGameObject * pOther)
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::COIN])
 			SkillIcon(PLAYERSKILL::SKILL::COIN);
 	}
+	else if (L"Item_Page_Fiona" == pOther->Get_Tag())
+	{
+		m_arrPageCount[PLAYERSKILL::SKILL::FIONA] += 1;
+
+		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::FIONA])
+			SkillIcon(PLAYERSKILL::SKILL::FIONA);
+	}
 
 	cout << "스킬 개수 : " << 
 		"PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<
 		"MARCELINT : " << m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] << " | " <<
 		"COIN : " << m_arrPageCount[PLAYERSKILL::SKILL::COIN] << " | " <<
+		"FIONA : " << m_arrPageCount[PLAYERSKILL::SKILL::FIONA] << " | " <<
 		endl;
 }
 

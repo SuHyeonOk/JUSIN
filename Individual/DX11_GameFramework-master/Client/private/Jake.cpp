@@ -374,9 +374,7 @@ void CJake::Current_Player(_double TimeDelta)
 void CJake::Player_Skill_Tick(_double TimeDelta)
 {
 	// 전체적으로 스킬을 on 한다.
-	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		m_bSkill = true;
 	}
@@ -760,7 +758,7 @@ void CJake::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	if (7 <= m_pModelCom->Get_Keyframes())
+	if (5 <= m_pModelCom->Get_Keyframes())
 		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
 	else
 		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
@@ -895,7 +893,8 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	if (10 < m_bSkillClone_TimeAcc)
 	{
 		// Get_Dead 가 true 라면 아이들로 변경한다.
-		CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
+		CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, 
+			TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
 		pGameObject->Set_Dead();
 
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경

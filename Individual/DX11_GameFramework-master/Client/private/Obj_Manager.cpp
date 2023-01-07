@@ -14,15 +14,15 @@ CObj_Manager::CObj_Manager()
 
 HRESULT		CObj_Manager::Initialized()
 {
-	m_tPlayerInfo.fHP		= 100.0f;
-	m_tPlayerInfo.fHPMax	= 100.0f;
-	m_tPlayerInfo.iAttack	= 10;
-	m_tPlayerInfo.fExp		= 0.0f;
-	m_tPlayerInfo.fExpMax	= 100.0f;
-	m_tPlayerInfo.iLevel	= 1;
-	m_tPlayerInfo.iKey		= 0;
-	m_tPlayerInfo.iHeart	= 0;
-	m_tPlayerInfo.iCoin		= 0;
+	m_tPlayerInfo.fHP = 100.0f;
+	m_tPlayerInfo.fHPMax = 100.0f;
+	m_tPlayerInfo.iAttack = 10;
+	m_tPlayerInfo.fExp = 0.0f;
+	m_tPlayerInfo.fExpMax = 100.0f;
+	m_tPlayerInfo.iLevel = 1;
+	m_tPlayerInfo.iKey = 0;
+	m_tPlayerInfo.iHeart = 0;
+	m_tPlayerInfo.iCoin = 0;
 
 	m_tPlayerInfo.iKey = 0;
 	m_tPlayerInfo.iHeart = 0;
@@ -79,6 +79,21 @@ _float		CObj_Manager::Get_Player_Distance(_fvector	_MyPos)
 	return XMVectorGetX(XMVector3Length(vDistance));
 }
 
+void		CObj_Manager::Set_Player_PlusHP(_float fHP)
+{
+	if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax)
+	{
+		_float fPlayerHp = m_tPlayerInfo.fHP + fHP;		// 현재 체력 + 추가할 HP 의 결과가
+
+		if (m_tPlayerInfo.fHPMax < fPlayerHp)			// 전체 HPMax 보다 크다면
+			m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;	// 그냥 HPMax 값으로 채우고, 
+		else
+			m_tPlayerInfo.fHP += fHP;					// 그 외는 추가한 HP 만큼 체력이 추가된다.
+	}
+
+	CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
+}
+
 void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 {
 	if (m_bShield)
@@ -112,7 +127,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 				m_tPlayerInfo.fHP -= m_fMonster_Attck;
 				CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 			}
-			
+
 			m_fMonster_Attck = 0;
 			m_dPlayerAttck_TimeAcc = 0;
 		}
@@ -161,10 +176,17 @@ void		CObj_Manager::Current_Player()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_Z))
+	if (m_tPlayerInfo.eState != PLAYERINFO::STATE::MAGIC ||
+		m_tPlayerInfo.eState != PLAYERINFO::STATE::S_PAINT ||
+		m_tPlayerInfo.eState != PLAYERINFO::STATE::S_MARCELINE ||
+		m_tPlayerInfo.eState != PLAYERINFO::STATE::S_COIN ||
+		m_tPlayerInfo.eState != PLAYERINFO::STATE::S_FIONA)
 	{
-		m_ChangeTarget++;
-		Set_Current_Player_State(PLAYERINFO::CHANGE);
+		if (pGameInstance->Key_Down(DIK_Z))		// 플레이어가 변신 또는 스킬 사용중 일 때는 변경하지 못 한다.
+		{
+			m_ChangeTarget++;
+			Set_Current_Player_State(PLAYERINFO::CHANGE);
+		}
 	}
 
 	switch (m_ChangeTarget)
@@ -212,7 +234,7 @@ void		CObj_Manager::Player_Exp()
 void		CObj_Manager::Player_Weapon()
 {
 	// 스킬 사용? 무기사용?
-	if(CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		CUI_Manager::GetInstance()->Set_Weapons(0);
 	else
 		CUI_Manager::GetInstance()->Set_Weapons(1);

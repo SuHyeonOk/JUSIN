@@ -5,9 +5,10 @@
 #include "Bone.h"
 #include "Finn_Weapon.h"
 
+#include "ItemManager.h"
 #include "Skill_Manager.h"
 #include "S_PaintWork.h"
-#include "ItemManager.h"
+#include "S_Fiona.h"
 
 CFinn::CFinn(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -43,7 +44,7 @@ HRESULT CFinn::Initialize(void * pArg)
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -67,11 +68,11 @@ void CFinn::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//Player_Info();
-
 	//Shader_Time(TimeDelta); // Shader Hit Time
 
-	Parts_Tick(TimeDelta);
+	// 내가 현재 플레이어가 아니라면 무기를 호출하지 않는다.
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
@@ -87,20 +88,9 @@ void CFinn::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//if (pGameInstance->Key_Down(DIK_P))
-	//{
-	//	++m_AnimiNum;
-	//}
-	//if (pGameInstance->Key_Down(DIK_O))
-	//{
-	//	--m_AnimiNum;
-	//}
-	//m_pModelCom->Set_AnimIndex(m_AnimiNum);
-	//cout << m_AnimiNum << endl;
-	//RELEASE_INSTANCE(CGameInstance);
-
-	Parts_LateTick(TimeDelta);
+	// 내가 현재 플레이어가 아니라면 무기를 호출하지 않는다.
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		Parts_LateTick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -116,6 +106,10 @@ HRESULT CFinn::Render()
 	//if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer && 
 	//	CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	//	return E_FAIL;
+
+	// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 렌더를 끈다.
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return E_FAIL;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -291,28 +285,6 @@ HRESULT CFinn::Ready_Parts()
 	return S_OK;
 }
 
-void CFinn::Player_Info()
-{
-	//CObj_Manager::PLAYERINFO	tPlayerInfo;
-	//tPlayerInfo.iHp = 
-
-	//CObj_Manager::GetInstance()->Set_Current_Player();
-
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Key_Down(DIK_R))
-	//{
-	//	CM_PigWarrior_BEE* pObj; 
-	//	// TODO : Get_Object 를 만들거나, 충돌처리 하여 객체를 받아올 수 있으면 수정
-
-	//	CM_Monster* pMonster = dynamic_cast<CM_Monster*>(pObj);
-	//	CObj_Manager::GetInstance()->Set_Player_PlusHp(pMonster->Get_Monster_Attack());
-	//}
-
-	//RELEASE_INSTANCE(CGameInstance);
-
-}
-
 void CFinn::Parts_Tick(const _double & TimeDelta)
 {
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -367,8 +339,12 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Skill_Marceline_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::S_COIN:
+	case CObj_Manager::PLAYERINFO::S_COIN:	// 13
 		Skill_Coin_Tick(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
+		Skill_Fiona_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::ROLL:
@@ -395,10 +371,11 @@ void CFinn::Current_Player(_double TimeDelta)
 		Player_Skill_Tick(TimeDelta);
 
 		// 플레이어의 스킬 때 키 입력을 받지 않는다.
-		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			Key_Input(TimeDelta);
+		if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+			CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			m_OnMove = false; 
 		else
-			m_OnMove = false;
+			Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -413,14 +390,15 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkill = true;
 
-	if (m_bSkill)
+	if (m_bSkill)	// COIN 한번만 생성되고, 추가적인 제어 때문에 직접 함수 안에서 처리한다.
 	{
-		m_dSkill_TimeAcc += TimeDelta;	// 스킬 사용 후 일정시간 뒤 초기화 (COIN 스킬의 경우 한 번만 사용하기 때문에 함수 안 에서 바로 초기화 했다.)
+		m_dSkill_TimeAcc += TimeDelta;	// 스킬 사용 후 일정시간 뒤 초기화
 		if (20 < m_dSkill_TimeAcc)
 		{
 			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
 			m_bSkill_Clone = false;
 
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 			m_bSkill = false;
 			m_dSkill_TimeAcc = 0;
@@ -435,6 +413,9 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 	
 		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
+
+		if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_FIONA);
 	}
 }
 
@@ -727,6 +708,46 @@ void CFinn::Skill_Coin_Tick(_double TimeDelta)
 	m_bSkill = false;
 }
 
+HRESULT CFinn::Skill_Fiona_Tick(_double TimeDelta)
+{
+	if (m_bIsSwim)		// 예외처리 수영 중일 때는 변하지 말기
+		return S_OK;
+
+	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
+	if (!m_bSkill_Clone)
+	{
+		m_bSkill_Clone = true;
+
+		// 모델 생성
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(),								// STATIC 레벨에
+			TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+			return E_FAIL;
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	// 모델을 따라간다. (우리 눈에는 보이지 않는다.)
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),	// STATIC 레벨에
+		TEXT("Layer_S_Fiona"), TEXT("Com_Transform"), 0));																// 스킬 객체의 트랜스폼을 가져온다.
+
+	if (nullptr != pChangeTransformCom)	// 예외처리) 만약 객체가 생성되지 않았다면, 따라가지 않는다.
+	{
+		_vector vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 void CFinn::Roolling_Tick(_double TimeDelta)
 {
 	if (m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
@@ -759,8 +780,7 @@ void CFinn::Hit_Tick(_double TimeDelta)
 
 void CFinn::Stun_Tick()
 {
-	_vector vMyPos;
-	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4	f4MyPos;
 	XMStoreFloat4(&f4MyPos, vMyPos);
 

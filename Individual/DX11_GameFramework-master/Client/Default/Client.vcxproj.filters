@@ -166,6 +166,9 @@
     <Filter Include="02.GameObjects\PlayerSkill\Magic">
       <UniqueIdentifier>{6f7a346b-b41f-4fce-8af0-c2a772e94af3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\Fiona">
+      <UniqueIdentifier>{65797c89-1260-45a3-8322-fb7d2ee35433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -432,6 +435,9 @@
     <ClInclude Include="..\public\UI_Scroll_Count.h">
       <Filter>02.GameObjects\UI\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_Fiona.h">
+      <Filter>02.GameObjects\PlayerSkill\Fiona</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -679,6 +685,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_Scroll_Count.cpp">
       <Filter>02.GameObjects\UI\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_Fiona.cpp">
+      <Filter>02.GameObjects\PlayerSkill\Fiona</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

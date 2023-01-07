@@ -46,7 +46,6 @@ private:
 	void	Shader_Time(_double TimeDelta);
 
 private:
-	void	Player_Info();
 	void	Parts_Tick(const _double & TimeDelta);
 	void	Parts_LateTick(const _double & TimeDelta);
 
@@ -62,6 +61,7 @@ private:
 	void	Attack_Paint_Tick(_double TimeDelta);
 	void	Skill_Marceline_Tick(_double TimeDelta);
 	void	Skill_Coin_Tick(_double TimeDelta);
+	HRESULT	Skill_Fiona_Tick(_double TimeDelta);
 
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);

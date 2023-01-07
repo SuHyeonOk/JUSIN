@@ -26,8 +26,6 @@ HRESULT CFood::Initialize_Prototype()
 
 HRESULT CFood::Initialize(void * pArg)
 {	
-	m_wsTag = L"Item_Food";
-
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
@@ -36,12 +34,14 @@ HRESULT CFood::Initialize(void * pArg)
 
 	if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
 	{
+		m_wsTag = L"Item_Food_Tart";
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinFoodInfo.fPos.x, m_tinFoodInfo.fPos.y, m_tinFoodInfo.fPos.z);
 	}
 	else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
 	{
+		m_wsTag = L"Item_Food_Burrito";
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinFoodInfo.fPos.x, m_tinFoodInfo.fPos.y, m_tinFoodInfo.fPos.z);
@@ -116,7 +116,17 @@ HRESULT CFood::Render()
 void CFood::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	{
+		if (CObj_Manager::GetInstance()->Get_Current_Player().fHP >= CObj_Manager::GetInstance()->Get_Current_Player().fHPMax)
+			return;	// 체력이 가득찬 상태에서는 아이템을 먹을 수 없다.
+
 		CGameObject::Set_Dead();
+	
+		if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(30.0f);
+		else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+	}
 }
 
 HRESULT CFood::SetUp_Components()

@@ -24,7 +24,7 @@ public:
 
 		enum STATE {
 			IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, STUN, DIE, CHANGE, CHEERING, 
-			SWIM, S_PAINT, S_MARCELINE, S_COIN, 
+			SWIM, S_PAINT, S_MARCELINE, S_COIN, S_FIONA,
 			TREEWITCH_0, TREEWITCH_1, TREEWITCH_2, MAGIC, STATE_END
 		};
 		STATE		eState = STATE_END;		// 현재 상태
@@ -83,8 +83,8 @@ public:
 	void				Set_Player_Attack(_int iAttack) { m_tPlayerInfo.iAttack = iAttack; } // 스킬의 경우 잠시 공격력을 올렸다가 내리도록 하기 위해서
 
 	// UI 관련
-	void				Set_Player_PlusExp(_float fExp) { m_tPlayerInfo.fExp += fExp; }
-	void				Set_Player_PlusHP(_int eHp) { if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax) m_tPlayerInfo.fHP += eHp; }
+	void				CObj_Manager::Set_Player_PlusExp(_float fExp) { m_tPlayerInfo.fExp += fExp; }	// TODO : 원래는 안 에서 함수 만들어서 해야하는데 이미 몬스터에서 각각 다 처리함..ㅋㅋ
+	void				CObj_Manager::Set_Player_PlusHP(_float fHP);
 	void				CObj_Manager::Set_Player_MinusHP(_float fAttack);
 
 	void				Set_Coin(_int iCount) { m_tPlayerInfo.iCoin += iCount; }

@@ -426,7 +426,7 @@ void CLevel_GamePlay::ImGui_Coin()
 
 void CLevel_GamePlay::ImGui_Page()
 {
-	const _char* szObjName[] = { "Page_Paint","Page_Marcelint", "Coin" };
+	const _char* szObjName[] = { "Page_Paint","Page_Marcelint", "Page_Coin", "Page_Fiona" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_PAGE", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -478,6 +478,21 @@ void CLevel_GamePlay::ImGui_Page()
 			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::COIN;
 
 			m_wstObjName = L"Page_Coin__";
+			m_wstObjName += to_wstring(m_iPage_1_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+				return;
+
+			m_iPage_1_Count++;
+		}
+		if (3 == iObjNum)
+		{
+			tPageInfo.fPos = m_f3ClickPos;
+			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::FIONA;
+
+			m_wstObjName = L"Page_Fiona__";
 			m_wstObjName += to_wstring(m_iPage_1_Count);
 
 			m_szObjName = m_wstObjName.c_str();
@@ -1181,6 +1196,22 @@ void CLevel_GamePlay::Load_Page()
 			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::COIN;
 
 			m_wstObjName = L"Page_Coin__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+					return;
+			}
+		}
+		for (_int i = 0; i < iPageVecCount; i++)
+		{
+			tPageInfo.fPos = pObjInfo.ObjPos;
+			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::FIONA;
+
+			m_wstObjName = L"Page_Fiona__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstObjNameTemp(pObjInfo.ObjName);

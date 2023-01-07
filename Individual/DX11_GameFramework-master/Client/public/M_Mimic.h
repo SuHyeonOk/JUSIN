@@ -33,9 +33,6 @@ private:
 	virtual void		Hit_Tick()								override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
-private:
-
-
 public:
 	static	CM_Mimic*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

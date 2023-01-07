@@ -21,7 +21,7 @@ class CSkill_Manager : public CBase
 public:
 	typedef struct tagPlyaerSkill
 	{
-		enum SKILL { PAINT, MARCELINT, COIN, SKILL_END };
+		enum SKILL { PAINT, MARCELINT, COIN, FIONA, SKILL_END };
 		SKILL		eSkill = SKILL_END;			// 현재 사용 중 인 스킬
 
 	}PLAYERSKILL;
@@ -33,6 +33,13 @@ public:
 
 	}MAGICSKILL;
 
+	typedef struct tagPlayerFionaSkill
+	{
+		enum SKILLSTATE { IDLE, RUN, ATTACK, CAT, HIT, STUN, DANCE, SKILLSTATE_END };
+		SKILLSTATE		eSkill = SKILLSTATE_END;
+
+	}FIONASKILL;
+
 public:
 	CSkill_Manager();
 	virtual ~CSkill_Manager() = default;
@@ -43,6 +50,9 @@ public:		// 플레이어
 
 	MAGICSKILL					Get_Magic_Skill() { return m_tMagicSkill; }
 	void						Set_Magic_Skill(MAGICSKILL::SKILLSTATE eSkillState) { m_tMagicSkill.eSkill = eSkillState; }
+
+	FIONASKILL					Get_Fiona_Skill() { return m_tFionaSkill; }
+	void						Set_Fiona_Skill(FIONASKILL::SKILLSTATE eSkillState) { m_tFionaSkill.eSkill = eSkillState; }
 
 public:
 	void		CSkill_Manager::Page_Use(ITEMINDEX	iIndex);
@@ -56,8 +66,9 @@ public:		// 유아이 관련
 private:
 	PLAYERSKILL		m_tPlayerSkill;
 	MAGICSKILL		m_tMagicSkill;
+	FIONASKILL		m_tFionaSkill;
 
-	_int			m_arrPageCount[ITEMINDEX_END] = { 0 };
+	_int			m_arrPageCount[PLAYERSKILL::SKILL::SKILL_END] = { 0 };
 
 public:
 	virtual void Free() override;	
