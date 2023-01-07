@@ -65,7 +65,7 @@ private:
 
 	void	Roolling_Tick(_double TimeDelta);
 	void	Hit_Tick(_double TimeDelta);
-	void	KnockbackHit_Tick(_double TimeDelta);
+	void	KnockBack_Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
 
 	void	Swim_Tick(_double TimeDelta);
@@ -86,7 +86,7 @@ private:
 	//////////////////////////// 플레이어 일 때
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
-	_double		m_dKnockbackHit_TimeAcc = 0;
+	_double		m_dKnockBack_Hit_TimeAcc = 0;
 
 	_bool		m_bStun = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번

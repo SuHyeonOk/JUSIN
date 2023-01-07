@@ -105,9 +105,9 @@ HRESULT CFinn::Render()
 	//	CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	//	return E_FAIL;
 
-	// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 랜더를 끈다.
-	if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		return E_FAIL;
+	//// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 랜더를 끈다.
+	//if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	//	return E_FAIL;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -286,7 +286,9 @@ HRESULT CFinn::Ready_Parts()
 void CFinn::Parts_Tick(const _double & TimeDelta)
 {
 	// 현재 스킬일 때는 무기를 출력하지 않는다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState ||		// 스킬 사용했을 때
+		CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState &&	// 스킬 중 상태에서 
+		CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)			// 공격을 받을 때 출력하지 않는다.
 		return;
 
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -300,7 +302,9 @@ void CFinn::Parts_Tick(const _double & TimeDelta)
 void CFinn::Parts_LateTick(const _double & TimeDelta)
 {
 	// 현재 스킬일 때는 무기를 출력하지 않는다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+		CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState &&
+		CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		return;
 
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -331,6 +335,12 @@ void CFinn::Player_Tick(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
 
+	if (CObj_Manager::PLAYERINFO::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		Skill_Fiona_Tick(TimeDelta);
+		return;
+	}
+
 	switch (m_tPlayerInfo.eState)
 	{
 	case CObj_Manager::PLAYERINFO::ATTACK:
@@ -349,9 +359,9 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Skill_Coin_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
-		Skill_Fiona_Tick(TimeDelta);
-		break;
+	//case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
+	//	Skill_Fiona_Tick(TimeDelta);
+	//	break;
 
 	case CObj_Manager::PLAYERINFO::ROLL:
 		Roolling_Tick(TimeDelta);
@@ -362,7 +372,7 @@ void CFinn::Player_Tick(_double TimeDelta)
 		break;
 
 	case CObj_Manager::PLAYERINFO::KNOCKBACKHIT:
-		KnockbackHit_Tick(TimeDelta);
+		KnockBack_Hit_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::STUN:
@@ -750,7 +760,7 @@ HRESULT CFinn::Skill_Fiona_Tick(_double TimeDelta)
 	if (nullptr != pChangeTransformCom)	// 예외처리) 만약 객체가 생성되지 않았다면, 따라가지 않는다.
 	{
 		_vector vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos, m_pNavigationCom);
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -779,12 +789,12 @@ void CFinn::Hit_Tick(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::KnockbackHit_Tick(_double TimeDelta)
+void CFinn::KnockBack_Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	m_dKnockbackHit_TimeAcc += TimeDelta;
-	if (0.35 < m_dKnockbackHit_TimeAcc)
+	m_dKnockBack_Hit_TimeAcc += TimeDelta;
+	if (0.35 < m_dKnockBack_Hit_TimeAcc)
 		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
 	else
 		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
@@ -792,7 +802,7 @@ void CFinn::KnockbackHit_Tick(_double TimeDelta)
 	if (m_pModelCom->Get_Finished())
 	{
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_dKnockbackHit_TimeAcc = 0;
+		m_dKnockBack_Hit_TimeAcc = 0;
 	}
 }
 

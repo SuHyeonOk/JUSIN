@@ -65,6 +65,19 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
 	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f);
 
+	// 현재 플레이어의 네비 인덱스를 받아온다.
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
+	CNavigation * pNavigationCom = nullptr;
+	if(CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+	else	// Jake
+		pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	
+	RELEASE_INSTANCE(CGameInstance);
+	
+	m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
+
 	return S_OK;
 }
 
@@ -85,24 +98,20 @@ void CS_Fiona::Tick(_double TimeDelta)
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	// 내 무기 콜라이더 공격 중일 때만 On
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_SkillParts[0]->Tick(TimeDelta);
+	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_SkillParts[1]->Tick(TimeDelta);
-	}
 }
 
 void CS_Fiona::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_SkillParts[0]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_SkillParts[1]->Late_Tick(TimeDelta);
-	}
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
@@ -295,7 +304,7 @@ void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 		m_pModelCom->Set_AnimIndex(2, false);
 		Cat_Tick();
 		break;
-	case Client::CSkill_Manager::FIONASKILL::HIT://
+	case Client::CSkill_Manager::FIONASKILL::HIT:
 		m_pModelCom->Set_AnimIndex(21, false);
 		Hit_Tick(TimeDelta);
 		break;
