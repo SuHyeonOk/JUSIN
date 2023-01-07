@@ -169,6 +169,9 @@
     <Filter Include="02.GameObjects\PlayerSkill\Fiona">
       <UniqueIdentifier>{65797c89-1260-45a3-8322-fb7d2ee35433}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\MninMap">
+      <UniqueIdentifier>{f005a83e-abc1-45cf-a7e0-38524901f234}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -441,6 +444,12 @@
     <ClInclude Include="..\public\S_Skill_Weapon.h">
       <Filter>02.GameObjects\PlayerSkill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_MiniMap.h">
+      <Filter>02.GameObjects\UI\MninMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_MiniMap_Player.h">
+      <Filter>02.GameObjects\UI\MninMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -694,6 +703,12 @@
     </ClCompile>
     <ClCompile Include="..\private\S_Skill_Weapon.cpp">
       <Filter>02.GameObjects\PlayerSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_MainMap.cpp">
+      <Filter>02.GameObjects\UI\MninMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_MiniMap_Player.cpp">
+      <Filter>02.GameObjects\UI\MninMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -335,12 +335,6 @@ void CFinn::Player_Tick(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
 
-	if (CObj_Manager::PLAYERINFO::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	{
-		Skill_Fiona_Tick(TimeDelta);
-		return;
-	}
-
 	switch (m_tPlayerInfo.eState)
 	{
 	case CObj_Manager::PLAYERINFO::ATTACK:
@@ -359,9 +353,9 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Skill_Coin_Tick(TimeDelta);
 		break;
 
-	//case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
-	//	Skill_Fiona_Tick(TimeDelta);
-	//	break;
+	case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
+		Skill_Fiona_Tick(TimeDelta);
+		break;
 
 	case CObj_Manager::PLAYERINFO::ROLL:
 		Roolling_Tick(TimeDelta);

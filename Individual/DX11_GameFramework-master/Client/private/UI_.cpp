@@ -210,6 +210,25 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 
+	// [21] : MninMap
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_MninMap")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+	// [22] : MninMap
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_MninMap_Player")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	
+
+
+	
 
 
 	
@@ -285,6 +304,10 @@ void CUI_::Tick(_double TimeDelta)
 		if (1 < iCount)
 			m_vecUI[20]->Tick(TimeDelta);
 	}
+
+	// ¹Ì´Ï¸Ê
+	m_vecUI[21]->Tick(TimeDelta);
+	m_vecUI[22]->Tick(TimeDelta);
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -380,6 +403,8 @@ void CUI_::Late_Tick(_double TimeDelta)
 			m_vecUI[20]->Late_Tick(TimeDelta);
 	}
 
+	m_vecUI[21]->Late_Tick(TimeDelta);
+	m_vecUI[22]->Late_Tick(TimeDelta);
 
 
 

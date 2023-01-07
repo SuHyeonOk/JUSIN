@@ -21,7 +21,7 @@ HRESULT CUI_Talk::Initialize_Prototype()
 {
 	//if (FAILED(__super::Initialize_Prototype()))
 	//	return E_FAIL;
-	
+
 	return S_OK;
 }
 
@@ -62,7 +62,7 @@ void CUI_Talk::Tick(_double TimeDelta)
 void CUI_Talk::Late_Tick(_double TimeDelta)
 {
 
-	if(nullptr != m_pRendererCom)
+	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
@@ -79,7 +79,7 @@ HRESULT CUI_Talk::Render()
 	m_pVIBufferCom->Render();
 
 	// ´ëº»
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);	
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	pGameInstance->Render_Font(TEXT("Font_Comic"), CUI_Manager::GetInstance()->Get_Text(), _float2(460.f, 75.f), 0.f, _float2(0.4f, 0.37f));
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -131,7 +131,7 @@ HRESULT CUI_Talk::SetUp_ShaderResources()
 
 CUI_Talk * CUI_Talk::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CUI_Talk*		pInstance = new CUI_Talk(pDevice, pContext);
+	CUI_Talk*		pInstance = new CUI_Talk(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{

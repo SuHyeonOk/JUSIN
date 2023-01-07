@@ -30,6 +30,8 @@
 #include "UI_Scroll.h"
 #include "UI_SkillIcon.h"
 #include "UI_Scroll_Count.h"
+#include "UI_MiniMap.h"
+#include "UI_MiniMap_Player.h"
 
 // Obj
 #include "O_Box.h"
@@ -1077,6 +1079,16 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/Scroll_Count.png")))))
 		return E_FAIL;
 
+	// mini map
+	/* For.Prototype_Component_Texture_UI_Mini_Map_Garden */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Garden"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Mini_Map_Garden.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Mini_Map_Player */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Player"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Player.png")))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1159,6 +1171,15 @@ HRESULT CLoader::UI_Create()
 		CUI_Scroll_Count::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// MiniMap
+	/* For.Prototype_GameObject_UI_MninMap */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_MninMap"),
+		CUI_MninMap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_MninMap_Player */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_MninMap_Player"),
+		CUI_MninMap_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 
