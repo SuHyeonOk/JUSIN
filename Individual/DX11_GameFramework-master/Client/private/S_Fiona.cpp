@@ -326,17 +326,8 @@ void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 {
 	m_OnMove = false;
 
-	m_dHit_TimeAcc += TimeDelta;
-	if (0.22 < m_dHit_TimeAcc)
-		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
-	else
-		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
-
 	if (m_pModelCom->Get_Finished())
-	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
-		m_dHit_TimeAcc = 0;
-	}
 }
 
 void CS_Fiona::Stun_Tick()

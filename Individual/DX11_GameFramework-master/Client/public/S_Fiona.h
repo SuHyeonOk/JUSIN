@@ -56,8 +56,6 @@ private:
 	vector<CGameObject*>	m_SkillParts;
 	_bool					m_OnMove = false;
 
-	_double					m_dHit_TimeAcc = 0;
-
 	_bool					m_bStun = false;			// 스턴
 	_uint					m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 

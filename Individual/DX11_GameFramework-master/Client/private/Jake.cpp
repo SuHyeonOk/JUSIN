@@ -26,7 +26,7 @@ HRESULT CJake::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
@@ -58,8 +58,8 @@ HRESULT CJake::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(18);
 
-	m_tPlayerInfo.ePlayer	= m_tPlayerInfo.JAKE;
-	m_tPlayerInfo.eState	= m_tPlayerInfo.IDLE;
+	m_tPlayerInfo.ePlayer = m_tPlayerInfo.JAKE;
+	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
 	return S_OK;
 }
@@ -213,7 +213,7 @@ HRESULT CJake::SetUp_ShaderResources()
 	//	return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
-	
+
 	return S_OK;
 }
 
@@ -336,6 +336,10 @@ void CJake::Player_Tick(_double TimeDelta)
 		break;
 
 	case CObj_Manager::PLAYERINFO::HIT:
+		Hit_Tick(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::KNOCKBACKHIT:
 		Hit_Tick(TimeDelta);
 		break;
 
@@ -577,7 +581,7 @@ void CJake::Key_Input(_double TimeDelta)
 	if (m_OnMove)
 	{
 		if (CObj_Manager::PLAYERINFO::SWIM == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			m_pTransformCom->Go_Straight(TimeDelta, 2.f, m_pNavigationCom); 
+			m_pTransformCom->Go_Straight(TimeDelta, 2.f, m_pNavigationCom);
 		else
 			m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
 
@@ -737,7 +741,7 @@ void CJake::Skill_Marceline_Tick(_double TimeDelta)
 void CJake::Control_Tick(_double TimeDelta)
 {
 	m_pTransformCom->Go_Straight(0, m_pNavigationCom);
-	
+
 	CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE);
 }
 
@@ -757,11 +761,6 @@ void CJake::Roolling_Tick(_double TimeDelta)
 void CJake::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
-
-	if (5 <= m_pModelCom->Get_Keyframes())
-		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
-	else
-		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
 
 	if (m_pModelCom->Get_Finished())
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
@@ -797,7 +796,7 @@ void CJake::Stun_Tick()
 
 void CJake::Swim_Tick(_double TimeDelta)
 {
-	if (m_tPlayerInfo.ePlayer ==  CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::SWIM);
 
 	if (!m_bDiving)
@@ -873,7 +872,7 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		
+
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
 			return E_FAIL;
 		RELEASE_INSTANCE(CGameInstance);
@@ -893,18 +892,18 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	if (10 < m_bSkillClone_TimeAcc)
 	{
 		// Get_Dead 가 true 라면 아이들로 변경한다.
-		CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, 
+		CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY,
 			TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
 		pGameObject->Set_Dead();
 
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경
 		m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
-		
+
 		m_bSkillClone_TimeAcc = 0;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
-	
+
 	return S_OK;
 }
 
@@ -938,14 +937,16 @@ void CJake::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(27, false);
 			break;
 
-			// Level Up : 50
-
 		case CObj_Manager::PLAYERINFO::STATE::S_COIN:
 			m_pModelCom->Set_AnimIndex(25);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:
 			m_pModelCom->Set_AnimIndex(38, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::KNOCKBACKHIT:
+			m_pModelCom->Set_AnimIndex(50, false);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::STUN:

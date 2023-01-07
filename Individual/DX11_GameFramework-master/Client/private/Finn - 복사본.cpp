@@ -70,7 +70,9 @@ void CFinn::Tick(_double TimeDelta)
 
 	//Shader_Time(TimeDelta); // Shader Hit Time
 
-	Parts_Tick(TimeDelta);
+	// 내가 현재 플레이어가 아니라면 무기를 호출하지 않는다.
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
@@ -79,7 +81,7 @@ void CFinn::Tick(_double TimeDelta)
 		CObj_Manager::PLAYERINFO::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState ||				// 스킬 사용 중일 때는 충돌 을 받지 않는다.
 		CSkill_Manager::PLAYERSKILL::SKILL::FIONA != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
-		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
 		m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
 	}
 }
@@ -88,7 +90,9 @@ void CFinn::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Parts_LateTick(TimeDelta);
+	// 내가 현재 플레이어가 아니라면 무기를 호출하지 않는다.
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		Parts_LateTick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -106,6 +110,7 @@ HRESULT CFinn::Render()
 	//	return E_FAIL;
 
 	// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 랜더를 끈다.
+	// 스킬을 사용중일 때 HIT 의 기능으로 넉백은 되어야 하지만, 보여서는 안 된다.
 	if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		return E_FAIL;
 
@@ -285,10 +290,6 @@ HRESULT CFinn::Ready_Parts()
 
 void CFinn::Parts_Tick(const _double & TimeDelta)
 {
-	// 현재 스킬일 때는 무기를 출력하지 않는다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		return;
-
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Tick(TimeDelta);
 	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -299,10 +300,6 @@ void CFinn::Parts_Tick(const _double & TimeDelta)
 
 void CFinn::Parts_LateTick(const _double & TimeDelta)
 {
-	// 현재 스킬일 때는 무기를 출력하지 않는다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		return;
-
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Late_Tick(TimeDelta);
 	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -326,6 +323,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 	else
 		if (1 == m_pNavigationCom->Get_CellType())
 			m_bIsSwim = true;
+
+	cout << "현재 플레이어 상태(HIT는5) > " << CObj_Manager::GetInstance()->Get_Current_Player().eState <<
+		" 지금 키 입력 상태(1이여야 이동) : " << m_OnMove <<
+		" 지금 네비 상태(0 이동) " << m_pNavigationCom->Get_CellType() << endl;
 
 	// 내가 플레이어 일 때 만 할 행동	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
@@ -357,12 +358,8 @@ void CFinn::Player_Tick(_double TimeDelta)
 		Roolling_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::HIT:
+	case CObj_Manager::PLAYERINFO::HIT || CObj_Manager::PLAYERINFO::BEARTRAP:
 		Hit_Tick(TimeDelta);
-		break;
-
-	case CObj_Manager::PLAYERINFO::KNOCKBACKHIT:
-		KnockbackHit_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::STUN:
@@ -779,23 +776,6 @@ void CFinn::Hit_Tick(_double TimeDelta)
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::KnockbackHit_Tick(_double TimeDelta)
-{
-	m_OnMove = false;
-
-	m_dKnockbackHit_TimeAcc += TimeDelta;
-	if (0.35 < m_dKnockbackHit_TimeAcc)
-		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
-	else
-		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
-
-	if (m_pModelCom->Get_Finished())
-	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
-		m_dKnockbackHit_TimeAcc = 0;
-	}
-}
-
 void CFinn::Stun_Tick()
 {
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -841,7 +821,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		// CellType 이 1 이라면 내려가다가
 		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);	// -0.6 변경하면 Player Flolow() 에서도 변경
 
-																// CellType 이 0 이되면 올라간다.
+		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())
 		{
 			m_pModelCom->Set_AnimIndex(49);
@@ -931,7 +911,7 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(35, false);
 			break;
 
-		case CObj_Manager::PLAYERINFO::STATE::KNOCKBACKHIT:
+		case CObj_Manager::PLAYERINFO::STATE::BEARTRAP:
 			m_pModelCom->Set_AnimIndex(46, false);
 			break;
 
