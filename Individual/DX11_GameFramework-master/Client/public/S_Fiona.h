@@ -40,21 +40,28 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
+	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
+
 private:
 	void				KeyInput(const _double & TimeDelta);
 
 	void				Skill_Tick(const _double & TimeDelta);
 	void				Attack_Tick();
 	void				Cat_Tick();
-	void				Hit_Tick();
+	void				Hit_Tick(const _double & TimeDelta);
 	void				Stun_Tick();
 	void				Dance_Tick();
 
 private:
+	vector<CGameObject*>	m_SkillParts;
 	_bool					m_OnMove = false;
+
+	_double					m_dHit_TimeAcc = 0;
 
 	_bool					m_bStun = false;			// 스턴
 	_uint					m_iStun_Count = 0;			// 스턴 애니메이션 두 번
+
+	_float					m_fOriginal_Player_Attack = 0.0f;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

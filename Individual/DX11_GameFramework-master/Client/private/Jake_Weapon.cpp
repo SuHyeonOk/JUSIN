@@ -3,7 +3,6 @@
 
 #include "GameInstance.h"
 #include "Bone.h"
-#include "Obj_Manager.h"
 #include "UI_Manager.h"
 
 CJake_Weapon::CJake_Weapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

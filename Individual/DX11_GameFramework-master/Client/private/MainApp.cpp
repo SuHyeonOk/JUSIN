@@ -18,6 +18,7 @@
 #include "S_PaintWork.h"
 #include "S_Marceline.h"
 #include "S_Fiona.h"
+#include "S_Skill_Weapon.h"
 
 #include "O_TextureObject.h"
 
@@ -369,6 +370,11 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_GameObject_S_Fiona */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Fiona"),
 		CS_Fiona::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_S_Weapon */												// 스킬 중 콜라이더만 필요한 경우 사용하는 객체
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Weapon"),
+		CS_Skill_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

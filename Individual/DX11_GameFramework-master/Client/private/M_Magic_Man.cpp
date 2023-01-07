@@ -141,7 +141,9 @@ void CM_Magic_Man::On_Collision(CGameObject * pOther)
 		if (L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag())
  			m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
 
-	if(L"Skill_PaintWork" == pOther->Get_Tag())
+	if (L"Skill_PaintWork" == pOther->Get_Tag() ||
+		L"Skill_Fiona_Sword" == pOther->Get_Tag() ||
+		L"Skill_Fiona_Cat" == pOther->Get_Tag())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())

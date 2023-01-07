@@ -16,7 +16,7 @@ HRESULT		CObj_Manager::Initialized()
 {
 	m_tPlayerInfo.fHP = 100.0f;
 	m_tPlayerInfo.fHPMax = 100.0f;
-	m_tPlayerInfo.iAttack = 10;
+	m_tPlayerInfo.fAttack = 10;
 	m_tPlayerInfo.fExp = 0.0f;
 	m_tPlayerInfo.fExpMax = 100.0f;
 	m_tPlayerInfo.iLevel = 1;
@@ -220,7 +220,7 @@ void		CObj_Manager::Player_Exp()
 		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
 		m_tPlayerInfo.fExp = 0.0f;						// 경험치 0 으로 초기화
 		m_tPlayerInfo.fExpMax += 50.0f;					// 최대 경험치 증가
-		m_tPlayerInfo.iAttack += 10;					// 공격력 증가
+		m_tPlayerInfo.fAttack += 10;					// 공격력 증가
 
 		// UI 초기화
 		CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);

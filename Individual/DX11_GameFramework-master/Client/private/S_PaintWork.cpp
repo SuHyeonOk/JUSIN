@@ -115,7 +115,7 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 	if (1.25 < m_dBullet_TimeAcc)
 	{
 		// 죽을 때 원래 공격력으로 변경
-		CObj_Manager::GetInstance()->Set_Player_Attack(m_tBulletInfo.iAttack);
+		CObj_Manager::GetInstance()->Set_Player_Attack(m_tBulletInfo.fAttack);
 
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;

@@ -2,6 +2,9 @@
 #include "..\public\S_Fiona.h"
 
 #include "GameInstance.h"
+#include "Bone.h"
+#include "S_Skill_Weapon.h"
+
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
@@ -50,10 +53,17 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Parts()))
+		return E_FAIL;
+
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 
 	CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+
+	// FIONE 일 때는 플레이어의 평소 공격력의 1.5배가 된다.
+	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
+	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f);
 
 	return S_OK;
 }
@@ -62,35 +72,37 @@ void CS_Fiona::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 현재 플레이어의 네비게이션 위치를 담아준다.
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
-	//RELEASE_INSTANCE(CGameInstance);
-	//m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
-
 	// 스킬이 피오나가 아니라면 삭제.
-	if(CSkill_Manager::PLAYERSKILL::SKILL::FIONA != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
 		CGameObject::Set_Dead();
+		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
+	}
 
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼
-	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-
-	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
-	else
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+	// 내 무기 콜라이더 공격 중일 때만 On
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_SkillParts[0]->Tick(TimeDelta);
+		m_SkillParts[1]->Tick(TimeDelta);
+	}
 }
 
 void CS_Fiona::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_SkillParts[0]->Late_Tick(TimeDelta);
+		m_SkillParts[1]->Late_Tick(TimeDelta);
+	}
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
@@ -134,16 +146,7 @@ HRESULT CS_Fiona::Render()
 
 void CS_Fiona::On_Collision(CGameObject * pOther)
 {
-	// 지금 충돌한 Page 관리
-	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
 
-	CObj_Manager::GetInstance()->Set_Jake_Shield();
-
-	// 나 지금 몬스터랑 충돌 했어
-	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
-
-	// 그 몬스터는 이거야
-	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
 }
 
 HRESULT CS_Fiona::SetUp_Components()
@@ -207,6 +210,46 @@ HRESULT CS_Fiona::SetUp_ShaderResources()
 	return S_OK;
 }
 
+HRESULT CS_Fiona::Ready_Parts()
+{
+	CGameObject*		pPartObject = nullptr;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CS_Skill_Weapon::WEAPONDESC			WeaponDesc;
+	ZeroMemory(&WeaponDesc, sizeof(WeaponDesc));
+
+	WeaponDesc.eWeaponType = CS_Skill_Weapon::WEAPONDESC::FIONA_SWORD;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Sword");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_S_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_SkillParts.push_back(pPartObject);
+
+	WeaponDesc.eWeaponType = CS_Skill_Weapon::WEAPONDESC::FIONA_CAT;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("morningstar");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_S_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_SkillParts.push_back(pPartObject);
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 {
 	// 0 : 고양이 공격 왼쪽
@@ -244,20 +287,20 @@ void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 	case Client::CSkill_Manager::FIONASKILL::RUN:
 		m_pModelCom->Set_AnimIndex(4);
 		break;
-	case Client::CSkill_Manager::FIONASKILL::ATTACK://
+	case Client::CSkill_Manager::FIONASKILL::ATTACK:
 		m_pModelCom->Set_AnimIndex(19, false);
 		Attack_Tick();
 		break;
-	case Client::CSkill_Manager::FIONASKILL::CAT://
+	case Client::CSkill_Manager::FIONASKILL::CAT:
 		m_pModelCom->Set_AnimIndex(2, false);
 		Cat_Tick();
 		break;
 	case Client::CSkill_Manager::FIONASKILL::HIT://
-		m_pModelCom->Set_AnimIndex(3, false);
-		Hit_Tick();
+		m_pModelCom->Set_AnimIndex(21, false);
+		Hit_Tick(TimeDelta);
 		break;
 	case Client::CSkill_Manager::FIONASKILL::STUN:
-		m_pModelCom->Set_AnimIndex(21, false);
+		m_pModelCom->Set_AnimIndex(5, false);
 		Stun_Tick();
 		break;
 	case Client::CSkill_Manager::FIONASKILL::DANCE://
@@ -279,10 +322,21 @@ void CS_Fiona::Cat_Tick()
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 }
 
-void CS_Fiona::Hit_Tick()
+void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 {
+	m_OnMove = false;
+
+	m_dHit_TimeAcc += TimeDelta;
+	if (0.22 < m_dHit_TimeAcc)
+		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
+	else
+		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
+
 	if (m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+		m_dHit_TimeAcc = 0;
+	}
 }
 
 void CS_Fiona::Stun_Tick()
@@ -414,6 +468,10 @@ CGameObject * CS_Fiona::Clone(void * pArg)
 void CS_Fiona::Free()
 {
 	__super::Free();
+
+	for (auto& pPart : m_SkillParts)
+		Safe_Release(pPart);
+	m_SkillParts.clear();
 
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);

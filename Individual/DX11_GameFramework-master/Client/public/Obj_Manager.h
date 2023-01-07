@@ -42,7 +42,7 @@ public:
 
 		_float	fHP;		// 몬스터"가" 체력을 깍을 때 필요
 		_float	fHPMax;
-		_int	iAttack;	// 몬스터"의" 체력을 깍을 때 필요
+		_float	fAttack;	// 몬스터"의" 체력을 깍을 때 필요
 		_float	fExp;		// 몬스터가 죽으면 증가
 		_float	fExpMax;
 		_int	iLevel;		// iExp가 가득차면 +1 증가
@@ -79,8 +79,8 @@ public:
 	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
-	_int				Get_Player_Attack() { return m_tPlayerInfo.iAttack; }
-	void				Set_Player_Attack(_int iAttack) { m_tPlayerInfo.iAttack = iAttack; } // 스킬의 경우 잠시 공격력을 올렸다가 내리도록 하기 위해서
+	_float				Get_Player_Attack() { return m_tPlayerInfo.fAttack; }
+	void				Set_Player_Attack(_float iAttack) { m_tPlayerInfo.fAttack = iAttack; } // 스킬의 경우 잠시 공격력을 올렸다가 내리도록 하기 위해서
 
 	// UI 관련
 	void				CObj_Manager::Set_Player_PlusExp(_float fExp) { m_tPlayerInfo.fExp += fExp; }	// TODO : 원래는 안 에서 함수 만들어서 해야하는데 이미 몬스터에서 각각 다 처리함..ㅋㅋ

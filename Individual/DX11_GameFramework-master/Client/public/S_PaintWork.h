@@ -23,7 +23,7 @@ public:
 
 		_float3		f3Pos;
 		_float4		f4Look;
-		_int		iAttack = 0;
+		_float		fAttack = 0.0f;
 
 	}PAINTWORKINFO;
 

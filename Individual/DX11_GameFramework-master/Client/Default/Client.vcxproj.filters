@@ -438,6 +438,9 @@
     <ClInclude Include="..\public\S_Fiona.h">
       <Filter>02.GameObjects\PlayerSkill\Fiona</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_Skill_Weapon.h">
+      <Filter>02.GameObjects\PlayerSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -688,6 +691,9 @@
     </ClCompile>
     <ClCompile Include="..\private\S_Fiona.cpp">
       <Filter>02.GameObjects\PlayerSkill\Fiona</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_Skill_Weapon.cpp">
+      <Filter>02.GameObjects\PlayerSkill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

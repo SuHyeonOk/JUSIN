@@ -50,7 +50,7 @@ void CM_Monster::Tick(const _double& TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (m_bPlayer_Attack)
+	if (m_bPlayer_Attack)	// 몬스터 공격 받는 중...
 	{
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayer_Attack_TimeAcc)
@@ -112,7 +112,9 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 			m_bPlayer_Attack = true;
 	}
 
-	if (L"Skill_PaintWork" == pOther->Get_Tag())
+	if (L"Skill_PaintWork" == pOther->Get_Tag() || 
+		L"Skill_Fiona_Sword" == pOther->Get_Tag() || 
+		L"Skill_Fiona_Cat" == pOther->Get_Tag())
 		m_bPlayer_Attack = true;
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())

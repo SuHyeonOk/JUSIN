@@ -229,6 +229,7 @@
     <ClInclude Include="..\public\S_Fiona.h" />
     <ClInclude Include="..\public\S_Marceline.h" />
     <ClInclude Include="..\public\S_PaintWork.h" />
+    <ClInclude Include="..\public\S_Skill_Weapon.h" />
     <ClInclude Include="..\public\S_StunChick.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_.h" />
@@ -316,6 +317,7 @@
     <ClCompile Include="..\private\S_Fiona.cpp" />
     <ClCompile Include="..\private\S_Marceline.cpp" />
     <ClCompile Include="..\private\S_PaintWork.cpp" />
+    <ClCompile Include="..\private\S_Skill_Weapon.cpp" />
     <ClCompile Include="..\private\S_StunChick.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\UI_.cpp" />

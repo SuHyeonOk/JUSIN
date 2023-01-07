@@ -686,7 +686,7 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		vLook = XMVector4Transform(vLook, RotationMatrix);		// 회전행렬의 look 을 가져온다.
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);			// 넘긴다.
 
-		tPaintWorkInfo.iAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
+		tPaintWorkInfo.fAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))

@@ -77,7 +77,9 @@ void CFinn::Tick(_double TimeDelta)
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
 
-	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState ||				// 스킬 사용 중일 때는 충돌 을 받지 않는다.
+		CSkill_Manager::PLAYERSKILL::SKILL::FIONA != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
 		m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
@@ -107,8 +109,9 @@ HRESULT CFinn::Render()
 	//	CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	//	return E_FAIL;
 
-	// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 렌더를 끈다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 랜더를 끈다.
+	// 스킬을 사용중일 때 HIT 의 기능으로 넉백은 되어야 하지만, 보여서는 안 된다.
+	if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		return E_FAIL;
 
 	if (FAILED(__super::Render()))
@@ -198,7 +201,7 @@ HRESULT CFinn::SetUp_ShaderResources()
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
+
 	if (pGameInstance->Key_Pressing(DIK_F))
 	{
 		m_bHit = true;
@@ -306,7 +309,7 @@ void CFinn::Parts_LateTick(const _double & TimeDelta)
 }
 
 void CFinn::Player_Tick(_double TimeDelta)
-{	
+{
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
@@ -320,6 +323,7 @@ void CFinn::Player_Tick(_double TimeDelta)
 	else
 		if (1 == m_pNavigationCom->Get_CellType())
 			m_bIsSwim = true;
+
 
 	// 내가 플레이어 일 때 만 할 행동	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
@@ -373,7 +377,7 @@ void CFinn::Current_Player(_double TimeDelta)
 		// 플레이어의 스킬 때 키 입력을 받지 않는다.
 		if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
 			CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			m_OnMove = false; 
+			m_OnMove = false;
 		else
 			Key_Input(TimeDelta);
 	}
@@ -410,7 +414,7 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 	{
 		if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)		// 해당 스킬을
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);			// 실행 시킨다.
-	
+
 		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
 
@@ -520,9 +524,9 @@ void CFinn::Check_Follow(_double TimeDelta)
 void CFinn::Key_Input(_double TimeDelta)
 {
 	if (true == CObj_Manager::GetInstance()->Get_Interaction() ||
-		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL	||
-		m_tPlayerInfo.eState == m_tPlayerInfo.HIT	||
-		m_tPlayerInfo.eState == m_tPlayerInfo.STUN	||
+		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
+		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
+		m_tPlayerInfo.eState == m_tPlayerInfo.STUN ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH_0 || m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH_1 || m_tPlayerInfo.eState == m_tPlayerInfo.TREEWITCH_2)
 	{
 		m_OnMove = false;
@@ -647,7 +651,7 @@ void CFinn::Attack_Paint_Tick(_double TimeDelta)
 		vLook = XMVector4Transform(vLook, RotationMatrix);		// 회전행렬의 look 을 가져온다.
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);			// 넘긴다.
 
-		tPaintWorkInfo.iAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
+		tPaintWorkInfo.fAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
@@ -810,12 +814,12 @@ void CFinn::Swim_Tick(_double TimeDelta)
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::SWIM);
 
-	if(!m_bDiving)
+	if (!m_bDiving)
 		m_pModelCom->Set_AnimIndex(40, false);
 
 	if (40 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		m_bDiving = true;
-		
+
 	if (m_bDiving)
 	{
 		m_pModelCom->Set_AnimIndex(52);
@@ -826,7 +830,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())
 		{
-			m_pModelCom->Set_AnimIndex(49);	
+			m_pModelCom->Set_AnimIndex(49);
 			if (m_pTransformCom->Go_SwinUp(TimeDelta, 5.f))	// 0 까지 올라왔다면
 			{
 				m_bDiving = false;
@@ -893,9 +897,9 @@ void CFinn::Anim_Change(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(25);
 			break;
 
-		//case CObj_Manager::PLAYERINFO::STATE::S_COIN:
-		//	m_pModelCom->Set_AnimIndex(23, false);
-		//	break;
+			//case CObj_Manager::PLAYERINFO::STATE::S_COIN:
+			//	m_pModelCom->Set_AnimIndex(23, false);
+			//	break;
 
 		case CObj_Manager::PLAYERINFO::STATE::TREEWITCH_0:
 			m_pModelCom->Set_AnimIndex(55, false, false);
@@ -926,7 +930,7 @@ void CFinn::Anim_Change(_double TimeDelta)
 			break;
 		}
 
-		if(m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
 		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
 	}
