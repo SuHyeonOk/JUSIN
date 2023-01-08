@@ -100,7 +100,7 @@ HRESULT CUI_MninMap::SetUp_Components()
 		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+	//if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Garden"), TEXT("Com_Texture"),

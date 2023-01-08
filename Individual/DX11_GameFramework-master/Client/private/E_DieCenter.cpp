@@ -46,7 +46,7 @@ HRESULT CE_DieCenter::Initialize(void * pArg)
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
+	_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.7f);
 
 	m_fSizeX = fRandomNumber;
 	m_fSizeY = fRandomNumber;

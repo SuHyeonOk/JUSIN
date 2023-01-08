@@ -66,6 +66,9 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
 {
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return;
+
 	__super::Tick(TimeDelta);
 
 	//Shader_Time(TimeDelta); // Shader Hit Time
@@ -75,9 +78,7 @@ void CFinn::Tick(_double TimeDelta)
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
 
-	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
-		CObj_Manager::PLAYERINFO::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState ||				// 스킬 사용 중일 때는 충돌 을 받지 않는다.
-		CSkill_Manager::PLAYERSKILL::SKILL::FIONA != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
 		m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
@@ -86,6 +87,9 @@ void CFinn::Tick(_double TimeDelta)
 
 void CFinn::Late_Tick(_double TimeDelta)
 {
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return;
+
 	__super::Late_Tick(TimeDelta);
 
 	Parts_LateTick(TimeDelta);
@@ -100,14 +104,8 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 HRESULT CFinn::Render()
 {
-	//// 플레이어 스킬 상태일때 Player 의 Render 를 잠시 꺼둔다.
-	//if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer && 
-	//	CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	//	return E_FAIL;
-
-	//// 내가 현재 플레이어가 아니더라도 해당 스킬을 사용하면 랜더를 끈다.
-	//if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	//	return E_FAIL;
+	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return E_FAIL;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -285,12 +283,6 @@ HRESULT CFinn::Ready_Parts()
 
 void CFinn::Parts_Tick(const _double & TimeDelta)
 {
-	// 현재 스킬일 때는 무기를 출력하지 않는다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState ||		// 스킬 사용했을 때
-		CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState &&	// 스킬 중 상태에서 
-		CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)			// 공격을 받을 때 출력하지 않는다.
-		return;
-
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Tick(TimeDelta);
 	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -301,12 +293,6 @@ void CFinn::Parts_Tick(const _double & TimeDelta)
 
 void CFinn::Parts_LateTick(const _double & TimeDelta)
 {
-	// 현재 스킬일 때는 무기를 출력하지 않는다.
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState &&
-		CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		return;
-
 	if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
 		m_PlayerParts[0]->Late_Tick(TimeDelta);
 	else if (CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_DOLDEN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayerWeapon)
@@ -400,8 +386,13 @@ void CFinn::Current_Player(_double TimeDelta)
 
 void CFinn::Player_Skill_Tick(_double TimeDelta)
 {
+	if (m_bIsSwim)		// 수영 중 에는 스킬 사용 금지
+		return;
+
 	// 전체적으로 스킬을 on 한다.
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill || 
+		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkill = true;
 
 	if (m_bSkill)	// COIN 한번만 생성되고, 추가적인 제어 때문에 직접 함수 안에서 처리한다.
@@ -724,39 +715,16 @@ void CFinn::Skill_Coin_Tick(_double TimeDelta)
 
 HRESULT CFinn::Skill_Fiona_Tick(_double TimeDelta)
 {
-	if (m_bIsSwim)		// 예외처리 수영 중일 때는 변하지 말기
-		return S_OK;
+	// 모델 생성
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
 
-	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
-	if (!m_bSkill_Clone)
-	{
-		m_bSkill_Clone = true;
-
-		// 모델 생성
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(),								// STATIC 레벨에
-			TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
-			return E_FAIL;
-		RELEASE_INSTANCE(CGameInstance);
-	}
-
-	// 모델을 따라간다. (우리 눈에는 보이지 않는다.)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(),	// STATIC 레벨에
-		TEXT("Layer_S_Fiona"), TEXT("Com_Transform"), 0));																// 스킬 객체의 트랜스폼을 가져온다.
-
-	if (nullptr != pChangeTransformCom)	// 예외처리) 만약 객체가 생성되지 않았다면, 따라가지 않는다.
-	{
-		_vector vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos, m_pNavigationCom);
-	}
-
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(),								// STATIC 레벨에
+		TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

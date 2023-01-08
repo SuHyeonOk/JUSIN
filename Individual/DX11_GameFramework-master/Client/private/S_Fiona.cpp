@@ -33,8 +33,6 @@ HRESULT CS_Fiona::Initialize_Prototype()
 
 HRESULT CS_Fiona::Initialize(void * pArg)
 {
-	m_wsTag = L"Skill_Fiona";
-
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)
@@ -65,18 +63,29 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
 	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f);
 
-	// 현재 플레이어의 네비 인덱스를 받아온다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	
-	CNavigation * pNavigationCom = nullptr;
-	if(CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-		pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		m_wsTag = L"Finn";
+		// 현재 플레이어의 네비 인덱스를 받아온다.
+		m_pPlayer_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+		// 현재 플레이어의 트랜스폼을 가져온다. 그리고 스킬의 좌표를 계속 넣어준다.
+		m_pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+		// 현재 플레이어의 콜라이더를 가져와서 충돌이 가능하도록 만든다.
+		m_pPlayer_ColliderCom = dynamic_cast<CCollider*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Collider"), 0));
+	}
 	else	// Jake
-		pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	{
+		m_wsTag = L"Jake";
+		m_pPlayer_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+		m_pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+		m_pPlayer_ColliderCom = dynamic_cast<CCollider*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Collider"), 0));
+	}
 	
+	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
+
 	RELEASE_INSTANCE(CGameInstance);
-	
-	m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
 
 	return S_OK;
 }
@@ -85,17 +94,23 @@ void CS_Fiona::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 스킬이 피오나가 아니라면 삭제.
-	if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
+
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (20 < m_bSkillClone_TimeAcc)
 	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+
 		CGameObject::Set_Dead();
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
+
+		m_bSkillClone_TimeAcc = 0;
 	}
 
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
-
-	m_pModelCom->Play_Animation(TimeDelta);
 
 	// 내 무기 콜라이더 공격 중일 때만 On
 	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
@@ -113,7 +128,9 @@ void CS_Fiona::Late_Tick(_double TimeDelta)
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_SkillParts[1]->Late_Tick(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
+	m_pModelCom->Play_Animation(TimeDelta);
+
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
@@ -145,9 +162,9 @@ HRESULT CS_Fiona::Render()
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
-			m_pColliderCom->Render();
+			m_pPlayer_ColliderCom->Render();
 
-		m_pNavigationCom->Render();
+		m_pPlayer_ColliderCom->Render();
 	}
 
 	return S_OK;

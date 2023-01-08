@@ -37,10 +37,10 @@ HRESULT CS_Skill_Weapon::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	if (WEAPONDESC::WEAPON::FIONA_SWORD == m_WeaponDesc.eWeaponType)
-		m_wsTag = L"Skill_Fiona_Sword";
-	else if (WEAPONDESC::WEAPON::FIONA_CAT == m_WeaponDesc.eWeaponType)
-		m_wsTag = L"Skill_Fiona_Cat";
+	//if (WEAPONDESC::WEAPON::FIONA_SWORD == m_WeaponDesc.eWeaponType)
+	//	m_wsTag = L"Skill_Fiona_Sword";
+	//else if (WEAPONDESC::WEAPON::FIONA_CAT == m_WeaponDesc.eWeaponType)
+	//	m_wsTag = L"Skill_Fiona_Cat";
 
 	return S_OK;
 }

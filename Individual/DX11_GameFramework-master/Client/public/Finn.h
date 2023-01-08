@@ -99,7 +99,6 @@ private:
 	_double		m_dSkill_TimeAcc = 0;
 
 	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
-	_double		m_bSkillClone_TimeAcc = 0;
 
 	//////////////////////////// 플레이어가 아닐 때
 

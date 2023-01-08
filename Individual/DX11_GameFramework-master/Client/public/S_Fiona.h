@@ -53,6 +53,12 @@ private:
 	void				Dance_Tick();
 
 private:
+	CTransform*				m_pPlayer_TransformCom = nullptr;
+	CNavigation*			m_pPlayer_NavigationCom = nullptr;
+	CCollider*				m_pPlayer_ColliderCom = nullptr;
+
+	_double					m_bSkillClone_TimeAcc = 0;
+
 	vector<CGameObject*>	m_SkillParts;
 	_bool					m_OnMove = false;
 

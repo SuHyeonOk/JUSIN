@@ -36,19 +36,19 @@ HRESULT CCoin::Initialize(void * pArg)
 
 	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
 	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
 	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
 	}
@@ -91,6 +91,12 @@ void CCoin::Late_Tick(_double TimeDelta)
 
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
+		// 플레이어와의 거리가 완전 가까우면 무조건 삭제
+		_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		if(0.2 > fDistance)
+			CGameObject::Set_Dead();
+
+		// 시간 지나면 삭제
 		m_dDead_TimeAcc += TimeDelta;
 		if (1 < m_dDead_TimeAcc)
 		{
@@ -186,7 +192,7 @@ HRESULT CCoin::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
+	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
