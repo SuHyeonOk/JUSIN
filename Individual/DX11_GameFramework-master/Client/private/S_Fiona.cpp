@@ -104,10 +104,11 @@ void CS_Fiona::Tick(_double TimeDelta)
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 
-		CGameObject::Set_Dead();
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
+		CGameObject::Set_Dead();
 
 		m_bSkillClone_TimeAcc = 0;
+		return;
 	}
 
 	KeyInput(TimeDelta);
@@ -165,7 +166,7 @@ HRESULT CS_Fiona::Render()
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
 
-		m_pColliderCom->Render();
+		m_pNavigationCom->Render();
 	}
 
 	return S_OK;
@@ -188,13 +189,12 @@ HRESULT CS_Fiona::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	CCollider::COLLIDERDESC			ColliderDesc;
-
 	/* For.Com_Model */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Fiona"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
+	CCollider::COLLIDERDESC			ColliderDesc;
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 	ColliderDesc.vSize = _float3(0.4f, 1.2f, 0.4f);
@@ -315,15 +315,15 @@ void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 		m_pModelCom->Set_AnimIndex(4);
 		break;
 	case Client::CSkill_Manager::FIONASKILL::ATTACK:
-		m_pModelCom->Set_AnimIndex(19, false);
+		m_pModelCom->Set_AnimIndex(19, false, false);
 		Attack_Tick();
 		break;
 	case Client::CSkill_Manager::FIONASKILL::CAT:
-		m_pModelCom->Set_AnimIndex(2, false);
+		m_pModelCom->Set_AnimIndex(2, false, false);
 		Cat_Tick();
 		break;
 	case Client::CSkill_Manager::FIONASKILL::HIT:
-		m_pModelCom->Set_AnimIndex(21, false);
+		m_pModelCom->Set_AnimIndex(21, false, false);
 		Hit_Tick(TimeDelta);
 		break;
 	case Client::CSkill_Manager::FIONASKILL::STUN:

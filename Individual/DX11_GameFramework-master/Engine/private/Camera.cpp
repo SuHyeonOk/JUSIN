@@ -46,7 +46,7 @@ void CCamera::Tick(_double TimeDelta)
 		return;
 
  	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransformCom->Get_WorldMatrix_Inverse());
-	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), 1280 / 720.f, 0.2f, 300.f));
+	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(XMConvertToRadians(80.f), 1280 / 720.f, 0.2f, 300.f));
 }
 
 void CCamera::Late_Tick(_double TimeDelta)

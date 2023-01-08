@@ -5,7 +5,6 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-#include "Level_Tool.h"
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
 #include "Level_Skeleton.h"
@@ -56,11 +55,6 @@ void CLevel_Loading::Late_Tick(_double TimeDelta)
 	
 		switch (m_eNextLevelID)
 		{
-		case LEVEL_TOOL:
-			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_TOOL);
-			pLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
-			break;
-
 		case LEVEL_LOGO:
 			CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_LOGO);
 			pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);

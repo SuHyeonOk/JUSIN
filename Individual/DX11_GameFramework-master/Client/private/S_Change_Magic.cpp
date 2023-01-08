@@ -2,6 +2,9 @@
 #include "..\public\S_Change_Magic.h"
 
 #include "GameInstance.h"
+#include "Bone.h"
+#include "S_Skill_Weapon.h"
+
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
@@ -28,15 +31,17 @@ HRESULT CS_Change_Magic::Initialize_Prototype()
 
 HRESULT CS_Change_Magic::Initialize(void * pArg)
 {
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
 	if (nullptr != pArg)
-		memcpy(&m_tChangeInfo, pArg, sizeof(CHANGEINFO));
+		memcpy(&f3Pos, pArg, sizeof(_float3));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tChangeInfo.f3Pos.x, m_tChangeInfo.f3Pos.y, m_tChangeInfo.f3Pos.z);
+	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -44,12 +49,27 @@ HRESULT CS_Change_Magic::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_wsTag = L"Jake_Magic";
-
-	CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
+	if (FAILED(Ready_Parts()))
+		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
+
+	CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	m_pTransformCom->Set_Pos();
+	m_pModelCom->Set_AnimIndex(0);
+
+	m_wsTag = L"Jake";
+	m_pPlayer_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	m_pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+	m_pPlayer_ColliderCom = dynamic_cast<CCollider*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Collider"), 0));
+
+	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
@@ -58,31 +78,39 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
-	RELEASE_INSTANCE(CGameInstance);
-	m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
+	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
+
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (20 < m_bSkillClone_TimeAcc)
+	{
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+
+		CGameObject::Set_Dead();
+
+		m_bSkillClone_TimeAcc = 0;
+		return;
+	}
 
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
 
-	m_pModelCom->Play_Animation(TimeDelta);
-
-	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼
-	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-
-	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
-	else
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+	// 내 무기 콜라이더 공격 중일 때만 On
+	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
+  		m_SkillParts[0]->Tick(TimeDelta);
 }
 
 void CS_Change_Magic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);
+	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
+		m_SkillParts[0]->Late_Tick(TimeDelta);
+
+	m_pModelCom->Play_Animation(TimeDelta);
+
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
@@ -124,16 +152,7 @@ HRESULT CS_Change_Magic::Render()
 
 void CS_Change_Magic::On_Collision(CGameObject * pOther)
 {
-	// 지금 충돌한 Page 관리
-	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
 
-	CObj_Manager::GetInstance()->Set_Jake_Shield();
-
-	// 나 지금 몬스터랑 충돌 했어
-	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
-
-	// 그 몬스터는 이거야
-	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
 }
 
 HRESULT CS_Change_Magic::SetUp_Components()
@@ -148,34 +167,18 @@ HRESULT CS_Change_Magic::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
+	/* For.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"), TEXT("Com_Model"),
+		(CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
 	CCollider::COLLIDERDESC			ColliderDesc;
+	/* For.Com_AABB */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.7f, 0.7f, 1.0f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (CHANGEINFO::CHANGE::FINN == m_tChangeInfo.eChange)
-	{
-		///* For.Com_Model */
-		//if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_Magic_Man_Finn"), TEXT("Com_Model"),
-		//	(CComponent**)&m_pModelCom)))
-		//	return E_FAIL;
-
-		///* For.Com_SPHERE */
-		//ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		//ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-		//ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-	}
-	else if (CHANGEINFO::CHANGE::JAKE == m_tChangeInfo.eChange)
-	{
-		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"), TEXT("Com_Model"),
-			(CComponent**)&m_pModelCom)))
-			return E_FAIL;
-
-		/* For.Com_SPHERE */
-		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 1.3f);
-	}
-
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
@@ -188,7 +191,6 @@ HRESULT CS_Change_Magic::SetUp_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
-
 
 	return S_OK;
 }
@@ -207,6 +209,33 @@ HRESULT CS_Change_Magic::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CS_Change_Magic::Ready_Parts()
+{
+	CGameObject*		pPartObject = nullptr;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CS_Skill_Weapon::WEAPONDESC			WeaponDesc;
+	ZeroMemory(&WeaponDesc, sizeof(WeaponDesc));
+
+	WeaponDesc.eWeaponType = CS_Skill_Weapon::WEAPONDESC::JAKE_MAGIC;
+	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
+	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Jake_Arm_Mesh");
+	WeaponDesc.pTargetTransform = m_pTransformCom;
+	Safe_AddRef(WeaponDesc.pSocket);
+	Safe_AddRef(m_pTransformCom);
+
+	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_S_Weapon"), &WeaponDesc);
+	if (nullptr == pPartObject)
+		return E_FAIL;
+
+	m_SkillParts.push_back(pPartObject);
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -239,14 +268,24 @@ void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)
 
 void CS_Change_Magic::Attack_Tick()
 {
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+
 	if (m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
 }
 
 void CS_Change_Magic::Hit_Tick()
 {
+	m_OnMove = false;
+
 	if (m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
 }
 
 void CS_Change_Magic::KeyInput(const _double & TimeDelta)

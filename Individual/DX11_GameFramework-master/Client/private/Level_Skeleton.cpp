@@ -32,7 +32,13 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TestLevel()))
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
 		return E_FAIL;
 
 	//if (FAILED(Ready_PreviousData()))
@@ -48,15 +54,6 @@ HRESULT CLevel_Skleton::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
 		return E_FAIL;
 
 	// 파일 읽기
@@ -110,53 +107,6 @@ HRESULT CLevel_Skleton::Ready_Lights()
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
 		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_Skleton::Ready_TestLevel()
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CM_Monster::MONSTERDESC tMonsterDesc;
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_1;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_2;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 7.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.GHOST_3;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 9.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Ghost"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_1;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-	//tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
-	//tMonsterDesc.f3Pos = _float3(-5.f, 0.f, 8.f);
-	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Ghost_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
-	//	return E_FAIL;
-
-
 
 	RELEASE_INSTANCE(CGameInstance);
 

@@ -196,7 +196,6 @@
     <ClInclude Include="..\public\Level_Logo.h" />
     <ClInclude Include="..\public\Level_Skeleton.h" />
     <ClInclude Include="..\public\Level_Skeleton_Boss.h" />
-    <ClInclude Include="..\public\Level_Tool.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
@@ -286,7 +285,6 @@
     <ClCompile Include="..\private\Level_Logo.cpp" />
     <ClCompile Include="..\private\Level_Skeleton.cpp" />
     <ClCompile Include="..\private\Level_Skeleton_Boss.cpp" />
-    <ClCompile Include="..\private\Level_Tool.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />

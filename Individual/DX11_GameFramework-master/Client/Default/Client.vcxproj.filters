@@ -43,9 +43,6 @@
     <Filter Include="01.Levels\02.GamePlay">
       <UniqueIdentifier>{22df0cdb-5b80-4341-b095-9cf9d96f954c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\99. Tool">
-      <UniqueIdentifier>{8f2cc244-962e-4458-b62f-2b25a7835dd0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Map">
       <UniqueIdentifier>{7c83f2f1-d10e-45a7-9d0b-8751ff0bb839}</UniqueIdentifier>
     </Filter>
@@ -218,9 +215,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Camera_Dynamic.h">
       <Filter>02.GameObjects\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Level_Tool.h">
-      <Filter>01.Levels\99. Tool</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\Player</Filter>
@@ -481,9 +475,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_Dynamic.cpp">
       <Filter>02.GameObjects\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Level_Tool.cpp">
-      <Filter>01.Levels\99. Tool</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\Player</Filter>

@@ -133,16 +133,13 @@ HRESULT CM_Magic_Man::Render()
 void CM_Magic_Man::On_Collision(CGameObject * pOther)
 {
 	// 일반 무기 공격은 피해를 입지 않고, 변신된 후의 주먹 공격만 충돌한다.
-	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
-		if (L"Finn_Magic" == pOther->Get_Tag() || L"Jake_Magic" == pOther->Get_Tag())
+	if(CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
+		if (L"Jake_Magic_Weapon" == pOther->Get_Tag())
 			m_bPlayer_Attack = true;
 
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		if (L"Player_Weapon")
- 			m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
-
-	if (L"Skill_PaintWork" == pOther->Get_Tag())
-		m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
+		if (L"Jake_Magic_Weapon" == pOther->Get_Tag())
+   			m_tMonsterInfo.eState = m_tMonsterInfo.ADD_1;
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())
 		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;

@@ -6,9 +6,11 @@
 #include "Jake_Weapon.h"
 
 #include "O_TextureObject.h"
+
+#include "ItemManager.h"
 #include "Skill_Manager.h"
-#include "S_Change_Magic.h"
 #include "S_PaintWork.h"
+#include "S_Fiona.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -66,6 +68,9 @@ HRESULT CJake::Initialize(void * pArg)
 
 void CJake::Tick(_double TimeDelta)
 {
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+		return;
+	
 	__super::Tick(TimeDelta);
 
 	Sword_Tick(TimeDelta);
@@ -82,6 +87,9 @@ void CJake::Tick(_double TimeDelta)
 
 void CJake::Late_Tick(_double TimeDelta)
 {
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+		return;
+
 	__super::Late_Tick(TimeDelta);
 
 	Sword_LateTick(TimeDelta);
@@ -96,10 +104,8 @@ void CJake::Late_Tick(_double TimeDelta)
 
 HRESULT CJake::Render()
 {
-	// 플레이어 스킬 상태일때 Player 의 Render 를 잠시 꺼둔다.
-	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer &&
-		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		return E_FAIL;
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+		return S_OK;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -194,6 +200,7 @@ HRESULT CJake::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	RELEASE_INSTANCE(CGameInstance);
 
 	/* For.Lights */
 	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
@@ -211,8 +218,6 @@ HRESULT CJake::SetUp_ShaderResources()
 
 	//if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
 	//	return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
@@ -327,6 +332,14 @@ void CJake::Player_Tick(_double TimeDelta)
 		Skill_Marceline_Tick(TimeDelta);
 		break;
 
+	case CObj_Manager::PLAYERINFO::S_COIN:	// 13
+		Skill_Coin_Tick(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
+		Skill_Fiona_Tick(TimeDelta);
+		break;
+
 	case CObj_Manager::PLAYERINFO::CONTROL:
 		Control_Tick(TimeDelta);
 		break;
@@ -362,11 +375,7 @@ void CJake::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
 		Player_Skill_Tick(TimeDelta);
 
-		// 플레이어의 스킬 때 키 입력을 받지 않는다.
-		if (CObj_Manager::PLAYERINFO::STATE::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			Key_Input(TimeDelta);
-		else
-			m_OnMove = false;
+		Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -377,20 +386,23 @@ void CJake::Current_Player(_double TimeDelta)
 
 void CJake::Player_Skill_Tick(_double TimeDelta)
 {
-	// 전체적으로 스킬을 on 한다.
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
-		m_bSkill = true;
-	}
+	if (m_bIsSwim)		// 수영 중 에는 스킬 사용 금지
+		return;
 
-	if (m_bSkill)
+	// 전체적으로 스킬을 on 한다.
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_bSkill = true;
+
+	if (m_bSkill)	// COIN 한번만 생성되고, 추가적인 제어 때문에 직접 함수 안에서 처리한다.
 	{
-		m_dSkill_TimeAcc += TimeDelta;
+		m_dSkill_TimeAcc += TimeDelta;	// 스킬 사용 후 일정시간 뒤 초기화
 		if (20 < m_dSkill_TimeAcc)
 		{
 			// 모든 스킬을 false 로 변경한다. (예외적으로 키 입력을 하는 경우는 추가 처리)
 			m_bSkill_Clone = false;
 
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 			m_bSkill = false;
 			m_dSkill_TimeAcc = 0;
@@ -398,8 +410,17 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 	}
 
 	// 스킬 한 번만 실행할 때
-	if (!m_bSkill_Clone && CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);
+	if (!m_bSkill_Clone)																							// 처음 상태임! 객체를 생성하지 않았을 때
+	{
+		if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)		// 해당 스킬을
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_MARCELINE);			// 실행 시킨다.
+
+		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
+
+		if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)			// 변신 스킬의 경우 그 객체에서 모든 것을 처리한다.
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_FIONA);
+	}
 }
 
 void CJake::Player_Follow(_double TimeDelta)
@@ -408,10 +429,6 @@ void CJake::Player_Follow(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	// Finn 에게로
-	//CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
-
-	//_vector vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// Finn 좌표 받아옴
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();	// Finn 좌표 받아옴
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
@@ -499,7 +516,7 @@ void CJake::Check_Follow(_double TimeDelta)
 			// 오브젝트 포탈 생성
 			CO_TextureObject::TEXTUREOBJECT tTextureObject;
 			tTextureObject.eTextureType = tTextureObject.MOVE_PORTAL;
-			tTextureObject.f3Pos = _float3(f4MyPos.x - fAddX, f4MyPos.y, (f4MyPos.z - fAddZ) - 0.5f);
+			tTextureObject.f3Pos = _float3(f4MyPos.x - fAddX, f4MyPos.y + 1.0f, (f4MyPos.z - fAddZ) - 0.5f);
 			if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Portal_Jake"), TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
 				return;
 
@@ -639,13 +656,11 @@ void CJake::Key_Input(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		if (m_bSkill)
+		if (m_bSkill &&
+			CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
-			if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-			{
-				m_bSkill_Clone = false;
-				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::S_PAINT);
-			}
+			m_bSkill_Clone = false;
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::S_PAINT);
 		}
 		else
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
@@ -672,6 +687,12 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 
+	if (18 == m_pModelCom->Get_AnimIndex() && 0 <= m_pModelCom->Get_Keyframes())
+		return;
+
+	// 1) 총 스킬이 재생되어야 하는 시간을 체크하는 Tick
+	// 2) 스페이스바를 누르면 그 때 마다 객체가 생성되어야 하는 Tick
+
 	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
@@ -692,7 +713,7 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 
 		tPaintWorkInfo.fAttack = CObj_Manager::GetInstance()->Get_Player_Attack();	// 공격력은 일부러 한 번만 넘긴다.
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
-		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
 
@@ -700,7 +721,7 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
 
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
-		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
 
@@ -710,7 +731,7 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
 
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
-		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z);
+		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
 			return;
 
@@ -736,6 +757,38 @@ void CJake::Skill_Marceline_Tick(_double TimeDelta)
 			return;
 		RELEASE_INSTANCE(CGameInstance);
 	}
+}
+
+void CJake::Skill_Coin_Tick(_double TimeDelta)
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
+
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+	return;
+}
+
+HRESULT CJake::Skill_Fiona_Tick(_double TimeDelta)
+{
+	// 모델 생성
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(),								// STATIC 레벨에
+		TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+		return E_FAIL;
+	RELEASE_INSTANCE(CGameInstance);
+
+	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
+
+	return S_OK;
 }
 
 void CJake::Control_Tick(_double TimeDelta)
@@ -854,55 +907,19 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
-	if (m_bIsSwim)		// 예외처리 수영 중일 때는 변하지 말기
-		return S_OK;
+	// 모델 생성
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
 
-	// m_bSkill_Clone -> ture 라면? KeyInput(), Render() 를 호출하지 않는다.
-	if (!m_bSkill_Clone)
-	{
-		m_bSkill_Clone = true;
-
-		// Magic 모델 생성
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		CS_Change_Magic::CHANGEINFO		tChangeInfo;
-		tChangeInfo.eChange = tChangeInfo.JAKE;
-		tChangeInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
-
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &tChangeInfo)))
-			return E_FAIL;
-		RELEASE_INSTANCE(CGameInstance);
-	}
-
-	// Magic 모델을 따라간다.
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pChangeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_GAMEPLAY, TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Com_Transform"), 0));
 
-	if (nullptr != pChangeTransformCom)
-	{
-		_vector vChangePos = pChangeTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vChangePos);
-	}
-
-	m_bSkillClone_TimeAcc += TimeDelta;
-	if (10 < m_bSkillClone_TimeAcc)
-	{
-		// Get_Dead 가 true 라면 아이들로 변경한다.
-		CS_Change_Magic * pGameObject = dynamic_cast<CS_Change_Magic*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY,
-			TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), 0));
-		pGameObject->Set_Dead();
-
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;		// 상태 변경
-		m_bSkill_Clone = false;							// 스킬 한 번만 생성되기 위해서
-
-		m_bSkillClone_TimeAcc = 0;
-	}
-
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY,							
+		TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
+
+	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 
 	return S_OK;
 }

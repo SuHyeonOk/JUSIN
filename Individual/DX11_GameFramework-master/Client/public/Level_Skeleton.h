@@ -19,7 +19,6 @@ public:
 
 private:
 	HRESULT Ready_Lights();
-	HRESULT Ready_TestLevel();
 	HRESULT Ready_PreviousData();
 	HRESULT Ready_Layer_Npc();
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);

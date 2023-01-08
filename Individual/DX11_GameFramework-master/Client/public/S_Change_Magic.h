@@ -15,16 +15,6 @@ BEGIN(Client)
 
 class CS_Change_Magic final : public CGameObject
 {
-public:
-	typedef struct tagPlayerChangeInfo
-	{
-		enum CHANGE { FINN, JAKE, CHANGE_END };
-		CHANGE		eChange;
-
-		_float3		f3Pos;
-
-	}CHANGEINFO;
-
 private:
 	CS_Change_Magic(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CS_Change_Magic(const CS_Change_Magic& rhs);
@@ -47,8 +37,15 @@ private:
 	CNavigation*			m_pNavigationCom = nullptr;
 
 private:
+	CTransform*				m_pPlayer_TransformCom = nullptr;
+	CNavigation*			m_pPlayer_NavigationCom = nullptr;
+	CCollider*				m_pPlayer_ColliderCom = nullptr;
+
+private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
+
+	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
 	void				KeyInput(const _double & TimeDelta);
@@ -58,8 +55,9 @@ private:
 	void				Hit_Tick();
 
 private:
-	CHANGEINFO				m_tChangeInfo;
-	
+	_double					m_bSkillClone_TimeAcc = 0;
+
+	vector<CGameObject*>	m_SkillParts;
 	_bool					m_OnMove = false;
 
 public:

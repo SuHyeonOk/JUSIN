@@ -37,6 +37,11 @@ private:
 	CNavigation*			m_pNavigationCom = nullptr;
 
 private:
+	CTransform*				m_pPlayer_TransformCom = nullptr;
+	CNavigation*			m_pPlayer_NavigationCom = nullptr;
+	CCollider*				m_pPlayer_ColliderCom = nullptr;
+
+private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
@@ -53,10 +58,6 @@ private:
 	void				Dance_Tick();
 
 private:
-	CTransform*				m_pPlayer_TransformCom = nullptr;
-	CNavigation*			m_pPlayer_NavigationCom = nullptr;
-	CCollider*				m_pPlayer_ColliderCom = nullptr;
-
 	_double					m_bSkillClone_TimeAcc = 0;
 
 	vector<CGameObject*>	m_SkillParts;

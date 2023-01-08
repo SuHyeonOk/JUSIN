@@ -22,7 +22,7 @@ public:
 		CBone*				pSocket;
 		CTransform*			pTargetTransform;
 
-		enum WEAPON { FIONA_SWORD, FIONA_CAT, WEAPON_END };
+		enum WEAPON { JAKE_MAGIC, FIONA_SWORD, FIONA_CAT, WEAPON_END };
 		WEAPON		eWeaponType = WEAPON_END;
 
 	}WEAPONDESC;

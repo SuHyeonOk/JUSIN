@@ -32,7 +32,8 @@ HRESULT CCoin::Initialize(void * pArg)
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	if (nullptr != pArg)
-		memcpy(&m_tinCoinInfo, pArg, sizeof(COININFO));
+		memcpy(&m_tinCoinInfo, pArg, sizeof(m_tinCoinInfo));
+
 
 	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 	{
@@ -91,10 +92,13 @@ void CCoin::Late_Tick(_double TimeDelta)
 
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
-		// 플레이어와의 거리가 완전 가까우면 무조건 삭제
-		_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-		if(0.2 > fDistance)
-			CGameObject::Set_Dead();
+		if (CCoin::COININFO::COMEOUT != m_tCoinInfo.eState)
+		{
+			// 플레이어와의 거리가 완전 가까우면 무조건 삭제
+			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+			if (0.2 > fDistance)
+				CGameObject::Set_Dead();
+		}
 
 		// 시간 지나면 삭제
 		m_dDead_TimeAcc += TimeDelta;

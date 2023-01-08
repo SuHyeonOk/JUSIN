@@ -28,8 +28,6 @@ HRESULT CS_Skill_Weapon::Initialize_Prototype()
 
 HRESULT CS_Skill_Weapon::Initialize(void * pArg)
 {
-	m_wsTag = L"Player_Weapon";
-
 	if (nullptr != pArg)
 		memcpy(&m_WeaponDesc, pArg, sizeof(m_WeaponDesc));
 
@@ -39,10 +37,10 @@ HRESULT CS_Skill_Weapon::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//if (WEAPONDESC::WEAPON::FIONA_SWORD == m_WeaponDesc.eWeaponType)
-	//	m_wsTag = L"Skill_Fiona_Sword";
-	//else if (WEAPONDESC::WEAPON::FIONA_CAT == m_WeaponDesc.eWeaponType)
-	//	m_wsTag = L"Skill_Fiona_Cat";
+	if (WEAPONDESC::WEAPON::JAKE_MAGIC == m_WeaponDesc.eWeaponType)
+		m_wsTag = L"Jake_Magic_Weapon";
+	else
+		m_wsTag = L"Player_Weapon";
 
 	return S_OK;
 }
@@ -52,7 +50,8 @@ void CS_Skill_Weapon::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	// 내가 공격하고 있지 않은 상태라면
-	if (CSkill_Manager::FIONASKILL::IDLE == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+	if (CSkill_Manager::MAGICSKILL::IDLE == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill ||
+		CSkill_Manager::FIONASKILL::IDLE == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
 	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
@@ -124,7 +123,13 @@ HRESULT CS_Skill_Weapon::SetUp_Components()
 	/* For.Com_SPHERE */
 	CCollider::COLLIDERDESC			ColliderDesc;
 
-	if (WEAPONDESC::WEAPON::FIONA_SWORD == m_WeaponDesc.eWeaponType)
+	if (WEAPONDESC::WEAPON::JAKE_MAGIC == m_WeaponDesc.eWeaponType)
+	{
+		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 1.3f);
+	}
+	else if (WEAPONDESC::WEAPON::FIONA_SWORD == m_WeaponDesc.eWeaponType)
 	{
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);

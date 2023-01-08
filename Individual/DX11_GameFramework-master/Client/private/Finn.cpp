@@ -209,6 +209,11 @@ HRESULT CFinn::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	/* For.Lights */
+	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
+	if (nullptr == pLightDesc)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -370,12 +375,7 @@ void CFinn::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
 
-		// 플레이어의 스킬 때 키 입력을 받지 않는다.
-		if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-			CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			m_OnMove = false;
-		else
-			Key_Input(TimeDelta);
+		Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -391,8 +391,7 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 
 	// 전체적으로 스킬을 on 한다.
 	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill || 
-		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
-		CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkill = true;
 
 	if (m_bSkill)	// COIN 한번만 생성되고, 추가적인 제어 때문에 직접 함수 안에서 처리한다.
@@ -419,7 +418,7 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
 
-		if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)			// 변신 스킬의 경우 그 객체에서 모든 것을 처리한다.
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_FIONA);
 	}
 }
@@ -458,8 +457,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (1.5f < fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
@@ -710,7 +708,7 @@ void CFinn::Skill_Coin_Tick(_double TimeDelta)
 
 	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-	m_bSkill = false;
+	return;
 }
 
 HRESULT CFinn::Skill_Fiona_Tick(_double TimeDelta)

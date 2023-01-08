@@ -25,7 +25,7 @@ HRESULT CS_PaintWork::Initialize_Prototype()
 
 HRESULT CS_PaintWork::Initialize(void * pArg)
 {
-	m_wsTag = L"Skill_PaintWork";
+	m_wsTag = L"Skill_Paint";
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(CGameObject::GAMEOBJECTDESC));
@@ -54,7 +54,7 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 
 	// 총알 공격력 다르게 설정
-	CObj_Manager::GetInstance()->Set_Player_Attack(20);
+	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.25f);
 
 	return S_OK;
 }
@@ -89,12 +89,6 @@ void CS_PaintWork::Tick(_double TimeDelta)
 	}
 
 	m_pTransformCom->Go_Straight(TimeDelta);
-
-	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//_vector vLook = XMLoadFloat4(&m_tBulletInfo.f4Look);
-	//vMyPos += XMVector3Normalize(vLook) * 0.f * _float(TimeDelta);
-
-	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
 
 	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼
 	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
@@ -156,8 +150,6 @@ HRESULT CS_PaintWork::Render()
 
 void CS_PaintWork::On_Collision(CGameObject * pOther)
 {
-	CObj_Manager::GetInstance()->Set_Jake_Shield();
-
 	// 나 지금 몬스터랑 충돌 했어
 	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
 
