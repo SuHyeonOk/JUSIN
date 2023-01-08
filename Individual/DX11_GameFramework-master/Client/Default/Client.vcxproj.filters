@@ -453,6 +453,9 @@
     <ClInclude Include="..\public\E_Smoke.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\E_Food_Up.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -717,6 +720,9 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\E_Smoke.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_Food_Up.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>

@@ -57,6 +57,8 @@ HRESULT CE_DieCenter::Initialize(void * pArg)
 
 void CE_DieCenter::Tick(_double TimeDelta)
 {
+	// 외부에서 이미지를 정하고, 랜덤한 사이즈로 커졌다가. 알파값이 줄어듦면서 사라진다.
+
 	__super::Tick(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

@@ -15,6 +15,7 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
+	void	Food_Up(_float3 fSize);
 	void	Change_Smoke(_float3 fSize);
 	void	Skill_Marceline_Waves_Create(_float3 fSize);
 	void	Skill_Marceline_Sound_Create(_float3 fSize);

@@ -10,6 +10,16 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+void CEffect_Manager::Food_Up(_float3 fSize)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Food_Up"), &fSize)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
 void CEffect_Manager::Change_Smoke(_float3 fSize)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

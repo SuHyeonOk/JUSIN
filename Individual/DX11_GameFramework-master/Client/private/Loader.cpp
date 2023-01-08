@@ -41,6 +41,8 @@
 #include "E_Skill_Marceline_Waves.h"
 #include "E_Smoke.h"
 
+#include "E_Food_Up.h"
+
 // Obj
 #include "O_Box.h"
 #include "O_BearTrap.h"
@@ -941,6 +943,20 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Smoke/Gnomes_Hit_FX_1_D.png")))))
 		return E_FAIL;
 
+	// Food
+	/* For.Prototype_Component_Texture_E_Food_Change */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Change"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/Garden_Witch_Teleport_FX_1_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Food_Up */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Up"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/SpellKnight00Particle03.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Food_Hp */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Hp"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/SpellKnight05Particle01.png")))))
+		return E_FAIL;
+
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -968,6 +984,11 @@ HRESULT CLoader::Effect_Create()
 	/* For.Prototype_GameObject_E_Smoke*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Smoke"),
 		CE_Smoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_E_Food_Up*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Food_Up"),
+		CE_Food_Up::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 

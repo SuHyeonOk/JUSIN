@@ -53,6 +53,8 @@ HRESULT CE_Skill_Marceline_Sound::Initialize(void * pArg)
 
 void CE_Skill_Marceline_Sound::Tick(_double TimeDelta)
 {
+	// 사이즈가 커지면서, 일정 사이즈가 되고 알파값이 줄어들면 사라진다.
+
 	__super::Tick(TimeDelta);
 
 	if (0.5f > m_fSizeX)

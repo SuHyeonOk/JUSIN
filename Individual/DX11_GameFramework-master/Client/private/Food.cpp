@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Effect_Manager.h"
 
 CFood::CFood(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -64,6 +65,8 @@ void CFood::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+
+	Effect_Create(TimeDelta);
 }
 
 void CFood::Late_Tick(_double TimeDelta)
@@ -120,12 +123,15 @@ void CFood::On_Collision(CGameObject * pOther)
 		if (CObj_Manager::GetInstance()->Get_Current_Player().fHP >= CObj_Manager::GetInstance()->Get_Current_Player().fHPMax)
 			return;	// 체력이 가득찬 상태에서는 아이템을 먹을 수 없다.
 
-		CGameObject::Set_Dead();
-	
-		if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
-			CObj_Manager::GetInstance()->Set_Player_PlusHP(30.0f);
-		else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
-			CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+		if (!m_bPlayer_Collider)
+		{
+			m_bPlayer_Collider = true;
+
+			if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
+				CObj_Manager::GetInstance()->Set_Player_PlusHP(30.0f);
+			else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
+				CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+		}
 	}
 }
 
@@ -188,6 +194,23 @@ HRESULT CFood::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CFood::Effect_Create(const _double & TimeDelta)
+{
+	if (!m_bPlayer_Collider)
+		return;
+
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+	_float4 f4PlayerPos;
+	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+	m_dFoodUp_TimeAcc += TimeDelta;
+	if (1 < m_dFoodUp_TimeAcc)
+	{
+		CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+		m_dFoodUp_TimeAcc = 0;
+	}
 }
 
 CFood * CFood::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
