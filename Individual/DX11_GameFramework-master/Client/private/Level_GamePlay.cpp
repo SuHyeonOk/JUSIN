@@ -1443,7 +1443,7 @@ void CLevel_GamePlay::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pObjInfo.ObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
 					return;
 			}
 		}
@@ -1707,5 +1707,6 @@ void CLevel_GamePlay::Free()
 {
 	__super::Free();
 
+	CDataManager::GetInstance()->Free();
 }
 
