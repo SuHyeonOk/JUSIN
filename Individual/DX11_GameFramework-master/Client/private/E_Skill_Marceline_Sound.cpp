@@ -28,15 +28,17 @@ HRESULT CE_Skill_Marceline_Sound::Initialize_Prototype()
 
 HRESULT CE_Skill_Marceline_Sound::Initialize(void * pArg)
 {	
+	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+
 	if (nullptr != pArg)
-		memcpy(&m_tDieCenterInfo, pArg, sizeof(DIECENTERINFO));
+		memcpy(&f3Pos, pArg, sizeof(_float3));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = m_tDieCenterInfo.f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -44,13 +46,12 @@ HRESULT CE_Skill_Marceline_Sound::Initialize(void * pArg)
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.7f);
+	//_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.7f);
 
-	m_fSizeX = fRandomNumber;
-	m_fSizeY = fRandomNumber;
+	//m_fSizeX = fRandomNumber;
+	//m_fSizeY = fRandomNumber;
 	
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
 	return S_OK;
 }
@@ -59,50 +60,23 @@ void CE_Skill_Marceline_Sound::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if (0.5f > m_fSizeX)
+	{
+		m_fSizeX += _float(TimeDelta) * 0.5f;
+		m_fSizeY += _float(TimeDelta) * 0.5f;
+	}
+	else
+		m_fAlpha -= _float(TimeDelta);
+
+	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+
+	if (0 >= m_fAlpha)
+		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
 }
 
 void CE_Skill_Marceline_Sound::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	if (0 >= m_fAlpha)
-		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
-
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-
-	if (0.01 < m_fAlpha)
-	{
-		// 랜덤하게 사이즈가 커지고, 작아지기를 위해서
-		_int iRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
-
- 		if (0 == iRandomNumber)
-		{
-			// 스케일
-			m_fSizeX += _float(TimeDelta) * 3.f;
-			m_fSizeY += _float(TimeDelta) * 3.f;
-		}
-
-		// 셰이더
-		m_fAlpha -= _float(TimeDelta);
-	}
-
-	//m_dAlpha_TimeAcc += TimeDelta;	
-	//if (0.01 < m_dAlpha_TimeAcc)
-	//{
-	//	// 랜덤하게 사이즈가 커지고, 작아지기를 위해서
-	//	_int iRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0, 2);
-
-	//	if (0 == iRandomNumber)
-	//	{
-	//		// 스케일
-	//		m_fSizeX += 0.03f;
-	//		m_fSizeY += 0.03f;
-	//	}
-
-	//	// 셰이더
-	//	m_fAlpha -= 0.01f;
-	//	m_dAlpha_TimeAcc = 0;
-	//}
 
 	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
@@ -163,7 +137,7 @@ HRESULT CE_Skill_Marceline_Sound::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", _int(m_tDieCenterInfo.eMonsterKind))))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))

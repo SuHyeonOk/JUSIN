@@ -49,6 +49,7 @@ private:
 	STATE			m_eState = STATE_END;
 	_int			m_eAnim_Count = 0;
 
+	_double			m_dEffect_Sound_TimeAcc = 0;
 	_double			m_dEffect_Waves_TimeAcc = 0;
 
 public:

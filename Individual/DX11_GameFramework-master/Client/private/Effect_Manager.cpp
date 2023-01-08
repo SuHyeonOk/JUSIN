@@ -24,6 +24,26 @@ void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 fSize)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	_float	fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(-2.0f, 2.0f);
+	_float	fRandomNumberY = CUtilities_Manager::GetInstance()->Get_Random(0.6f, 2.0f);
+
+	_int fRandomPos = CUtilities_Manager::GetInstance()->Get_Random(0, 4);
+
+	if (0 == fRandomPos)
+		fSize = _float3(fSize.x + fRandomNumber, fSize.y + fRandomNumberY, fSize.z + fRandomNumber);
+	else if (1 == fRandomPos)
+		fSize = _float3(fSize.x - fRandomNumber, fSize.y + fRandomNumberY, fSize.z + fRandomNumber);
+	else if (2 == fRandomPos)
+		fSize = _float3(fSize.x + fRandomNumber, fSize.y + fRandomNumberY, fSize.z - fRandomNumber);
+	else if (3 == fRandomPos)
+		fSize = _float3(fSize.x - fRandomNumber, fSize.y + fRandomNumberY, fSize.z - fRandomNumber);
+
+	//_float	fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+	//fSize.x *= fRandomNumber;
+	//fSize.y *= fRandomNumber;
+	//fSize.z *= fRandomNumber;
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect_Skill_Marceline_Sound"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &fSize)))
 		return;
 
