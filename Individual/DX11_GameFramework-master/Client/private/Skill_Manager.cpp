@@ -10,6 +10,17 @@ CSkill_Manager::CSkill_Manager()
 {
 }
 
+void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)
+{
+	if (true == bIsCreate)
+		m_bChangeSkill_Create = true;
+	else
+	{
+		if(CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END == m_tPlayerSkill.eSkill)
+			m_bChangeSkill_Create = false;
+	}
+}
+
 void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 {
 	m_tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(iIndex);	// 현재 내가 누른 인덱스

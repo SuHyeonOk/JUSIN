@@ -28,6 +28,8 @@ HRESULT CS_Skill_Weapon::Initialize_Prototype()
 
 HRESULT CS_Skill_Weapon::Initialize(void * pArg)
 {
+	m_wsTag = L"Player_Weapon";
+
 	if (nullptr != pArg)
 		memcpy(&m_WeaponDesc, pArg, sizeof(m_WeaponDesc));
 
@@ -49,6 +51,10 @@ void CS_Skill_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 내가 공격하고 있지 않은 상태라면
+	if (CSkill_Manager::FIONASKILL::IDLE == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+
 	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
 		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
 	else
@@ -61,11 +67,11 @@ void CS_Skill_Weapon::Late_Tick(_double TimeDelta)
 
 	_matrix			SocketMatrix = m_WeaponDesc.pSocket->Get_OffsetMatrix() *
 		m_WeaponDesc.pSocket->Get_CombindMatrix() * XMLoadFloat4x4(&m_WeaponDesc.PivotMatrix);
-	
+
 	SocketMatrix.r[0] = XMVector3Normalize(SocketMatrix.r[0]);
 	SocketMatrix.r[1] = XMVector3Normalize(SocketMatrix.r[1]);
 	SocketMatrix.r[2] = XMVector3Normalize(SocketMatrix.r[2]);
-	
+
 	SocketMatrix = SocketMatrix * m_WeaponDesc.pTargetTransform->Get_WorldMatrix();
 
 	XMStoreFloat4x4(&m_SocketMatrix, SocketMatrix);
@@ -127,7 +133,7 @@ HRESULT CS_Skill_Weapon::SetUp_Components()
 	else if (WEAPONDESC::WEAPON::FIONA_CAT == m_WeaponDesc.eWeaponType)
 	{
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(0.6f, 0.6f, 0.6f);
+		ColliderDesc.vSize = _float3(1.5f, 1.5f, 1.5f);
 		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
 	}
 

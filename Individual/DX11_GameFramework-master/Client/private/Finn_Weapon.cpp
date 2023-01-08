@@ -27,7 +27,7 @@ HRESULT CFinn_Weapon::Initialize_Prototype()
 
 HRESULT CFinn_Weapon::Initialize(void * pArg)
 {
-	m_wsTag = L"Finn_Weapon";
+	m_wsTag = L"Player_Weapon";
 
 	if (nullptr != pArg)
 		memcpy(&m_WeaponDesc, pArg, sizeof(m_WeaponDesc));

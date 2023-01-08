@@ -66,7 +66,7 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
 {
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
 		return;
 
 	__super::Tick(TimeDelta);
@@ -87,7 +87,7 @@ void CFinn::Tick(_double TimeDelta)
 
 void CFinn::Late_Tick(_double TimeDelta)
 {
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
 		return;
 
 	__super::Late_Tick(TimeDelta);
@@ -104,7 +104,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 HRESULT CFinn::Render()
 {
-	if (CObj_Manager::PLAYERINFO::STATE::S_FIONA == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
 		return E_FAIL;
 
 	if (FAILED(__super::Render()))
@@ -726,6 +726,8 @@ HRESULT CFinn::Skill_Fiona_Tick(_double TimeDelta)
 		TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
 		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
+
+	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 
 	return S_OK;
 }

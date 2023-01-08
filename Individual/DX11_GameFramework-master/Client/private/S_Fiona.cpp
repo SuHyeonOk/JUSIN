@@ -61,7 +61,8 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 
 	// FIONE 일 때는 플레이어의 평소 공격력의 1.5배가 된다.
 	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
-	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f);
+	m_fSword_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.f;
+	m_fCat_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 2.f;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	
@@ -100,8 +101,8 @@ void CS_Fiona::Tick(_double TimeDelta)
 	m_bSkillClone_TimeAcc += TimeDelta;
 	if (20 < m_bSkillClone_TimeAcc)
 	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 
 		CGameObject::Set_Dead();
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
@@ -113,9 +114,9 @@ void CS_Fiona::Tick(_double TimeDelta)
 	Skill_Tick(TimeDelta);
 
 	// 내 무기 콜라이더 공격 중일 때만 On
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		m_SkillParts[0]->Tick(TimeDelta);
-	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		m_SkillParts[1]->Tick(TimeDelta);
 }
 
@@ -123,9 +124,9 @@ void CS_Fiona::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		m_SkillParts[0]->Late_Tick(TimeDelta);
-	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		m_SkillParts[1]->Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
@@ -162,9 +163,9 @@ HRESULT CS_Fiona::Render()
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
-			m_pPlayer_ColliderCom->Render();
+			m_pColliderCom->Render();
 
-		m_pPlayer_ColliderCom->Render();
+		m_pColliderCom->Render();
 	}
 
 	return S_OK;
@@ -338,22 +339,37 @@ void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 
 void CS_Fiona::Attack_Tick()
 {
+	CObj_Manager::GetInstance()->Set_Player_Attack(m_fSword_Attack);
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+
 	if (m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
 }
 
 void CS_Fiona::Cat_Tick()
 {
+	CObj_Manager::GetInstance()->Set_Player_Attack(m_fCat_Attack);
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+
 	if (m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
 }
 
 void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 {
 	m_OnMove = false;
 
-	if (m_pModelCom->Get_Finished())
+	if (21 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
 }
 
 void CS_Fiona::Stun_Tick()
@@ -380,13 +396,17 @@ void CS_Fiona::Stun_Tick()
 		m_bStun = false;
 		m_iStun_Count = 0;
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
 }
 
 void CS_Fiona::Dance_Tick()
 {
 	if (m_pModelCom->Get_Finished())
+	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	}
 }
 
 void CS_Fiona::KeyInput(const _double & TimeDelta)

@@ -66,6 +66,8 @@ private:
 	_uint					m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
 	_float					m_fOriginal_Player_Attack = 0.0f;
+	_float					m_fSword_Attack = 0;
+	_float					m_fCat_Attack = 0;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

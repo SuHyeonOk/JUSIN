@@ -29,7 +29,7 @@ HRESULT CJake_Weapon::Initialize(void * pArg)
 {
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
 		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
-		m_wsTag = L"Jake_Weapon";
+		m_wsTag = L"Player_Weapon";
 	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 		m_wsTag = L"Jake_Shield";
 

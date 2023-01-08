@@ -108,13 +108,11 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 {
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
-		if (L"Finn_Weapon" == pOther->Get_Tag() || L"Jake_Weapon" == pOther->Get_Tag())
+		if (L"Player_Weapon" == pOther->Get_Tag())
 			m_bPlayer_Attack = true;
 	}
 
-	if (L"Skill_PaintWork" == pOther->Get_Tag() || 
-		L"Skill_Fiona_Sword" == pOther->Get_Tag() || 
-		L"Skill_Fiona_Cat" == pOther->Get_Tag())
+	if (L"Skill_PaintWork" == pOther->Get_Tag())
 		m_bPlayer_Attack = true;
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())

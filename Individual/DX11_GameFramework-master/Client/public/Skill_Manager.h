@@ -44,6 +44,10 @@ public:
 	CSkill_Manager();
 	virtual ~CSkill_Manager() = default;
 
+public:
+	_bool						Get_ChangeSKill_Create() { return m_bChangeSkill_Create; }
+	void						CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate);
+
 public:		// 플레이어
 	PLAYERSKILL					Get_Player_Skill() { return m_tPlayerSkill; }
 	void						Set_Player_Skill(PLAYERSKILL::SKILL eSkillState) { m_tPlayerSkill.eSkill = eSkillState; }
@@ -69,6 +73,8 @@ private:
 	FIONASKILL		m_tFionaSkill;
 
 	_int			m_arrPageCount[PLAYERSKILL::SKILL::SKILL_END] = { 0 };
+
+	_bool			m_bChangeSkill_Create = false;
 
 public:
 	virtual void Free() override;	
