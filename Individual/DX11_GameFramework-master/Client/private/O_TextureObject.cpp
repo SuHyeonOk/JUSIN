@@ -76,6 +76,8 @@ void CO_TextureObject::Tick(_double TimeDelta)
 
 	//m_pTransformCom->LookAt(vCameraPos, true);	
 
+	// 	RELEASE_INSTANCE(CGameInstance);
+
 	//// 회전한다.
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
 

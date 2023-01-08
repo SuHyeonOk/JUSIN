@@ -33,6 +33,13 @@
 #include "UI_MiniMap.h"
 #include "UI_MiniMap_Player.h"
 
+// Effect
+#include "Effect_Rect_Instancing.h"
+#include "Effect_Point_Instancing.h"
+#include "E_DieCenter.h"
+#include "E_Skill_Marceline_Sound.h"
+#include "E_Skill_Marceline_Waves.h"
+
 // Obj
 #include "O_Box.h"
 #include "O_BearTrap.h"
@@ -45,11 +52,6 @@
 
 // Skill
 #include "S_Change_Magic.h"
-
-// Effect
-#include "Effect_Rect_Instancing.h"
-#include "Effect_Point_Instancing.h"
-#include "E_DieCenter.h"
 
 // Weapon
 #include "W_PigWarrior.h"
@@ -513,7 +515,9 @@ HRESULT CLoader::Loading_ForSkeleton()
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	//SkeletonTemp();
+#ifdef F2_SKELETON
+	SkeletonTemp();
+#endif
 
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
@@ -910,11 +914,21 @@ HRESULT CLoader::Effect_Texture()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	// Monset Die
 	/* For.Prototype_Component_Texture_E_DieCenter */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_DieCenter"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect_DieCenter/DieCenter_%d.png"), 9))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Monster_Die/DieCenter_%d.png"), 9))))
 		return E_FAIL;
 
+	// Skill Marceline
+	/* For.Prototype_Component_Texture_E_Skill_Marceline_Sound */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Sound"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Marceline/Marceline_Sound_Note.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Skill_Marceline_Waves */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Waves"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Marceline/Marceline_Waves.png")))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -930,6 +944,16 @@ HRESULT CLoader::Effect_Create()
 		CE_DieCenter::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_E_Skill_Marceline_Sound */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"),
+		CE_Skill_Marceline_Sound::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_E_Skill_Marceline_Waves */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Skill_Marceline_Waves"),
+		CE_Skill_Marceline_Waves::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	
 
 	RELEASE_INSTANCE(CGameInstance);
 

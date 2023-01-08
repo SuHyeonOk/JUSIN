@@ -21,5 +21,4 @@ extern unsigned int	g_iWinSizeY;
 
 using namespace Client;
 
-
-
+#define F2_SKELETON

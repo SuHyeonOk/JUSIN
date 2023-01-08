@@ -43,8 +43,13 @@ private:
 	void			State_Tick();
 
 private:
+	void			Effect_Create(const _double& TimeDelta);
+
+private:
 	STATE			m_eState = STATE_END;
 	_int			m_eAnim_Count = 0;
+
+	_double			m_dEffect_Waves_TimeAcc = 0;
 
 public:
 	static	CS_Marceline* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
+#include "Effect_Manager.h"
 
 CS_Marceline::CS_Marceline(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -60,6 +61,8 @@ void CS_Marceline::Tick(_double TimeDelta)
 
 	Animation_Tick();
 	State_Tick();
+
+	Effect_Create(TimeDelta);
 }
 
 void CS_Marceline::Late_Tick(_double TimeDelta)
@@ -204,6 +207,23 @@ void CS_Marceline::State_Tick()
 		}
 	}
 		break;
+	}
+}
+
+void CS_Marceline::Effect_Create(const _double & TimeDelta)
+{
+	if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+		return;
+
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	m_dEffect_Waves_TimeAcc += TimeDelta;
+	if (2 < m_dEffect_Waves_TimeAcc)
+	{
+		CEffect_Manager::GetInstance()->Skill_Marceline_Waves_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
+		m_dEffect_Waves_TimeAcc = 0;
 	}
 }
 

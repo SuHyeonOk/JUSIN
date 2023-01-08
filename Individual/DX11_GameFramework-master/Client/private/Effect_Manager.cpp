@@ -10,6 +10,26 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+void CEffect_Manager::Skill_Marceline_Waves_Create(_float3 fSize)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect_Skill_Marceline_Sound"), TEXT("Prototype_GameObject_E_Skill_Marceline_Waves"), &fSize)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 fSize)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect_Skill_Marceline_Sound"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &fSize)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
 void CEffect_Manager::DieCenter_Create(CE_DieCenter::DIECENTERINFO tDieCenter)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

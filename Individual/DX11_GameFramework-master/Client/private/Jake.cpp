@@ -353,7 +353,7 @@ void CJake::Player_Tick(_double TimeDelta)
 		break;
 
 	case CObj_Manager::PLAYERINFO::KNOCKBACKHIT:
-		Hit_Tick(TimeDelta);
+		KnockBack_Hit_Tick(TimeDelta);
 		break;
 
 	case CObj_Manager::PLAYERINFO::STUN:
@@ -819,6 +819,23 @@ void CJake::Hit_Tick(_double TimeDelta)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 }
 
+void CJake::KnockBack_Hit_Tick(_double TimeDelta)
+{
+	m_OnMove = false;
+
+	m_dKnockBack_Hit_TimeAcc += TimeDelta;
+	if (0.35 < m_dKnockBack_Hit_TimeAcc)
+		m_pTransformCom->Go_Backward(0, m_pNavigationCom);
+	else
+		m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
+
+	if (m_pModelCom->Get_Finished())
+	{
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		m_dKnockBack_Hit_TimeAcc = 0;
+	}
+}
+
 void CJake::Stun_Tick()
 {
 	_vector vMyPos;
@@ -952,10 +969,6 @@ void CJake::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::S_MARCELINE:
 			m_pModelCom->Set_AnimIndex(27, false);
-			break;
-
-		case CObj_Manager::PLAYERINFO::STATE::S_COIN:
-			m_pModelCom->Set_AnimIndex(25);
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::HIT:

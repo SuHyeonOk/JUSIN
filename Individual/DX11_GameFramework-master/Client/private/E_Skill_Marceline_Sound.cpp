@@ -1,24 +1,24 @@
 #include "stdafx.h"
-#include "..\public\E_DieCenter.h"
+#include "..\public\E_Skill_Marceline_Sound.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "PipeLine.h"
 #include "Utilities_Manager.h"
 
-CE_DieCenter::CE_DieCenter(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CE_Skill_Marceline_Sound::CE_Skill_Marceline_Sound(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CE_DieCenter::CE_DieCenter(const CE_DieCenter & rhs)
+CE_Skill_Marceline_Sound::CE_Skill_Marceline_Sound(const CE_Skill_Marceline_Sound & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CE_DieCenter::Initialize_Prototype()
+HRESULT CE_Skill_Marceline_Sound::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -26,7 +26,7 @@ HRESULT CE_DieCenter::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CE_DieCenter::Initialize(void * pArg)
+HRESULT CE_Skill_Marceline_Sound::Initialize(void * pArg)
 {	
 	if (nullptr != pArg)
 		memcpy(&m_tDieCenterInfo, pArg, sizeof(DIECENTERINFO));
@@ -55,21 +55,13 @@ HRESULT CE_DieCenter::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CE_DieCenter::Tick(_double TimeDelta)
+void CE_Skill_Marceline_Sound::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CE_DieCenter::Late_Tick(_double TimeDelta)
+void CE_Skill_Marceline_Sound::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -118,7 +110,7 @@ void CE_DieCenter::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
-HRESULT CE_DieCenter::Render()
+HRESULT CE_Skill_Marceline_Sound::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -133,7 +125,7 @@ HRESULT CE_DieCenter::Render()
 	return S_OK;
 }
 
-HRESULT CE_DieCenter::SetUp_Components()
+HRESULT CE_Skill_Marceline_Sound::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
@@ -148,13 +140,13 @@ HRESULT CE_DieCenter::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_DieCenter"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Sound"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CE_DieCenter::SetUp_ShaderResources()
+HRESULT CE_Skill_Marceline_Sound::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -180,31 +172,31 @@ HRESULT CE_DieCenter::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CE_DieCenter * CE_DieCenter::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CE_Skill_Marceline_Sound * CE_Skill_Marceline_Sound::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CE_DieCenter*		pInstance = new CE_DieCenter(pDevice, pContext);
+	CE_Skill_Marceline_Sound*		pInstance = new CE_Skill_Marceline_Sound(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CE_DieCenter");
+		MSG_BOX("Failed to Created : CE_Skill_Marceline_Sound");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CE_DieCenter::Clone(void * pArg)
+CGameObject * CE_Skill_Marceline_Sound::Clone(void * pArg)
 {
-	CE_DieCenter*		pInstance = new CE_DieCenter(*this);
+	CE_Skill_Marceline_Sound*		pInstance = new CE_Skill_Marceline_Sound(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CE_DieCenter");
+		MSG_BOX("Failed to Cloned : CE_Skill_Marceline_Sound");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CE_DieCenter::Free()
+void CE_Skill_Marceline_Sound::Free()
 {
 	__super::Free();
 

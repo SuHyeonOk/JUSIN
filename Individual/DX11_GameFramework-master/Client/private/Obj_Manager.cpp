@@ -176,7 +176,7 @@ void		CObj_Manager::Current_Player()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	//if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		if (pGameInstance->Key_Down(DIK_Z))		// 플레이어가 변신 또는 스킬 사용중 일 때는 변경하지 못 한다.
 		{
