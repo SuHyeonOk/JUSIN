@@ -126,8 +126,8 @@ HRESULT CS_Skill_Weapon::SetUp_Components()
 	if (WEAPONDESC::WEAPON::JAKE_MAGIC == m_WeaponDesc.eWeaponType)
 	{
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 1.3f);
+		ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+		ColliderDesc.vCenter = _float3(0.0f, -1.5f, 0.0f);
 	}
 	else if (WEAPONDESC::WEAPON::FIONA_SWORD == m_WeaponDesc.eWeaponType)
 	{

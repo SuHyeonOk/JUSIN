@@ -175,7 +175,7 @@ HRESULT CS_Change_Magic::SetUp_Components()
 	CCollider::COLLIDERDESC			ColliderDesc;
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.7f, 0.7f, 1.0f);
+	ColliderDesc.vSize = _float3(1.0f, 0.7f, 1.0f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),

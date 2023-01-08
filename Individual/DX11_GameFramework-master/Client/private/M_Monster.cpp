@@ -108,7 +108,7 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 {
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
-		if (L"Jake_Magic_Weapon" == pOther->Get_Tag())
+		if (L"Player_Weapon" == pOther->Get_Tag())
 			m_bPlayer_Attack = true;
 	}
 

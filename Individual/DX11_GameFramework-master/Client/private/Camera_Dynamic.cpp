@@ -142,14 +142,14 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		if (-12.1f < m_fYZ_Move)
-			m_fYZ_Move -= _float(TimeDelta) * 0.2f;
+			m_fYZ_Move -= _float(TimeDelta) * 0.1f;
 
 		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
 		if (-11.9f > m_fYZ_Move)
-			m_fYZ_Move += _float(TimeDelta) * 0.2f;
+			m_fYZ_Move += _float(TimeDelta) * 0.1f;
 	
 		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
 	}
@@ -167,7 +167,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4TargetPos;
 		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.f, vf4TargetPos.z - 4.f, 1.f);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
 		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 		
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
@@ -192,7 +192,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		_float4 vf4TargetPos;
 		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.0f, vf4TargetPos.z - 4.3f, 1.f);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
 		vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
 		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.

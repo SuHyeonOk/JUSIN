@@ -34,7 +34,6 @@ HRESULT CCoin::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&m_tinCoinInfo, pArg, sizeof(m_tinCoinInfo));
 
-
 	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 	{
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
@@ -70,18 +69,13 @@ void CCoin::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	CurrentState(TimeDelta);
-}
 
-void CCoin::Late_Tick(_double TimeDelta)
-{
-	__super::Late_Tick(TimeDelta);
-
-	if(m_bPlayer_Collider)	// 충돌 하면 일정시간 후 삭제
+	if (m_bPlayer_Collider)	// 충돌 하면 일정시간 후 삭제
 	{
 		if (!m_bOneCheck)
 		{
 			m_bOneCheck = true;
-	
+
 			if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 				CObj_Manager::GetInstance()->Set_Coin(1);
 			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
@@ -92,23 +86,27 @@ void CCoin::Late_Tick(_double TimeDelta)
 
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
-		if (CCoin::COININFO::COMEOUT != m_tCoinInfo.eState)
+		// 시간 지나면 삭제
+		m_dDead_TimeAcc += TimeDelta;
+		if (0.5 < m_dDead_TimeAcc)
 		{
 			// 플레이어와의 거리가 완전 가까우면 무조건 삭제
 			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 			if (0.2 > fDistance)
 				CGameObject::Set_Dead();
 		}
-
-		// 시간 지나면 삭제
-		m_dDead_TimeAcc += TimeDelta;
-		if (1 < m_dDead_TimeAcc)
+		else if (1 < m_dDead_TimeAcc)
 		{
 			m_bOneCheck = false;
 			CGameObject::Set_Dead();
 			m_dDead_TimeAcc = 0;
 		}
 	}
+}
+
+void CCoin::Late_Tick(_double TimeDelta)
+{
+	__super::Late_Tick(TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
@@ -196,7 +194,7 @@ HRESULT CCoin::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+	ColliderDesc.vSize = _float3(1.5f, 1.5f, 1.5f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

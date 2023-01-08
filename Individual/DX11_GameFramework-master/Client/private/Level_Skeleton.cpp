@@ -32,17 +32,17 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
-		return E_FAIL;
-
-	//if (FAILED(Ready_PreviousData()))
+	//if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 	//	return E_FAIL;
+
+	//if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
+	//	return E_FAIL;
+
+	//if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+	//	return E_FAIL;
+
+	if (FAILED(Ready_PreviousData()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
