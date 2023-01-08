@@ -16,7 +16,7 @@ void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)
 		m_bChangeSkill_Create = true;
 	else
 	{
-		if(CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END == m_tPlayerSkill.eSkill)
+		if (CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END == m_tPlayerSkill.eSkill)
 			m_bChangeSkill_Create = false;
 	}
 }

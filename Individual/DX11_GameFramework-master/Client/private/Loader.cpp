@@ -39,6 +39,7 @@
 #include "E_DieCenter.h"
 #include "E_Skill_Marceline_Sound.h"
 #include "E_Skill_Marceline_Waves.h"
+#include "E_Smoke.h"
 
 // Obj
 #include "O_Box.h"
@@ -930,6 +931,17 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Marceline/Marceline_Waves.png")))))
 		return E_FAIL;
 
+	// Skill Cange Smoke
+	/* For.Prototype_Component_Texture_E_Change_Smoke */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_Smoke"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Smoke/Gnomes_Hit_FX_2_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Change_ColorSmoke */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_ColorSmoke"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Smoke/Gnomes_Hit_FX_1_D.png")))))
+		return E_FAIL;
+
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -953,6 +965,10 @@ HRESULT CLoader::Effect_Create()
 		CE_Skill_Marceline_Waves::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_E_Smoke*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Smoke"),
+		CE_Smoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	
 
 	RELEASE_INSTANCE(CGameInstance);

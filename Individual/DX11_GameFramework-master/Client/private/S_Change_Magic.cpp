@@ -84,6 +84,7 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 	m_bSkillClone_TimeAcc += TimeDelta;
 	if (20 < m_bSkillClone_TimeAcc)
 	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 

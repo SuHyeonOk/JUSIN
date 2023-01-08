@@ -185,6 +185,7 @@
     <ClInclude Include="..\public\E_DieCenter.h" />
     <ClInclude Include="..\public\E_Skill_Marceline_Sound.h" />
     <ClInclude Include="..\public\E_Skill_Marceline_Waves.h" />
+    <ClInclude Include="..\public\E_Smoke.h" />
     <ClInclude Include="..\public\Finn.h" />
     <ClInclude Include="..\public\Finn_Weapon.h" />
     <ClInclude Include="..\public\Food.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="..\private\E_DieCenter.cpp" />
     <ClCompile Include="..\private\E_Skill_Marceline_Sound.cpp" />
     <ClCompile Include="..\private\E_Skill_Marceline_Waves.cpp" />
+    <ClCompile Include="..\private\E_Smoke.cpp" />
     <ClCompile Include="..\private\Finn.cpp" />
     <ClCompile Include="..\private\Finn_Weapon.cpp" />
     <ClCompile Include="..\private\Food.cpp" />

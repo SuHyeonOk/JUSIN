@@ -38,7 +38,7 @@ HRESULT CE_Skill_Marceline_Sound::Initialize(void * pArg)
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(f3Pos.x, f3Pos.y, f3Pos.z);
+	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -46,11 +46,6 @@ HRESULT CE_Skill_Marceline_Sound::Initialize(void * pArg)
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.7f);
-
-	//m_fSizeX = fRandomNumber;
-	//m_fSizeY = fRandomNumber;
-	
 	m_pTransformCom->Set_Pos();
 
 	return S_OK;

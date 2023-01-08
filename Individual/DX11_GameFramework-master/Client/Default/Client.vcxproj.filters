@@ -450,6 +450,9 @@
     <ClInclude Include="..\public\E_Skill_Marceline_Waves.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\E_Smoke.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -711,6 +714,9 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\E_Skill_Marceline_Waves.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_Smoke.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>

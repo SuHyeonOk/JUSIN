@@ -117,6 +117,9 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	//	" | EXP : " << m_tPlayerInfo.fExp << " / : " << m_tPlayerInfo.fExpMax << " | EXP% : " << m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax <<
 	//	" | KEY : " << m_tPlayerInfo.iKey << " | COIN : " << m_tPlayerInfo.iCoin << " | HEART: " << m_tPlayerInfo.iHeart << endl;
 
+	//cout << CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill << endl;
+
+
 	if (0 < m_fMonster_Attck)
 	{
 		m_dPlayerAttck_TimeAcc += TimeDelta;

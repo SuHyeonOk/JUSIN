@@ -202,7 +202,7 @@ void CS_Marceline::State_Tick()
 	{
 		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		{
-			//CGameObject::Set_Dead();
+			CGameObject::Set_Dead();
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		}
 	}

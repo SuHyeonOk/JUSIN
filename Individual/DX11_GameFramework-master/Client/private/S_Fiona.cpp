@@ -8,6 +8,7 @@
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
+#include "Effect_Manager.h"
 
 #include "S_StunChick.h"
 
@@ -33,17 +34,15 @@ HRESULT CS_Fiona::Initialize_Prototype()
 
 HRESULT CS_Fiona::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_f3Pos, pArg, sizeof(_float3));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -95,12 +94,17 @@ void CS_Fiona::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if(CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		CGameObject::Set_Dead();
+
+	// Ω««‡
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
 	m_bSkillClone_TimeAcc += TimeDelta;
 	if (20 < m_bSkillClone_TimeAcc)
 	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 
@@ -119,6 +123,17 @@ void CS_Fiona::Tick(_double TimeDelta)
 		m_SkillParts[0]->Tick(TimeDelta);
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		m_SkillParts[1]->Tick(TimeDelta);
+
+	// ¿Ã∆Â∆Æ
+	if (2 < m_dEffect_TimeAcc)
+		m_bEffect = true;
+
+	if (!m_bEffect)
+	{
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.5 < m_dEffect_TimeAcc)
+			CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.5f));
+	}
 }
 
 void CS_Fiona::Late_Tick(_double TimeDelta)
@@ -309,10 +324,10 @@ void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 	switch (CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 	{
 	case Client::CSkill_Manager::FIONASKILL::IDLE:
-		m_pModelCom->Set_AnimIndex(3);
+		m_pModelCom->Set_AnimIndex(3, true, false);
 		break;
 	case Client::CSkill_Manager::FIONASKILL::RUN:
-		m_pModelCom->Set_AnimIndex(4);
+		m_pModelCom->Set_AnimIndex(4, true, false);
 		break;
 	case Client::CSkill_Manager::FIONASKILL::ATTACK:
 		m_pModelCom->Set_AnimIndex(19, false, false);

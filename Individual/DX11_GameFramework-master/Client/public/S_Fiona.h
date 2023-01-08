@@ -58,9 +58,9 @@ private:
 	void				Dance_Tick();
 
 private:
-	_double					m_bSkillClone_TimeAcc = 0;
-
 	vector<CGameObject*>	m_SkillParts;
+	_float3					m_f3Pos = _float3(0.f, 0.f, 0.f);
+
 	_bool					m_OnMove = false;
 
 	_bool					m_bStun = false;			// Ω∫≈œ
@@ -69,6 +69,11 @@ private:
 	_float					m_fOriginal_Player_Attack = 0.0f;
 	_float					m_fSword_Attack = 0;
 	_float					m_fCat_Attack = 0;
+
+	_double					m_bSkillClone_TimeAcc = 0;
+	_double					m_dEffect_TimeAcc = 0;
+
+	_bool					m_bEffect = false;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
