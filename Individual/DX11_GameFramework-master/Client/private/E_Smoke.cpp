@@ -29,14 +29,14 @@ HRESULT CE_Smoke::Initialize_Prototype()
 HRESULT CE_Smoke::Initialize(void * pArg)
 {	
 	if (nullptr != pArg)
-		memcpy(&m_SmokeInfo, pArg, sizeof(SMOKEINFO));
+		memcpy(&m_tSmokeInfo, pArg, sizeof(SMOKEINFO));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = m_SmokeInfo.f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_tSmokeInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -65,7 +65,7 @@ void CE_Smoke::Tick(_double TimeDelta)
 	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
 
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector vDistance = XMLoadFloat4(&_float4(m_SmokeInfo.f4Look.x, m_SmokeInfo.f4Look.y, m_SmokeInfo.f4Look.z, 0.0f));
+	_vector vDistance = XMLoadFloat4(&_float4(m_tSmokeInfo.f4Look.x, m_tSmokeInfo.f4Look.y, m_tSmokeInfo.f4Look.z, 0.0f));
 	vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
 
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
@@ -143,6 +143,9 @@ HRESULT CE_Smoke::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tSmokeInfo.f3Color, sizeof _float3)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))

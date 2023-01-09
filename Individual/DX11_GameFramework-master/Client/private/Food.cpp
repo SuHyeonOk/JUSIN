@@ -251,7 +251,7 @@ void CFood::Effect_Create(const _double & TimeDelta)
 	if (!m_bBeneficial)
 	{
 		m_bBeneficial = true;
-		CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z), /*_float3(0.5f, 0.75f, 0.27f)*/_float3(1.0f, 1.0f, 1.0f));
+		CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, 0.7f, f4PlayerPos.z), _float3(0.5f, 0.75f, 0.27f));
 	}
 }
 

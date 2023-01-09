@@ -82,7 +82,7 @@ HRESULT CE_Beneficial::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(1);
+	m_pShaderCom->Begin(4);
 
 	m_pVIBufferCom->Render();
 
@@ -131,7 +131,7 @@ HRESULT CE_Beneficial::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTexture_Index)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tBeneficialInfo.f3Color, sizeof _float)))
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tBeneficialInfo.f3Color, sizeof _float3)))
 		return E_FAIL;
 
 	_float fAlpha = 0.8f;

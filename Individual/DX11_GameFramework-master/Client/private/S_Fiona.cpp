@@ -285,7 +285,7 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.01f));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.01f), _float3(1.0f, 0.75f, 0.79f));
 
 		m_dEffect_Ink_TimeAcc += TimeDelta;
 		if (0.1 < m_dEffect_Ink_TimeAcc)
@@ -343,7 +343,7 @@ void CS_Fiona::Effect_Create(const _double & TimeDelta)
 	m_dEffect_Smoke_TimeAcc += TimeDelta;
 	if (0.5 < m_dEffect_Smoke_TimeAcc)
 	{
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.01f));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.01f), _float3(1.0f, 0.75f, 0.79f));
 	}
 
 	m_dEffect_Ink_TimeAcc += TimeDelta;

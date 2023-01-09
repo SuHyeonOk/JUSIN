@@ -135,9 +135,8 @@ HRESULT CE_Skill_Marceline_Waves::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	//_float3 fColor = { 0.85f, 0.90f, 0.49f };
-	_float3 fColor = { 0.0f, 1.0f, 0.0f };
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &fColor, sizeof _float)))
+	_float3 fColor = { 0.85f, 0.90f, 0.49f };
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &fColor, sizeof _float3)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))

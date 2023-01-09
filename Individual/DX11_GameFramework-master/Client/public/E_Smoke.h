@@ -19,6 +19,7 @@ public:
 	{
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
 		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
+		_float3		f3Color = { 0.0f, 0.0f, 0.0f };
 
 	}SMOKEINFO;
 
@@ -45,7 +46,7 @@ private:
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	SMOKEINFO			m_SmokeInfo;
+	SMOKEINFO			m_tSmokeInfo;
 
 private:	// Shader
 	_float				m_fAlpha = 0.5f;
