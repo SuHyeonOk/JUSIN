@@ -51,6 +51,7 @@ private:
 	DIECENTERINFO		m_tDieCenterInfo;
 
 private:	// Shader
+	_float				m_fAlpha = 1.0f;
 	_float				m_fSizeX = 0.0f;
 	_float				m_fSizeY = 0.0f;
 

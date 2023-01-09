@@ -212,6 +212,7 @@ void CS_Marceline::State_Tick()
 
 void CS_Marceline::Effect_Create(const _double & TimeDelta)
 {
+	cout << m_pModelCom->Get_Keyframes() << endl;
 	if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		return;
 

@@ -8,6 +8,7 @@
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
+#include "Effect_Manager.h"
 
 CS_Change_Magic::CS_Change_Magic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -31,17 +32,15 @@ HRESULT CS_Change_Magic::Initialize_Prototype()
 
 HRESULT CS_Change_Magic::Initialize(void * pArg)
 {
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_f3Pos, pArg, sizeof(_float3));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -78,21 +77,11 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	Death_Set(TimeDelta);
+	Effect_Create(TimeDelta);
+
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
-
-	m_bSkillClone_TimeAcc += TimeDelta;
-	if (20 < m_bSkillClone_TimeAcc)
-	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
-
-		CGameObject::Set_Dead();
-
-		m_bSkillClone_TimeAcc = 0;
-		return;
-	}
 
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
@@ -241,6 +230,56 @@ HRESULT CS_Change_Magic::Ready_Parts()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CS_Change_Magic::Death_Set(const _double & TimeDelta)
+{
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (20 < m_bSkillClone_TimeAcc)
+	{
+		// 따라오던 플레이어의 좌표를 옮겨놓는다.
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		CTransform * pFollow_TransformCom;
+		CNavigation* pFollow_NavigationCom;
+
+		if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		{
+			pFollow_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+			pFollow_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+		}
+		else
+		{
+			pFollow_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+			pFollow_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+		}
+
+		pFollow_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION) * 0.99f);
+		pFollow_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
+
+		RELEASE_INSTANCE(CGameInstance);
+
+		// 죽을때 플레이어 원래 상태로 돌려놓는다.
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+
+		CGameObject::Set_Dead();
+
+		m_bSkillClone_TimeAcc = 0;
+		return;
+	}
+}
+
+void CS_Change_Magic::Effect_Create(const _double & TimeDelta)
+{
+	// 이펙트
+	if (2 < m_dEffect_TimeAcc)
+		return;
+
+	m_dEffect_TimeAcc += TimeDelta;
+	if (0.5 < m_dEffect_TimeAcc)
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 0.5f, m_f3Pos.z - 0.5f));
 }
 
 void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)

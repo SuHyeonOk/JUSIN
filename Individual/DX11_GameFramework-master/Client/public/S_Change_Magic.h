@@ -48,6 +48,10 @@ private:
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
+	void				Death_Set(const _double & TimeDelta);
+	void				Effect_Create(const _double & TimeDelta);
+
+private:
 	void				KeyInput(const _double & TimeDelta);
 
 	void				Skill_Tick(const _double & TimeDelta);
@@ -55,10 +59,13 @@ private:
 	void				Hit_Tick();
 
 private:
-	_double					m_bSkillClone_TimeAcc = 0;
-
 	vector<CGameObject*>	m_SkillParts;
+	_float3					m_f3Pos = _float3(0.f, 0.f, 0.f);
+	
 	_bool					m_OnMove = false;
+
+	_double					m_bSkillClone_TimeAcc = 0;
+	_double					m_dEffect_TimeAcc = 0;
 
 public:
 	static CS_Change_Magic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

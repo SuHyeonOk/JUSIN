@@ -137,6 +137,8 @@ private:
 	_float			m_fMonster_Attck = 0;
 	_double			m_dPlayerAttck_TimeAcc = 0;
 
+	_int			m_iWeapon_Index = 0;
+
 public:
 	virtual void Free() override;
 };

@@ -77,12 +77,6 @@ void CFinn::Tick(_double TimeDelta)
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
-
-	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	{
-		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 面倒贸府
-		m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
-	}
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -100,13 +94,16 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+
+	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 面倒贸府
+		m_pColliderCom[COLLTYPE_AABB]->Update(m_pTransformCom->Get_WorldMatrix());
+	}
 }
 
 HRESULT CFinn::Render()
 {
-	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
-		return E_FAIL;
-
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 

@@ -782,7 +782,7 @@ HRESULT CLoader::UI_Texture()
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Weapon"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/Weapon_%d.png"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/Weapon_%d.png"), 11))))
 		return E_FAIL;
 
 	// Skill
@@ -946,7 +946,7 @@ HRESULT CLoader::Effect_Texture()
 	// Food
 	/* For.Prototype_Component_Texture_E_Food_Change */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Change"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/Garden_Witch_Teleport_FX_1_D.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/Effect_Food_%d.png"), 8))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_E_Food_Up */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Up"),

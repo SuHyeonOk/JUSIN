@@ -92,7 +92,7 @@ void CCoin::Tick(_double TimeDelta)
 		{
 			// 플레이어와의 거리가 완전 가까우면 무조건 삭제
 			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-			if (0.2 > fDistance)
+			if (0.5 > fDistance)
 				CGameObject::Set_Dead();
 		}
 		else if (1 < m_dDead_TimeAcc)

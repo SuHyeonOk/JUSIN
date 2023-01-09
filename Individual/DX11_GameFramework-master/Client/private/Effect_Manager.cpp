@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Utilities_Manager.h"
 
+#include "E_Smoke.h"
+
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
@@ -24,12 +26,16 @@ void CEffect_Manager::Change_Smoke(_float3 fSize)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_float	fRandomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
-	_float	fRandomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+	CE_Smoke::SMOKEINFO	tSmokeInfo;
+	tSmokeInfo.f3Pos = fSize;
 
-	fSize = _float3(fSize.x * fRandomNumberX, fSize.y * fRandomNumberY, fSize.z);
+	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector4Transform(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tSmokeInfo.f4Look, vLook);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &fSize)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tSmokeInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);

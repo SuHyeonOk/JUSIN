@@ -28,17 +28,15 @@ HRESULT CE_Smoke::Initialize_Prototype()
 
 HRESULT CE_Smoke::Initialize(void * pArg)
 {	
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_SmokeInfo, pArg, sizeof(SMOKEINFO));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_SmokeInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -48,11 +46,16 @@ HRESULT CE_Smoke::Initialize(void * pArg)
 
 	_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 1.0f);
 
-	_float	m_fSizeX = fRandomNumber;
-	_float	m_fSizeY = fRandomNumber;
-	
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
+
+	//_vector vLook = XMLoadFloat4(&m_SmokeInfo.f4Look);
+	//_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	//_vector vUp = XMVector3Cross(vLook, vRight);
+
+	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 
 	return S_OK;
 }
@@ -61,18 +64,29 @@ void CE_Smoke::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
-
+	// 알파값 줄어들기2
 	m_dEffect_TimeAcc += TimeDelta;
 	if (1 < m_dEffect_TimeAcc)
 	{
-		m_fAlpha -= _float(TimeDelta);
+		m_fAlpha -= _float(TimeDelta) * 0.5f;
 		//m_dEffect_TimeAcc = 0;
+	}
+	// 카메라를 바라보고 랜덤한 곳으로 이동하기
+	else
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+		_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		RELEASE_INSTANCE(CGameInstance);
+
+		m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
+
+		_vector	vMyPos;		// 랜덤한 Look 을 받아온 방향으로
+		vMyPos += XMVector3Normalize(XMVectorSet(m_SmokeInfo.f4Look.x, m_SmokeInfo.f4Look.y, m_SmokeInfo.f4Look.z, 1.f) * 2.f * _float(TimeDelta));
+
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 이동한다.
+
+		//m_pTransformCom->Go_Straight(TimeDelta);
 	}
 
 	if (0 >= m_fAlpha)

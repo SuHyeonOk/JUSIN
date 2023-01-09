@@ -234,9 +234,33 @@ void		CObj_Manager::Player_Weapon()
 {
 	// 스킬 사용? 무기사용?
 	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
 		CUI_Manager::GetInstance()->Set_Weapons(0);
+		CUI_Manager::GetInstance()->Set_Weapon_index(m_iWeapon_Index);
+	}
 	else
 		CUI_Manager::GetInstance()->Set_Weapons(1);
+
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		CUI_Manager::GetInstance()->Set_Weapon_index(4);
+	}
+	else if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		CUI_Manager::GetInstance()->Set_Weapon_index(5);
+	}
+	else if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		CUI_Manager::GetInstance()->Set_Weapon_index(6);
+	}
+	else if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	{
+		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		CUI_Manager::GetInstance()->Set_Weapon_index(7);
+	}
 
 	// 무기
 	if (CObj_Manager::PLAYERINFO::FINN == m_tPlayerInfo.ePlayer)

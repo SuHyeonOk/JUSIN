@@ -94,26 +94,17 @@ void CS_Fiona::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 예외 처리로, 스킬이 끝나면 없앤다.
 	if(CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		CGameObject::Set_Dead();
 
+	// 죽을 떄의 처리
+	Death_Set(TimeDelta);
+	Effect_Create(TimeDelta);
+	
 	// 실행
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
-
-	m_bSkillClone_TimeAcc += TimeDelta;
-	if (20 < m_bSkillClone_TimeAcc)
-	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
-
-		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
-		CGameObject::Set_Dead();
-
-		m_bSkillClone_TimeAcc = 0;
-		return;
-	}
 
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
@@ -123,17 +114,6 @@ void CS_Fiona::Tick(_double TimeDelta)
 		m_SkillParts[0]->Tick(TimeDelta);
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 		m_SkillParts[1]->Tick(TimeDelta);
-
-	// 이펙트
-	if (2 < m_dEffect_TimeAcc)
-		m_bEffect = true;
-
-	if (!m_bEffect)
-	{
-		m_dEffect_TimeAcc += TimeDelta;
-		if (0.5 < m_dEffect_TimeAcc)
-			CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.5f));
-	}
 }
 
 void CS_Fiona::Late_Tick(_double TimeDelta)
@@ -290,6 +270,58 @@ HRESULT CS_Fiona::Ready_Parts()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CS_Fiona::Death_Set(const _double & TimeDelta)
+{
+	// 죽을 때의 처리
+	m_bSkillClone_TimeAcc += TimeDelta;
+	if (20 < m_bSkillClone_TimeAcc)
+	{
+		// 따라오던 플레이어의 좌표를 옮겨놓는다.
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		CTransform * pFollow_TransformCom;
+		CNavigation* pFollow_NavigationCom;
+
+		if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		{
+			pFollow_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+			pFollow_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+		}
+		else
+		{
+			pFollow_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+			pFollow_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+		}
+
+		pFollow_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION) * 0.99f);
+		pFollow_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
+
+		RELEASE_INSTANCE(CGameInstance);
+
+		// 죽으면서 모든 처리를 원래 플레이어로 돌아올 수 있도록 처리한다.
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+
+		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
+		CGameObject::Set_Dead();
+
+		m_bSkillClone_TimeAcc = 0;
+		return;
+	}
+}
+
+void CS_Fiona::Effect_Create(const _double & TimeDelta)
+{
+	// 이펙트
+	if (2 < m_dEffect_TimeAcc)
+		return;
+
+	m_dEffect_TimeAcc += TimeDelta;
+	if (0.5 < m_dEffect_TimeAcc)
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 0.5f, m_f3Pos.z - 0.5f));
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)

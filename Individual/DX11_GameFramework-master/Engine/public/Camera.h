@@ -33,6 +33,7 @@ public:
 
 private:
 	class CPipeLine*			m_pPipeLine = nullptr;
+	_float	m_fYZ_Move = 60.f;
 
 public:		
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;

@@ -15,15 +15,12 @@ BEGIN(Client)
 class CE_Smoke final : public CGameObject
 {
 public:
-	typedef struct tagDieCenterInfo : public CGameObject::GAMEOBJECTDESC
+	typedef struct tagSmoketInfo
 	{
-		enum TEXTURETYPE { SKY, BLUE, YELLOW, BROWN, PURPLE, GREEN, RED, GRAY, BLACK, TEXTURETYPE_END
-		};
-		TEXTURETYPE		eMonsterKind = TEXTURETYPE_END;
+		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-		_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
-	}DIECENTERINFO;
+	}SMOKEINFO;
 
 private:
 	CE_Smoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -48,7 +45,7 @@ private:
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	DIECENTERINFO		m_tDieCenterInfo;
+	SMOKEINFO			m_SmokeInfo;
 
 private:	// Shader
 	_float				m_fAlpha = 0.7f;

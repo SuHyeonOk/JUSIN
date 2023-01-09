@@ -61,6 +61,9 @@ void CE_Skill_Marceline_Waves::Tick(_double TimeDelta)
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
+	if (5.f < m_fSizeX)
+		m_fAlpha -= _float(TimeDelta) * 0.3f;
+
 	if (8.f < m_fSizeX)
 		CGameObject::Set_Dead();
 }
@@ -134,6 +137,9 @@ HRESULT CE_Skill_Marceline_Waves::SetUp_ShaderResources()
 
 	_float3 fColor = { 0.85f, 0.90f, 0.49f };
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &fColor, sizeof _float)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
 
 	return S_OK;

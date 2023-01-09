@@ -21,8 +21,8 @@ public:
 
 		PAINTWORK	ePaintWork = TYPE_END;
 
-		_float3		f3Pos;
-		_float4		f4Look;
+		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
 		_float		fAttack = 0.0f;
 
 	}PAINTWORKINFO;

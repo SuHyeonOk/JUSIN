@@ -48,6 +48,10 @@ private:
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
+	void				Death_Set(const _double & TimeDelta);
+	void				Effect_Create(const _double & TimeDelta);
+
+private:
 	void				KeyInput(const _double & TimeDelta);
 
 	void				Skill_Tick(const _double & TimeDelta);
@@ -72,8 +76,6 @@ private:
 
 	_double					m_bSkillClone_TimeAcc = 0;
 	_double					m_dEffect_TimeAcc = 0;
-
-	_bool					m_bEffect = false;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

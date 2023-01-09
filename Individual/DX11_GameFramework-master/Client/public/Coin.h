@@ -21,8 +21,8 @@ public:
 		enum STATE { IDLE, COMEOUT, STATE_END };
 
 		_float3		fPos = _float3(0.f, 0.f, 0.f);
-		COINKIND	eCoinKind;
-		STATE		eState;
+		COINKIND	eCoinKind = COIN_END;
+		STATE		eState = STATE_END;
 		
 	}COININFO;
 
