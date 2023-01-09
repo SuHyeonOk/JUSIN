@@ -116,7 +116,10 @@ HRESULT CM_Skeleton_Shield::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -390,7 +393,8 @@ void CM_Skeleton_Shield::Hit_Tick()
 		{
 			m_iRandomNum = 0;
 			m_bDefense = true;
-			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+			m_dShader_Hit_TimeAcc = 0;
+			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 		}
 	}
 	else

@@ -38,7 +38,7 @@ HRESULT		CObj_Manager::Initialized()
 	return S_OK;
 }
 
-void CObj_Manager::Tick_Player_Transform()
+void	CObj_Manager::Tick_Player_Transform()
 {
 	Get_Player_Transform();
 }

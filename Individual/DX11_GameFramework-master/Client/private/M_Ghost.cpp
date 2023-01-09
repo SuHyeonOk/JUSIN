@@ -120,7 +120,10 @@ HRESULT CM_Ghost::Render()
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+		if (m_bShader_Hit)
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+		else
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
 	}
 
 	return S_OK;
@@ -369,7 +372,10 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 void CM_Ghost::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	{
+		m_dShader_Hit_TimeAcc = 0;
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	}
 }
 
 void CM_Ghost::Die_Tick(const _double& TimeDelta)

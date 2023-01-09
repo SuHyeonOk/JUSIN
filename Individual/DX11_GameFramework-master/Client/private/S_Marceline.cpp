@@ -230,7 +230,7 @@ void CS_Marceline::Effect_Create(const _double & TimeDelta)
 	m_dEffect_Sound_TimeAcc += TimeDelta;
 	if (0.5 < m_dEffect_Sound_TimeAcc)
 	{
-		CEffect_Manager::GetInstance()->Skill_Marceline_Sound_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Skill_Marceline_Sound_Create(_float3(f4MyPos.x, 1.5f, f4MyPos.z));
 		m_dEffect_Sound_TimeAcc = 0;
 	}
 }

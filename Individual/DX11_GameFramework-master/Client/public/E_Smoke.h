@@ -48,11 +48,11 @@ private:
 	SMOKEINFO			m_SmokeInfo;
 
 private:	// Shader
-	_float				m_fAlpha = 0.7f;
+	_float				m_fAlpha = 0.5f;
 	_double				m_dEffect_TimeAcc = 0;
 
 public:
-	static	CE_Smoke*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Smoke*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

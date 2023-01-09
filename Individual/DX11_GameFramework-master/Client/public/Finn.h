@@ -78,9 +78,6 @@ private:
 
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 
-	// 셰이더
-	_float		m_bHit_Alpha = 1.0f;
-
 	//////////////////////////// 플레이어 일 때
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
@@ -99,6 +96,10 @@ private:
 	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
 
 	//////////////////////////// 플레이어가 아닐 때
+
+	// 셰이더
+	_bool		m_bShader_Hit = false;
+	_double		m_dShader_Hit_TimeAcc = 0;
 
 public:
 	static CFinn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

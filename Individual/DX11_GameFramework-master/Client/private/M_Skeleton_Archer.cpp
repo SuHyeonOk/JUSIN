@@ -114,7 +114,10 @@ HRESULT CM_Skeleton_Archer::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -317,8 +320,11 @@ void CM_Skeleton_Archer::Attack_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Archer::Hit_Tick()
 {
- 	if (m_pModelCom->Get_Finished())
+	if (m_pModelCom->Get_Finished())
+	{
+		m_dShader_Hit_TimeAcc = 0;
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	}
 }
 
 void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)

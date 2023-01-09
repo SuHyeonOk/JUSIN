@@ -122,8 +122,8 @@ HRESULT CFinn::Render()
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
 		{
-			if (CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 		}
@@ -211,11 +211,6 @@ HRESULT CFinn::SetUp_ShaderResources()
 	if (nullptr == pLightDesc)
 		return E_FAIL;
 
-	if (CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
-	{
-		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_bHit_Alpha, sizeof _float)))
-			return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -735,11 +730,16 @@ void CFinn::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
-	m_bHit_Alpha -= _float(TimeDelta) * 0.7f;
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
 
 	if (m_pModelCom->Get_Finished())
 	{
-		m_bHit_Alpha = 1.0f;
+		m_bShader_Hit = false;
+		m_dShader_Hit_TimeAcc = 0;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 }

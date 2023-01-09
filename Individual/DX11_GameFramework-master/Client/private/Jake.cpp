@@ -122,7 +122,10 @@ HRESULT CJake::Render()
 		if (i == 4)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -812,8 +815,19 @@ void CJake::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
+
 	if (m_pModelCom->Get_Finished())
+	{
+		m_bShader_Hit = false;
+		m_dShader_Hit_TimeAcc = 0;
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+
+	}
 }
 
 void CJake::KnockBack_Hit_Tick(_double TimeDelta)

@@ -106,7 +106,11 @@ HRESULT CM_Mimic::Render()
 			continue;
 		
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		
+		if (m_bShader_Hit)
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+		else
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -271,8 +275,11 @@ void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 
 void CM_Mimic::Hit_Tick()
 {
- 	if (m_pModelCom->Get_Finished())
+	if (m_pModelCom->Get_Finished())
+	{
+		m_dShader_Hit_TimeAcc = 0;
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	}
 }
 
 void CM_Mimic::Die_Tick(const _double& TimeDelta)

@@ -94,6 +94,8 @@ protected:	// 멤버 변수로 쓰이는 것
 
 protected:	// Shader
 	_float				m_fAlpha = 1.f;
+	_bool				m_bShader_Hit = false;
+	_double				m_dShader_Hit_TimeAcc = 0;
 
 protected:	
 	// On_Collision();

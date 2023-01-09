@@ -68,17 +68,23 @@ void CM_Magic_Man::Tick(_double TimeDelta)
 
 	if (m_bPlayer_Attack)
 	{
+		m_bShader_Hit = true;
+
+		m_dShader_Hit_TimeAcc += TimeDelta;
+		if (0.1 < m_dShader_Hit_TimeAcc)
+			m_bShader_Hit = false;
+
+		// 몬스터 상태 변경
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+		// UI 에 내 체력 넘겨주기
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayer_Attack_TimeAcc)
 		{
-			// 몬스터 상태 변경
-			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-
 			// 플레이어의 공격력 깍기
 			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
-
-			// UI 에 내 체력 넘겨주기
-			CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 			m_bPlayer_Attack = false;
 			m_dPlayer_Attack_TimeAcc = 0;

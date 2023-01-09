@@ -140,7 +140,10 @@ HRESULT CM_PigWarrior::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -411,7 +414,10 @@ void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 void CM_PigWarrior::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	{
+		m_dShader_Hit_TimeAcc = 0;
+		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	}
 }
 
 void CM_PigWarrior::Die_Tick(const _double& TimeDelta)
