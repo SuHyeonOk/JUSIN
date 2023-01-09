@@ -9,6 +9,7 @@
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
 #include "Effect_Manager.h"
+#include "Utilities_Manager.h"
 
 CS_Change_Magic::CS_Change_Magic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -126,7 +127,10 @@ HRESULT CS_Change_Magic::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -244,7 +248,8 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.54f, 0.0f, 1.0f));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), 
+			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
 	}
 
 	if (21 < m_bSkillClone_TimeAcc)
@@ -290,8 +295,8 @@ void CS_Change_Magic::Effect_Create(const _double & TimeDelta)
 		return;
 
 	m_dEffect_TimeAcc += TimeDelta;
-	if (0.5 < m_dEffect_TimeAcc)
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(0.54f, 0.0f, 1.0f));
+	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), 
+		_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
 }
 
 void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)
@@ -313,7 +318,7 @@ void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)
 		break;
 	case Client::CSkill_Manager::MAGICSKILL::HIT:
 		m_pModelCom->Set_AnimIndex(3, false);
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		break;
 	}
 }
@@ -329,12 +334,21 @@ void CS_Change_Magic::Attack_Tick()
 	}
 }
 
-void CS_Change_Magic::Hit_Tick()
+void CS_Change_Magic::Hit_Tick(const _double TimeDelta)
 {
 	m_OnMove = false;
 
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
+
 	if (m_pModelCom->Get_Finished())
 	{
+		m_bShader_Hit = false;
+		m_dShader_Hit_TimeAcc = 0;
+
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}

@@ -393,6 +393,8 @@ void CM_Skeleton_Shield::Hit_Tick()
 		{
 			m_iRandomNum = 0;
 			m_bDefense = true;
+
+			m_bShader_Hit = false;
 			m_dShader_Hit_TimeAcc = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 		}

@@ -36,10 +36,16 @@ private:
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
 private:
+	void				Appear(const _double& TimeDelta);
+
+private:
 	_float4				m_f4CenterPos;
 
 	_bool				m_bFind = false;
 	_bool				m_bAttack = false;
+
+	_bool				m_Appear = false;
+	_double				m_Appear_TimeAcc = 0;
 
 public:
 	static	CM_Magic_Man*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

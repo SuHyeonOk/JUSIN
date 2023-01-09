@@ -48,6 +48,10 @@ private:
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
+	void	Parts_Tick(const _double & TimeDelta);
+	void	Parts_LateTick(const _double & TimeDelta);
+
+private:
 	void				Death_Set(const _double & TimeDelta);
 	void				Effect_Create(const _double & TimeDelta);
 
@@ -77,6 +81,12 @@ private:
 	_double					m_bSkillClone_TimeAcc = 0;
 	_double					m_dEffect_Smoke_TimeAcc = 0;
 	_double					m_dEffect_Ink_TimeAcc = 0;
+
+	_double					m_dCat_Attack_TimeAcc = 0;
+
+	// 셰이더
+	_bool		m_bShader_Hit = false;
+	_double		m_dShader_Hit_TimeAcc = 0;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

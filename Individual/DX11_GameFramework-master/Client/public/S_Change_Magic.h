@@ -56,7 +56,7 @@ private:
 
 	void				Skill_Tick(const _double & TimeDelta);
 	void				Attack_Tick();
-	void				Hit_Tick();
+	void				Hit_Tick(const _double TimeDelta);
 
 private:
 	vector<CGameObject*>	m_SkillParts;
@@ -66,6 +66,10 @@ private:
 
 	_double					m_bSkillClone_TimeAcc = 0;
 	_double					m_dEffect_TimeAcc = 0;
+
+	// ºŒ¿Ã¥ı
+	_bool		m_bShader_Hit = false;
+	_double		m_dShader_Hit_TimeAcc = 0;
 
 public:
 	static CS_Change_Magic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

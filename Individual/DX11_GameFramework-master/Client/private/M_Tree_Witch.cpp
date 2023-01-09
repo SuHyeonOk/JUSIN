@@ -359,6 +359,7 @@ void CM_Tree_Witch::Hit_Tick()
 {
 	if (m_pModelCom->Get_Finished())
 	{
+		m_bShader_Hit = false;
 		m_dShader_Hit_TimeAcc = 0;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	}

@@ -123,7 +123,7 @@ void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Size)
 
 	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-0.2f, 0.2f);
+	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.2f);
 
 	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
 

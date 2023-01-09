@@ -6,6 +6,8 @@
 #include "ItemManager.h"		
 #include "Skill_Manager.h"	
 #include "UI_Manager.h"
+#include "Effect_Manager.h"
+#include "Utilities_Manager.h"
 	
 #include "B_3DBullet.h"
 
@@ -57,7 +59,7 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 	m_tMonsterInfo.fExp		= 70.0f;
 	m_tMonsterInfo.fAttack	= 20.0f;
 
-	//m_pTransformCom->Set_Pos(_float3(MonsterDesc.f3Pos.x, 100.f, MonsterDesc.f3Pos.z));	// 처음에는 높이 있어서 보이지 않는다.
+	m_pTransformCom->Set_Pos(_float3(MonsterDesc.f3Pos.x, 100.f, MonsterDesc.f3Pos.z));	// 처음에는 높이 있어서 보이지 않는다.
 
 	return S_OK;
 }
@@ -65,6 +67,10 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 void CM_Magic_Man::Tick(_double TimeDelta)
 {
 	//__super::Tick(TimeDelta);
+
+	cout << CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)) << endl;
+
+	Appear(TimeDelta);
 
 	if (m_bPlayer_Attack)
 	{
@@ -365,6 +371,26 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
 
 		m_OneCoin = true;
+	}
+}
+
+void CM_Magic_Man::Appear(const _double& TimeDelta)
+{
+	if (5.f >= CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+	{
+		if (2 < m_Appear_TimeAcc)
+		{
+			m_pTransformCom->Set_Pos(0.f);
+			return;
+		}
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		m_Appear_TimeAcc += TimeDelta;
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4MyPos.x + 0.5f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f),
+			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
 	}
 }
 

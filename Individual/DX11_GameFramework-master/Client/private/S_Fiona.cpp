@@ -9,6 +9,7 @@
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
 #include "Effect_Manager.h"
+#include "Utilities_Manager.h"
 
 #include "S_StunChick.h"
 
@@ -109,21 +110,14 @@ void CS_Fiona::Tick(_double TimeDelta)
 	KeyInput(TimeDelta);
 	Skill_Tick(TimeDelta);
 
-	// 내 무기 콜라이더 공격 중일 때만 On
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_SkillParts[0]->Tick(TimeDelta);
-	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_SkillParts[1]->Tick(TimeDelta);
+	Parts_Tick(TimeDelta);
 }
 
 void CS_Fiona::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_SkillParts[0]->Late_Tick(TimeDelta);
-	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_SkillParts[1]->Late_Tick(TimeDelta);
+	Parts_LateTick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -153,7 +147,10 @@ HRESULT CS_Fiona::Render()
 		if (4 == i)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -272,6 +269,41 @@ HRESULT CS_Fiona::Ready_Parts()
 	return S_OK;
 }
 
+void CS_Fiona::Parts_Tick(const _double & TimeDelta)
+{
+	// 내 무기 콜라이더 공격 중일 때만 On
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		m_SkillParts[0]->Tick(TimeDelta);
+	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+	{
+		if (1.7 < m_dCat_Attack_TimeAcc)
+			return;
+
+		m_dCat_Attack_TimeAcc += TimeDelta;
+		if (1.5 < m_dCat_Attack_TimeAcc)
+			m_SkillParts[1]->Tick(TimeDelta);
+	}
+	else
+		m_dCat_Attack_TimeAcc = 0;
+}
+
+void CS_Fiona::Parts_LateTick(const _double & TimeDelta)
+{
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		m_SkillParts[0]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+	{
+		if (1.7 < m_dCat_Attack_TimeAcc)
+			return;
+
+		m_dCat_Attack_TimeAcc += TimeDelta;
+		if (1.5 < m_dCat_Attack_TimeAcc)
+			m_SkillParts[1]->Late_Tick(TimeDelta);
+	}
+	else
+		m_dCat_Attack_TimeAcc = 0;
+}
+
 void CS_Fiona::Death_Set(const _double & TimeDelta)
 {
 	// 죽을 때의 처리
@@ -285,12 +317,13 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.01f), _float3(1.0f, 0.75f, 0.79f));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f),
+			_float3(CUtilities_Manager::GetInstance()->Get_Random(1.0f, 0.9f), CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89)));
 
 		m_dEffect_Ink_TimeAcc += TimeDelta;
 		if (0.1 < m_dEffect_Ink_TimeAcc)
 		{
-			CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+			CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.02f));
 			m_dEffect_Ink_TimeAcc = 0;
 		}
 	}
@@ -335,24 +368,20 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 void CS_Fiona::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (1 < m_dEffect_Smoke_TimeAcc)
+	if (1 < m_dEffect_Ink_TimeAcc)
 		return;
 
 	m_OnMove = false;
 
-	m_dEffect_Smoke_TimeAcc += TimeDelta;
-	if (0.5 < m_dEffect_Smoke_TimeAcc)
-	{
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.01f), _float3(1.0f, 0.75f, 0.79f));
-	}
+	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(1.0f, 0.9f), 
+		CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89)));
 
 	m_dEffect_Ink_TimeAcc += TimeDelta;
 	if (0.1 < m_dEffect_Ink_TimeAcc)
 	{
-		CEffect_Manager::GetInstance()->Change_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Change_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.02f));
 		m_dEffect_Ink_TimeAcc = 0;
 	}
-
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)
@@ -443,8 +472,17 @@ void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 {
 	m_OnMove = false;
 
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
+
 	if (21 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
+		m_bShader_Hit = false;
+		m_dShader_Hit_TimeAcc = 0;
+
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	}
