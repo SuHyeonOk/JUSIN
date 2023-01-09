@@ -22,7 +22,6 @@ public:
 
 	}BENEFICIALINFO;
 
-
 private:
 	CE_Beneficial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CE_Beneficial(const CE_Beneficial& rhs);

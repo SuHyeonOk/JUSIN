@@ -5,6 +5,7 @@
 #include "Utilities_Manager.h"
 
 #include "E_Smoke.h"
+#include "E_Skill_Marceline_Sound.h"
 #include "E_Beneficial.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
@@ -21,6 +22,34 @@ void CEffect_Manager::Beneficial(_float3 f3Size, _float3 f3Color)
 	tBeneficlalInfo.f3Pos = f3Size;
 	tBeneficlalInfo.f3Color = f3Color;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Beneficial"), &tBeneficlalInfo)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CEffect_Manager::Food_Hp(_float3 f3Size)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float	fRandomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+	_float	fRandomNumberY = CUtilities_Manager::GetInstance()->Get_Random(0.6f, 2.0f);
+	_float	fRandomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
+
+	_int fRandomPos = CUtilities_Manager::GetInstance()->Get_Random(0, 4);
+
+	if (0 == fRandomPos)
+		f3Size = _float3(f3Size.x + fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z + fRandomNumberZ);
+	else if (1 == fRandomPos)
+		f3Size = _float3(f3Size.x - fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z + fRandomNumberZ);
+	else if (2 == fRandomPos)
+		f3Size = _float3(f3Size.x + fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z - fRandomNumberZ);
+	else if (3 == fRandomPos)
+		f3Size = _float3(f3Size.x - fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z - fRandomNumberZ);
+
+	CE_Skill_Marceline_Sound::EFFECTINFO eEffectInfo;
+	eEffectInfo.eEffectType = CE_Skill_Marceline_Sound::EFFECTINFO::HP;
+	eEffectInfo.f3Pos = f3Size;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &eEffectInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -84,13 +113,10 @@ void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Size)
 	else if (3 == fRandomPos)
 		f3Size = _float3(f3Size.x - fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z - fRandomNumberZ);
 
-	//_float	fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-
-	//f3Size.x *= fRandomNumber;
-	//f3Size.y *= fRandomNumber;
-	//f3Size.z *= fRandomNumber;
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &f3Size)))
+	CE_Skill_Marceline_Sound::EFFECTINFO eEffectInfo;
+	eEffectInfo.eEffectType = CE_Skill_Marceline_Sound::EFFECTINFO::SOUND;
+	eEffectInfo.f3Pos = f3Size;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &eEffectInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);

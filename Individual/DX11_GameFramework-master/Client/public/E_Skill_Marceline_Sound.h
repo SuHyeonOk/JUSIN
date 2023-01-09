@@ -14,6 +14,16 @@ BEGIN(Client)
 
 class CE_Skill_Marceline_Sound final : public CGameObject
 {
+public:
+	typedef struct tagEffectlInfo
+	{
+		enum EFFECTTYPE { SOUND, HP, TYPE_END };
+		EFFECTTYPE	eEffectType = TYPE_END;
+
+		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+
+	}EFFECTINFO;
+
 private:
 	CE_Skill_Marceline_Sound(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CE_Skill_Marceline_Sound(const CE_Skill_Marceline_Sound& rhs);
@@ -35,6 +45,9 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+
+private:
+	EFFECTINFO			m_tEffectInfo;
 
 private:	// Shader
 	_float				m_fAlpha = 1.0f;

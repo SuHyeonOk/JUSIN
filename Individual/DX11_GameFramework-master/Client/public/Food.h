@@ -57,7 +57,9 @@ private:
 
 	_bool		m_bPlayer_Collider = false;
 
+	_double		m_dDead_TimeAcc = 0;
 	_double		m_dFoodUp_TimeAcc = 0;
+	_double		m_dFoodHp_TimeAcc = 0;
 	_bool		m_bBeneficial = false;
 
 public:

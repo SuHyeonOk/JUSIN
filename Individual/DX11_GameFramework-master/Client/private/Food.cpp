@@ -204,25 +204,35 @@ void CFood::Effect_Create(const _double & TimeDelta)
 	if (!m_bPlayer_Collider)
 		return;
 
+	m_dDead_TimeAcc += TimeDelta;
+	if (2 < m_dDead_TimeAcc)
+		CGameObject::Set_Dead();
+
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 	_float4 f4PlayerPos;
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 	// 링
-	if(0 == m_dFoodUp_TimeAcc)	// 맨 처음 한 번 하려고
+	if (0 == m_dFoodUp_TimeAcc)	// 맨 처음 한 번 하려고
+	{
 		CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
-
+		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+	}
+	
 	m_dFoodUp_TimeAcc += TimeDelta;
-	if (1 < m_dFoodUp_TimeAcc)
+	if (0.3 < m_dFoodUp_TimeAcc)
 	{
 		CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 		m_dFoodUp_TimeAcc = 0;
 	}
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (pGameInstance->Key_Down(DIK_B))
-		m_bBeneficial = false;
-	RELEASE_INSTANCE(CGameInstance);
+	// 십자가
+	m_dFoodHp_TimeAcc += TimeDelta;
+	if (0.5 < m_dFoodHp_TimeAcc)
+	{
+		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+		m_dFoodHp_TimeAcc = 0;
+	}
 
 	// 바닥에 이미지 변하는
 	if (!m_bBeneficial)
