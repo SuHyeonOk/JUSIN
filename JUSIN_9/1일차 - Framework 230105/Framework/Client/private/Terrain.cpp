@@ -144,6 +144,17 @@ HRESULT CTerrain::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (GetKeyState('W') & 0x8000)
+	{
+		dd++;
+	}
+
+	if (GetKeyState('S') & 0x8000)
+	{
+		dd--;
+	}
+
+
 	if (FAILED(m_pTextureCom[TYPE_DIFFUSE]->Bind_ShaderResources(m_pShaderCom, "g_DiffuseTexture")))
 		return E_FAIL;
 	if (FAILED(m_pTextureCom[TYPE_BRUSH]->Bind_ShaderResource(m_pShaderCom, "g_BrushTexture", 0)))

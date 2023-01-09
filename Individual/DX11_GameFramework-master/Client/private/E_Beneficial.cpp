@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "..\public\E_Food_Up.h"
+#include "..\public\E_Beneficial.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
-CE_Food_Up::CE_Food_Up(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CE_Beneficial::CE_Beneficial(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CE_Food_Up::CE_Food_Up(const CE_Food_Up & rhs)
+CE_Beneficial::CE_Beneficial(const CE_Beneficial & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CE_Food_Up::Initialize_Prototype()
+HRESULT CE_Beneficial::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,19 +24,17 @@ HRESULT CE_Food_Up::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CE_Food_Up::Initialize(void * pArg)
+HRESULT CE_Beneficial::Initialize(void * pArg)
 {	
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_tBeneficialInfo, pArg, sizeof(m_tBeneficialInfo));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_tBeneficialInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -45,31 +43,29 @@ HRESULT CE_Food_Up::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.f));
+	m_pTransformCom->Set_Scaled(_float3(3.0f, 3.0f, 1.f));
 	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
 
 	return S_OK;
 }
 
-void CE_Food_Up::Tick(_double TimeDelta)
+void CE_Beneficial::Tick(_double TimeDelta)
 {
-	// 이미지 알파값이 줄어들면서 위로 올라간다.	(카메라를 바라보지 않는다.)
+	// 이미지를 돌리면서, 원하는 색상으로 변경한다. (카메라를 바라보지 않는다.)
 
 	__super::Tick(TimeDelta);
 
-	m_pTransformCom->Go_Backward(TimeDelta);
-
-	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4 vf4MyPos;
-	XMStoreFloat4(&vf4MyPos, vMyPos);
-
-	m_fAlpha -= _float(TimeDelta) * 0.5f;
-
-	if (1.5f < vf4MyPos.y)
+	m_dChange_Texture += TimeDelta;
+	if (0.09 < m_dChange_Texture)
+	{
+		++m_iTexture_Index;
+		m_dChange_Texture = 0;
+	}
+	if (9 <= m_iTexture_Index)
 		CGameObject::Set_Dead();
 }
 
-void CE_Food_Up::Late_Tick(_double TimeDelta)
+void CE_Beneficial::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -79,7 +75,7 @@ void CE_Food_Up::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
-HRESULT CE_Food_Up::Render()
+HRESULT CE_Beneficial::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -87,15 +83,14 @@ HRESULT CE_Food_Up::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	//m_pShaderCom->Begin(5);
-	m_pShaderCom->Begin(2);
+	m_pShaderCom->Begin(1);
 
 	m_pVIBufferCom->Render();
 
 	return S_OK;
 }
 
-HRESULT CE_Food_Up::SetUp_Components()
+HRESULT CE_Beneficial::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
@@ -110,13 +105,13 @@ HRESULT CE_Food_Up::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Up"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Change"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CE_Food_Up::SetUp_ShaderResources()
+HRESULT CE_Beneficial::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -134,40 +129,44 @@ HRESULT CE_Food_Up::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	// 텍스처 넘기기
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTexture_Index)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tBeneficialInfo.f3Color, sizeof _float)))
+		return E_FAIL;
+
+	_float fAlpha = 0.8f;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-CE_Food_Up * CE_Food_Up::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CE_Beneficial * CE_Beneficial::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CE_Food_Up*		pInstance = new CE_Food_Up(pDevice, pContext);
+	CE_Beneficial*		pInstance = new CE_Beneficial(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CE_Food_Up");
+		MSG_BOX("Failed to Created : CE_Beneficial");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CE_Food_Up::Clone(void * pArg)
+CGameObject * CE_Beneficial::Clone(void * pArg)
 {
-	CE_Food_Up*		pInstance = new CE_Food_Up(*this);
+	CE_Beneficial*		pInstance = new CE_Beneficial(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CE_Food_Up");
+		MSG_BOX("Failed to Cloned : CE_Beneficial");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CE_Food_Up::Free()
+void CE_Beneficial::Free()
 {
 	__super::Free();
 

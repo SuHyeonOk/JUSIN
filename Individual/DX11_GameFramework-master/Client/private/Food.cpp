@@ -71,6 +71,9 @@ void CFood::Tick(_double TimeDelta)
 
 void CFood::Late_Tick(_double TimeDelta)
 {
+	if (m_bPlayer_Collider)
+		return;
+
 	__super::Late_Tick(TimeDelta);
 
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
@@ -205,11 +208,27 @@ void CFood::Effect_Create(const _double & TimeDelta)
 	_float4 f4PlayerPos;
 	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
+	// 링
+	if(0 == m_dFoodUp_TimeAcc)	// 맨 처음 한 번 하려고
+		CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+
 	m_dFoodUp_TimeAcc += TimeDelta;
 	if (1 < m_dFoodUp_TimeAcc)
 	{
 		CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 		m_dFoodUp_TimeAcc = 0;
+	}
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (pGameInstance->Key_Down(DIK_B))
+		m_bBeneficial = false;
+	RELEASE_INSTANCE(CGameInstance);
+
+	// 바닥에 이미지 변하는
+	if (!m_bBeneficial)
+	{
+		m_bBeneficial = true;
+		CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z), /*_float3(0.5f, 0.75f, 0.27f)*/_float3(1.0f, 1.0f, 1.0f));
 	}
 }
 

@@ -12,23 +12,21 @@ END
 
 BEGIN(Client)
 
-class CE_Food_Up final : public CGameObject
+class CE_Beneficial final : public CGameObject
 {
 public:
-	typedef struct tagDieCenterInfo : public CGameObject::GAMEOBJECTDESC
+	typedef struct tagBeneficialInfo
 	{
-		enum TEXTURETYPE { SKY, BLUE, YELLOW, BROWN, PURPLE, GREEN, RED, GRAY, BLACK, TEXTURETYPE_END
-		};
-		TEXTURETYPE		eMonsterKind = TEXTURETYPE_END;
+		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float3		f3Color = { 1.0f, 1.0f, 1.0f };
 
-		_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+	}BENEFICIALINFO;
 
-	}DIECENTERINFO;
 
 private:
-	CE_Food_Up(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CE_Food_Up(const CE_Food_Up& rhs);
-	virtual ~CE_Food_Up() = default;
+	CE_Beneficial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CE_Beneficial(const CE_Beneficial& rhs);
+	virtual ~CE_Beneficial() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -48,12 +46,15 @@ private:
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	DIECENTERINFO		m_tDieCenterInfo;
+	BENEFICIALINFO			m_tBeneficialInfo;
 
-	_float				m_fAlpha = 0.8f;
+private:	// Shader
+	_int					m_iTexture_Index = 0;
+	_double					m_dChange_Texture = 0;
+	_float					m_fAlpha = 0.7f;
 
 public:
-	static	CE_Food_Up*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Beneficial*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

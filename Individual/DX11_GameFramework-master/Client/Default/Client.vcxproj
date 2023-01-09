@@ -182,6 +182,7 @@
     <ClInclude Include="..\public\Effect_Manager.h" />
     <ClInclude Include="..\public\Effect_Point_Instancing.h" />
     <ClInclude Include="..\public\Effect_Rect_Instancing.h" />
+    <ClInclude Include="..\public\E_Beneficial.h" />
     <ClInclude Include="..\public\E_DieCenter.h" />
     <ClInclude Include="..\public\E_Food_Up.h" />
     <ClInclude Include="..\public\E_Skill_Marceline_Sound.h" />
@@ -275,6 +276,7 @@
     <ClCompile Include="..\private\Effect_Manager.cpp" />
     <ClCompile Include="..\private\Effect_Point_Instancing.cpp" />
     <ClCompile Include="..\private\Effect_Rect_Instancing.cpp" />
+    <ClCompile Include="..\private\E_Beneficial.cpp" />
     <ClCompile Include="..\private\E_DieCenter.cpp" />
     <ClCompile Include="..\private\E_Food_Up.cpp" />
     <ClCompile Include="..\private\E_Skill_Marceline_Sound.cpp" />

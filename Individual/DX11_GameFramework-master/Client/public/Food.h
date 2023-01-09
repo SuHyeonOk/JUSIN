@@ -58,6 +58,7 @@ private:
 	_bool		m_bPlayer_Collider = false;
 
 	_double		m_dFoodUp_TimeAcc = 0;
+	_bool		m_bBeneficial = false;
 
 public:
 	static	CFood* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

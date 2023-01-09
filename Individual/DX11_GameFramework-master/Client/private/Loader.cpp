@@ -40,7 +40,7 @@
 #include "E_Skill_Marceline_Sound.h"
 #include "E_Skill_Marceline_Waves.h"
 #include "E_Smoke.h"
-
+#include "E_Beneficial.h"
 #include "E_Food_Up.h"
 
 // Obj
@@ -950,7 +950,7 @@ HRESULT CLoader::Effect_Texture()
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_E_Food_Up */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Up"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/SpellKnight00Particle03.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/HealFX_2_D.png")))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_E_Food_Hp */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Hp"),
@@ -986,6 +986,10 @@ HRESULT CLoader::Effect_Create()
 		CE_Smoke::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_E_Beneficial*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Beneficial"),
+		CE_Beneficial::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* For.Prototype_GameObject_E_Food_Up*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Food_Up"),
 		CE_Food_Up::Create(m_pDevice, m_pContext))))

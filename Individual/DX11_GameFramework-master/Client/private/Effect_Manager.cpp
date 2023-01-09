@@ -5,6 +5,7 @@
 #include "Utilities_Manager.h"
 
 #include "E_Smoke.h"
+#include "E_Beneficial.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
@@ -12,22 +13,35 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
-void CEffect_Manager::Food_Up(_float3 fSize)
+void CEffect_Manager::Beneficial(_float3 f3Size, _float3 f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Food_Up"), &fSize)))
+	CE_Beneficial::BENEFICIALINFO	tBeneficlalInfo;
+	tBeneficlalInfo.f3Pos = f3Size;
+	tBeneficlalInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Beneficial"), &tBeneficlalInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Change_Smoke(_float3 fSize)
+void CEffect_Manager::Food_Up(_float3 f3Size)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Food_Up"), &f3Size)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CEffect_Manager::Change_Smoke(_float3 f3Size)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Smoke::SMOKEINFO	tSmokeInfo;
-	tSmokeInfo.f3Pos = fSize;
+	tSmokeInfo.f3Pos = f3Size;
 
 	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// ·£´ýÀ¸·Î
 	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
@@ -41,17 +55,17 @@ void CEffect_Manager::Change_Smoke(_float3 fSize)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Skill_Marceline_Waves_Create(_float3 fSize)
+void CEffect_Manager::Skill_Marceline_Waves_Create(_float3 f3Size)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Waves"), &fSize)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Waves"), &f3Size)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 fSize)
+void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Size)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -62,21 +76,21 @@ void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 fSize)
 	_int fRandomPos = CUtilities_Manager::GetInstance()->Get_Random(0, 4);
 
 	if (0 == fRandomPos)
-		fSize = _float3(fSize.x + fRandomNumberX, fSize.y + fRandomNumberY, fSize.z + fRandomNumberZ);
+		f3Size = _float3(f3Size.x + fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z + fRandomNumberZ);
 	else if (1 == fRandomPos)
-		fSize = _float3(fSize.x - fRandomNumberX, fSize.y + fRandomNumberY, fSize.z + fRandomNumberZ);
+		f3Size = _float3(f3Size.x - fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z + fRandomNumberZ);
 	else if (2 == fRandomPos)
-		fSize = _float3(fSize.x + fRandomNumberX, fSize.y + fRandomNumberY, fSize.z - fRandomNumberZ);
+		f3Size = _float3(f3Size.x + fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z - fRandomNumberZ);
 	else if (3 == fRandomPos)
-		fSize = _float3(fSize.x - fRandomNumberX, fSize.y + fRandomNumberY, fSize.z - fRandomNumberZ);
+		f3Size = _float3(f3Size.x - fRandomNumberX, f3Size.y + fRandomNumberY, f3Size.z - fRandomNumberZ);
 
 	//_float	fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 
-	//fSize.x *= fRandomNumber;
-	//fSize.y *= fRandomNumber;
-	//fSize.z *= fRandomNumber;
+	//f3Size.x *= fRandomNumber;
+	//f3Size.y *= fRandomNumber;
+	//f3Size.z *= fRandomNumber;
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &fSize)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &f3Size)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -42,6 +42,8 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
 
+	int dd = 0;
+
 public:
 	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
