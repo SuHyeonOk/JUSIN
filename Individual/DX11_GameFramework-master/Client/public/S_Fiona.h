@@ -75,7 +75,8 @@ private:
 	_float					m_fCat_Attack = 0;
 
 	_double					m_bSkillClone_TimeAcc = 0;
-	_double					m_dEffect_TimeAcc = 0;
+	_double					m_dEffect_Smoke_TimeAcc = 0;
+	_double					m_dEffect_Ink_TimeAcc = 0;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

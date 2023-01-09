@@ -17,7 +17,7 @@ class CE_Skill_Marceline_Sound final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum EFFECTTYPE { SOUND, HP, TYPE_END };
+		enum EFFECTTYPE { SOUND, HP, INK, TYPE_END };
 		EFFECTTYPE	eEffectType = TYPE_END;
 
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };

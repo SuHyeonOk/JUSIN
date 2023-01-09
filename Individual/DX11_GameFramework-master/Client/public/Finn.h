@@ -43,8 +43,6 @@ private:
 
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
-	void	Shader_Time(_double TimeDelta);
-
 private:
 	void	Parts_Tick(const _double & TimeDelta);
 	void	Parts_LateTick(const _double & TimeDelta);
@@ -81,7 +79,7 @@ private:
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 
 	// 셰이더
-	_bool		m_bHit = false;
+	_float		m_bHit_Alpha = 1.0f;
 
 	//////////////////////////// 플레이어 일 때
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간

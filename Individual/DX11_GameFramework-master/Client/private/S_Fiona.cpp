@@ -285,7 +285,14 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.01f));
+
+		m_dEffect_Ink_TimeAcc += TimeDelta;
+		if (0.1 < m_dEffect_Ink_TimeAcc)
+		{
+			CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+			m_dEffect_Ink_TimeAcc = 0;
+		}
 	}
 
 	if (21 < m_bSkillClone_TimeAcc)
@@ -328,12 +335,24 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 void CS_Fiona::Effect_Create(const _double & TimeDelta)
 {
 	// ÀÌÆåÆ®
-	if (1 < m_dEffect_TimeAcc)
+	if (1 < m_dEffect_Smoke_TimeAcc)
 		return;
 
-	m_dEffect_TimeAcc += TimeDelta;
-	if (0.5 < m_dEffect_TimeAcc)
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f));
+	m_OnMove = false;
+
+	m_dEffect_Smoke_TimeAcc += TimeDelta;
+	if (0.5 < m_dEffect_Smoke_TimeAcc)
+	{
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.01f));
+	}
+
+	m_dEffect_Ink_TimeAcc += TimeDelta;
+	if (0.1 < m_dEffect_Ink_TimeAcc)
+	{
+		CEffect_Manager::GetInstance()->Change_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f));
+		m_dEffect_Ink_TimeAcc = 0;
+	}
+
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)

@@ -56,29 +56,24 @@ void CE_Smoke::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 카메라를 바라보고 랜덤한 곳으로 회전하면서 이동하기
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	RELEASE_INSTANCE(CGameInstance);
+
+	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
+
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vDistance = XMLoadFloat4(&_float4(m_SmokeInfo.f4Look.x, m_SmokeInfo.f4Look.y, m_SmokeInfo.f4Look.z, 0.0f));
+	vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
+
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
+
 	// 알파값 줄어들기2
 	m_dEffect_TimeAcc += TimeDelta;
 	if (1 < m_dEffect_TimeAcc)
-	{
 		m_fAlpha -= _float(TimeDelta) * 0.5f;
-		//m_dEffect_TimeAcc = 0;
-	}
-	// 카메라를 바라보고 랜덤한 곳으로 이동하기
-	else
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		RELEASE_INSTANCE(CGameInstance);
-
-		m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
-
-		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_vector vDistance = XMLoadFloat4(&_float4(m_SmokeInfo.f4Look.x, m_SmokeInfo.f4Look.y, m_SmokeInfo.f4Look.z, 0.0f));
-		vMyPos += XMVector3Normalize(vDistance) * 0.5f * _float(TimeDelta);
-
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
-	}
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음

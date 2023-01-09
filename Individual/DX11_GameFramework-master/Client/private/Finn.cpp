@@ -112,6 +112,8 @@ HRESULT CFinn::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+
+
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -119,7 +121,12 @@ HRESULT CFinn::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		{
+			if (CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		}
 	}
 
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -192,13 +199,6 @@ HRESULT CFinn::SetUp_ShaderResources()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_F))
-	{
-		m_bHit = true;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_bHit", &m_bHit, sizeof _bool)))
-			return E_FAIL;
-	}
-
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
@@ -211,23 +211,13 @@ HRESULT CFinn::SetUp_ShaderResources()
 	if (nullptr == pLightDesc)
 		return E_FAIL;
 
+	if (CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_bHit_Alpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
-}
-
-void CFinn::Shader_Time(_double TimeDelta)
-{
-	if (!m_bHit)
-		return;
-
-	//if (m_bHit)
-	//{
-	//	m_bHit_TimeAcc += TimeDelta;
-	//	if (0.5 < m_bHit_TimeAcc)
-	//	{
-	//		m_bHit = false;
-	//		m_bHit_TimeAcc = 0;
-	//	}
-	//}
 }
 
 HRESULT CFinn::Ready_Parts()
@@ -745,8 +735,13 @@ void CFinn::Hit_Tick(_double TimeDelta)
 {
 	m_OnMove = false;
 
+	m_bHit_Alpha -= _float(TimeDelta) * 0.7f;
+
 	if (m_pModelCom->Get_Finished())
+	{
+		m_bHit_Alpha = 1.0f;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
 }
 
 void CFinn::KnockBack_Hit_Tick(_double TimeDelta)

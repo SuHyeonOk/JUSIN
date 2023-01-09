@@ -67,6 +67,19 @@ void CFood::Tick(_double TimeDelta)
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
 	Effect_Create(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_B))
+	{
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFood::Late_Tick(_double TimeDelta)

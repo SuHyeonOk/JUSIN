@@ -120,6 +120,12 @@ HRESULT CE_Skill_Marceline_Sound::SetUp_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Hp"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
+	else if (EFFECTINFO::EFFECTTYPE::INK == m_tEffectInfo.eEffectType)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_ColorSmoke"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
