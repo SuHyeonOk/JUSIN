@@ -24,6 +24,7 @@ void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)
 void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 {
 	m_tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(iIndex);	// 현재 내가 누른 인덱스
+	CSkill_Manager::GetInstance()->Set_Player_Skill(m_tPlayerSkill.eSkill);
 
 	if(0 < m_arrPageCount[m_tPlayerSkill.eSkill])								// 예외처리 0보다 클때, 즉 스킬이 있을 때 사용 가능하다.
 		m_arrPageCount[m_tPlayerSkill.eSkill] -= 1;								// 아이템 하나 감소

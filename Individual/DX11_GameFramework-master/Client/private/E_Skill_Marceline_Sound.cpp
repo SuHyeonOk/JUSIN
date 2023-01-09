@@ -152,7 +152,8 @@ HRESULT CE_Skill_Marceline_Sound::SetUp_ShaderResources()
 	
 	if (EFFECTINFO::EFFECTTYPE::INK == m_tEffectInfo.eEffectType)
 	{
-		_float3 f3Color = _float3(CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f));
+		_float3 f3Color = _float3(CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f), 
+			CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f));
 
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &f3Color, sizeof _float3)))
 			return E_FAIL;

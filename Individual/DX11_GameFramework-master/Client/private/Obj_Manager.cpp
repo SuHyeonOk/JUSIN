@@ -234,49 +234,54 @@ void		CObj_Manager::Player_Exp()
 
 void		CObj_Manager::Player_Weapon()
 {
-	// 스킬 사용? 무기사용?
+	// 오른쪽 하단 UI
 	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
-		CUI_Manager::GetInstance()->Set_Weapons(0);
+		CUI_Manager::GetInstance()->Set_Weapons(0);		// 기본 공격 사용 중
 		CUI_Manager::GetInstance()->Set_Weapon_index(m_iWeapon_Index);
 	}
 	else
-		CUI_Manager::GetInstance()->Set_Weapons(1);
+		CUI_Manager::GetInstance()->Set_Weapons(1);		// 스킬 사용 중					
 
-	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	// 무기 (스킬을 사용하지 않을 때만 넘긴다.)
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
-		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
-		CUI_Manager::GetInstance()->Set_Weapon_index(4);
-	}
-	else if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
-		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
-		CUI_Manager::GetInstance()->Set_Weapon_index(5);
-	}
-	else if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
-		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
-		CUI_Manager::GetInstance()->Set_Weapon_index(6);
-	}
-	else if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-	{
-		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
-		CUI_Manager::GetInstance()->Set_Weapon_index(7);
-	}
-
-	// 무기
-	if (CObj_Manager::PLAYERINFO::FINN == m_tPlayerInfo.ePlayer)
-	{
-		if (CObj_Manager::PLAYERINFO::F_DOLDEN == m_tPlayerInfo.ePlayerWeapon)
-			CUI_Manager::GetInstance()->Set_Weapon_index(0);
-		else if (CObj_Manager::PLAYERINFO::F_ROOT == m_tPlayerInfo.ePlayerWeapon)
-			CUI_Manager::GetInstance()->Set_Weapon_index(1);
+		if (CObj_Manager::PLAYERINFO::FINN == m_tPlayerInfo.ePlayer)
+		{
+			if (CObj_Manager::PLAYERINFO::F_DOLDEN == m_tPlayerInfo.ePlayerWeapon)
+				CUI_Manager::GetInstance()->Set_Weapon_index(0);
+			else if (CObj_Manager::PLAYERINFO::F_ROOT == m_tPlayerInfo.ePlayerWeapon)
+				CUI_Manager::GetInstance()->Set_Weapon_index(1);
+			else
+				CUI_Manager::GetInstance()->Set_Weapon_index(2);
+		}
 		else
-			CUI_Manager::GetInstance()->Set_Weapon_index(2);
+		{
+			CUI_Manager::GetInstance()->Set_Weapon_index(3);
+		}
 	}
-	else
+	else	// 반대로 스킬을 사용중 이라면 스킬의 인덱스를 넘긴다.
 	{
-		CUI_Manager::GetInstance()->Set_Weapon_index(3);
+		if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		{
+			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+			CUI_Manager::GetInstance()->Set_Weapon_index(4);
+		}
+		else if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		{
+			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+			CUI_Manager::GetInstance()->Set_Weapon_index(5);
+		}
+		else if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		{
+			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+			CUI_Manager::GetInstance()->Set_Weapon_index(6);
+		}
+		else if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		{
+			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+			CUI_Manager::GetInstance()->Set_Weapon_index(7);
+		}
 	}
 }
 

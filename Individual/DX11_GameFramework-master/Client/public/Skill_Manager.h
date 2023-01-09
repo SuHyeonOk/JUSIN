@@ -49,8 +49,10 @@ public:
 	void						CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate);
 
 public:		// 플레이어
-	PLAYERSKILL					Get_Player_Skill() { return m_tPlayerSkill; }
-	void						Set_Player_Skill(PLAYERSKILL::SKILL eSkillState) { m_tPlayerSkill.eSkill = eSkillState; }
+	PLAYERSKILL					Get_Player_Skill() { 
+		return m_tPlayerSkill; }
+	void						Set_Player_Skill(PLAYERSKILL::SKILL eSkillState) { 
+		m_tPlayerSkill.eSkill = eSkillState; }
 
 	MAGICSKILL					Get_Magic_Skill() { return m_tMagicSkill; }
 	void						Set_Magic_Skill(MAGICSKILL::SKILLSTATE eSkillState) { m_tMagicSkill.eSkill = eSkillState; }
