@@ -235,7 +235,19 @@ HRESULT CS_Change_Magic::Ready_Parts()
 void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 {
 	m_bSkillClone_TimeAcc += TimeDelta;
+
 	if (20 < m_bSkillClone_TimeAcc)
+	{
+		m_OnMove = false;
+
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+	}
+
+	if (21 < m_bSkillClone_TimeAcc)
 	{
 		// 따라오던 플레이어의 좌표를 옮겨놓는다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -274,12 +286,12 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 void CS_Change_Magic::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (2 < m_dEffect_TimeAcc)
+	if (1 < m_dEffect_TimeAcc)
 		return;
 
 	m_dEffect_TimeAcc += TimeDelta;
 	if (0.5 < m_dEffect_TimeAcc)
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 0.5f, m_f3Pos.z - 0.5f));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f));
 }
 
 void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)

@@ -75,7 +75,7 @@ void CEffect_Manager::Change_Smoke(_float3 f3Size)
 	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
 	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
 	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-	vLook = XMVector4Transform(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
 	XMStoreFloat4(&tSmokeInfo.f4Look, vLook);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tSmokeInfo)))

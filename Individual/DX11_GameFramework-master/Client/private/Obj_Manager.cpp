@@ -198,9 +198,11 @@ void		CObj_Manager::Current_Player()
 		m_tPlayerInfo.ePlayer = m_tPlayerInfo.JAKE;
 		break;
 
+#ifdef F2_SKELETON
 	case PLAYERINFO::FREE:
 		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FREE; // ▣ 추 후 삭제 해야함
 		break;
+#endif
 
 	case PLAYERINFO::RESET:
 		m_ChangeTarget = 0; // 즉, Finn

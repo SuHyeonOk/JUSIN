@@ -49,14 +49,6 @@ HRESULT CE_Smoke::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
 
-	//_vector vLook = XMLoadFloat4(&m_SmokeInfo.f4Look);
-	//_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-	//_vector vUp = XMVector3Cross(vLook, vRight);
-
-	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
-
 	return S_OK;
 }
 
@@ -81,12 +73,11 @@ void CE_Smoke::Tick(_double TimeDelta)
 
 		m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
 
-		_vector	vMyPos;		// 랜덤한 Look 을 받아온 방향으로
-		vMyPos += XMVector3Normalize(XMVectorSet(m_SmokeInfo.f4Look.x, m_SmokeInfo.f4Look.y, m_SmokeInfo.f4Look.z, 1.f) * 2.f * _float(TimeDelta));
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vDistance = XMLoadFloat4(&_float4(m_SmokeInfo.f4Look.x, m_SmokeInfo.f4Look.y, m_SmokeInfo.f4Look.z, 0.0f));
+		vMyPos += XMVector3Normalize(vDistance) * 0.5f * _float(TimeDelta);
 
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 이동한다.
-
-		//m_pTransformCom->Go_Straight(TimeDelta);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 	}
 
 	if (0 >= m_fAlpha)
@@ -111,7 +102,7 @@ HRESULT CE_Smoke::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);
+	m_pShaderCom->Begin(4);
 
 	m_pVIBufferCom->Render();
 

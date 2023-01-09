@@ -52,7 +52,6 @@ HRESULT CE_Beneficial::Initialize(void * pArg)
 void CE_Beneficial::Tick(_double TimeDelta)
 {
 	// 이미지를 돌리면서, 원하는 색상으로 변경한다. (카메라를 바라보지 않는다.)
-
 	__super::Tick(TimeDelta);
 
 	m_dChange_Texture += TimeDelta;
