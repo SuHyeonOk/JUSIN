@@ -221,7 +221,7 @@ void CM_Mimic::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::HIT:
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(4, false);
 		break;
 
@@ -273,8 +273,10 @@ void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
-void CM_Mimic::Hit_Tick()
+void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 {
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;

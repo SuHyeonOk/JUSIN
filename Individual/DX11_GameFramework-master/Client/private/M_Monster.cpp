@@ -67,6 +67,8 @@ void CM_Monster::Tick(const _double& TimeDelta)
 		m_dPlayer_Attack_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayer_Attack_TimeAcc)
 		{
+			m_pTransformCom->Go_Backward(0.f);
+
 			// 플레이어의 공격력 으로 몬스터 체력 깍기
 			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
 

@@ -172,7 +172,7 @@ HRESULT CM_Ghost::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.7f, 0.7f, 0.7f);
+	ColliderDesc.vSize = _float3(0.5f, 0.7f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.7f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
@@ -273,7 +273,7 @@ void CM_Ghost::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::HIT:
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(4, false);
 		break;
 
@@ -369,8 +369,10 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Ghost::Hit_Tick()
+void CM_Ghost::Hit_Tick(const _double& TimeDelta)
 {
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;

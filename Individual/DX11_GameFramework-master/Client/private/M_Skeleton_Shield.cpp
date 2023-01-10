@@ -286,7 +286,7 @@ void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::HIT:
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::DIE:
@@ -381,7 +381,7 @@ void CM_Skeleton_Shield::Attack_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Skeleton_Shield::Hit_Tick()
+void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 {
 	if (0 == m_iRandomNum)
 		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(1, 2);
@@ -393,18 +393,20 @@ void CM_Skeleton_Shield::Hit_Tick()
 		{
 			m_iRandomNum = 0;
 			m_bDefense = true;
-
-			m_bShader_Hit = false;
-			m_dShader_Hit_TimeAcc = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 		}
 	}
 	else
 	{
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
 		m_pModelCom->Set_AnimIndex(2, false);	// Hit
 		if (m_pModelCom->Get_Finished())
 		{
 			m_iRandomNum = 0;
+
+			m_bShader_Hit = false;
+			m_dShader_Hit_TimeAcc = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}
 	}

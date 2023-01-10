@@ -295,7 +295,7 @@ void CM_PigWarrior::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::HIT:
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		m_pModelCom->Set_AnimIndex(6, false);
 		break;
 
@@ -411,8 +411,10 @@ void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_PigWarrior::Hit_Tick()
+void CM_PigWarrior::Hit_Tick(const _double& TimeDelta)
 {
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;

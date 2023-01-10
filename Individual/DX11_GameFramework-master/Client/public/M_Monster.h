@@ -72,7 +72,7 @@ protected:	// 자식이 자주 사용할 함수
 	virtual void			Move_Tick(const _double& TimeDelta) {};
 	virtual void			Find_Tick() {};
 	virtual void			Attack_Tick(const _double& TimeDelta) {};
-	virtual void			Hit_Tick() {};
+	virtual void			Hit_Tick(const _double& TimeDelta) {};
 	virtual	void			Die_Tick(const _double& TimeDelta) {};
 
 protected:	// 자식에서 가져다 쓰는 함수

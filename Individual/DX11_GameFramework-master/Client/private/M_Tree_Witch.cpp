@@ -207,7 +207,7 @@ void CM_Tree_Witch::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::HIT:
 		m_pModelCom->Set_AnimIndex(4, false);
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::DIE:
@@ -355,8 +355,10 @@ void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 	}
 }
 
-void CM_Tree_Witch::Hit_Tick()
+void CM_Tree_Witch::Hit_Tick(const _double& TimeDelta)
 {
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+	
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;

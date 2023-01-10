@@ -245,7 +245,7 @@ void CM_Magic_Man::Monster_Tick(const _double& TimeDelta)
 
 	case MONSTERINFO::STATE::HIT:
 		m_pModelCom->Set_AnimIndex(4, false);
-		Hit_Tick();
+		Hit_Tick(TimeDelta);
 		break;
 
 	case MONSTERINFO::STATE::ADD_1:
@@ -345,8 +345,10 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 	}
 }
 
-void CM_Magic_Man::Hit_Tick()
+void CM_Magic_Man::Hit_Tick(const _double& TimeDelta)
 {
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }

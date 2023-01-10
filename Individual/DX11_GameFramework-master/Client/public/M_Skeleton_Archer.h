@@ -31,7 +31,7 @@ private:
 	virtual void		Move_Tick(const _double& TimeDelta)		override;
 	virtual void		Find_Tick()								override;
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
-	virtual void		Hit_Tick()								override;
+	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
 private:
