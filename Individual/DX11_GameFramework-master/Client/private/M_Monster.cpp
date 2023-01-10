@@ -50,32 +50,7 @@ void CM_Monster::Tick(const _double& TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (m_bPlayer_Attack)	// 몬스터 공격 받는 중...
-	{
-		m_bShader_Hit = true;
-
-		m_dShader_Hit_TimeAcc += TimeDelta;
-		if (0.1 < m_dShader_Hit_TimeAcc)
-			m_bShader_Hit = false;
-
-		// 몬스터 상태 변경
-		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-
-		// UI 에 내 체력 넘겨주기
-		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
-
-		m_dPlayer_Attack_TimeAcc += TimeDelta;
-		if (0.7 < m_dPlayer_Attack_TimeAcc)
-		{
-			m_pTransformCom->Go_Backward(0.f);
-
-			// 플레이어의 공격력 으로 몬스터 체력 깍기
-			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
-
-			m_bPlayer_Attack = false;
-			m_dPlayer_Attack_TimeAcc = 0;
-		}
-	}
+	Hit_Process(TimeDelta);
 }
 
 void CM_Monster::Late_Tick(const _double& TimeDelta)
@@ -297,6 +272,39 @@ void CM_Monster::Dance_Time()
 {
 	if (CSkill_Manager::PLAYERSKILL::MARCELINT != CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+}
+
+void CM_Monster::Hit_Process(const _double & TimeDelta)
+{
+	if (!m_bPlayer_Attack)
+		return;
+
+	// 몬스터 공격 받는 중...
+
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
+
+	// 몬스터 상태 변경
+	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+	// UI 에 내 체력 넘겨주기
+	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+
+	m_dPlayer_Attack_TimeAcc += TimeDelta;
+	if (0.7 < m_dPlayer_Attack_TimeAcc)
+	{
+		m_pTransformCom->Go_Backward(0.f);
+
+		// 플레이어의 공격력 으로 몬스터 체력 깍기
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+
+		m_bPlayer_Attack = false;
+		m_dPlayer_Attack_TimeAcc = 0;
+		return;
+	}
 }
 
 void CM_Monster::Free()

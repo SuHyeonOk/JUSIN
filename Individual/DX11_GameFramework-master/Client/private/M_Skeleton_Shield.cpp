@@ -388,25 +388,25 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 
 	if (1 == m_iRandomNum)
 	{
-		m_pModelCom->Set_AnimIndex(3, false);	// 방어
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
+		m_pModelCom->Set_AnimIndex(3, false);	// Hit
 		if (m_pModelCom->Get_Finished())
 		{
 			m_iRandomNum = 0;
 			m_bDefense = true;
+
+			m_bShader_Hit = false;
+			m_dShader_Hit_TimeAcc = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 		}
 	}
 	else
 	{
-		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
-
-		m_pModelCom->Set_AnimIndex(2, false);	// Hit
+		m_pModelCom->Set_AnimIndex(2, false);	// 방어
 		if (m_pModelCom->Get_Finished())
 		{
 			m_iRandomNum = 0;
-
-			m_bShader_Hit = false;
-			m_dShader_Hit_TimeAcc = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}
 	}

@@ -117,6 +117,9 @@ private:
 	_bool				m_bRandomPos = false;
 	_double				m_bRandomMove_TimeAcc = 0;
 
+	// 자식 Tick 에서 도는 함수
+	void				Hit_Process(const _double & TimeDelta);
+
 public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;
 	virtual void			Free() override;
