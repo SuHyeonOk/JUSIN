@@ -12,22 +12,22 @@ END
 
 BEGIN(Client)
 
-class CE_Skill_Marceline_Sound final : public CGameObject
+class CE_Alpha_Change final : public CGameObject
 {
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { SOUND, HP, INK, TYPE_END };
-		TEXTURETYPE	eEffectType = TYPE_END;
+		enum TEXTURETYPE { HIT_TEXTURE, TEXTURE_END };
+		TEXTURETYPE		eTextureType = TEXTURE_END;
 
-		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
 
 	}EFFECTINFO;
 
 private:
-	CE_Skill_Marceline_Sound(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CE_Skill_Marceline_Sound(const CE_Skill_Marceline_Sound& rhs);
-	virtual ~CE_Skill_Marceline_Sound() = default;
+	CE_Alpha_Change(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CE_Alpha_Change(const CE_Alpha_Change& rhs);
+	virtual ~CE_Alpha_Change() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -47,15 +47,14 @@ private:
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	EFFECTINFO			m_tEffectInfo;
+	EFFECTINFO				m_tEffectInfo;
 
 private:	// Shader
-	_float				m_fAlpha = 1.0f;
-	_float				m_fSizeX = 0.0f;
-	_float				m_fSizeY = 0.0f;
+	_int					m_iHit_Texture_Index = 0;
+	_double					m_dChange_Texture = 0;
 
 public:
-	static	CE_Skill_Marceline_Sound*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Alpha_Change*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

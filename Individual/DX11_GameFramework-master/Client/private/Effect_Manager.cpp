@@ -7,11 +7,25 @@
 #include "E_Smoke.h"
 #include "E_Skill_Marceline_Sound.h"
 #include "E_Beneficial.h"
+#include "E_Alpha_Change.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
 {
+}
+
+void CEffect_Manager::Effect_Hit_Create(_float3 f3Size)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Alpha_Change::EFFECTINFO tEffectInfo;
+	tEffectInfo.f3Pos = f3Size;
+	tEffectInfo.eTextureType = CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CEffect_Manager::Beneficial(_float3 f3Size, _float3 f3Color)

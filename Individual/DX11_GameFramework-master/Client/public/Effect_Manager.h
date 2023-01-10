@@ -16,7 +16,8 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
-	void	Beneficial(_float3 fSize, _float3 f3Color);
+	void	Effect_Hit_Create(_float3 f3Size);
+	void	Beneficial(_float3 f3Size, _float3 f3Color);
 	void	Food_Hp(_float3 f3Size);
 	void	Food_Up(_float3 f3Size);
 	void	Change_Ink(_float3 f3Size);

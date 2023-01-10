@@ -277,6 +277,18 @@ void CM_Monster::Dance_Time()
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
+void CM_Monster::Effect_Hit(_float3 fPulsPos)
+{
+	if (!m_bShader_Hit)
+		return;
+
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4MyPos.x + fPulsPos.x, f4MyPos.y + fPulsPos.y, f4MyPos.z + fPulsPos.z));
+}
+
 void CM_Monster::Hit_Process(const _double & TimeDelta)
 {
 	if (!m_bPlayer_Attack)
@@ -284,6 +296,7 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 
 	// 몬스터 공격 받는 중...
 
+	// 몬스터 Hit 셰이더 흰색 깜박!
 	m_bShader_Hit = true;
 
 	if (0.1 < m_dPlayer_Attack_TimeAcc)

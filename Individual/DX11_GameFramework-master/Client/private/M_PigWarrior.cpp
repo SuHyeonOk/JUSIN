@@ -413,6 +413,7 @@ void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Hit_Tick(const _double& TimeDelta)
 {
+	CM_Monster::Effect_Hit(_float3(0.0f, 0.7f, -0.7f));
 	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
 	if (m_pModelCom->Get_Finished())

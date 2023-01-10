@@ -342,6 +342,7 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 
 void CM_Gronmes::Hit_Tick(const _double& TimeDelta)
 {
+	CM_Monster::Effect_Hit();
 	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
 	if (m_pModelCom->Get_Finished())

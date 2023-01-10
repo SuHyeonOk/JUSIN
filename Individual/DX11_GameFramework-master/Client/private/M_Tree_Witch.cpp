@@ -357,6 +357,8 @@ void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 
 void CM_Tree_Witch::Hit_Tick(const _double& TimeDelta)
 {
+	CM_Monster::Effect_Hit(_float3(0.0f, 1.3f, -1.0f));
+
 	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 	
 	if (m_pModelCom->Get_Finished())

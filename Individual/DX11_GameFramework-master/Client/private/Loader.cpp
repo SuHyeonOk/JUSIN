@@ -42,6 +42,7 @@
 #include "E_Smoke.h"
 #include "E_Beneficial.h"
 #include "E_Food_Up.h"
+#include "E_Alpha_Change.h"
 
 // Obj
 #include "O_Box.h"
@@ -957,6 +958,12 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Food/SpellKnight05Particle01.png")))))
 		return E_FAIL;
 
+	// Hit
+	/* For.Prototype_Component_Texture_E_Hit_Cahange */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Hit_Cahange"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Hit/Hit_Cahnge_Effect_%d.png"), 4))))
+		return E_FAIL;
+
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -993,6 +1000,11 @@ HRESULT CLoader::Effect_Create()
 	/* For.Prototype_GameObject_E_Food_Up*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Food_Up"),
 		CE_Food_Up::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_E_Alpha_Change*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Alpha_Change"),
+		CE_Alpha_Change::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 

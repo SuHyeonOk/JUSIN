@@ -459,6 +459,9 @@
     <ClInclude Include="..\public\E_Beneficial.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\E_Alpha_Change.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -729,6 +732,9 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\E_Beneficial.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_Alpha_Change.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>

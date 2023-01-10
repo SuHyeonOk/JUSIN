@@ -62,6 +62,8 @@ private:
 	_double		m_dFoodHp_TimeAcc = 0;
 	_bool		m_bBeneficial = false;
 
+	_double		m_dKeyDown_TimeAcc = 0;
+
 public:
 	static	CFood* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

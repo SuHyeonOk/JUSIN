@@ -325,6 +325,8 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 
 void CM_Magic_Man::Hit_Tick(const _double& TimeDelta)
 {
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;
@@ -342,7 +344,7 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.2f);
 
-	if (!m_OneCoin)	// 종이 생성
+  	if (!m_OneCoin)	// 종이 생성
 	{
 		// Item
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -379,6 +381,9 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 {
 	if (!m_bPlayer_Attack)
 		return;
+
+	// 히트 이펙트
+	CM_Monster::Effect_Hit(_float3(0.0f, 1.3f, -1.0f));
 
 	// 몬스터 공격 받는 중...
 	m_bShader_Hit = true;

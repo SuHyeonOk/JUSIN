@@ -285,6 +285,10 @@ void CS_Fiona::Parts_Tick(const _double & TimeDelta)
 	}
 	else
 		m_dCat_Attack_TimeAcc = 0;
+
+	if (CSkill_Manager::FIONASKILL::ATTACK != CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill ||
+		CSkill_Manager::FIONASKILL::CAT != CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 }
 
 void CS_Fiona::Parts_LateTick(const _double & TimeDelta)

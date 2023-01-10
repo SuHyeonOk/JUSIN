@@ -70,14 +70,33 @@ void CFood::Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_B))
+	if (pGameInstance->Key_Pressing(DIK_B))
 	{
+		m_dKeyDown_TimeAcc += TimeDelta;
+		cout << m_dKeyDown_TimeAcc << endl;
+
 		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
 	}
+	else
+		m_dKeyDown_TimeAcc = 0;
+
+	if (pGameInstance->Key_Pressing(DIK_V))
+	{
+		m_dKeyDown_TimeAcc += TimeDelta;
+		cout << m_dKeyDown_TimeAcc << endl;
+
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(1.0f, 1.0f, 1.0f));
+	}
+	else
+		m_dKeyDown_TimeAcc = 0;
 
 	RELEASE_INSTANCE(CGameInstance);
 }

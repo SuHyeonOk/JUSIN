@@ -388,6 +388,7 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 
 	if (1 == m_iRandomNum)
 	{
+		CM_Monster::Effect_Hit();
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
 		m_pModelCom->Set_AnimIndex(3, false);	// Hit

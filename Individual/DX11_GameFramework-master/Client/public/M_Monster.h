@@ -82,6 +82,8 @@ protected:	// 자식에서 가져다 쓰는 함수
 	void				Die(const _double& TimeDelta, _float fPlusY, _uint iBronzeCount = 0, _uint iSilverCount = 0, _uint iGoldCount = 0);
 	void				Dance_Time();
 
+	void				Effect_Hit(_float3 fPulsPos = _float3(0.0f, 1.0f, -0.7f));
+
 private:
 	// 자식 Tick 에서 도는 함수
 	void				Hit_Process(const _double & TimeDelta);

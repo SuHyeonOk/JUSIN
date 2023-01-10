@@ -87,7 +87,7 @@ HRESULT CE_Skill_Marceline_Sound::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	if (EFFECTINFO::EFFECTTYPE::INK == m_tEffectInfo.eEffectType)		// 색 조정
+	if (EFFECTINFO::TEXTURETYPE::INK == m_tEffectInfo.eEffectType)		// 색 조정
 		m_pShaderCom->Begin(4);	
 	else																// 이미지색
 		m_pShaderCom->Begin(2);	
@@ -111,19 +111,19 @@ HRESULT CE_Skill_Marceline_Sound::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (EFFECTINFO::EFFECTTYPE::SOUND == m_tEffectInfo.eEffectType)
+	if (EFFECTINFO::TEXTURETYPE::SOUND == m_tEffectInfo.eEffectType)
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Sound"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-	else if (EFFECTINFO::EFFECTTYPE::HP == m_tEffectInfo.eEffectType)
+	else if (EFFECTINFO::TEXTURETYPE::HP == m_tEffectInfo.eEffectType)
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Food_Hp"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-	else if (EFFECTINFO::EFFECTTYPE::INK == m_tEffectInfo.eEffectType)
+	else if (EFFECTINFO::TEXTURETYPE::INK == m_tEffectInfo.eEffectType)
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_ColorSmoke"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -153,7 +153,7 @@ HRESULT CE_Skill_Marceline_Sound::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 	
-	if (EFFECTINFO::EFFECTTYPE::INK == m_tEffectInfo.eEffectType)
+	if (EFFECTINFO::TEXTURETYPE::INK == m_tEffectInfo.eEffectType)
 	{
 		_float3 f3Color = _float3(CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f));
 
