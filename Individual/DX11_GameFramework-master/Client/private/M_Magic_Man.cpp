@@ -68,34 +68,9 @@ void CM_Magic_Man::Tick(_double TimeDelta)
 {
 	//__super::Tick(TimeDelta);
 
-	cout << CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)) << endl;
-
 	Appear(TimeDelta);
+	Hit_Process(TimeDelta);
 
-	if (m_bPlayer_Attack)
-	{
-		m_bShader_Hit = true;
-
-		m_dShader_Hit_TimeAcc += TimeDelta;
-		if (0.1 < m_dShader_Hit_TimeAcc)
-			m_bShader_Hit = false;
-
-		// 몬스터 상태 변경
-		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-
-		// UI 에 내 체력 넘겨주기
-		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
-
-		m_dPlayer_Attack_TimeAcc += TimeDelta;
-		if (0.7 < m_dPlayer_Attack_TimeAcc)
-		{
-			// 플레이어의 공격력 깍기
-			m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
-
-			m_bPlayer_Attack = false;
-			m_dPlayer_Attack_TimeAcc = 0;
-		}
-	}
 	Monster_Tick(TimeDelta);
 }
 
@@ -136,7 +111,10 @@ HRESULT CM_Magic_Man::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			if (m_bShader_Hit)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+			else
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -180,7 +158,7 @@ HRESULT CM_Magic_Man::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.f, 1.7f, 1.f);
+	ColliderDesc.vSize = _float3(0.7f, 1.7f, 0.7f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
@@ -347,10 +325,11 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 
 void CM_Magic_Man::Hit_Tick(const _double& TimeDelta)
 {
-	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
-
 	if (m_pModelCom->Get_Finished())
-		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+	{
+		m_bShader_Hit = false;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	}
 }
 
 void CM_Magic_Man::NoHit_Tick()
@@ -362,6 +341,8 @@ void CM_Magic_Man::NoHit_Tick()
 void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.2f);
+
+	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 	if (!m_OneCoin)	// 종이 생성
 	{
@@ -391,8 +372,40 @@ void CM_Magic_Man::Appear(const _double& TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
 		m_Appear_TimeAcc += TimeDelta;
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4MyPos.x + 0.5f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f),
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f),
 			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
+	}
+}
+
+void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
+{
+	if (!m_bPlayer_Attack)
+		return;
+
+	// 몬스터 공격 받는 중...
+	m_bShader_Hit = true;
+
+	if (0.1 < m_dPlayer_Attack_TimeAcc)
+		m_bShader_Hit = false;
+
+	// 몬스터 상태 변경
+	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+	// UI 에 내 체력 넘겨주기
+	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+
+	m_dPlayer_Attack_TimeAcc += TimeDelta;
+	if (0.5 < m_dPlayer_Attack_TimeAcc)
+	{
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
+
+		// 플레이어의 공격력 으로 몬스터 체력 깍기
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+
+		m_bPlayer_Attack = false;
+		m_dPlayer_Attack_TimeAcc = 0;
+		return;
 	}
 }
 

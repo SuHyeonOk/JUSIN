@@ -44,8 +44,8 @@ private:
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
-	void	Sword_Tick(const _double & TimeDelta);
-	void	Sword_LateTick(const _double & TimeDelta);
+	void	Parts_Tick(const _double & TimeDelta);
+	void	Parts_LateTick(const _double & TimeDelta);
 
 private:
 	void	Player_Tick(_double TimeDelta);
@@ -106,9 +106,9 @@ private:
 	_double		m_dShader_Hit_TimeAcc = 0;
 
 public:
-	static CJake* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg = nullptr) override;
-	virtual void Free() override;
+	static CJake*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject*	Clone(void* pArg = nullptr) override;
+	virtual void			Free() override;
 };
 
 END

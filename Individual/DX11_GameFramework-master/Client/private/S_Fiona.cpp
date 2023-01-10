@@ -317,15 +317,12 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f),
-			_float3(CUtilities_Manager::GetInstance()->Get_Random(1.0f, 0.9f), CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89)));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f), 
+				CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89f)));
 
-		m_dEffect_Ink_TimeAcc += TimeDelta;
-		if (0.1 < m_dEffect_Ink_TimeAcc)
-		{
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.02 < m_dEffect_TimeAcc)
 			CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.02f));
-			m_dEffect_Ink_TimeAcc = 0;
-		}
 	}
 
 	if (21 < m_bSkillClone_TimeAcc)
@@ -368,19 +365,26 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 void CS_Fiona::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (1 < m_dEffect_Ink_TimeAcc)
+	if (7 <= m_bEffect_Count)
+	{
+		m_dEffect_TimeAcc = 0;
 		return;
+	}
 
 	m_OnMove = false;
 
-	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(1.0f, 0.9f), 
-		CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89)));
+	// 계속 생성
+	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f),
+		CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89f)));
 
-	m_dEffect_Ink_TimeAcc += TimeDelta;
-	if (0.1 < m_dEffect_Ink_TimeAcc)
+	// 몇 초 마다 생성
+	m_dEffect_TimeAcc += TimeDelta;
+	if (0.2 < m_dEffect_TimeAcc)
 	{
+		++m_bEffect_Count;
+
 		CEffect_Manager::GetInstance()->Change_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.02f));
-		m_dEffect_Ink_TimeAcc = 0;
+		m_dEffect_TimeAcc = 0;
 	}
 }
 

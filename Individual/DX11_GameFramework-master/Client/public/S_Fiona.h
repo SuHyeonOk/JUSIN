@@ -79,10 +79,9 @@ private:
 	_float					m_fCat_Attack = 0;
 
 	_double					m_bSkillClone_TimeAcc = 0;
-	_double					m_dEffect_Smoke_TimeAcc = 0;
-	_double					m_dEffect_Ink_TimeAcc = 0;
-
 	_double					m_dCat_Attack_TimeAcc = 0;
+	_double					m_dEffect_TimeAcc = 0;
+	_int					m_bEffect_Count = 0;
 
 	// ºŒ¿Ã¥ı
 	_bool		m_bShader_Hit = false;

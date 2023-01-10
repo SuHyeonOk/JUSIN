@@ -55,7 +55,7 @@ void CE_Skill_Marceline_Sound::Tick(_double TimeDelta)
 
 	__super::Tick(TimeDelta);
 
-	if (0.5f > m_fSizeX)
+	if (0.7f > m_fSizeX)
 	{
 		m_fSizeX += _float(TimeDelta) * 0.5f;
 		m_fSizeY += _float(TimeDelta) * 0.5f;
@@ -87,7 +87,10 @@ HRESULT CE_Skill_Marceline_Sound::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(4);
+	if (EFFECTINFO::EFFECTTYPE::INK == m_tEffectInfo.eEffectType)		// 색 조정
+		m_pShaderCom->Begin(4);	
+	else																// 이미지색
+		m_pShaderCom->Begin(2);	
 
 	m_pVIBufferCom->Render();
 

@@ -325,7 +325,6 @@ void CM_Skeleton_Archer::Hit_Tick(const _double& TimeDelta)
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;
-		m_dShader_Hit_TimeAcc = 0;
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 	}
 }

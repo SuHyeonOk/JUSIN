@@ -73,7 +73,7 @@ void CJake::Tick(_double TimeDelta)
 	
 	__super::Tick(TimeDelta);
 
-	Sword_Tick(TimeDelta);
+	Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
@@ -86,7 +86,7 @@ void CJake::Late_Tick(_double TimeDelta)
 
 	__super::Late_Tick(TimeDelta);
 
-	Sword_LateTick(TimeDelta);
+	Parts_LateTick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -275,7 +275,7 @@ HRESULT CJake::Ready_Parts()
 	return S_OK;
 }
 
-void CJake::Sword_Tick(const _double & TimeDelta)
+void CJake::Parts_Tick(const _double & TimeDelta)
 {
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
 		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
@@ -287,7 +287,7 @@ void CJake::Sword_Tick(const _double & TimeDelta)
 		m_PlayerParts[2]->Tick(TimeDelta);
 }
 
-void CJake::Sword_LateTick(const _double & TimeDelta)
+void CJake::Parts_LateTick(const _double & TimeDelta)
 {
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
 		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)

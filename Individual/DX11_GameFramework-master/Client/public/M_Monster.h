@@ -82,6 +82,10 @@ protected:	// 자식에서 가져다 쓰는 함수
 	void				Die(const _double& TimeDelta, _float fPlusY, _uint iBronzeCount = 0, _uint iSilverCount = 0, _uint iGoldCount = 0);
 	void				Dance_Time();
 
+private:
+	// 자식 Tick 에서 도는 함수
+	void				Hit_Process(const _double & TimeDelta);
+
 protected:
 	CRenderer*			m_pRendererCom = nullptr;
 	CShader*			m_pShaderCom = nullptr;
@@ -95,7 +99,6 @@ protected:	// 멤버 변수로 쓰이는 것
 protected:	// Shader
 	_float				m_fAlpha = 1.f;
 	_bool				m_bShader_Hit = false;
-	_double				m_dShader_Hit_TimeAcc = 0;
 
 protected:	
 	// On_Collision();
@@ -116,9 +119,6 @@ private:
 	_float				m_fRandomAxis = 0.f;
 	_bool				m_bRandomPos = false;
 	_double				m_bRandomMove_TimeAcc = 0;
-
-	// 자식 Tick 에서 도는 함수
-	void				Hit_Process(const _double & TimeDelta);
 
 public:		
 	virtual CGameObject*	Clone(void* pArg = nullptr) = 0;

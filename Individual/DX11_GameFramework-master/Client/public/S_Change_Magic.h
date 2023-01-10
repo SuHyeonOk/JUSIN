@@ -64,7 +64,8 @@ private:
 	
 	_bool					m_OnMove = false;
 
-	_double					m_bSkillClone_TimeAcc = 0;
+	_double					m_dSkillClone_TimeAcc = 0;
+	_double					m_dAttack_TimeAcc = 0;
 	_double					m_dEffect_TimeAcc = 0;
 
 	// ºŒ¿Ã¥ı

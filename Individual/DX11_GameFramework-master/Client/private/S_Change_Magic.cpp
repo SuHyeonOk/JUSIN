@@ -89,15 +89,21 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 
 	// 내 무기 콜라이더 공격 중일 때만 On
 	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
-  		m_SkillParts[0]->Tick(TimeDelta);
+	{
+		m_dAttack_TimeAcc += TimeDelta;
+		if (1.6 < m_dAttack_TimeAcc)
+			return;
+
+		if (1.4 < m_dAttack_TimeAcc)
+			m_SkillParts[0]->Tick(TimeDelta);
+	}
+	else
+		m_dAttack_TimeAcc = 0;
 }
 
 void CS_Change_Magic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
-
-	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
-		m_SkillParts[0]->Late_Tick(TimeDelta);
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -108,6 +114,19 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+
+
+	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
+	{
+		m_dAttack_TimeAcc += TimeDelta;
+		if (1.6 < m_dAttack_TimeAcc)
+			return;
+
+		if (1.4 < m_dAttack_TimeAcc)
+			m_SkillParts[0]->Late_Tick(TimeDelta);
+	}
+	else
+		m_dAttack_TimeAcc = 0;
 }
 
 HRESULT CS_Change_Magic::Render()
@@ -238,9 +257,9 @@ HRESULT CS_Change_Magic::Ready_Parts()
 
 void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 {
-	m_bSkillClone_TimeAcc += TimeDelta;
+	m_dSkillClone_TimeAcc += TimeDelta;
 
-	if (20 < m_bSkillClone_TimeAcc)
+	if (20 < m_dSkillClone_TimeAcc)
 	{
 		m_OnMove = false;
 
@@ -252,7 +271,7 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
 	}
 
-	if (21 < m_bSkillClone_TimeAcc)
+	if (21 < m_dSkillClone_TimeAcc)
 	{
 		// 따라오던 플레이어의 좌표를 옮겨놓는다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -283,7 +302,7 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 
 		CGameObject::Set_Dead();
 
-		m_bSkillClone_TimeAcc = 0;
+		m_dSkillClone_TimeAcc = 0;
 		return;
 	}
 }

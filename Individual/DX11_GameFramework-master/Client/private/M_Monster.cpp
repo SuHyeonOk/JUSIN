@@ -204,7 +204,7 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 	{
 		// 몬스터 죽으면 UI 초기화
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 
 		// 알파값이 다 사라지면 죽음
 		CGameObject::Set_Dead();	
@@ -215,6 +215,8 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 
 	if (5 != m_iDieEffect_Count)													// 이펙트 5개
 	{
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+
 		++m_iDieEffect_Count;
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -283,8 +285,7 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 
 	m_bShader_Hit = true;
 
-	m_dShader_Hit_TimeAcc += TimeDelta;
-	if (0.1 < m_dShader_Hit_TimeAcc)
+	if (0.1 < m_dPlayer_Attack_TimeAcc)
 		m_bShader_Hit = false;
 
 	// 몬스터 상태 변경
@@ -294,12 +295,13 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 	m_dPlayer_Attack_TimeAcc += TimeDelta;
-	if (0.7 < m_dPlayer_Attack_TimeAcc)
+	if (0.5 < m_dPlayer_Attack_TimeAcc)
 	{
-		m_pTransformCom->Go_Backward(0.f);
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
 
 		// 플레이어의 공격력 으로 몬스터 체력 깍기
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
 
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;

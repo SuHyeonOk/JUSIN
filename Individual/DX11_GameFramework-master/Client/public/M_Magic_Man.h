@@ -37,6 +37,7 @@ private:
 
 private:
 	void				Appear(const _double& TimeDelta);
+	void				Hit_Process(const _double & TimeDelta);
 
 private:
 	_float4				m_f4CenterPos;
