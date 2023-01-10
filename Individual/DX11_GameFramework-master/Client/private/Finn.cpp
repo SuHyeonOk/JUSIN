@@ -93,7 +93,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{

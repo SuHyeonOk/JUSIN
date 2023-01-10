@@ -50,7 +50,7 @@ HRESULT CRenderer::Initialize_Prototype()
 
 	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	/* ·»ÅÍÅ¸°ÙµéÀ» »ý¼ºÇÏ³®. */
+	/* ·»ÅÍÅ¸°ÙµéÀ» »ý¼ºÇÑ´Ù. */
 
 	/* For.Target_Diffuse */
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, &_float4(1.f, 0.0f, 0.0f, 1.f))))
@@ -73,7 +73,6 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.MRT_LightAcc */ /* ºû ¿¬»êÀÇ °á°ú¸¦ ÀúÀåÇÒ ·»´õÅ¸°Ùµé.  */
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 		return E_FAIL;
-
 
 	return S_OK;
 }

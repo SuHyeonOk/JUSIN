@@ -342,8 +342,6 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.2f);
 
-	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
-
 	if (!m_OneCoin)	// 종이 생성
 	{
 		// Item

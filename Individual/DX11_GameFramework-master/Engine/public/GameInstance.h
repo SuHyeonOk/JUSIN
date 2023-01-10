@@ -125,6 +125,7 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = nullptr;
 	class CFont_Manager*			m_pFont_Manager = nullptr;
 	class CFrustum*					m_pFrustum = nullptr;
+	class CTarget_Manager*			m_pTarget_Manager = nullptr;
 
 public:
 	static void Release_Engine();

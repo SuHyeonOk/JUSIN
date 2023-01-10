@@ -81,9 +81,9 @@ public:
 	HRESULT Ready_Animation();
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix); // PivotMatrix : 내 모델의 초기 상태를 제어하기 위한 행렬
+	static CModel*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const char* pModelFilePath, _fmatrix PivotMatrix); // PivotMatrix : 내 모델의 초기 상태를 제어하기 위한 행렬
 	virtual CComponent* Clone(void* pArg) override;
-	virtual void Free() override;
+	virtual void		Free() override;
 };
 
 END
