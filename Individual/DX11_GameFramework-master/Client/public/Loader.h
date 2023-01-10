@@ -57,7 +57,6 @@ private:
 	_bool			m_isFinished = false;
 	_tchar			m_szLoadingText[MAX_PATH] = TEXT("");
 
-
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID);
 	virtual void Free() override;

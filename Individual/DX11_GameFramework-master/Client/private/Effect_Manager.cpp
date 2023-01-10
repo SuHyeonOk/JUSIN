@@ -4,8 +4,9 @@
 #include "GameInstance.h"
 #include "Utilities_Manager.h"
 
-#include "E_Smoke.h"
+#include "E_Burst.h"
 #include "E_Skill_Marceline_Sound.h"
+#include "E_NoLook_Grow.h"
 #include "E_Beneficial.h"
 #include "E_Alpha_Change.h"
 
@@ -15,12 +16,49 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
-void CEffect_Manager::Effect_Hit_Create(_float3 f3Size)
+void CEffect_Manager::Effect_Paint_Create(_float3 f3Pos, const _float3 & f3Color, const _uint & iPaintType)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (0 == iPaintType)
+	{
+		CE_Burst::EFFECTINFO	tEffetInfo;
+		tEffetInfo.f3Pos = f3Pos;
+		tEffetInfo.f3Color = f3Color;
+		tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_M_TEXTURE;
+
+		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+		_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+		_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+		vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+		XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tEffetInfo)))
+			return;
+	}
+	// 나머지도 만드러야함
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CEffect_Manager::Effect_Swim_Create(_float3 f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_NoLook_Grow::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_NoLook_Grow::EFFECTINFO::SWIM_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_NoLook_Grow"), &tEffectInfo)))
+		return;
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CEffect_Manager::Effect_Hit_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Alpha_Change::EFFECTINFO tEffectInfo;
-	tEffectInfo.f3Pos = f3Size;
+	tEffectInfo.f3Pos = f3Pos;
 	tEffectInfo.eTextureType = CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
 		return;
@@ -28,12 +66,12 @@ void CEffect_Manager::Effect_Hit_Create(_float3 f3Size)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Beneficial(_float3 f3Size, _float3 f3Color)
+void CEffect_Manager::Beneficial(_float3 f3Pos, _float3 f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Beneficial::BENEFICIALINFO	tBeneficlalInfo;
-	tBeneficlalInfo.f3Pos = f3Size;
+	tBeneficlalInfo.f3Pos = f3Pos;
 	tBeneficlalInfo.f3Color = f3Color;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Beneficial"), &tBeneficlalInfo)))
 		return;
@@ -41,7 +79,7 @@ void CEffect_Manager::Beneficial(_float3 f3Size, _float3 f3Color)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Food_Hp(_float3 f3Size)
+void CEffect_Manager::Food_Hp(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -59,24 +97,24 @@ void CEffect_Manager::Food_Hp(_float3 f3Size)
 
 	CE_Skill_Marceline_Sound::EFFECTINFO eEffectInfo;
 	eEffectInfo.eEffectType = CE_Skill_Marceline_Sound::EFFECTINFO::HP;
-	eEffectInfo.f3Pos = _float3(f3Size.x + f4RandomPos.x, f3Size.y + f4RandomPos.y, f3Size.z + f4RandomPos.z);
+	eEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z + f4RandomPos.z);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &eEffectInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Food_Up(_float3 f3Size)
+void CEffect_Manager::Food_Up(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Food_Up"), &f3Size)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Food_Up"), &f3Pos)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Change_Ink(_float3 f3Size)
+void CEffect_Manager::Change_Ink(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -94,44 +132,48 @@ void CEffect_Manager::Change_Ink(_float3 f3Size)
 
 	CE_Skill_Marceline_Sound::EFFECTINFO eEffectInfo;
 	eEffectInfo.eEffectType = CE_Skill_Marceline_Sound::EFFECTINFO::INK;
-	eEffectInfo.f3Pos = _float3(f3Size.x + f4RandomPos.x, f3Size.y + f4RandomPos.y , f3Size.z + f4RandomPos.z);
+	eEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y , f3Pos.z + f4RandomPos.z);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &eEffectInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Change_Smoke(_float3 f3Size, _float3 f3Color)
+void CEffect_Manager::Change_Smoke(_float3 f3Pos, _float3 f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CE_Smoke::SMOKEINFO	tSmokeInfo;
-	tSmokeInfo.f3Pos = f3Size;
-	tSmokeInfo.f3Color = f3Color;
+	CE_Burst::EFFECTINFO	tEffetInfo;
+	tEffetInfo.f3Pos = f3Pos;
+	tEffetInfo.f3Color = f3Color;
+	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE;
 
 	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
 	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
 	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
 	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
-	XMStoreFloat4(&tSmokeInfo.f4Look, vLook);
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tSmokeInfo)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tEffetInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Skill_Marceline_Waves_Create(_float3 f3Size)
+void CEffect_Manager::Skill_Marceline_Waves_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Waves"), &f3Size)))
+	CE_NoLook_Grow::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_NoLook_Grow::EFFECTINFO::MARVELINE_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_NoLook_Grow"), &tEffectInfo)))
 		return;
 
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Size)
+void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -149,7 +191,7 @@ void CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Size)
 
 	CE_Skill_Marceline_Sound::EFFECTINFO eEffectInfo;
 	eEffectInfo.eEffectType = CE_Skill_Marceline_Sound::EFFECTINFO::SOUND;
-	eEffectInfo.f3Pos = _float3(f3Size.x + f4RandomPos.x, f3Size.y + f4RandomPos.y, f3Size.z + f4RandomPos.z);
+	eEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z + f4RandomPos.z);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"), &eEffectInfo)))
 		return;
 

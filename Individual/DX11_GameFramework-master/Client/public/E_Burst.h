@@ -12,21 +12,26 @@ END
 
 BEGIN(Client)
 
-class CE_Smoke final : public CGameObject
+class CE_Burst final : public CGameObject
 {
 public:
 	typedef struct tagSmoketInfo
 	{
+		enum TEXTURETYPE { SMOKE_TEXUTRE, 
+			POAIN_M_TEXTURE, POAIN_Y_TEXTURE, POAIN_B_TEXTURE,
+			TEXTURE_END };
+		TEXTURETYPE	eTextureType = TEXTURE_END;
+
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
 		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
 		_float3		f3Color = { 0.0f, 0.0f, 0.0f };
 
-	}SMOKEINFO;
+	}EFFECTINFO;
 
 private:
-	CE_Smoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CE_Smoke(const CE_Smoke& rhs);
-	virtual ~CE_Smoke() = default;
+	CE_Burst(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CE_Burst(const CE_Burst& rhs);
+	virtual ~CE_Burst() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -46,14 +51,14 @@ private:
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	SMOKEINFO			m_tSmokeInfo;
+	EFFECTINFO			m_tEffectInfo;
 
 private:	// Shader
 	_float				m_fAlpha = 0.5f;
 	_double				m_dEffect_TimeAcc = 0;
 
 public:
-	static	CE_Smoke*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Burst*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

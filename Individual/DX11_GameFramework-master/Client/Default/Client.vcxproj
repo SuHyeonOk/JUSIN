@@ -186,9 +186,9 @@
     <ClInclude Include="..\public\E_Beneficial.h" />
     <ClInclude Include="..\public\E_DieCenter.h" />
     <ClInclude Include="..\public\E_Food_Up.h" />
+    <ClInclude Include="..\public\E_NoLook_Grow.h" />
     <ClInclude Include="..\public\E_Skill_Marceline_Sound.h" />
-    <ClInclude Include="..\public\E_Skill_Marceline_Waves.h" />
-    <ClInclude Include="..\public\E_Smoke.h" />
+    <ClInclude Include="..\public\E_Burst.h" />
     <ClInclude Include="..\public\Finn.h" />
     <ClInclude Include="..\public\Finn_Weapon.h" />
     <ClInclude Include="..\public\Food.h" />
@@ -281,9 +281,9 @@
     <ClCompile Include="..\private\E_Beneficial.cpp" />
     <ClCompile Include="..\private\E_DieCenter.cpp" />
     <ClCompile Include="..\private\E_Food_Up.cpp" />
+    <ClCompile Include="..\private\E_NoLook_Grow.cpp" />
     <ClCompile Include="..\private\E_Skill_Marceline_Sound.cpp" />
-    <ClCompile Include="..\private\E_Skill_Marceline_Waves.cpp" />
-    <ClCompile Include="..\private\E_Smoke.cpp" />
+    <ClCompile Include="..\private\E_Burst.cpp" />
     <ClCompile Include="..\private\Finn.cpp" />
     <ClCompile Include="..\private\Finn_Weapon.cpp" />
     <ClCompile Include="..\private\Food.cpp" />

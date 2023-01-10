@@ -1,24 +1,24 @@
 #include "stdafx.h"
-#include "..\public\E_Smoke.h"
+#include "..\public\E_Burst.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "PipeLine.h"
 #include "Utilities_Manager.h"
 
-CE_Smoke::CE_Smoke(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CE_Burst::CE_Burst(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CE_Smoke::CE_Smoke(const CE_Smoke & rhs)
+CE_Burst::CE_Burst(const CE_Burst & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CE_Smoke::Initialize_Prototype()
+HRESULT CE_Burst::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -26,17 +26,17 @@ HRESULT CE_Smoke::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CE_Smoke::Initialize(void * pArg)
+HRESULT CE_Burst::Initialize(void * pArg)
 {	
 	if (nullptr != pArg)
-		memcpy(&m_tSmokeInfo, pArg, sizeof(SMOKEINFO));
+		memcpy(&m_tEffectInfo, pArg, sizeof(EFFECTINFO));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = m_tSmokeInfo.f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_tEffectInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -52,7 +52,7 @@ HRESULT CE_Smoke::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CE_Smoke::Tick(_double TimeDelta)
+void CE_Burst::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
@@ -65,7 +65,7 @@ void CE_Smoke::Tick(_double TimeDelta)
 	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
 
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector vDistance = XMLoadFloat4(&_float4(m_tSmokeInfo.f4Look.x, m_tSmokeInfo.f4Look.y, m_tSmokeInfo.f4Look.z, 0.0f));
+	_vector vDistance = XMLoadFloat4(&_float4(m_tEffectInfo.f4Look.x, m_tEffectInfo.f4Look.y, m_tEffectInfo.f4Look.z, 0.0f));
 	vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
 
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
@@ -79,7 +79,7 @@ void CE_Smoke::Tick(_double TimeDelta)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
 }
 
-void CE_Smoke::Late_Tick(_double TimeDelta)
+void CE_Burst::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -89,7 +89,7 @@ void CE_Smoke::Late_Tick(_double TimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
-HRESULT CE_Smoke::Render()
+HRESULT CE_Burst::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -104,7 +104,7 @@ HRESULT CE_Smoke::Render()
 	return S_OK;
 }
 
-HRESULT CE_Smoke::SetUp_Components()
+HRESULT CE_Burst::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
@@ -118,14 +118,25 @@ HRESULT CE_Smoke::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_Smoke"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_Smoke"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_M_TEXTURE == m_tEffectInfo.eTextureType ||
+			 CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_Y_TEXTURE == m_tEffectInfo.eTextureType ||
+			 CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_B_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
 
-HRESULT CE_Smoke::SetUp_ShaderResources()
+HRESULT CE_Burst::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -145,7 +156,7 @@ HRESULT CE_Smoke::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tSmokeInfo.f3Color, sizeof _float3)))
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tEffectInfo.f3Color, sizeof _float3)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
@@ -154,31 +165,31 @@ HRESULT CE_Smoke::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CE_Smoke * CE_Smoke::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CE_Burst * CE_Burst::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CE_Smoke*		pInstance = new CE_Smoke(pDevice, pContext);
+	CE_Burst*		pInstance = new CE_Burst(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CE_Smoke");
+		MSG_BOX("Failed to Created : CE_Burst");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CE_Smoke::Clone(void * pArg)
+CGameObject * CE_Burst::Clone(void * pArg)
 {
-	CE_Smoke*		pInstance = new CE_Smoke(*this);
+	CE_Burst*		pInstance = new CE_Burst(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CE_Smoke");
+		MSG_BOX("Failed to Cloned : CE_Burst");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CE_Smoke::Free()
+void CE_Burst::Free()
 {
 	__super::Free();
 

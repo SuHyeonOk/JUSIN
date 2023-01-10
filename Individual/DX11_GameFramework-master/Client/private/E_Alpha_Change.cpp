@@ -43,7 +43,6 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	//m_pTransformCom->Set_Scaled(_float3(3.0f, 3.0f, 1.f));
 
 	return S_OK;
 }

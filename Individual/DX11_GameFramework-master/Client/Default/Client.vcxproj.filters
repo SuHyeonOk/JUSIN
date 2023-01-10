@@ -447,12 +447,6 @@
     <ClInclude Include="..\public\E_Skill_Marceline_Sound.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\E_Skill_Marceline_Waves.h">
-      <Filter>02.GameObjects\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\E_Smoke.h">
-      <Filter>02.GameObjects\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\E_Food_Up.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
@@ -460,6 +454,12 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\E_Alpha_Change.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\E_NoLook_Grow.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\E_Burst.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
   </ItemGroup>
@@ -722,12 +722,6 @@
     <ClCompile Include="..\private\E_Skill_Marceline_Sound.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\E_Skill_Marceline_Waves.cpp">
-      <Filter>02.GameObjects\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\E_Smoke.cpp">
-      <Filter>02.GameObjects\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\E_Food_Up.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
@@ -735,6 +729,12 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\E_Alpha_Change.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_NoLook_Grow.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_Burst.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>

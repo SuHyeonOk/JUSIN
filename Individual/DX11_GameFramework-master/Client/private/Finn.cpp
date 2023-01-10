@@ -7,6 +7,8 @@
 
 #include "ItemManager.h"
 #include "Skill_Manager.h"
+#include "Effect_Manager.h"
+
 #include "S_PaintWork.h"
 #include "S_Fiona.h"
 
@@ -788,6 +790,23 @@ void CFinn::Stun_Tick()
 
 void CFinn::Swim_Tick(_double TimeDelta)
 {
+	// 수영 이펙트
+	m_dEffect_Swim_TimeAcc += TimeDelta;
+	if (0.5 < m_dEffect_Swim_TimeAcc)
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		if (0.65f < m_fEffect_SiwmY)
+			m_fEffect_SiwmY = 0.6f;
+
+		m_fEffect_SiwmY += 0.0001f;
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, m_fEffect_SiwmY, f4MyPos.z));
+		m_dEffect_Swim_TimeAcc = 0;
+	}
+
+	// 수영 설정
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::SWIM);
 
