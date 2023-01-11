@@ -69,11 +69,13 @@ HRESULT CN_NPC::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+#ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
 	}
+#endif
 
 	return S_OK;
 }

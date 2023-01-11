@@ -129,6 +129,7 @@ HRESULT CFinn::Render()
 		}
 	}
 
+#ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		for (_uint i = 0; i < COLLTYPE_END; ++i)
@@ -139,6 +140,7 @@ HRESULT CFinn::Render()
 
 		m_pNavigationCom->Render();
 	}
+#endif
 
 	return S_OK;
 }

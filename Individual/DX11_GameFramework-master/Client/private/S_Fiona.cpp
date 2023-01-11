@@ -153,6 +153,7 @@ HRESULT CS_Fiona::Render()
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
+#ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
@@ -160,6 +161,7 @@ HRESULT CS_Fiona::Render()
 
 		m_pNavigationCom->Render();
 	}
+#endif
 
 	return S_OK;
 }

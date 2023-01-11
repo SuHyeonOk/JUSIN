@@ -141,11 +141,13 @@ HRESULT CCoin::Render()
 		m_pModelCom->Render(m_pShaderCom, i);
 	}
 
+#ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
 	}
+#endif
 
 	return S_OK;
 }

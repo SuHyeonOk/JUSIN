@@ -96,11 +96,13 @@ HRESULT CO_BearTrap::Render()
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 0);
 	}
 
+#ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
 	}
+#endif
 
 	return S_OK;
 }

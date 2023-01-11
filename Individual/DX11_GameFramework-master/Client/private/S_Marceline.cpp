@@ -99,11 +99,13 @@ HRESULT CS_Marceline::Render()
 	}
 
 
+#ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
 	}
+#endif
 
 	return S_OK;
 }
