@@ -53,11 +53,11 @@ HRESULT CM_Mimic::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= 50.0f;
-	m_tMonsterInfo.fMaxHP	= 50.0f;
-	m_tMonsterInfo.fExp		= 50.0f;
-	m_tMonsterInfo.fAttack	= 15.0f;
+	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.fHP = 50.0f;
+	m_tMonsterInfo.fMaxHP = 50.0f;
+	m_tMonsterInfo.fExp = 50.0f;
+	m_tMonsterInfo.fAttack = 15.0f;
 
 	return S_OK;
 }
@@ -97,20 +97,16 @@ HRESULT CM_Mimic::Render()
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
 		}
 
-		return S_OK;	// 죽었다면, 여기까지 진행하고 return
+		return S_OK;	// ??????, ??????? ??????? return
 	}
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		if (1 == i)
 			continue;
-		
+
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		
-		if (m_bShader_Hit)
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
-		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 	return S_OK;
@@ -192,16 +188,16 @@ void CM_Mimic::Monster_Tick(const _double& TimeDelta)
 	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
-	// 0 : 왼쪽 공격ㅁ
-	// 1 : 정면 공격
-	// 2 : 좌우 로 움직이면서 뒤로
-	// 3 : 죽는거
+	// 0 : ???? ?????
+	// 1 : ???? ????
+	// 2 : ?¿? ?? ??????? ???
+	// 3 : ??°?
 	// 4 : Hit
-	// 5 : 쓰지마
-	// 6 : 가만히
-	// 7 : 눈치봄
-	// 8 : 숨겨져 있는 상태
-	// 9 : 발견
+	// 5 : ??????
+	// 6 : ??????
+	// 7 : ?????
+	// 8 : ?????? ??? ????
+	// 9 : ???
 
 	switch (m_tMonsterInfo.eState)
 	{
@@ -239,7 +235,7 @@ void CM_Mimic::Monster_Tick(const _double& TimeDelta)
 
 void CM_Mimic::Idle_Tick(const _double& TimeDelta)
 {
-	if(m_bPlayer_Attack)
+	if (m_bPlayer_Attack)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 }
 
@@ -248,7 +244,7 @@ void CM_Mimic::Find_Tick()
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-	// 느낌표 띄우기
+	// ????? ????
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_vector	vMyPos;
@@ -269,19 +265,14 @@ void CM_Mimic::Find_Tick()
 
 void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 {
-	if(!m_bPlayer_Attack)
+	if (!m_bPlayer_Attack)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
 
 void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Effect_Hit(_float3(-3.6f, 0.7f, -0.7f));
-
 	if (m_pModelCom->Get_Finished())
-	{
-		m_bShader_Hit = false;
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
-	}
 }
 
 void CM_Mimic::Die_Tick(const _double& TimeDelta)
@@ -290,18 +281,18 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 
 	if (0.0f >= m_fAlpha)
 	{
-		// 몬스터 죽으면 UI 초기화
+		// ???? ?????? UI ????
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
 		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
-		// 알파값이 다 사라지면 죽음
+		// ??????? ?? ??????? ????
 		CGameObject::Set_Dead();
 	}
 
-	if (0.0f < m_fAlpha)															// 알파값 줄어 들도록
+	if (0.0f < m_fAlpha)															// ????? ??? ????
 		m_fAlpha -= _float(TimeDelta);
 
-	if (5 != m_iDieEffect_Count)													// 이펙트 5개
+	if (5 != m_iDieEffect_Count)													// ????? 5??
 	{
 		++m_iDieEffect_Count;
 
@@ -315,7 +306,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 		CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
 	}
 
-	if (!m_OneCoin)															// 한 번만
+	if (!m_OneCoin)															// ?? ????
 	{
 		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
 		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
@@ -324,8 +315,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x - 3.6f, vf4MyPos.y, vf4MyPos.z), 10, 3, 2); 	// 동전 생성
-		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x - 3.6f, vf4MyPos.y, vf4MyPos.z), 10, 3, 2); 	// ???? ????
 
 		m_OneCoin = true;
 	}

@@ -69,12 +69,12 @@ void	CSkill_Manager::Page_PickUp(CGameObject * pOther)
 			SkillIcon(PLAYERSKILL::SKILL::FIONA);
 	}
 
-	cout << "스킬 개수 : " << 
-		"PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<
-		"MARCELINT : " << m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] << " | " <<
-		"COIN : " << m_arrPageCount[PLAYERSKILL::SKILL::COIN] << " | " <<
-		"FIONA : " << m_arrPageCount[PLAYERSKILL::SKILL::FIONA] << " | " <<
-		endl;
+	//cout << "스킬 개수 : " << 
+	//	"PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<
+	//	"MARCELINT : " << m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] << " | " <<
+	//	"COIN : " << m_arrPageCount[PLAYERSKILL::SKILL::COIN] << " | " <<
+	//	"FIONA : " << m_arrPageCount[PLAYERSKILL::SKILL::FIONA] << " | " <<
+	//	endl;
 }
 
 void	CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill)

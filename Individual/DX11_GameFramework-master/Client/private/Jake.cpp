@@ -275,7 +275,7 @@ HRESULT CJake::Ready_Parts()
 
 	m_PlayerParts.push_back(pPartObject);
 
-	WeaponDesc.eWeaponType = CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE;
+	WeaponDesc.eWeaponType = CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD;
 	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
 	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Bip001 L Finger0");
 	WeaponDesc.pTargetTransform = m_pTransformCom;
@@ -301,7 +301,7 @@ void CJake::Parts_Tick(const _double & TimeDelta)
 		m_PlayerParts[0]->Tick(TimeDelta);
 		m_PlayerParts[1]->Tick(TimeDelta);
 	}
-	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 		m_PlayerParts[2]->Tick(TimeDelta);
 }
 
@@ -313,7 +313,7 @@ void CJake::Parts_LateTick(const _double & TimeDelta)
 		m_PlayerParts[0]->Late_Tick(TimeDelta);
 		m_PlayerParts[1]->Late_Tick(TimeDelta);
 	}
-	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 		m_PlayerParts[2]->Late_Tick(TimeDelta);
 }
 
@@ -834,7 +834,7 @@ void CJake::Control_Tick(_double TimeDelta)
 {
 	m_pTransformCom->Go_Straight(0, m_pNavigationCom);
 
-	CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE);
+	CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD);
 }
 
 void CJake::Roolling_Tick(_double TimeDelta)
@@ -1063,7 +1063,7 @@ void CJake::Anim_Change(_double TimeDelta)
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::LEVEL_UP:
-			m_pModelCom->Set_AnimIndex(44, true, false);
+			m_pModelCom->Set_AnimIndex(47, true, false);
 			break;
 		}
 

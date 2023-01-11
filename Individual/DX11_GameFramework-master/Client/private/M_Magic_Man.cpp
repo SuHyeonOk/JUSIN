@@ -353,7 +353,7 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
+		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 3);
 
 		m_OneCoin = true;
 	}

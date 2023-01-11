@@ -121,12 +121,15 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
-			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
-		else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
-			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
-		else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
-			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+		{
+			if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
+				CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+			else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
+				CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+			else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
+				CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+		}
 
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
@@ -194,6 +197,7 @@ void CB_2DBullet::On_Collision(CGameObject * pOther)
 		}
 		else
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 	} 
 }

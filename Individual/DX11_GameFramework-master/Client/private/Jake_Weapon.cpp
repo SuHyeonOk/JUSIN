@@ -31,7 +31,7 @@ HRESULT CJake_Weapon::Initialize(void * pArg)
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon ||
 		CObj_Manager::PLAYERINFO::JAKEWEAPON::RFIST == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 		m_wsTag = L"Player_Weapon";
-	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 		m_wsTag = L"Jake_Shield";
 
 	if (nullptr != pArg)
@@ -94,7 +94,7 @@ HRESULT   CJake_Weapon::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 	{
 		if (FAILED(SetUp_ShaderResources()))
 			return E_FAIL;
@@ -127,13 +127,13 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 
 	CObj_Manager::GetInstance()->Set_Jake_Shield();
 
-	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == m_WeaponDesc.eWeaponType)
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)
 	{
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f), _float3(0.968f, 0.729f, 0.160f));
 	}
 
 	// 나 지금 몬스터랑 충돌 했어
@@ -171,7 +171,7 @@ HRESULT CJake_Weapon::SetUp_Components()
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
-	else if (m_WeaponDesc.eWeaponType == CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE)
+	else if (m_WeaponDesc.eWeaponType == CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_W_Jake_Punch_Shield"), TEXT("Com_Model"),
