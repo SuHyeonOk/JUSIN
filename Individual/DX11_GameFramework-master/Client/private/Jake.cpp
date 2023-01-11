@@ -9,7 +9,6 @@
 #include "Skill_Manager.h"
 #include "Effect_Manager.h"
 
-#include "O_TextureObject.h"
 #include "S_PaintWork.h"
 #include "S_Fiona.h"
 
@@ -488,11 +487,13 @@ void CJake::Check_Follow(_double TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
-	if (3.f < fDistanceX)
+	if (3.0f < fDistanceX)
 	{
 		m_dNotfollow_TimeAcc += TimeDelta;
-		if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
+		if (3.0 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
 		{
+			m_bEffect_Follow = true;
+
 			_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 			_float fLookX = XMVectorGetX(vMyLook);
 			_float fLookZ = XMVectorGetZ(vMyLook);
@@ -516,18 +517,37 @@ void CJake::Check_Follow(_double TimeDelta)
 			m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
 			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), m_pNavigationCom);	// 플레이어 근처로 이동
 
-			// 오브젝트 포탈 생성
-			CO_TextureObject::TEXTUREOBJECT tTextureObject;
-			tTextureObject.eTextureType = tTextureObject.MOVE_PORTAL;
-			tTextureObject.f3Pos = _float3(f4MyPos.x - fAddX, f4MyPos.y + 1.0f, (f4MyPos.z - fAddZ) - 0.5f);
-			if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Portal_Jake"), TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
-				return;
+			//// 오브젝트 포탈 생성
+			//CO_TextureObject::TEXTUREOBJECT tTextureObject;
+			//tTextureObject.eTextureType = tTextureObject.MOVE_PORTAL;
+			//tTextureObject.f3Pos = _float3(f4MyPos.x - fAddX, f4MyPos.y + 1.0f, (f4MyPos.z - fAddZ) - 0.5f);
+			//if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Portal_Jake"), TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+			//	return;
 
 			m_dNotfollow_TimeAcc = 0;
 		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	// 이펙트
+	if (m_bEffect_Follow)
+	{
+		m_bEffect_Follow_TimeAcc += TimeDelta;
+		if (0.3 < m_bEffect_Follow_TimeAcc)
+		{
+			m_bEffect_Follow = false;
+			m_bEffect_Follow_TimeAcc = 0;
+		}
+
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.7f), _float3(0.968f, 0.729f, 0.160f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.8f), _float3(0.968f, 0.729f, 0.160f));
+	}
+
 
 	//// 일정시간 동안 Jake 가 근처에 있지 않다면 Jake 를 내 근처로 이동시킨다.
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

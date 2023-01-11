@@ -66,7 +66,11 @@ void CE_Burst::Tick(_double TimeDelta)
 
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = XMLoadFloat4(&_float4(m_tEffectInfo.f4Look.x, m_tEffectInfo.f4Look.y, m_tEffectInfo.f4Look.z, 0.0f));
-	vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
+
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
+		vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
+	else
+		vMyPos += XMVector3Normalize(vDistance) * 0.5f * _float(TimeDelta);
 
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 

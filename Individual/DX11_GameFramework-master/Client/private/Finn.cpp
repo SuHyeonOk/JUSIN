@@ -474,6 +474,8 @@ void CFinn::Check_Follow(_double TimeDelta)
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (3 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
 		{
+			m_bEffect_Follow = true;
+
 			_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 			_float fLookX = XMVectorGetX(vMyLook);
 			_float fLookZ = XMVectorGetZ(vMyLook);
@@ -501,6 +503,24 @@ void CFinn::Check_Follow(_double TimeDelta)
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	// 이펙트
+	if (m_bEffect_Follow)
+	{
+		m_bEffect_Follow_TimeAcc += TimeDelta;
+		if (0.3 < m_bEffect_Follow_TimeAcc)
+		{
+			m_bEffect_Follow = false;
+			m_bEffect_Follow_TimeAcc = 0;
+		}
+
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.7f), _float3(0.396f, 0.654f, 0.796f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.8f), _float3(0.396f, 0.654f, 0.796f));
+	}
 }
 
 void CFinn::Key_Input(_double TimeDelta)

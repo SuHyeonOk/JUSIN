@@ -79,7 +79,6 @@ private:
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
 
 	//////////////////////////// 플레이어 일 때
-	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
 	_double		m_dKnockBack_Hit_TimeAcc = 0;
 
@@ -97,6 +96,8 @@ private:
 
 	//////////////////////////// 플레이어가 아닐 때
 
+	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
+
 	// 셰이더
 	_bool		m_bShader_Hit = false;
 	_double		m_dShader_Hit_TimeAcc = 0;
@@ -104,6 +105,9 @@ private:
 	// 이펙트
 	_float		m_fEffect_SiwmY = 0.6f;
 	_double		m_dEffect_Swim_TimeAcc = 0;
+
+	_bool		m_bEffect_Follow = false;
+	_double		m_bEffect_Follow_TimeAcc = 0;
 
 public:
 	static CFinn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

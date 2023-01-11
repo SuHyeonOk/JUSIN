@@ -202,6 +202,7 @@ HRESULT CEffect_Manager::Effect_Ink(_float3 f3Pos, _float3 f3Color)
 
 HRESULT CEffect_Manager::Effect_Random_Ink(_float3 f3Pos, _float3 f3Color)
 {
+	// º°·Î.. '-'
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);

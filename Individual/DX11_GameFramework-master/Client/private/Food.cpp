@@ -73,7 +73,7 @@ void CFood::Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_B))
+	if (pGameInstance->Key_Down(DIK_B))
 	{
 		m_dKeyDown_TimeAcc += TimeDelta;
 		cout << m_dKeyDown_TimeAcc << endl;
@@ -82,9 +82,8 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(	_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), 
-			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
-			CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
+		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.5f, f4PlayerPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.5f, f4PlayerPos.z - 1.1f), _float3(1.0f, 0.67f, 0.0f));
 	}
 	else
 		m_dKeyDown_TimeAcc = 0;
