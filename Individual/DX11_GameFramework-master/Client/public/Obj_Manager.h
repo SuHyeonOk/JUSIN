@@ -75,6 +75,7 @@ public:
 	void				Set_Current_Player_State(PLAYERINFO::STATE	eState) { m_tPlayerInfo.eState = eState; }
 
 	// ¹«±â
+	_bool				Get_Jake_Shield() { return m_bShield; }
 	void				Set_Jake_Shield() { m_bShield = true; }
 	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }
 

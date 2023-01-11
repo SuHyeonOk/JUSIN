@@ -97,7 +97,7 @@ HRESULT CM_Mimic::Render()
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
 		}
 
-		return S_OK;	// ??????, ??????? ??????? return
+		return S_OK;
 	}
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
@@ -188,17 +188,6 @@ void CM_Mimic::Monster_Tick(const _double& TimeDelta)
 	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
-	// 0 : ???? ?????
-	// 1 : ???? ????
-	// 2 : ?вп? ?? ??????? ???
-	// 3 : ??б╞?
-	// 4 : Hit
-	// 5 : ??????
-	// 6 : ??????
-	// 7 : ?????
-	// 8 : ?????? ??? ????
-	// 9 : ???
-
 	switch (m_tMonsterInfo.eState)
 	{
 	case MONSTERINFO::STATE::IDLE:
@@ -244,7 +233,6 @@ void CM_Mimic::Find_Tick()
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-	// ????? ????
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_vector	vMyPos;
@@ -277,22 +265,18 @@ void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 
 void CM_Mimic::Die_Tick(const _double& TimeDelta)
 {
-	//CM_Monster::Die(TimeDelta, 0.7f, 0, 0, 7);
-
 	if (0.0f >= m_fAlpha)
 	{
-		// ???? ?????? UI ????
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
 		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
-		// ??????? ?? ??????? ????
 		CGameObject::Set_Dead();
 	}
 
-	if (0.0f < m_fAlpha)															// ????? ??? ????
+	if (0.0f < m_fAlpha)															
 		m_fAlpha -= _float(TimeDelta);
 
-	if (5 != m_iDieEffect_Count)													// ????? 5??
+	if (5 != m_iDieEffect_Count)													
 	{
 		++m_iDieEffect_Count;
 
@@ -306,7 +290,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 		CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
 	}
 
-	if (!m_OneCoin)															// ?? ????
+	if (!m_OneCoin)														
 	{
 		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
 		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
@@ -316,6 +300,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
 		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x - 3.6f, vf4MyPos.y, vf4MyPos.z), 10, 3, 2); 	// ???? ????
+		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
 
 		m_OneCoin = true;
 	}

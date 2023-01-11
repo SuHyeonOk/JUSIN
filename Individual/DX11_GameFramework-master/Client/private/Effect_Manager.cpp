@@ -17,6 +17,37 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Effect_Coin_Create(_float3 f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
+	CE_Burst::EFFECTINFO	tEffetInfo;
+	tEffetInfo.f3Pos = _float3(f3Pos.x, f3Pos.y + 1.0f, f3Pos.z - 1.0f);
+	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::LEAF_TEXTURE;
+
+	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
+		return E_FAIL;
+
+	tEffetInfo.f3Pos = _float3(f3Pos.x, f3Pos.y + 1.0f, f3Pos.z - 1.1f);
+	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::HEART_TEXTURE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
+		return E_FAIL;
+
+	tEffetInfo.f3Pos = _float3(f3Pos.x, f3Pos.y + 1.0f, f3Pos.z - 1.2f);
+	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::FLOWER_TEXTURE;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_Shield_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

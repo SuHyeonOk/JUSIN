@@ -17,7 +17,7 @@ class CE_Burst final : public CGameObject
 public:
 	typedef struct tagSmoketInfo
 	{
-		enum TEXTURETYPE { SMOKE_TEXUTRE, STAR_TEXTURE, STAR3_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { SMOKE_TEXUTRE, STAR_TEXTURE, STAR3_TEXTURE, HEART_TEXTURE, FLOWER_TEXTURE, LEAF_TEXTURE, TEXTURE_END };
 		TEXTURETYPE	eTextureType = TEXTURE_END;
 
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -52,7 +52,7 @@ private:
 	EFFECTINFO			m_tEffectInfo;
 
 private:	// Shader
-	_float				m_fAlpha = 0.5f;
+	_float				m_fAlpha = 0.0f;
 
 public:
 	static	CE_Burst*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

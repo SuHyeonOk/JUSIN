@@ -51,6 +51,12 @@ void CJake_Weapon::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	// 제이크 쉴드 이펙트
+	if (false == CObj_Manager::GetInstance()->Get_Jake_Shield())	// 제이크가 쉴드를 떼고 다시 들 때를 위해서 초기화
+	{
+		m_bEffect_Shield = false;
+		m_bMonster_Collider = false;
+	}
+
 	if (m_bMonster_Collider)
 	{
 		if (false == m_bEffect_Shield)
@@ -67,8 +73,7 @@ void CJake_Weapon::Tick(_double TimeDelta)
 		m_dEffect_Shield_TimeAcc += TimeDelta;
 		if (3 < m_dEffect_Shield_TimeAcc)
 		{
-			m_bEffect_Shield = false;
-			m_bMonster_Collider = false;
+			
 			m_dEffect_Shield_TimeAcc = 0;
 		}
 	}

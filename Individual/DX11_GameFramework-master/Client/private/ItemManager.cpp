@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Utilities_Manager.h"
+#include "Effect_Manager.h"
 
 #include "Coin.h"
 #include "Page.h"
@@ -63,6 +64,13 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
+	}
+
+	_int iRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(5, 10);
+
+	for (_int i = 0; i < iRandomNumber; i++)
+	{
+		CEffect_Manager::GetInstance()->Effect_Coin_Create(f3StartPos);
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

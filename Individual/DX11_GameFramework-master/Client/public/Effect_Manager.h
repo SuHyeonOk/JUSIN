@@ -16,6 +16,7 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
+	HRESULT		Effect_Coin_Create(_float3 f3Pos);
 	HRESULT		Effect_Shield_Create(_float3 f3Pos);
 
 	HRESULT		Effect_Star_Create(_float3 f3Pos);

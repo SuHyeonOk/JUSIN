@@ -49,6 +49,11 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
 
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
+		m_fAlpha = 0.5f;
+	else
+		m_fAlpha = 1.0f;
+
 	return S_OK;
 }
 
@@ -67,10 +72,7 @@ void CE_Burst::Tick(_double TimeDelta)
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = XMLoadFloat4(&_float4(m_tEffectInfo.f4Look.x, m_tEffectInfo.f4Look.y, m_tEffectInfo.f4Look.z, 0.0f));
 
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
-		vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
-	else
-		vMyPos += XMVector3Normalize(vDistance) * 0.5f * _float(TimeDelta);
+	vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
 
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
@@ -132,6 +134,12 @@ HRESULT CE_Burst::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star"));
 	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star3"));
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::HEART_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Heart"));
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::FLOWER_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Flower"));
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::LEAF_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Leaf"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

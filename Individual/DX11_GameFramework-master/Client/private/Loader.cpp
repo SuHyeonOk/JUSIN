@@ -811,6 +811,7 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Player.png")))))
 		return E_FAIL;
 
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -999,6 +1000,20 @@ HRESULT CLoader::Effect_Texture()
 	/* For.Prototype_Component_Texture_E_Jake_Shield */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Jake_Shield"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Hit/Jake_Shield.png")))))
+		return E_FAIL;
+
+	// Coin
+	/* For.Prototype_Component_Texture_E_Heart */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Heart"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Coin/Pigs_Explosion_Cuore_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Flower */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Flower"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Coin/Pigs_Explosion_Flower_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Leaf */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Leaf"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Coin/TreeWitch_Explosion_leaves_D.png")))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

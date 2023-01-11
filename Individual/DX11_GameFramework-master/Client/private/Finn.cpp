@@ -966,7 +966,7 @@ void CFinn::Anim_Change(_double TimeDelta)
 			break;
 
 		case CObj_Manager::PLAYERINFO::STATE::LEVEL_UP:
-			m_pModelCom->Set_AnimIndex(47, true, false);
+			m_pModelCom->Set_AnimIndex(44, true, false);
 			break;
 		}
 
