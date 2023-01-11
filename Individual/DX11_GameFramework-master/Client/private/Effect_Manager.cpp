@@ -4,7 +4,6 @@
 #include "GameInstance.h"
 #include "Utilities_Manager.h"
 
-#include "E_Burst.h"
 #include "E_Skill_Marceline_Sound.h"
 #include "E_NoLook_Grow.h"
 #include "E_Beneficial.h"
@@ -16,27 +15,24 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
-void CEffect_Manager::Effect_Paint_Create(_float3 f3Pos, const _float3 & f3Color, const _uint & iPaintType)
+void	Effect_Paint_Create(CE_Burst::EFFECTINFO::TEXTURETYPE eTextureType, _float3 f3Pos, const _float3 & f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (0 == iPaintType)
-	{
-		CE_Burst::EFFECTINFO	tEffetInfo;
-		tEffetInfo.f3Pos = f3Pos;
-		tEffetInfo.f3Color = f3Color;
-		tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_M_TEXTURE;
+	CE_Burst::EFFECTINFO	tEffetInfo;
+	tEffetInfo.f3Pos = f3Pos;
+	tEffetInfo.f3Color = f3Color;
+	tEffetInfo.eTextureType = eTextureType;
 
-		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-		_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
-		_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-		vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
-		XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);							// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tEffetInfo)))
-			return;
-	}
-	// 나머지도 만드러야함
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Smoke"), &tEffetInfo)))
+		return;
+
 	RELEASE_INSTANCE(CGameInstance);
 }
 

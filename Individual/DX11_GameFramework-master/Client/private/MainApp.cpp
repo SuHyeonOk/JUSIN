@@ -7,6 +7,11 @@
 
 #include "Obj_Manager.h"
 #include "DataManager.h"
+#include "Effect_Manager.h"
+#include "ItemManager.h"
+#include "Skill_Manager.h"
+#include "UI_Manager.h"
+#include "Utilities_Manager.h"
 
 #include "Model.h"
 #include "Sky.h"
@@ -54,15 +59,15 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
-#ifdef _DEBUG // 디버그 창
-	if (::AllocConsole() == TRUE) {
-		FILE* nfp[3];
-		freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
-		freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
-		freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
-		std::ios::sync_with_stdio();
-	}
-#endif
+//#ifdef _DEBUG // 디버그 창
+//	if (::AllocConsole() == TRUE) {
+//		FILE* nfp[3];
+//		freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
+//		freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
+//		freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
+//		std::ios::sync_with_stdio();
+//	}
+//#endif
 
 	CObj_Manager::GetInstance()->Initialized();
 
@@ -423,9 +428,19 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
+	_int a = 0;
+
 #ifdef _DEBUG
 	FreeConsole();
 #endif
+
+	CDataManager::GetInstance()->DestroyInstance();
+	CEffect_Manager::GetInstance()->DestroyInstance();
+	CItemManager::GetInstance()->DestroyInstance();
+	CObj_Manager::GetInstance()->DestroyInstance();
+	CSkill_Manager::GetInstance()->DestroyInstance();
+	CUI_Manager::GetInstance()->DestroyInstance();
+	CUtilities_Manager::GetInstance()->DestroyInstance();
 
 	m_pGameInstance->Clear_ImguiObjects();
 

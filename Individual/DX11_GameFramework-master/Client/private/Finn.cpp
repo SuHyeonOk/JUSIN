@@ -798,7 +798,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		if (0.65f < m_fEffect_SiwmY)
+		if (0.7f < m_fEffect_SiwmY)
 			m_fEffect_SiwmY = 0.6f;
 
 		m_fEffect_SiwmY += 0.0001f;

@@ -321,8 +321,8 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f), 
-				CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89f)));
+		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
+			CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
 
 		m_dEffect_TimeAcc += TimeDelta;
 		if (0.02 < m_dEffect_TimeAcc)
@@ -378,8 +378,8 @@ void CS_Fiona::Effect_Create(const _double & TimeDelta)
 	m_OnMove = false;
 
 	// 拌加 积己
-	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f),
-		CUtilities_Manager::GetInstance()->Get_Random(0.75f, 0.85f), CUtilities_Manager::GetInstance()->Get_Random(0.79f, 0.89f)));
+	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
+		CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
 
 	// 割 檬 付促 积己
 	m_dEffect_TimeAcc += TimeDelta;
