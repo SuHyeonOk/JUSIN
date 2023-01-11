@@ -59,15 +59,15 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
-//#ifdef _DEBUG // 디버그 창
-//	if (::AllocConsole() == TRUE) {
-//		FILE* nfp[3];
-//		freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
-//		freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
-//		freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
-//		std::ios::sync_with_stdio();
-//	}
-//#endif
+#ifdef _DEBUG // 디버그 창
+	if (::AllocConsole() == TRUE) {
+		FILE* nfp[3];
+		freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
+		freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
+		freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
+		std::ios::sync_with_stdio();
+	}
+#endif
 
 	CObj_Manager::GetInstance()->Initialized();
 
@@ -353,7 +353,7 @@ HRESULT CMainApp::Ready_Prototype_Component()
 		CS_PaintWork::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(0.0f));
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(0.0f));	// 날 보고
 
 	// 마르셀린
 	/* For.Prototype_Component_Model_S_Marceline */

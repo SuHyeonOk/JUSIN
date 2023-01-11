@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
+#include "Effect_Manager.h"
 
 CS_PaintWork::CS_PaintWork(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -108,6 +109,30 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 	m_dBullet_TimeAcc += TimeDelta;
 	if (1.25 < m_dBullet_TimeAcc)
 	{
+		// 이펙트
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::BLUE == m_tBulletInfo.ePaintWork)
+		{
+			CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.3f, 0.8f, 1.0f));
+			CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.3f, 1.0f, 1.0f));
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.3f, 1.0f, 1.0f));
+		}
+		else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::MAGENTA == m_tBulletInfo.ePaintWork)
+		{
+			CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 0.5f, 1.0f));
+			CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.6f, 0.0f, 0.9f));
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.6f, 0.0f, 0.9f));
+		}
+		else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::YELLOW == m_tBulletInfo.ePaintWork)
+		{
+			CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 1.0f, 0.0f));
+			CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.9f, 1.0f, 0.6f));
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
+		}
+
 		// 죽을 때 원래 공격력으로 변경
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_tBulletInfo.fAttack);
 
@@ -157,6 +182,32 @@ void CS_PaintWork::On_Collision(CGameObject * pOther)
 
 	// 그 몬스터는 이거야
 	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
+
+	// 이펙트
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::BLUE == m_tBulletInfo.ePaintWork)
+	{
+		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.3f, 0.8f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.3f, 1.0f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.3f, 1.0f, 1.0f));
+	}
+	else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::MAGENTA == m_tBulletInfo.ePaintWork)
+	{
+		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 0.5f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.6f, 0.0f, 0.9f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.6f, 0.0f, 0.9f));
+	}
+	else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::YELLOW == m_tBulletInfo.ePaintWork)
+	{
+		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 1.0f, 0.0f));
+		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.9f, 1.0f, 0.6f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
+	}
+
+	CGameObject::Set_Dead();
 }
 
 HRESULT CS_PaintWork::SetUp_Components()
@@ -171,21 +222,21 @@ HRESULT CS_PaintWork::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	if (m_tBulletInfo.ePaintWork == m_tBulletInfo.BLUE)
+	if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::BLUE == m_tBulletInfo.ePaintWork)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_PaintWork_Blue"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	else if (m_tBulletInfo.ePaintWork == m_tBulletInfo.MAGENTA)
+	else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::MAGENTA == m_tBulletInfo.ePaintWork)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_PaintWork_Magenta"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	else if (m_tBulletInfo.ePaintWork == m_tBulletInfo.YELLOW)
+	else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::YELLOW == m_tBulletInfo.ePaintWork)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Model_S_PaintWork_Yellow"), TEXT("Com_Model"),

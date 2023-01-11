@@ -80,8 +80,6 @@ private:
 
 	_double					m_bSkillClone_TimeAcc = 0;
 	_double					m_dCat_Attack_TimeAcc = 0;
-	_double					m_dEffect_TimeAcc = 0;
-	_int					m_bEffect_Count = 0;
 
 	// ºŒ¿Ã¥ı
 	_bool		m_bShader_Hit = false;

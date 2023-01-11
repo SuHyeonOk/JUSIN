@@ -334,6 +334,15 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 	tBulletInfo.eToodyBullet = tBulletInfo.CIRCLE_BULLET;
 	tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 	tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);
+
+	// 이펙트 색상 넣어주기
+	if (CM_Monster::MONSTERDESC::G_BLUE == m_tMonsterDesc.eMonsterKind)
+		tBulletInfo.iCircle_Color = 0;
+	else if (CM_Monster::MONSTERDESC::G_RED == m_tMonsterDesc.eMonsterKind)
+		tBulletInfo.iCircle_Color = 0;
+	else if (CM_Monster::MONSTERDESC::G_YELLOW == m_tMonsterDesc.eMonsterKind)
+		tBulletInfo.iCircle_Color = 0;
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Circle_0"), TEXT("Prototype_GameObject_B_ToodyBullet"), &tBulletInfo)))
 		return;
 

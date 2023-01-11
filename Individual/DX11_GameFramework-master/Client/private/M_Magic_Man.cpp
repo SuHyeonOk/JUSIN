@@ -111,10 +111,12 @@ HRESULT CM_Magic_Man::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
+		{
 			if (m_bShader_Hit)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		}
 	}
 
 	return S_OK;
@@ -372,7 +374,7 @@ void CM_Magic_Man::Appear(const _double& TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
 		m_Appear_TimeAcc += TimeDelta;
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f),
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f),
 			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
 	}
 }

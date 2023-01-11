@@ -12,26 +12,25 @@ END
 
 BEGIN(Client)
 
-class CE_Burst final : public CGameObject
+class CE_Look_Grow final : public CGameObject
 {
 public:
-	typedef struct tagSmoketInfo
+	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { SMOKE_TEXUTRE, 
-			POAIN_M_TEXTURE, POAIN_Y_TEXTURE, POAIN_B_TEXTURE,
+		enum TEXTURETYPE { SOUND_TEXTURE, HP_TEXTURE, INK_TEXTURE,
+			PAINT_FIRECRAKER_TEXTURE, PAINT_CIRCLE_TEXTURE, STAR3_TEXTURE,
 			TEXTURE_END };
-		TEXTURETYPE	eTextureType = TEXTURE_END;
+		TEXTURETYPE		eTextureType = TEXTURE_END;
 
-		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
-		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
-		_float3		f3Color = { 0.0f, 0.0f, 0.0f };
+		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float3			f3Color = { 0.0f, 0.0f, 0.0f };
 
 	}EFFECTINFO;
 
 private:
-	CE_Burst(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CE_Burst(const CE_Burst& rhs);
-	virtual ~CE_Burst() = default;
+	CE_Look_Grow(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CE_Look_Grow(const CE_Look_Grow& rhs);
+	virtual ~CE_Look_Grow() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -54,10 +53,12 @@ private:
 	EFFECTINFO			m_tEffectInfo;
 
 private:	// Shader
-	_float				m_fAlpha = 0.5f;
+	_float				m_fAlpha = 0.0f;
+	_float				m_fSizeX = 0.0f;
+	_float				m_fSizeY = 0.0f;
 
 public:
-	static	CE_Burst*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Look_Grow*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

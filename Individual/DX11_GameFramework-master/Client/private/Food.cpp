@@ -5,6 +5,9 @@
 #include "Obj_Manager.h"
 #include "Effect_Manager.h"
 
+#include "E_Burst.h"
+#include "Utilities_Manager.h"
+
 CFood::CFood(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -79,7 +82,9 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(	_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), 
+			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
+			CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
 	}
 	else
 		m_dKeyDown_TimeAcc = 0;
@@ -93,7 +98,7 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(1.0f, 1.0f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(1.0f, 0.0f, 0.0f));
 	}
 	else
 		m_dKeyDown_TimeAcc = 0;
@@ -248,7 +253,6 @@ void CFood::Effect_Create(const _double & TimeDelta)
 	if (0 == m_dFoodUp_TimeAcc)	// 맨 처음 한 번 하려고
 	{
 		CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
-		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 	}
 	
 	m_dFoodUp_TimeAcc += TimeDelta;
@@ -262,7 +266,7 @@ void CFood::Effect_Create(const _double & TimeDelta)
 	m_dFoodHp_TimeAcc += TimeDelta;
 	if (0.5 < m_dFoodHp_TimeAcc)
 	{
-		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, 1.2f, f4PlayerPos.z));
+		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z));
 		m_dFoodHp_TimeAcc = 0;
 	}
 

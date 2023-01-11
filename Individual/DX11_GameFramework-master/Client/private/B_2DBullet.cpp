@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "PipeLine.h"
+#include "Effect_Manager.h"
 
 CB_2DBullet::CB_2DBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -56,10 +57,10 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
+	if (BULLETINFO::TOODYBULLET::STAR_BULLET == m_tBulletInfo.eToodyBullet)
 		m_pTransformCom->Set_Scaled(_float3(0.4f, 0.4f, 1.f));
-	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
-		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+	//else if (BULLETINFO::TOODYBULLET::CIRCLE_BULLET == m_tBulletInfo.eToodyBullet)
+	//	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
 	// 처음 한 번만 플레이어를 향하는 벡터를 구한다.
 	_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
@@ -87,6 +88,24 @@ void CB_2DBullet::Tick(_double TimeDelta)
 	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
  	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
+																		// 이펙트
+	if (BULLETINFO::TOODYBULLET::CIRCLE_BULLET == m_tBulletInfo.eToodyBullet)
+	{
+		if (0.1 < m_dEffect_TimeAcc)
+		{
+			_float4 f4MyPos;
+			XMStoreFloat4(&f4MyPos, vMyPos);
+
+			if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
+				CEffect_Manager::GetInstance()->Effect_Ink(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+			else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
+				CEffect_Manager::GetInstance()->Effect_Ink(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+			else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
+				CEffect_Manager::GetInstance()->Effect_Ink(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+
+			m_dEffect_TimeAcc = 0;
+		}
+	}
 }
 
 void CB_2DBullet::Late_Tick(_double TimeDelta)
@@ -97,6 +116,17 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 	m_dBullet_TimeAcc += TimeDelta;
 	if (1 < m_dBullet_TimeAcc)
 	{
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+		else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+		else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
 	}
@@ -115,6 +145,9 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 
 HRESULT CB_2DBullet::Render()
 {
+	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+		return S_OK;
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -143,7 +176,21 @@ void CB_2DBullet::On_Collision(CGameObject * pOther)
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
 		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+		{
+			_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+			_float4 f4MyPos;
+			XMStoreFloat4(&f4MyPos, vMyPos);
+
+			if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
+				CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+			else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
+				CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+			else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
+				CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+
+
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STUN);
+		}
 		else
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
@@ -170,12 +217,12 @@ HRESULT CB_2DBullet::SetUp_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
-	{
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
+	//else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
+	//{
+	//	/* For.Com_Texture */
+	//	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	//		return E_FAIL;
+	//}
 
 	CCollider::COLLIDERDESC			ColliderDesc;
 
@@ -207,7 +254,7 @@ HRESULT CB_2DBullet::SetUp_ShaderResources()
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
-
+	
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 

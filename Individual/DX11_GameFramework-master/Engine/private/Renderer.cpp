@@ -39,13 +39,13 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	if (nullptr != m_pTarget_Manager)
-	{
-		m_pTarget_Manager->Render_Debug(TEXT("MRT_Deferred"));
-		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
-	}
-#endif
+//#ifdef _DEBUG
+//	if (nullptr != m_pTarget_Manager)
+//	{
+//		m_pTarget_Manager->Render_Debug(TEXT("MRT_Deferred"));
+//		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
+//	}
+//#endif
 
 	return S_OK;
 }
@@ -86,14 +86,14 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 100.0f, 100.f, 200.f, 200.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 100.0f, 300.f, 200.f, 200.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 300.0f, 100.f, 200.f, 200.f)))
-		return E_FAIL;
-#endif
+//#ifdef _DEBUG
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 100.0f, 100.f, 200.f, 200.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 100.0f, 300.f, 200.f, 200.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 300.0f, 100.f, 200.f, 200.f)))
+//		return E_FAIL;
+//#endif
 
 	/*LPDIRECT3DDEVICE9		pDevice = nullptr;
 

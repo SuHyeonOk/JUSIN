@@ -323,15 +323,15 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
 			CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
 
-		m_dEffect_TimeAcc += TimeDelta;
-		if (0.02 < m_dEffect_TimeAcc)
-			CEffect_Manager::GetInstance()->Change_Ink(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.02f));
+		CEffect_Manager::GetInstance()->Effect_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f),
+			CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f)));
+			
 	}
 
-	if (21 < m_bSkillClone_TimeAcc)
+	if (22 < m_bSkillClone_TimeAcc)
 	{
 		// 따라오던 플레이어의 좌표를 옮겨놓는다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -371,27 +371,17 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 void CS_Fiona::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (7 <= m_bEffect_Count)
-	{
-		m_dEffect_TimeAcc = 0;
+	if (1 < m_bSkillClone_TimeAcc)
 		return;
-	}
 
 	m_OnMove = false;
 
 	// 계속 생성
-	CEffect_Manager::GetInstance()->Change_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
+	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
 		CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
 
-	// 몇 초 마다 생성
-	m_dEffect_TimeAcc += TimeDelta;
-	if (0.2 < m_dEffect_TimeAcc)
-	{
-		++m_bEffect_Count;
-
-		CEffect_Manager::GetInstance()->Change_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.02f));
-		m_dEffect_TimeAcc = 0;
-	}
+	CEffect_Manager::GetInstance()->Effect_Ink(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f),
+		CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f)));
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)

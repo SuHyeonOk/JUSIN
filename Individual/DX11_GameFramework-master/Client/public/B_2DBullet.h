@@ -26,6 +26,8 @@ public:
 
 		_float		fMonsterAttack = 0.0f;
 
+		_uint		iCircle_Color = 0;	// CIRCLE_BULLET 을 사용하는 경우에만 몬스터 종류에 따라 다른 색
+
 	}BULLETINFO;
 
 private:
@@ -58,6 +60,7 @@ private:
 
 	_float4					m_f4Distance;
 	_double					m_dBullet_TimeAcc = 0;
+	_double					m_dEffect_TimeAcc = 0;
 
 public:
 	static	CB_2DBullet*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

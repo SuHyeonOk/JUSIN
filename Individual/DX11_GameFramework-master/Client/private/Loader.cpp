@@ -37,12 +37,12 @@
 #include "Effect_Rect_Instancing.h"
 #include "Effect_Point_Instancing.h"
 #include "E_DieCenter.h"
-#include "E_Skill_Marceline_Sound.h"
 #include "E_NoLook_Grow.h"
 #include "E_Burst.h"
 #include "E_Beneficial.h"
 #include "E_Food_Up.h"
 #include "E_Alpha_Change.h"
+#include "E_Look_Grow.h"
 
 // Obj
 #include "O_Box.h"
@@ -968,13 +968,21 @@ HRESULT CLoader::Effect_Texture()
 	/* For.Prototype_Component_Texture_E_Swim */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Swim"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Swim/Water_Wave_FX_1.png")))))
-
-	// Paint
-	/* For.Prototype_Component_Texture_E_Paint */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Water_Wave_FX_3.png")))))
 		return E_FAIL;
 
+	// Paint
+	/* For.Prototype_Component_Texture_E_Paint_Firecracker */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint_Firecracker"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Water_Wave_FX_3.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Paint_Circle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint_Circle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/CharacterShadow_2.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Star_3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Star_3"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Star_3.png")))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -990,16 +998,16 @@ HRESULT CLoader::Effect_Create()
 		CE_DieCenter::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_E_Skill_Marceline_Sound */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Skill_Marceline_Sound"),
-		CE_Skill_Marceline_Sound::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	/* For.Prototype_GameObject_E_NoLook_Grow */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_NoLook_Grow"),
 		CE_NoLook_Grow::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_E_Look_Grow */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Look_Grow"),
+		CE_Look_Grow::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
-	/* For.Prototype_GameObject_E_Smoke*/
+	/* For.Prototype_GameObject_E_Burst*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Burst"),
 		CE_Burst::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

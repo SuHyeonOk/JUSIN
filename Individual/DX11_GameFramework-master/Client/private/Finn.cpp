@@ -92,8 +92,6 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	//Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
@@ -119,13 +117,13 @@ HRESULT CFinn::Render()
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
 		if (i == 0)
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);		// 그림자
 		else
 		{
 			if (m_bShader_Hit)
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);	// Hit 시
 			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// 평소
 		}
 	}
 

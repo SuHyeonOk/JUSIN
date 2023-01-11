@@ -70,10 +70,7 @@ void CE_Burst::Tick(_double TimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
-	// 알파값 줄어들기2
-	m_dEffect_TimeAcc += TimeDelta;
-	if (1 < m_dEffect_TimeAcc)
-		m_fAlpha -= _float(TimeDelta) * 0.5f;
+	m_fAlpha -= _float(TimeDelta) * 0.2f;
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
@@ -129,7 +126,7 @@ HRESULT CE_Burst::SetUp_Components()
 			 CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_B_TEXTURE == m_tEffectInfo.eTextureType)
 	{
 		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint_Firecracker"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
 
