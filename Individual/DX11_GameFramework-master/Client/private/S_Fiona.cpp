@@ -9,7 +9,6 @@
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
 #include "Effect_Manager.h"
-#include "Utilities_Manager.h"
 
 #include "S_StunChick.h"
 
@@ -315,7 +314,7 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 	// 磷阑 锭狼 贸府
 	m_bSkillClone_TimeAcc += TimeDelta;
 
-	if (20 < m_bSkillClone_TimeAcc)
+	if (21 < m_bSkillClone_TimeAcc)
 	{
 		m_OnMove = false;
 
@@ -324,10 +323,7 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f));
-
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
-			CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
-			
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f), _float3(0.8f, 0.7f, 0.8f));
 	}
 
 	if (22 < m_bSkillClone_TimeAcc)
@@ -375,11 +371,8 @@ void CS_Fiona::Effect_Create(const _double & TimeDelta)
 	m_OnMove = false;
 
 	// 拌加 积己
-	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
-		CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
-
-	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(CUtilities_Manager::GetInstance()->Get_Random(0.8f, 1.0f),
-		CUtilities_Manager::GetInstance()->Get_Random(0.7f, 0.8f), CUtilities_Manager::GetInstance()->Get_Random(0.8f, 0.9f)));
+	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f));
+	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(0.8f, 0.7f, 0.8f));
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)

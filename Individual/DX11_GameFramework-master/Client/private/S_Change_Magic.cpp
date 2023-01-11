@@ -9,7 +9,6 @@
 #include "Skill_Manager.h"
 #include "UI_Manager.h"
 #include "Effect_Manager.h"
-#include "Utilities_Manager.h"
 
 CS_Change_Magic::CS_Change_Magic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -265,7 +264,7 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 {
 	m_dSkillClone_TimeAcc += TimeDelta;
 
-	if (20 < m_dSkillClone_TimeAcc)
+	if (21 < m_dSkillClone_TimeAcc)
 	{
 		m_OnMove = false;
 
@@ -273,11 +272,11 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), 
-			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.4f, 0.0f, 0.9f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(0.4f, 0.0f, 0.9f));
 	}
 
-	if (21 < m_dSkillClone_TimeAcc)
+	if (22 < m_dSkillClone_TimeAcc)
 	{
 		// 따라오던 플레이어의 좌표를 옮겨놓는다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -316,12 +315,13 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 void CS_Change_Magic::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (1 < m_dEffect_TimeAcc)
+	if (1 < m_dSkillClone_TimeAcc)
 		return;
 
-	m_dEffect_TimeAcc += TimeDelta;
-	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), 
-		_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
+	m_OnMove = false;
+
+	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(0.4f, 0.0f, 0.9f));
+	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(0.4f, 0.0f, 0.9f));
 }
 
 void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)

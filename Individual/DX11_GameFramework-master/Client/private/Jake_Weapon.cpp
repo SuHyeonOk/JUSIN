@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Bone.h"
 #include "UI_Manager.h"
+#include "Effect_Manager.h"
 
 CJake_Weapon::CJake_Weapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -125,6 +126,15 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 		return;
 
 	CObj_Manager::GetInstance()->Set_Jake_Shield();
+
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHLDE == m_WeaponDesc.eWeaponType)
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 1.0f));
+	}
 
 	// 나 지금 몬스터랑 충돌 했어
 	CObj_Manager::GetInstance()->Set_Monster_Crash(true);

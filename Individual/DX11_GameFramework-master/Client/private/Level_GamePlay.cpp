@@ -52,6 +52,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
 		return E_FAIL;
 
+	CObj_Manager::GetInstance()->Set_NextLevel(false);
+
 	// 파일 읽기
 	Load_Food();
 	Load_Coin();

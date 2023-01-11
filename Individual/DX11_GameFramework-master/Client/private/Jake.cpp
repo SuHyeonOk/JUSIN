@@ -73,6 +73,22 @@ void CJake::Tick(_double TimeDelta)
 	
 	__super::Tick(TimeDelta);
 
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//cout << "Á¦ÀÌÅ© : " <<m_i << endl;
+
+	//if (pGameInstance->Key_Down(DIK_P))
+	//{
+	//	m_i++;
+	//}
+	//if (pGameInstance->Key_Down(DIK_O))
+	//{
+	//	m_i--;
+	//}
+	//m_pModelCom->Set_AnimIndex(m_i, false);
+
+	//RELEASE_INSTANCE(CGameInstance);
+
 	Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
@@ -1044,6 +1060,10 @@ void CJake::Anim_Change(_double TimeDelta)
 
 		case CObj_Manager::PLAYERINFO::STATE::CHEERING:
 			m_pModelCom->Set_AnimIndex(9, false);
+			break;
+
+		case CObj_Manager::PLAYERINFO::STATE::LEVEL_UP:
+			m_pModelCom->Set_AnimIndex(44, true, false);
 			break;
 		}
 

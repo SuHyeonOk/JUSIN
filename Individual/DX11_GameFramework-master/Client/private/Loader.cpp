@@ -85,6 +85,8 @@
 #include "M_Skeleton_Shield.h"
 #include "M_Skeleton_Archer.h"
 
+#include "Obj_Manager.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
 	, m_pContext(pContext)
@@ -95,6 +97,8 @@ CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 _uint APIENTRY LoadingThread(void* pArg)
 {
+	CObj_Manager::GetInstance()->Set_NextLevel(true);
+
 	CLoader*		pLoader = (CLoader*)pArg;
 
 	EnterCriticalSection(&pLoader->Get_CriticalSection());

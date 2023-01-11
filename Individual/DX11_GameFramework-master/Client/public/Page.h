@@ -62,6 +62,9 @@ private:
 	//_bool		m_bRotation_Start = false;
 	//_double		m_dRotation_Stop_TimeAcc = 0;
 	//_double		m_dRotation_Start_TimeAcc = 0;
+
+	_double		m_dDead_TimeAcc = 0;
+	_bool		m_bPlayer_Collider = false;
 	
 public:
 	static	CPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -23,7 +23,7 @@ public:
 		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
 
 		enum STATE {
-			IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, KNOCKBACKHIT, STUN, DIE, CHANGE, CHEERING,
+			IDLE, RUN, ROLL, ATTACK, CONTROL, HIT, KNOCKBACKHIT, STUN, DIE, CHANGE, CHEERING, LEVEL_UP,
 			SWIM, S_PAINT, S_MARCELINE, S_COIN, S_FIONA,
 			TREEWITCH_0, TREEWITCH_1, TREEWITCH_2, MAGIC, STATE_END
 		};
@@ -109,14 +109,14 @@ public:
 
 private:
 	void		CObj_Manager::Current_Player();		// 현재 플레이어가 누구인지 Tick
-	void		CObj_Manager::Player_Exp();			// 현재 플레이어의 경험치를 Tick
+	void		CObj_Manager::Player_Exp(const _double & TimeDelta);			// 현재 플레이어의 경험치를 Tick
 	void		CObj_Manager::Player_Weapon();		// 현재 플레이어의 무기 출력
 
 private:
 	void		CObj_Manager::Key_Input();
 
 private:
-	_bool			m_bNextLevel = false;
+	_bool			m_bNextLevel = true;	// 처음에 true 였다가 레벨이 시작하면 flase 로 초기화 한다. 그리고, 다음 맵을 넘어갈 때 true 가 된다.
 	LEVEL			m_eCurrent_Level;
 	PLAYERINFO		m_tPlayerInfo;
 
@@ -138,6 +138,10 @@ private:
 	_double			m_dPlayerAttck_TimeAcc = 0;
 
 	_int			m_iWeapon_Index = 0;
+
+	_bool			m_bEffect = false;
+	_double			m_dEffect_TimeAcc = 0;
+	_double			m_dEffect_Up_TimeAcc = 0;
 
 public:
 	virtual void Free() override;

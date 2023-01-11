@@ -76,7 +76,7 @@ HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos)
 
 	CPage::PAGEINFO tPageInfo;
 	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
-	tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL(CUtilities_Manager::GetInstance()->Get_Random(0, 7));
+	tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL(CUtilities_Manager::GetInstance()->Get_Random(0, 3));
 	tPageInfo.bJemp = true;
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))

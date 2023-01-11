@@ -58,6 +58,8 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
+	CObj_Manager::GetInstance()->Set_NextLevel(false);
+
 	// 파일 읽기
 	Load_Food();
 	Load_Coin();
@@ -142,7 +144,7 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_BackGround"), TEXT("Com_Navigation"), 0));
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
 
-	CObj_Manager::GetInstance()->Set_NextLevel(false);
+	//CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	RELEASE_INSTANCE(CGameInstance);
 

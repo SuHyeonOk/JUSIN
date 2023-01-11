@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "UI_Manager.h"
 #include "Skill_Manager.h"
+#include "Effect_Manager.h"
 
 IMPLEMENT_SINGLETON(CObj_Manager)
 
@@ -107,8 +108,11 @@ void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 
 void		CObj_Manager::Tick(_double TimeDelta)
 {
+	if (m_bNextLevel)
+		return;
+
 	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
-	Player_Exp();				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
+	Player_Exp(TimeDelta);				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 	Key_Input();				// 전체적인 키 입력
 	Player_Weapon();			// 현재 플레이어의 무기를 출력한다.
 
@@ -212,10 +216,16 @@ void		CObj_Manager::Current_Player()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void		CObj_Manager::Player_Exp()
+void	CObj_Manager::Player_Exp(const _double & TimeDelta)
 {
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+	_float4 f4PlayerPos;
+	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
 	if (m_tPlayerInfo.fExp >= m_tPlayerInfo.fExpMax)
 	{
+		m_bEffect = true;
+
 		m_tPlayerInfo.iLevel++;							// 레벨 증가
 		m_tPlayerInfo.fHPMax += 10.0f;					// 공격력 증가
 		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
@@ -227,8 +237,30 @@ void		CObj_Manager::Player_Exp()
 		CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);
 		CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax);
+	}
 
-		return;
+	// 이펙트
+	if (m_bEffect)
+	{
+		// 플레이어 상태 변경
+		m_tPlayerInfo.eState = PLAYERINFO::STATE::LEVEL_UP;
+
+		m_dEffect_Up_TimeAcc += TimeDelta;
+		if (0.3 < m_dEffect_Up_TimeAcc)
+		{
+			CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+			CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, 0.7f, f4PlayerPos.z), _float3(0.9f, 1.0f, 0.6f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.9f, 1.0f, 0.6f));
+			m_dEffect_Up_TimeAcc = 0;
+		}
+
+ 		m_dEffect_TimeAcc += TimeDelta;
+		if (3 < m_dEffect_TimeAcc)
+		{
+			m_bEffect = false;
+			m_dEffect_TimeAcc = 0;
+			return;
+		}
 	}
 }
 

@@ -65,7 +65,16 @@ void CPage::Tick(_double TimeDelta)
 
 	// 만약 점프 상태라면 뛰어서 떨어져야 함
 	if (true == m_tinPageInfo.bJemp)
+	{
 		m_pTransformCom->RandomJump(900, 6.f, 0.5f, TimeDelta);
+	
+		if (m_bPlayer_Collider)
+		{
+			m_dDead_TimeAcc += TimeDelta;
+			if (1 < m_dDead_TimeAcc)
+				CGameObject::Set_Dead();
+		}
+	}
 
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	//m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
@@ -122,8 +131,11 @@ HRESULT CPage::Render()
 
 void CPage::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-		CGameObject::Set_Dead();
+	if (true != m_tinPageInfo.bJemp)
+		if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+			CGameObject::Set_Dead();
+		else
+			m_bPlayer_Collider = true;
 }
 
 HRESULT CPage::SetUp_Components()
