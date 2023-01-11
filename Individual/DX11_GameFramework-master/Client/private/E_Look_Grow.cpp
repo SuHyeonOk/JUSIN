@@ -81,7 +81,8 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
 
 	// 빠르게 커지는
-	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType)
+	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
 	{
 		m_fSizeX += _float(TimeDelta) * 1.2f;
 		m_fSizeY += _float(TimeDelta) * 1.2f;
@@ -154,14 +155,15 @@ HRESULT CE_Look_Grow::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Sound"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_Hp"));
-	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
+			 CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_RANDOM_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Change_ColorSmoke"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_FIRECRAKER_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Paint_Firecracker"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Paint_Circle"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
-		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star_3"));
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star_Random"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

@@ -264,7 +264,7 @@ void CFood::Effect_Create(const _double & TimeDelta)
 
 	// ½ÊÀÚ°¡
 	m_dFoodHp_TimeAcc += TimeDelta;
-	if (0.5 < m_dFoodHp_TimeAcc)
+	if (0.2 < m_dFoodHp_TimeAcc)
 	{
 		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z));
 		m_dFoodHp_TimeAcc = 0;

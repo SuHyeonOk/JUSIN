@@ -94,7 +94,12 @@ HRESULT CE_Burst::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(4);
+	// 색 조정
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
+		m_pShaderCom->Begin(4);
+	// 이미지색
+	else
+		m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 
@@ -115,20 +120,18 @@ HRESULT CE_Burst::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
+	_tchar	m_szTextureName[MAX_PATH] = L"";
+
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
-	{
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Change_Smoke"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
-	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_M_TEXTURE == m_tEffectInfo.eTextureType ||
-			 CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_Y_TEXTURE == m_tEffectInfo.eTextureType ||
-			 CE_Burst::EFFECTINFO::TEXTURETYPE::POAIN_B_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint_Firecracker"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Change_Smoke"));
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star"));
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star3"));
+
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
 
 	return S_OK;
 }

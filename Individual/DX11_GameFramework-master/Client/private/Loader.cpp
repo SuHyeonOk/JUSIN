@@ -187,10 +187,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Star"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Star/Star.png")))))
 		return E_FAIL;
-	/* For.Prototype_Component_Texture_B_Circle */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_B_Circle"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Circle/Circle.png")))))
-		return E_FAIL;
 
 	UI_Texture();
 	Effect_Texture();
@@ -979,9 +975,19 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint_Circle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/CharacterShadow_2.png")))))
 		return E_FAIL;
-	/* For.Prototype_Component_Texture_E_Star_3 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Star_3"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Star_3.png")))))
+	/* For.Prototype_Component_Texture_E_Star_Random */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Star_Random"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Star_Random.png")))))
+		return E_FAIL;
+
+	// Star
+	/* For.Prototype_Component_Texture_E_Star */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Star"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Star/Star.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Star3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Star3"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Star/Star3.png")))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -16,7 +16,50 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Burst::EFFECTINFO	tEffetInfo;
+	tEffetInfo.f3Pos = f3Pos;
+	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE;
+
+	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_Star3_Create(_float3 f3Pos, const _float3 & f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Burst::EFFECTINFO	tEffetInfo;
+	tEffetInfo.f3Pos = f3Pos;
+	tEffetInfo.f3Color = f3Color;
+	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE;
+
+	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_StarRandom_Create(_float3 f3Pos, const _float3 & f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -110,12 +153,12 @@ HRESULT CEffect_Manager::Food_Hp(_float3 f3Pos)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
+	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 
 	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
 
-	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
+	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
 
 	_vector vRandomPos = vTempPos * fRandomRange;
 	_float4 f4RandomPos;
@@ -146,6 +189,21 @@ HRESULT CEffect_Manager::Effect_Ink(_float3 f3Pos, _float3 f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CE_Look_Grow::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::INK_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	tEffectInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Grow"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Random_Ink(_float3 f3Pos, _float3 f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
 	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
@@ -159,7 +217,7 @@ HRESULT CEffect_Manager::Effect_Ink(_float3 f3Pos, _float3 f3Color)
 	XMStoreFloat4(&f4RandomPos, vRandomPos);
 
 	CE_Look_Grow::EFFECTINFO tEffectInfo;
-	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::INK_TEXTURE;
+	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::INK_RANDOM_TEXTURE;
 	tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z + f4RandomPos.z);
 	tEffectInfo.f3Color = f3Color;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Grow"), &tEffectInfo)))

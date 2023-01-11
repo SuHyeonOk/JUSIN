@@ -17,9 +17,7 @@ class CE_Burst final : public CGameObject
 public:
 	typedef struct tagSmoketInfo
 	{
-		enum TEXTURETYPE { SMOKE_TEXUTRE, 
-			POAIN_M_TEXTURE, POAIN_Y_TEXTURE, POAIN_B_TEXTURE,
-			TEXTURE_END };
+		enum TEXTURETYPE { SMOKE_TEXUTRE, STAR_TEXTURE, STAR3_TEXTURE, TEXTURE_END };
 		TEXTURETYPE	eTextureType = TEXTURE_END;
 
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };

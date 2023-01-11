@@ -118,19 +118,19 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 		{
 			CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.3f, 0.8f, 1.0f));
 			CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.3f, 1.0f, 1.0f));
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.3f, 1.0f, 1.0f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.3f, 1.0f, 1.0f));
 		}
 		else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::MAGENTA == m_tBulletInfo.ePaintWork)
 		{
 			CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 0.5f, 1.0f));
 			CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.6f, 0.0f, 0.9f));
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.6f, 0.0f, 0.9f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.6f, 0.0f, 0.9f));
 		}
 		else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::YELLOW == m_tBulletInfo.ePaintWork)
 		{
 			CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 1.0f, 0.0f));
 			CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.9f, 1.0f, 0.6f));
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
 		}
 
 		// 죽을 때 원래 공격력으로 변경
@@ -192,19 +192,19 @@ void CS_PaintWork::On_Collision(CGameObject * pOther)
 	{
 		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.3f, 0.8f, 1.0f));
 		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.3f, 1.0f, 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.3f, 1.0f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.3f, 1.0f, 1.0f));
 	}
 	else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::MAGENTA == m_tBulletInfo.ePaintWork)
 	{
 		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 0.5f, 1.0f));
 		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.6f, 0.0f, 0.9f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.6f, 0.0f, 0.9f));
+		CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.6f, 0.0f, 0.9f));
 	}
 	else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::YELLOW == m_tBulletInfo.ePaintWork)
 	{
 		CEffect_Manager::GetInstance()->Effect_Paint_Circle_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z), _float3(0.9f, 1.0f, 0.0f));
 		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.9f, 1.0f, 0.6f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
+		CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
 	}
 
 	CGameObject::Set_Dead();

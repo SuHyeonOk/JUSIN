@@ -91,7 +91,8 @@ void CB_2DBullet::Tick(_double TimeDelta)
 																		// 이펙트
 	if (BULLETINFO::TOODYBULLET::CIRCLE_BULLET == m_tBulletInfo.eToodyBullet)
 	{
-		if (0.1 < m_dEffect_TimeAcc)
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.04 < m_dEffect_TimeAcc)
 		{
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vMyPos);
@@ -121,11 +122,11 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
 		if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
 		else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
 		else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
 
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
@@ -182,11 +183,11 @@ void CB_2DBullet::On_Collision(CGameObject * pOther)
 			XMStoreFloat4(&f4MyPos, vMyPos);
 
 			if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
-				CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+				CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
 			else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
-				CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+				CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
 			else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
-				CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+				CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
 
 
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STUN);

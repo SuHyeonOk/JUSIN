@@ -339,9 +339,9 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 	if (CM_Monster::MONSTERDESC::G_BLUE == m_tMonsterDesc.eMonsterKind)
 		tBulletInfo.iCircle_Color = 0;
 	else if (CM_Monster::MONSTERDESC::G_RED == m_tMonsterDesc.eMonsterKind)
-		tBulletInfo.iCircle_Color = 0;
+		tBulletInfo.iCircle_Color = 1;
 	else if (CM_Monster::MONSTERDESC::G_YELLOW == m_tMonsterDesc.eMonsterKind)
-		tBulletInfo.iCircle_Color = 0;
+		tBulletInfo.iCircle_Color = 2;
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Circle_0"), TEXT("Prototype_GameObject_B_ToodyBullet"), &tBulletInfo)))
 		return;

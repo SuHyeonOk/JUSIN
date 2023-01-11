@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "ItemManager.h"
+#include "Effect_Manager.h"
 
 CO_Box::CO_Box(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -67,7 +68,16 @@ void CO_Box::Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(1);
 		break;
 	case Client::CO_Box::OPEN:
+	{
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+
 		m_pModelCom->Set_AnimIndex(3, false);
+	}
 		break;
 	case Client::CO_Box::STOP:
 		m_pModelCom->Set_AnimIndex(2);
