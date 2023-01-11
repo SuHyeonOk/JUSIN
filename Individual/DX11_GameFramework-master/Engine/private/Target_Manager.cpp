@@ -1,12 +1,43 @@
 #include "..\public\Target_Manager.h"
 #include "RenderTarget.h"
 
+#include "Shader.h"
+#include "VIBuffer_Rect.h"
+
 IMPLEMENT_SINGLETON(CTarget_Manager)
 
 CTarget_Manager::CTarget_Manager()
 {
 
 }
+
+HRESULT CTarget_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+#ifdef _DEBUG
+
+	D3D11_VIEWPORT			ViewportDesc;
+	ZeroMemory(&ViewportDesc, sizeof ViewportDesc);
+
+	_uint			iNumViewports = 1;
+
+	pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());	// 이전 데이터를 초기화 하기 위해 항등으로 처리
+	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));	// 직교투영 실행
+
+	m_pShader = CShader::Create(pDevice, pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements);
+	if (nullptr == m_pShader)
+		return E_FAIL;
+
+	m_pVIBuffer = CVIBuffer_Rect::Create(pDevice, pContext);
+	if (nullptr == m_pVIBuffer)
+		return E_FAIL;
+
+#endif // _DEBUG
+
+	return S_OK;
+}
+
 
 HRESULT CTarget_Manager::Add_RenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 * pClearColor)
 {
@@ -26,12 +57,12 @@ HRESULT CTarget_Manager::Add_MRT(const _tchar * pMRTTag, const _tchar * pTargetT
 {
 	CRenderTarget*		pRenderTarget = Find_RenderTarget(pTargetTag);
 
-	if(nullptr == pRenderTarget)
+	if (nullptr == pRenderTarget)
 		return E_FAIL;
 
 	list<CRenderTarget*>*		pMRTList = Find_MRT(pMRTTag);
 
-	if (nullptr == pMRTList)				// 특정 렌더 타깃을 퍼음 만들어지는 상황으로 그냥 만들어 주면 된다.
+	if (nullptr == pMRTList)					// 특정 렌더 타깃을 처음 만들어지는 상황으로 그냥 만들어 주면 된다.
 	{
 		list<CRenderTarget*>		MRTList;
 
@@ -39,7 +70,7 @@ HRESULT CTarget_Manager::Add_MRT(const _tchar * pMRTTag, const _tchar * pTargetT
 
 		m_MRTs.emplace(pMRTTag, MRTList);
 	}
-	else									// List가 이미 있는 경우로, 그 리스트에 렌더 타깃을 추가한다.
+	else										// List가 이미 있는 경우로, 그 리스트에 렌더 타깃을 추가한다.
 		pMRTList->push_back(pRenderTarget);
 
 	Safe_AddRef(pRenderTarget);
@@ -61,8 +92,12 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext * pContext, const _tchar 
 
 	_uint			iNumViews = 0;
 
-	for (auto& pRTV : *pMRTList)	
-		pRTVs[iNumViews++] = pRTV->Get_RTV();	// RenderTarget 에 있는 맵+리스트를 가져온다.
+	for (auto& pRTV : *pMRTList)
+	{
+		pRTV->Clear();
+
+		pRTVs[iNumViews++] = pRTV->Get_RTV();		// RenderTarget 에 있는 맵+리스트를 가져온다.
+	}
 
 	pContext->OMSetRenderTargets(iNumViews, pRTVs, m_pDepthStencilView);
 
@@ -79,6 +114,36 @@ HRESULT CTarget_Manager::End_MRT(ID3D11DeviceContext * pContext, const _tchar * 
 
 	return S_OK;
 }
+#ifdef _DEBUG
+
+HRESULT CTarget_Manager::Ready_Debug(const _tchar * pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+	CRenderTarget*		pTarget = Find_RenderTarget(pTargetTag);
+
+	if (nullptr == pTarget)
+		return E_FAIL;
+
+	return pTarget->Ready_Debug(fX, fY, fSizeX, fSizeY);
+}
+
+void CTarget_Manager::Render_Debug(const _tchar* pMRTTag)
+{
+	list<CRenderTarget*>*		pMRTList = Find_MRT(pMRTTag);
+	if (nullptr == pMRTList)
+		return;
+
+	if (FAILED(m_pShader->Set_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return;
+
+	if (FAILED(m_pShader->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return;
+
+	for (auto& pRenderTarget : *pMRTList)
+	{
+		pRenderTarget->Render(m_pShader, m_pVIBuffer);
+	}
+}
+#endif // _DEBUG
 
 CRenderTarget * CTarget_Manager::Find_RenderTarget(const _tchar * pTargetTag)
 {
@@ -87,7 +152,7 @@ CRenderTarget * CTarget_Manager::Find_RenderTarget(const _tchar * pTargetTag)
 	if (iter == m_RenderTargets.end())
 		return nullptr;
 
-	return iter->second;	
+	return iter->second;
 }
 
 list<class CRenderTarget*>* CTarget_Manager::Find_MRT(const _tchar * pMRTTag)
@@ -104,7 +169,7 @@ void CTarget_Manager::Free()
 {
 	for (auto& Pair : m_MRTs)
 	{
-		for (auto& pRenderTarget : Pair.second)		
+		for (auto& pRenderTarget : Pair.second)
 			Safe_Release(pRenderTarget);
 
 		Pair.second.clear();
@@ -115,4 +180,11 @@ void CTarget_Manager::Free()
 		Safe_Release(Pair.second);
 
 	m_RenderTargets.clear();
+
+
+#ifdef _DEBUG
+	Safe_Release(m_pShader);
+	Safe_Release(m_pVIBuffer);
+
+#endif
 }

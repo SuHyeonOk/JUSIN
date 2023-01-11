@@ -22,11 +22,11 @@ public:
 
 #ifdef _DEBUG
 public:
-	HRESULT Ready_Debug(const _tchar* pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT Ready_Debug(const _tchar* pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);	// 타깃을 준비시키는 기능
 	void Render_Debug(const _tchar* pMRTTag);	// 타깃의 개 수만큼 그리면서 사각형 버퍼를 그린다.
 #endif // _DEBUG
 
-private:
+private:	// 기본적으로 RenderTarget 을 보관하는 맵
 	map<const _tchar*, class CRenderTarget*>				m_RenderTargets;
 	typedef map<const _tchar*, class CRenderTarget*>		RENDERTARGETS;
 

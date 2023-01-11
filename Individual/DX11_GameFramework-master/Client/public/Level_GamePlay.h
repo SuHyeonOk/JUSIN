@@ -38,13 +38,13 @@ private:
 	void	ImGui_Monster();
 
 private:
-	void	Load_Food();
-	void	Load_Coin();
-	void	Load_Page();
-	void	Load_Item();
-	void	Load_Npc();
-	void	Load_Object();
-	void	Load_Monster();
+	HRESULT	Load_Food();
+	HRESULT	Load_Coin();
+	HRESULT	Load_Page();
+	HRESULT	Load_Item();
+	HRESULT	Load_Npc();
+	HRESULT	Load_Object();
+	HRESULT	Load_Monster();
 
 private:
 	const _tchar*	m_szObjName;

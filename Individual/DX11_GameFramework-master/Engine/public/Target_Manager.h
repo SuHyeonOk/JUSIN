@@ -13,11 +13,18 @@ public:
 	virtual ~CTarget_Manager() = default;
 
 public:
+	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4* pClearColor);
 	HRESULT Add_MRT(const _tchar* pMRTTag, const _tchar* pTargetTag);
 
 	HRESULT Begin_MRT(ID3D11DeviceContext* pContext, const _tchar* pMRTTag);
 	HRESULT End_MRT(ID3D11DeviceContext* pContext, const _tchar* pMRTTag);
+
+#ifdef _DEBUG
+public:
+	HRESULT Ready_Debug(const _tchar* pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);	// 타깃을 준비시키는 기능
+	void Render_Debug(const _tchar* pMRTTag);	// 타깃의 개 수만큼 그리면서 사각형 버퍼를 그린다.
+#endif // _DEBUG
 
 private:	// 기본적으로 RenderTarget 을 보관하는 맵
 	map<const _tchar*, class CRenderTarget*>				m_RenderTargets;
@@ -31,6 +38,13 @@ private:
 private:
 	ID3D11RenderTargetView*				m_pBackBufferView = nullptr;
 	ID3D11DepthStencilView*				m_pDepthStencilView = nullptr;
+
+#ifdef _DEBUG
+private:
+	class CVIBuffer_Rect*				m_pVIBuffer = nullptr;
+	class CShader*						m_pShader = nullptr;
+	_float4x4							m_ViewMatrix, m_ProjMatrix;
+#endif
 
 private:
 	class CRenderTarget* Find_RenderTarget(const _tchar* pTargetTag);

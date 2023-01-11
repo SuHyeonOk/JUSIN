@@ -1,4 +1,6 @@
 #include "..\public\RenderTarget.h"
+#include "Shader.h"
+#include "VIBuffer_Rect.h"
 
 CRenderTarget::CRenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice(pDevice)
@@ -43,6 +45,45 @@ HRESULT CRenderTarget::Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixe
 	return S_OK;
 }
 
+HRESULT CRenderTarget::Clear()
+{
+	m_pContext->ClearRenderTargetView(m_pRTV, (_float*)&m_vClearColor);
+
+	return S_OK;
+}
+
+#ifdef _DEBUG
+
+HRESULT CRenderTarget::Ready_Debug(_float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+	D3D11_VIEWPORT			ViewportDesc;
+	ZeroMemory(&ViewportDesc, sizeof ViewportDesc);
+
+	_uint			iNumViewports = 1;
+
+	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+
+	m_WorldMatrix._11 = fSizeX;
+	m_WorldMatrix._22 = fSizeY;
+	m_WorldMatrix._41 = fX - ViewportDesc.Width * 0.5f;
+	m_WorldMatrix._42 = -fY + ViewportDesc.Height * 0.5f;
+
+
+	return S_OK;
+}
+
+void CRenderTarget::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+{
+	pShader->Set_Matrix("g_WorldMatrix", &m_WorldMatrix);
+	pShader->Set_ShaderResourceView("g_Texture", m_pSRV);
+
+	pShader->Begin(0);
+	pVIBuffer->Render();
+}
+#endif // _DEBUG
+
 CRenderTarget * CRenderTarget::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 * pClearColor)
 {
 	CRenderTarget*		pInstance = new CRenderTarget(pDevice, pContext);
@@ -57,8 +98,10 @@ CRenderTarget * CRenderTarget::Create(ID3D11Device * pDevice, ID3D11DeviceContex
 
 void CRenderTarget::Free()
 {
-	if(m_vClearColor.y == 0.f)
-		SaveDDSTextureToFile(m_pContext, m_pTexture2D, TEXT("../Bin/Test.dds"));
+	// 파일 만드려고, if 조건문의 경우 디퓨즈만 보기 위해서 디퓨즈의 색상을 1.0f, 0.0f, 0.0f 로 변경했다.
+	// 결론 : 디쥬프 dds 파일 만들기
+	/*if(m_vClearColor.y == 0.f)
+	SaveDDSTextureToFile(m_pContext, m_pTexture2D, TEXT("../Bin/Test.dds"));*/
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);

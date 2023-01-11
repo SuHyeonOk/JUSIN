@@ -90,6 +90,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pComponent_Manager->Add_Prototype(m_iStaticLevelIndex, m_pPrototypeTransformTag, CTransform::Create(*ppDeviceOut, *ppContextOut))))
 		return E_FAIL;
 
+	if (FAILED(m_pTarget_Manager->Initialize(*ppDeviceOut, *ppContextOut)))
+		return E_FAIL;
+
 	if (FAILED(m_pFrustum->Initialize()))
 		return E_FAIL;
 

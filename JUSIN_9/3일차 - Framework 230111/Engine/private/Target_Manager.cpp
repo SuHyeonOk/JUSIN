@@ -22,8 +22,8 @@ HRESULT CTarget_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
 
 	pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
-	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
+	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());	// 이전 데이터를 초기화 하기 위해 항등으로 처리
+	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));	// 직교투영 실행
 
 	m_pShader = CShader::Create(pDevice, pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXTEX_DECLARATION::Elements, VTXTEX_DECLARATION::iNumElements);
 	if (nullptr == m_pShader)
@@ -62,7 +62,7 @@ HRESULT CTarget_Manager::Add_MRT(const _tchar * pMRTTag, const _tchar * pTargetT
 
 	list<CRenderTarget*>*		pMRTList = Find_MRT(pMRTTag);
 
-	if (nullptr == pMRTList)
+	if (nullptr == pMRTList)					// 특정 렌더 타깃을 처음 만들어지는 상황으로 그냥 만들어 주면 된다.
 	{
 		list<CRenderTarget*>		MRTList;
 
@@ -70,7 +70,7 @@ HRESULT CTarget_Manager::Add_MRT(const _tchar * pMRTTag, const _tchar * pTargetT
 
 		m_MRTs.emplace(pMRTTag, MRTList);
 	}
-	else
+	else										// List가 이미 있는 경우로, 그 리스트에 렌더 타깃을 추가한다.
 		pMRTList->push_back(pRenderTarget);
 
 	Safe_AddRef(pRenderTarget);
@@ -85,6 +85,7 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext * pContext, const _tchar 
 	if (nullptr == pMRTList)
 		return E_FAIL;
 
+	// 기존에 그리던 Target 을 가져오는 것 (다른 방법 으로는 Get뎁스 스텐실 함수를 만들어도 되긴하다.)
 	pContext->OMGetRenderTargets(1, &m_pBackBufferView, &m_pDepthStencilView);
 
 	ID3D11RenderTargetView*		pRTVs[8] = { nullptr };
@@ -95,7 +96,7 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext * pContext, const _tchar 
 	{
 		pRTV->Clear();
 
-		pRTVs[iNumViews++] = pRTV->Get_RTV();	
+		pRTVs[iNumViews++] = pRTV->Get_RTV();		// RenderTarget 에 있는 맵+리스트를 가져온다.
 	}
 
 	pContext->OMSetRenderTargets(iNumViews, pRTVs, m_pDepthStencilView);
@@ -105,6 +106,7 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext * pContext, const _tchar 
 
 HRESULT CTarget_Manager::End_MRT(ID3D11DeviceContext * pContext, const _tchar * pMRTTag)
 {
+	// 새로 셋 하는 것이 초기화 하는 것 이다. 
 	pContext->OMSetRenderTargets(1, &m_pBackBufferView, m_pDepthStencilView);
 
 	Safe_Release(m_pBackBufferView);

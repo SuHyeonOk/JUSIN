@@ -28,12 +28,24 @@ HRESULT CRenderer::Draw_RenderGroup()
 		return E_FAIL;
 	if (FAILED(Render_NonAlphaBlend()))
 		return E_FAIL;
+
+	if (FAILED(Render_LightAcc()))	// 조명 함수 호출
+		return E_FAIL;
+
 	if (FAILED(Render_NonLight()))
 		return E_FAIL;
 	if (FAILED(Render_AlphaBlend()))
 		return E_FAIL;
 	if (FAILED(Render_UI()))
 		return E_FAIL;
+
+#ifdef _DEBUG
+	if (nullptr != m_pTarget_Manager)
+	{
+		m_pTarget_Manager->Render_Debug(TEXT("MRT_Deferred"));
+		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
+	}
+#endif
 
 	return S_OK;
 }
@@ -53,7 +65,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* 렌터타겟들을 생성한다. */
 
 	/* For.Target_Diffuse */
-	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, &_float4(1.f, 0.0f, 0.0f, 1.f))))
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, &_float4(0.0f, 0.0f, 1.f, 1.f))))
 		return E_FAIL;
 
 	/* For.Target_Normal */
@@ -73,6 +85,15 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.MRT_LightAcc */ /* 빛 연산의 결과를 저장할 렌더타겟들.  */
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 		return E_FAIL;
+
+#ifdef _DEBUG
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 100.0f, 100.f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 100.0f, 300.f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 300.0f, 100.f, 200.f, 200.f)))
+		return E_FAIL;
+#endif
 
 	/*LPDIRECT3DDEVICE9		pDevice = nullptr;
 
@@ -117,27 +138,12 @@ HRESULT CRenderer::Render_Priority()
 
 HRESULT CRenderer::Render_NonAlphaBlend()
 {
-	//if (nullptr == m_pTarget_Manager)
-	//	return E_FAIL;
+	if (nullptr == m_pTarget_Manager)
+		return E_FAIL;
 
 	///* Diffuse + Normal */
 	//if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_Deferred"))))
 	//	return E_FAIL;
-
-	//for (auto& pGameObject : m_RenderObjects[RENDER_NONALPHABLEND])
-	//{
-	//	if (nullptr != pGameObject)
-	//		pGameObject->Render();
-
-	//	Safe_Release(pGameObject);
-	//}
-
-	//m_RenderObjects[RENDER_NONALPHABLEND].clear();
-
-	//if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
-	//	return E_FAIL;
-
-	//return S_OK;
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_NONALPHABLEND])
 	{
@@ -148,6 +154,26 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 	}
 
 	m_RenderObjects[RENDER_NONALPHABLEND].clear();
+
+	//if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
+	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_LightAcc()
+{
+	if (nullptr == m_pTarget_Manager)
+		return E_FAIL;
+
+	/* Shade */
+	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_LightAcc"))))
+		return E_FAIL;
+
+	//m_pLight_Manager->Render();
+
+	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_LightAcc"))))
+		return E_FAIL;
 
 	return S_OK;
 }
