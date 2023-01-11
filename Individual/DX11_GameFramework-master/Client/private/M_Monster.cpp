@@ -64,11 +64,9 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }
@@ -82,7 +80,7 @@ HRESULT CM_Monster::Render()
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
 	{
 		if (nullptr != m_pColliderCom)
-			m_pColliderCom->Render();
+			m_pColliderCom[COLLTYPE_AABB]->Render();
 	}
 #endif
 
@@ -306,6 +304,9 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 
 	// 몬스터 상태 변경
 	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+	// 공격 당할 때 플레이어 바라보기
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	// UI 에 내 체력 넘겨주기
 	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);

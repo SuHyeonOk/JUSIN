@@ -71,8 +71,6 @@ void CM_Skeleton_Archer::Tick(_double TimeDelta)
 
 void CM_Skeleton_Archer::Late_Tick(_double TimeDelta)
 {
-
-
 	__super::Late_Tick(TimeDelta);
 }
 
@@ -101,12 +99,6 @@ HRESULT CM_Skeleton_Archer::Render()
 		return S_OK;	// 죽었다면, 여기까지 진행하고 return
 	}
 
-	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
-	{
-		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
-			return E_FAIL;
-	}
-
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
@@ -114,10 +106,12 @@ HRESULT CM_Skeleton_Archer::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
+		{
 			if (m_bShader_Hit)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+		}
 	}
 
 	return S_OK;

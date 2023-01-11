@@ -92,7 +92,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	//Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);

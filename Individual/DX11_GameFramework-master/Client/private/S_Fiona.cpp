@@ -124,10 +124,10 @@ void CS_Fiona::Late_Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
-	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	//Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CS_Fiona::Render()
