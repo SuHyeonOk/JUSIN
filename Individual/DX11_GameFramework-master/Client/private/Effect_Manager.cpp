@@ -9,11 +9,26 @@
 #include "E_NoLook_Grow.h"
 #include "E_Beneficial.h"
 #include "E_Alpha_Change.h"
+#include "E_Alpha_Rotation.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
 {
+}
+
+HRESULT CEffect_Manager::Effect_Shield_Create(_float3 f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
+	CE_Alpha_Rotation::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Alpha_Rotation::EFFECTINFO::SHIELD_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Rotation"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
 }
 
 HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)

@@ -16,6 +16,8 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
+	HRESULT		Effect_Shield_Create(_float3 f3Pos);
+
 	HRESULT		Effect_Star_Create(_float3 f3Pos);
 	HRESULT		Effect_Star3_Create(_float3 f3Pos, const _float3 & f3Color);
 	HRESULT		Effect_StarRandom_Create(_float3 f3Pos, const _float3 & f3Color);

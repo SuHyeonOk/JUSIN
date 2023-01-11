@@ -444,9 +444,6 @@
     <ClInclude Include="..\public\UI_MiniMap_Player.h">
       <Filter>02.GameObjects\UI\MninMap</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\E_Skill_Marceline_Sound.h">
-      <Filter>02.GameObjects\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\E_Food_Up.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
@@ -463,6 +460,9 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\E_Look_Grow.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\E_Alpha_Rotation.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
   </ItemGroup>
@@ -722,9 +722,6 @@
     <ClCompile Include="..\private\UI_MiniMap_Player.cpp">
       <Filter>02.GameObjects\UI\MninMap</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\E_Skill_Marceline_Sound.cpp">
-      <Filter>02.GameObjects\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\E_Food_Up.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
@@ -741,6 +738,9 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\E_Look_Grow.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_Alpha_Rotation.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>

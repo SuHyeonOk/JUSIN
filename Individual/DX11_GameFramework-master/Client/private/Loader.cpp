@@ -43,6 +43,7 @@
 #include "E_Food_Up.h"
 #include "E_Alpha_Change.h"
 #include "E_Look_Grow.h"
+#include "E_Alpha_Rotation.h"
 
 // Obj
 #include "O_Box.h"
@@ -994,6 +995,12 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Star/Star3.png")))))
 		return E_FAIL;
 
+	// Shield
+	/* For.Prototype_Component_Texture_E_Jake_Shield */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Jake_Shield"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Hit/Jake_Shield.png")))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1034,6 +1041,10 @@ HRESULT CLoader::Effect_Create()
 	/* For.Prototype_GameObject_E_Alpha_Change*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Alpha_Change"),
 		CE_Alpha_Change::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_E_Alpha_Rotation*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Alpha_Rotation"),
+		CE_Alpha_Rotation::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 

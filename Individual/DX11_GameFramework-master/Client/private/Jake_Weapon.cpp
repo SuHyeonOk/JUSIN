@@ -50,6 +50,29 @@ void CJake_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 제이크 쉴드 이펙트
+	if (m_bMonster_Collider)
+	{
+		if (false == m_bEffect_Shield)
+		{
+			m_bEffect_Shield = true;
+
+			_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
+			_float4 f4MyPos;
+			XMStoreFloat4(&f4MyPos, vMyPos);
+
+			CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f));
+		}
+
+		m_dEffect_Shield_TimeAcc += TimeDelta;
+		if (3 < m_dEffect_Shield_TimeAcc)
+		{
+			m_bEffect_Shield = false;
+			m_bMonster_Collider = false;
+			m_dEffect_Shield_TimeAcc = 0;
+		}
+	}
+
 	// 현재 플레이어가 무기의 주인일 때
 	if (CObj_Manager::PLAYERINFO::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
@@ -128,13 +151,7 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 	CObj_Manager::GetInstance()->Set_Jake_Shield();
 
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)
-	{
-		_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f), _float3(0.968f, 0.729f, 0.160f));
-	}
+		m_bMonster_Collider = true;
 
 	// 나 지금 몬스터랑 충돌 했어
 	CObj_Manager::GetInstance()->Set_Monster_Crash(true);

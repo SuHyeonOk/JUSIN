@@ -12,22 +12,23 @@ END
 
 BEGIN(Client)
 
-class CE_Skill_Marceline_Sound final : public CGameObject
+class CE_Alpha_Rotation final : public CGameObject
 {
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { SOUND, HP, INK, TYPE_END };
-		TEXTURETYPE	eEffectType = TYPE_END;
+		enum TEXTURETYPE { SHIELD_TEXTURE, TEXTURETYPE_END };
+		TEXTURETYPE	eTextureType = TEXTURETYPE_END;
 
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float3		f3Color = { 0.0f, 0.0f, 0.0f };
 
 	}EFFECTINFO;
 
 private:
-	CE_Skill_Marceline_Sound(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CE_Skill_Marceline_Sound(const CE_Skill_Marceline_Sound& rhs);
-	virtual ~CE_Skill_Marceline_Sound() = default;
+	CE_Alpha_Rotation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CE_Alpha_Rotation(const CE_Alpha_Rotation& rhs);
+	virtual ~CE_Alpha_Rotation() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -55,7 +56,7 @@ private:	// Shader
 	_float				m_fSizeY = 0.0f;
 
 public:
-	static	CE_Skill_Marceline_Sound*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Alpha_Rotation*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };
