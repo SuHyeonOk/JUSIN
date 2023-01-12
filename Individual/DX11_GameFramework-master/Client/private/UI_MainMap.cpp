@@ -51,7 +51,12 @@ HRESULT CUI_MninMap::Initialize(void * pArg)
 
 void CUI_MninMap::Tick(_double TimeDelta)
 {
-
+	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+		m_iMiMap_Texture = 0;
+	if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+		m_iMiMap_Texture = 1;
+	else
+		m_iMiMap_Texture = 1;
 }
 
 void CUI_MninMap::Late_Tick(_double TimeDelta)
@@ -77,6 +82,10 @@ HRESULT CUI_MninMap::Render()
 
 	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Garden"), _float2(1147.f, 19.f), 0.f, _float2(0.4f, 0.37f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
+	if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Skeleton"), _float2(1141.f, 19.f), 0.f, _float2(0.4f, 0.37f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
+	else
+		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Skeleton Boss"), _float2(1147.f, 19.f), 0.f, _float2(0.4f, 0.37f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -100,13 +109,10 @@ HRESULT CUI_MninMap::SetUp_Components()
 		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	//if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
-	{
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Garden"), TEXT("Com_Texture"),
-			(CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map"), TEXT("Com_Texture"),
+		(CComponent**)&m_pTextureCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -123,7 +129,7 @@ HRESULT CUI_MninMap::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iMiMap_Texture)))
 		return E_FAIL;
 
 	return S_OK;

@@ -310,8 +310,8 @@ void CUI_::Tick(_double TimeDelta)
 	}
 
 	// ¹Ì´Ï¸Ê
-	//m_vecUI[21]->Tick(TimeDelta);
-	//m_vecUI[22]->Tick(TimeDelta);
+	m_vecUI[21]->Tick(TimeDelta);
+	m_vecUI[22]->Tick(TimeDelta);
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -410,8 +410,8 @@ void CUI_::Late_Tick(_double TimeDelta)
 			m_vecUI[20]->Late_Tick(TimeDelta);
 	}
 
-	//m_vecUI[21]->Late_Tick(TimeDelta);
-	//m_vecUI[22]->Late_Tick(TimeDelta);
+	m_vecUI[21]->Late_Tick(TimeDelta);
+	m_vecUI[22]->Late_Tick(TimeDelta);
 
 
 

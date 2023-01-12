@@ -829,9 +829,9 @@ HRESULT CLoader::UI_Texture()
 		return E_FAIL;
 
 	// mini map
-	/* For.Prototype_Component_Texture_UI_Mini_Map_Garden */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Garden"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Mini_Map_Garden.png")))))
+	/* For.Prototype_Component_Texture_UI_Mini_Map */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Mini_Map_%d.png"), 2))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Mini_Map_Player */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Player"),

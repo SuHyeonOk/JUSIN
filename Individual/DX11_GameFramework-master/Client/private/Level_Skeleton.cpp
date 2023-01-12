@@ -62,14 +62,14 @@ HRESULT CLevel_Skleton::Initialize()
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
-	//// 파일 읽기
-	//Load_Food();
-	//Load_Coin();
-	//Load_Page();
-	//Load_Item();
-	////Load_Npc();
-	//Load_Object();
-	//Load_Monster();
+	// 파일 읽기
+	Load_Food();
+	Load_Coin();
+	Load_Page();
+	Load_Item();
+	//Load_Npc();
+	Load_Object();
+	Load_Monster();
 
 	return S_OK;
 }
