@@ -68,7 +68,8 @@ HRESULT CJake::Initialize(void * pArg)
 
 void CJake::Tick(_double TimeDelta)
 {
-	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create() ||
+		m_bChange)
 		return;
 	
 	__super::Tick(TimeDelta);
@@ -97,7 +98,8 @@ void CJake::Tick(_double TimeDelta)
 
 void CJake::Late_Tick(_double TimeDelta)
 {
-	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create() ||
+		m_bChange)
 		return;
 
 	__super::Late_Tick(TimeDelta);
@@ -562,7 +564,7 @@ void CJake::Check_Follow(_double TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.7f), _float3(0.968f, 0.729f, 0.160f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.8f), _float3(0.968f, 0.729f, 0.160f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.8f));
 	}
 
 
@@ -925,11 +927,7 @@ void CJake::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		if (0.7f < m_fEffect_SiwmY)
-			m_fEffect_SiwmY = 0.6f;
-
-		m_fEffect_SiwmY += 0.0001f;
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, m_fEffect_SiwmY, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.65f, f4MyPos.z));
 		m_dEffect_Swim_TimeAcc = 0;
 	}
 
@@ -992,10 +990,10 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
-	if (true == m_bSkill_Clone)
+	if (true == m_bChange)
 		return S_OK;
 
-	m_bSkill_Clone = true;
+	m_bChange = true;
 
 	// ¸ðµ¨ »ý¼º
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);

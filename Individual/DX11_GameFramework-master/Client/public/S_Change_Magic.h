@@ -48,7 +48,7 @@ private:
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
-	void				Death_Set(const _double & TimeDelta);
+	HRESULT				Death_Set(const _double & TimeDelta);
 	void				Effect_Create(const _double & TimeDelta);
 
 private:

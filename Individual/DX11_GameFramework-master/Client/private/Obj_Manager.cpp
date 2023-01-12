@@ -39,12 +39,22 @@ HRESULT		CObj_Manager::Initialized()
 	return S_OK;
 }
 
-void	CObj_Manager::Tick_Player_Transform()
+void		CObj_Manager::Set_Current_Player_State(PLAYERINFO::STATE eState)
 {
-	Get_Player_Transform();
+	m_tPlayerInfo.eState = eState;
+
+	//if (PLAYERINFO::STATE::HIT	!= m_tPlayerInfo.eState ||
+	//	PLAYERINFO::STATE::STUN != m_tPlayerInfo.eState ||
+	//	PLAYERINFO::STATE::STUN != m_tPlayerInfo.eState)
+	//{
+	//	m_bHit = true;
+	//	m_tPlayerState = eState;
+	//}
+	//else
+		
 }
 
-_vector			CObj_Manager::Get_Player_Transform()
+_vector		CObj_Manager::Get_Player_Transform()
 {
 	if (m_bNextLevel)
 		return _vector();
@@ -106,6 +116,11 @@ void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 	m_fMonster_Attck = fAttack;
 }
 
+void		CObj_Manager::Tick_Player_Transform()
+{
+	Get_Player_Transform();
+}
+
 void		CObj_Manager::Tick(_double TimeDelta)
 {
 	if (m_bNextLevel)
@@ -123,7 +138,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 
 	//cout << CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill << endl;
 
-
+	// 몬스터 에게 공격 당했을 때
 	if (0 < m_fMonster_Attck)
 	{
 		m_dPlayerAttck_TimeAcc += TimeDelta;
@@ -139,6 +154,18 @@ void		CObj_Manager::Tick(_double TimeDelta)
 			m_dPlayerAttck_TimeAcc = 0;
 		}
 	}
+
+	//// Hit, Stun, Magic 로 변할 때 키 입력이 있게되면, 바뀌지 않아서 일정시간 뒤에 값을 바뀌게 한다.
+	//if (m_bHit)
+	//{
+	//	m_dHit_TimaAcc += TimeDelta;
+	//	if (0.5 < m_dHit_TimaAcc)
+	//	{
+	//		m_tPlayerInfo.eState = m_tPlayerState;
+	//		m_bHit = false;
+	//		m_dHit_TimaAcc = 0;
+	//	}
+	//}
 }
 
 void		CObj_Manager::Key_Input()
@@ -246,7 +273,7 @@ void	CObj_Manager::Player_Exp(const _double & TimeDelta)
 		m_tPlayerInfo.eState = PLAYERINFO::STATE::LEVEL_UP;
 
 		m_dEffect_Up_TimeAcc += TimeDelta;
-		if (0.3 < m_dEffect_Up_TimeAcc)
+		if (0.35 < m_dEffect_Up_TimeAcc)
 		{
 			CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 			CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, 0.7f, f4PlayerPos.z), _float3(0.9f, 1.0f, 0.6f));
@@ -320,3 +347,4 @@ void		CObj_Manager::Player_Weapon()
 void		CObj_Manager::Free()
 {
 }
+

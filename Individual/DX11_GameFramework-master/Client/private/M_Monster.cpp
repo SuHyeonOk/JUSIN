@@ -65,8 +65,8 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }

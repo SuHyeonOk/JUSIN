@@ -8,11 +8,44 @@
 
 #include "Coin.h"
 #include "Page.h"
+#include "Key.h"
 
 IMPLEMENT_SINGLETON(CItemManager)
 
 CItemManager::CItemManager()
 {
+}
+
+HRESULT CItemManager::Key_Clone(_float3 f3StartPos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Key_Monster"), TEXT("Prototype_GameObject_Key"), &f3StartPos)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos, _uint iCount)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CPage::PAGEINFO tPageInfo;
+	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
+	tPageInfo.bJemp = true;
+
+	for (_uint i = 0; i < iCount; ++i)
+	{
+		tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL(CUtilities_Manager::GetInstance()->Get_Random(0, 3));
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+			return E_FAIL;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _uint iSilverCount, _uint iGoldCount)
@@ -45,7 +78,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		m_wstObjName = L"Layer_CoinSilver_";
 		m_wstObjName += to_wstring(i);
 
-		m_szObjName = m_wstObjName.c_str(); 
+		m_szObjName = m_wstObjName.c_str();
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
@@ -60,7 +93,7 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 		m_wstObjName = L"Layer_CoinGold_";
 		m_wstObjName += to_wstring(i);
 
-		m_szObjName = m_wstObjName.c_str(); 
+		m_szObjName = m_wstObjName.c_str();
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 			return E_FAIL;
@@ -68,26 +101,6 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 
 	for (_int i = 0; i < 3; i++)
 		CEffect_Manager::GetInstance()->Effect_Coin_Create(f3StartPos);
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos, _uint iCount)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CPage::PAGEINFO tPageInfo;
-	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
-	tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL(CUtilities_Manager::GetInstance()->Get_Random(0, 3));
-	tPageInfo.bJemp = true;
-
-	for (_uint i = 0; i < iCount; ++i)
-	{
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-			return E_FAIL;
-	}
 
 	RELEASE_INSTANCE(CGameInstance);
 

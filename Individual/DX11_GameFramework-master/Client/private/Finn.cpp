@@ -306,6 +306,14 @@ void CFinn::Parts_LateTick(const _double & TimeDelta)
 
 void CFinn::Player_Tick(_double TimeDelta)
 {
+	//// 가장 우선히 되어야 할 행동
+	//if(CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	//	Hit_Tick(TimeDelta);
+	//else if (CObj_Manager::PLAYERINFO::STATE::STUN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	//	Stun_Tick();
+	////else if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	////	Stun_Tick();
+
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
@@ -373,7 +381,7 @@ void CFinn::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
 
-		if (m_tPlayerInfo.eState != m_tPlayerInfo.HIT)
+		if (CObj_Manager::PLAYERINFO::STATE::HIT != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 			Key_Input(TimeDelta);
 	}
 	else
@@ -424,11 +432,7 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 
 void CFinn::Player_Follow(_double TimeDelta)
 {
-	// 현재 플레이어를 따라간다.
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	// Jake 에게로
+	// 현재 플레이어  Jake를 따라간다.
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();			// Jake 좌표 받아옴
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// 내 좌표
@@ -457,7 +461,7 @@ void CFinn::Player_Follow(_double TimeDelta)
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
 		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		CSkill_Manager::MAGICSKILL::RUN == CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill)
 	{
 		if (1.5f < fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
@@ -467,8 +471,6 @@ void CFinn::Player_Follow(_double TimeDelta)
 		if (1.5f > fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFinn::Check_Follow(_double TimeDelta)
@@ -536,7 +538,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.7f), _float3(0.396f, 0.654f, 0.796f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.8f), _float3(0.396f, 0.654f, 0.796f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.8f));
 	}
 }
 
@@ -835,11 +837,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		if (0.7f < m_fEffect_SiwmY)
-			m_fEffect_SiwmY = 0.6f;
-
-		m_fEffect_SiwmY += 0.0001f;
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, m_fEffect_SiwmY, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.65f, f4MyPos.z));
 		m_dEffect_Swim_TimeAcc = 0;
 	}
 

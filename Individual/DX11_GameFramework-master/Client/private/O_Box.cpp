@@ -73,8 +73,11 @@ void CO_Box::Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 0.67f, 0.0f));
+		if (3 > m_pModelCom->Get_Keyframes())
+		{
+			CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
+			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f));
+		}
 
 		m_pModelCom->Set_AnimIndex(3, false);
 	}
@@ -99,7 +102,7 @@ void CO_Box::Tick(_double TimeDelta)
 			XMStoreFloat4(&vf4MyPos, vMyPos);
 
 			CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 0, 0, 10);
-			CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
+			CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 3);
 		}
 	}
 	RELEASE_INSTANCE(CGameInstance);

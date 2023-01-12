@@ -127,13 +127,12 @@ HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)
 	return S_OK;
 }
 
-HRESULT CEffect_Manager::Effect_Star3_Create(_float3 f3Pos, const _float3 & f3Color)
+HRESULT CEffect_Manager::Effect_Star3_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Burst::EFFECTINFO	tEffetInfo;
 	tEffetInfo.f3Pos = f3Pos;
-	tEffetInfo.f3Color = f3Color;
 	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE;
 
 	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// ·£´ýÀ¸·Î
@@ -364,7 +363,7 @@ HRESULT CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Pos)
 
 	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
 
-	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
+	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.5f);
 
 	_vector vRandomPos = vTempPos * fRandomRange;
 	_float4 f4RandomPos;

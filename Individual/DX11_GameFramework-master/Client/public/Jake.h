@@ -22,6 +22,11 @@ private:
 	virtual ~CJake() = default;
 
 public:
+	void	Set_Change() {
+		m_bChange = false;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Tick(_double TimeDelta) override;
@@ -96,6 +101,9 @@ private:
 
 	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
 	_double		m_bSkillClone_TimeAcc = 0;
+
+	// 변신
+	_bool		m_bChange = false;
 
 	//////////////////////////// 플레이어가 아닐 때
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간

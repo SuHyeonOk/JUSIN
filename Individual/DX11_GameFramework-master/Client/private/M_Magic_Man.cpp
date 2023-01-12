@@ -346,16 +346,17 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.2f);
 
-  	if (!m_OneCoin)	// 辆捞 积己
+  	if (!m_bItem)	// 辆捞 积己
 	{
 		// Item
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 3);
+		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 5);
+		CItemManager::GetInstance()->Key_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
 
-		m_OneCoin = true;
+		m_bItem = true;
 	}
 }
 
@@ -374,8 +375,7 @@ void CM_Magic_Man::Appear(const _double& TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
 		m_Appear_TimeAcc += TimeDelta;
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f),
-			_float3(CUtilities_Manager::GetInstance()->Get_Random(0.4f, 0.54f), 0.0f, CUtilities_Manager::GetInstance()->Get_Random(0.9f, 1.0f)));
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f));
 	}
 }
 

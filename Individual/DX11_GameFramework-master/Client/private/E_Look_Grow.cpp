@@ -110,7 +110,7 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 	}
 	else																				// 일정시간 있다가 알파값 줄어든다.
 	{
-		m_fAlpha -= _float(TimeDelta) * 0.2f;
+		m_fAlpha -= _float(TimeDelta) * 0.5f;
 	}
 
 	if (0 >= m_fAlpha)

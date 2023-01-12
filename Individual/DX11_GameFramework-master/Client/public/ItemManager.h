@@ -14,8 +14,9 @@ public:
 	virtual ~CItemManager() = default;
 
 public:
-	HRESULT	RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _uint iSilverCount, _uint iGoldCount);
+	HRESULT	Key_Clone(_float3 f3StartPos);
 	HRESULT	RandomPage_Clone(_float3 f3StartPos, _uint iCount = 1);
+	HRESULT	RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _uint iSilverCount, _uint iGoldCount);
 
 private:
 	const _tchar*	m_szObjName;

@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Bone.h"
 #include "S_Skill_Weapon.h"
+#include "Jake.h"
 
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
@@ -116,7 +117,7 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 	//Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 
 
 	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
@@ -260,10 +261,11 @@ HRESULT CS_Change_Magic::Ready_Parts()
 	return S_OK;
 }
 
-void CS_Change_Magic::Death_Set(const _double & TimeDelta)
+HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 {
 	m_dSkillClone_TimeAcc += TimeDelta;
 
+	// 이펙트
 	if (21 < m_dSkillClone_TimeAcc)
 	{
 		m_OnMove = false;
@@ -272,21 +274,29 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.4f, 0.0f, 0.9f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f), _float3(0.4f, 0.0f, 0.9f));
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
 	}
 
 	if (22 < m_dSkillClone_TimeAcc)
 	{
 		// 죽을때 플레이어 원래 상태로 돌려놓는다.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+		//CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+		//CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CJake * pGameObject = dynamic_cast<CJake*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), 0));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		
+		pGameObject->Set_Change();
+		RELEASE_INSTANCE(CGameInstance);
 
 		CGameObject::Set_Dead();
 
 		m_dSkillClone_TimeAcc = 0;
-		return;
+		return S_OK;
 	}
 }
 
@@ -298,8 +308,8 @@ void CS_Change_Magic::Effect_Create(const _double & TimeDelta)
 
 	m_OnMove = false;
 
-	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(0.4f, 0.0f, 0.9f));
-	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(0.4f, 0.0f, 0.9f));
+	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f));
+	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
 }
 
 void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)

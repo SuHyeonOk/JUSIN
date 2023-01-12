@@ -51,7 +51,6 @@ private:
 
 	_float4x4				m_SocketMatrix;
 
-	_bool					m_bMonster_Shiedl_Collider = false;
 	_bool					m_bEffect_Shield = false;
 	_double					m_dEffect_Shield_TimeAcc = 0;
 
