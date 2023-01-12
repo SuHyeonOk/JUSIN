@@ -21,26 +21,70 @@ HRESULT CEffect_Manager::Effect_Coin_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	
+	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
+
+	_float fRandomRange = 0.0f;
+	_vector vRandomPos = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	_float4 f4RandomPos;
+
 	CE_Burst::EFFECTINFO	tEffetInfo;
-	tEffetInfo.f3Pos = _float3(f3Pos.x, f3Pos.y + 1.0f, f3Pos.z - 1.0f);
+	_float fRandomAxis = 0.0f;
+	_matrix	RotationMatrix = XMMatrixIdentity();
+	_vector vLook = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+
+	// 잎
+
+	fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
+	vRandomPos = vTempPos * fRandomRange;
+	XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+	tEffetInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + 1.0f + f4RandomPos.y, f3Pos.z - 1.0f);
 	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::LEAF_TEXTURE;
 
-	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
-	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
 	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
 	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
 		return E_FAIL;
 
-	tEffetInfo.f3Pos = _float3(f3Pos.x, f3Pos.y + 1.0f, f3Pos.z - 1.1f);
+	// 하트
+
+	fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
+	vRandomPos = vTempPos * fRandomRange;
+	XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+	tEffetInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + 1.0f + f4RandomPos.y, f3Pos.z - 1.1f);
 	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::HEART_TEXTURE;
+	fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
 		return E_FAIL;
 
-	tEffetInfo.f3Pos = _float3(f3Pos.x, f3Pos.y + 1.0f, f3Pos.z - 1.2f);
+	// 꽃
+
+	fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
+	vRandomPos = vTempPos * fRandomRange;
+	XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+	tEffetInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + 1.0f + f4RandomPos.y, f3Pos.z - 1.2f);
 	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::FLOWER_TEXTURE;
+	fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
+	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+	vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
+	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
 		return E_FAIL;
 

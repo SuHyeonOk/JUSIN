@@ -53,6 +53,7 @@ private:
 
 private:	// Shader
 	_float				m_fAlpha = 0.0f;
+	_double				m_dNoAlpha_TimeAcc = 0;
 
 public:
 	static	CE_Burst*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

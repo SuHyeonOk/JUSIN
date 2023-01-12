@@ -80,8 +80,8 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		//CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z), 10, 3, 2); 	// 동전 생성
-		//CItemManager::GetInstance()->RandomPage_Clone(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.1f), _float3(1.0f, 0.67f, 0.0f));
 	}
 
 	if (pGameInstance->Key_Pressing(DIK_V))

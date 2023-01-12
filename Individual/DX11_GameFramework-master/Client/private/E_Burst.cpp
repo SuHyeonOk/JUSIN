@@ -43,11 +43,21 @@ HRESULT CE_Burst::Initialize(void * pArg)
 
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
-	_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 1.0f);
-
+	
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
+	
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
+		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)			// 랜덤한  크기를 가지는 이미지
+	{
+		_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 1.0f);
+
+		m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
+	}
+	else																						// 고정된 크기를 가지는 이미지
+	{
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+	}
 
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
 		m_fAlpha = 0.5f;
@@ -61,22 +71,40 @@ void CE_Burst::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 카메라를 바라보고 랜덤한 곳으로 회전하면서 이동하기
+	// ★ 카메라를 바라보고 랜덤한 곳으로 회전하면서 이동하기
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
+	m_pTransformCom->LookAt(vCameraPos, true);
 
+	// 입력한 Look 방향으로 이동하기
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = XMLoadFloat4(&_float4(m_tEffectInfo.f4Look.x, m_tEffectInfo.f4Look.y, m_tEffectInfo.f4Look.z, 0.0f));
 
-	vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
-
+	// ★ 이동하는 속도 조절
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
+		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
+		vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
+	else
+		vMyPos += XMVector3Normalize(vDistance) * 0.2f * _float(TimeDelta);
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
 
-	m_fAlpha -= _float(TimeDelta) * 0.2f;
+	// ★ 알파값 줄어들기
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)	// 그냥 바로 알파값 줄어든다.
+	{
+		m_fAlpha -= _float(TimeDelta) * 0.2f;
+	}
+	else																				// 일정시간 있다가 알파값 줄어든다.
+	{
+		m_dNoAlpha_TimeAcc += TimeDelta;
+		if (1 < m_dNoAlpha_TimeAcc)
+		{
+			m_fAlpha -= _float(TimeDelta) * 0.5f;
+			//m_dNoAlpha_TimeAcc = 0; // 어짜피 죽기 때문에.. '-'
+		}
+	}
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음

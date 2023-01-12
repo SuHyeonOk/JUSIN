@@ -66,12 +66,8 @@ HRESULT CItemManager::RandomCoin_Clone(_float3 f3StartPos, _uint iBronzeCount, _
 			return E_FAIL;
 	}
 
-	_int iRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(5, 10);
-
-	for (_int i = 0; i < iRandomNumber; i++)
-	{
+	for (_int i = 0; i < 3; i++)
 		CEffect_Manager::GetInstance()->Effect_Coin_Create(f3StartPos);
-	}
 
 	RELEASE_INSTANCE(CGameInstance);
 

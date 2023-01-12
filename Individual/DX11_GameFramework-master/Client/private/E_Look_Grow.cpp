@@ -90,13 +90,28 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 	// 천천히 커지는
 	else
 	{
-		m_fSizeX += _float(TimeDelta) * 0.6f;
-		m_fSizeY += _float(TimeDelta) * 0.6f;
+		m_fSizeX += _float(TimeDelta) * 0.2f;
+		m_fSizeY += _float(TimeDelta) * 0.2f;
 	}
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeX, 1.f));
 
-	m_fAlpha -= _float(TimeDelta) * 0.5f;
+
+	// ★ 알파값 줄어들기
+	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType || 
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)	// 그냥 바로 알파값 줄어든다.
+	{
+		m_dNoAlpha_TimeAcc += TimeDelta;
+		if (2 < m_dNoAlpha_TimeAcc)
+		{
+			m_fAlpha -= _float(TimeDelta) * 0.5f;
+			//m_dNoAlpha_TimeAcc = 0; // 어짜피 죽기 때문에.. '-'
+		}
+	}
+	else																				// 일정시간 있다가 알파값 줄어든다.
+	{
+		m_fAlpha -= _float(TimeDelta) * 0.2f;
+	}
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음

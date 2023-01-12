@@ -21,6 +21,9 @@ private:
 	const _tchar*	m_szObjName;
 	wstring			m_wstObjName;
 
+private:
+	_double			m_Effect_TimeAcc = 0;
+
 public:
 	virtual void Free() override;	
 };

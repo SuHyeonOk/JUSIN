@@ -57,6 +57,8 @@ private:	// Shader
 	_float				m_fSizeX = 0.0f;
 	_float				m_fSizeY = 0.0f;
 
+	_double				m_dNoAlpha_TimeAcc = 0;
+
 public:
 	static	CE_Look_Grow*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
