@@ -18,6 +18,9 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	HRESULT Ready_Later_Loaing(const _tchar* pLayerTag);
+
+private:
 	class CLoader*	m_pLoader = nullptr;
 	LEVEL			m_eNextLevelID = LEVEL_END;
 

@@ -3,7 +3,6 @@
 
 #include "GameInstance.h"
 
-#include "BackGround.h"
 #include "Terrain.h"
 #include "Player.h"
 
@@ -99,6 +98,7 @@ CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 _uint APIENTRY LoadingThread(void* pArg)
 {
 	CObj_Manager::GetInstance()->Set_NextLevel(true);
+	CObj_Manager::GetInstance()->Set_Current_Level(LEVEL_LOADING);
 
 	CLoader*		pLoader = (CLoader*)pArg;
 
@@ -146,10 +146,10 @@ HRESULT CLoader::Loading_ForLogo()
 	Safe_AddRef(pGameInstance);
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
-	/* For.Prototype_Component_Texture_Logo */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/AT_title.dds")))))
-		return E_FAIL;
+	///* For.Prototype_Component_Texture_Logo */
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/AT_title.dds")))))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
 
@@ -159,10 +159,10 @@ HRESULT CLoader::Loading_ForLogo()
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
-	/* For.Prototype_GameObject_BackGround */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
-		CBackGround::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	///* For.Prototype_GameObject_BackGround */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
+	//	CBackGround::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 

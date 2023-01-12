@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 #include "Camera_Dynamic.h"
+#include "BackGround.h"
 
 #include "Obj_Manager.h"
 #include "DataManager.h"
@@ -385,6 +386,16 @@ HRESULT CMainApp::Ready_Prototype_Component()
 
 #pragma endregion
 
+	// Loading
+	/* For.Prototype_Component_Texture_Loading */
+	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_Loading"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Loading/Loading_%d.png"), 4))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_BackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
+		CBackGround::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	Safe_AddRef(m_pRenderer);
 

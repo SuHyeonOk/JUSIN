@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\public\BackGround.h"
 #include "GameInstance.h"
+#include "Obj_Manager.h"
 
 CBackGround::CBackGround(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -53,6 +54,18 @@ HRESULT CBackGround::Initialize(void * pArg)
 void CBackGround::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	if (LEVEL_LOGO == CObj_Manager::GetInstance()->Get_Current_Level())
+		m_iLevel_Texture = 0;			// logo 이미지
+	else
+	{
+		if (0 == CObj_Manager::GetInstance()->Get_Loading_Count())
+			m_iLevel_Texture = 1;		// 가든
+		else if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
+			m_iLevel_Texture = 2;		// 해골
+		else
+			m_iLevel_Texture = 3;		// 해골 보스
+	}
 }
 
 void CBackGround::Late_Tick(_double TimeDelta)
@@ -90,18 +103,15 @@ HRESULT CBackGround::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"),
 		(CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"), TEXT("Com_Texture"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_Loading"), TEXT("Com_Texture"),
 		(CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-
-
 
 	return S_OK;
 }
@@ -117,7 +127,8 @@ HRESULT CBackGround::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iLevel_Texture)))
 		return E_FAIL;
 
 	return S_OK;

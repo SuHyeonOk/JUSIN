@@ -21,6 +21,9 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Later_Loaing(TEXT("Layer_Loaing"))))
+		return E_FAIL;
+
 	m_eNextLevelID = eNextLevelID;
 
 	/* eNextLevelID를 위한 자원을 쓰레드에게 준비해라. */
@@ -92,6 +95,19 @@ HRESULT CLevel_Loading::Render()
 		return E_FAIL;
 	
 	SetWindowText(g_hWnd, m_pLoader->Get_LoadingText());
+
+	return S_OK;
+}
+
+HRESULT CLevel_Loading::Ready_Later_Loaing(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_LOADING, pLayerTag, TEXT("Prototype_GameObject_BackGround"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

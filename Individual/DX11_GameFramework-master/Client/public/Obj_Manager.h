@@ -65,8 +65,18 @@ public:
 	_bool				Get_NextLevel() { return m_bNextLevel; }
 	void				Set_NextLevel(_bool bNext) { m_bNextLevel = bNext; }
 
+	// Loading 을 실행한 횟수 
+	_int				Get_Loading_Count() {
+		return m_iLoading_Count;
+	}
+	void				Set_Loading_Count() {
+		++m_iLoading_Count;
+	}
+
 	// 현재 Level
-	LEVEL				Get_Current_Level() { return m_eCurrent_Level; }
+	LEVEL				Get_Current_Level() { 
+		return m_eCurrent_Level;
+	}
 	void				Set_Current_Level(LEVEL eLevelID) { m_eCurrent_Level = eLevelID; }
 
 	// Player 정보
@@ -119,6 +129,8 @@ private:
 private:
 	_bool			m_bNextLevel = true;	// 처음에 true 였다가 레벨이 시작하면 flase 로 초기화 한다. 그리고, 다음 맵을 넘어갈 때 true 가 된다.
 	LEVEL			m_eCurrent_Level;
+	_int			m_iLoading_Count = 0;
+
 	PLAYERINFO		m_tPlayerInfo;
 
 private: // KeyInput

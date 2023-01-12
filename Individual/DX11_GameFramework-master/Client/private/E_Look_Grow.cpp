@@ -99,16 +99,19 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 
 	// ★ 알파값 줄어들기
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType || 
-		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)	// 그냥 바로 알파값 줄어든다.
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
 	{
 		m_dNoAlpha_TimeAcc += TimeDelta;
 		if (2 < m_dNoAlpha_TimeAcc)
-		{
 			m_fAlpha -= _float(TimeDelta) * 0.5f;
-			//m_dNoAlpha_TimeAcc = 0; // 어짜피 죽기 때문에.. '-'
-		}
 	}
-	else																				// 일정시간 있다가 알파값 줄어든다.
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_dNoAlpha_TimeAcc += TimeDelta;
+		if (0.5 < m_dNoAlpha_TimeAcc)
+			m_fAlpha -= _float(TimeDelta) * 0.5f;
+	}
+	else																				
 	{
 		m_fAlpha -= _float(TimeDelta) * 0.5f;
 	}

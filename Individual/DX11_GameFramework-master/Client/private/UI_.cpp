@@ -2,6 +2,7 @@
 #include "..\public\UI_.h"
 #include "GameInstance.h"
 
+#include "Obj_Manager.h"
 #include "UI_Manager.h"
 #include "UI_SkillIcon.h"
 #include "Skill_Manager.h"
@@ -240,6 +241,9 @@ HRESULT CUI_::Initialize(void * pArg)
 
 void CUI_::Tick(_double TimeDelta)
 {
+	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
+		return;
+
 	if(CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Tick(TimeDelta);
 
@@ -341,6 +345,9 @@ void CUI_::Tick(_double TimeDelta)
 
 void CUI_::Late_Tick(_double TimeDelta)
 {
+	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
+		return;
+
 	if (CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Late_Tick(TimeDelta);
 
@@ -417,6 +424,9 @@ void CUI_::Late_Tick(_double TimeDelta)
 
 HRESULT CUI_::Render()
 {
+	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
+		return E_FAIL;
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 

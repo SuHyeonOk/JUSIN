@@ -38,6 +38,8 @@ private:
 
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 
+	_int					m_iLevel_Texture = 0;
+
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
