@@ -144,6 +144,14 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 					CObj_Manager::GetInstance()->Set_NextLevel(true);
 					CObj_Manager::GetInstance()->Set_Loading_Count();
 				}
+				else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+				{
+					CGameObject::Set_Dead();
+					CObj_Manager::GetInstance()->Set_NextLevel(true);
+					CObj_Manager::GetInstance()->Set_Loading_Count();
+				}
+
+				CObj_Manager::GetInstance()->Set_Clear();
 			}
 			RELEASE_INSTANCE(CGameInstance);
 		}

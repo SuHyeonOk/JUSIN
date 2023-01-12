@@ -100,6 +100,7 @@ public:
 
 	void				Set_Coin(_int iCount) { m_tPlayerInfo.iCoin += iCount; }
 	void				Set_Key() { m_tPlayerInfo.iKey += 1; }
+	void				Set_Clear() { m_tPlayerInfo.iKey = 0; }
 	void				Set_Heart() { m_tPlayerInfo.iHeart += 1; }
 
 	// UI Talk

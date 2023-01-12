@@ -56,6 +56,7 @@
 
 // Skill
 #include "S_Change_Magic.h"
+#include "S_Jake_Son.h"
 
 // Weapon
 #include "W_PigWarrior.h"
@@ -298,6 +299,28 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Tree_Witch_Roots_FX/Tree_Witch_Roots_FX.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// Jake_Son
+	/* For.Prototype_Component_Model_S_Jake_son_A */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_A"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_A/Jake_son_A.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_Jake_son_B */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_B"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_B/Jake_son_B.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_Jake_son_C */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_C"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_C/Jake_son_C.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_Jake_son_D */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_D"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_D/Jake_son_D.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_Jake_son_E */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_E"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_E/Jake_son_E.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	///////////////////////////////////////////////////////////// ANIM
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -431,6 +454,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_Magic_Man_Jake */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Change_Magic"),
 		CS_Change_Magic::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_S_Jake_Son */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
+		CS_Jake_Son::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Item
@@ -1163,6 +1190,15 @@ HRESULT CLoader::SkeletonTemp()
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
+	/* For.Prototype_Component_Model_S_Jake_son_D */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_D"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_D/Jake_son_D.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_Jake_son_E */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_E"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_E/Jake_son_E.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
@@ -1234,6 +1270,11 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_B_RandomBullet */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_B_RandomBullet"),
 		CB_3DBullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_S_Jake_Son */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
+		CS_Jake_Son::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	UI_Create();

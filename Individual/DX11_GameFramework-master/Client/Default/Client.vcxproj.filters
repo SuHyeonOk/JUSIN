@@ -169,6 +169,9 @@
     <Filter Include="02.GameObjects\UI\MninMap">
       <UniqueIdentifier>{f005a83e-abc1-45cf-a7e0-38524901f234}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\Jake_Son">
+      <UniqueIdentifier>{bd6a00fa-55fb-4bf9-98f8-6be1c307ff3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -465,6 +468,9 @@
     <ClInclude Include="..\public\E_Alpha_Rotation.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_Jake_Son.h">
+      <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -742,6 +748,9 @@
     </ClCompile>
     <ClCompile Include="..\private\E_Alpha_Rotation.cpp">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_Jake_Son.cpp">
+      <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

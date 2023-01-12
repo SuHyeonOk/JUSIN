@@ -15,8 +15,7 @@
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
-
-#include "B_3DBullet.h"
+#include "S_Jake_Son.h"
 
 CLevel_Skleton::CLevel_Skleton(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -55,19 +54,22 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_JakeSon"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
-	// 파일 읽기
-	Load_Food();
-	Load_Coin();
-	Load_Page();
-	Load_Item();
-	//Load_Npc();
-	Load_Object();
-	Load_Monster();
+	//// 파일 읽기
+	//Load_Food();
+	//Load_Coin();
+	//Load_Page();
+	//Load_Item();
+	////Load_Npc();
+	//Load_Object();
+	//Load_Monster();
 
 	return S_OK;
 }
@@ -222,6 +224,26 @@ HRESULT CLevel_Skleton::Ready_Layer_Jake(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-6.f, 0.f, 6.f))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Skleton::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CS_Jake_Son::JAKESONINFO tJakeSonInfo;
+	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_D;
+	tJakeSonInfo.fPos = _float3(-27.0f, 0.0f, 10.0f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
+		return E_FAIL;
+
+	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_E;
+	tJakeSonInfo.fPos = _float3(17.0f, 0.0f, 53.0f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

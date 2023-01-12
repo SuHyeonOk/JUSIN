@@ -298,6 +298,8 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		m_dSkillClone_TimeAcc = 0;
 		return S_OK;
 	}
+
+	return S_OK;
 }
 
 void CS_Change_Magic::Effect_Create(const _double & TimeDelta)

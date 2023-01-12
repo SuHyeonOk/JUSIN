@@ -67,7 +67,8 @@ void CJake_Weapon::Tick(_double TimeDelta)
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 	}
 
-	cout << _int(m_bEffect_Shield) << endl;
+	// TODO : 쉴드 이펙트
+	//cout << _int(m_bEffect_Shield) << endl;
 
 	// 쉴드 이펙트
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)	// 쉴드 객체의 경우 에만 다음을 실행한다.

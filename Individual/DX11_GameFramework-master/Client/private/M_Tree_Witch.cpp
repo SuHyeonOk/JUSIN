@@ -54,7 +54,7 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 		return E_FAIL;
 	
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= 70.0f;
+	m_tMonsterInfo.fHP		= 100.0f;
 	m_tMonsterInfo.fMaxHP	= 70.0f;
 	m_tMonsterInfo.fExp		= 50.0f;
 	m_tMonsterInfo.fAttack	= 12.0f;
@@ -143,7 +143,7 @@ HRESULT CM_Tree_Witch::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.5f, 1.7f, 1.5f);
+	ColliderDesc.vSize = _float3(1.2f, 1.7f, 1.2f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),

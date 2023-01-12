@@ -26,6 +26,14 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 제이크 애기
+	_int		Get_JakeSon_Count() {
+		return m_iJakeSon_Count;
+	}
+	void		Set_JakeSon_Count() {
+		++m_iJakeSon_Count;
+	}
+
 	// 스킬
 	_bool		Get_IsIcon_Index(ITEMINDEX iIndex) { return m_bIsSkill_Index[iIndex]; }
 	void		Set_IsIcon_Index(ITEMINDEX iIndex, _bool bIsIndex) { m_bIsSkill_Index[iIndex] = bIsIndex; }
@@ -93,6 +101,8 @@ private:
 	_float			m_HpGauge_Monster = 1.0f;
 	_int			m_iUI_Monster_Index = 0;
 	_bool			m_bUI_Monster = false;
+
+	_int			m_iJakeSon_Count = 0;
 
 	_tchar			m_szText[MAX_PATH] = L"";
 	_bool			m_bisTalk = false;

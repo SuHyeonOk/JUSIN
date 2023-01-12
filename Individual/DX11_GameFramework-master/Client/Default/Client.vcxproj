@@ -233,6 +233,7 @@
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\public\S_Change_Magic.h" />
     <ClInclude Include="..\public\S_Fiona.h" />
+    <ClInclude Include="..\public\S_Jake_Son.h" />
     <ClInclude Include="..\public\S_Marceline.h" />
     <ClInclude Include="..\public\S_PaintWork.h" />
     <ClInclude Include="..\public\S_Skill_Weapon.h" />
@@ -329,6 +330,7 @@
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\private\S_Change_Magic.cpp" />
     <ClCompile Include="..\private\S_Fiona.cpp" />
+    <ClCompile Include="..\private\S_Jake_Son.cpp" />
     <ClCompile Include="..\private\S_Marceline.cpp" />
     <ClCompile Include="..\private\S_PaintWork.cpp" />
     <ClCompile Include="..\private\S_Skill_Weapon.cpp" />

@@ -16,6 +16,7 @@
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
+#include "S_Jake_Son.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -50,6 +51,9 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_Jake_Son"))))
 		return E_FAIL;
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
@@ -214,6 +218,31 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-9.f, 0.f, -10.f))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CS_Jake_Son::JAKESONINFO tJakeSonInfo;
+	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_A;
+	tJakeSonInfo.fPos = _float3(-15.0f, 0.0f, 6.0f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
+		return E_FAIL;
+
+	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_B;
+	tJakeSonInfo.fPos = _float3(-30.0f, 0.0f, 20.0f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
+		return E_FAIL;
+
+	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_C;
+	tJakeSonInfo.fPos = _float3(-14.0f, 0.0f, 47.0f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

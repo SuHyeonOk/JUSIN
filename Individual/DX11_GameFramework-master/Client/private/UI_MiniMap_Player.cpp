@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 CUI_MninMap_Player::CUI_MninMap_Player(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)
@@ -93,7 +94,7 @@ HRESULT CUI_MninMap_Player::Render()
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_tchar szCount[MAX_PATH];
-	wsprintf(szCount, TEXT("Jake Son : %d"), CObj_Manager::GetInstance()->Get_Current_Player().iKey);
+	wsprintf(szCount, TEXT("Jake Son : %d"), CUI_Manager::GetInstance()->Get_JakeSon_Count());
 
 	pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(1137.f, 164.f), 0.f, _float2(0.35f, 0.33f));
 
