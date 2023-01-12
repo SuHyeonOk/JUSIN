@@ -49,7 +49,7 @@ HRESULT CJake_Weapon::Initialize(void * pArg)
 void CJake_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
+	
 	// 현재 플레이어가 무기의 주인일 때
 	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
@@ -67,19 +67,14 @@ void CJake_Weapon::Tick(_double TimeDelta)
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 	}
 
-	cout << m_bEffect_Shield << endl;
-
 	// 쉴드 이펙트
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)	// 쉴드 객체의 경우 에만 다음을 실행한다.
 	{
-		_bool a = m_bEffect_Shield;
-
 		if (true == CObj_Manager::GetInstance()->Get_Jake_Shield())	// 제이크 쉴드가 충돌 했을 때! 쉴드 이펙트를 호출하면 계속 생성되기 때문에
 		{
-			_bool ab = m_bEffect_Shield;
 			if (!m_bEffect_Shield)							// false 일 때만 생성한다.
 			{
-				//m_bEffect_Shield = true;
+				m_bEffect_Shield = true;
 
 				_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
 				_float4 f4MyPos;

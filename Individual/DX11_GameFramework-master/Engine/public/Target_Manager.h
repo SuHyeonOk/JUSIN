@@ -13,6 +13,9 @@ public:
 	virtual ~CTarget_Manager() = default;
 
 public:
+	ID3D11ShaderResourceView* Get_SRV(const _tchar* pTargetTag);
+
+public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4* pClearColor);
 	HRESULT Add_MRT(const _tchar* pMRTTag, const _tchar* pTargetTag);

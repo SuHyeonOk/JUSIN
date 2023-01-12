@@ -38,7 +38,7 @@ public:
 
 #ifdef _DEBUG
 public:
-	HRESULT Render();
+	virtual HRESULT Render();
 #endif // _DEBUG
 
 private:
