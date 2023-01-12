@@ -373,7 +373,8 @@ void CFinn::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
 
-		Key_Input(TimeDelta);
+		if (m_tPlayerInfo.eState != m_tPlayerInfo.HIT)
+			Key_Input(TimeDelta);
 	}
 	else
 	{

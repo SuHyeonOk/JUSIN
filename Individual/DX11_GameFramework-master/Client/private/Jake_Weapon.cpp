@@ -50,45 +50,44 @@ void CJake_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 제이크 쉴드 이펙트
-	if (false == CObj_Manager::GetInstance()->Get_Jake_Shield())	// 제이크가 쉴드를 떼고 다시 들 때를 위해서 초기화
-	{
-		m_bEffect_Shield = false;
-		m_bMonster_Collider = false;
-	}
-
-	if (m_bMonster_Collider)
-	{
-		if (false == m_bEffect_Shield)
-		{
-			m_bEffect_Shield = true;
-
-			_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
-			_float4 f4MyPos;
-			XMStoreFloat4(&f4MyPos, vMyPos);
-
-			CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f));
-		}
-
-		m_dEffect_Shield_TimeAcc += TimeDelta;
-		if (3 < m_dEffect_Shield_TimeAcc)
-		{
-			
-			m_dEffect_Shield_TimeAcc = 0;
-		}
-	}
-
 	// 현재 플레이어가 무기의 주인일 때
-	if (CObj_Manager::PLAYERINFO::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
-		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
-		if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 
+		if (CObj_Manager::PLAYERINFO::STATE::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		{
 			CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+			CObj_Manager::GetInstance()->Set_Jake_Shield(false);
+			m_bEffect_Shield = false;								// 그리고 아이들 상태가 되었을 떄 초기화 시켜준다.
+		}
 
 		if (CObj_Manager::GetInstance()->Get_Monster_Crash())
 			CUI_Manager::GetInstance()->Set_Ui_Monster(true);
 		else
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+	}
+
+	cout << m_bEffect_Shield << endl;
+
+	// 쉴드 이펙트
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)	// 쉴드 객체의 경우 에만 다음을 실행한다.
+	{
+		_bool a = m_bEffect_Shield;
+
+		if (true == CObj_Manager::GetInstance()->Get_Jake_Shield())	// 제이크 쉴드가 충돌 했을 때! 쉴드 이펙트를 호출하면 계속 생성되기 때문에
+		{
+			_bool ab = m_bEffect_Shield;
+			if (!m_bEffect_Shield)							// false 일 때만 생성한다.
+			{
+				//m_bEffect_Shield = true;
+
+				_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
+				_float4 f4MyPos;
+				XMStoreFloat4(&f4MyPos, vMyPos);
+
+				CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f));
+			}
+		}
 	}
 }
 
@@ -153,10 +152,11 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 	if (CObj_Manager::PLAYERINFO::JAKE != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	CObj_Manager::GetInstance()->Set_Jake_Shield();
-
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)
-		m_bMonster_Collider = true;
+	{
+		CObj_Manager::GetInstance()->Set_Jake_Shield(true);
+		m_bMonster_Shiedl_Collider = true;
+	}
 
 	// 나 지금 몬스터랑 충돌 했어
 	CObj_Manager::GetInstance()->Set_Monster_Crash(true);

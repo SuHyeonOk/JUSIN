@@ -393,7 +393,8 @@ void CJake::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
 		Player_Skill_Tick(TimeDelta);
 
-		Key_Input(TimeDelta);
+		if(CObj_Manager::PLAYERINFO::STATE::HIT != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+			Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -628,6 +629,7 @@ void CJake::Key_Input(_double TimeDelta)
 		m_tPlayerInfo.eState == m_tPlayerInfo.CONTROL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
+		//m_tPlayerInfo.eState == m_tPlayerInfo.RUN ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 	{
 		m_OnMove = false;
@@ -865,7 +867,6 @@ void CJake::Hit_Tick(_double TimeDelta)
 		m_bShader_Hit = false;
 		m_dShader_Hit_TimeAcc = 0;
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-
 	}
 }
 
@@ -991,6 +992,11 @@ void CJake::Cheering_Tick()
 
 HRESULT CJake::Magic_Tick(_double TimeDelta)
 {
+	if (true == m_bSkill_Clone)
+		return S_OK;
+
+	m_bSkill_Clone = true;
+
 	// 모델 생성
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4 f4MyPos;
@@ -1001,11 +1007,12 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY,							
 		TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
 		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
-	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
-
 	return S_OK;
+
+	//CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 }
 
 void CJake::Anim_Change(_double TimeDelta)

@@ -273,33 +273,11 @@ void CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
 		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.4f, 0.0f, 0.9f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f), _float3(0.4f, 0.0f, 0.9f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f), _float3(0.4f, 0.0f, 0.9f));
 	}
 
 	if (22 < m_dSkillClone_TimeAcc)
 	{
-		// 따라오던 플레이어의 좌표를 옮겨놓는다.
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-		CTransform * pFollow_TransformCom;
-		CNavigation* pFollow_NavigationCom;
-
-		if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-		{
-			pFollow_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
-			pFollow_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
-		}
-		else
-		{
-			pFollow_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
-			pFollow_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
-		}
-
-		pFollow_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION) * 0.99f);
-		pFollow_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
-
-		RELEASE_INSTANCE(CGameInstance);
-
 		// 죽을때 플레이어 원래 상태로 돌려놓는다.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);

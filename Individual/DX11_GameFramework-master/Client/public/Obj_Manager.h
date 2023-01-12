@@ -76,7 +76,7 @@ public:
 
 	// 무기
 	_bool				Get_Jake_Shield() { return m_bShield; }
-	void				Set_Jake_Shield() { m_bShield = true; }
+	void				Set_Jake_Shield(_bool bShield) { m_bShield = bShield; }
 	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
