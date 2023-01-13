@@ -59,7 +59,7 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
 	m_tMonsterInfo.fHP		= 100.0f;
-	m_tMonsterInfo.fMaxHP	= 60.0f;
+	m_tMonsterInfo.fMaxHP	= 100.0f;
 	m_tMonsterInfo.fExp		= 30.0f;
 	m_tMonsterInfo.fAttack	= 10.0f;
 
@@ -349,9 +349,9 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 		_float4 f4PlaterPos;
 		XMStoreFloat4(&f4PlaterPos, vPlayerPos);
 
-		_float fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		_float fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
 		f4PlaterPos.x += fRandomNum;
-		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
 		f4PlaterPos.z += fRandomNum;
 
 		vPlayerPos = XMLoadFloat4(&f4PlaterPos);

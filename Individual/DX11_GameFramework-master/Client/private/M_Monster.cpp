@@ -204,8 +204,8 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 	{
 		// 몬스터 죽으면 UI 초기화
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-		//CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+		//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 
 		// 알파값이 다 사라지면 죽음
 		CGameObject::Set_Dead();	
@@ -308,17 +308,17 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 	// 공격 당할 때 플레이어 바라보기
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	// UI 에 내 체력 넘겨주기
-	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
-
-	m_dPlayer_Attack_TimeAcc += TimeDelta;
-	if (0.5 < m_dPlayer_Attack_TimeAcc)
+	// 맨 처음 한 번 체력을 깍는다.
+	if (0 == m_dPlayer_Attack_TimeAcc)											
 	{
-		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
-
-		// 플레이어의 공격력 으로 몬스터 체력 깍기
-		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
-
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
+	}
+	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
+ 	m_dPlayer_Attack_TimeAcc += TimeDelta;
+	if (0.5 < m_dPlayer_Attack_TimeAcc)											
+	{
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;
 		return;

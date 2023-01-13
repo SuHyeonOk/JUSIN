@@ -98,11 +98,11 @@ void CS_Fiona::Tick(_double TimeDelta)
 	if(CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		CGameObject::Set_Dead();
 
-	// 죽을 떄의 처리
+	// 죽을 때의 처리
 	Death_Set(TimeDelta);
 	Effect_Create(TimeDelta);
 	
-	// 실행
+	// 실행중 실제 플레이어의 좌표 옮기기
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
@@ -272,11 +272,9 @@ HRESULT CS_Fiona::Ready_Parts()
 
 void CS_Fiona::Parts_Tick(const _double & TimeDelta)
 {
-	m_SkillParts[0]->Tick(TimeDelta);
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		m_SkillParts[0]->Tick(TimeDelta);
 
-	// 내 무기 콜라이더 공격 중일 때만 On
-	//if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 	{
 		if (1.7 < m_dCat_Attack_TimeAcc)
@@ -288,18 +286,13 @@ void CS_Fiona::Parts_Tick(const _double & TimeDelta)
 	}
 	else
 		m_dCat_Attack_TimeAcc = 0;
-
-	if (CSkill_Manager::FIONASKILL::ATTACK != CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill ||
-		CSkill_Manager::FIONASKILL::CAT != CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 }
 
 void CS_Fiona::Parts_LateTick(const _double & TimeDelta)
 {
-	m_SkillParts[0]->Late_Tick(TimeDelta);
+	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		m_SkillParts[0]->Late_Tick(TimeDelta);
 
-	//if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 	{
 		if (1.7 < m_dCat_Attack_TimeAcc)

@@ -64,8 +64,9 @@ HRESULT CM_Mimic::Initialize(void * pArg)
 
 void CM_Mimic::Tick(_double TimeDelta)
 {
-	__super::Tick(TimeDelta);
+	//__super::Tick(TimeDelta);
 
+	Hit_Process(TimeDelta);
 	Monster_Tick(TimeDelta);
 }
 
@@ -272,7 +273,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 	if (0.0f >= m_fAlpha)
 	{
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
 		CGameObject::Set_Dead();
 	}
@@ -307,6 +308,40 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
 
 		m_OneCoin = true;
+	}
+}
+
+void CM_Mimic::Hit_Process(const _double & TimeDelta)
+{
+	// 미믹 몬스터의 경우 Hit 넉백, 이동이 되면 안 되기에 CM_Mosnter::Tick() 을 돌지 않는다.
+
+	if (!m_bPlayer_Attack)
+		return;
+
+	// 몬스터 공격 받는 중...
+
+	// 몬스터 Hit 셰이더 흰색 깜박!
+	m_bShader_Hit = true;
+
+	if (0.1 < m_dPlayer_Attack_TimeAcc)
+		m_bShader_Hit = false;
+
+	// 몬스터 상태 변경
+	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+	// 맨 처음 한 번 체력을 깍는다.
+	if (0 == m_dPlayer_Attack_TimeAcc)
+	{
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
+	}
+	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
+	m_dPlayer_Attack_TimeAcc += TimeDelta;
+	if (0.5 < m_dPlayer_Attack_TimeAcc)
+	{
+		m_bPlayer_Attack = false;
+		m_dPlayer_Attack_TimeAcc = 0;
+		return;
 	}
 }
 

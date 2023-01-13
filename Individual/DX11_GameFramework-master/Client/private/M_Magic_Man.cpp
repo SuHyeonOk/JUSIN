@@ -388,10 +388,9 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 	if (!m_bPlayer_Attack)
 		return;
 
-	// 히트 이펙트
-	CM_Monster::Effect_Hit(_float3(0.0f, 1.3f, -1.0f));
-
 	// 몬스터 공격 받는 중...
+
+	// 몬스터 Hit 셰이더 흰색 깜박!
 	m_bShader_Hit = true;
 
 	if (0.1 < m_dPlayer_Attack_TimeAcc)
@@ -400,18 +399,20 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 	// 몬스터 상태 변경
 	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 
-	// UI 에 내 체력 넘겨주기
-	CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
+	// 공격 당할 때 플레이어 바라보기
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
+	// 맨 처음 한 번 체력을 깍는다.
+	if (0 == m_dPlayer_Attack_TimeAcc)
+	{
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
+	}
+	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
 	m_dPlayer_Attack_TimeAcc += TimeDelta;
 	if (0.5 < m_dPlayer_Attack_TimeAcc)
 	{
-		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
-
-		// 플레이어의 공격력 으로 몬스터 체력 깍기
-		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();
-		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);
-
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;
 		return;

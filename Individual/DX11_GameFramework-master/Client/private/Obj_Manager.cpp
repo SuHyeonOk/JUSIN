@@ -107,7 +107,7 @@ void		CObj_Manager::Set_Player_PlusHP(_float fHP)
 
 void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 {
-	if (m_bShield)
+	if (m_bShield)	// Jake 의 쉴드 가 true 라면 플레이어는 공격 받지 않는다.
 	{
 		m_bShield = false;
 		return;
@@ -126,8 +126,8 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	if (m_bNextLevel)
 		return;
 
-	Current_Player();			// 현재 플레이어가 누구인지                                     Tick
-	Player_Exp(TimeDelta);				// 플레이어 경험치를 계산하영 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
+	Current_Player();			// 현재 플레이어가 누구인지 Tick
+	Player_Exp(TimeDelta);		// 플레이어 경험치를 계산하여 일정 경험치 보다 커지면 레벨업, 최대 경험치 증가, 공격력 증가
 	Key_Input();				// 전체적인 키 입력
 	Player_Weapon();			// 현재 플레이어의 무기를 출력한다.
 
@@ -141,15 +141,14 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	// 몬스터 에게 공격 당했을 때
 	if (0 < m_fMonster_Attck)
 	{
+		if (0 == m_dPlayerAttck_TimeAcc && 0 < m_tPlayerInfo.fHP)
+		{
+			m_tPlayerInfo.fHP -= m_fMonster_Attck;
+			CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
+		}
 		m_dPlayerAttck_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayerAttck_TimeAcc)
 		{
-			if (0 < m_tPlayerInfo.fHP)
-			{
-				m_tPlayerInfo.fHP -= m_fMonster_Attck;
-				CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
-			}
-
 			m_fMonster_Attck = 0;
 			m_dPlayerAttck_TimeAcc = 0;
 		}
@@ -243,12 +242,8 @@ void		CObj_Manager::Current_Player()
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void	CObj_Manager::Player_Exp(const _double & TimeDelta)
+void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 {
-	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-	_float4 f4PlayerPos;
-	XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
 	if (m_tPlayerInfo.fExp >= m_tPlayerInfo.fExpMax)
 	{
 		m_bEffect = true;
@@ -275,6 +270,10 @@ void	CObj_Manager::Player_Exp(const _double & TimeDelta)
 		m_dEffect_Up_TimeAcc += TimeDelta;
 		if (0.35 < m_dEffect_Up_TimeAcc)
 		{
+			_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+			_float4 f4PlayerPos;
+			XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
 			CEffect_Manager::GetInstance()->Food_Up(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 			CEffect_Manager::GetInstance()->Beneficial(_float3(f4PlayerPos.x, 0.7f, f4PlayerPos.z), _float3(0.9f, 1.0f, 0.6f));
 			CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.9f, 1.0f, 0.6f));

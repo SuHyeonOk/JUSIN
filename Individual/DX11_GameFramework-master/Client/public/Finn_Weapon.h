@@ -42,6 +42,11 @@ public:
 	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
+	HRESULT				SetUp_Components();
+	HRESULT				SetUp_ShaderResources();
+
+
+private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
@@ -51,9 +56,7 @@ private:
 
 	_float4x4				m_SocketMatrix;
 
-private:
-	HRESULT SetUp_Components();
-	HRESULT SetUp_ShaderResources();
+	_bool					m_bMonster_Crash = false;
 
 public:
 	static CFinn_Weapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

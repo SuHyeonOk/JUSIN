@@ -38,7 +38,7 @@ HRESULT CS_Skill_Weapon::Initialize(void * pArg)
 		return E_FAIL;
 
 	if (WEAPONDESC::WEAPON::JAKE_MAGIC == m_WeaponDesc.eWeaponType)
-		m_wsTag = L"Jake_Magic_Weapon";
+		m_wsTag = L"Jake_Magic_Weapon";	// 일반 몬스터는 공격 받지 않고, 매직 몬스터만 공격 받기 때문에
 	else
 		m_wsTag = L"Player_Weapon";
 
@@ -48,16 +48,10 @@ HRESULT CS_Skill_Weapon::Initialize(void * pArg)
 void CS_Skill_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-	// 무기와, 몬스터가 충돌한 경우 true 로 변경되는데, 공격중이 아니게 될 때 초기화 한다.
+	
 	if (CSkill_Manager::MAGICSKILL::IDLE == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill ||
 		CSkill_Manager::FIONASKILL::IDLE == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_Monster_Crash = false;
-
-	if (true == m_Monster_Crash)
-		CUI_Manager::GetInstance()->Set_Ui_Monster(true);	// 공격 중 일 때 유아이를 띄운다.
-	else
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);	// 공격중이 아니라면 유아이를 없앤다.
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);	// 공격이 아닌 상태에서는 몬스터 UI 를 끈다.
 }
 
 void CS_Skill_Weapon::Late_Tick(_double TimeDelta)
@@ -103,11 +97,8 @@ HRESULT   CS_Skill_Weapon::Render()
 
 void CS_Skill_Weapon::On_Collision(CGameObject * pOther)
 {
-	// 나 지금 몬스터랑 충돌 했어
-	m_Monster_Crash = true;
-
-	// 그 몬스터는 이거야
-	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
+	CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
+	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);	// 충돌한 몬스터는 이거야
 }
 
 HRESULT CS_Skill_Weapon::SetUp_Components()

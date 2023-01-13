@@ -58,8 +58,8 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
-	_bool				Get_Monster_Crash() { return m_bMonster_Crash; }
-	void				Set_Monster_Crash(_bool bCrash) { m_bMonster_Crash = bCrash; }
+	//_bool				Get_Monster_Crash() { return m_bMonster_Crash; }
+	//void				Set_Monster_Crash(_bool bCrash) { m_bMonster_Crash = bCrash; }
 
 	// 다음 레벨로 넘어갈 것 인지.
 	_bool				Get_NextLevel() { return m_bNextLevel; }

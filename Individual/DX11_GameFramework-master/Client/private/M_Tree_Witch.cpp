@@ -382,7 +382,7 @@ void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 	{
 		// 몬스터 죽으면 UI 초기화
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 
 		// 알파값이 다 사라지면 죽음
 		CGameObject::Set_Dead();

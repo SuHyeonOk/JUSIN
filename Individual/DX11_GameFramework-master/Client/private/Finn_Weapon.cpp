@@ -48,13 +48,7 @@ void CFinn_Weapon::Tick(_double TimeDelta)
 	// 현재 플레이어가 무기의 주인일 때
 	if (CObj_Manager::PLAYERINFO::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
-		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 히트일떄도꺼!!!!!!!!!!!!!!!
 		if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-			CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-
-		if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-			CUI_Manager::GetInstance()->Set_Ui_Monster(true);
-		else
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 	}
 }
@@ -118,41 +112,9 @@ void CFinn_Weapon::On_Collision(CGameObject * pOther)
 	// 내가 플레이어 일 때만 체크할거야
 	if (CObj_Manager::PLAYERINFO::FINN != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
-
-	// 나 지금 몬스터랑 충돌 했어
-	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
-
-	// 그 몬스터는 이거야
-	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
-
-	//if (L"Monster__Ghost_0" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(0);
-	//else if (L"Monster__Ghost_1" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(1);
-	//else if (L"Monster__Ghost_2" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(2);
-	//else if (L"Monster__Skeleton_Archer" == pOther->Get_Tag() || L"Monster__Skeleton_Shield" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(3);
-	//else if (L"Monster__Gronmes_Blue" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(4);
-	//else if (L"Monster__Gronmes_Red" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(5);
-	//else if (L"Monster__Gronmes_Yellow" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(6);
-	//else if (L"Monster__Mimic" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(7);
-	//else if (L"Monster__PigWarrior_Bee" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(8);
-	//else if (L"Monster__Pigs_Cowboy" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(9);
-	//else if (L"Monster__Pigs_Sr" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(10);
-	//else if (L"Monster__PigWarrior_Worke" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(11);
-	//else if (L"Monster__TreeWitch" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(12);
-	//else if (L"Monster__Magic_Man" == pOther->Get_Tag())
-	//	CUI_Manager::GetInstance()->Set_UI_Monster_Index(13);
+	
+	CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
+	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);	// 충돌한 몬스터는 이거야
 }
 
 HRESULT CFinn_Weapon::SetUp_Components()

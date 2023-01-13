@@ -53,19 +53,22 @@ void CJake_Weapon::Tick(_double TimeDelta)
 	// 현재 플레이어가 무기의 주인일 때
 	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
-		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 
-		if (CObj_Manager::PLAYERINFO::STATE::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		{
-			CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-			CObj_Manager::GetInstance()->Set_Jake_Shield(false);
-			//m_bEffect_Shielddddddddddddddddd = false;								// 그리고 아이들 상태가 되었을 때 초기화 시켜준다.
-			m_Test = 27000;
-		}
-
-		if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-			CUI_Manager::GetInstance()->Set_Ui_Monster(true);
-		else
+		if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+
+		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 
+		//if (CObj_Manager::PLAYERINFO::STATE::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		//{
+		//	CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		//	CObj_Manager::GetInstance()->Set_Jake_Shield(false);
+		//	//m_bEffect_Shielddddddddddddddddd = false;								// 그리고 아이들 상태가 되었을 때 초기화 시켜준다.
+		//	m_Test = 27000;
+		//}
+
+		//if (CObj_Manager::GetInstance()->Get_Monster_Crash())
+		//	CUI_Manager::GetInstance()->Set_Ui_Monster(true);
+		//else
+		//	CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 	}
 
 	// TODO : 쉴드 이펙트
@@ -154,14 +157,11 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 	if (CObj_Manager::PLAYERINFO::JAKE != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
+	CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
+	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);	// 충돌한 몬스터는 이거야
+
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)
 		CObj_Manager::GetInstance()->Set_Jake_Shield(true);
-
-	// 나 지금 몬스터랑 충돌 했어
-	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
-
-	// 그 몬스터는 이거야
-	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
 }
 
 HRESULT CJake_Weapon::SetUp_Components()

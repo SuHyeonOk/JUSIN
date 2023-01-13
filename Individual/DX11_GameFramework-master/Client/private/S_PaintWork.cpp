@@ -88,17 +88,10 @@ void CS_PaintWork::Tick(_double TimeDelta)
 			m_dMove_TimeAcc = 0;
 		}
 	}
-
 	m_pTransformCom->Go_Straight(TimeDelta);
 
-	// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼
 	if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-
-	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
-	else
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);		// 몬스터 UI 끄기
 }
 
 void CS_PaintWork::Late_Tick(_double TimeDelta)
@@ -177,11 +170,8 @@ HRESULT CS_PaintWork::Render()
 
 void CS_PaintWork::On_Collision(CGameObject * pOther)
 {
-	// 나 지금 몬스터랑 충돌 했어
-	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
-
-	// 그 몬스터는 이거야
-	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);
+	CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
+	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);	// 충돌한 몬스터는 이거야
 
 	// 이펙트
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);

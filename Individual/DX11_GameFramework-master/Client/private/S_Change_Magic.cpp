@@ -78,9 +78,11 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// 죽을 때 처리
 	Death_Set(TimeDelta);
 	Effect_Create(TimeDelta);
 
+	// Jake 의 자리 옮기기
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
@@ -94,7 +96,7 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 		if (1.6 < m_dAttack_TimeAcc)
 		{
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
-			CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+			//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 			return;
 		}
 
