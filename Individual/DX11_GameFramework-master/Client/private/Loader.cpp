@@ -1137,6 +1137,11 @@ HRESULT CLoader::SkeletonTemp()
 
 	_matrix			PivotMatrix = XMMatrixIdentity();
 
+	/* For.Prototype_Component_Model_O_Box*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_Box"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Box/Box.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	// Food
 	/* For.Prototype_Component_Model_Royal_Tart */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"),
@@ -1242,6 +1247,10 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
 
 	// Obj
+	/* For.Prototype_GameObject_O_Box */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Box"),
+		CO_Box::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* For.Prototype_GameObject_O_BearTrap */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_BearTrap"),
 		CO_BearTrap::Create(m_pDevice, m_pContext))))

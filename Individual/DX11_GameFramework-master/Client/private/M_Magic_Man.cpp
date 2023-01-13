@@ -253,7 +253,7 @@ void CM_Magic_Man::Find_Tick()
 	_vector vDistance = vPlayerPos - vCenterPos;
 	_float	fDistance = XMVectorGetX(XMVector3Length(vDistance));
 
-	// TODO : 나중에 정확한 생성 위치를 정하면 그 자리에서 cout 으로 확인해 보면서 일정한 거리에서 나타나 도록 수정하기 (높이 때문에 거리가 내가 생각하는 거리가 아님)
+	// 그러다가 플레이어와의 거리가 가까워지면 나타난다.
 	if (5.f > fDistance)
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vCenterPos);

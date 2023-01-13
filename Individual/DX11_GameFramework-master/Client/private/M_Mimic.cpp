@@ -305,7 +305,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
 		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x - 3.6f, vf4MyPos.y, vf4MyPos.z), 10, 3, 2); 	// ???? ????
-		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
+		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x - 3.6f, vf4MyPos.y, vf4MyPos.z));
 
 		m_OneCoin = true;
 	}

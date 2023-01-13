@@ -45,16 +45,16 @@ HRESULT CPage::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 
-	if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
-		m_wsTag = L"Item_Page_Paint";
-	else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
-		m_wsTag = L"Item_Page_Marcelint";
-	else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
-		m_wsTag = L"Item_Page_Coin";
-	else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
-		m_wsTag = L"Item_Page_Fiona";
-	else
-		m_wsTag = L"Item_Page_End";
+	//if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
+	//	m_wsTag = L"Item_Page_Paint";
+	//else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
+	//	m_wsTag = L"Item_Page_Marcelint";
+	//else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
+	//	m_wsTag = L"Item_Page_Coin";
+	//else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
+	//	m_wsTag = L"Item_Page_Fiona";
+	//else
+	//	m_wsTag = L"Item_Page_End";
 
 	return S_OK;
 }
@@ -68,18 +68,18 @@ void CPage::Tick(_double TimeDelta)
 	{
 		m_pTransformCom->RandomJump(600, 6.f, 0.5f, TimeDelta);
 	
-		// 플레이어와의 거리가 완전 가까우면 무조건 삭제
-		_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-		if (0.5 > fDistance)
-			CGameObject::Set_Dead();
+		//// 플레이어와의 거리가 완전 가까우면 무조건 삭제
+		//_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		//if (0.5 > fDistance)
+		//	CGameObject::Set_Dead();
 
-		// 시간 지나면 삭제
-		m_dDead_TimeAcc += TimeDelta;
-		if (0.5 < m_dDead_TimeAcc)
-		{
-			CGameObject::Set_Dead();
-			m_dDead_TimeAcc = 0;
-		}
+		//// 시간 지나면 삭제
+		//m_dDead_TimeAcc += TimeDelta;
+		//if (2 < m_dDead_TimeAcc)
+		//{
+		//	CGameObject::Set_Dead();
+		//	m_dDead_TimeAcc = 0;
+		//}
 	}
 
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
@@ -140,21 +140,37 @@ HRESULT CPage::Render()
 
 void CPage::On_Collision(CGameObject * pOther)
 {
-	// 충돌한 객체의 스킬 종류를 스킬매니저에 데이터를 넘긴다.
-	if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
-		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::PAINT);
-	else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
-		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT);
-	else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
-		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::COIN);
-	else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
-		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::FIONA);
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	{
+		// Page 가 바닥에 있을 때만 삭제된다.
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 0.0f };
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		if (0 == f4MyPos.y)
+		{
+			// 충돌한 객체의 스킬 종류를 스킬매니저에 데이터를 넘긴다.
+			if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
+				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::PAINT);
+			else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
+				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT);
+			else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
+				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::COIN);
+			else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
+				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::FIONA);
+
+			CGameObject::Set_Dead();
+		}
+	}
+
+
+
 
 
 	if (false == m_tinPageInfo.bJemp)
 	{
-		if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-			CGameObject::Set_Dead();
+		
+			
 	}
 	else
 		m_bPlayer_Collider = true;
