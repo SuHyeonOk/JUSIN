@@ -381,8 +381,7 @@ void CFinn::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
 
-		if (CObj_Manager::PLAYERINFO::STATE::HIT != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-			Key_Input(TimeDelta);
+		Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -795,6 +794,7 @@ void CFinn::Hit_Tick(_double TimeDelta)
 		m_bShader_Hit = false;
 		m_dShader_Hit_TimeAcc = 0;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
 }
 

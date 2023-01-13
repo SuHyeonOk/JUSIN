@@ -258,6 +258,8 @@ void CM_Mimic::Find_Tick()
 
 void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 {
+	CObj_Manager::GetInstance()->Set_Interaction(true);
+
 	if (!m_bPlayer_Attack)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }

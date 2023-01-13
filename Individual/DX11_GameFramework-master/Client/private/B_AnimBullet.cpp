@@ -123,7 +123,6 @@ void CB_AnimBullet::On_Collision(CGameObject * pOther)
 	{
 		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::KNOCKBACKHIT);
-		// 매직 총알의 경우 그냥 먹는 것 이기 때문에 플레이어 상태 변경 하지 않음
 		
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 	}

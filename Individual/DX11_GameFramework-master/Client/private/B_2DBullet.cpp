@@ -198,6 +198,7 @@ void CB_2DBullet::On_Collision(CGameObject * pOther)
 		else
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 
+		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 	} 
 }

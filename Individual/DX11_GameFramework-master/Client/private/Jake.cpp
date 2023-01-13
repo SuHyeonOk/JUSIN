@@ -895,6 +895,7 @@ void CJake::Hit_Tick(_double TimeDelta)
 		m_bShader_Hit = false;
 		m_dShader_Hit_TimeAcc = 0;
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
 }
 

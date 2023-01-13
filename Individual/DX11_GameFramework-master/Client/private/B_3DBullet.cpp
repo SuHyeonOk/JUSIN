@@ -142,6 +142,7 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CGameObject::Set_Dead();
 
 		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)

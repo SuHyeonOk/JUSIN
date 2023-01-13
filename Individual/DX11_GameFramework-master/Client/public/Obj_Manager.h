@@ -80,7 +80,9 @@ public:
 	void				Set_Current_Level(LEVEL eLevelID) { m_eCurrent_Level = eLevelID; }
 
 	// Player 정보
-	PLAYERINFO			Get_Current_Player() { return m_tPlayerInfo; }
+	PLAYERINFO			Get_Current_Player() { 
+		return m_tPlayerInfo; 
+	}
 	void				Set_Current_Player(PLAYERINFO ePlayerInfo) { m_tPlayerInfo = ePlayerInfo; }
 	void				CObj_Manager::Set_Current_Player_State(PLAYERINFO::STATE	eState);
 
@@ -105,6 +107,7 @@ public:
 
 	// UI Talk
 	_bool				Get_Interaction() { return m_bInteraction; }
+	void				Set_Interaction(_bool bInteraction) { m_bInteraction = bInteraction; }
 
 public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	void				CObj_Manager::Tick_Player_Transform();					// Player 에서 현재 내 거리를 계산한다.

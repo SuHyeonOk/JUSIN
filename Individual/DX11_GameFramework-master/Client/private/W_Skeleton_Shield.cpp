@@ -116,6 +116,7 @@ void CW_Skeleton_Shield::On_Collision(CGameObject * pOther)
 	{
 		if (WEAPONDESC::WARRIORTYPE::SWORD == m_WeaponDesc.eWarriorType)
 		{
+			CObj_Manager::GetInstance()->Set_Interaction(true);
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_WeaponDesc.fAttack);
 		}

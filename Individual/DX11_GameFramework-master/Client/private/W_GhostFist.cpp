@@ -95,6 +95,7 @@ void CW_GhostFist::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_WeaponDesc.fAttack);
 	}
