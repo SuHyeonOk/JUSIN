@@ -66,18 +66,16 @@ void CPage::Tick(_double TimeDelta)
 	// 만약 점프 상태라면 뛰어서 떨어져야 함
 	if (true == m_tinPageInfo.bJemp)
 	{
-		m_pTransformCom->RandomJump(700, 6.f, 0.5f, TimeDelta);
+		m_pTransformCom->RandomJump(600, 6.f, 0.5f, TimeDelta);
 	
+		// 플레이어와의 거리가 완전 가까우면 무조건 삭제
+		_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		if (0.5 > fDistance)
+			CGameObject::Set_Dead();
+
 		// 시간 지나면 삭제
 		m_dDead_TimeAcc += TimeDelta;
 		if (0.5 < m_dDead_TimeAcc)
-		{
-			// 플레이어와의 거리가 완전 가까우면 무조건 삭제
-			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-			if (0.5 > fDistance)
-				CGameObject::Set_Dead();
-		}
-		else if (1 < m_dDead_TimeAcc)
 		{
 			CGameObject::Set_Dead();
 			m_dDead_TimeAcc = 0;
@@ -142,7 +140,18 @@ HRESULT CPage::Render()
 
 void CPage::On_Collision(CGameObject * pOther)
 {
-	if (true != m_tinPageInfo.bJemp)
+	// 충돌한 객체의 스킬 종류를 스킬매니저에 데이터를 넘긴다.
+	if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
+		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::PAINT);
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
+		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT);
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
+		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::COIN);
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
+		CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::FIONA);
+
+
+	if (false == m_tinPageInfo.bJemp)
 	{
 		if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 			CGameObject::Set_Dead();

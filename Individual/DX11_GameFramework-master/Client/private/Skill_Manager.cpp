@@ -38,36 +38,65 @@ void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 			 3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
 }
 
-void	CSkill_Manager::Page_PickUp(CGameObject * pOther)
+void	CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex)
 {
-	if (L"Item_Page_Paint" == pOther->Get_Tag())
+	if (PLAYERSKILL::SKILL::PAINT == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;		// 충돌한 객체의 개수 관리
 
-		if(1 == m_arrPageCount[PLAYERSKILL::SKILL::PAINT])		// 아이템 개수가 1개 일 때만 스킬창에 추가할 수 있다.
+		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::PAINT])		// 아이템 개수가 1개 일 때만 스킬창에 추가할 수 있다.
 			SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기
 	}
-	else if (L"Item_Page_Marcelint" == pOther->Get_Tag())
+	else if (PLAYERSKILL::SKILL::MARCELINT == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT])
 			SkillIcon(PLAYERSKILL::SKILL::MARCELINT);
 	}
-	else if (L"Item_Page_Coin" == pOther->Get_Tag())
+	else if (PLAYERSKILL::SKILL::COIN == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::COIN] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::COIN])
 			SkillIcon(PLAYERSKILL::SKILL::COIN);
 	}
-	else if (L"Item_Page_Fiona" == pOther->Get_Tag())
+	else if (PLAYERSKILL::SKILL::FIONA == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::FIONA] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::FIONA])
 			SkillIcon(PLAYERSKILL::SKILL::FIONA);
 	}
+
+	//if (L"Item_Page_Paint" == pOther->Get_Tag())
+	//{
+	//	m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;		// 충돌한 객체의 개수 관리
+
+	//	if(1 == m_arrPageCount[PLAYERSKILL::SKILL::PAINT])		// 아이템 개수가 1개 일 때만 스킬창에 추가할 수 있다.
+	//		SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기
+	//}
+	//else if (L"Item_Page_Marcelint" == pOther->Get_Tag())
+	//{
+	//	m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] += 1;
+
+	//	if (1 == m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT])
+	//		SkillIcon(PLAYERSKILL::SKILL::MARCELINT);
+	//}
+	//else if (L"Item_Page_Coin" == pOther->Get_Tag())
+	//{
+	//	m_arrPageCount[PLAYERSKILL::SKILL::COIN] += 1;
+
+	//	if (1 == m_arrPageCount[PLAYERSKILL::SKILL::COIN])
+	//		SkillIcon(PLAYERSKILL::SKILL::COIN);
+	//}
+	//else if (L"Item_Page_Fiona" == pOther->Get_Tag())
+	//{
+	//	m_arrPageCount[PLAYERSKILL::SKILL::FIONA] += 1;
+
+	//	if (1 == m_arrPageCount[PLAYERSKILL::SKILL::FIONA])
+	//		SkillIcon(PLAYERSKILL::SKILL::FIONA);
+	//}
 
 	//cout << "스킬 개수 : " << 
 	//	"PAINT : " << m_arrPageCount[PLAYERSKILL::SKILL::PAINT] << " | " <<

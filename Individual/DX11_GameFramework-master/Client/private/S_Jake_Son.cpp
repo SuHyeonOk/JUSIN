@@ -44,7 +44,6 @@ HRESULT CS_Jake_Son::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_wsTag = L"Jake_Son";
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 
@@ -116,6 +115,7 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 
 		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z - 0.5f));
 		CUI_Manager::GetInstance()->Set_JakeSon_Count();
+		
 		CGameObject::Set_Dead();
 	}
 }

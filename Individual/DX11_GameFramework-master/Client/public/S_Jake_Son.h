@@ -59,3 +59,14 @@ public:
 };
 
 END
+
+//void CTransform::Jump(_double TimeDelta, const _float fJumpPower)
+//{
+//	_vector   vPosition = Get_State(CTransform::STATE_TRANSLATION);
+//	_vector   vUp = XMVector3Cross(Get_State(CTransform::STATE_LOOK), Get_State(CTransform::STATE_RIGHT));
+//
+//
+//	vPosition += XMVector3Normalize(vUp) * m_fTime * fJumpPower * TimeDelta;
+//	m_fTime -= 5.f * TimeDelta;
+//	Set_State(CTransform::STATE_TRANSLATION, vPosition);
+//}

@@ -161,7 +161,7 @@ HRESULT CJake::Render()
 
 void CJake::On_Collision(CGameObject * pOther)
 {
-	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
+	//CSkill_Manager::GetInstance()->Page_PickUp(pOther);
 }
 
 HRESULT CJake::SetUp_Components()

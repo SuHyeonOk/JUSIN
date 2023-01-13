@@ -62,7 +62,7 @@ public:		// 플레이어
 
 public:
 	void		CSkill_Manager::Page_Use(ITEMINDEX	iIndex);
-	void		CSkill_Manager::Page_PickUp(CGameObject * pOther);										// 현재 먹은 (충돌한) Page 의 종류 관리
+	void		CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex/*CGameObject * pOther*/);										// 현재 먹은 (충돌한) Page 의 종류 관리
 
 public:		// 유아이 관련
 	_int		Get_PageCount(PLAYERSKILL::SKILL iIndex) { return m_arrPageCount[iIndex]; }				

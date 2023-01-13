@@ -26,8 +26,6 @@ HRESULT CS_StunChick::Initialize_Prototype()
 
 HRESULT CS_StunChick::Initialize(void * pArg)
 {	
-	m_wsTag = L"StenChick";
-
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)

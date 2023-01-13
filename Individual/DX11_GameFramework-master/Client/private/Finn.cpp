@@ -161,7 +161,7 @@ HRESULT CFinn::Render()
 
 void CFinn::On_Collision(CGameObject * pOther)
 {
-	CSkill_Manager::GetInstance()->Page_PickUp(pOther);
+	//CSkill_Manager::GetInstance()->Page_PickUp(pOther);
 }
 
 HRESULT CFinn::SetUp_Components()

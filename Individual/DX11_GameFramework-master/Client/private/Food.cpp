@@ -85,8 +85,6 @@ void CFood::Tick(_double TimeDelta)
 		CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.5f, f4PlayerPos.z - 0.5f));
 		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.5f));
 		
-
-		CGameObject::Set_Dead();
 	}
 
 	if (pGameInstance->Key_Pressing(DIK_V))
