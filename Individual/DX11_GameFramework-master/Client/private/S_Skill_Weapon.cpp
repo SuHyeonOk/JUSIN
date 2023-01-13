@@ -49,15 +49,15 @@ void CS_Skill_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 내가 공격하고 있지 않은 상태라면
+	// 무기와, 몬스터가 충돌한 경우 true 로 변경되는데, 공격중이 아니게 될 때 초기화 한다.
 	if (CSkill_Manager::MAGICSKILL::IDLE == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill ||
 		CSkill_Manager::FIONASKILL::IDLE == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		m_Monster_Crash = false;
 
-	if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
+	if (true == m_Monster_Crash)
+		CUI_Manager::GetInstance()->Set_Ui_Monster(true);	// 공격 중 일 때 유아이를 띄운다.
 	else
-		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);	// 공격중이 아니라면 유아이를 없앤다.
 }
 
 void CS_Skill_Weapon::Late_Tick(_double TimeDelta)
@@ -104,7 +104,7 @@ HRESULT   CS_Skill_Weapon::Render()
 void CS_Skill_Weapon::On_Collision(CGameObject * pOther)
 {
 	// 나 지금 몬스터랑 충돌 했어
-	CObj_Manager::GetInstance()->Set_Monster_Crash(true);
+	m_Monster_Crash = true;
 
 	// 그 몬스터는 이거야
 	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);

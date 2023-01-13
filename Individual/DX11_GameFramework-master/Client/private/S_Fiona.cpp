@@ -272,9 +272,11 @@ HRESULT CS_Fiona::Ready_Parts()
 
 void CS_Fiona::Parts_Tick(const _double & TimeDelta)
 {
+	m_SkillParts[0]->Tick(TimeDelta);
+
 	// 내 무기 콜라이더 공격 중일 때만 On
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_SkillParts[0]->Tick(TimeDelta);
+	//if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 	{
 		if (1.7 < m_dCat_Attack_TimeAcc)
@@ -294,8 +296,10 @@ void CS_Fiona::Parts_Tick(const _double & TimeDelta)
 
 void CS_Fiona::Parts_LateTick(const _double & TimeDelta)
 {
-	if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
-		m_SkillParts[0]->Late_Tick(TimeDelta);
+	m_SkillParts[0]->Late_Tick(TimeDelta);
+
+	//if (CSkill_Manager::FIONASKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
+		
 	if (CSkill_Manager::FIONASKILL::CAT == CSkill_Manager::GetInstance()->Get_Fiona_Skill().eSkill)
 	{
 		if (1.7 < m_dCat_Attack_TimeAcc)

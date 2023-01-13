@@ -42,18 +42,21 @@ public:
 	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
-	CShader*				m_pShaderCom = nullptr;
-	CRenderer*				m_pRendererCom = nullptr;
-	CModel*					m_pModelCom = nullptr;
-	CCollider*				m_pColliderCom = nullptr;
-
-	WEAPONDESC				m_WeaponDesc;
-
-	_float4x4				m_SocketMatrix;
+	HRESULT				 SetUp_Components();
+	HRESULT				 SetUp_ShaderResources();
 
 private:
-	HRESULT SetUp_Components();
-	HRESULT SetUp_ShaderResources();
+	CShader*			m_pShaderCom = nullptr;
+	CRenderer*			m_pRendererCom = nullptr;
+	CModel*				m_pModelCom = nullptr;
+	CCollider*			m_pColliderCom = nullptr;
+
+	WEAPONDESC			m_WeaponDesc;
+
+	_float4x4			m_SocketMatrix;
+
+private:
+	_bool				m_Monster_Crash = false;
 
 public:
 	static CS_Skill_Weapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
