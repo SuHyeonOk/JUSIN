@@ -383,6 +383,10 @@ void CJake::Player_Tick(_double TimeDelta)
 	case CObj_Manager::PLAYERINFO::MAGIC:
 		Magic_Tick(TimeDelta);
 		break;
+
+	case CObj_Manager::PLAYERINFO::JAKESON:
+		JakeSon_Tick(TimeDelta);
+		break;
 	}
 
 	Anim_Change(TimeDelta);
@@ -616,6 +620,12 @@ void CJake::Check_Follow(_double TimeDelta)
 void CJake::Key_Input(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	// TODO jake Test
+	if (pGameInstance->Key_Pressing(DIK_I))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
+	}
 
 	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
 	{
@@ -1011,6 +1021,29 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	return S_OK;
 
 	//CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
+}
+
+HRESULT CJake::JakeSon_Tick(const _double & TimeDelta)
+{
+	if (true == m_bChange)
+		return S_OK;
+
+	m_bChange = true;
+
+	// 모델 생성
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON,
+		TEXT("Layer_S_Change_JakeSOn"), TEXT("Prototype_GameObject_S_JakeSonTransform"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	
+	return S_OK;
 }
 
 void CJake::Anim_Change(_double TimeDelta)

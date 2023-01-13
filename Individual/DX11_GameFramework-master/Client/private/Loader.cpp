@@ -57,6 +57,7 @@
 // Skill
 #include "S_Change_Magic.h"
 #include "S_Jake_Son.h"
+#include "S_Jake_Son_Transform.h"
 
 // Weapon
 #include "W_PigWarrior.h"
@@ -581,6 +582,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
+	/* For.Prototype_Component_Model_S_JakeSonsTransform */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	// Monster
 	/* For.Prototype_Component_Model_M_Ghost_1 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_1"),
@@ -648,6 +654,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
 	 // Map
+	 /* For.Prototype_GameObject_S_JakeSonTransform */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
+		CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	 /* For.Prototype_GameObject_Map_Skeleton */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton"),
 		CMap_Skeleton::Create(m_pDevice, m_pContext))))
@@ -722,6 +733,11 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
+	///* For.Prototype_Component_Model_S_JakeSonsTransform */
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
+	//	return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
@@ -730,6 +746,12 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton_Boss"),
 		CMap_Skleton_Boss::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Skill
+	///* For.Prototype_GameObject_S_JakeSonTransform */
+	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
+	//	CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 
@@ -1198,6 +1220,10 @@ HRESULT CLoader::SkeletonTemp()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_E"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_E/Jake_son_E.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_S_JakeSonsTransform */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
@@ -1275,6 +1301,10 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_S_Jake_Son */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_S_JakeSonTransform */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
+		CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	UI_Create();

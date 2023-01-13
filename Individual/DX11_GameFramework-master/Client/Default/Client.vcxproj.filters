@@ -471,6 +471,9 @@
     <ClInclude Include="..\public\S_Jake_Son.h">
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_Jake_Son_Transform.h">
+      <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -750,6 +753,9 @@
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_Jake_Son.cpp">
+      <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_Jake_Son_Transform.cpp">
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClCompile>
   </ItemGroup>

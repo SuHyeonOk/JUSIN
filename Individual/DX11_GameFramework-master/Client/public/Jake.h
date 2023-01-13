@@ -77,6 +77,7 @@ private:
 	void	Cheering_Tick();
 
 	HRESULT	Magic_Tick(_double TimeDelta);
+	HRESULT	JakeSon_Tick(const _double & TimeDelta);
 
 	void	Anim_Change(_double TimeDelta);
 
