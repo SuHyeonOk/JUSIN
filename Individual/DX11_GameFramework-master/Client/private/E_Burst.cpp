@@ -129,7 +129,8 @@ HRESULT CE_Burst::Render()
 		return E_FAIL;
 
 	// 색 조정
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
+		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pShaderCom->Begin(4);
 	// 이미지색
 	else

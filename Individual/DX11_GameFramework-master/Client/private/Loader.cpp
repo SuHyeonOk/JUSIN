@@ -581,12 +581,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 	///////////////////////////////////////////////////////////// ANIM
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-	/* For.Prototype_Component_Model_S_JakeSonsTransform */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	// Monster
 	/* For.Prototype_Component_Model_M_Ghost_1 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_1"),
@@ -654,11 +648,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
 	 // Map
-	 /* For.Prototype_GameObject_S_JakeSonTransform */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
-		CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	 /* For.Prototype_GameObject_Map_Skeleton */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton"),
 		CMap_Skeleton::Create(m_pDevice, m_pContext))))
@@ -1063,6 +1052,12 @@ HRESULT CLoader::Effect_Texture()
 	/* For.Prototype_Component_Texture_E_Leaf */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Leaf"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Coin/TreeWitch_Explosion_leaves_D.png")))))
+		return E_FAIL;
+
+	// JakeSon
+	/* For.Prototype_Component_Texture_E_Jake_Son */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Jake_Son"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Jake_Son/Jake_Son_%d.png"), 4))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

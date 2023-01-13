@@ -62,10 +62,10 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 	m_dChange_Texture += TimeDelta;
 	if (0.09 < m_dChange_Texture)					// 이미지가 변경되는 시간
 	{
-		++m_iHit_Texture_Index;
+		++m_iTexture_Index;
 		m_dChange_Texture = 0;
 	}
-	if (4 <= m_iHit_Texture_Index)					// 삭제될 때
+	if (4 <= m_iTexture_Index)					// 삭제될 때
 		CGameObject::Set_Dead();
 }
 
@@ -108,8 +108,15 @@ HRESULT CE_Alpha_Change::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
+	_tchar	m_szTextureName[MAX_PATH] = L"";
+
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Hit_Cahange"));
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Jake_Son"));
+
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Hit_Cahange"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -133,12 +140,15 @@ HRESULT CE_Alpha_Change::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	// 텍스처 넘기기
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iHit_Texture_Index)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTexture_Index)))
 		return E_FAIL;
 
-	_float fAlpha = 0.2f;
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
-		return E_FAIL;
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		_float fAlpha = 0.2f;
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

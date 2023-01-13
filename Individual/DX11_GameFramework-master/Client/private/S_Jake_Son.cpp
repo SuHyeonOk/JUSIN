@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
+#include "Effect_Manager.h"
 
 CS_Jake_Son::CS_Jake_Son(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -109,6 +110,11 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		_vector vMyPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
 		CUI_Manager::GetInstance()->Set_JakeSon_Count();
 		CGameObject::Set_Dead();
 	}

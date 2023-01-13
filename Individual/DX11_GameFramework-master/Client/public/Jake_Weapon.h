@@ -51,7 +51,7 @@ private:
 
 	_float4x4				m_SocketMatrix;
 
-	_bool					m_bEffect_Shield = false;
+	_bool					m_bEffect_Shielddddddddddddddddd = false;
 	_double					m_dEffect_Shield_TimeAcc = 0;
 
 private:

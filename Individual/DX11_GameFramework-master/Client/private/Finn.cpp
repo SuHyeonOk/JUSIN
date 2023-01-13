@@ -837,7 +837,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.65f, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
 		m_dEffect_Swim_TimeAcc = 0;
 	}
 

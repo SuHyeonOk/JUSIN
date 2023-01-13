@@ -196,7 +196,7 @@ HRESULT CB_3DBullet::SetUp_Components()
 	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)	// ¿ä±â
 	{
 		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+		ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

@@ -108,8 +108,6 @@ private:
 	_bool		m_bEffect_Follow = false;
 	_double		m_bEffect_Follow_TimeAcc = 0;
 
-	_int m_i = 0;
-
 public:
 	static CFinn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
