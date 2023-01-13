@@ -90,7 +90,10 @@ void CLevel_GamePlay::Late_Tick(_double TimeDelta)
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }

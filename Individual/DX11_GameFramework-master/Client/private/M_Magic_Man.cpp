@@ -300,7 +300,6 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 
 		// ÃÑ¾Ë ³¯¸®´Â ÄÚµå
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 		// ³» ÁÂÇ¥
 		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -318,8 +317,13 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_MAGIC;
 		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Magic_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 
 		RELEASE_INSTANCE(CGameInstance);
 	}

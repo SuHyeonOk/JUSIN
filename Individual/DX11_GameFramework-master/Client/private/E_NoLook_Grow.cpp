@@ -54,13 +54,11 @@ void CE_NoLook_Grow::Tick(_double TimeDelta)
 
 	__super::Tick(TimeDelta);
 
-	//if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::SWIM_TEXTURE == m_tEffectInfo.eTextureType)	// 높이 값이 계속 달라져야 해서
-	//{
+	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::TREE_TEXTURE != m_tEffectInfo.eTextureType)	// 높이 값이 계속 달라져야 해서
+	{
+	
+	}
 
-
-
-	//	m_pTransformCom->Set_Pos(m_fHight);
-	//}
 
 	m_fSizeX += _float(TimeDelta) * 3.f;
 	m_fSizeY += _float(TimeDelta) * 3.f;

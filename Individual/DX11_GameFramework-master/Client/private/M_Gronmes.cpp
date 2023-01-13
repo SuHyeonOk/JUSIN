@@ -290,8 +290,6 @@ void CM_Gronmes::Find_Tick()
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	_vector	vMyPos;
 	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
@@ -302,9 +300,13 @@ void CM_Gronmes::Find_Tick()
 	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
 	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
 	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
-		return;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+	{
+		RELEASE_INSTANCE(CGameInstance);
+		return;
+	}
 	RELEASE_INSTANCE(CGameInstance);
 }
 
@@ -316,8 +318,6 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 
 	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 	m_bAttack = true;
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	// ³» ÁÂÇ¥
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -343,8 +343,13 @@ void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
 	else if (CM_Monster::MONSTERDESC::G_YELLOW == m_tMonsterDesc.eMonsterKind)
 		tBulletInfo.iCircle_Color = 2;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_Circle_0"), TEXT("Prototype_GameObject_B_ToodyBullet"), &tBulletInfo)))
+	{
+		RELEASE_INSTANCE(CGameInstance);
 		return;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }

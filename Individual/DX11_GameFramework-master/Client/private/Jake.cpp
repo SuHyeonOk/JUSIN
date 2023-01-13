@@ -769,7 +769,10 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.BLUE;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_0"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 
 		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		XMStoreFloat4(&tPaintWorkInfo.f4Look, vLook);
@@ -777,7 +780,10 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.MAGENTA;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_1"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 
 		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(15.f));
 		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -787,7 +793,10 @@ void CJake::Attack_Paint_Tick(_double TimeDelta)
 		tPaintWorkInfo.ePaintWork = tPaintWorkInfo.YELLOW;
 		tPaintWorkInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Paint_2"), TEXT("Prototype_GameObject_S_PaintWork"), &tPaintWorkInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 
 		RELEASE_INSTANCE(CGameInstance);
 	}
@@ -808,7 +817,10 @@ void CJake::Skill_Marceline_Tick(_double TimeDelta)
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_S_Marceline_1"), TEXT("Prototype_GameObject_S_Marceline"),
 			&_float3(f4MyPos.x + 1.0f, f4MyPos.y, f4MyPos.z + 1.0f))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
@@ -837,7 +849,10 @@ HRESULT CJake::Skill_Fiona_Tick(_double TimeDelta)
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(),								// STATIC 레벨에
 		TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+	{
+		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
+	}
 	RELEASE_INSTANCE(CGameInstance);
 
 	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
@@ -911,7 +926,10 @@ void CJake::Stun_Tick()
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("S_StunChick_1"), TEXT("Prototype_GameObject_S_StunChick"), &_float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 		RELEASE_INSTANCE(CGameInstance);
 
 		m_bStru = true;
@@ -1015,7 +1033,10 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY,							
 		TEXT("Layer_S_Change_Magic_JAKE"), TEXT("Prototype_GameObject_S_Change_Magic"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+	{
+		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1040,7 +1061,10 @@ HRESULT CJake::JakeSon_Tick(const _double & TimeDelta)
 	
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON,
 		TEXT("Layer_S_Change_JakeSOn"), TEXT("Prototype_GameObject_S_JakeSonTransform"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+	{
+		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 	

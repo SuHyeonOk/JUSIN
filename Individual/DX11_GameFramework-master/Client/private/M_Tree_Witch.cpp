@@ -244,8 +244,6 @@ void CM_Tree_Witch::Find_Tick()
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	_vector	vMyPos;
 	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
@@ -256,8 +254,13 @@ void CM_Tree_Witch::Find_Tick()
 	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
 	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
 	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 2.f, f4MyPos.z - 0.5f);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+	{
+		RELEASE_INSTANCE(CGameInstance);
 		return;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -304,18 +307,19 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 	// µ¢±¼
 	if (m_pModelCom->Animation_Check(0) && m_pModelCom->Get_Finished())
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-		
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;	
 
 		CB_AnimBullet::ANIMBULLETINFO	tBulletInfo;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROOTS;
 		tBulletInfo.fMonsterAttack = m_tMonsterInfo.fAttack;
 		tBulletInfo.f3Start_Pos = _float3(m_f4PlayerPos.x, m_f4PlayerPos.y, m_f4PlayerPos.z);
 		
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_B_RandomBullet_Roots_0"), TEXT("Prototype_GameObject_B_AnimBullet"), &tBulletInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
-		
+		}
 		RELEASE_INSTANCE(CGameInstance);
 	}
 	// ±ò¾Æ ¹¶°³±â

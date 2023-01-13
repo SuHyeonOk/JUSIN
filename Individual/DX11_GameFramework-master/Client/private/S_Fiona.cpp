@@ -489,7 +489,10 @@ void CS_Fiona::Stun_Tick()
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("S_StunChick_1"), TEXT("Prototype_GameObject_S_StunChick"), &_float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
 			return;
+		}
 		RELEASE_INSTANCE(CGameInstance);
 
 		m_bStun = true;

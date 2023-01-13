@@ -180,8 +180,6 @@ void CN_KeyMan::Help_UI()
 
 	m_bHelp_UI = true;
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4	f4MyPos;
 	XMStoreFloat4(&f4MyPos, vMyPos);
@@ -190,8 +188,14 @@ void CN_KeyMan::Help_UI()
 	tTextureInfo.eTextureType = tTextureInfo.TYPE_TALK;
 	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
 	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.7f, f4MyPos.z - 0.5f);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+	{
+		RELEASE_INSTANCE(CGameInstance);
 		return;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
