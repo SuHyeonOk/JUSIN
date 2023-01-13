@@ -172,7 +172,7 @@ HRESULT CEffect_Manager::Effect_Star3Count_Create(_float3 f3Pos, const _float3 &
 	tEffetInfo.f3Pos = f3Pos;
 	tEffetInfo.f3Color = f3Color;
 
-	for (_int i = 0; i < 10; ++i)
+	for (_int i = 0; i < 20; ++i)
 	{
 		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// ·£´ýÀ¸·Î
 		_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
@@ -398,12 +398,12 @@ HRESULT CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Pos)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
+	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.5f);
 	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 
 	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
 
-	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.5f);
+	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
 
 	_vector vRandomPos = vTempPos * fRandomRange;
 	_float4 f4RandomPos;

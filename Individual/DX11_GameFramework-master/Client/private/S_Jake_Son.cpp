@@ -110,11 +110,11 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		_vector vMyPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z - 0.5f));
 		CUI_Manager::GetInstance()->Set_JakeSon_Count();
 		CGameObject::Set_Dead();
 	}

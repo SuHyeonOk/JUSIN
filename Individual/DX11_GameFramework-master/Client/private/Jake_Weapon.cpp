@@ -58,7 +58,8 @@ void CJake_Weapon::Tick(_double TimeDelta)
 		{
 			CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 			CObj_Manager::GetInstance()->Set_Jake_Shield(false);
-			m_bEffect_Shielddddddddddddddddd = false;								// 그리고 아이들 상태가 되었을 떄 초기화 시켜준다.
+			//m_bEffect_Shielddddddddddddddddd = false;								// 그리고 아이들 상태가 되었을 때 초기화 시켜준다.
+			m_Test = 27000;
 		}
 
 		if (CObj_Manager::GetInstance()->Get_Monster_Crash())
@@ -68,22 +69,25 @@ void CJake_Weapon::Tick(_double TimeDelta)
 	}
 
 	// TODO : 쉴드 이펙트
-	cout << _int(m_bEffect_Shielddddddddddddddddd) << endl;
+	//cout << "shield:" << m_Test << endl;
+	//if (m_bEffect_Shielddddddddddddddddd == true)
+	//{
+	//	int i = 0;
+	//}
 
 	// 쉴드 이펙트
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)	// 쉴드 객체의 경우 에만 다음을 실행한다.
 	{
 		if (true == CObj_Manager::GetInstance()->Get_Jake_Shield())	// 제이크 쉴드가 충돌 했을 때! 쉴드 이펙트를 호출하면 계속 생성되기 때문에
 		{
-			if (!m_bEffect_Shielddddddddddddddddd)									// false 일 때만 생성한다.
+			if (m_Test == 27000)									// false 일 때만 생성한다.
 			{
-				m_bEffect_Shielddddddddddddddddd = true;
-
 				_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
 				_float4 f4MyPos;
 				XMStoreFloat4(&f4MyPos, vMyPos);
 
 				CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f));
+				m_Test = 0;
 			}
 		}
 	}

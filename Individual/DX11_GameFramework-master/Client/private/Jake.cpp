@@ -645,6 +645,7 @@ void CJake::Key_Input(_double TimeDelta)
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 	{
 		m_OnMove = false;
+		RELEASE_INSTANCE(CGameInstance);
 		return;
 	}
 

@@ -53,6 +53,7 @@ private:
 
 	_bool					m_bEffect_Shielddddddddddddddddd = false;
 	_double					m_dEffect_Shield_TimeAcc = 0;
+	UINT32 m_Test = 27000;
 
 private:
 	HRESULT SetUp_Components();

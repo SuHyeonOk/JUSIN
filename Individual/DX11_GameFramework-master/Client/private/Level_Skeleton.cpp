@@ -671,7 +671,7 @@ void CLevel_Skleton::ImGui_Npc()
 
 void CLevel_Skleton::ImGui_Object()
 {
-	const _char* szObjName[] = { "Box", "Portal", "BearTrap", "PortalOff" };
+	const _char* szObjName[] = { "Box", "Portal", "BearTrap", "PortalOff", "JakeSon_Test" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Object", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -736,6 +736,19 @@ void CLevel_Skleton::ImGui_Object()
 				return;
 
 			m_iObject_Count++;
+		}
+		else if (4 == iObjNum)
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+			CS_Jake_Son::JAKESONINFO tJakeSonInfo;
+			tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_E;
+			tJakeSonInfo.fPos = m_f3ClickPos;
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_S_Jake_Son"), TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
+				return;
+
+			RELEASE_INSTANCE(CGameInstance);
+
 		}
 	}
 
