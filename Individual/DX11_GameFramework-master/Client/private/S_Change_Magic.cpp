@@ -295,6 +295,7 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		pGameObject->Set_Change();
 		RELEASE_INSTANCE(CGameInstance);
 
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 		CGameObject::Set_Dead();
 
 		m_dSkillClone_TimeAcc = 0;

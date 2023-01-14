@@ -473,17 +473,18 @@ void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
 }
 
 void CS_Fiona::Stun_Tick()
 {
-	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4	f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
-
 	if (!m_bStun)
 	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("S_StunChick_1"), TEXT("Prototype_GameObject_S_StunChick"), &_float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z))))
 		{
@@ -504,6 +505,7 @@ void CS_Fiona::Stun_Tick()
 		m_iStun_Count = 0;
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
 }
 

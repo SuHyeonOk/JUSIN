@@ -114,21 +114,21 @@ HRESULT CLevel_Skleton_Boss::Ready_PreviousData()
 
 	CTransform * pObjTransformCom;
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 6.f));
+	pObjTransformCom->Set_Pos(_float3(7.0f, 0.0f, 0.0f));
 
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-6.f, 0.f, 6.f));
+	pObjTransformCom->Set_Pos(_float3(8.0f, 0.0f, 0.0f));
 
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
+	pObjTransformCom->Set_Pos(_float3(7.0f, 0.0f, 0.0f));
 
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));	
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
-	pObjNavigationCom->Set_CellIndex(2);
+	pObjNavigationCom->Set_CellIndex(22);
 
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
-	pObjNavigationCom->Set_CellIndex(2);
+	pObjNavigationCom->Set_CellIndex(22);
 
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_BackGround"), TEXT("Com_Navigation"), 0));
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));

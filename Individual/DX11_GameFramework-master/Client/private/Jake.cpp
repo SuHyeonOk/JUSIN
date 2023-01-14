@@ -946,6 +946,7 @@ void CJake::Stun_Tick()
 		m_bStru = false;
 		m_iStun_Count = 0;
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
 }
 

@@ -43,15 +43,6 @@ void CDataManager::Set_ItemInfo(const _tchar & ObjName, const _float3 & ObjPos)
 	m_vecItemInfo.push_back(eObjInfo);
 }
 
-void CDataManager::Set_NpcInfo(const _tchar & ObjName, const _float3 & ObjPos)
-{
-	OBJINFO		eObjInfo;
-	memcpy(eObjInfo.ObjName, &ObjName, sizeof(_char[MAX_PATH]));
-	eObjInfo.ObjPos = ObjPos;
-
-	m_vecNpcInfo.push_back(eObjInfo);
-}
-
 void CDataManager::Set_ObjectInfo(const _tchar & ObjName, const _float3 & ObjPos)
 {
 	OBJINFO		eObjInfo;
@@ -75,8 +66,7 @@ void CDataManager::Free()
 	m_vecFoodInfo.clear();
 	m_vecCoinInfo.clear();
 	m_vecPageInfo.clear();
-	m_vecPageInfo.clear();
-	m_vecNpcInfo.clear();
+	m_vecItemInfo.clear();
 	m_vecObjectInfo.clear();
 	m_vecMonsterInfo.clear();
 }

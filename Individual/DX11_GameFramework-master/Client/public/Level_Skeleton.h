@@ -35,7 +35,6 @@ private:
 	void	ImGui_Coin();
 	void	ImGui_Page();
 	void	ImGui_Item();
-	void	ImGui_Npc();
 	void	ImGui_Object();
 	void	ImGui_Monster();
 
@@ -44,7 +43,6 @@ private:
 	HRESULT	Load_Coin();
 	HRESULT	Load_Page();
 	HRESULT	Load_Item();
-	HRESULT	Load_Npc();
 	HRESULT	Load_Object();
 	HRESULT	Load_Monster();
 
