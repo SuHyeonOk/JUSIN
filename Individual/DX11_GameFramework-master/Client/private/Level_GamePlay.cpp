@@ -32,9 +32,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Npc()))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -51,6 +48,9 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_Jake_Son"))))

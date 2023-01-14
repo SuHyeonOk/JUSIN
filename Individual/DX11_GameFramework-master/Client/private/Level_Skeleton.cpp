@@ -8,6 +8,7 @@
 #include "DataManager.h"
 #include "Camera_Dynamic.h"
 #include "Obj_Manager.h"
+#include "Level_Loading.h"
 
 #include "O_TextureObject.h"
 #include "M_Monster.h"
@@ -32,6 +33,9 @@ HRESULT CLevel_Skleton::Initialize()
 		return E_FAIL;
 
 #ifdef F2_SKELETON
+
+	CObj_Manager::GetInstance()->Set_NextLevel(false);
+
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
@@ -45,22 +49,22 @@ HRESULT CLevel_Skleton::Initialize()
 		return E_FAIL;
 #endif
 
-	if (FAILED(Ready_Layer_Npc()))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_JakeSon"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
-	CObj_Manager::GetInstance()->Set_NextLevel(false);
+	if (FAILED(Ready_Layer_Npc()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_JakeSon"))))
+		return E_FAIL;
+
+	//CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	// 파일 읽기
 	Load_Food();
@@ -85,6 +89,16 @@ void CLevel_Skleton::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
+	if (CObj_Manager::GetInstance()->Get_NextLevel())
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON_BOSS))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return;
+		}
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 HRESULT CLevel_Skleton::Render()
@@ -146,7 +160,7 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_BackGround"), TEXT("Com_Navigation"), 0));
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
 
-	//CObj_Manager::GetInstance()->Set_NextLevel(false);
+	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	RELEASE_INSTANCE(CGameInstance);
 

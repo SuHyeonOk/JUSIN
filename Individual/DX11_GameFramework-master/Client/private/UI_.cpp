@@ -314,31 +314,31 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[22]->Tick(TimeDelta);
 
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_P))
-	{
-		cout << "전체적인 상태 } " << 0 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << " || " <<
-		1 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << " || " <<
-		2 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << " || " <<
-		3 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
+	//if (pGameInstance->Key_Down(DIK_P))
+	//{
+	//	cout << "전체적인 상태 } " << 0 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << " || " <<
+	//	1 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << " || " <<
+	//	2 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << " || " <<
+	//	3 << "> " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
 
-		cout << "전체적인 상태 형변환 안 한 것 } " << 0 << " : " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " || " <<
-			1 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO) << " || " <<
-			2 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE) << " || " <<
-			3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
+	//	cout << "전체적인 상태 형변환 안 한 것 } " << 0 << " : " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " || " <<
+	//		1 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO) << " || " <<
+	//		2 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE) << " || " <<
+	//		3 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR) << endl;
 
-		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
-			cout << 1 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << endl;
-		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
-			cout << 2 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << endl;
-		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
-			cout << 3 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << endl;
-		if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
-			cout << 4 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
-	}
+	//	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
+	//		cout << 1 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE)) << endl;
+	//	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
+	//		cout << 2 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO)) << endl;
+	//	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_THREE))
+	//		cout << 3 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_THREE)) << endl;
+	//	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_FOUR))
+	//		cout << 4 << "] : " << _int(CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_FOUR)) << endl;
+	//}
 
-	RELEASE_INSTANCE(CGameInstance);
+	//RELEASE_INSTANCE(CGameInstance);
 
 	__super::Tick(TimeDelta);
 }

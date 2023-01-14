@@ -635,16 +635,6 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 #pragma endregion
 
-#pragma region 셰이더
-	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 셰이더
-
-#pragma endregion
-
-#pragma region 네비게이션
-	lstrcpy(m_szLoadingText, TEXT("네비게이션정보생성중"));
-
-#pragma endregion
-
 #pragma region 객체
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. ")); ////////////////////////////////////////////////////////////////// 객체 원형
 	 // Map
@@ -699,7 +689,9 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+#ifdef F2_SKELETON
 	SkeletonTemp();
+#endif
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
 	// SktBox
@@ -726,8 +718,6 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
 	//	return E_FAIL;
-
-	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 	// Map
@@ -1115,10 +1105,10 @@ HRESULT CLoader::Effect_Create()
 HRESULT CLoader::SkeletonTemp()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
+	
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
 		return E_FAIL;
 
 	// 2D Bullet
