@@ -458,8 +458,6 @@ void CS_Fiona::Cat_Tick()
 
 void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 {
-	m_OnMove = false;
-
 	m_bShader_Hit = true;
 
 	m_dShader_Hit_TimeAcc += TimeDelta;

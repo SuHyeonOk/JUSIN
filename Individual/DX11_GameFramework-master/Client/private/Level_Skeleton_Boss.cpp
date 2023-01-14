@@ -169,8 +169,8 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
-	eCameraInfo.eLevel = LEVEL_GAMEPLAY;
-	eCameraInfo.f3Pos = _float3(-1.f, 0.f, 0.f);
+	eCameraInfo.eLevel = LEVEL_SKELETON_BOSS;
+	eCameraInfo.f3Pos = _float3(7.0f, 0.f, 0.f);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 
@@ -183,7 +183,7 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Finn(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Finn"), &_float3(-1.f, 0.f, 0.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Finn"), &_float3(7.0f, 0.f, 0.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -195,7 +195,7 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Jake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(0.f, 0.f, 0.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(8.0f, 0.f, 0.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

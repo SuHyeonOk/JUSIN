@@ -222,6 +222,8 @@ void CS_Marceline::Effect_Create(const _double & TimeDelta)
 	_float4 f4MyPos;
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
+	if (0 == m_dEffect_Waves_TimeAcc)
+		CEffect_Manager::GetInstance()->Skill_Marceline_Waves_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
 	m_dEffect_Waves_TimeAcc += TimeDelta;
 	if (2 < m_dEffect_Waves_TimeAcc)
 	{

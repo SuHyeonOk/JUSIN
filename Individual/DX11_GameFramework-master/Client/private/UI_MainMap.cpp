@@ -56,7 +56,7 @@ void CUI_MninMap::Tick(_double TimeDelta)
 	if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
 		m_iMiMap_Texture = 1;
 	else if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
-		m_iMiMap_Texture = 1;
+		m_iMiMap_Texture = 2;
 }
 
 void CUI_MninMap::Late_Tick(_double TimeDelta)
@@ -85,7 +85,7 @@ HRESULT CUI_MninMap::Render()
 	if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
 		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Skeleton"), _float2(1141.f, 19.f), 0.f, _float2(0.4f, 0.37f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
 	else if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
-		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Skeleton Boss"), _float2(1147.f, 19.f), 0.f, _float2(0.4f, 0.37f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
+		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Skeleton Boss"), _float2(1133.f, 22.f), 0.f, _float2(0.33f, 0.29f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
 
 	RELEASE_INSTANCE(CGameInstance);
 

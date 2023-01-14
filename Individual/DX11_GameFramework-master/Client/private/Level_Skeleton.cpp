@@ -64,8 +64,6 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_JakeSon"))))
 		return E_FAIL;
 
-	//CObj_Manager::GetInstance()->Set_NextLevel(false);
-
 	// 파일 읽기
 	Load_Food();
 	Load_Coin();

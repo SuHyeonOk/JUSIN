@@ -63,24 +63,9 @@ void CPage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// 만약 점프 상태라면 뛰어서 떨어져야 함
+	// 만약 점프 상태라면 뛰어서 떨어진다.
 	if (true == m_tinPageInfo.bJemp)
-	{
 		m_pTransformCom->RandomJump(600, 6.f, 0.5f, TimeDelta);
-	
-		//// 플레이어와의 거리가 완전 가까우면 무조건 삭제
-		//_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-		//if (0.5 > fDistance)
-		//	CGameObject::Set_Dead();
-
-		//// 시간 지나면 삭제
-		//m_dDead_TimeAcc += TimeDelta;
-		//if (2 < m_dDead_TimeAcc)
-		//{
-		//	CGameObject::Set_Dead();
-		//	m_dDead_TimeAcc = 0;
-		//}
-	}
 
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	//m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
@@ -92,11 +77,8 @@ void CPage::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	if (!m_bPlayer_Collider)
-	{
-		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
-		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
-	}
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_ITME, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -162,19 +144,6 @@ void CPage::On_Collision(CGameObject * pOther)
 			CGameObject::Set_Dead();
 		}
 	}
-
-
-
-
-
-	if (false == m_tinPageInfo.bJemp)
-	{
-		
-			
-	}
-	else
-		m_bPlayer_Collider = true;
-
 }
 
 HRESULT CPage::SetUp_Components()
