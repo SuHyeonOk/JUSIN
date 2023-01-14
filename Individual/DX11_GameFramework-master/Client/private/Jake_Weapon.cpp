@@ -42,58 +42,38 @@ HRESULT CJake_Weapon::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 
 void CJake_Weapon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	
+
 	// 현재 플레이어가 무기의 주인일 때
 	if (CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		if (CObj_Manager::PLAYERINFO::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
-
-		// 내가 공격하고 있지 않은 상태라면 몬스터와 충돌을 꺼 
-		//if (CObj_Manager::PLAYERINFO::STATE::IDLE == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		//{
-		//	CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-		//	CObj_Manager::GetInstance()->Set_Jake_Shield(false);
-		//	//m_bEffect_Shielddddddddddddddddd = false;								// 그리고 아이들 상태가 되었을 때 초기화 시켜준다.
-		//	m_Test = 27000;
-		//}
-
-		//if (CObj_Manager::GetInstance()->Get_Monster_Crash())
-		//	CUI_Manager::GetInstance()->Set_Ui_Monster(true);
-		//else
-		//	CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 	}
 
-	// TODO : 쉴드 이펙트
-	//cout << "shield:" << m_Test << endl;
-	//if (m_bEffect_Shielddddddddddddddddd == true)
-	//{
-	//	int i = 0;
-	//}
-
-	// 쉴드 이펙트
-	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)	// 쉴드 객체의 경우 에만 다음을 실행한다.
+	// 쉴드 객체의 경우 에만 다음을 실행한다.
+	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)	
 	{
 		if (true == CObj_Manager::GetInstance()->Get_Jake_Shield())	// 제이크 쉴드가 충돌 했을 때! 쉴드 이펙트를 호출하면 계속 생성되기 때문에
 		{
-			if (m_Test == 27000)									// false 일 때만 생성한다.
+			if (!m_bEffect_Shield)
 			{
 				_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
 				_float4 f4MyPos;
 				XMStoreFloat4(&f4MyPos, vMyPos);
 
 				CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.5f));
-				m_Test = 0;
+				m_bEffect_Shield = true;
 			}
 		}
 	}
+
 }
 
 void CJake_Weapon::Late_Tick(_double TimeDelta)
@@ -160,8 +140,10 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 	CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
 	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);	// 충돌한 몬스터는 이거야
 
+	// 내가 제이크 쉴드야
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)
-		CObj_Manager::GetInstance()->Set_Jake_Shield(true);
+		CObj_Manager::GetInstance()->Set_Jake_Shield(true);	// 나 충돌했어
+
 }
 
 HRESULT CJake_Weapon::SetUp_Components()

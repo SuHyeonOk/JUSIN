@@ -41,6 +41,10 @@ public:
 
 	virtual void		On_Collision(CGameObject* pOther) override;
 
+	void ResetJakeS() {
+		m_bEffect_Shield = false;
+	}
+
 private:
 	CShader*				m_pShaderCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
@@ -51,9 +55,7 @@ private:
 
 	_float4x4				m_SocketMatrix;
 
-	_bool					m_bEffect_Shielddddddddddddddddd = false;
-	_double					m_dEffect_Shield_TimeAcc = 0;
-	UINT32 m_Test = 27000;
+	_bool					m_bEffect_Shield = false;
 
 private:
 	HRESULT SetUp_Components();

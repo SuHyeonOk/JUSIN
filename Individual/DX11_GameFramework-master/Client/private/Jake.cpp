@@ -302,6 +302,8 @@ void CJake::Parts_Tick(const _double & TimeDelta)
 	{
 		m_PlayerParts[0]->Tick(TimeDelta);
 		m_PlayerParts[1]->Tick(TimeDelta);
+		((CJake_Weapon*)m_PlayerParts[2])->ResetJakeS();
+		CObj_Manager::GetInstance()->Set_Jake_Shield(false);
 	}
 	else if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == CObj_Manager::GetInstance()->Get_Current_Player().eJakeWeapon)
 		m_PlayerParts[2]->Tick(TimeDelta);
@@ -633,6 +635,7 @@ void CJake::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Up(DIK_LCONTROL))
 	{
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CObj_Manager::GetInstance()->Set_Jake_Weapon(CObj_Manager::PLAYERINFO::JAKEWEAPON::LFIST);
 	}
@@ -641,7 +644,6 @@ void CJake::Key_Input(_double TimeDelta)
 		m_tPlayerInfo.eState == m_tPlayerInfo.CONTROL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.ROLL ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.HIT ||
-		//m_tPlayerInfo.eState == m_tPlayerInfo.RUN ||
 		m_tPlayerInfo.eState == m_tPlayerInfo.STUN)
 	{
 		m_OnMove = false;
