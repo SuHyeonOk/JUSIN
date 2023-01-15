@@ -44,7 +44,7 @@ HRESULT CM_Skeleton_Archer::Initialize(void * pArg)
 
 	MonsterDesc.TransformDesc.fSpeedPerSec = 2.f;
 	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	MonsterDesc.TransformDesc.f3Pos = _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+	MonsterDesc.TransformDesc.f3Pos = MonsterDesc.f3Pos;
 	m_f4CenterPos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
 
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
@@ -148,7 +148,13 @@ HRESULT CM_Skeleton_Archer::SetUp_Components()
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-
+	else if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.SKELETON_ARCHER_3)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_2"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
 
 
 	CCollider::COLLIDERDESC			ColliderDesc;

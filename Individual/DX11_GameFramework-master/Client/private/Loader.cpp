@@ -90,7 +90,8 @@
 // Boss
 #include "M_Gary_Boss.h"
 #include "Boss_S_Scream.h"
-
+#include "Boss_S_Cage.h"
+#include "Boss_Skeleton.h"
 
 #include "Obj_Manager.h"
 
@@ -599,6 +600,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Ghost_3"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Ghost/Ghost_3/Ghost_3.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Archer_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_2/Skeleton_Archer_2.fbx", PivotMatrix))))
+		return E_FAIL;
 	/* For.Prototype_Component_Model_M_Skeleton_Archer_3 */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_3"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_3/Skeleton_Archer_3.fbx", PivotMatrix))))
@@ -615,6 +620,7 @@ HRESULT CLoader::Loading_ForSkeleton()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Shield_4"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Shield_4/Skeleton_Shield_4.fbx", PivotMatrix))))
 		return E_FAIL;
+
 
 	// Weapon
 	/* For.Prototype_Component_Model_W_skeleton_sword */
@@ -696,6 +702,7 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 
 #ifdef F2_SKELETON
 	SkeletonTemp();
+	SkeletonBossTemp();
 #endif
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
@@ -705,7 +712,7 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Dead.dds")))))
 		return E_FAIL;
 
-	// Boss_Screeam
+	// Boss_Skill
 	/* For.Prototype_Component_Texture_Scream */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Texture_Scream"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Scream/Scream_template.png")))))
@@ -723,6 +730,12 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// BossFan
+	/* For.Prototype_Component_Model_M_Skeleton_1 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_1/Skeleton_1.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	// Boss
@@ -730,10 +743,14 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_Gary"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Gary/Gary.fbx", PivotMatrix))))
 		return E_FAIL;
-
+	// Boss Skill
 	/* For.Prototype_Component_Model_B_Boss_Fite_Rock */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_B_Boss_Fite_Rock"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Fire_Rock/Fire_Rock.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_B_Boss_Death_Cage */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_B_Boss_Death_Cage"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Death_Cage/Death_Cage.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_S_JakeSonsTransform */
@@ -756,6 +773,14 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	/* For.Prototype_GameObject_Boss_S_Scream */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_S_Scream"),
 		CBoss_S_Scream::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Boss_S_Cage */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_S_Cage"),
+		CBoss_S_Cage::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Boss_Skeleton */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Skeleton"),
+		CBoss_Skeleton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill
@@ -1340,6 +1365,85 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLoader::SkeletonBossTemp()
+{
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
+
+
+	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
+
+	_matrix			PivotMatrix = XMMatrixIdentity();
+
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	// 보스 맵 때만!
+	/* For.Prototype_Component_Model_M_Skeleton_Archer_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_2/Skeleton_Archer_2.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Archer_3 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_3/Skeleton_Archer_3.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Archer_4 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Archer_4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Archer_4/Skeleton_Archer_4.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Shield_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Shield_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Shield_2/Skeleton_Shield_2.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Skeleton_Shield_4 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Shield_4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Shield_4/Skeleton_Shield_4.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// Weapon
+	/* For.Prototype_Component_Model_W_skeleton_sword */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_W_skeleton_sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/skeleton_sword/skeleton_sword.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_W_skeleton_shield */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_W_skeleton_shield"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Weapon/skeleton_shield/skeleton_shield.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// Bullet
+	/* For.Prototype_Component_Model_B_Bone */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_B_Bone"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Bone/Bone.fbx", PivotMatrix))))
+		return E_FAIL;
+
+
+	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+	/* For.Prototype_GameObject_M_Skeleton_Shield */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Skeleton_Shield"),
+		CM_Skeleton_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Skeleton_Archer */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Skeleton_Archer"),
+		CM_Skeleton_Archer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// MonsterWeapo
+	/* For.Prototype_GameObject_W_Skeleton_Shield */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_W_Skeleton_Shield"),
+		CW_Skeleton_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

@@ -172,6 +172,8 @@
   <ItemGroup>
     <ClInclude Include="..\Bin\ShaderFiles\Shader_Client_Defines.h" />
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\public\Boss_Skeleton.h" />
+    <ClInclude Include="..\public\Boss_S_Cage.h" />
     <ClInclude Include="..\public\Boss_S_Scream.h" />
     <ClInclude Include="..\public\B_2DBullet.h" />
     <ClInclude Include="..\public\B_3DBullet.h" />
@@ -273,6 +275,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\private\Boss_Skeleton.cpp" />
+    <ClCompile Include="..\private\Boss_S_Cage.cpp" />
     <ClCompile Include="..\private\Boss_S_Scream.cpp" />
     <ClCompile Include="..\private\B_2DBullet.cpp" />
     <ClCompile Include="..\private\B_3DBullet.cpp" />

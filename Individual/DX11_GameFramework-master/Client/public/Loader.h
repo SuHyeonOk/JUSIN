@@ -44,6 +44,7 @@ public:
 	HRESULT	Effect_Create();
 
 	HRESULT	SkeletonTemp();
+	HRESULT	SkeletonBossTemp();
 
 private:
 	ID3D11Device*			m_pDevice = nullptr;

@@ -64,15 +64,16 @@ private:
 	_float				m_fAttack	= 0.0f;
 	_float				m_fExp		= 0.0f;
 
-	// Idle_Tick()
-	_double				m_dAttack_TimeAcc = 0;
+	_double				m_dSkill_TimeAcc = 0;
 	
 	// A_Bullet_Tick()
 	_int				m_iBullet_Count = 0;
 
 	// A_Stun_Tick()
-	_double				m_dStun_TimeAcc = 0;
 	_bool				m_bEffect_Smoke = false;
+
+
+
 
 	// ºŒ¿Ã¥ı
 	_bool				m_bShader_Hit = false;

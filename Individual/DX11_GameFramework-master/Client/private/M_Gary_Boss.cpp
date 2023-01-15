@@ -7,6 +7,7 @@
 #include "Effect_Manager.h"
 
 #include "B_3DBullet.h"
+#include "Boss_S_Cage.h"
 
 CM_Gary_Boss::CM_Gary_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -189,6 +190,8 @@ void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 	if (0 >= m_fHP)
 		m_eState = DIE;
 
+	m_eState = A_CAGE;
+
 	switch (m_eState)
 	{
 	case Client::CM_Gary_Boss::IDLE:
@@ -276,8 +279,8 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	if (7.0f < fDistance)
 		return;
 
-	m_dAttack_TimeAcc += TimeDelta;
-	if (3 < m_dAttack_TimeAcc)
+	m_dSkill_TimeAcc += TimeDelta;
+	if (3 < m_dSkill_TimeAcc)
 	{
 		_int iRandom = CUtilities_Manager::GetInstance()->Get_Random(0, 1);
 		iRandom = 1;
@@ -286,7 +289,7 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 		else
 			m_eState = A_STUN;
 
-		m_dAttack_TimeAcc = 0;
+		m_dSkill_TimeAcc = 0;
 	}
 }
 
@@ -350,22 +353,21 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 	if(true == m_bEffect_Smoke)		// 이펙트~~~
 		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f));
 
-	m_dStun_TimeAcc += TimeDelta;
-	if (0 < m_dStun_TimeAcc)
+	m_dSkill_TimeAcc += TimeDelta;
+	if (0 < m_dSkill_TimeAcc)
 		m_bEffect_Smoke = true;		// 이펙트 발사
 
-	if (1 < m_dStun_TimeAcc)		
+	if (1 < m_dSkill_TimeAcc)
 		m_pTransformCom->Set_Pos(_float3(2.43f, 0.0f, 10.75f));		// 특정 위치로 순간이동
 
-	if (2 < m_dStun_TimeAcc)
+	if (2 < m_dSkill_TimeAcc)
 		m_bEffect_Smoke = false;	// 이펙트 꺼
 	
-	if (3 < m_dStun_TimeAcc)
+	if (3 < m_dSkill_TimeAcc)
 	{
 		m_eAnimState = A_STUN;
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			cout << "생성" << endl;
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_Boss_S_Scream"), &(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z)))))
 		{
@@ -376,7 +378,7 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 		RELEASE_INSTANCE(CGameInstance);
 
 		m_eState = IDLE;
-		m_dStun_TimeAcc = 0;
+		m_dSkill_TimeAcc = 0;
 	}
 
 	return S_OK;
@@ -384,6 +386,34 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 
 HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 {
+	m_eAnimState = IDLE;
+	m_pTransformCom->Set_Pos(_float3(6.2f, 1.5f, 20.0f));
+
+	if (0 == m_dSkill_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Cage"), TEXT("Prototype_GameObject_Boss_S_Cage"), &(_float3(5.1f, 0.0f, 16.0f)))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return E_FAIL;
+		}
+
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	m_dSkill_TimeAcc += TimeDelta;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CBoss_S_Cage * pGameObject = dynamic_cast<CBoss_S_Cage*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Cage"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (nullptr == pGameObject)		// 이 객체가 nullptr 이라면 삭제된 것 이니 다른 스킬을 사용한다.
+	{
+		m_eState = IDLE;
+		m_dSkill_TimeAcc = 0;
+	}
+
 	return S_OK;
 }
 
