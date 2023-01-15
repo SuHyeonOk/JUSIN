@@ -33,7 +33,7 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 	m_wsTag = L"3DBullet";
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 4.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+	GameObjectDesc.TransformDesc.f3Pos = m_tBulletInfo.f3Start_Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -45,12 +45,8 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
 		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 0.5f));
-
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
+	else
 	{
-		//_vector vTargetPos = XMLoadFloat4(&_float4(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f));
-		//m_pTransformCom->LookAt(vTargetPos);
-
 		_vector vPlayerPos = XMVectorSet(m_tBulletInfo.f3Target_Pos.x, m_tBulletInfo.f3Target_Pos.y, m_tBulletInfo.f3Target_Pos.z, 1.f);
 		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_vector vDistance = vPlayerPos - vMyPos;
@@ -64,7 +60,9 @@ void CB_3DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 플레이어를 향해 회전하며 날아가는 총알
+		Magic_Tick(TimeDelta);
+	else
 	{
 		m_pTransformCom->Turn(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), TimeDelta * 15);
 
@@ -73,12 +71,7 @@ void CB_3DBullet::Tick(_double TimeDelta)
 		vMyPos += XMVector3Normalize(vDistance) * 7.f * _float(TimeDelta);
 
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
-
-		//m_pTransformCom->Go_Straight(TimeDelta, 7.f);
 	}
-
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 플레이어를 향해 회전하며 날아가는 총알
-		Magic_Tick(TimeDelta);
 }
 
 void CB_3DBullet::Late_Tick(_double TimeDelta)
@@ -98,6 +91,7 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 		}
 	}
 
+	// 기본 적인 충돌 처리들
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_BULLET, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
@@ -170,31 +164,38 @@ HRESULT CB_3DBullet::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC) // 요기
+	if (NONANIMBULLETINFO::BULLETTYPE::TYPE_MAGIC == m_tBulletInfo.eBulletType)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_B_FireDragon_Area_FX"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON) // 요기
+	else if (NONANIMBULLETINFO::BULLETTYPE::TYPE_SKELETON == m_tBulletInfo.eBulletType)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_SKELETON, TEXT("Prototype_Component_Model_B_Bone"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	
+	else if (NONANIMBULLETINFO::BULLETTYPE::TYPE_ROCK == m_tBulletInfo.eBulletType)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_B_Boss_Fite_Rock"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+
 	/* For.Com_SPHERE */
 	CCollider::COLLIDERDESC			ColliderDesc;
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 
-	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 요기
+	if (NONANIMBULLETINFO::BULLETTYPE::TYPE_MAGIC == m_tBulletInfo.eBulletType)
 	{
 		ColliderDesc.vSize = _float3(1.5f, 1.5f, 1.5f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	}
-	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)	// 요기
+	else
 	{
 		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);

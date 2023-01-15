@@ -15,27 +15,7 @@ BEGIN(Client)
 class CM_Gary_Boss final : public CGameObject
 {
 public:
-	typedef struct tagGaryBossInfo
-	{
-		// 0 : 오른손 평타
-		// 1 : 왼손 평타
-		// 2 : 뒤로 넘어갈랑 DIE??
-		// 3 : 왼쪽 Hit
-		// 4 : 손 펼락 말랑
-		// 5 : IDLE
-		// 6 : 춤
-		// 7 : MOVE
-
-		enum STATE { IDLE, MOVE, A_BULLET, A_STUN, A_CAGE, A_DANCE, HIT, DIE, STATE_END };
-
-		STATE			eState = STATE_END;
-
-		_float	fHP = 0.0f;
-		_float	fMaxHP = 0.0f;
-		_float	fAttack = 0.0f;
-		_float	fExp = 0.0f;
-
-	}BOSSINFO;
+	enum STATE { IDLE, MOVE, A_BULLET, A_STUN, A_CAGE, A_DANCE, HIT, DIE, STATE_END };
 
 private:
 	CM_Gary_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -63,8 +43,9 @@ private:
 
 private:
 	void				Monster_Tick(const _double& TimeDelta);
-	void				Anim_Change(const _double& TimeDelta);
+	void				Anim_Change();
 
+	// TODO : 구조 다 짜고, TimeDelta 필요없는 함수는 삭제하기
 	void				Idle_Tick(const _double& TimeDelta);
 	void				Move_Tick(const _double& TimeDelta);
 	HRESULT				A_Bullet_Tick(const _double& TimeDelta);
@@ -75,9 +56,27 @@ private:
 	void				Die_Tick(const _double& TimeDelta);
 
 private:
-	BOSSINFO			m_tBossInfo;
+	// 기본 데이터
+	STATE				m_eState = STATE_END;
+	STATE				m_eAnimState = STATE_END;
+	_float				m_fHP		= 0.0f;
+	_float				m_fMaxHP	= 0.0f;
+	_float				m_fAttack	= 0.0f;
+	_float				m_fExp		= 0.0f;
 
+	// Idle_Tick()
+	_double				m_dAttack_TimeAcc = 0;
+	
+	// A_Bullet_Tick()
+	_int				m_iBullet_Count = 0;
+
+	// A_Stun_Tick()
+	_double				m_dStun_TimeAcc = 0;
+	_bool				m_bEffect_Smoke = false;
+
+	// 셰이더
 	_bool				m_bShader_Hit = false;
+	_double				m_dShader_Hit_TimeAcc = 0;
 
 public:
 	static	CM_Gary_Boss*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

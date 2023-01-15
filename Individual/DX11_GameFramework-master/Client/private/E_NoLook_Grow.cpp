@@ -63,8 +63,6 @@ void CE_NoLook_Grow::Tick(_double TimeDelta)
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
-	cout << m_fAlpha << endl;
-
 	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::MARVELINE_TEXTURE == m_tEffectInfo.eTextureType)
 	{
 		if (5.f < m_fSizeX)

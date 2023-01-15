@@ -952,6 +952,8 @@ void CJake::Stun_Tick()
 
 void CJake::Swim_Tick(_double TimeDelta)
 {
+	CObj_Manager::GetInstance()->Set_Interaction(false);	// 보스전 할 때 보스 스킬 피하기 위해서 들어간다.
+
 	// 수영 이펙트
 	m_dEffect_Swim_TimeAcc += TimeDelta;
 	if (0.5 < m_dEffect_Swim_TimeAcc)

@@ -86,7 +86,11 @@
 #include "M_Ghost.h"
 #include "M_Skeleton_Shield.h"
 #include "M_Skeleton_Archer.h"
+
+// Boss
 #include "M_Gary_Boss.h"
+#include "Boss_S_Scream.h"
+
 
 #include "Obj_Manager.h"
 
@@ -701,6 +705,12 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Dead.dds")))))
 		return E_FAIL;
 
+	// Boss_Screeam
+	/* For.Prototype_Component_Texture_Scream */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Texture_Scream"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Scream/Scream_template.png")))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
@@ -713,13 +723,18 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
 	// Boss
 	/* For.Prototype_Component_Model_Gary */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_Gary"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Gary/Gary.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	/* For.Prototype_Component_Model_B_Boss_Fite_Rock */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_B_Boss_Fite_Rock"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Random_Bullet/Fire_Rock/Fire_Rock.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	///* For.Prototype_Component_Model_S_JakeSonsTransform */
 	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
@@ -737,6 +752,10 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	/* For.Prototype_GameObject_M_Gary_Boss */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gary_Boss"),
 		CM_Gary_Boss::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Boss_S_Scream */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_S_Scream"),
+		CBoss_S_Scream::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill

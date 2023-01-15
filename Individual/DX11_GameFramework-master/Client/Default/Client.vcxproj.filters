@@ -172,8 +172,11 @@
     <Filter Include="02.GameObjects\Bullet">
       <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Gary">
+    <Filter Include="02.GameObjects\Monster\Gary_Boss">
       <UniqueIdentifier>{370d9ffd-f9ed-428c-87a3-7592214341fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Gary_Boss\Skill">
+      <UniqueIdentifier>{605b3fa9-b638-414f-a702-c4af7e5a56cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -478,7 +481,10 @@
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClInclude>
     <ClInclude Include="..\public\M_Gary_Boss.h">
-      <Filter>02.GameObjects\Monster\Gary</Filter>
+      <Filter>02.GameObjects\Monster\Gary_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Boss_S_Scream.h">
+      <Filter>02.GameObjects\Monster\Gary_Boss\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -765,7 +771,10 @@
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClCompile>
     <ClCompile Include="..\private\M_Gary_Boss.cpp">
-      <Filter>02.GameObjects\Monster\Gary</Filter>
+      <Filter>02.GameObjects\Monster\Gary_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Boss_S_Scream.cpp">
+      <Filter>02.GameObjects\Monster\Gary_Boss\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
