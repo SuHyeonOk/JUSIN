@@ -10,7 +10,7 @@ BEGIN(Engine)
 class ENGINE_DLL CRenderer final : public CComponent
 {
 public:
-	enum RENDERGROUP { RENDER_PRIORITY, RENDER_MAP, RENDER_NONALPHABLEND, RENDER_NONLIGHT, RENDER_ALPHABLEND, RENDER_UI, RENDER_END };
+	enum RENDERGROUP { RENDER_PRIORITY, RENDER_MAP_NONALPHABLEND, RENDER_NONALPHABLEND, RENDER_NONLIGHT, RENDER_ALPHABLEND, RENDER_UI, RENDER_END };
 private:
 	CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CRenderer() = default;
@@ -40,9 +40,9 @@ private:
 	class CShader*						m_pShader = nullptr;
 	_float4x4							m_WorldMatrix, m_ViewMatrix, m_ProjMatrix;
 
-
 private:
 	HRESULT Render_Priority();
+	HRESULT Render_Map_NonAlphaBlend();
 	HRESULT Render_NonAlphaBlend();
 	HRESULT Render_LightAcc();
 	HRESULT Render_Blend();
@@ -55,9 +55,9 @@ private:
 
 
 public:
-	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CRenderer* Clone(void* pArg = nullptr) override;
-	virtual void Free() override;
+	static CRenderer*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CRenderer*	Clone(void* pArg = nullptr) override;
+	virtual void		Free() override;
 
 };
 

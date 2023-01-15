@@ -55,10 +55,8 @@ HRESULT CLevel_Skleton_Boss::Initialize()
 	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton_Boss"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton_Boss"))))
+	if (FAILED(Ready_Layer_Map(TEXT("Layer_Skeleton_Boss"))))
 		return E_FAIL;
-
-	//CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	return S_OK;
 }
@@ -203,7 +201,7 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Jake(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton_Boss::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton_Boss::Ready_Layer_Map(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

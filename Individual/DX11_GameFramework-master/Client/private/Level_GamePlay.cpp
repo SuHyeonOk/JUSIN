@@ -38,7 +38,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Garden"))))
+	if (FAILED(Ready_Layer_Map(TEXT("Layer_Garden"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -252,7 +252,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Map_Garden(const _tchar * pLayerTag)
+HRESULT CLevel_GamePlay::Ready_Layer_Map(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

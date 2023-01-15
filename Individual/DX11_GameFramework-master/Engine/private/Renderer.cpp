@@ -44,6 +44,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
+	if (FAILED(Render_Map_NonAlphaBlend()))
+		return E_FAIL;
 	if (FAILED(Render_NonAlphaBlend()))
 		return E_FAIL;
 
@@ -95,7 +97,7 @@ HRESULT CRenderer::Initialize_Prototype()
 
 	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	/* ·»ÅÍÅ¸°ÙµéÀ» »ý¼ºÇÏ³®. */
+	/* ·»ÅÍÅ¸°ÙµéÀ» »ý¼ºÇÑ´Ù. */
 
 	/* For.Target_Diffuse */
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, &_float4(0.f, 0.0f, 0.0f, 0.f))))
@@ -179,6 +181,31 @@ HRESULT CRenderer::Render_Priority()
 	}
 
 	m_RenderObjects[RENDER_PRIORITY].clear();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Map_NonAlphaBlend()
+{
+	if (nullptr == m_pTarget_Manager)
+		return E_FAIL;
+
+	/* Diffuse + Normal */
+	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_Deferred"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RENDER_MAP_NONALPHABLEND])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+
+	m_RenderObjects[RENDER_MAP_NONALPHABLEND].clear();
+
+	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
+		return E_FAIL;
 
 	return S_OK;
 }
