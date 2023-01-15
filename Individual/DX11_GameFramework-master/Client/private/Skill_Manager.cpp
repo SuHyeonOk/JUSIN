@@ -23,6 +23,9 @@ void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)
 
 void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 {
+	if(false == CUI_Manager::GetInstance()->Get_IsIcon_Index(iIndex))			// 왼쪽 하단 스킬이 비어있다면 사용하지 못 한다.
+		return;
+	
 	m_tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(iIndex);	// 현재 내가 누른 인덱스
 	CSkill_Manager::GetInstance()->Set_Player_Skill(m_tPlayerSkill.eSkill);
 

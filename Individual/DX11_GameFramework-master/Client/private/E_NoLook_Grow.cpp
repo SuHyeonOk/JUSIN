@@ -45,6 +45,10 @@ HRESULT CE_NoLook_Grow::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
 
+	m_fAlpha = 1.0f;
+	m_fSizeX = 0.0f;
+	m_fSizeY = 0.0f; 
+	
 	return S_OK;
 }
 
@@ -54,19 +58,18 @@ void CE_NoLook_Grow::Tick(_double TimeDelta)
 
 	__super::Tick(TimeDelta);
 
-	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::TREE_TEXTURE != m_tEffectInfo.eTextureType)	// 높이 값이 계속 달라져야 해서
-	{
-	
-	}
-
-
 	m_fSizeX += _float(TimeDelta) * 3.f;
 	m_fSizeY += _float(TimeDelta) * 3.f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
-	if (5.f < m_fSizeX)
-		m_fAlpha -= _float(TimeDelta) * 0.3f;
+	cout << m_fAlpha << endl;
+
+	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::MARVELINE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		if (5.f < m_fSizeX)
+			m_fAlpha -= _float(TimeDelta) * 0.3f;
+	}
 
 	if (8.f < m_fSizeX)
 		CGameObject::Set_Dead();
@@ -156,10 +159,10 @@ HRESULT CE_NoLook_Grow::SetUp_ShaderResources()
 		_float3 fColor = { 0.85f, 0.90f, 0.49f };
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &fColor, sizeof _float3)))
 			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
-			return E_FAIL;
 	}
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }

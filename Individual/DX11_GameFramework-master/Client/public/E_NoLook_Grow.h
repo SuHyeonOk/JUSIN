@@ -17,7 +17,7 @@ class CE_NoLook_Grow final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { MARVELINE_TEXTURE, SWIM_TEXTURE, TREE_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { MARVELINE_TEXTURE, SWIM_TEXTURE, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -53,8 +53,6 @@ private:	// Shader
 	_float				m_fAlpha = 1.0f;
 	_float				m_fSizeX = 0.0f;
 	_float				m_fSizeY = 0.0f;
-
-	_float				m_fHight = 0.0f;
 
 public:
 	static	CE_NoLook_Grow*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

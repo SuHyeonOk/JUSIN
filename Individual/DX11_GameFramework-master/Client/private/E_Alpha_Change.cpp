@@ -44,6 +44,9 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	m_iTexture_Index = 0;
+	m_dChange_Texture = 0;
+
 	return S_OK;
 }
 
@@ -57,10 +60,12 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
+	m_pTransformCom->LookAt(vCameraPos, true);
+
+
 
 	m_dChange_Texture += TimeDelta;
-	if (0.09 < m_dChange_Texture)					// 이미지가 변경되는 시간
+	if (0.09 < m_dChange_Texture)				// 이미지가 변경되는 시간
 	{
 		++m_iTexture_Index;
 		m_dChange_Texture = 0;
@@ -143,12 +148,12 @@ HRESULT CE_Alpha_Change::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTexture_Index)))
 		return E_FAIL;
 
+	_float fAlpha = 1.0f;
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		_float fAlpha = 0.2f;
-		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
-			return E_FAIL;
-	}
+		fAlpha = 0.2f;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }
