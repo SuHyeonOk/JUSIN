@@ -17,8 +17,7 @@ class CE_DieCenter final : public CGameObject
 public:
 	typedef struct tagDieCenterInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum TEXTURETYPE { SKY, BLUE, YELLOW, BROWN, PURPLE, GREEN, RED, GRAY, BLACK, TEXTURETYPE_END
-		};
+		enum TEXTURETYPE { SKY, BLUE, YELLOW, BROWN, PURPLE, GREEN, RED, GRAY, BLACK, TEXTURETYPE_END };
 		TEXTURETYPE		eMonsterKind = TEXTURETYPE_END;
 
 		_float3	f3Pos = _float3(0.f, 0.f, 0.f);

@@ -190,7 +190,7 @@ void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 	if (0 >= m_fHP)
 		m_eState = DIE;
 
-	m_eState = A_CAGE;
+	m_eState = A_DANCE;
 
 	switch (m_eState)
 	{
@@ -388,11 +388,25 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 {
 	m_eAnimState = IDLE;
 	m_pTransformCom->Set_Pos(_float3(6.2f, 1.5f, 20.0f));
-
-	if (0 == m_dSkill_TimeAcc)
+	
+	if (0 == m_dSkill_TimeAcc)	// 한 번만!
 	{
+		// 플레이어 위치를 변경한다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+		CTransform * pFinn_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+		CNavigation* pFinn_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+
+		pFinn_TransformCom->Set_Pos(_float3(8.0f, 0.0f, 14.0f));
+		pFinn_NavigationCom->Set_CellIndex(400);
+
+		CTransform * pJake_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+		CNavigation* pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+
+		pJake_TransformCom->Set_Pos(_float3(8.0f, 0.0f, 14.5f));
+		pJake_NavigationCom->Set_CellIndex(400);
+
+		// Cage 를 생성한다.
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Cage"), TEXT("Prototype_GameObject_Boss_S_Cage"), &(_float3(5.1f, 0.0f, 16.0f)))))
 		{
 			RELEASE_INSTANCE(CGameInstance);
@@ -417,9 +431,39 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 	return S_OK;
 }
 
-HRESULT CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
+void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 {
+	m_eAnimState = A_DANCE;
+	m_pTransformCom->Set_Pos(_float3(6.2f, 2.0f, 20.5f));
+
+
+	Fann_Create();
+	Fann_Dead_Check();
+
+
+}
+
+HRESULT CM_Gary_Boss::Fann_Create()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Archer_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &_float3(4.0f, 0.0f, 1.0f))))
+	{
+		RELEASE_INSTANCE(CGameInstance);
+		return E_FAIL;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
+}
+
+_bool CM_Gary_Boss::Fann_Dead_Check()
+{
+
+
+
+	return false;
 }
 
 void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)

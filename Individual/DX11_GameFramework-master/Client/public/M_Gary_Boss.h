@@ -51,7 +51,9 @@ private:
 	HRESULT				A_Bullet_Tick(const _double& TimeDelta);
 	HRESULT				A_Stun_Tick(const _double& TimeDelta);
 	HRESULT				A_Cage_Tick(const _double& TimeDelta);
-	HRESULT				A_Dance_Tick(const _double& TimeDelta);
+	void				A_Dance_Tick(const _double& TimeDelta);
+	HRESULT				Fann_Create();
+	_bool				Fann_Dead_Check();
 	void				Hit_Tick(const _double& TimeDelta);
 	void				Die_Tick(const _double& TimeDelta);
 

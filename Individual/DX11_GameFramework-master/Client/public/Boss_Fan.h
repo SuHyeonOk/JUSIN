@@ -12,14 +12,14 @@ END
 
 BEGIN(Client)
 
-class CBoss_Skeleton final : public CGameObject
+class CBoss_Fan final : public CGameObject
 {
 	enum STATE { DANCE, HIT, DIE, STATE_END };
 
 private:
-	CBoss_Skeleton(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CBoss_Skeleton(const CBoss_Skeleton& rhs);
-	virtual ~CBoss_Skeleton() = default;
+	CBoss_Fan(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CBoss_Fan(const CBoss_Fan& rhs);
+	virtual ~CBoss_Fan() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -43,13 +43,23 @@ private:
 private:
 	void			Monster_Tick(const _double& TimeDelta);
 
+	void			Dance_Tick();
+	void			Hit_Tick(const _double& TimeDelta);
+	void			Die(const _double& TimeDelta);
+
 private:
 	STATE			m_eState = STATE_END;
+	_float			m_fHP = 0.0f;
 
+	_bool			m_bShader_Hit = false;
+	_double			m_dShader_Hit_TimeAcc = 0;
+	
 	_float			m_fAlpha = 1.0f;
 
+	_int			m_iDieEffect_Count = 0;
+
 public:
-	static	CBoss_Skeleton*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CBoss_Fan*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };

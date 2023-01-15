@@ -489,7 +489,7 @@
     <ClInclude Include="..\public\Boss_S_Cage.h">
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Boss_Skeleton.h">
+    <ClInclude Include="..\public\Boss_Fan.h">
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClInclude>
   </ItemGroup>
@@ -785,7 +785,7 @@
     <ClCompile Include="..\private\Boss_S_Cage.cpp">
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Boss_Skeleton.cpp">
+    <ClCompile Include="..\private\Boss_Fan.cpp">
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClCompile>
   </ItemGroup>

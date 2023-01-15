@@ -91,7 +91,7 @@
 #include "M_Gary_Boss.h"
 #include "Boss_S_Scream.h"
 #include "Boss_S_Cage.h"
-#include "Boss_Skeleton.h"
+#include "Boss_Fan.h"
 
 #include "Obj_Manager.h"
 
@@ -778,9 +778,9 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_S_Cage"),
 		CBoss_S_Cage::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_Boss_Skeleton */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Skeleton"),
-		CBoss_Skeleton::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_Boss_Fan */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Fan"),
+		CBoss_Fan::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill
