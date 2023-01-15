@@ -123,8 +123,6 @@ void CS_Fiona::Late_Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
-	//Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -315,16 +313,6 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 	{
 		m_OnMove = false;
 
-		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
-	}
-
-	if (22 < m_bSkillClone_TimeAcc)
-	{
 		// 따라오던 플레이어의 좌표를 옮겨놓는다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -347,6 +335,17 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 
 		RELEASE_INSTANCE(CGameInstance);
 
+		// 위에서 좌표를 옮겨 두고, 이펙트 처리
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f));
+		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
+	}
+
+	if (22 < m_bSkillClone_TimeAcc)
+	{
 		// 죽으면서 모든 처리를 원래 플레이어로 돌아올 수 있도록 처리한다.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);

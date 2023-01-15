@@ -49,6 +49,9 @@ HRESULT CLevel_Skleton_Boss::Initialize()
 		return E_FAIL;
 #endif
 
+	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Gary_Boss"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -194,6 +197,18 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Jake(const _tchar * pLayerTag)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(8.0f, 0.f, 0.f))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Skleton_Boss::Ready_Layer_Boss(const _tchar * pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, pLayerTag, TEXT("Prototype_GameObject_M_Gary_Boss"), &_float3(7.0f, 0.0f, 5.0f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

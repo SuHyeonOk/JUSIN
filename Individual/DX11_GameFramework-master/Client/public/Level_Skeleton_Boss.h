@@ -25,6 +25,7 @@ private:
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Finn(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Jake(const _tchar* pLayerTag);
+	HRESULT Ready_Layer_Boss(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Map(const _tchar* pLayerTag);
 
 public:

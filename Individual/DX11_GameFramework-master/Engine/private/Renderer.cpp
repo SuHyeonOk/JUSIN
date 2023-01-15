@@ -67,8 +67,6 @@ HRESULT CRenderer::Draw_RenderGroup()
 		return E_FAIL;
 	if (FAILED(Render_AlphaBlend()))
 		return E_FAIL;
-	if (FAILED(Render_UI()))
-		return E_FAIL;
 
 #ifdef _DEBUG
 
@@ -81,6 +79,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
 	}
 #endif
+
+	if (FAILED(Render_UI()))
+		return E_FAIL;
 
 	return S_OK;
 }

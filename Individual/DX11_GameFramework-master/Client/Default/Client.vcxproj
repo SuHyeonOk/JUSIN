@@ -208,6 +208,7 @@
     <ClInclude Include="..\public\Map_Garden.h" />
     <ClInclude Include="..\public\Map_Skeleton.h" />
     <ClInclude Include="..\public\Map_Skeleton_Boss.h" />
+    <ClInclude Include="..\public\M_Gary_Boss.h" />
     <ClInclude Include="..\public\M_Ghost.h" />
     <ClInclude Include="..\public\M_Gronmes.h" />
     <ClInclude Include="..\public\M_Magic_Man.h" />
@@ -306,6 +307,7 @@
     <ClCompile Include="..\private\Map_Garden.cpp" />
     <ClCompile Include="..\private\Map_Skeleton.cpp" />
     <ClCompile Include="..\private\Map_Skeleton_Boss.cpp" />
+    <ClCompile Include="..\private\M_Gary_Boss.cpp" />
     <ClCompile Include="..\private\M_Ghost.cpp" />
     <ClCompile Include="..\private\M_Gronmes.cpp" />
     <ClCompile Include="..\private\M_Magic_Man.cpp" />

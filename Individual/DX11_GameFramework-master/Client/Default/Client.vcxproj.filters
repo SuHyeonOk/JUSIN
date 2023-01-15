@@ -172,6 +172,9 @@
     <Filter Include="02.GameObjects\Bullet">
       <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Gary">
+      <UniqueIdentifier>{370d9ffd-f9ed-428c-87a3-7592214341fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -474,6 +477,9 @@
     <ClInclude Include="..\public\S_Jake_Son_Transform.h">
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Gary_Boss.h">
+      <Filter>02.GameObjects\Monster\Gary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -757,6 +763,9 @@
     </ClCompile>
     <ClCompile Include="..\private\S_Jake_Son_Transform.cpp">
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Gary_Boss.cpp">
+      <Filter>02.GameObjects\Monster\Gary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

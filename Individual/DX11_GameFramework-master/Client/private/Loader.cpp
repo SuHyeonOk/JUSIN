@@ -86,6 +86,7 @@
 #include "M_Ghost.h"
 #include "M_Skeleton_Shield.h"
 #include "M_Skeleton_Archer.h"
+#include "M_Gary_Boss.h"
 
 #include "Obj_Manager.h"
 
@@ -712,6 +713,12 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	// Boss
+	/* For.Prototype_Component_Model_Gary */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_Gary"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Gary/Gary.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	///* For.Prototype_Component_Model_S_JakeSonsTransform */
@@ -724,6 +731,12 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	/* For.Prototype_GameObject_Map_Skeleton */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Skeleton_Boss"),
 		CMap_Skleton_Boss::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Boss
+	/* For.Prototype_GameObject_M_Gary_Boss */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Gary_Boss"),
+		CM_Gary_Boss::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill
@@ -1108,7 +1121,7 @@ HRESULT CLoader::SkeletonTemp()
 	
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
 		return E_FAIL;
 
 	// 2D Bullet
