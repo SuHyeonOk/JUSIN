@@ -54,12 +54,12 @@ HRESULT CRenderer::Draw_RenderGroup()
 	빛의 정보의 경우 라이트객체로부터 얻어온다. */
 	/* 셰이드타겟을 가득 채우고 그려줄 수있는 정점버퍼를 그린다. 이용하는 셰이더에게 노멀타겟과 빛 정보를 전역변수로
 	던져서 연산할 수 있도록 하겠다. */
-	//if (FAILED(Render_LightAcc()))	// 조명 함수 호출
-	//	return E_FAIL;
+	if (FAILED(Render_LightAcc()))	// 조명 함수 호출
+		return E_FAIL;
 
 	/* 디퓨즈타겟(색상) * 셰이드타겟(명암)을 곱하여 최종적으로 백버퍼에 그려내는 작업을 수행한다. */
-	//if (FAILED(Render_Blend()))
-	//	return E_FAIL;
+	if (FAILED(Render_Blend()))
+		return E_FAIL;
 
 	if (FAILED(Render_NonLight()))
 		return E_FAIL;
@@ -68,17 +68,17 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-//#ifdef _DEBUG
-//
-//	if (FAILED(Render_DebugObject()))
-//		return E_FAIL;
-//
-//	if (nullptr != m_pTarget_Manager)
-//	{
-//		m_pTarget_Manager->Render_Debug(TEXT("MRT_Deferred"));
-//		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
-//	}
-//#endif
+#ifdef _DEBUG
+
+	if (FAILED(Render_DebugObject()))
+		return E_FAIL;
+
+	if (nullptr != m_pTarget_Manager)
+	{
+		m_pTarget_Manager->Render_Debug(TEXT("MRT_Deferred"));
+		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
+	}
+#endif
 
 	return S_OK;
 }
@@ -132,14 +132,14 @@ HRESULT CRenderer::Initialize_Prototype()
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
 
-//#ifdef _DEBUG
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 100.0f, 100.f, 200.f, 200.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 100.0f, 300.f, 200.f, 200.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 300.0f, 100.f, 200.f, 200.f)))
-//		return E_FAIL;
-//#endif
+#ifdef _DEBUG
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 100.0f, 100.f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 100.0f, 300.f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 300.0f, 100.f, 200.f, 200.f)))
+		return E_FAIL;
+#endif
 
 	/*LPDIRECT3DDEVICE9		pDevice = nullptr;
 
@@ -188,9 +188,9 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 	if (nullptr == m_pTarget_Manager)
 		return E_FAIL;
 
-	///* Diffuse + Normal */
-	//if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_Deferred"))))
-	//	return E_FAIL;
+	/* Diffuse + Normal */
+	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_Deferred"))))
+		return E_FAIL;
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_NONALPHABLEND])
 	{
@@ -202,8 +202,8 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 
 	m_RenderObjects[RENDER_NONALPHABLEND].clear();
 
-	//if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
-	//	return E_FAIL;
+	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
+		return E_FAIL;
 
 	return S_OK;
 }

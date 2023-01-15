@@ -89,8 +89,8 @@ HRESULT CO_BearTrap::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (1 == i)		// 안 해도 되는데 그냥 굳이 할 필요도 없어서 없애도 차이 없음
-			continue;
+		//if (1 == i)		// 안 해도 되는데 그냥 굳이 할 필요도 없어서 없애도 차이 없음
+		//	continue;
 
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 0);

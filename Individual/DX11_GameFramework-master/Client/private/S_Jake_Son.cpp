@@ -69,7 +69,7 @@ void CS_Jake_Son::Late_Tick(_double TimeDelta)
 
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }
@@ -91,7 +91,7 @@ HRESULT CS_Jake_Son::Render()
 		if (i == 1)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 	}
 
 #ifdef _DEBUG

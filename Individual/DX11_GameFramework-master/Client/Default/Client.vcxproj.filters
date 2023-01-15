@@ -61,9 +61,6 @@
     <Filter Include="02.GameObjects\Player\Jake">
       <UniqueIdentifier>{a7ce69b3-14b2-414f-92c6-c6d17d452ff5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Bullet">
-      <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Monster\PigWarrior">
       <UniqueIdentifier>{c75bc1ea-60f0-4e59-93cd-b6df6396624b}</UniqueIdentifier>
     </Filter>
@@ -171,6 +168,9 @@
     </Filter>
     <Filter Include="02.GameObjects\PlayerSkill\Jake_Son">
       <UniqueIdentifier>{bd6a00fa-55fb-4bf9-98f8-6be1c307ff3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Bullet">
+      <UniqueIdentifier>{8a1aa0b8-be10-4e12-b348-3e01b9b21016}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -783,9 +783,6 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Map.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl">

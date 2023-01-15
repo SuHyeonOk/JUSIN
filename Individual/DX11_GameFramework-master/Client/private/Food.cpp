@@ -137,9 +137,9 @@ HRESULT CFood::Render()
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		if (i == 0)
+		/*if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
-		else
+		else*/
 			m_pModelCom->Render(m_pShaderCom, i, nullptr);
 	}
 

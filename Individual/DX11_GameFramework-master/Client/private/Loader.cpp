@@ -1108,7 +1108,7 @@ HRESULT CLoader::SkeletonTemp()
 	
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
 		return E_FAIL;
 
 	// 2D Bullet
@@ -1214,7 +1214,7 @@ HRESULT CLoader::SkeletonTemp()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
 		return E_FAIL;
-
+ 
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),

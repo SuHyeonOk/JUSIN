@@ -32,6 +32,9 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
+		return E_FAIL;
+
 #ifdef F2_SKELETON
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
@@ -55,8 +58,7 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Map_Garden(TEXT("Layer_Skeleton"))))
-		return E_FAIL;
+
 
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
