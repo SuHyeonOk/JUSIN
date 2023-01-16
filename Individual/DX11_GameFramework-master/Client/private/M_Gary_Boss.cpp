@@ -42,7 +42,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 10.0f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.0f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
@@ -54,7 +54,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
-	m_f4CenterPos = _float4(2.43f, 0.0f, 10.75f, 1.0f);
+	m_f4CenterPos = _float4(2.8f, 0.0f, 12.6f, 1.0f);
 
 	m_eState		= IDLE;
 	m_eAnimState	= IDLE;
@@ -185,16 +185,6 @@ HRESULT CM_Gary_Boss::SetUp_ShaderResources()
 
 void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 {
-	//////////////////////////// 디버그용
-	_vector vddMyPos;
-	vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4	f4ddMyPos;
-	XMStoreFloat4(&f4ddMyPos, vddMyPos);
-
-	cout << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
-	//////////////////////////// 디버그용
-
 	// 체력이 0 이되면 죽는다.
 	if (0 >= m_fHP)
 		m_eState = DIE;
@@ -206,7 +196,7 @@ void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 		Idle_Tick(TimeDelta);
 		break;
 	case Client::CM_Gary_Boss::A_MOVE:
-		// 딱히 안 쓸 것 같은데. 순간이동을 해야한다.
+		// 플레이어를 향해 빠르게 달려오고, 평태 친다.
 		A_Move_Tick(TimeDelta);
 		break;
 	case Client::CM_Gary_Boss::A_BULLET:
@@ -250,8 +240,11 @@ void CM_Gary_Boss::Anim_Change()
 	case Client::CM_Gary_Boss::IDLE:
 		m_pModelCom->Set_AnimIndex(5);
 		break;
-	case Client::CM_Gary_Boss::A_MOVE:
+	case Client::CM_Gary_Boss::MOVE:
 		m_pModelCom->Set_AnimIndex(7);
+		break;
+	case Client::CM_Gary_Boss::A_ATTACK:
+		m_pModelCom->Set_AnimIndex(1, false);
 		break;
 	case Client::CM_Gary_Boss::A_BULLET:
 		m_pModelCom->Set_AnimIndex(0, false);
@@ -259,8 +252,6 @@ void CM_Gary_Boss::Anim_Change()
 	case Client::CM_Gary_Boss::A_STUN:
 		m_pModelCom->Set_AnimIndex(4, false);
 		break;
-	//case Client::CM_Gary_Boss::A_CAGE:
-	//	break;
 	case Client::CM_Gary_Boss::A_DANCE:
 		m_pModelCom->Set_AnimIndex(6);
 		break;
@@ -275,72 +266,116 @@ void CM_Gary_Boss::Anim_Change()
 
 void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 {
-	m_eAnimState = IDLE;
-
-	// 일정거리 일 때만 공격한다.
-	_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	
-	if (7.0f < fDistance)
-		return;
-
-	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-	
-	if (false == m_bSkill)
+	// 무조건 적으로 이전에 MovePos 가 true 라면 처음 위치로 이동 시켜야 한다.
+	if (true == m_bMovePos)
 	{
-		m_bSkill = true;
-		//m_pTransformCom->Set_Pos(_float3(RandomPos().x, RandomPos().y, RandomPos().z));
+		if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
+		{
+			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+			m_pTransformCom->Set_Pos(_float3(4.0f, 0.0f, 17.0f));
+			m_bMovePos = false;
+		}
 	}
 
-	m_dSkill_TimeAcc += TimeDelta;
-	if (5 < m_dSkill_TimeAcc)
-	{
-		_int iRandom = CUtilities_Manager::GetInstance()->Get_Random(0, 4);
+	m_eAnimState = IDLE;
 	
-		if (0 == iRandom)
-			m_eState = A_MOVE;
-		else if (1 == iRandom)
-			m_eState = A_BULLET;
-		else if (2 == iRandom)
-			m_eState = A_STUN;
-		else if (3 == iRandom)
-			m_eState = A_CAGE;
-		else if (4 == iRandom)
-			m_eState = A_DANCE;
+	_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	
+	if (7.0f < fDistance)		// 일정 범위 밖 이라면 그냥 이동하고 있는다.
+		RandomMove(TimeDelta);
 
-		m_bSkill = false;
+	m_dSkill_TimeAcc += TimeDelta;
+	if (5 < m_dSkill_TimeAcc)		// 5 초 마다 스킬을 고른다.
+	{
+		Random_Skill();
+
 		m_dSkill_TimeAcc = 0;
 	}
 }
 
+void CM_Gary_Boss::Random_Skill()
+{
+	_int	iMaxRandomNumber = 0;
+
+	// DANCE 스킬의 경우 보스의 체력이 80%로 남았을 때 실행된다.
+	_float fHP = m_fHP / m_fMaxHP;
+	if (0.3 > fHP)
+		iMaxRandomNumber = 4;
+	else
+		iMaxRandomNumber = 3;
+
+	_int iRandom = CUtilities_Manager::GetInstance()->Get_Random(0, iMaxRandomNumber);
+
+	// 이전 패턴이랑 다른 경우에 실행한다.
+	if (m_iSkill_Data == iRandom)
+	{
+		m_dSkill_TimeAcc = 5;
+		m_eState = STATE::IDLE;
+		return;
+	}
+
+	if (0 == iRandom)
+		m_eState = A_MOVE;
+	else if (1 == iRandom)
+		m_eState = A_BULLET;
+	else if (2 == iRandom)
+		m_eState = A_STUN;
+	else if (3 == iRandom)
+		m_eState = A_CAGE;
+	else if (4 == iRandom)
+		m_eState = A_DANCE;
+
+	m_iSkill_Data = iRandom;
+}
+
 void CM_Gary_Boss::RandomMove(const _double & TimeDelta)
 {
-	// 랜덤한 좌표를 잡는다.
-	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+	if (false == m_bMove)
+	{
+		m_eAnimState = STATE::MOVE;
 
-	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, 0.0f, fRandomZ, 1.0f));
+		// 랜덤한 좌표를 한 번 구한다.
+		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+		_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 
-	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(-3.0f, 3.0f);
+		_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, 0.0f, fRandomZ, 1.0f));
 
-	_vector vRandomPos = vTempPos * fRandomRange;
-	_float4 f4RandomPos;
-	XMStoreFloat4(&f4RandomPos, vRandomPos);
+		_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(-5.0f, 5.0f);
 
-	_float4((m_f4CenterPos.x + f4RandomPos.x), m_f4CenterPos.y, (m_f4CenterPos.z + f4RandomPos.z), m_f4CenterPos.w);
+		if (-1.0 > fRandomRange || 1.0 < fRandomRange)
+		{
+			_vector vRandomPos = vTempPos * fRandomRange;
+			_float4 f4RandomPos;
+			XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+			m_f4MovemPos = _float4((m_f4CenterPos.x + f4RandomPos.x), m_f4CenterPos.y, (m_f4CenterPos.z + f4RandomPos.z), m_f4CenterPos.w);
+
+			m_bMove = true;
+		}
+		else
+			return;
+	}
 
 	// 랜덤한 좌표로 이동한다.
+	_vector vMovePos = XMVectorSet(m_f4MovemPos.x, m_f4MovemPos.y, m_f4MovemPos.z, m_f4MovemPos.w);
+	m_pTransformCom->Chase(vMovePos, TimeDelta);
+	m_pTransformCom->LookAt(vMovePos);
 
+	_vector vDistance = vMovePos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float	fDistace = XMVectorGetX(XMVector3Length(vDistance));
 
-
-	// 이동하고 나면 아이들 상태로 가서 스킬을 랜덤으로 돌린다.
-
-
+	// 랜덤한 위치와 현재 내 좌표가 0.5f 이하라면! 아이들 상태로 있다가 다시 이동한다.
+	if (0.5f > fDistace)
+	{
+		m_eAnimState = STATE::IDLE;
+		m_bMove = false;			// 다시 랜덤한 좌표를 구한다.
+	}
 
 }
 
 void CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 {
-	m_eAnimState = STATE::A_MOVE;
+	m_eAnimState = STATE::MOVE;
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	if (false == m_bSkill)
@@ -358,6 +393,8 @@ void CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 
 	if (0.5f > fDistace)
 	{
+		// TODO : 날라와서 평타치기
+		m_eAnimState = STATE::A_ATTACK;
 		m_bSkill = false;
 		m_eState = STATE::IDLE;
 	}
@@ -413,6 +450,8 @@ HRESULT CM_Gary_Boss::A_Bullet_Tick(const _double & TimeDelta)
 
 HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 {
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 	XMStoreFloat4(&f4MyPos, vMyPos);
@@ -430,7 +469,7 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 	if (2 < m_dSkill_TimeAcc)
 		m_bEffect_Smoke = false;	// 이펙트 꺼
 	
-	if (3 < m_dSkill_TimeAcc)
+	if (5 < m_dSkill_TimeAcc)
 	{
 		m_eAnimState = A_STUN;
 
@@ -453,9 +492,11 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 
 HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 {
+	m_bMovePos = true;
+
 	m_eAnimState = IDLE;
 	m_pTransformCom->Set_Pos(_float3(6.2f, 1.5f, 20.0f));
-	m_pTransformCom->LookAt(XMVectorSet(6.2f, 1.5f, 20.0f, 1.0f));
+	m_pTransformCom->LookAt(XMVectorSet(6.2f, 1.5f, 19.0f, 1.0f));
 	
 	if (0 == m_dSkill_TimeAcc)	// 한 번만!
 	{
@@ -501,13 +542,25 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 
 void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 {
+	m_bMovePos = true;
+
 	m_eAnimState = A_DANCE;
 	m_pTransformCom->Set_Pos(_float3(6.2f, 2.0f, 20.5f));
 	m_pTransformCom->LookAt(XMVectorSet(6.2f, 2.0f, 20.0f, 1.0f));
 
+	m_dSkill_TimeAcc += TimeDelta;
+	if (0.5 < m_dSkill_TimeAcc)
+	{
+		m_fHP += 10.0f;
+		m_dSkill_TimeAcc = 0;
+	}
+
 	Fann_Create();
-	if(true == Fann_Dead_Check())	// 생성한 팬이 모두 삭제 되었다면, 다른 패턴
-		m_eState = IDLE;	
+	if (true == Fann_Dead_Check())	// 생성한 팬이 모두 삭제 되었다면, 다른 패턴
+	{
+		m_eState = IDLE;
+		m_dSkill_TimeAcc = 0;
+	}
 }
 
 HRESULT CM_Gary_Boss::Fann_Create()

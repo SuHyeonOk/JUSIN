@@ -15,7 +15,7 @@ BEGIN(Client)
 class CM_Gary_Boss final : public CGameObject
 {
 public:
-	enum STATE { IDLE, A_MOVE, A_BULLET, A_STUN, A_CAGE, A_DANCE, HIT, DIE, STATE_END };
+	enum STATE { IDLE, MOVE, A_MOVE, A_ATTACK, A_BULLET, A_STUN, A_CAGE, A_DANCE, HIT, DIE, STATE_END };
 
 private:
 	CM_Gary_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -47,6 +47,7 @@ private:
 
 	// TODO : 구조 다 짜고, TimeDelta 필요없는 함수는 삭제하기
 	void				Idle_Tick(const _double& TimeDelta);
+	void				Random_Skill();
 	void				RandomMove(const _double& TimeDelta);
 	void				A_Move_Tick(const _double& TimeDelta);
 	HRESULT				A_Bullet_Tick(const _double& TimeDelta);
@@ -70,6 +71,7 @@ private:
 	_float4				m_f4CenterPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	// 여러 곳 에서 활용 변수
+	_bool				m_bMovePos = false;
 	_bool				m_bSkill = false;
 	_double				m_dSkill_TimeAcc = 0;
 	
@@ -82,6 +84,12 @@ private:
 	// A_Move_Tick()
 	_float4				m_f4PlayerPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	// Move()
+	_bool				m_bMove = false;
+	_float4				m_f4MovemPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	// Random_Skill()
+	_int				m_iSkill_Data = 0;
 
 	// 셰이더
 	_bool				m_bShader_Hit = false;
