@@ -190,7 +190,7 @@ void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 	if (0 >= m_fHP)
 		m_eState = DIE;
 
-	m_eState = A_DANCE;
+	m_eState = A_CAGE;
 
 	switch (m_eState)
 	{

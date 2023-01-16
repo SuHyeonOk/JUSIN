@@ -205,19 +205,12 @@ HRESULT CRenderer::Render_Map_NonAlphaBlend()
 
 	m_RenderObjects[RENDER_MAP_NONALPHABLEND].clear();
 
-	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
-		return E_FAIL;
-
 	return S_OK;
 }
 
 HRESULT CRenderer::Render_NonAlphaBlend()
 {
 	if (nullptr == m_pTarget_Manager)
-		return E_FAIL;
-
-	/* Diffuse + Normal */
-	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_Deferred"))))
 		return E_FAIL;
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_NONALPHABLEND])
