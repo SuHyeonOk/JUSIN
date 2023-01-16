@@ -15,7 +15,7 @@ BEGIN(Client)
 class CM_Gary_Boss final : public CGameObject
 {
 public:
-	enum STATE { IDLE, MOVE, A_BULLET, A_STUN, A_CAGE, A_DANCE, HIT, DIE, STATE_END };
+	enum STATE { IDLE, A_MOVE, A_BULLET, A_STUN, A_CAGE, A_DANCE, HIT, DIE, STATE_END };
 
 private:
 	CM_Gary_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -32,10 +32,10 @@ public:
 	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
-	CShader*				m_pShaderCom = nullptr;
-	CRenderer*				m_pRendererCom = nullptr;
-	CModel*					m_pModelCom = nullptr;
-	CCollider*				m_pColliderCom = nullptr;
+	CShader*			m_pShaderCom = nullptr;
+	CRenderer*			m_pRendererCom = nullptr;
+	CModel*				m_pModelCom = nullptr;
+	CCollider*			m_pColliderCom = nullptr;
 
 private:
 	HRESULT				SetUp_Components();
@@ -47,7 +47,8 @@ private:
 
 	// TODO : 구조 다 짜고, TimeDelta 필요없는 함수는 삭제하기
 	void				Idle_Tick(const _double& TimeDelta);
-	void				Move_Tick(const _double& TimeDelta);
+	void				RandomMove(const _double& TimeDelta);
+	void				A_Move_Tick(const _double& TimeDelta);
 	HRESULT				A_Bullet_Tick(const _double& TimeDelta);
 	HRESULT				A_Stun_Tick(const _double& TimeDelta);
 	HRESULT				A_Cage_Tick(const _double& TimeDelta);
@@ -66,6 +67,10 @@ private:
 	_float				m_fAttack	= 0.0f;
 	_float				m_fExp		= 0.0f;
 
+	_float4				m_f4CenterPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	// 여러 곳 에서 활용 변수
+	_bool				m_bSkill = false;
 	_double				m_dSkill_TimeAcc = 0;
 	
 	// A_Bullet_Tick()
@@ -74,7 +79,8 @@ private:
 	// A_Stun_Tick()
 	_bool				m_bEffect_Smoke = false;
 
-
+	// A_Move_Tick()
+	_float4				m_f4PlayerPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 
 	// 셰이더

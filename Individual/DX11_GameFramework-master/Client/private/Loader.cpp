@@ -730,12 +730,6 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	// BossFan
-	/* For.Prototype_Component_Model_M_Skeleton_1 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_1"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_1/Skeleton_1.fbx", PivotMatrix))))
-		return E_FAIL;
-
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	// Boss
@@ -751,6 +745,11 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	/* For.Prototype_Component_Model_B_Boss_Death_Cage */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_B_Boss_Death_Cage"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Bullet/Death_Cage/Death_Cage.fbx", PivotMatrix))))
+		return E_FAIL;
+	// BossFan
+	/* For.Prototype_Component_Model_M_Skeleton_1 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_M_Skeleton_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_1/Skeleton_1.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_S_JakeSonsTransform */

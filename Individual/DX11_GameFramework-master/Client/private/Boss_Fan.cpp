@@ -46,10 +46,9 @@ HRESULT CBoss_Fan::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pModelCom->Set_AnimIndex(0);
 
 	m_eState	= DANCE;
-	m_fHP		= 15.0f;
+	m_fHP		= 30.0f;
 
 	return S_OK;
 }
@@ -58,6 +57,16 @@ void CBoss_Fan::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_Y))
+	{
+		CGameObject::Set_Dead();
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	Monster_Tick(TimeDelta);
 }
 
 void CBoss_Fan::Late_Tick(_double TimeDelta)
@@ -131,6 +140,9 @@ HRESULT CBoss_Fan::Render()
 
 void CBoss_Fan::On_Collision(CGameObject * pOther)
 {
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		return;
+
 	if (L"Player_Weapon" == pOther->Get_Tag())
 		m_eState = HIT;
 }
@@ -160,7 +172,7 @@ HRESULT CBoss_Fan::SetUp_Components()
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
-		(CComponent**)&m_pColliderCom[COLLTYPE_AABB], &ColliderDesc)))
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -183,7 +195,7 @@ HRESULT CBoss_Fan::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (CBoss_Fan::DIE == m_eState)
+	if (STATE::DIE == m_eState)
 	{
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 			return E_FAIL;
@@ -194,6 +206,9 @@ HRESULT CBoss_Fan::SetUp_ShaderResources()
 
 void CBoss_Fan::Monster_Tick(const _double & TimeDelta)
 {
+	if (0 >= m_fHP)
+		m_eState = CBoss_Fan::DIE;
+
 	switch (m_eState)
 	{
 	case Client::CBoss_Fan::DANCE:
@@ -221,14 +236,14 @@ void CBoss_Fan::Hit_Tick(const _double & TimeDelta)
 {
 	m_bShader_Hit = true;
 
+	if (0 == m_dShader_Hit_TimeAcc)
+		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
+
 	m_dShader_Hit_TimeAcc += TimeDelta;
 	if (0.1 < m_dShader_Hit_TimeAcc)
 		m_bShader_Hit = false;
 
-	if (m_bShader_Hit)
-		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
-
-	if (m_pModelCom->Get_Finished())
+	if (0.7 < m_dShader_Hit_TimeAcc)
 	{
 		m_dShader_Hit_TimeAcc = 0;
 		m_bShader_Hit = false;

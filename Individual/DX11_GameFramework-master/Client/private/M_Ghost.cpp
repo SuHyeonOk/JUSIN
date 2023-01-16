@@ -345,17 +345,36 @@ void CM_Ghost::Attack_Tick(const _double& TimeDelta)
 		m_bAttack = true;
 
 		// 플레이어와의 거리가 1 만큼의 랜덤한 위치로 가서 플레이어를 공격한다.
+		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+		_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+		_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, 0.0f, fRandomZ, 1.0f));
+
+		_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+
+		_vector vRandomPos = vTempPos * fRandomRange;
+		_float4 f4RandomPos;
+		XMStoreFloat4(&f4RandomPos, vRandomPos);
+
 		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 		_float4 f4PlaterPos;
 		XMStoreFloat4(&f4PlaterPos, vPlayerPos);
 
-		_float fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
-		f4PlaterPos.x += fRandomNum;
-		fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
-		f4PlaterPos.z += fRandomNum;
+		_vector vRendomPos = XMVectorSet((f4PlaterPos.x + f4RandomPos.x), f4PlaterPos.y, (f4PlaterPos.z + f4RandomPos.z), f4PlaterPos.w);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vRendomPos);
 
-		vPlayerPos = XMLoadFloat4(&f4PlaterPos);
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPlayerPos);
+		// 과거 버전
+		//_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		//_float4 f4PlaterPos;
+		//XMStoreFloat4(&f4PlaterPos, vPlayerPos);
+
+		//_float fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
+		//f4PlaterPos.x += fRandomNum;
+		//fRandomNum = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
+		//f4PlaterPos.z += fRandomNum;
+
+		//vPlayerPos = XMLoadFloat4(&f4PlaterPos);
+		//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPlayerPos);
 	}
 	else
 	{

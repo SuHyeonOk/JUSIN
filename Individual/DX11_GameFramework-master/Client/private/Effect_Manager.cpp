@@ -395,8 +395,6 @@ HRESULT CEffect_Manager::Skill_Marceline_Waves_Create(_float3 f3Pos)
 
 HRESULT CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Pos)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.5f);
 	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
@@ -408,6 +406,8 @@ HRESULT CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Pos)
 	_vector vRandomPos = vTempPos * fRandomRange;
 	_float4 f4RandomPos;
 	XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Look_Grow::EFFECTINFO tEffectInfo;
 	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::SOUND_TEXTURE;

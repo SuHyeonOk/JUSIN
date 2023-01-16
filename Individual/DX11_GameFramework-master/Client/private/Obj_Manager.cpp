@@ -17,7 +17,7 @@ HRESULT		CObj_Manager::Initialized()
 {
 	m_tPlayerInfo.fHP = 100.0f;
 	m_tPlayerInfo.fHPMax = 100.0f;
-	m_tPlayerInfo.fAttack = 10;
+	m_tPlayerInfo.fAttack = 1000.0f;
 	m_tPlayerInfo.fExp = 0.0f;
 	m_tPlayerInfo.fExpMax = 100.0f;
 	m_tPlayerInfo.iLevel = 1;
