@@ -118,7 +118,7 @@ void CFood::Late_Tick(_double TimeDelta)
 
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_MAP_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }
@@ -137,9 +137,9 @@ HRESULT CFood::Render()
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		/*if (i == 0)
+		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, nullptr, 1);
-		else*/
+		else
 			m_pModelCom->Render(m_pShaderCom, i, nullptr);
 	}
 

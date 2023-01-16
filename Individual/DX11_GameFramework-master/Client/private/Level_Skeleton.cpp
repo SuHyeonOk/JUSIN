@@ -119,7 +119,7 @@ HRESULT CLevel_Skleton::Ready_Lights()
 	LightDesc.isEnable = true;
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.0f, 0.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
@@ -248,12 +248,12 @@ HRESULT CLevel_Skleton::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
 
 	CS_Jake_Son::JAKESONINFO tJakeSonInfo;
 	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_D;
-	tJakeSonInfo.fPos = _float3(-27.0f, 0.0f, 10.0f);
+	tJakeSonInfo.fPos = _float3(-27.0f, 0.2f, 10.0f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
 		return E_FAIL;
 
 	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_E;
-	tJakeSonInfo.fPos = _float3(17.0f, 0.0f, 53.0f);
+	tJakeSonInfo.fPos = _float3(17.0f, 0.2f, 53.0f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
 		return E_FAIL;
 

@@ -24,7 +24,7 @@ private:
 	ID3D11DeviceContext*	m_pContext = nullptr;
 
 private:
-	LIGHTDESC			m_LightDesc;
+	LIGHTDESC				m_LightDesc;
 
 public:
 	static CLight* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);

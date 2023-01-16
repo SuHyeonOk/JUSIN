@@ -136,7 +136,7 @@ HRESULT CFinn::Render()
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);		// 그림자
 		else
 		{
-			if (m_bShader_Hit)
+			if (m_bShader_Hit && CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);	// Hit 시
 			else
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// 평소
@@ -161,7 +161,7 @@ HRESULT CFinn::Render()
 
 void CFinn::On_Collision(CGameObject * pOther)
 {
-	//CSkill_Manager::GetInstance()->Page_PickUp(pOther);
+
 }
 
 HRESULT CFinn::SetUp_Components()
@@ -858,7 +858,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.5f, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
 		m_dEffect_Swim_TimeAcc = 0;
 	}
 

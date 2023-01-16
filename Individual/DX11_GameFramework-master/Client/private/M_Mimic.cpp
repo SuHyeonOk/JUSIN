@@ -275,7 +275,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 	if (0.0f >= m_fAlpha)
 	{
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 
 		CGameObject::Set_Dead();
 	}

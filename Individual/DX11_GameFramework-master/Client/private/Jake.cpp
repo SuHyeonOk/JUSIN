@@ -140,7 +140,7 @@ HRESULT CJake::Render()
 		if (i == 4)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			if (m_bShader_Hit)
+			if (m_bShader_Hit && CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
@@ -962,7 +962,7 @@ void CJake::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.5f, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
 		m_dEffect_Swim_TimeAcc = 0;
 	}
 
