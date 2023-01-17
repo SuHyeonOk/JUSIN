@@ -4,7 +4,7 @@
 #include "Light_Manager.h"
 #include "VIBuffer_Rect.h"
 #include "Shader.h"
-
+#include "PipeLine.h"
 
 CRenderer::CRenderer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent(pDevice, pContext)
@@ -155,6 +155,9 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
 		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 310.0f, 150.f, 150.f)))
+		return E_FAIL;
+
 	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
@@ -267,6 +270,26 @@ HRESULT CRenderer::Render_LightAcc()
 	if (FAILED(m_pShader->Set_ShaderResourceView("g_NormalTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_Normal")))))
 		return E_FAIL;
 
+	if (FAILED(m_pShader->Set_ShaderResourceView("g_DepthTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_Depth")))))
+		return E_FAIL;
+
+	/* 직교행렬  */
+	/*transpose()
+	XMMatrixInverse();
+	float3x3*/
+	/*XMMatrixTranspose();*/
+
+	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
+
+	if (FAILED(m_pShader->Set_Matrix("g_ProjMatrixInv", &pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+	if (FAILED(m_pShader->Set_Matrix("g_ViewMatrixInv", &pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShader->Set_RawValue("g_vCamPosition", &pPipeLine->Get_CamPosition(), sizeof(_float4))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CPipeLine);
+
 	/* 빛 갯수만큼 사각형 버퍼(셰이드타겟의 전체 픽셀을 갱신할 수 있는 사이즈로 그려지는 정점버퍼. )를 그린다. */
 	m_pLight_Manager->Render_Light(m_pVIBuffer, m_pShader);
 
@@ -290,6 +313,8 @@ HRESULT CRenderer::Render_Blend()
 	if (FAILED(m_pShader->Set_ShaderResourceView("g_DiffuseTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_Diffuse")))))
 		return E_FAIL;
 	if (FAILED(m_pShader->Set_ShaderResourceView("g_ShadeTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_Shade")))))
+		return E_FAIL;
+	if (FAILED(m_pShader->Set_ShaderResourceView("g_SpecularTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_Specular")))))
 		return E_FAIL;
 
 	m_pShader->Begin(3);
