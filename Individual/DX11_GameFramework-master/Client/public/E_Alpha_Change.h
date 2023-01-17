@@ -17,10 +17,11 @@ class CE_Alpha_Change final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { HIT_TEXTURE, JAKESON_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { HIT_TEXTURE, JAKESON_TEXTURE, COLOR_HIT_TEXTURE, BOOM_FIRE_TEXTURE, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float3			f3Color = { 0.0f, 0.0f, 0.0f };
 
 	}EFFECTINFO;
 

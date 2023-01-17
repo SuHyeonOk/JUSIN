@@ -47,12 +47,15 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 	m_iTexture_Index = 0;
 	m_dChange_Texture = 0;
 
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
+		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+
 	return S_OK;
 }
 
 void CE_Alpha_Change::Tick(_double TimeDelta)
 {
-	// 카메라를 바라보고, 원본 이미지의 일정한 (0.8f) 알파값만 넣고, 텍스처를 변경한다.
+	// 카메라를 바라보고, 텍스처를 변경한다.
 	__super::Tick(TimeDelta);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -92,7 +95,12 @@ HRESULT CE_Alpha_Change::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);
+	// 색 조정
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
+		m_pShaderCom->Begin(4);
+	// 이미지색
+	else
+		m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 
@@ -115,11 +123,14 @@ HRESULT CE_Alpha_Change::SetUp_Components()
 
 	_tchar	m_szTextureName[MAX_PATH] = L"";
 
-	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType)
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Hit_Cahange"));
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Jake_Son"));
-
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BOOM_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Boom_Fire"));
+	
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
@@ -154,6 +165,12 @@ HRESULT CE_Alpha_Change::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
 		return E_FAIL;
+
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tEffectInfo.f3Color, sizeof _float3)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

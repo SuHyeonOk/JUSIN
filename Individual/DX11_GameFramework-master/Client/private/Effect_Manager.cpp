@@ -17,6 +17,49 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Effect_Small_Fire_Create(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Look_Grow::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::SMALL_FIRE_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Grow"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Color_Hit_Create(const _float3 & f3Pos, const _float3 & f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Alpha_Change::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	tEffectInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Boom_Fire_Create(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Alpha_Change::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BOOM_FIRE_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_JakeSon_Create(const _float3 & f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

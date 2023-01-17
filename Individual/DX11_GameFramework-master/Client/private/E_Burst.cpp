@@ -34,7 +34,10 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+	if(CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
+		GameObjectDesc.TransformDesc.fSpeedPerSec = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 2.0f);
+	else
+		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = m_tEffectInfo.f3Pos;
 

@@ -53,6 +53,11 @@ HRESULT CE_Look_Grow::Initialize(void * pArg)
 		m_fSizeX = 0.01f;
 		m_fSizeY = 0.01f;
 	}
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SMALL_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_fSizeX = 0.3f;
+		m_fSizeY = 0.3f;
+	}
 	// 크기 조정 안 하는
 	else
 	{
@@ -80,7 +85,7 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
 
-	// 빠르게 커지는
+													// 빠르게 커지는
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
 	{
@@ -98,6 +103,7 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 
 
 	// ★ 알파값 줄어들기
+	// 일정 시간 있다가 줄어들기
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType || 
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
 	{
@@ -111,6 +117,12 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 		if (0.5 < m_dNoAlpha_TimeAcc)
 			m_fAlpha -= _float(TimeDelta) * 0.5f;
 	}
+	// 빠르게 줄어들기
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SMALL_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_fAlpha -= _float(TimeDelta);
+	}
+	// 바로 줄어들기
 	else																				
 	{
 		m_fAlpha -= _float(TimeDelta) * 0.5f;
@@ -182,6 +194,8 @@ HRESULT CE_Look_Grow::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Paint_Circle"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star_Random"));
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SMALL_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Fire"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

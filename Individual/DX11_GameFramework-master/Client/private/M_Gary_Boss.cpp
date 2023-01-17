@@ -269,10 +269,10 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	// 무조건 적으로 이전에 MovePos 가 true 라면 처음 위치로 이동 시켜야 한다.
 	if (true == m_bMovePos)
 	{
-		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
 		if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
 		{
-			m_pTransformCom->Set_Pos(_float3(4.0f, 0.0f, 17.0f));
+			m_pTransformCom->Set_Pos(_float3(4.0f, 0.2f, 17.0f));
 			m_bMovePos = false;
 		}
 	}
@@ -399,17 +399,13 @@ HRESULT CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 		m_eAnimState = STATE::A_ATTACK;
 
 		// 내 좌표
-		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4	f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		_vector	vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		_float4	f4MyLook = _float4(0.0f, 0.0f, 1.0f, 0.0f);
-		XMStoreFloat4(&f4MyLook, vMyLook);
-
-		_vector vTempPos = XMVector3Normalize(XMVectorSet(1.0f, 0.0f, 1.0f, 1.0f));
+		
+		_vector vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		_float fRange = 1.0f;
-		_vector vObjPos = vTempPos * fRange;
+		_vector vObjPos = vMyLook * fRange;
 		_float4 f4ObjPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 		XMStoreFloat4(&f4ObjPos, vObjPos);
 

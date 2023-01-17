@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Effect_Manager.h"
 
 CB_3DBullet::CB_3DBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -60,6 +61,8 @@ void CB_3DBullet::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	Effect_Tick(TimeDelta);
+
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)	// 플레이어를 향해 회전하며 날아가는 총알
 		Magic_Tick(TimeDelta);
 	else
@@ -86,6 +89,16 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 		m_dBullet_TimeAcc += TimeDelta;
 		if (1 < m_dBullet_TimeAcc)
 		{
+			if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROCK)
+			{
+				_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+				_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+				XMStoreFloat4(&f4MyPos, vMyPos);
+
+				CEffect_Manager::GetInstance()->Effect_Boom_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f));
+				CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f));
+			}
+
 			CGameObject::Set_Dead();
 			m_dBullet_TimeAcc = 0;
 		}
@@ -134,15 +147,28 @@ HRESULT CB_3DBullet::Render()
 
 void CB_3DBullet::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	if (L"Finn" != pOther->Get_Tag() || L"Jake" != pOther->Get_Tag())
 	{
 		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CGameObject::Set_Dead();
 
 		if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
 		{
-			if(CObj_Manager::PLAYERINFO::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			if (CObj_Manager::PLAYERINFO::MAGIC != CObj_Manager::GetInstance()->Get_Current_Player().eState)
 				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::MAGIC);	// 플레이어 State 을 변경한다.
+		}
+		else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROCK)
+		{
+			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+			_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+			XMStoreFloat4(&f4MyPos, vMyPos);
+
+			CEffect_Manager::GetInstance()->Effect_Boom_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f));
+			CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(1.0f, 0.0f, 0.0f));
+			CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f));
+
+			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);
 		}
 		else
 		{
@@ -242,6 +268,24 @@ void CB_3DBullet::Magic_LateTick(const _double & TimeDelta)
 	{
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
+	}
+}
+
+void CB_3DBullet::Effect_Tick(const _double & TimeDelta)
+{
+	// 이펙트
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROCK)
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.1 < m_dEffect_TimeAcc)
+		{
+			CEffect_Manager::GetInstance()->Effect_Small_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z));
+			m_dEffect_TimeAcc = 0;
+		}
 	}
 }
 

@@ -58,12 +58,32 @@ void CBoss_S_Cage::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (true == m_arrSkeleton_Dead_Count[0] && 
-		true == m_arrSkeleton_Dead_Count[1] && 
-		true == m_arrSkeleton_Dead_Count[2] && 
-		true == m_arrSkeleton_Dead_Count[3] && 
-		true == m_arrSkeleton_Dead_Count[4])
-		CGameObject::Set_Dead();
+	if (false == m_bDead)
+	{
+		_int iDead_Count = 0;
+		for (_int i = 0; i < 5; ++i)
+		{
+			if (true == m_arrSkeleton_Dead_Count[i])
+				++iDead_Count;
+		}
+
+		if (5 <= iDead_Count)
+			m_bDead = true;
+	}
+	else
+	{
+		if (0.0f < m_fAlpha)
+			m_fAlpha -= _float(TimeDelta);
+		else
+			CGameObject::Set_Dead();
+	}
+
+	//if (true == m_arrSkeleton_Dead_Count[0] && 
+	//	true == m_arrSkeleton_Dead_Count[1] && 
+	//	true == m_arrSkeleton_Dead_Count[2] && 
+	//	true == m_arrSkeleton_Dead_Count[3] && 
+	//	true == m_arrSkeleton_Dead_Count[4])
+	//	CGameObject::Set_Dead();
 
 	Skeleton_Create();
 	Skeleton_Dead_Check();
@@ -145,6 +165,9 @@ HRESULT CBoss_S_Cage::SetUp_ShaderResources()
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }

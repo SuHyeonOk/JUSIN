@@ -56,11 +56,16 @@ private:
 	void					Magic_Tick(const _double & TimeDelta);
 	void					Magic_LateTick(const _double & TimeDelta);
 
+	void					Effect_Tick(const _double & TimeDelta);
+
 private:
 	NONANIMBULLETINFO		m_tBulletInfo;
 	
 	_float4				m_f4Distance;
 	_double				m_dBullet_TimeAcc = 0;
+
+	// Effect
+	_double				m_dEffect_TimeAcc = 0;
 
 public:
 	static	CB_3DBullet*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
