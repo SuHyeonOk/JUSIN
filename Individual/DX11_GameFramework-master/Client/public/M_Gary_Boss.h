@@ -49,7 +49,7 @@ private:
 	void				Idle_Tick(const _double& TimeDelta);
 	void				Random_Skill();
 	void				RandomMove(const _double& TimeDelta);
-	void				A_Move_Tick(const _double& TimeDelta);
+	HRESULT				A_Move_Tick(const _double& TimeDelta);
 	HRESULT				A_Bullet_Tick(const _double& TimeDelta);
 	HRESULT				A_Stun_Tick(const _double& TimeDelta);
 	HRESULT				A_Cage_Tick(const _double& TimeDelta);

@@ -80,10 +80,7 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z));
-	
-		CEffect_Manager::GetInstance()->Effect_Shield_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.5f, f4PlayerPos.z - 0.5f));
-		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.5f));
+		CEffect_Manager::GetInstance()->Effect_Coin_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z));
 		
 	}
 

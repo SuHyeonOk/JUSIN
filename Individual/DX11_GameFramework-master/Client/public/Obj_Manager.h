@@ -19,7 +19,11 @@ public:
 public:
 	typedef struct tagPlayerInfo
 	{
-		enum PLAYER { FINN, JAKE, FREE, RESET, PLAYER_END };
+		enum PLAYER { FINN, JAKE, 
+#ifdef F2_SKELETON 
+			FREE, 
+#endif
+			RESET, PLAYER_END };
 		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
 
 		enum STATE {

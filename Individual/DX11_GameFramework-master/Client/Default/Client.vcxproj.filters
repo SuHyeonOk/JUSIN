@@ -492,6 +492,9 @@
     <ClInclude Include="..\public\Boss_Fan.h">
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Boss_S_Wind.h">
+      <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -786,6 +789,9 @@
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Boss_Fan.cpp">
+      <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Boss_S_Wind.cpp">
       <Filter>02.GameObjects\Monster\0. Gary_Boss\Skill</Filter>
     </ClCompile>
   </ItemGroup>

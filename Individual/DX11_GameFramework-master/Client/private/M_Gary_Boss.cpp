@@ -269,9 +269,9 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	// 무조건 적으로 이전에 MovePos 가 true 라면 처음 위치로 이동 시켜야 한다.
 	if (true == m_bMovePos)
 	{
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
 		{
-			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 			m_pTransformCom->Set_Pos(_float3(4.0f, 0.0f, 17.0f));
 			m_bMovePos = false;
 		}
@@ -301,19 +301,21 @@ void CM_Gary_Boss::Random_Skill()
 	_float fHP = m_fHP / m_fMaxHP;
 	if (0.3 > fHP)
 		iMaxRandomNumber = 4;
-	else
+	else if(0.8 > fHP)
 		iMaxRandomNumber = 3;
+	else
+		iMaxRandomNumber = 2;
 
 	_int iRandom = CUtilities_Manager::GetInstance()->Get_Random(0, iMaxRandomNumber);
 
-	// 이전 패턴이랑 다른 경우에 실행한다.
-	if (m_iSkill_Data == iRandom)
-	{
-		m_dSkill_TimeAcc = 5;
-		m_eState = STATE::IDLE;
-		return;
-	}
-
+	//// 이전 패턴이랑 다른 경우에 실행한다.
+	//if (m_iSkill_Data == iRandom)
+	//{
+	//	m_dSkill_TimeAcc = 5;
+	//	m_eState = STATE::IDLE;
+	//	return;
+	//}
+	iRandom = 0;
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)
@@ -373,8 +375,9 @@ void CM_Gary_Boss::RandomMove(const _double & TimeDelta)
 
 }
 
-void CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
+HRESULT CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 {
+	// 플레이어 근처까지 달려와서 바람을 날린다.
 	m_eAnimState = STATE::MOVE;
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
@@ -391,13 +394,42 @@ void CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 	_vector vDistance = vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float fDistace = XMVectorGetX(XMVector3Length(vDistance));
 
-	if (0.5f > fDistace)
+	if (1.5f > fDistace)
 	{
-		// TODO : 날라와서 평타치기
 		m_eAnimState = STATE::A_ATTACK;
+
+		// 내 좌표
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		_vector	vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		_float4	f4MyLook = _float4(0.0f, 0.0f, 1.0f, 0.0f);
+		XMStoreFloat4(&f4MyLook, vMyLook);
+
+		_vector vTempPos = XMVector3Normalize(XMVectorSet(1.0f, 0.0f, 1.0f, 1.0f));
+		_float fRange = 1.0f;
+		_vector vObjPos = vTempPos * fRange;
+		_float4 f4ObjPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+		XMStoreFloat4(&f4ObjPos, vObjPos);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Wind"), TEXT("Prototype_GameObject_Boss_S_Wind"),
+			&(_float3((f4MyPos.x + f4ObjPos.x), (f4MyPos.y + f4ObjPos.y + 0.6f), (f4MyPos.z + f4ObjPos.z))))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return E_FAIL;
+		}
+
+		RELEASE_INSTANCE(CGameInstance);
+
+
 		m_bSkill = false;
 		m_eState = STATE::IDLE;
 	}
+
+	return S_OK;
 }
 
 HRESULT CM_Gary_Boss::A_Bullet_Tick(const _double & TimeDelta)
@@ -434,7 +466,7 @@ HRESULT CM_Gary_Boss::A_Bullet_Tick(const _double & TimeDelta)
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_B_RandomBullet_Skeleton_0"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Bullet"), TEXT("Prototype_GameObject_B_RandomBullet"), &tBulletInfo)))
 		{
 			RELEASE_INSTANCE(CGameInstance);
 			return E_FAIL;
@@ -475,7 +507,7 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_Boss_S_Scream"), &(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z)))))
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Scream"), TEXT("Prototype_GameObject_Boss_S_Scream"), &(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z)))))
 		{
 			RELEASE_INSTANCE(CGameInstance);
 			return E_FAIL;

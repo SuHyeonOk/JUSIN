@@ -43,7 +43,7 @@ HRESULT CEffect_Manager::Effect_Coin_Create(_float3 f3Pos)
 
 	_float fRandomRange = 0.0f;
 	_vector vRandomPos = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	_float4 f4RandomPos;
+	_float4 f4RandomPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	CE_Burst::EFFECTINFO	tEffetInfo;
 	_float fRandomAxis = 0.0f;

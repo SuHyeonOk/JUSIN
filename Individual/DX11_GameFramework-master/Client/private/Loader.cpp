@@ -92,6 +92,7 @@
 #include "Boss_S_Scream.h"
 #include "Boss_S_Cage.h"
 #include "Boss_Fan.h"
+#include "Boss_S_Wind.h"
 
 #include "Obj_Manager.h"
 
@@ -717,6 +718,10 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Texture_Scream"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Scream/Scream_template.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_Wind */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Texture_Wind"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/2DBullet/Wind/Finisher_360_Wave_1.png")))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
 
@@ -780,6 +785,10 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	/* For.Prototype_GameObject_Boss_Fan */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Fan"),
 		CBoss_Fan::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Boss_S_Wind */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_S_Wind"),
+		CBoss_S_Wind::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Skill
