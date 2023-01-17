@@ -10,11 +10,50 @@
 #include "E_Beneficial.h"
 #include "E_Alpha_Change.h"
 #include "E_Alpha_Rotation.h"
+#include "E_Look_Up.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
 {
+}
+
+
+
+HRESULT CEffect_Manager::Effect_Color_Boss_Smoke_Create(const _float3 & f3Pos, const _float3 & f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.25f, 0.25f);
+	_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
+
+	CE_Look_Up::EFFECTINFO	tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE;
+	tEffectInfo.f3Pos = _float3(f3Pos.x + fRendomNumberX, f3Pos.y + fRendomNumberY, f3Pos.z);
+	tEffectInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Color_Skeleeton_Create(const _float3 & f3Pos, const _float3 & f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.25f, 0.25f);
+	_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.15f, 0.15f);
+
+	CE_Look_Up::EFFECTINFO	tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::SKELETON_TEXTURE;
+	tEffectInfo.f3Pos = _float3(f3Pos.x + fRendomNumberX, f3Pos.y + fRendomNumberY, f3Pos.z);
+	tEffectInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
 }
 
 HRESULT CEffect_Manager::Effect_Burn_Fire_Create(const _float3 & f3Pos)

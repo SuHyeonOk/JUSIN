@@ -322,7 +322,7 @@ void CM_Gary_Boss::Random_Skill()
 	//	m_eState = STATE::IDLE;
 	//	return;
 	//}
-	iRandom = 2;
+	iRandom = 4;
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)
@@ -512,8 +512,6 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 
 		if (false == m_bEffect)	// 한 번만 호출되기 위해서
 		{
-			cout << " 불 생성" << endl;
-
 			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z + 1.0f));			// 뒤
 			CEffect_Manager::GetInstance()->Effect_Burn_Fire_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z + 1.0f));
 			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x - 2.0f, f4MyPos.y + 0.6f, f4MyPos.z));			// 왼쪽
@@ -562,9 +560,9 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 		RELEASE_INSTANCE(CGameInstance);
 
 		m_eState = IDLE;
+		m_bEffect = false;
 		m_dSkill_TimeAcc = 0;
 		m_dEffect_TimeAcc = 0;
-		m_bEffect = false;
 	}
 
 	return S_OK;

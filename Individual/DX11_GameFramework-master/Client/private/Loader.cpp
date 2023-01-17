@@ -43,6 +43,7 @@
 #include "E_Alpha_Change.h"
 #include "E_Look_Grow.h"
 #include "E_Alpha_Rotation.h"
+#include "E_Look_Up.h"
 
 // Obj
 #include "O_Box.h"
@@ -1132,7 +1133,14 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Burn"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Burn_%d.png"), 4))))
 		return E_FAIL;
-
+	/* For.Prototype_Component_Texture_E_Boss_Skeleton */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Skeleton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Death_Scream_Skull_FX_1.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Boss_Smoke */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Smoke"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/FX_Fire_Smoke_3_D.png")))))
+		return E_FAIL;
 
 
 	
@@ -1183,6 +1191,10 @@ HRESULT CLoader::Effect_Create()
 		CE_Alpha_Rotation::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
+	/* For.Prototype_GameObject_E_Look_Up*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Look_Up"),
+		CE_Look_Up::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
