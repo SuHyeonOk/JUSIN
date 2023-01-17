@@ -252,6 +252,8 @@ HRESULT CNavigation::Render()
 	return S_OK;
 }
 
+#endif // _DEBUG
+
 /* 네비게이션을 구성하는 쎌들의 이웃을 설정한다. */
 HRESULT CNavigation::Ready_Neighbor()
 {
@@ -344,8 +346,6 @@ HRESULT CNavigation::Ready_NextLevel(const _tchar * pNavigationDataFilePath)
 		vPoints[2].y = (_float)_wtof(szPosY_2);
 		vPoints[2].z = (_float)_wtof(szPosZ_2);
 
-		if (813 <= m_Cells.size())
-			_int a = 0;
 		CCell*	pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size(), iNavigatType);
 		if (nullptr == pCell)
 			return E_FAIL;
@@ -356,14 +356,12 @@ HRESULT CNavigation::Ready_NextLevel(const _tchar * pNavigationDataFilePath)
 	if (FAILED(Ready_Neighbor()))
 		return E_FAIL;
 
-	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Navigation.hlsl"), VTXPOS_DECLARATION::Elements, VTXPOS_DECLARATION::iNumElements);
-	if (nullptr == m_pShader)
+	CShader* pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Navigation.hlsl"), VTXPOS_DECLARATION::Elements, VTXPOS_DECLARATION::iNumElements);
+	if (nullptr == pShader)
 		return E_FAIL;
 
 	return S_OK;
 }
-
-#endif // _DEBUG
 
 CNavigation * CNavigation::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pNavigationDataFilePath)
 {
