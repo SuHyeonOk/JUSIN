@@ -58,8 +58,16 @@ void CE_NoLook_Grow::Tick(_double TimeDelta)
 
 	__super::Tick(TimeDelta);
 
-	m_fSizeX += _float(TimeDelta) * 3.f;
-	m_fSizeY += _float(TimeDelta) * 3.f;
+	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::WAVE_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_fSizeX += _float(TimeDelta) * 1.0f;
+		m_fSizeY += _float(TimeDelta) * 1.0f;
+	}
+	else
+	{
+		m_fSizeX += _float(TimeDelta) * 3.f;
+		m_fSizeY += _float(TimeDelta) * 3.f;
+	}
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
@@ -69,7 +77,11 @@ void CE_NoLook_Grow::Tick(_double TimeDelta)
 			m_fAlpha -= _float(TimeDelta) * 0.3f;
 	}
 
-	if (8.f < m_fSizeX)
+	_float fMaxSize = 8.0f;
+	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::WAVE_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+		fMaxSize = 1.6f;
+
+	if (fMaxSize < m_fSizeX)
 		CGameObject::Set_Dead();
 }
 
@@ -125,6 +137,12 @@ HRESULT CE_NoLook_Grow::SetUp_Components()
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Swim"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::WAVE_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Fire_Wave"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
 

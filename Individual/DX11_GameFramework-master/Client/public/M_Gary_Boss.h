@@ -78,9 +78,6 @@ private:
 	// A_Bullet_Tick()
 	_int				m_iBullet_Count = 0;
 
-	// A_Stun_Tick()
-	_bool				m_bEffect_Smoke = false;
-
 	// A_Move_Tick()
 	_float4				m_f4PlayerPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
@@ -90,6 +87,15 @@ private:
 
 	// Random_Skill()
 	_int				m_iSkill_Data = 0;
+
+	// Hit()
+	_bool				m_bHit = false;
+	
+	// ¿Ã∆Â∆Æ
+	_bool				m_bEffect_Smoke = false;
+	_bool				m_bEffect = false;
+	_double				m_dEffect_TimeAcc = 0;
+
 
 	// ºŒ¿Ã¥ı
 	_bool				m_bShader_Hit = false;

@@ -1124,6 +1124,18 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Fire"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/FX_Fire_1_D.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Boss_Fire_Wave */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Fire_Wave"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Fire_Wave_1_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Boss_Burn */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Burn"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Burn_%d.png"), 4))))
+		return E_FAIL;
+
+
+
+	
 
 	RELEASE_INSTANCE(CGameInstance);
 

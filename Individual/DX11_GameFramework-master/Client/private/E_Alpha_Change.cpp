@@ -49,6 +49,8 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
 
 	return S_OK;
 }
@@ -65,16 +67,29 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(vCameraPos, true);
 
-
-
 	m_dChange_Texture += TimeDelta;
 	if (0.09 < m_dChange_Texture)				// 이미지가 변경되는 시간
 	{
 		++m_iTexture_Index;
 		m_dChange_Texture = 0;
 	}
-	if (4 <= m_iTexture_Index)					// 삭제될 때
-		CGameObject::Set_Dead();
+
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		if (4 <= m_iTexture_Index)
+		{
+			++m_iDead_Count;
+			m_iTexture_Index = 0;
+		}
+
+		if (10 <= m_iDead_Count)
+			CGameObject::Set_Dead();
+	}
+	else
+	{
+		if (4 <= m_iTexture_Index)					// 삭제될 때
+			CGameObject::Set_Dead();
+	}
 }
 
 void CE_Alpha_Change::Late_Tick(_double TimeDelta)
@@ -130,6 +145,8 @@ HRESULT CE_Alpha_Change::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Jake_Son"));
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BOOM_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Boom_Fire"));
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Burn"));
 	
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

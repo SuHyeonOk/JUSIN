@@ -17,7 +17,8 @@ class CE_Alpha_Change final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { HIT_TEXTURE, JAKESON_TEXTURE, COLOR_HIT_TEXTURE, BOOM_FIRE_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { HIT_TEXTURE, JAKESON_TEXTURE, COLOR_HIT_TEXTURE, 
+			BOOM_FIRE_TEXTURE, BURN_FIRE_TEXTURE, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -53,6 +54,8 @@ private:
 private:	// Shader
 	_int					m_iTexture_Index = 0;
 	_double					m_dChange_Texture = 0;
+
+	_int					m_iDead_Count = 0;
 
 public:
 	static	CE_Alpha_Change*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

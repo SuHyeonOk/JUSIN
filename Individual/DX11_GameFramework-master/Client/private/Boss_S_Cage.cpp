@@ -78,13 +78,6 @@ void CBoss_S_Cage::Tick(_double TimeDelta)
 			CGameObject::Set_Dead();
 	}
 
-	//if (true == m_arrSkeleton_Dead_Count[0] && 
-	//	true == m_arrSkeleton_Dead_Count[1] && 
-	//	true == m_arrSkeleton_Dead_Count[2] && 
-	//	true == m_arrSkeleton_Dead_Count[3] && 
-	//	true == m_arrSkeleton_Dead_Count[4])
-	//	CGameObject::Set_Dead();
-
 	Skeleton_Create();
 	Skeleton_Dead_Check();
 }

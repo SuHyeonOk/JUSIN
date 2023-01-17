@@ -121,8 +121,8 @@ void CM_Mimic::On_Collision(CGameObject * pOther)
 	{
 		if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		{
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tMonsterInfo.fAttack);
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 		}
 	}
 }

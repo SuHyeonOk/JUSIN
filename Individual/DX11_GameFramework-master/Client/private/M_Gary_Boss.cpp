@@ -9,6 +9,7 @@
 #include "B_3DBullet.h"
 #include "Boss_S_Cage.h"
 #include "Boss_Fan.h"
+#include "Boss_S_Wind.h"
 
 CM_Gary_Boss::CM_Gary_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -128,8 +129,9 @@ HRESULT CM_Gary_Boss::Render()
 
 void CM_Gary_Boss::On_Collision(CGameObject * pOther)
 {
-	//if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-	//	m_eState = HIT;
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		if (L"Player_Weapon" == pOther->Get_Tag())
+			m_bHit = true;
 }
 
 HRESULT CM_Gary_Boss::SetUp_Components()
@@ -186,8 +188,10 @@ HRESULT CM_Gary_Boss::SetUp_ShaderResources()
 void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 {
 	// 체력이 0 이되면 죽는다.
-	if (0 >= m_fHP)
-		m_eState = DIE;
+	//if (0 >= m_fHP)
+	//	m_eState = DIE;
+
+	Hit_Tick(TimeDelta);	// Hit 상태는 따로 다른 Tick 은 계속 돌아가기를 원한다.
 
 	switch (m_eState)
 	{
@@ -215,9 +219,9 @@ void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 		// 밴드 쪽 으로 올라가고, 아래 잡몹들이 춤을 추면 보스는 체력을 회복한다. 
 		A_Dance_Tick(TimeDelta);
 		break;
-	case Client::CM_Gary_Boss::HIT:
-		Hit_Tick(TimeDelta);
-		break;
+	//case Client::CM_Gary_Boss::HIT:
+	//	Hit_Tick(TimeDelta);
+	//	break;
 	case Client::CM_Gary_Boss::DIE:
 		Die_Tick(TimeDelta);
 		break;
@@ -234,6 +238,9 @@ void CM_Gary_Boss::Anim_Change()
 	// 5 : IDLE
 	// 6 : 춤
 	// 7 : MOVE
+
+	if (true == m_bHit && CM_Gary_Boss::IDLE == m_eState)
+		m_eAnimState = CM_Gary_Boss::HIT;
 
 	switch (m_eAnimState)
 	{
@@ -269,9 +276,9 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	// 무조건 적으로 이전에 MovePos 가 true 라면 처음 위치로 이동 시켜야 한다.
 	if (true == m_bMovePos)
 	{
-		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
-		if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
-		{
+ 		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
+    	if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
+	 	{
 			m_pTransformCom->Set_Pos(_float3(4.0f, 0.2f, 17.0f));
 			m_bMovePos = false;
 		}
@@ -287,7 +294,7 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	m_dSkill_TimeAcc += TimeDelta;
 	if (5 < m_dSkill_TimeAcc)		// 5 초 마다 스킬을 고른다.
 	{
-		Random_Skill();
+		Random_Skill();   
 
 		m_dSkill_TimeAcc = 0;
 	}
@@ -315,7 +322,7 @@ void CM_Gary_Boss::Random_Skill()
 	//	m_eState = STATE::IDLE;
 	//	return;
 	//}
-	iRandom = 0;
+	iRandom = 2;
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)
@@ -403,16 +410,21 @@ HRESULT CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 		_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		
-		_vector vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		_float fRange = 1.0f;
-		_vector vObjPos = vMyLook * fRange;
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		_float4 f4Look = { 0.0f, 0.0f, 1.0f, 0.0f };
+		XMStoreFloat4(&f4Look, vLook);
+
+		_float fRange = 1.5f;
+		_vector vObjPos = vLook * fRange;
 		_float4 f4ObjPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 		XMStoreFloat4(&f4ObjPos, vObjPos);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Wind"), TEXT("Prototype_GameObject_Boss_S_Wind"),
-			&(_float3((f4MyPos.x + f4ObjPos.x), (f4MyPos.y + f4ObjPos.y + 0.6f), (f4MyPos.z + f4ObjPos.z))))))
+		CBoss_S_Wind::BOSSSKILLINFO tSkillInfo;
+		tSkillInfo.f3Pos = _float3((f4MyPos.x + f4ObjPos.x), (f4MyPos.y + f4ObjPos.y + 0.6f), (f4MyPos.z + f4ObjPos.z));
+		tSkillInfo.f4Look = _float4(f4Look.x, f4Look.y, f4Look.z, f4Look.w);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Wind"), TEXT("Prototype_GameObject_Boss_S_Wind"), &tSkillInfo)))
 		{
 			RELEASE_INSTANCE(CGameInstance);
 			return E_FAIL;
@@ -495,8 +507,46 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 		m_pTransformCom->Set_Pos(_float3(2.43f, 0.0f, 10.75f));		// 특정 위치로 순간이동
 
 	if (2 < m_dSkill_TimeAcc)
+	{
 		m_bEffect_Smoke = false;	// 이펙트 꺼
-	
+
+		if (false == m_bEffect)	// 한 번만 호출되기 위해서
+		{
+			cout << " 불 생성" << endl;
+
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z + 1.0f));			// 뒤
+			CEffect_Manager::GetInstance()->Effect_Burn_Fire_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z + 1.0f));
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x - 2.0f, f4MyPos.y + 0.6f, f4MyPos.z));			// 왼쪽
+			CEffect_Manager::GetInstance()->Effect_Burn_Fire_Create(_float3(f4MyPos.x - 2.0f, f4MyPos.y + 1.0f, f4MyPos.z));
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x - 1.1f, f4MyPos.y + 0.6f, f4MyPos.z + 0.6f));		// 왼쪽 대각선
+			CEffect_Manager::GetInstance()->Effect_Burn_Fire_Create(_float3(f4MyPos.x - 1.1f, f4MyPos.y + 1.0f, f4MyPos.z + 0.6f));
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x + 2.0f, f4MyPos.y + 0.6f, f4MyPos.z));			// 오른쪽
+			CEffect_Manager::GetInstance()->Effect_Burn_Fire_Create(_float3(f4MyPos.x + 2.0f, f4MyPos.y + 1.0f, f4MyPos.z));
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x + 1.1f, f4MyPos.y + 0.6f, f4MyPos.z + 0.6f));		// 오른쪽 대각선
+			CEffect_Manager::GetInstance()->Effect_Burn_Fire_Create(_float3(f4MyPos.x + 1.1f, f4MyPos.y + 1.0f, f4MyPos.z + 0.6f));
+			
+			m_bEffect = true;
+		}
+
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.5 < m_dEffect_TimeAcc)
+		{
+			// 뒤에 불 이펙트
+			// 현재 보스의 위치
+			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+			_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
+			XMStoreFloat4(&f4MyPos, vMyPos);
+
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z + 1.0f));			// 뒤
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x - 2.0f, f4MyPos.y + 0.6f, f4MyPos.z));			// 왼쪽
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x - 1.1f, f4MyPos.y + 0.6f, f4MyPos.z + 0.6f));		// 왼쪽 대각선
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x + 2.0f, f4MyPos.y + 0.6f, f4MyPos.z));			// 오른쪽
+			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x + 1.1f, f4MyPos.y + 0.6f, f4MyPos.z + 0.6f));		// 오른쪽 대각선
+
+			m_dEffect_TimeAcc = 0;
+		}
+	}
+
 	if (5 < m_dSkill_TimeAcc)
 	{
 		m_eAnimState = A_STUN;
@@ -513,6 +563,8 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 
 		m_eState = IDLE;
 		m_dSkill_TimeAcc = 0;
+		m_dEffect_TimeAcc = 0;
+		m_bEffect = false;
 	}
 
 	return S_OK;
@@ -673,26 +725,38 @@ _bool CM_Gary_Boss::Fann_Dead_Check()
 
 void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 {
-	m_eAnimState = STATE::HIT;
-	m_bShader_Hit = true;
+	if (false == m_bHit)
+		return;
 
 	if (0 == m_dShader_Hit_TimeAcc)
+	{
 		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
+		m_eAnimState = STATE::HIT;
+		m_bShader_Hit = true;
+	}
 
 	m_dShader_Hit_TimeAcc += TimeDelta;
 	if (0.1 < m_dShader_Hit_TimeAcc)
 		m_bShader_Hit = false;
 
-	if (0.7 < m_dShader_Hit_TimeAcc)
+	if (m_pModelCom->Get_Finished())
+		m_eAnimState = STATE::IDLE;
+
+	if (1.0f < m_dShader_Hit_TimeAcc)
 	{
 		m_dShader_Hit_TimeAcc = 0;
 		m_bShader_Hit = false;
-		m_eState = STATE::IDLE;
+		m_eAnimState = STATE::IDLE;
+
+		m_bHit = false;
+		//m_eState = STATE::IDLE;
 	}
 }
 
 void CM_Gary_Boss::Die_Tick(const _double & TimeDelta)
 {
+	m_eAnimState = STATE::DIE;
+
 }
 
 CM_Gary_Boss * CM_Gary_Boss::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

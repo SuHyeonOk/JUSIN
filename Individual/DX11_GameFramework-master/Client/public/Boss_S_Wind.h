@@ -15,6 +15,14 @@ BEGIN(Client)
 
 class CBoss_S_Wind final : public CGameObject
 {
+public:
+	typedef struct tagBossSkillInfo
+	{
+		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	}BOSSSKILLINFO;
+
 private:
 	CBoss_S_Wind(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CBoss_S_Wind(const CBoss_S_Wind& rhs);
@@ -41,10 +49,14 @@ private:
 	CCollider*				m_pColliderCom = nullptr;
 
 private:
+	BOSSSKILLINFO		m_tSkillInfo;
+
 	_float				m_fAlpha = 1.0f;
 	_float				m_fSizeX = 0.0f;
 	_float				m_fSizeY = 0.0f;
 
+
+	_float	m_fX = 0.0f;
 
 public:
 	static	CBoss_S_Wind*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

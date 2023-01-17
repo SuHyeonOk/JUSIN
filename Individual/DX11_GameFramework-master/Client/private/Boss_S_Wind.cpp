@@ -26,17 +26,15 @@ HRESULT CBoss_S_Wind::Initialize_Prototype()
 
 HRESULT CBoss_S_Wind::Initialize(void * pArg)
 {	
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
-
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_tSkillInfo, pArg, sizeof(m_tSkillInfo));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_tSkillInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -45,8 +43,11 @@ HRESULT CBoss_S_Wind::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
-	
+
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVectorSet(m_tSkillInfo.f4Look.x, m_tSkillInfo.f4Look.y, m_tSkillInfo.f4Look.z, m_tSkillInfo.f4Look.w));
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	m_pTransformCom->Rotation(vRight, XMConvertToRadians(90.f));
+
 	m_fAlpha = 1.0f;
 	m_fSizeX = 1.0f;
 	m_fSizeY = 1.0f;
@@ -57,6 +58,27 @@ HRESULT CBoss_S_Wind::Initialize(void * pArg)
 void CBoss_S_Wind::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//if (pGameInstance->Key_Pressing(DIK_A))
+	//	--m_fX;
+	//if (pGameInstance->Key_Pressing(DIK_D))
+	//	++m_fX;
+
+	//cout << "m_fX : " << m_fX << endl;
+
+	//RELEASE_INSTANCE(CGameInstance);
+
+	//_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	//m_pTransformCom->Rotation(vRight, XMConvertToRadians(m_fX));
+
+
+
+
+
+
+
 
 	m_fSizeX += _float(TimeDelta) * 5.0f;
 	m_fSizeY += _float(TimeDelta) * 5.0f;

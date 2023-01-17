@@ -17,6 +17,34 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Effect_Burn_Fire_Create(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Alpha_Change::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Wave_Fire_Create(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_NoLook_Grow::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_NoLook_Grow::EFFECTINFO::WAVE_FIRE_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_NoLook_Grow"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_Small_Fire_Create(const _float3 & f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -57,7 +85,6 @@ HRESULT CEffect_Manager::Effect_Boom_Fire_Create(const _float3 & f3Pos)
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
-	return S_OK;
 }
 
 HRESULT CEffect_Manager::Effect_JakeSon_Create(const _float3 & f3Pos)
