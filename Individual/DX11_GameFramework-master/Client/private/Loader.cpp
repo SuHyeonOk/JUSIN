@@ -1141,9 +1141,26 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Smoke"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/FX_Fire_Smoke_3_D.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Boss_Potal_0 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Potal_0"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Dead_Teleport_FX_1_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Boss_Potal_1 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Potal_1"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Portal_FX_2_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Boss_Potal_2 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Potal_2"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Artifact_FX_1.png")))))
+		return E_FAIL;
 
-
+	/* For.Prototype_Component_Texture_E_Potal_Star */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Potal_Star"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Golden_Wings_Stars_D.png")))))
+		return E_FAIL;
 	
+
+
 
 	RELEASE_INSTANCE(CGameInstance);
 

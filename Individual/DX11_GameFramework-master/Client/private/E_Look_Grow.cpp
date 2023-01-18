@@ -42,10 +42,11 @@ HRESULT CE_Look_Grow::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	// 알파 값
 	m_fAlpha = 1.0f;
+	m_fSizeX = 1.0f;
+	m_fSizeY = 1.0f;
 
-	// 크기 조정 하는
+	// 크기 조정
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType || 
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
@@ -57,12 +58,6 @@ HRESULT CE_Look_Grow::Initialize(void * pArg)
 	{
 		m_fSizeX = 0.3f;
 		m_fSizeY = 0.3f;
-	}
-	// 크기 조정 안 하는
-	else
-	{
-		m_fSizeX = 1.0f;
-		m_fSizeY = 1.0f;
 	}
 
 	m_pTransformCom->Set_Pos();
@@ -83,50 +78,10 @@ void CE_Look_Grow::Tick(_double TimeDelta)
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->LookAt(vCameraPos, true);		// 카메라를 바라본다.
+	m_pTransformCom->LookAt(vCameraPos, true);
 
-													// 빠르게 커지는
-	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		m_fSizeX += _float(TimeDelta) * 1.2f;
-		m_fSizeY += _float(TimeDelta) * 1.2f;
-	}
-	// 천천히 커지는
-	else
-	{
-		m_fSizeX += _float(TimeDelta) * 0.2f;
-		m_fSizeY += _float(TimeDelta) * 0.2f;
-	}
-
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeX, 1.f));
-
-
-	// ★ 알파값 줄어들기
-	// 일정 시간 있다가 줄어들기
-	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType || 
-		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		m_dNoAlpha_TimeAcc += TimeDelta;
-		if (2 < m_dNoAlpha_TimeAcc)
-			m_fAlpha -= _float(TimeDelta) * 0.5f;
-	}
-	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		m_dNoAlpha_TimeAcc += TimeDelta;
-		if (0.5 < m_dNoAlpha_TimeAcc)
-			m_fAlpha -= _float(TimeDelta) * 0.5f;
-	}
-	// 빠르게 줄어들기
-	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SMALL_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		m_fAlpha -= _float(TimeDelta);
-	}
-	// 바로 줄어들기
-	else																				
-	{
-		m_fAlpha -= _float(TimeDelta) * 0.5f;
-	}
+	Size_Tick(TimeDelta);
+	Alpha_Tick(TimeDelta);
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
@@ -136,7 +91,7 @@ void CE_Look_Grow::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Compute_CamZ();
+	CGameObject::Compute_CamZ();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
@@ -180,7 +135,7 @@ HRESULT CE_Look_Grow::SetUp_Components()
 		return E_FAIL;
 
 	_tchar	m_szTextureName[MAX_PATH] = L"";
-
+	
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Sound"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
@@ -196,6 +151,12 @@ HRESULT CE_Look_Grow::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Star_Random"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SMALL_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Fire"));
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Potal_0"));
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_1 == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Potal_1"));
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_2 == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Potal_2"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -232,6 +193,77 @@ HRESULT CE_Look_Grow::SetUp_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CE_Look_Grow::Size_Tick(const _double & TimeDelta)
+{
+	// 빠르게 커지는
+	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_1 == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_2 == m_tEffectInfo.eTextureType)
+	{
+		m_fSizeX += _float(TimeDelta) * 1.2f;
+		m_fSizeY += _float(TimeDelta) * 1.2f;
+	}
+	// 중간 속도
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
+	{
+		m_fSizeX += _float(TimeDelta) * 0.5f;
+		m_fSizeY += _float(TimeDelta) * 0.5f;
+	}
+	// 천천히 커지는
+	else
+	{
+		m_fSizeX += _float(TimeDelta) * 0.2f;
+		m_fSizeY += _float(TimeDelta) * 0.2f;
+	}
+
+	// ★ 일정 크기되면 사이즈 작아지기
+	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
+	{
+		cout << m_fSizeX << endl;
+
+		if (0.7 >= m_fAlpha)
+		{
+			m_fSizeX -= _float(TimeDelta) * 2.0f;
+			m_fSizeY -= _float(TimeDelta) * 2.0f;
+		}
+	}
+
+	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeX, 1.f));
+}
+
+void CE_Look_Grow::Alpha_Tick(const _double & TimeDelta)
+{
+	// ★ 알파값 줄어들기
+	// 일정 시간 있다가 줄어들기
+	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_dNoAlpha_TimeAcc += TimeDelta;
+		if (2 < m_dNoAlpha_TimeAcc)
+			m_fAlpha -= _float(TimeDelta) * 0.5f;
+	}
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
+	{
+		m_dNoAlpha_TimeAcc += TimeDelta;
+		if (0.5 < m_dNoAlpha_TimeAcc)
+			m_fAlpha -= _float(TimeDelta) * 0.5f;
+	}
+	// 빠르게 줄어들기
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SMALL_FIRE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_1 == m_tEffectInfo.eTextureType)
+	{
+		m_fAlpha -= _float(TimeDelta);
+	}
+	// 바로 줄어들기
+	else
+	{
+		m_fAlpha -= _float(TimeDelta) * 0.5f;
+	}
+
 }
 
 CE_Look_Grow * CE_Look_Grow::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

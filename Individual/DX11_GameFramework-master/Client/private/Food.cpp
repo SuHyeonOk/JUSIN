@@ -80,8 +80,8 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Coin_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z));
-		
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z - 0.5f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z - 0.6f));
 	}
 
 	if (pGameInstance->Key_Pressing(DIK_V))
@@ -93,7 +93,8 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(1.0f, 0.0f, 0.0f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z - 0.5f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z - 0.6f));
 	}
 	else
 		m_dKeyDown_TimeAcc = 0;

@@ -71,6 +71,19 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (pGameInstance->Key_Down(DIK_B))
+	{
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.5f, f4PlayerPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.5f, f4PlayerPos.z - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.5f, f4PlayerPos.z - 1.2f));
+	}
+	RELEASE_INSTANCE(CGameInstance);
+
 	//_matrix PlayerWorld;
 	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
 	//_float4x4 f44PlayerWorld;
@@ -333,7 +346,7 @@ void CM_Gary_Boss::Random_Skill()
 	//	m_eState = STATE::IDLE;
 	//	return;
 	//}
-	iRandom = 4;
+	iRandom = 0;
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)

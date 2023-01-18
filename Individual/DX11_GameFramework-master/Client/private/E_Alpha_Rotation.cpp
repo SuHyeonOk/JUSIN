@@ -46,6 +46,9 @@ HRESULT CE_Alpha_Rotation::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	if(CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STAR_TEXTURE == m_tEffectInfo.eTextureType)
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+
 	return S_OK;
 }
 
@@ -102,8 +105,21 @@ HRESULT CE_Alpha_Rotation::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
+	_tchar	m_szTextureName[MAX_PATH] = L"";
+
+	switch (m_tEffectInfo.eTextureType)
+	{
+	case CE_Alpha_Rotation::EFFECTINFO::SHIELD_TEXTURE:
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Jake_Shield"));
+		break;
+
+	case CE_Alpha_Rotation::EFFECTINFO::POTAL_STAR_TEXTURE:
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Potal_Star"));
+		break;
+	}
+
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Jake_Shield"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;

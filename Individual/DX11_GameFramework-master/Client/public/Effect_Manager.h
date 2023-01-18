@@ -16,8 +16,12 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
+	HRESULT		Effect_Potal_Star_Create(const _float3 & f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
+
+	HRESULT		Effect_Boss_Potals_Create(const _float3 & f3Pos);
+	HRESULT		Effect_Boss_Potal_Create(const _float3 & f3Pos);
 	HRESULT		Effect_Color_Boss_Smoke_Create(const _float3 & f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
-	HRESULT		Effect_Color_Skeleeton_Create(const _float3 & f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
+	HRESULT		Effect_Color_Skeleeton_Create(const _float3 & f3Pos);
 	HRESULT		Effect_Burn_Fire_Create(const _float3 & f3Pos);
 	HRESULT		Effect_Wave_Fire_Create(const _float3 & f3Pos);
 	HRESULT		Effect_Small_Fire_Create(const _float3 & f3Pos);

@@ -236,8 +236,8 @@ void CBoss_Fan::Dance_Tick(const _double& TimeDelta)
 		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
 		XMStoreFloat4(&f4Pos, vPos);
 
-		CEffect_Manager::GetInstance()->Effect_Color_Boss_Smoke_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z), _float3(0.6f, 0.5f, 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Color_Skeleeton_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z), _float3(0.7f, 0.1f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Color_Boss_Smoke_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z), _float3(0.87f, 0.56f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Color_Skeleeton_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z));
 
 		m_bEffect_TimeAcc = 0;
 	}

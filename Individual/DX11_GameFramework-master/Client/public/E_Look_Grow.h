@@ -19,7 +19,7 @@ public:
 	{
 		enum TEXTURETYPE { SOUND_TEXTURE, HP_TEXTURE, INK_RANDOM_TEXTURE, INK_TEXTURE,
 			PAINT_FIRECRAKER_TEXTURE, PAINT_CIRCLE_TEXTURE, STAR3_TEXTURE,
-			SMALL_FIRE_TEXTURE,
+			SMALL_FIRE_TEXTURE, POTAL_0, POTAL_1, POTAL_2,
 			TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
@@ -49,6 +49,10 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+
+private:
+	void				Size_Tick(const _double & TimeDelta);
+	void				Alpha_Tick(const _double & TimeDelta);
 
 private:
 	EFFECTINFO			m_tEffectInfo;
