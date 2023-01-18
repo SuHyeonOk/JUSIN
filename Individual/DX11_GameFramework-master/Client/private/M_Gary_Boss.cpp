@@ -357,7 +357,7 @@ void CM_Gary_Boss::Random_Skill()
 	//	m_eState = STATE::IDLE;
 	//	return;
 	//}
-	//iRandom = 4;
+	iRandom = 4;
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)

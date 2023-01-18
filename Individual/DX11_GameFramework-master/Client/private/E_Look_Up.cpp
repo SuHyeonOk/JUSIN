@@ -44,10 +44,13 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 		return E_FAIL;
 
 	_float fRandomSize = 0.0f;
-	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
-		fRandomSize = 1.0f;
-	else
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::SKELETON_TEXTURE == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.7f, 1.1f);
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
+
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
@@ -140,6 +143,8 @@ HRESULT CE_Look_Up::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Skeleton"));
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Smoke"));
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_Hp"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

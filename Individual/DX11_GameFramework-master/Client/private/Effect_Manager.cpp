@@ -455,23 +455,33 @@ HRESULT CEffect_Manager::Food_Hp(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-	_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
-	_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.7f, 0.7f);
+	_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.2f, 0.2f);
+	_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 
-	_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
-
-	_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
-
-	_vector vRandomPos = vTempPos * fRandomRange;
-	_float4 f4RandomPos;
-	XMStoreFloat4(&f4RandomPos, vRandomPos);
-
-	CE_Look_Grow::EFFECTINFO tEffectInfo;
-	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::HP_TEXTURE;
-	tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z + f4RandomPos.z);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Grow"), &tEffectInfo)))
+	CE_Look_Up::EFFECTINFO	tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE;
+	tEffectInfo.f3Pos = _float3(f3Pos.x + fRendomNumberX, f3Pos.y + fRendomNumberY, f3Pos.z + fRendomNumberZ);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo)))
 		return E_FAIL;
+
+	//_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+	//_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+	//_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+	//_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, fRandomZ, 1.0f));
+
+	//_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f);
+
+	//_vector vRandomPos = vTempPos * fRandomRange;
+	//_float4 f4RandomPos;
+	//XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+	//CE_Look_Up::EFFECTINFO	tEffectInfo;
+	//tEffectInfo.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE;
+	//tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z + f4RandomPos.z);
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo)))
+	//	return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 	return S_OK;

@@ -80,8 +80,7 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z - 0.5f));
-		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4PlayerPos.x, 0.6f, f4PlayerPos.z - 0.6f));
+		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 	}
 
 	if (pGameInstance->Key_Pressing(DIK_V))
@@ -262,7 +261,7 @@ void CFood::Effect_Create(const _double & TimeDelta)
 	m_dFoodHp_TimeAcc += TimeDelta;
 	if (0.2 < m_dFoodHp_TimeAcc)
 	{
-		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z));
+		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
 		m_dFoodHp_TimeAcc = 0;
 	}
 

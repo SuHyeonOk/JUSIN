@@ -48,7 +48,6 @@ HRESULT CE_Look_Grow::Initialize(void * pArg)
 
 	// 크기 조정
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType || 
-		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType)
 	{
 		m_fSizeX = 0.01f;
@@ -138,8 +137,6 @@ HRESULT CE_Look_Grow::SetUp_Components()
 	
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Skill_Marceline_Sound"));
-	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
-		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_Hp"));
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
 			 CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_RANDOM_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Change_ColorSmoke"));
@@ -207,8 +204,7 @@ void CE_Look_Grow::Size_Tick(const _double & TimeDelta)
 		m_fSizeY += _float(TimeDelta) * 1.2f;
 	}
 	// 중간 속도
-	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
 	{
 		m_fSizeX += _float(TimeDelta) * 0.5f;
 		m_fSizeY += _float(TimeDelta) * 0.5f;
@@ -245,8 +241,7 @@ void CE_Look_Grow::Alpha_Tick(const _double & TimeDelta)
 		if (2 < m_dNoAlpha_TimeAcc)
 			m_fAlpha -= _float(TimeDelta) * 0.5f;
 	}
-	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
+	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
 	{
 		m_dNoAlpha_TimeAcc += TimeDelta;
