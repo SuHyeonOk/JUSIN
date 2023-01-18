@@ -7,6 +7,8 @@
 #include "Skill_Manager.h"
 #include "Effect_Manager.h"
 
+#include "S_Jake_Son_Twister.h"
+
 CS_Jake_Son_Transform::CS_Jake_Son_Transform(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -56,7 +58,7 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 	m_pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
 	m_pJake_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 
-	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Skeleton_Boss"), TEXT("Com_Transform"), 0));
+	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Skeleton_Boss"), TEXT("Com_Transform"), 0));
 
 	m_pNavigationCom->Set_CellIndex(m_pJake_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
@@ -82,6 +84,9 @@ void CS_Jake_Son_Transform::Tick(_double TimeDelta)
 void CS_Jake_Son_Transform::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (STATE::SKILL == m_eState)
+		return;
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
@@ -148,14 +153,14 @@ HRESULT CS_Jake_Son_Transform::SetUp_Components()
 	CCollider::COLLIDERDESC			ColliderDesc;
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.0f, 0.7f, 1.0f);
+	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
-	/* For.Com_Navigation */
+	/* For.Com_Navigation */ 
 	CNavigation::NAVIDESC			NaviDesc;
 	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
 
@@ -224,7 +229,7 @@ void CS_Jake_Son_Transform::State_Tick(const _double & TimeDelta)
 		Attack_Tick(TimeDelta);
 		break;
 	case Client::CS_Jake_Son_Transform::SKILL:
-		m_pModelCom->Set_AnimIndex(1, false, false);
+		m_pModelCom->Set_AnimIndex(1);
 		Skill_Tick(TimeDelta);
 		break;
 	}
@@ -259,9 +264,30 @@ void CS_Jake_Son_Transform::Attack_Tick(const _double & TimeDelta)
 
 }
 
-void CS_Jake_Son_Transform::Skill_Tick(const _double & TimeDelta)
+HRESULT CS_Jake_Son_Transform::Skill_Tick(const _double & TimeDelta)
 {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Pos, vPos);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Jake_Son_Twister"), TEXT("Prototype_GameObject_S_Jake_Son_Twister"), &_float3(2.5f, 0.0f, 17.8f))))
+	{
+		RELEASE_INSTANCE(CGameInstance);
+		return E_FAIL;
+	}
+
+	CS_Jake_Son_Twister * pGameObject = dynamic_cast<CS_Jake_Son_Twister*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Jake_Son_Twister"), TEXT("Prototype_GameObject_S_Jake_Son_Twister"), 0));
+	RELEASE_INSTANCE(CGameInstance);
+
+	m_dTwister_TimeAcc += TimeDelta;
+	if (3.0 < m_dTwister_TimeAcc)
+	{
+		m_eState = STATE::IDLE;
+		pGameObject->Set_Dead();
+		m_dTwister_TimeAcc = 0;
+	}
 }
 
 CS_Jake_Son_Transform * CS_Jake_Son_Transform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

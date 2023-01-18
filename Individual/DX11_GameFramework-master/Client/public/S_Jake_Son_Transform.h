@@ -54,13 +54,14 @@ private:
 
 	void				Player_Follow(const _double & TimeDelta);
 	void				Attack_Tick(const _double & TimeDelta);
-	void				Skill_Tick(const _double & TimeDelta);
+	HRESULT				Skill_Tick(const _double & TimeDelta);
 
 private:
 	_float3				m_f3Pos = _float3(0.f, 0.f, 0.f);
 	
 	STATE				m_eState = STATE_END;
 
+	_double				m_dTwister_TimeAcc = { 0.0 };
 
 
 

@@ -241,6 +241,7 @@
     <ClInclude Include="..\public\S_Fiona.h" />
     <ClInclude Include="..\public\S_Jake_Son.h" />
     <ClInclude Include="..\public\S_Jake_Son_Transform.h" />
+    <ClInclude Include="..\public\S_Jake_Son_Twister.h" />
     <ClInclude Include="..\public\S_Marceline.h" />
     <ClInclude Include="..\public\S_PaintWork.h" />
     <ClInclude Include="..\public\S_Skill_Weapon.h" />
@@ -345,6 +346,7 @@
     <ClCompile Include="..\private\S_Fiona.cpp" />
     <ClCompile Include="..\private\S_Jake_Son.cpp" />
     <ClCompile Include="..\private\S_Jake_Son_Transform.cpp" />
+    <ClCompile Include="..\private\S_Jake_Son_Twister.cpp" />
     <ClCompile Include="..\private\S_Marceline.cpp" />
     <ClCompile Include="..\private\S_PaintWork.cpp" />
     <ClCompile Include="..\private\S_Skill_Weapon.cpp" />
