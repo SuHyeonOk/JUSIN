@@ -23,6 +23,8 @@ public:
 
 	}TRANSFORMDESC;	
 
+	//TRANSFORMDESC TransformDesc = { .fSpeedPerSec = 0.0f, .fRotationPerSec = 0.0f };
+
 protected:
 	CTransform(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CTransform(const CTransform& rhs);
@@ -85,6 +87,7 @@ private:
 	_float4x4				m_WorldMatrix;
 	TRANSFORMDESC			m_TransformDesc;
 
+	_int iData[3] = { 0 };
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
