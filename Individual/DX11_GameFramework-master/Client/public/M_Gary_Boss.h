@@ -49,6 +49,7 @@ private:
 	void				Idle_Tick(const _double& TimeDelta);
 	void				Random_Skill();
 	void				RandomMove(const _double& TimeDelta);
+
 	HRESULT				A_Move_Tick(const _double& TimeDelta);
 	HRESULT				A_Bullet_Tick(const _double& TimeDelta);
 	HRESULT				A_Stun_Tick(const _double& TimeDelta);
@@ -56,8 +57,11 @@ private:
 	void				A_Dance_Tick(const _double& TimeDelta);
 	HRESULT				Fann_Create();
 	_bool				Fann_Dead_Check();
+
 	void				Hit_Tick(const _double& TimeDelta);
 	void				Die_Tick(const _double& TimeDelta);
+
+	void				Effect_Tick(const _double& TimeDelta);
 
 private:
 	// 기본 데이터
@@ -94,8 +98,8 @@ private:
 	// 이펙트
 	_bool				m_bEffect_Smoke = false;
 	_bool				m_bEffect = false;
+	_int				m_iEffect_Count = 0;
 	_double				m_dEffect_TimeAcc = 0;
-
 
 	// 셰이더
 	_bool				m_bShader_Hit = false;

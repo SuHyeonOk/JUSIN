@@ -90,8 +90,7 @@ void CBoss_S_Cage::Late_Tick(_double TimeDelta)
 
 	CGameObject::Compute_CamZ();
 
-	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
+	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)

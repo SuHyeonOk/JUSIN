@@ -82,6 +82,12 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.5f, f4PlayerPos.z - 1.3f));
 		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.5f, f4PlayerPos.z - 1.2f));
 	}
+
+	if (pGameInstance->Key_Down(DIK_V))
+	{
+		Effect_Tick(TimeDelta);
+	}
+	
 	RELEASE_INSTANCE(CGameInstance);
 
 	//_matrix PlayerWorld;
@@ -94,6 +100,8 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 	//cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
 	//cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
 	//cout << "----------------보스------------------------" << endl;
+
+	Effect_Tick(TimeDelta);
 
 	Monster_Tick(TimeDelta);
 	Anim_Change();
@@ -300,11 +308,14 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	// 무조건 적으로 이전에 MovePos 가 true 라면 처음 위치로 이동 시켜야 한다.
 	if (true == m_bMovePos)
 	{
+		if(0 == m_dSkill_TimeAcc)
+			m_iEffect_Count = 0;
  		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
     	if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
 	 	{
 			m_pTransformCom->Set_Pos(_float3(4.0f, 0.2f, 17.0f));
 			m_bMovePos = false;
+			m_iEffect_Count = 0;
 		}
 	}
 
@@ -318,7 +329,7 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	m_dSkill_TimeAcc += TimeDelta;
 	if (5 < m_dSkill_TimeAcc)		// 5 초 마다 스킬을 고른다.
 	{
-		Random_Skill();   
+		Random_Skill();
 
 		m_dSkill_TimeAcc = 0;
 	}
@@ -332,7 +343,7 @@ void CM_Gary_Boss::Random_Skill()
 	_float fHP = m_fHP / m_fMaxHP;
 	if (0.3 > fHP)
 		iMaxRandomNumber = 4;
-	else if(0.8 > fHP)
+	else if (0.8 > fHP)
 		iMaxRandomNumber = 3;
 	else
 		iMaxRandomNumber = 2;
@@ -346,7 +357,7 @@ void CM_Gary_Boss::Random_Skill()
 	//	m_eState = STATE::IDLE;
 	//	return;
 	//}
-	iRandom = 0;
+	//iRandom = 4;
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)
@@ -354,9 +365,15 @@ void CM_Gary_Boss::Random_Skill()
 	else if (2 == iRandom)
 		m_eState = A_STUN;
 	else if (3 == iRandom)
+	{
 		m_eState = A_CAGE;
+		m_iEffect_Count = 0;
+	}
 	else if (4 == iRandom)
+	{
 		m_eState = A_DANCE;
+		m_iEffect_Count = 0;
+	}
 
 	m_iSkill_Data = iRandom;
 }
@@ -496,7 +513,7 @@ HRESULT CM_Gary_Boss::A_Bullet_Tick(const _double & TimeDelta)
 		tBulletInfo.fMonsterAttack = m_fAttack;
 		tBulletInfo.eBulletType = tBulletInfo.TYPE_ROCK;
 		tBulletInfo.f3Start_Pos = _float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z);
-		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 0.8f, f4PlayerPos.z);
+		tBulletInfo.f3Target_Pos = _float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -781,6 +798,39 @@ void CM_Gary_Boss::Die_Tick(const _double & TimeDelta)
 {
 	m_eAnimState = STATE::DIE;
 
+}
+
+void CM_Gary_Boss::Effect_Tick(const _double & TimeDelta)
+{
+	if (3 <= m_iEffect_Count)
+	{
+		//m_iEffect_Count = 0;
+		return;
+	}
+
+	cout << m_iEffect_Count << endl;
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4rPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4rPos, vPos);
+
+ 	if (0 == m_iEffect_Count)
+	{
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.3f));
+		++m_iEffect_Count;
+	}
+
+	m_dEffect_TimeAcc += TimeDelta;
+	if (0.3 < m_dEffect_TimeAcc)
+	{
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.2f));
+
+		++m_iEffect_Count;
+		m_dEffect_TimeAcc = 0;
+	}
 }
 
 CM_Gary_Boss * CM_Gary_Boss::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

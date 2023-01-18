@@ -183,7 +183,7 @@ HRESULT CJake::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.35f, 0.7f, 0.35f);
+	ColliderDesc.vSize = _float3(0.4f, 1.2f, 0.4f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
