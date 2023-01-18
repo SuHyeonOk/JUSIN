@@ -35,8 +35,6 @@ HRESULT CLevel_Skleton_Boss::Initialize()
 	
 #ifdef F2_SKELETON
 
-	Test(TEXT("Test"));
-
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -84,21 +82,6 @@ HRESULT CLevel_Skleton_Boss::Render()
 		return E_FAIL;
 
 	//SetWindowText(g_hWnd, TEXT("Level : GAMEPLAY"));
-
-	return S_OK;
-}
-
-HRESULT CLevel_Skleton_Boss::Test(const _tchar* pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CBoss_S_Wind::BOSSSKILLINFO tSkillInfo;
-	tSkillInfo.f3Pos = _float3(5.0f, 0.f, 0.0f);
-	tSkillInfo.f4Look = _float4(0.0f, 0.0f, 1.0f, 0.0f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Wind"), TEXT("Prototype_GameObject_Boss_S_Wind"), &tSkillInfo)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }

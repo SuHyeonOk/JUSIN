@@ -179,6 +179,8 @@ HRESULT CE_Alpha_Change::SetUp_ShaderResources()
 	_float fAlpha = 1.0f;
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType)
 		fAlpha = 0.2f;
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
+		fAlpha = 0.7f;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &fAlpha, sizeof _float)))
 		return E_FAIL;

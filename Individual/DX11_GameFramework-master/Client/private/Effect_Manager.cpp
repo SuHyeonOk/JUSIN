@@ -616,11 +616,17 @@ HRESULT CEffect_Manager::Skill_Marceline_Sound_Create(_float3 f3Pos)
 	_float4 f4RandomPos;
 	XMStoreFloat4(&f4RandomPos, vRandomPos);
 
+	// »ö»ó
+	_float3 f3Random_Color = { 0.0f, 0.0f, 0.0f };
+	if (0 == CUtilities_Manager::GetInstance()->Get_Random(0, 2))
+		f3Random_Color = { 1.0f, 1.0f, 1.0f };
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Look_Grow::EFFECTINFO tEffectInfo;
 	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::SOUND_TEXTURE;
 	tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z + f4RandomPos.z);
+	tEffectInfo.f3Color = f3Random_Color;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Grow"), &tEffectInfo)))
 		return E_FAIL;
 

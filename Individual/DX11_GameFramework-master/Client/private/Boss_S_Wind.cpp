@@ -44,16 +44,20 @@ HRESULT CBoss_S_Wind::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	_vector vLook = XMLoadFloat4(&m_tSkillInfo.f4Look);
+	_vector vLook = XMLoadFloat4(&m_tSkillInfo.f4Look) * -1.0f;
 	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	_vector vUp = XMVector3Cross(vLook, vRight);
 
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+	_float3		vScale = m_pTransformCom->Get_Scaled();	
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(90.0f));
 
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVectorSet(m_tSkillInfo.f4Look.x, m_tSkillInfo.f4Look.y, m_tSkillInfo.f4Look.z, m_tSkillInfo.f4Look.w));
-	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(-90.f));
+	vRight = vRight * vScale.x;
+	vUp = vUp * vScale.y;		
+	vLook = vRight * vScale.z;	
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
+	m_pTransformCom->Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 
 	m_fAlpha = 1.0f;
 	m_fSizeX = 1.0f;
@@ -66,77 +70,13 @@ void CBoss_S_Wind::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	_matrix PlayerWorld;
-	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	_float4x4 f44PlayerWorld;
-	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-	cout << "----------------------------------------" << endl;
-	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	cout << "----------------------------------------" << endl;
-
-	if (pGameInstance->Key_Pressing(DIK_F))
-	{
-		_matrix PlayerWorld;
-		PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-		_float4x4 f44PlayerWorld;
-		XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-		cout << "----------------------------------------" << endl;
-		cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-		cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-		cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-		cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-		cout << "----------------------------------------" << endl;
-	}
-
-	if (pGameInstance->Key_Pressing(DIK_R))
-	{
-		m_fX = 0;
-		m_fY = 0;
-		m_fZ = 0;
-	}
-
-	if (pGameInstance->Key_Pressing(DIK_Q))
-		--m_fX;
-	if (pGameInstance->Key_Pressing(DIK_A))
-		++m_fX;
-
-	if (pGameInstance->Key_Pressing(DIK_W))
-		--m_fY;
-	if (pGameInstance->Key_Pressing(DIK_S))
-		++m_fY;
-
-	if (pGameInstance->Key_Pressing(DIK_E))
-		--m_fZ;
-	if (pGameInstance->Key_Pressing(DIK_D))
-		++m_fZ;
-
-	cout << "m_fX : " << m_fX << " | m_fY : " << m_fY << " | m_fZ : " << m_fZ << endl;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(m_fX));
-	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(m_fY));
-	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), XMConvertToRadians(m_fZ));
-
-
-
-
-
-
-
-
 	m_fSizeX += _float(TimeDelta) * 5.0f;
 	m_fSizeY += _float(TimeDelta) * 5.0f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
-	//m_fAlpha -= _float(TimeDelta) * 0.2f;
+	if (3.0f < m_fSizeY)
+		m_fAlpha -= _float(TimeDelta);
 
 	if (5.0f < m_fSizeY)
 		CGameObject::Set_Dead();
@@ -165,7 +105,7 @@ HRESULT CBoss_S_Wind::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);	// pass
+	m_pShaderCom->Begin(4);
 
 	m_pVIBufferCom->Render();
 
@@ -211,7 +151,7 @@ HRESULT CBoss_S_Wind::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -242,6 +182,10 @@ HRESULT CBoss_S_Wind::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
+
+	_float3 f3Color = { 0.0f, 0.0f, 0.0f };
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &f3Color, sizeof _float3)))
 		return E_FAIL;
 
 	return S_OK;

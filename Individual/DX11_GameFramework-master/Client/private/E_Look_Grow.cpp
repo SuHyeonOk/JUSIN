@@ -105,7 +105,8 @@ HRESULT CE_Look_Grow::Render()
 		return E_FAIL;
 
 	// »ö Á¶Á¤
-	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_FIRECRAKER_TEXTURE == m_tEffectInfo.eTextureType ||
+	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::SOUND_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_FIRECRAKER_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::PAINT_CIRCLE_TEXTURE == m_tEffectInfo.eTextureType || 
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::INK_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Grow::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)

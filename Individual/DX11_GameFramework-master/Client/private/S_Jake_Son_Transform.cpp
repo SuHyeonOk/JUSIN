@@ -85,8 +85,11 @@ void CS_Jake_Son_Transform::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);		// 面倒贸府
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	if (STATE::ATTACK == m_eState)
+	{
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);		// 面倒贸府
+		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	}
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -217,7 +220,7 @@ void CS_Jake_Son_Transform::State_Tick(const _double & TimeDelta)
 		m_pModelCom->Set_AnimIndex(3);
 		break;
 	case Client::CS_Jake_Son_Transform::ATTACK:
-		m_pModelCom->Set_AnimIndex(0, false, false);
+		m_pModelCom->Set_AnimIndex(0);
 		Attack_Tick(TimeDelta);
 		break;
 	case Client::CS_Jake_Son_Transform::SKILL:
@@ -251,6 +254,8 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 
 void CS_Jake_Son_Transform::Attack_Tick(const _double & TimeDelta)
 {
+	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta);
+
 
 }
 
