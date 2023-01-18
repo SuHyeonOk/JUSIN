@@ -53,9 +53,6 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
 
-	if(LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
-		m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
-
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 
@@ -207,6 +204,11 @@ HRESULT CS_Fiona::SetUp_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
+
+	if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+		m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
+	else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+		m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
 
 	return S_OK;
 }

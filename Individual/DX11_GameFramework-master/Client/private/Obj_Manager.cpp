@@ -39,21 +39,6 @@ HRESULT		CObj_Manager::Initialized()
 	return S_OK;
 }
 
-void		CObj_Manager::Set_Current_Player_State(PLAYERINFO::STATE eState)
-{
-	m_tPlayerInfo.eState = eState;
-
-	//if (PLAYERINFO::STATE::HIT	!= m_tPlayerInfo.eState ||
-	//	PLAYERINFO::STATE::STUN != m_tPlayerInfo.eState ||
-	//	PLAYERINFO::STATE::STUN != m_tPlayerInfo.eState)
-	//{
-	//	m_bHit = true;
-	//	m_tPlayerState = eState;
-	//}
-	//else
-		
-}
-
 _vector		CObj_Manager::Get_Player_Transform()
 {
 	if (m_bNextLevel)
@@ -153,18 +138,6 @@ void		CObj_Manager::Tick(_double TimeDelta)
 			m_dPlayerAttck_TimeAcc = 0;
 		}
 	}
-
-	//// Hit, Stun, Magic 로 변할 때 키 입력이 있게되면, 바뀌지 않아서 일정시간 뒤에 값을 바뀌게 한다.
-	//if (m_bHit)
-	//{
-	//	m_dHit_TimaAcc += TimeDelta;
-	//	if (0.5 < m_dHit_TimaAcc)
-	//	{
-	//		m_tPlayerInfo.eState = m_tPlayerState;
-	//		m_bHit = false;
-	//		m_dHit_TimaAcc = 0;
-	//	}
-	//}
 }
 
 void		CObj_Manager::Key_Input()
@@ -200,6 +173,11 @@ void		CObj_Manager::Key_Input()
 	if (pGameInstance->Key_Down(DIK_I))	// TODO : 중간 보스 잡으면 변경
 	{
 		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_FAMILY;
+	}
+
+	if (pGameInstance->Key_Pressing(DIK_M))
+	{
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

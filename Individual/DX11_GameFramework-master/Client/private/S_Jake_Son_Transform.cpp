@@ -2,13 +2,9 @@
 #include "..\public\S_Jake_Son_Transform.h"
 
 #include "GameInstance.h"
-#include "Bone.h"
-#include "S_Skill_Weapon.h"
-#include "Jake.h"
-
 #include "Obj_Manager.h"
+#include "Utilities_Manager.h"
 #include "Skill_Manager.h"
-#include "UI_Manager.h"
 #include "Effect_Manager.h"
 
 CS_Jake_Son_Transform::CS_Jake_Son_Transform(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -48,10 +44,7 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
-	if (FAILED(Ready_Parts()))
-		return E_FAIL;
-
+	
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 
@@ -59,15 +52,13 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	m_pTransformCom->Set_Pos();
-	m_pModelCom->Set_AnimIndex(0);
-
 	m_wsTag = L"Jake";
-	m_pPlayer_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
-	m_pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
-	m_pPlayer_ColliderCom = dynamic_cast<CCollider*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Collider"), 0));
+	m_pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	m_pJake_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 
-	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
+	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Skeleton_Boss"), TEXT("Com_Transform"), 0));
+
+	m_pNavigationCom->Set_CellIndex(m_pJake_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -78,64 +69,14 @@ void CS_Jake_Son_Transform::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	cout << m_i << endl;
-
-	if (pGameInstance->Key_Down(DIK_P))
-	{
-		m_i++;
-	}
-	if (pGameInstance->Key_Down(DIK_O))
-	{
-		m_i--;
-	}
-	m_pModelCom->Set_AnimIndex(m_i, false);
-
-	// 0 : 발견
-	// 1 : 조이기
-	// 2 : 놓치기
-	// 3 : 발 춤추기
-	// 4 : 뒤로 넘어갈랑
-	// 5 : 오 Hit
-	// 6 : 왼 Hit
-	// 7 : IDLE
-	// 8 : MOVE
-	// 9 : 조이기2
-	// 10 : 앞으로 한 발 뛰고 공중
-	// 11 : 뒤로 한 발 뛰고 공중
-	// 12 : 황소 뒤로 발차듯이
-	// 13 : 이상한 껑충
-	// 14 : 막기
-	// 15 : 막다가 Hit
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	//Death_Set(TimeDelta);
 	//Effect_Create(TimeDelta);
 
-	//m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	//m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
+	// 계속 제이크의 좌표와 네비를 변경해 준다.
+	m_pJake_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	m_pJake_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
-	//KeyInput(TimeDelta);
-	//Skill_Tick(TimeDelta);
-
-	//// 내 무기 콜라이더 공격 중일 때만 On
-	//if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
-	//{
-	//	m_dAttack_TimeAcc += TimeDelta;
-	//	if (1.6 < m_dAttack_TimeAcc)
-	//	{
-	//		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
-	//		CObj_Manager::GetInstance()->Set_Monster_Crash(false);
-	//		return;
-	//	}
-
-	//	if (1.4 < m_dAttack_TimeAcc)
-	//		m_SkillParts[0]->Tick(TimeDelta);
-	//}
-	//else
-	//	m_dAttack_TimeAcc = 0;
+	JakeSon_Tick(TimeDelta);
+	State_Tick(TimeDelta);
 }
 
 void CS_Jake_Son_Transform::Late_Tick(_double TimeDelta)
@@ -144,24 +85,11 @@ void CS_Jake_Son_Transform::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// 충돌처리
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_P_WEAPON, this);		// 충돌처리
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-
-
-	//if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
-	//{
-	//	m_dAttack_TimeAcc += TimeDelta;
-	//	if (1.6 < m_dAttack_TimeAcc)
-	//		return;
-
-	//	if (1.4 < m_dAttack_TimeAcc)
-	//		m_SkillParts[0]->Late_Tick(TimeDelta);
-	//}
-	//else
-	//	m_dAttack_TimeAcc = 0;
 }
 
 HRESULT CS_Jake_Son_Transform::Render()
@@ -178,13 +106,10 @@ HRESULT CS_Jake_Son_Transform::Render()
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
-		if (i == 0)
+		if (i == 2)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			if (m_bShader_Hit)
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
-			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
 	}
 
 #ifdef _DEBUG
@@ -200,11 +125,6 @@ HRESULT CS_Jake_Son_Transform::Render()
 	return S_OK;
 }
 
-void CS_Jake_Son_Transform::On_Collision(CGameObject * pOther)
-{
-
-}
-
 HRESULT CS_Jake_Son_Transform::SetUp_Components()
 {
 	/* For.Com_Renderer */
@@ -218,7 +138,7 @@ HRESULT CS_Jake_Son_Transform::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_SKELETON, TEXT("Prototype_Component_Model_S_JakeSonsTransform"), TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTransform"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -241,6 +161,9 @@ HRESULT CS_Jake_Son_Transform::SetUp_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
 		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
+
+	// TODO 전체적으로 플레이 하면서 네비 잘 타지는지 확인해야 한다.
+	//m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
 
 	return S_OK;
 }
@@ -265,208 +188,75 @@ HRESULT CS_Jake_Son_Transform::SetUp_ShaderResources()
 	return S_OK;
 }
 
-HRESULT CS_Jake_Son_Transform::Ready_Parts()
+void CS_Jake_Son_Transform::JakeSon_Tick(const _double & TimeDelta)
 {
-	CGameObject*		pPartObject = nullptr;
+	// 평소에는 플레이어를 따라 다니다가
+	// 일정 범위 안에 몬스터가 있다면 몬스터를 공격한다.
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vBossPos = m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
-	CS_Skill_Weapon::WEAPONDESC			WeaponDesc;
-	ZeroMemory(&WeaponDesc, sizeof(WeaponDesc));
+	_vector vDistance = vBossPos - vPos;
+	_float fDistance = XMVectorGetX(XMVector3Length(vDistance));
 
-	WeaponDesc.eWeaponType = CS_Skill_Weapon::WEAPONDESC::JAKE_MAGIC;
-	WeaponDesc.PivotMatrix = m_pModelCom->Get_PivotFloat4x4();
-	WeaponDesc.pSocket = m_pModelCom->Get_BonePtr("Jake_Arm_Mesh");
-	WeaponDesc.pTargetTransform = m_pTransformCom;
-	Safe_AddRef(WeaponDesc.pSocket);
-	Safe_AddRef(m_pTransformCom);
-
-	pPartObject = pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_S_Weapon"), &WeaponDesc);
-	if (nullptr == pPartObject)
-		return E_FAIL;
-
-	m_SkillParts.push_back(pPartObject);
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
+	if (3 > fDistance)
+		m_eState = CS_Jake_Son_Transform::STATE(CUtilities_Manager::GetInstance()->Get_Random(2, 3));	// 랜덤으로 스킬을 변경한다.
+	else
+		Player_Follow(TimeDelta);
 }
 
-HRESULT CS_Jake_Son_Transform::Death_Set(const _double & TimeDelta)
+void CS_Jake_Son_Transform::State_Tick(const _double & TimeDelta)
 {
-	m_dSkillClone_TimeAcc += TimeDelta;
-
-	// 이펙트
-	if (21 < m_dSkillClone_TimeAcc)
+	switch (m_eState)
 	{
-		m_OnMove = false;
-
-		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.0f, 0.0f, 0.0f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
+	case Client::CS_Jake_Son_Transform::IDLE:
+		m_pModelCom->Set_AnimIndex(2);
+		Player_Follow(TimeDelta);
+		break;
+	case Client::CS_Jake_Son_Transform::RUN:
+		m_pModelCom->Set_AnimIndex(3);
+		break;
+	case Client::CS_Jake_Son_Transform::ATTACK:
+		m_pModelCom->Set_AnimIndex(0, false, false);
+		Attack_Tick(TimeDelta);
+		break;
+	case Client::CS_Jake_Son_Transform::SKILL:
+		m_pModelCom->Set_AnimIndex(1, false, false);
+		Skill_Tick(TimeDelta);
+		break;
 	}
-
-	if (22 < m_dSkillClone_TimeAcc)
-	{
-		// 죽을때 플레이어 원래 상태로 돌려놓는다.
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		CJake * pGameObject = dynamic_cast<CJake*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), 0));
-		if (nullptr == pGameObject)
-			return E_FAIL;
-		
-		pGameObject->Set_Change();
-		RELEASE_INSTANCE(CGameInstance);
-
-		CGameObject::Set_Dead();
-
-		m_dSkillClone_TimeAcc = 0;
-		return S_OK;
-	}
-
-	return S_OK;
 }
 
-void CS_Jake_Son_Transform::Effect_Create(const _double & TimeDelta)
+void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 {
-	// 이펙트
-	if (1 < m_dSkillClone_TimeAcc)
-		return;
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();	// Finn 좌표 받아옴
 
-	m_OnMove = false;
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
 
-	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(0.0f, 0.0f, 0.0f));
-	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	// 따라가는 속도 조절
+	if (2.2f > fDistanceX)
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f, m_pNavigationCom);
+	else
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f, m_pNavigationCom);
+
+	// 상태 변경
+	if (1.5f < fDistanceX)
+		m_eState = RUN;
+	if (1.5f > fDistanceX)
+		m_eState = IDLE;
+}
+
+void CS_Jake_Son_Transform::Attack_Tick(const _double & TimeDelta)
+{
+
 }
 
 void CS_Jake_Son_Transform::Skill_Tick(const _double & TimeDelta)
 {
-	if (CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::HIT);
 
-	switch (CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
-	{
-	case Client::CSkill_Manager::MAGICSKILL::IDLE:
-		m_pModelCom->Set_AnimIndex(0);
-		break;
-	case Client::CSkill_Manager::MAGICSKILL::RUN:
-		m_pModelCom->Set_AnimIndex(1);
-		break;
-	case Client::CSkill_Manager::MAGICSKILL::ATTACK:
-		m_pModelCom->Set_AnimIndex(2, false);
-		Attack_Tick();
-		break;
-	case Client::CSkill_Manager::MAGICSKILL::HIT:
-		m_pModelCom->Set_AnimIndex(3, false);
-		Hit_Tick(TimeDelta);
-		break;
-	}
-}
-
-void CS_Jake_Son_Transform::Attack_Tick()
-{
-	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
-
-	if (m_pModelCom->Get_Finished())
-	{
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-	}
-}
-
-void CS_Jake_Son_Transform::Hit_Tick(const _double TimeDelta)
-{
-	m_OnMove = false;
-
-	m_bShader_Hit = true;
-
-	m_dShader_Hit_TimeAcc += TimeDelta;
-	if (0.1 < m_dShader_Hit_TimeAcc)
-		m_bShader_Hit = false;
-
-	if (m_pModelCom->Get_Finished())
-	{
-		m_bShader_Hit = false;
-		m_dShader_Hit_TimeAcc = 0;
-
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-	}
-}
-
-void CS_Jake_Son_Transform::KeyInput(const _double & TimeDelta)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (m_OnMove)
-	{
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::RUN);
-	}
-
-	if (m_OnMove && 15 <= m_pModelCom->Get_Keyframes())
-		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
-	else if (m_OnMove && 15 >= m_pModelCom->Get_Keyframes())
-		m_pTransformCom->Go_Straight(TimeDelta * 0.5, m_pNavigationCom);
-		
-#pragma region 이동
-	if (pGameInstance->Key_Pressing(DIK_UP))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
-
-		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-		if (pGameInstance->Key_Pressing(DIK_LEFT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-	}
-	if (pGameInstance->Key_Pressing(DIK_RIGHT))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
-
-		if (pGameInstance->Key_Pressing(DIK_UP))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-
-		if (pGameInstance->Key_Pressing(DIK_DOWN))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	}
-	if (pGameInstance->Key_Pressing(DIK_DOWN))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
-
-		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
-		if (pGameInstance->Key_Pressing(DIK_LEFT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	}
-	if (pGameInstance->Key_Pressing(DIK_LEFT))
-	{
-		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
-
-		if (pGameInstance->Key_Pressing(DIK_UP))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-		if (pGameInstance->Key_Pressing(DIK_DOWN))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	}
-#pragma endregion
-
-	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
-	{
-		m_OnMove = false;
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
-	}
-
-	if (pGameInstance->Key_Down(DIK_SPACE))
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::ATTACK);
-
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 CS_Jake_Son_Transform * CS_Jake_Son_Transform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -452,8 +452,6 @@ void CJake::Player_Follow(_double TimeDelta)
 {
 	// 현재 플레이어를 따라간다.
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();	// Finn 좌표 받아옴
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
@@ -491,8 +489,6 @@ void CJake::Player_Follow(_double TimeDelta)
 		if (1.5f > fDistanceX)
 			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CJake::Check_Follow(_double TimeDelta)
@@ -620,12 +616,6 @@ void CJake::Check_Follow(_double TimeDelta)
 void CJake::Key_Input(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	// TODO jake Test
-	if (pGameInstance->Key_Pressing(DIK_I))
-	{
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
-	}
 
 	if (pGameInstance->Key_Pressing(DIK_LCONTROL))
 	{

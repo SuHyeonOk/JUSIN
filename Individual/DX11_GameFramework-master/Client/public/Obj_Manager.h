@@ -62,9 +62,6 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
-	//_bool				Get_Monster_Crash() { return m_bMonster_Crash; }
-	//void				Set_Monster_Crash(_bool bCrash) { m_bMonster_Crash = bCrash; }
-
 	// 다음 레벨로 넘어갈 것 인지.
 	_bool				Get_NextLevel() { return m_bNextLevel; }
 	void				Set_NextLevel(_bool bNext) { m_bNextLevel = bNext; }
@@ -88,7 +85,9 @@ public:
 		return m_tPlayerInfo; 
 	}
 	void				Set_Current_Player(PLAYERINFO ePlayerInfo) { m_tPlayerInfo = ePlayerInfo; }
-	void				CObj_Manager::Set_Current_Player_State(PLAYERINFO::STATE	eState);
+	void				Set_Current_Player_State(PLAYERINFO::STATE	eState) {
+		m_tPlayerInfo.eState = eState;
+	}
 
 	// 무기
 	_bool				Get_Jake_Shield() { return m_bShield; }
@@ -165,7 +164,6 @@ private:
 	_double			m_dEffect_Up_TimeAcc = 0;
 
 	PLAYERINFO::STATE	m_tPlayerState = PLAYERINFO::STATE::STATE_END;
-	_bool				m_bHit = false;
 	_double				m_dHit_TimaAcc = 0;	// Hit, Stun, Magic 로 변할 때 키 입력 이있게 되면, 먹지 않아서
 
 public:

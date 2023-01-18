@@ -792,7 +792,7 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CBoss_S_Wind::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Skill
+	//// Skill
 	///* For.Prototype_GameObject_S_JakeSonTransform */
 	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
 	//	CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
