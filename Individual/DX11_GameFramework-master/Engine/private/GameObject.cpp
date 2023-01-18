@@ -110,8 +110,12 @@ CComponent * CGameObject::Find_Component(const _tchar * pComponentTag) // ◈
 	return iter->second;
 }
 
-HRESULT CGameObject::Compute_CamZ(_fvector vWorldPos)
+HRESULT CGameObject::Compute_CamZ()	// 현재 프로젝트의 경우 모든 CGaemObject 가 m_pTranformCom 을 가지고 있기에 인자(_fvector vWorldPos)를 받아오지 않도도 된다.
 {
+	// 알파 블렌드로 그리는 객체에서 매 프레임 마다 호출해서, 카메라 와의 거리를 게산한다.
+
+	_vector		vWorldPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
 	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
 
 	_fvector		vCamPos = XMLoadFloat4(&pPipeLine->Get_CamPosition());

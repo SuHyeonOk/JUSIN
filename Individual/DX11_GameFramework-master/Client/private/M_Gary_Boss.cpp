@@ -71,6 +71,17 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	//_matrix PlayerWorld;
+	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
+	//_float4x4 f44PlayerWorld;
+	//XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
+	//cout << "----------------보스------------------------" << endl;
+	//cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
+	//cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
+	//cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
+	//cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
+	//cout << "----------------보스------------------------" << endl;
+
 	Monster_Tick(TimeDelta);
 	Anim_Change();
 }
@@ -411,13 +422,15 @@ HRESULT CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		
 		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		_float4 f4Look = { 0.0f, 0.0f, 1.0f, 0.0f };
-		XMStoreFloat4(&f4Look, vLook);
 
 		_float fRange = 1.5f;
 		_vector vObjPos = vLook * fRange;
 		_float4 f4ObjPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 		XMStoreFloat4(&f4ObjPos, vObjPos);
+
+		vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		_float4 f4Look = { 0.0f, 0.0f, 1.0f, 0.0f };
+		XMStoreFloat4(&f4Look, vLook);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

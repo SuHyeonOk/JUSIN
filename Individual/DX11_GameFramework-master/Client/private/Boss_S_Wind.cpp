@@ -44,9 +44,16 @@ HRESULT CBoss_S_Wind::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVectorSet(m_tSkillInfo.f4Look.x, m_tSkillInfo.f4Look.y, m_tSkillInfo.f4Look.z, m_tSkillInfo.f4Look.w));
-	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	m_pTransformCom->Rotation(vRight, XMConvertToRadians(90.f));
+	_vector vLook = XMLoadFloat4(&m_tSkillInfo.f4Look);
+	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	_vector vUp = XMVector3Cross(vLook, vRight);
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVectorSet(m_tSkillInfo.f4Look.x, m_tSkillInfo.f4Look.y, m_tSkillInfo.f4Look.z, m_tSkillInfo.f4Look.w));
+	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(-90.f));
 
 	m_fAlpha = 1.0f;
 	m_fSizeX = 1.0f;
@@ -59,19 +66,63 @@ void CBoss_S_Wind::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//if (pGameInstance->Key_Pressing(DIK_A))
-	//	--m_fX;
-	//if (pGameInstance->Key_Pressing(DIK_D))
-	//	++m_fX;
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//cout << "m_fX : " << m_fX << endl;
+	_matrix PlayerWorld;
+	PlayerWorld = m_pTransformCom->Get_WorldMatrix();
+	_float4x4 f44PlayerWorld;
+	XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
+	cout << "----------------------------------------" << endl;
+	cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
+	cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
+	cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
+	cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
+	cout << "----------------------------------------" << endl;
 
-	//RELEASE_INSTANCE(CGameInstance);
+	if (pGameInstance->Key_Pressing(DIK_F))
+	{
+		_matrix PlayerWorld;
+		PlayerWorld = m_pTransformCom->Get_WorldMatrix();
+		_float4x4 f44PlayerWorld;
+		XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
+		cout << "----------------------------------------" << endl;
+		cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
+		cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
+		cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
+		cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
+		cout << "----------------------------------------" << endl;
+	}
 
-	//_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	//m_pTransformCom->Rotation(vRight, XMConvertToRadians(m_fX));
+	if (pGameInstance->Key_Pressing(DIK_R))
+	{
+		m_fX = 0;
+		m_fY = 0;
+		m_fZ = 0;
+	}
+
+	if (pGameInstance->Key_Pressing(DIK_Q))
+		--m_fX;
+	if (pGameInstance->Key_Pressing(DIK_A))
+		++m_fX;
+
+	if (pGameInstance->Key_Pressing(DIK_W))
+		--m_fY;
+	if (pGameInstance->Key_Pressing(DIK_S))
+		++m_fY;
+
+	if (pGameInstance->Key_Pressing(DIK_E))
+		--m_fZ;
+	if (pGameInstance->Key_Pressing(DIK_D))
+		++m_fZ;
+
+	cout << "m_fX : " << m_fX << " | m_fY : " << m_fY << " | m_fZ : " << m_fZ << endl;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(m_fX));
+	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(m_fY));
+	//m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), XMConvertToRadians(m_fZ));
 
 
 
@@ -134,8 +185,8 @@ void CBoss_S_Wind::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		CObj_Manager::GetInstance()->Set_Interaction(true);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+		//CObj_Manager::GetInstance()->Set_Interaction(true);
+		//CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 	} 
 }
 

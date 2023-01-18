@@ -60,10 +60,10 @@ protected:
 protected:	
 	HRESULT				Add_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, class CComponent** ppOut, void* pArg = nullptr);
 	class CComponent*	Find_Component(const _tchar* pComponentTag);
-	HRESULT				Compute_CamZ(_fvector vWorldPos);
+	HRESULT				Compute_CamZ();
 
 private:
-	_float		m_fCamDistance = 0.0f;	// 객체와 카메라의 거리
+	_float		m_fCamDistance = 0.0f;	// 알파 블렌드로 그리는 객체마다. 카메라와의 거리르 가지고 있는다.
 	_bool		m_bDead = false;		// 객체가 사라져야 한다면 , true
 
 public:	

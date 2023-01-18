@@ -57,6 +57,8 @@ private:
 
 
 	_float	m_fX = 0.0f;
+	_float	m_fY = 0.0f;
+	_float	m_fZ = 0.0f;
 
 public:
 	static	CBoss_S_Wind*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

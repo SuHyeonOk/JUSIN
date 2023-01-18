@@ -96,7 +96,7 @@ void CM_Ghost::Late_Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	CGameObject::Compute_CamZ();
 
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))

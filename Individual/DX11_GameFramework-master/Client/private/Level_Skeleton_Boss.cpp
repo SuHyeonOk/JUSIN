@@ -17,6 +17,7 @@
 #include "Page.h"
 
 #include "B_3DBullet.h"
+#include "Boss_S_Wind.h"
 
 CLevel_Skleton_Boss::CLevel_Skleton_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -33,6 +34,8 @@ HRESULT CLevel_Skleton_Boss::Initialize()
 		return E_FAIL;
 	
 #ifdef F2_SKELETON
+
+	Test(TEXT("Test"));
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
@@ -81,6 +84,21 @@ HRESULT CLevel_Skleton_Boss::Render()
 		return E_FAIL;
 
 	//SetWindowText(g_hWnd, TEXT("Level : GAMEPLAY"));
+
+	return S_OK;
+}
+
+HRESULT CLevel_Skleton_Boss::Test(const _tchar* pLayerTag)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CBoss_S_Wind::BOSSSKILLINFO tSkillInfo;
+	tSkillInfo.f3Pos = _float3(5.0f, 0.f, 0.0f);
+	tSkillInfo.f4Look = _float4(0.0f, 0.0f, 1.0f, 0.0f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Wind"), TEXT("Prototype_GameObject_Boss_S_Wind"), &tSkillInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }

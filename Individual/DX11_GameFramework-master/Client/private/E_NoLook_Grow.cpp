@@ -89,7 +89,7 @@ void CE_NoLook_Grow::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	CGameObject::Compute_CamZ();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);

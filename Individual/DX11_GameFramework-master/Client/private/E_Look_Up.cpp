@@ -43,14 +43,18 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	_float fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 1.2f);
+	_float fRandomSize = 0.0f;
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+		fRandomSize = 1.0f;
+	else
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
 
 	// 알파 값
-	m_fAlpha = 0.6f;
-
+	m_fAlpha = 1.0f;
+	
 	return S_OK;
 }
 
@@ -68,9 +72,19 @@ void CE_Look_Up::Tick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(vCameraPos, true);
 
+	_vector	vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector	vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+
+	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
+	vPosition += XMVector3Normalize(vUp) * _float(TimeDelta);
+
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPosition);
+
+
 	//m_dNoAlpha_TimeAcc += TimeDelta;
 	//if (0.5 < m_dNoAlpha_TimeAcc)
-		m_fAlpha -= _float(TimeDelta) * 0.5f;
+	//if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+		m_fAlpha -= _float(TimeDelta) * 0.4f;
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
@@ -80,7 +94,7 @@ void CE_Look_Up::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Compute_CamZ(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	Compute_CamZ();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
@@ -94,7 +108,12 @@ HRESULT CE_Look_Up::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(4);
+	// 색 조정
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+		m_pShaderCom->Begin(4);
+	// 이미지색
+	else
+		m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 

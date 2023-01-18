@@ -109,7 +109,7 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 
 	/* For.Target_Depth */	// 원하면 월드 pos를 넘겨줘도 되는데 Depth 을 넘기는 것이 보다 활용도가 좋다. 그 때는 DXGI_FORMAT_R32G32B32A32_FLOAT 을 사용하면 된다.
-	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R16G16B16A16_UNORM, &_float4(0.f, 0.f, 0.f, 1.f))))
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R16G16B16A16_UNORM, &_float4(0.f, 1.f, 0.f, 1.f))))
 		return E_FAIL;
 
 
@@ -340,7 +340,7 @@ HRESULT CRenderer::Render_NonLight()
 
 HRESULT CRenderer::Render_AlphaBlend()
 {
-	m_RenderObjects[RENDER_ALPHABLEND].sort([](CGameObject* pSour, CGameObject* pDest)
+	m_RenderObjects[RENDER_ALPHABLEND].sort([](CGameObject* pSour, CGameObject* pDest)-> _bool
 	{
 		return pSour->Get_CamDistance() > pDest->Get_CamDistance();
 	});

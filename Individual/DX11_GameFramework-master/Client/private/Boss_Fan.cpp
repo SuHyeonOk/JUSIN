@@ -213,7 +213,7 @@ void CBoss_Fan::Monster_Tick(const _double & TimeDelta)
 	{
 	case Client::CBoss_Fan::DANCE:
 		m_pModelCom->Set_AnimIndex(2);
-		Dance_Tick();
+		Dance_Tick(TimeDelta);
 		break;
 	case Client::CBoss_Fan::HIT:
 		m_pModelCom->Set_AnimIndex(5);
@@ -226,10 +226,21 @@ void CBoss_Fan::Monster_Tick(const _double & TimeDelta)
 	}
 }
 
-void CBoss_Fan::Dance_Tick()
+void CBoss_Fan::Dance_Tick(const _double& TimeDelta)
 {
 	// ¿Ã∆Â∆Æ
+	m_bEffect_TimeAcc += TimeDelta;
+	if (0.3 < m_bEffect_TimeAcc)
+	{
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Pos, vPos);
 
+		CEffect_Manager::GetInstance()->Effect_Color_Boss_Smoke_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z), _float3(0.6f, 0.5f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Color_Skeleeton_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z), _float3(0.7f, 0.1f, 1.0f));
+
+		m_bEffect_TimeAcc = 0;
+	}
 }
 
 void CBoss_Fan::Hit_Tick(const _double & TimeDelta)

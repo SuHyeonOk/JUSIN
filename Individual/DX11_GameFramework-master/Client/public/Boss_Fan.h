@@ -43,7 +43,7 @@ private:
 private:
 	void			Monster_Tick(const _double& TimeDelta);
 
-	void			Dance_Tick();
+	void			Dance_Tick(const _double& TimeDelta);
 	void			Hit_Tick(const _double& TimeDelta);
 	void			Die(const _double& TimeDelta);
 
@@ -57,6 +57,8 @@ private:
 	_float			m_fAlpha = 1.0f;
 
 	_int			m_iDieEffect_Count = 0;
+
+	_double			m_bEffect_TimeAcc = 0;
 
 public:
 	static	CBoss_Fan*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
