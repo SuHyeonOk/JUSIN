@@ -231,10 +231,12 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 		//m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
 	}
+#ifdef F2_SKELETON
 	else if (ePlayerInfo.ePlayer == ePlayerInfo.FREE)
 	{
 		Key_Input(TimeDelta);
-	}
+}
+#endif
 
 	RELEASE_INSTANCE(CGameInstance);
 }

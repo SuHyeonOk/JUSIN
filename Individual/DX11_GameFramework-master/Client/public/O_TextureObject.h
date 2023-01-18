@@ -51,12 +51,10 @@ private:
 	CCollider*				m_pColliderCom = nullptr;
 
 private:
-	void					MovePortal(const _double & TimeDelta);
-
-private:
 	TEXTUREOBJECT			m_TextureObject;
 
-	_double					m_bMovePortal = 0;
+	_bool					m_bTick = false;
+	_double					m_bEffect_TimeAcc = 0;
 
 public:
 	static	CO_TextureObject*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

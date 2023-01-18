@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "PipeLine.h"
+#include "Effect_Manager.h"
 
 CO_TextureObject::CO_TextureObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -78,15 +79,34 @@ void CO_TextureObject::Tick(_double TimeDelta)
 
 	// 	RELEASE_INSTANCE(CGameInstance);
 
+	if (3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+		m_bTick = true;
+
+	if (false == m_bTick)
+		return;
+
 	//// 회전한다.
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)	// 일정 시간 뒤 삭제
-		MovePortal(TimeDelta);
+	// 이펙트
+
+	m_bEffect_TimeAcc += TimeDelta;
+	if (1.0 < m_bEffect_TimeAcc)
+	{
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Pos, vPos);
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4Pos.x, f4Pos.y, f4Pos.z - 0.2f));
+
+		m_bEffect_TimeAcc = 0;
+	}
 }
 
 void CO_TextureObject::Late_Tick(_double TimeDelta)
 {
+	if (false == m_bTick)
+		return;
+
 	__super::Late_Tick(TimeDelta);
 
 	// 충돌 처리
@@ -215,16 +235,6 @@ HRESULT CO_TextureObject::SetUp_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CO_TextureObject::MovePortal(const _double & TimeDelta)
-{
-	m_bMovePortal += TimeDelta;
-	if (1 < m_bMovePortal)
-	{
-		CGameObject::Set_Dead();
-		m_bMovePortal = 0;
-	}
 }
 
 CO_TextureObject * CO_TextureObject::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -753,7 +753,7 @@ HRESULT CFinn::Skill_Fiona_Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(),								// STATIC 레벨에
+	if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(),
 		TEXT("Layer_S_Fiona"), TEXT("Prototype_GameObject_S_Fiona"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
 	{
 		RELEASE_INSTANCE(CGameInstance);

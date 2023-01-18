@@ -811,22 +811,22 @@ void CM_Gary_Boss::Effect_Tick(const _double & TimeDelta)
 	cout << m_iEffect_Count << endl;
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4 f4rPos = { 0.0f, 0.0f, 0.0f, 1.0f };
-	XMStoreFloat4(&f4rPos, vPos);
+	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Pos, vPos);
 
  	if (0 == m_iEffect_Count)
 	{
-		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.3f));
 		++m_iEffect_Count;
 	}
 
 	m_dEffect_TimeAcc += TimeDelta;
 	if (0.3 < m_dEffect_TimeAcc)
 	{
-		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.3f));
-		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4rPos.x, f4rPos.y + 1.5f, f4rPos.z - 1.2f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.2f));
 
 		++m_iEffect_Count;
 		m_dEffect_TimeAcc = 0;
