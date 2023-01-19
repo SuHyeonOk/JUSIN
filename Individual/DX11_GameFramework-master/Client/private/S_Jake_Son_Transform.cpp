@@ -237,7 +237,9 @@ void CS_Jake_Son_Transform::State_Tick(const _double & TimeDelta)
 
 void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 {
-	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();	// Finn 좌표 받아옴
+	// TODO : 물속에 들어갈 때 조금 더 빨리 들어가기
+
+	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();		// Finn 좌표 받아옴
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
 	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
@@ -250,6 +252,9 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 	else
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f, m_pNavigationCom);
 
+	// 계속 플레이어 바라보기
+	m_pTransformCom->LookAt(vPlayerPos);
+
 	// 상태 변경
 	if (1.5f < fDistanceX)
 		m_eState = RUN;
@@ -259,6 +264,7 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 
 void CS_Jake_Son_Transform::Attack_Tick(const _double & TimeDelta)
 {
+	m_pTransformCom->LookAt(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta);
 
 

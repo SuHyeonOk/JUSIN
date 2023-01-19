@@ -59,6 +59,10 @@ void CS_Jake_Son_Twister::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	// JakeSonTeansform 이동시키기
+	m_pJakeSon_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
+	// 기본 공격
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), TimeDelta * 2.0f);
 	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta);
 }
@@ -135,7 +139,7 @@ HRESULT CS_Jake_Son_Twister::SetUp_Components()
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 	ColliderDesc.vSize = _float3(1.f, 1.f, 1.f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-
+	
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
