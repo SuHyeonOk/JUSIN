@@ -294,6 +294,8 @@ HRESULT CS_Jake_Son_Transform::Skill_Tick(const _double & TimeDelta)
 		pGameObject->Set_Dead();
 		m_dTwister_TimeAcc = 0;
 	}
+
+	return S_OK;
 }
 
 CS_Jake_Son_Transform * CS_Jake_Son_Transform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
