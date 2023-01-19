@@ -335,6 +335,13 @@ void CJake::Player_Tick(_double TimeDelta)
 		if (1 == m_pNavigationCom->Get_CellType())
 			m_bIsSwim = true;
 
+	// 예죄적으로 Jake의 경우 항시 체크한다.
+	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
+	{
+		if (CSkill_Manager::PLAYERSKILL::JAKESON == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::JAKESON;
+	}
+
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
 
@@ -1053,8 +1060,8 @@ HRESULT CJake::JakeSon_Tick(const _double & TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON,
-		TEXT("Layer_S_Change_JakeSOn"), TEXT("Prototype_GameObject_S_JakeSonTransform"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS,
+		TEXT("Layer_S_Change_JakeSonTransform"), TEXT("Prototype_GameObject_S_JakeSonTransform"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))	// 스킬 객체를 생성한다.
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;

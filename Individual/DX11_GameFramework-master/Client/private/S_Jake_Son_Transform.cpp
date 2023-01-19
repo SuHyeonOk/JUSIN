@@ -48,7 +48,7 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 		return E_FAIL;
 	
 	m_pTransformCom->Set_Pos();
-	m_pModelCom->Set_AnimIndex(0);
+	m_pModelCom->Set_AnimIndex(2);
 
 	CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::IDLE);
 
@@ -58,7 +58,7 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 	m_pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
 	m_pJake_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 
-	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Skeleton_Boss"), TEXT("Com_Transform"), 0));
+	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Com_Transform"), 0));
 
 	m_pNavigationCom->Set_CellIndex(m_pJake_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
@@ -133,6 +133,12 @@ HRESULT CS_Jake_Son_Transform::Render()
 	return S_OK;
 }
 
+void CS_Jake_Son_Transform::On_Collision(CGameObject * pOther)
+{
+	if (L"Gary_Boss" == pOther->Get_Tag())
+		m_bCollide = true;
+}
+
 HRESULT CS_Jake_Son_Transform::SetUp_Components()
 {
 	/* For.Com_Renderer */
@@ -153,7 +159,7 @@ HRESULT CS_Jake_Son_Transform::SetUp_Components()
 	CCollider::COLLIDERDESC			ColliderDesc;
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+	ColliderDesc.vSize = _float3(1.2f, 1.2f, 1.2f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
@@ -201,35 +207,46 @@ void CS_Jake_Son_Transform::JakeSon_Tick(const _double & TimeDelta)
 	// 평소에는 플레이어를 따라 다니다가
 	// 일정 범위 안에 몬스터가 있다면 몬스터를 공격한다.
 
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector vBossPos = m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	if (true == m_bIsSkill)
+		return;
 
-	_vector vDistance = vBossPos - vPos;
-	_float fDistance = XMVectorGetX(XMVector3Length(vDistance));
+	m_dSkill_TimeAcc += TimeDelta;
+	if (2.0 < m_dSkill_TimeAcc)
+	{
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_vector vBossPos = m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
-	if (3 > fDistance)
-		m_eState = CS_Jake_Son_Transform::STATE(CUtilities_Manager::GetInstance()->Get_Random(2, 3));	// 랜덤으로 스킬을 변경한다.
+		_vector vDistance = vBossPos - vPos;
+		_float fDistance = XMVectorGetX(XMVector3Length(vDistance));
+
+		if (4.0f > fDistance)
+		{
+			m_bIsSkill = true;
+			m_eState = CS_Jake_Son_Transform::STATE(CUtilities_Manager::GetInstance()->Get_Random(2, 3));	// 랜덤으로 스킬을 변경한다.
+		}
+		else
+			m_eState = RUN;
+
+
+		m_dSkill_TimeAcc = 0;
+	}
 	else
-		Player_Follow(TimeDelta);
+		m_eState = RUN;
 }
 
 void CS_Jake_Son_Transform::State_Tick(const _double & TimeDelta)
 {
 	switch (m_eState)
 	{
-	case Client::CS_Jake_Son_Transform::IDLE:
-		m_pModelCom->Set_AnimIndex(2);
+	case Client::CS_Jake_Son_Transform::RUN:
 		Player_Follow(TimeDelta);
 		break;
-	case Client::CS_Jake_Son_Transform::RUN:
-		m_pModelCom->Set_AnimIndex(3);
-		break;
 	case Client::CS_Jake_Son_Transform::ATTACK:
-		m_pModelCom->Set_AnimIndex(0);
+		m_pModelCom->Set_AnimIndex(1, false);
 		Attack_Tick(TimeDelta);
 		break;
 	case Client::CS_Jake_Son_Transform::SKILL:
-		m_pModelCom->Set_AnimIndex(1);
+		m_pModelCom->Set_AnimIndex(0);
 		Skill_Tick(TimeDelta);
 		break;
 	}
@@ -237,8 +254,6 @@ void CS_Jake_Son_Transform::State_Tick(const _double & TimeDelta)
 
 void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 {
-	// TODO : 물속에 들어갈 때 조금 더 빨리 들어가기
-
 	_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();		// Finn 좌표 받아옴
 
 	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
@@ -255,44 +270,53 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 	// 계속 플레이어 바라보기
 	m_pTransformCom->LookAt(vPlayerPos);
 
-	// 상태 변경
+	// 애니메이션 변경
 	if (1.5f < fDistanceX)
-		m_eState = RUN;
+		m_pModelCom->Set_AnimIndex(3);
 	if (1.5f > fDistanceX)
-		m_eState = IDLE;
+		m_pModelCom->Set_AnimIndex(2);
 }
 
 void CS_Jake_Son_Transform::Attack_Tick(const _double & TimeDelta)
 {
 	m_pTransformCom->LookAt(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta);
+	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta, 0.7f);
 
-
+	if (m_pModelCom->Get_Finished() && true == m_bCollide)
+	{
+		m_bCollide = false;
+		m_bIsSkill = false;
+		m_eState = RUN;
+	}
 }
 
 HRESULT CS_Jake_Son_Transform::Skill_Tick(const _double & TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
-	XMStoreFloat4(&f4Pos, vPos);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Jake_Son_Twister"), TEXT("Prototype_GameObject_S_Jake_Son_Twister"), &_float3(2.5f, 0.0f, 17.8f))))
+	if (false == m_bCreate)
 	{
-		RELEASE_INSTANCE(CGameInstance);
-		return E_FAIL;
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Pos, vPos);
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Jake_Son_Twister"), TEXT("Prototype_GameObject_S_Jake_Son_Twister"), &_float3(f4Pos.x, f4Pos.y, f4Pos.z))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return E_FAIL;
+		}
+
+		m_bCreate = true;
 	}
 
 	CS_Jake_Son_Twister * pGameObject = dynamic_cast<CS_Jake_Son_Twister*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Jake_Son_Twister"), TEXT("Prototype_GameObject_S_Jake_Son_Twister"), 0));
 	RELEASE_INSTANCE(CGameInstance);
 
-	m_dTwister_TimeAcc += TimeDelta;
-	if (3.0 < m_dTwister_TimeAcc)
+	if (nullptr == pGameObject)
 	{
-		m_eState = STATE::IDLE;
-		pGameObject->Set_Dead();
-		m_dTwister_TimeAcc = 0;
+		m_bCreate = false;
+		m_bIsSkill = false;
+		m_eState = RUN;
 	}
 
 	return S_OK;

@@ -29,7 +29,7 @@ public:
 	virtual void		Late_Tick(_double TimeDelta) override;
 	virtual HRESULT		Render() override;
 
-	virtual void		On_Collision(CGameObject* pOther) override {};
+	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
 	CShader*				m_pShaderCom = nullptr;
@@ -59,12 +59,16 @@ private:
 private:
 	_float3				m_f3Pos = _float3(0.f, 0.f, 0.f);
 	
-	STATE				m_eState = STATE_END;
+	STATE				m_eState = { STATE_END };
 
-	_double				m_dTwister_TimeAcc = { 0.0 };
+	_bool				m_bIsSkill = { false };
+	_double				m_dSkill_TimeAcc = { 0.0 };
+
+	_bool				m_bCollide = { false };
+	_bool				m_bCreate = { false };
 
 
-
+	_float m_i = 0;
 public:
 	static CS_Jake_Son_Transform*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*			Clone(void* pArg = nullptr) override;

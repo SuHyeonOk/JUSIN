@@ -71,10 +71,17 @@ void	CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex)
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::FIONA])
 			SkillIcon(PLAYERSKILL::SKILL::FIONA);
 	}
+	else if (PLAYERSKILL::SKILL::JAKESON == iIndex)
+	{
+		m_arrPageCount[PLAYERSKILL::SKILL::JAKESON] += 1;
+
+		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::JAKESON])
+			SkillIcon(PLAYERSKILL::SKILL::JAKESON);
+	}
 
 	//if (L"Item_Page_Paint" == pOther->Get_Tag())
 	//{
-	//	m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;		// 충돌한 객체의 개수 관리
+	//	m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;			// 충돌한 객체의 개수 관리
 
 	//	if(1 == m_arrPageCount[PLAYERSKILL::SKILL::PAINT])		// 아이템 개수가 1개 일 때만 스킬창에 추가할 수 있다.
 	//		SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기

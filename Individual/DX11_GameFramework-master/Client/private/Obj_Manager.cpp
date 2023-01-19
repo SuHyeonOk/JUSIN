@@ -17,7 +17,7 @@ HRESULT		CObj_Manager::Initialized()
 {
 	m_tPlayerInfo.fHP = 100.0f;
 	m_tPlayerInfo.fHPMax = 100.0f;
-	m_tPlayerInfo.fAttack = 10.0f;
+	m_tPlayerInfo.fAttack = 100.0f;
 	m_tPlayerInfo.fExp = 0.0f;
 	m_tPlayerInfo.fExpMax = 100.0f;
 	m_tPlayerInfo.iLevel = 1;
@@ -177,7 +177,9 @@ void		CObj_Manager::Key_Input()
 
 	if (pGameInstance->Key_Pressing(DIK_M))
 	{
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::JAKESON);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
+		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -298,26 +300,30 @@ void		CObj_Manager::Player_Weapon()
 	}
 	else	// 반대로 스킬을 사용중 이라면 스킬의 인덱스를 넘긴다.
 	{
+		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+
 		if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
-			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+			//m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(4);
 		}
 		else if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
-			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		//	m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(5);
 		}
 		else if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
-			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		//	m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(6);
 		}
 		else if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		{
-			m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+		//	m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(7);
 		}
+		else if (CSkill_Manager::PLAYERSKILL::JAKESON == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			CUI_Manager::GetInstance()->Set_Weapon_index(11);
 	}
 }
 

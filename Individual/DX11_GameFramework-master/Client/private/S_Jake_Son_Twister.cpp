@@ -34,7 +34,7 @@ HRESULT CS_Jake_Son_Twister::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.0f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
@@ -48,8 +48,8 @@ HRESULT CS_Jake_Son_Twister::Initialize(void * pArg)
 	m_pModelCom->Set_AnimIndex(0);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	m_pJakeSon_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_S_Change_JakeSOn"), TEXT("Com_Transform"), 0));
-	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Skeleton_Boss"), TEXT("Com_Transform"), 0));
+	m_pJakeSon_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_S_Change_JakeSonTransform"), TEXT("Com_Transform"), 0));
+	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Com_Transform"), 0));
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -63,7 +63,7 @@ void CS_Jake_Son_Twister::Tick(_double TimeDelta)
 	m_pJakeSon_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	// 기본 공격
-	m_pTransformCom->Turn(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), TimeDelta * 2.0f);
+	m_pTransformCom->Turn(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), TimeDelta * 5.0f);
 	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta);
 }
 
@@ -113,7 +113,8 @@ HRESULT CS_Jake_Son_Twister::Render()
 
 void CS_Jake_Son_Twister::On_Collision(CGameObject * pOther)
 {
-
+	if (L"Gary_Boss" == pOther->Get_Tag())
+		CGameObject::Set_Dead();
 }
 
 HRESULT CS_Jake_Son_Twister::SetUp_Components()
@@ -137,8 +138,8 @@ HRESULT CS_Jake_Son_Twister::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.f, 1.f, 1.f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vSize = _float3(1.2f, 1.2f, 1.2f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 	
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))

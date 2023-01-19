@@ -59,7 +59,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_eState		= IDLE;
 	m_eAnimState	= IDLE;
-	m_fHP			= 10.0f;
+	m_fHP			= 1000.0f;
 	m_fMaxHP		= 1000.0f;
 	m_fAttack		= 50.0f;
 	m_fExp			= 1000.0f;

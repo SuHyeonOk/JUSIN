@@ -887,7 +887,7 @@ HRESULT CLoader::UI_Texture()
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Weapon */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Weapon"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/Weapon_%d.png"), 11))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Weapon/Weapon_%d.png"), 12))))
 		return E_FAIL;
 
 	// Skill
@@ -897,7 +897,7 @@ HRESULT CLoader::UI_Texture()
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Skill_Icon */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Skill_Icon"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/Skill_%d.png"), 7))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/Skill_%d.png"), 8))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Skill_Scroll_Count */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Skill_Scroll_Count"),
@@ -1341,7 +1341,7 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
 	/* For.Prototype_Component_Model_S_JakeSonsTwister */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTwister"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTwister.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTwister/JakeSonsTwister.fbx", PivotMatrix))))
 		return E_FAIL;
  
 	// NPC
