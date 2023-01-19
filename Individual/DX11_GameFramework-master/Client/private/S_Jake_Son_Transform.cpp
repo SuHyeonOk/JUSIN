@@ -8,6 +8,7 @@
 #include "Effect_Manager.h"
 
 #include "S_Jake_Son_Twister.h"
+#include "Jake.h"
 
 CS_Jake_Son_Transform::CS_Jake_Son_Transform(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -55,12 +56,8 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	m_wsTag = L"Jake";
-	m_pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
 	m_pJake_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
-
 	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Com_Transform"), 0));
-
-	m_pNavigationCom->Set_CellIndex(m_pJake_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -71,11 +68,10 @@ void CS_Jake_Son_Transform::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//Effect_Create(TimeDelta);
+	Death_Set(TimeDelta);
 
 	// 계속 제이크의 좌표와 네비를 변경해 준다.
 	m_pJake_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	m_pJake_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
 	JakeSon_Tick(TimeDelta);
 	State_Tick(TimeDelta);
@@ -125,8 +121,6 @@ HRESULT CS_Jake_Son_Transform::Render()
 	{
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
-
-		m_pNavigationCom->Render();
 	}
 #endif
 
@@ -166,16 +160,6 @@ HRESULT CS_Jake_Son_Transform::SetUp_Components()
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
-	/* For.Com_Navigation */ 
-	CNavigation::NAVIDESC			NaviDesc;
-	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
-
-	NaviDesc.iCurrentIndex = 0;
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
-		(CComponent**)&m_pNavigationCom, &NaviDesc)))
-		return E_FAIL;
-
 	// TODO 전체적으로 플레이 하면서 네비 잘 타지는지 확인해야 한다.
 	//m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
 
@@ -198,6 +182,54 @@ HRESULT CS_Jake_Son_Transform::SetUp_ShaderResources()
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CS_Jake_Son_Transform::Death_Set(const _double & TimeDelta)
+{
+	if (0 == m_dSkillClone_TimeAcc)
+	{
+		// 이펙트
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		CEffect_Manager::GetInstance()->Effect_JakeSon_Transform_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.7f));
+	}
+
+	m_dSkillClone_TimeAcc += TimeDelta;
+
+	if (60.0 < m_dSkillClone_TimeAcc)
+	{
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		CEffect_Manager::GetInstance()->Effect_JakeSon_Transform_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.2f, f4PlayerPos.z - 0.7f));
+
+		// 죽을때 플레이어 원래 상태로 돌려놓는다.
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END);
+		
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		
+		// 핀의 네비 를 가져와서 제이크 에게 넘겨주기
+		CNavigation* pFinn_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+		CNavigation* pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+		pJake_NavigationCom->Set_CellIndex(pFinn_NavigationCom->Get_CellIndex());
+
+		// 제이크 변신 초기화 시켜주기
+		CJake * pGameObject = dynamic_cast<CJake*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), 0));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		RELEASE_INSTANCE(CGameInstance);
+
+		pGameObject->Set_Change();
+
+		m_dSkillClone_TimeAcc = 0;
+		CGameObject::Set_Dead();
+
+		return S_OK;
+	}
 
 	return S_OK;
 }
@@ -263,9 +295,9 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 
 	// 따라가는 속도 조절
 	if (2.2f > fDistanceX)
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f, m_pNavigationCom);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f);
 	else
-		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f, m_pNavigationCom);
+		m_pTransformCom->Chase(vPlayerPos, TimeDelta, 1.5f);
 
 	// 계속 플레이어 바라보기
 	m_pTransformCom->LookAt(vPlayerPos);
@@ -350,7 +382,6 @@ void CS_Jake_Son_Transform::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);

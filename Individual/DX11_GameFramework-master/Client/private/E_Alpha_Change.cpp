@@ -49,8 +49,14 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
-	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType || 
+		CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+	
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+		m_iDead_Number = 10;
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
+		m_iDead_Number = 3;
 
 	return S_OK;
 }
@@ -74,7 +80,7 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 		m_dChange_Texture = 0;
 	}
 
-	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
+	if (0 != m_iDead_Number)
 	{
 		if (4 <= m_iTexture_Index)
 		{
@@ -82,7 +88,7 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 			m_iTexture_Index = 0;
 		}
 
-		if (10 <= m_iDead_Count)
+		if (m_iDead_Number <= m_iDead_Count)
 			CGameObject::Set_Dead();
 	}
 	else
@@ -96,7 +102,7 @@ void CE_Alpha_Change::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	Compute_CamZ();
+	CGameObject::Compute_CamZ();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
@@ -141,7 +147,8 @@ HRESULT CE_Alpha_Change::SetUp_Components()
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::HIT_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::COLOR_HIT_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Hit_Cahange"));
-	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TEXTURE == m_tEffectInfo.eTextureType)
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Jake_Son"));
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BOOM_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Boom_Fire"));

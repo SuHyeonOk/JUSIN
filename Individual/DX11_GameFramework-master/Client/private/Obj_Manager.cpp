@@ -175,7 +175,7 @@ void		CObj_Manager::Key_Input()
 		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_FAMILY;
 	}
 
-	if (pGameInstance->Key_Pressing(DIK_M))
+	if (pGameInstance->Key_Down(DIK_M))
 	{
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::JAKESON);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);

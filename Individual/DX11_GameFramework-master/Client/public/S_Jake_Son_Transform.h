@@ -36,12 +36,9 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
-	CNavigation*			m_pNavigationCom = nullptr;
 
 private:
 	CTransform*				m_pJake_TransformCom = nullptr;
-	CNavigation*			m_pJake_NavigationCom = nullptr;
-
 	CTransform*				m_pBoss_TransformCom = nullptr;
 
 private:
@@ -49,6 +46,8 @@ private:
 	HRESULT				SetUp_ShaderResources();
 
 private:
+	HRESULT				Death_Set(const _double & TimeDelta);
+
 	void				JakeSon_Tick(const _double & TimeDelta);
 	void				State_Tick(const _double & TimeDelta);
 
@@ -67,8 +66,8 @@ private:
 	_bool				m_bCollide = { false };
 	_bool				m_bCreate = { false };
 
+	_double				m_dSkillClone_TimeAcc = { 0.0 };
 
-	_float m_i = 0;
 public:
 	static CS_Jake_Son_Transform*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*			Clone(void* pArg = nullptr) override;

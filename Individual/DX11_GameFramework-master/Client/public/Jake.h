@@ -24,6 +24,7 @@ private:
 public:
 	void	Set_Change() {
 		m_bChange = false;
+		m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::IDLE;
 	}
 
 public:
@@ -78,6 +79,7 @@ private:
 
 	HRESULT	Magic_Tick(_double TimeDelta);
 	HRESULT	JakeSon_Tick(const _double & TimeDelta);
+	void	JakeSon_Transform_Change();
 
 	void	Anim_Change(_double TimeDelta);
 

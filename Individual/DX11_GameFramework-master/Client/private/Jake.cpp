@@ -335,12 +335,8 @@ void CJake::Player_Tick(_double TimeDelta)
 		if (1 == m_pNavigationCom->Get_CellType())
 			m_bIsSwim = true;
 
-	// 예죄적으로 Jake의 경우 항시 체크한다.
-	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
-	{
-		if (CSkill_Manager::PLAYERSKILL::JAKESON == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-			m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::JAKESON;
-	}
+	// 예외적으로 Jake의 경우 항시 체크한다.
+	JakeSon_Transform_Change();
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		m_tPlayerInfo.eState = CObj_Manager::GetInstance()->Get_Current_Player().eState;
@@ -405,9 +401,7 @@ void CJake::Current_Player(_double TimeDelta)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
 		Player_Skill_Tick(TimeDelta);
-
-		if(CObj_Manager::PLAYERINFO::STATE::HIT != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-			Key_Input(TimeDelta);
+		Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -1042,8 +1036,6 @@ HRESULT CJake::Magic_Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
-
-	//CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 }
 
 HRESULT CJake::JakeSon_Tick(const _double & TimeDelta)
@@ -1070,6 +1062,15 @@ HRESULT CJake::JakeSon_Tick(const _double & TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 	
 	return S_OK;
+}
+
+void CJake::JakeSon_Transform_Change()
+{
+	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())	// 해당 레벨에서
+	{	
+		if (CSkill_Manager::PLAYERSKILL::JAKESON == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)	// 스킬을 사용하면
+			m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::JAKESON;
+	}
 }
 
 void CJake::Anim_Change(_double TimeDelta)

@@ -39,7 +39,6 @@ private:
 private:
 	CTransform*				m_pPlayer_TransformCom = nullptr;
 	CNavigation*			m_pPlayer_NavigationCom = nullptr;
-	CCollider*				m_pPlayer_ColliderCom = nullptr;
 
 private:
 	HRESULT SetUp_Components();

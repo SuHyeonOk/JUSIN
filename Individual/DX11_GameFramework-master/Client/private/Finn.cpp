@@ -306,14 +306,6 @@ void CFinn::Parts_LateTick(const _double & TimeDelta)
 
 void CFinn::Player_Tick(_double TimeDelta)
 {
-	//// 가장 우선히 되어야 할 행동
-	//if(CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	//	Hit_Tick(TimeDelta);
-	//else if (CObj_Manager::PLAYERINFO::STATE::STUN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	//	Stun_Tick();
-	////else if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	////	Stun_Tick();
-
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();

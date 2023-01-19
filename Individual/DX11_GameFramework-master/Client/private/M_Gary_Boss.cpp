@@ -537,7 +537,7 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
 	if(true == m_bEffect_Smoke)		// ÀÌÆåÆ®~~~
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f));
+		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), _float3(0.0f, 0.0f, 0.0f));
 
 	m_dSkill_TimeAcc += TimeDelta;
 	if (0 < m_dSkill_TimeAcc)
