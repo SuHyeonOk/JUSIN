@@ -178,6 +178,9 @@
     <Filter Include="02.GameObjects\Monster\0. Gary_Boss\Skill">
       <UniqueIdentifier>{605b3fa9-b638-414f-a702-c4af7e5a56cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Boss">
+      <UniqueIdentifier>{350a7176-7bb6-4cfd-bcf8-42f39f87d63b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -501,6 +504,15 @@
     <ClInclude Include="..\public\S_Jake_Son_Twister.h">
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Boss.h">
+      <Filter>02.GameObjects\UI\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Boss_Bar.h">
+      <Filter>02.GameObjects\UI\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Boss_BarBack.h">
+      <Filter>02.GameObjects\UI\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -805,6 +817,15 @@
     </ClCompile>
     <ClCompile Include="..\private\S_Jake_Son_Twister.cpp">
       <Filter>02.GameObjects\PlayerSkill\Jake_Son</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Boss.cpp">
+      <Filter>02.GameObjects\UI\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Boss_BarBack.cpp">
+      <Filter>02.GameObjects\UI\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Boss_Bar.cpp">
+      <Filter>02.GameObjects\UI\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

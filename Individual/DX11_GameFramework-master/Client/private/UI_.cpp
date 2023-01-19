@@ -226,7 +226,29 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 
-	
+	// [23] : Boss 공격시 UI
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Boss")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [24] : Boss 공격시 UI
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Boss_HealthBar_Bar")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [25] : Boss 공격시 UI
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Boss_HealthBar_BarBack")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
 
 
 	
@@ -313,6 +335,10 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[21]->Tick(TimeDelta);
 	m_vecUI[22]->Tick(TimeDelta);
 
+	// Boss UI
+	m_vecUI[23]->Tick(TimeDelta);
+	m_vecUI[25]->Tick(TimeDelta);
+	m_vecUI[24]->Tick(TimeDelta);
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -413,6 +439,9 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[21]->Late_Tick(TimeDelta);
 	m_vecUI[22]->Late_Tick(TimeDelta);
 
+	m_vecUI[23]->Late_Tick(TimeDelta);
+	m_vecUI[25]->Late_Tick(TimeDelta);
+	m_vecUI[24]->Late_Tick(TimeDelta);
 
 
 

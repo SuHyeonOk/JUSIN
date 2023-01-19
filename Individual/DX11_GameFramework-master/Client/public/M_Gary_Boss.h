@@ -23,6 +23,14 @@ private:
 	virtual ~CM_Gary_Boss() = default;
 
 public:
+	_float				Get_BossHp() {
+		return m_fHP;
+	}
+	_float				Get_BossMaxHp() {
+		return m_fMaxHP;
+	}
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual void		Tick(_double TimeDelta) override;

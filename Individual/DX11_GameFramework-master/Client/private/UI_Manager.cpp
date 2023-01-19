@@ -37,6 +37,8 @@ void CUI_Manager::UI_Monster_Index(CGameObject * pOther)
 		m_iUI_Monster_Index = 12;
 	else if (L"Monster__Magic_Man" == pOther->Get_Tag())
 		m_iUI_Monster_Index = 13;
+	else if (L"Gary_Boss" == pOther->Get_Tag())
+		m_iUI_Monster_Index = 14;
 }
 
 void CUI_Manager::Free()

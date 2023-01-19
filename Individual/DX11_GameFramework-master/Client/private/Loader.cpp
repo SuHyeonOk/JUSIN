@@ -31,6 +31,9 @@
 #include "UI_Scroll_Count.h"
 #include "UI_MiniMap.h"
 #include "UI_MiniMap_Player.h"
+#include "UI_Boss.h"
+#include "UI_Boss_Bar.h"
+#include "UI_Boss_BarBack.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -850,6 +853,20 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/Enemies_HealthBar_BarBack.png")))))
 		return E_FAIL;
 
+	// Boss
+	/* For.Prototype_Component_Texture_UI_Boss */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Boss"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/barra_boss_base.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Boss_HealthBar_Bar */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Boss_HealthBar_Bar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/barra_boss_Death.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Boss_HealthBar_BarBack */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Boss_HealthBar_BarBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/barra_boss_White.png")))))
+		return E_FAIL;
+
 	// Player 
 	/* For.Prototype_Component_Texture_UI_Finn_Informacion */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Finn_Informacion"),
@@ -928,23 +945,37 @@ HRESULT CLoader::UI_Create()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_3DTexture"),
 		CUI_3DTexture::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
+	/* For.Prototype_GameObject_UI_Talk */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Talk"),
 		CUI_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Monster
-	/* For.Prototype_GameObject_UI_3DTexture */
+	/* For.Prototype_GameObject_UI_Monster */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster"),
 		CUI_Monstser::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
+	/* For.Prototype_GameObject_UI_Monster_HealthBar_Bar */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster_HealthBar_Bar"),
 		CUI_Monstser_Bar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_UI_3DTexture */
+	/* For.Prototype_GameObject_UI_Monster_HealthBar_BarBack */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Monster_HealthBar_BarBack"),
 		CUI_Monstser_BarBack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Boss
+	/* For.Prototype_GameObject_UI_Boss */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Boss"),
+		CUI_Boss::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_Boss_HealthBar_Bar */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Boss_HealthBar_Bar"),
+		CUI_Boss_Bar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_Boss_HealthBar_BarBack */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Boss_HealthBar_BarBack"),
+		CUI_Boss_BarBack::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Player

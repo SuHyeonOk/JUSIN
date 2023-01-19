@@ -93,7 +93,7 @@ public:
 	void Speed_Chase(_fvector vTargetPos, _float fSpeed, _double TimeDelta, _float fLimit = 0.1f);
 
 	_bool	Go_SwinUp(_double TimeDelta, _float fSpeed);
-	void	Go_SwinDown(_double TimeDelta, _float fSpeed, _float fDeep);
+	void	Go_SwinDown(_double TimeDelta, _float fDeep);
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShaderCom, const char* pConstantName);

@@ -249,6 +249,9 @@
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_.h" />
     <ClInclude Include="..\public\UI_3DTexture.h" />
+    <ClInclude Include="..\public\UI_Boss.h" />
+    <ClInclude Include="..\public\UI_Boss_Bar.h" />
+    <ClInclude Include="..\public\UI_Boss_BarBack.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
     <ClInclude Include="..\public\UI_Level_Bar.h" />
     <ClInclude Include="..\public\UI_Level_BarBack.h" />
@@ -354,6 +357,9 @@
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\UI_.cpp" />
     <ClCompile Include="..\private\UI_3DTexture.cpp" />
+    <ClCompile Include="..\private\UI_Boss.cpp" />
+    <ClCompile Include="..\private\UI_Boss_Bar.cpp" />
+    <ClCompile Include="..\private\UI_Boss_BarBack.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
     <ClCompile Include="..\private\UI_Level_Bar.cpp" />
     <ClCompile Include="..\private\UI_Level_BarBack.cpp" />

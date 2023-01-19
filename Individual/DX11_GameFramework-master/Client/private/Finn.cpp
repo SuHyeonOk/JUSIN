@@ -869,8 +869,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(52);
 
 		// CellType 이 1 이라면 내려가다가
-		m_pTransformCom->Go_SwinDown(TimeDelta, 1.2f, -0.8f);	// -0.6 변경하면 Player Flolow() 에서도 변경
-
+		m_pTransformCom->Go_SwinDown(TimeDelta * 2.2f, -0.8f);	// -0.6 변경하면 Player Flolow() 에서도 변경
 																// CellType 이 0 이되면 올라간다.
 		if (0 == m_pNavigationCom->Get_CellType())
 		{

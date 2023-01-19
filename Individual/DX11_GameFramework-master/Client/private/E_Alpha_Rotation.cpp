@@ -130,6 +130,10 @@ HRESULT CE_Alpha_Rotation::SetUp_Components()
 	case CE_Alpha_Rotation::EFFECTINFO::POTAL_STAR_TEXTURE:
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Potal_Star"));
 		break;
+
+	case CE_Alpha_Rotation::EFFECTINFO::POTAL_STARCOLOR_TEXTURE:
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Potal_Star"));
+		break;
 	}
 
 	/* For.Com_Texture */

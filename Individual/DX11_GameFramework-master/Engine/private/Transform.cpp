@@ -437,12 +437,12 @@ _bool CTransform::Go_SwinUp(_double TimeDelta, _float fSpeed)
 	return false;
 }
 
-void CTransform::Go_SwinDown(_double TimeDelta, _float fSpeed, _float fDeep)
+void CTransform::Go_SwinDown(_double TimeDelta, _float fDeep)
 {
 	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
 	_vector	vUp = Get_State(CTransform::STATE_UP);
 
-	vPosition -= XMVector3Normalize(vUp) * fSpeed * _float(TimeDelta);
+	vPosition -= XMVector3Normalize(vUp) * _float(TimeDelta);
 
 	_float4 f4MyPos;
 	XMStoreFloat4(&f4MyPos, vPosition);
