@@ -34,6 +34,8 @@
 #include "UI_Boss.h"
 #include "UI_Boss_Bar.h"
 #include "UI_Boss_BarBack.h"
+#include "UI_Inventory_X.h"
+#include "UI_Inventory.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -931,6 +933,15 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Player.png")))))
 		return E_FAIL;
 
+	// Inventory
+	/* For.Prototype_Component_Texture_UI_Inventory_X */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Inventory_X"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/enchiridion_pc_Key1.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Inventario */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Inventario"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/inventario.png")))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1037,6 +1048,19 @@ HRESULT CLoader::UI_Create()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_MninMap_Player"),
 		CUI_MninMap_Player::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Inventory
+	/* For.Prototype_GameObject_UI_Inventory */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Inventory_X"),
+		CUI_Inventory_X::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_Inventory */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Inventory"),
+		CUI_Inventory::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
 
 
 

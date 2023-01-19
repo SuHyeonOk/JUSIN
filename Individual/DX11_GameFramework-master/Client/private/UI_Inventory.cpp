@@ -1,26 +1,25 @@
 #include "stdafx.h"
-#include "..\public\UI_Boss_Bar.h"
+#include "..\public\UI_Inventory.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
-#include "M_Gary_Boss.h"
 
-CUI_Boss_Bar::CUI_Boss_Bar(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CUI_Inventory::CUI_Inventory(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)
 {
 }
 
-CUI_Boss_Bar::CUI_Boss_Bar(const CUI_Boss_Bar & rhs)
+CUI_Inventory::CUI_Inventory(const CUI_Inventory & rhs)
 	: CUI_(rhs)
 {
 }
 
-HRESULT CUI_Boss_Bar::Initialize_Prototype()
+HRESULT CUI_Inventory::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CUI_Boss_Bar::Initialize(void * pArg)
+HRESULT CUI_Inventory::Initialize(void * pArg)
 {
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -34,11 +33,14 @@ HRESULT CUI_Boss_Bar::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_fSizeX = 417.0f / 1.5f;
-	m_fSizeY = 22.0f / 1.5f;
+	m_fSizeX = 974.0f / 1.5f;
+	m_fSizeY = 626.0f / 1.5f;
+
+	m_fX = m_fSizeX * 0.5f;
+	m_fY = m_fSizeY * 0.7f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(10.0f, 261.0f, 0.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(0.0f, 0.0f, 0.f, 1.f));
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));
@@ -46,18 +48,18 @@ HRESULT CUI_Boss_Bar::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CUI_Boss_Bar::Tick(_double TimeDelta)
+void CUI_Inventory::Tick(_double TimeDelta)
 {
-	
+
 }
 
-void CUI_Boss_Bar::Late_Tick(_double TimeDelta)
+void CUI_Inventory::Late_Tick(_double TimeDelta)
 {
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
-HRESULT CUI_Boss_Bar::Render()
+HRESULT CUI_Inventory::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -65,14 +67,14 @@ HRESULT CUI_Boss_Bar::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(3);
+	m_pShaderCom->Begin(1);
 
 	m_pVIBufferCom->Render();
 
 	return S_OK;
 }
 
-HRESULT CUI_Boss_Bar::SetUp_Components()
+HRESULT CUI_Inventory::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -90,14 +92,14 @@ HRESULT CUI_Boss_Bar::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Boss_HealthBar_Bar"), TEXT("Com_Texture"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Inventario"), TEXT("Com_Texture"),
 		(CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CUI_Boss_Bar::SetUp_ShaderResources()
+HRESULT CUI_Inventory::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -112,47 +114,34 @@ HRESULT CUI_Boss_Bar::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_M_Gary_Boss"), 0));
-	if (nullptr == pGameObject)
-	{
-		MSG_BOX("보스 체력을 가져오지 못했습니다.");
-		return E_FAIL;
-	}
-	RELEASE_INSTANCE(CGameInstance);
-
-	_float fHPGauge = pGameObject->Get_BossHp() / pGameObject->Get_BossMaxHp();
-	if (FAILED(m_pShaderCom->Set_RawValue("g_fHPGauge", &fHPGauge, sizeof _float)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
-CUI_Boss_Bar * CUI_Boss_Bar::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CUI_Inventory * CUI_Inventory::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CUI_Boss_Bar*		pInstance = new CUI_Boss_Bar(pDevice, pContext);
+ 	CUI_Inventory*		pInstance = new CUI_Inventory(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CUI_Boss_Bar");
+		MSG_BOX("Failed to Created : CUI_Inventory");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CUI_Boss_Bar::Clone(void * pArg)
+CGameObject * CUI_Inventory::Clone(void * pArg)
 {
-	CUI_Boss_Bar*		pInstance = new CUI_Boss_Bar(*this);
+	CUI_Inventory*		pInstance = new CUI_Inventory(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CUI_Boss_Bar");
+		MSG_BOX("Failed to Cloned : CUI_Inventory");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CUI_Boss_Bar::Free()
+void CUI_Inventory::Free()
 {
 	__super::Free();
 

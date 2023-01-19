@@ -62,6 +62,11 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
+	// UI_Inventory
+	_bool				Get_Inventory() {
+		return m_bInventory;
+	}
+
 	// 다음 레벨로 넘어갈 것 인지.
 	_bool				Get_NextLevel() { return m_bNextLevel; }
 	void				Set_NextLevel(_bool bNext) { m_bNextLevel = bNext; }
@@ -151,13 +156,13 @@ private:
 	_float			m_fAngle = 0.f;
 
 private:
-	// X 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
+	// Z 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
 	_uint			m_ChangeTarget = 0;
+	_int			m_iWeapon_Index = 0;
+	_bool			m_bInventory = false;
 
 	_float			m_fMonster_Attck = 0;
 	_double			m_dPlayerAttck_TimeAcc = 0;
-
-	_int			m_iWeapon_Index = 0;
 
 	_bool			m_bEffect = false;
 	_double			m_dEffect_TimeAcc = 0;

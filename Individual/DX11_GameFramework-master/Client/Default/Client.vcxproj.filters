@@ -181,6 +181,9 @@
     <Filter Include="02.GameObjects\UI\Boss">
       <UniqueIdentifier>{350a7176-7bb6-4cfd-bcf8-42f39f87d63b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory">
+      <UniqueIdentifier>{6a75a53a-4476-45cc-86ed-6e1b4fde68d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -513,6 +516,12 @@
     <ClInclude Include="..\public\UI_Boss_BarBack.h">
       <Filter>02.GameObjects\UI\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Inventory.h">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Inventory_X.h">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -826,6 +835,12 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_Boss_Bar.cpp">
       <Filter>02.GameObjects\UI\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Inventory_X.cpp">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Inventory.cpp">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -250,7 +250,21 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 
+	// [26] : Inventory_X
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Inventory_X")));
 
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
+
+	// [27] : Inventory
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Inventory")));
+
+	if (nullptr == pUI)
+		return E_FAIL;
+
+	m_vecUI.push_back(pUI);
 	
 
 
@@ -335,10 +349,21 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[21]->Tick(TimeDelta);
 	m_vecUI[22]->Tick(TimeDelta);
 
-	// Boss UI
-	m_vecUI[23]->Tick(TimeDelta);
-	m_vecUI[25]->Tick(TimeDelta);
-	m_vecUI[24]->Tick(TimeDelta);
+	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())	// Boss 전에서만 유아이를 띄운다.
+	{
+		// Boss UI
+		m_vecUI[23]->Tick(TimeDelta);
+		m_vecUI[25]->Tick(TimeDelta);
+		m_vecUI[24]->Tick(TimeDelta);
+	}
+
+	// Inventory
+	m_vecUI[26]->Tick(TimeDelta);
+	if(true == CObj_Manager::GetInstance()->Get_Inventory())
+		m_vecUI[27]->Tick(TimeDelta);
+
+
+
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -439,9 +464,18 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[21]->Late_Tick(TimeDelta);
 	m_vecUI[22]->Late_Tick(TimeDelta);
 
-	m_vecUI[23]->Late_Tick(TimeDelta);
-	m_vecUI[25]->Late_Tick(TimeDelta);
-	m_vecUI[24]->Late_Tick(TimeDelta);
+	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
+	{
+		m_vecUI[23]->Late_Tick(TimeDelta);
+		m_vecUI[25]->Late_Tick(TimeDelta);
+		m_vecUI[24]->Late_Tick(TimeDelta);
+	}
+
+	m_vecUI[26]->Late_Tick(TimeDelta);
+	if (true == CObj_Manager::GetInstance()->Get_Inventory())
+		m_vecUI[27]->Late_Tick(TimeDelta);
+
+
 
 
 

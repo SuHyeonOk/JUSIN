@@ -161,6 +161,10 @@ void		CObj_Manager::Key_Input()
 	if (pGameInstance->Key_Down(DIK_F11))
 		g_bNavigationRender = !g_bNavigationRender;
 
+	// Inventory
+	if (pGameInstance->Key_Down(DIK_X))
+		m_bInventory = !m_bInventory;
+
 	// 상호작용 키 움직이지 못함.
 	if (pGameInstance->Key_Down(DIK_F))
 		m_bInteraction = !m_bInteraction;

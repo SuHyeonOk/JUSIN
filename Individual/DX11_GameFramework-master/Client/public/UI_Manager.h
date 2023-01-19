@@ -68,7 +68,9 @@ public:
 
 	// 몬스터 체력 게이지
 	_float		Get_HPGauge_Monster() { return m_HpGauge_Monster; }
-	void		Set_HPGauge_Monster(_float fGauge) { m_HpGauge_Monster = fGauge; }
+	void		Set_HPGauge_Monster(_float fGauge) { 
+		m_HpGauge_Monster = fGauge;
+	}
 
 	// UI 몬스터 인덱스
 	_int		Get_UI_Monster_Index() { return m_iUI_Monster_Index; }

@@ -113,7 +113,8 @@ void CFinn_Weapon::On_Collision(CGameObject * pOther)
 	if (CObj_Manager::PLAYERINFO::FINN != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 	
-	CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
+	if (L"Gary_Boss" != pOther->Get_Tag())
+		CUI_Manager::GetInstance()->Set_Ui_Monster(true);		// 나 지금 몬스터랑 충돌 해서 UI 를 띄울게
 	CUI_Manager::GetInstance()->UI_Monster_Index(pOther);	// 충돌한 몬스터는 이거야
 }
 

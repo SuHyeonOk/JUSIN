@@ -272,7 +272,7 @@ void CM_Skeleton_Archer::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta))
+	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 0.5f))
 	{
 		m_bAttack = false;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;

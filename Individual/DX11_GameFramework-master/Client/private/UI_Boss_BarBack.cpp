@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
-#include "UI_Manager.h"
+#include "M_Gary_Boss.h"
 
 CUI_Boss_BarBack::CUI_Boss_BarBack(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)
@@ -48,11 +48,19 @@ HRESULT CUI_Boss_BarBack::Initialize(void * pArg)
 
 void CUI_Boss_BarBack::Tick(_double TimeDelta)
 {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_M_Gary_Boss"), 0));
+	if (nullptr == pGameObject)
+	{
+		MSG_BOX("보스 체력을 가져오지 못했습니다.");
+		return;
+	}
+	RELEASE_INSTANCE(CGameInstance);
 
-	_float fHPGauge = CUI_Manager::GetInstance()->Get_HPGauge_Monster();
+	_float fHPGauge = pGameObject->Get_BossHp() / pGameObject->Get_BossMaxHp();
 
 	if (fHPGauge < m_fHPGauge)
-		m_fHPGauge -= _float(TimeDelta) * 0.5f;
+		m_fHPGauge -= _float(TimeDelta) * 0.2f;
 	else
 		m_fHPGauge = fHPGauge;
 }

@@ -3,7 +3,6 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
-#include "UI_Manager.h"
 
 CUI_Boss::CUI_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)

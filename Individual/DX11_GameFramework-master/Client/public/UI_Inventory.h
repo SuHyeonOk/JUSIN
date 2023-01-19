@@ -9,12 +9,12 @@ END
 
 BEGIN(Client)
 
-class CUI_Boss final : public CUI_
+class CUI_Inventory final : public CUI_
 {
 private:
-	CUI_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUI_Boss(const CUI_Boss& rhs);
-	virtual ~CUI_Boss() = default;
+	CUI_Inventory(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUI_Inventory(const CUI_Inventory& rhs);
+	virtual ~CUI_Inventory() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -31,7 +31,7 @@ private:
 	virtual			HRESULT SetUp_ShaderResources() override;
 
 public:
-	static CUI_Boss*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUI_Inventory*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };

@@ -223,8 +223,8 @@ HRESULT CEffect_Manager::Effect_JakeSon_Transform_Create(const _float3 & f3Pos)
 
 	for (_int i = 0; i < 3; ++i)
 	{
-		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
-		_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.5f, 1.5f);
+		_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.5f, 1.5f);
 
 		_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, 1.0f, 1.0f));
 

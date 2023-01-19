@@ -253,6 +253,8 @@
     <ClInclude Include="..\public\UI_Boss_Bar.h" />
     <ClInclude Include="..\public\UI_Boss_BarBack.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
+    <ClInclude Include="..\public\UI_Inventory.h" />
+    <ClInclude Include="..\public\UI_Inventory_X.h" />
     <ClInclude Include="..\public\UI_Level_Bar.h" />
     <ClInclude Include="..\public\UI_Level_BarBack.h" />
     <ClInclude Include="..\public\UI_Level_Number.h" />
@@ -361,6 +363,8 @@
     <ClCompile Include="..\private\UI_Boss_Bar.cpp" />
     <ClCompile Include="..\private\UI_Boss_BarBack.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
+    <ClCompile Include="..\private\UI_Inventory.cpp" />
+    <ClCompile Include="..\private\UI_Inventory_X.cpp" />
     <ClCompile Include="..\private\UI_Level_Bar.cpp" />
     <ClCompile Include="..\private\UI_Level_BarBack.cpp" />
     <ClCompile Include="..\private\UI_Level_Number.cpp" />
