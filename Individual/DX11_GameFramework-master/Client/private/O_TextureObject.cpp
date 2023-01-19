@@ -96,7 +96,7 @@ void CO_TextureObject::Tick(_double TimeDelta)
 		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
 		XMStoreFloat4(&f4Pos, vPos);
-		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4Pos.x, f4Pos.y, f4Pos.z - 0.2f));
+		CEffect_Manager::GetInstance()->Effect_Potal_StarColor_Create(_float3(f4Pos.x, f4Pos.y, f4Pos.z - 0.2f), _float3(0.019f, 0.91f, 1.0f));
 
 		m_bEffect_TimeAcc = 0;
 	}

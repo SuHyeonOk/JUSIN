@@ -248,7 +248,15 @@ void CBoss_Fan::Hit_Tick(const _double & TimeDelta)
 	m_bShader_Hit = true;
 
 	if (0 == m_dShader_Hit_TimeAcc)
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4MyPos, vMyPos);
+		CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 1.2f, f4MyPos.z - 0.7f), _float3(0.9f, 0.0f, 0.1f));
+
+
 		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
+	}
 
 	m_dShader_Hit_TimeAcc += TimeDelta;
 	if (0.1 < m_dShader_Hit_TimeAcc)

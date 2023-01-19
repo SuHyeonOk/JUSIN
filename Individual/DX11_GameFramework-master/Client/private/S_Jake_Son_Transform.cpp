@@ -70,7 +70,7 @@ void CS_Jake_Son_Transform::Tick(_double TimeDelta)
 
 	Death_Set(TimeDelta);
 
-	// 계속 제이크의 좌표와 네비를 변경해 준다.
+	// 계속 제이크의 좌표를 변경해 준다.
 	m_pJake_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	JakeSon_Tick(TimeDelta);
@@ -160,9 +160,6 @@ HRESULT CS_Jake_Son_Transform::SetUp_Components()
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
-	// TODO 전체적으로 플레이 하면서 네비 잘 타지는지 확인해야 한다.
-	//m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
-
 	return S_OK;
 }
 
@@ -212,7 +209,7 @@ HRESULT CS_Jake_Son_Transform::Death_Set(const _double & TimeDelta)
 		
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		
-		// 핀의 네비 를 가져와서 제이크 에게 넘겨주기
+		// 핀의 네비를 가져와서 제이크 에게 넘겨주기
 		CNavigation* pFinn_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
 		CNavigation* pJake_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
 		pJake_NavigationCom->Set_CellIndex(pFinn_NavigationCom->Get_CellIndex());

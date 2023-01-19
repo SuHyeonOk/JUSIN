@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Utilities_Manager.h"
 
 CE_NoLook_Grow::CE_NoLook_Grow(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -43,7 +44,31 @@ HRESULT CE_NoLook_Grow::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
+
+	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::MARVELINE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::SWIM_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
+
+		_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+		_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		_float3		vScale = m_pTransformCom->Get_Scaled();
+
+		_float		fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 180.0f);
+		_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(fAngle));
+
+		vRight = vRight * vScale.x;
+		vUp = vUp * vScale.y;
+		vLook = vRight * vScale.z;
+
+		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
+		m_pTransformCom->Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
+	}
+	else // 그냥 한 번 회전
+		m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
 
 	m_fAlpha = 1.0f;
 	m_fSizeX = 0.0f;

@@ -17,7 +17,7 @@ class CE_Alpha_Rotation final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { SHIELD_TEXTURE, POTAL_STAR_TEXTURE, TEXTURETYPE_END };
+		enum TEXTURETYPE { SHIELD_TEXTURE, POTAL_STAR_TEXTURE, POTAL_STARCOLOR_TEXTURE, TEXTURETYPE_END };
 		TEXTURETYPE	eTextureType = TEXTURETYPE_END;
 
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };

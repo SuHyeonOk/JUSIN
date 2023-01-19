@@ -19,12 +19,40 @@ CEffect_Manager::CEffect_Manager()
 }
 
 
-
-HRESULT CEffect_Manager::Effect_Potal_Star_Create(const _float3 & f3Pos, const _float3 & f3Color)
+HRESULT CEffect_Manager::Effect_Potal_StarColor_Create(const _float3 & f3Pos, const _float3 & f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	for (_int i = 0; i < 5; ++i)
+	for (_int i = 0; i < 7; ++i)
+	{
+		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+		_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+		_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, fRandomY, 1.0f, 1.0f));
+
+		_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.5f);
+
+		_vector vRandomPos = vTempPos * fRandomRange;
+		_float4 f4RandomPos;
+		XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+		CE_Alpha_Rotation::EFFECTINFO tEffectInfo;
+		tEffectInfo.eTextureType = CE_Alpha_Rotation::EFFECTINFO::POTAL_STARCOLOR_TEXTURE;
+		tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z);
+		tEffectInfo.f3Color = f3Color;
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Rotation"), &tEffectInfo)))
+			return E_FAIL;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Potal_Star_Create(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	for (_int i = 0; i < 7; ++i)
 	{
 		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
 		_float	fRandomY = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
@@ -40,8 +68,6 @@ HRESULT CEffect_Manager::Effect_Potal_Star_Create(const _float3 & f3Pos, const _
 		CE_Alpha_Rotation::EFFECTINFO tEffectInfo;
 		tEffectInfo.eTextureType = CE_Alpha_Rotation::EFFECTINFO::POTAL_STAR_TEXTURE;
 		tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + f4RandomPos.y, f3Pos.z);
-		tEffectInfo.f3Color = f3Color;
-
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Rotation"), &tEffectInfo)))
 			return E_FAIL;
 	}

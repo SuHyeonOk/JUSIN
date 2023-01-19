@@ -75,9 +75,12 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 	if (pGameInstance->Key_Down(DIK_B))
 	{
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
-		XMStoreFloat4(&f4MyPos, vMyPos);
-		CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 1.2f, f4MyPos.z - 0.7f), _float3(0.9f, 0.0f, 0.1f));
+		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Pos, vMyPos);
+
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 2.0f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.2f));
 	}
 
 	if (pGameInstance->Key_Down(DIK_V))

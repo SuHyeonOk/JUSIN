@@ -46,8 +46,17 @@ HRESULT CE_Alpha_Rotation::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	if(CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STAR_TEXTURE == m_tEffectInfo.eTextureType)
-		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+	if (CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STAR_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STARCOLOR_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		// 랜덤한 크기 주기
+		_float fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
+		m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
+
+		// 랜덤한 알파값 주기
+		_float fRandomAlpha = CUtilities_Manager::GetInstance()->Get_Random(0.5f, 1.0f);
+		m_fAlpha = fRandomAlpha;
+	}
 
 	return S_OK;
 }
@@ -84,7 +93,12 @@ HRESULT CE_Alpha_Rotation::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);
+	// 색 조정
+	if (CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STARCOLOR_TEXTURE == m_tEffectInfo.eTextureType)
+		m_pShaderCom->Begin(4);
+	// 이미지색
+	else
+		m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 
@@ -121,6 +135,12 @@ HRESULT CE_Alpha_Rotation::SetUp_Components()
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
+
+	if (CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STARCOLOR_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tEffectInfo.f3Color, sizeof _float3)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
