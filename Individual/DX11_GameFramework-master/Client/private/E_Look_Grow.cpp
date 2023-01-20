@@ -220,8 +220,6 @@ void CE_Look_Grow::Size_Tick(const _double & TimeDelta)
 	// ★ 일정 크기되면 사이즈 작아지기
 	if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
 	{
-		cout << m_fSizeX << endl;
-
 		if (0.7 >= m_fAlpha)
 		{
 			m_fSizeX -= _float(TimeDelta) * 2.0f;

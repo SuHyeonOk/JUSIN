@@ -45,46 +45,29 @@ HRESULT CE_NoLook_Grow::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	//if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::MARVELINE_TEXTURE == m_tEffectInfo.eTextureType ||
-	//	CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::SWIM_TEXTURE == m_tEffectInfo.eTextureType)
-	//{
-	//	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.0f));
+	// Right 을 기준으로 90도 회전 후 그 Look 을 기준으로 360.0f 랜덤값을 준다.
+	if (CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::MARVELINE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_NoLook_Grow::EFFECTINFO::TEXTURETYPE::SWIM_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.0f));
 
-	//	_vector vRight	= m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	//	_vector vLook	= XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-	//	_vector vUp		= XMVector3Cross(vLook, vRight);
+		_vector vLook	= m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+		_vector vUp		= XMVector3Cross(vLook, vRight);
 
-	//	_float3		vScale = m_pTransformCom->Get_Scaled();
-	//	_float		fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 180.0f);
-	//	_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(fAngle));
+		_float3		vScale = m_pTransformCom->Get_Scaled();
+		_float		fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 360.0f);
+		_matrix		RotationMatrix = XMMatrixRotationAxis(vLook, XMConvertToRadians(fAngle));
 
-	//	vRight = vRight * vScale.x;
-	//	vUp = vUp * vScale.y;
-	//	vLook = vRight * vScale.z;
+		vRight = vRight * vScale.x;
+		vUp = vUp * vScale.y;
+		vLook = vLook * vScale.z;
 
-	//	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
-	//	m_pTransformCom->Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
-	//	m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
-
-	//	//_float		fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 180.0f);
-	//	//m_pTransformCom->Rotation(XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f), XMConvertToRadians(fAngle));
-
-	//	//_vector vLook	= m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	//	//_vector vRight	= XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-	//	//_vector vUp		= XMVector3Cross(vLook, vRight);
-
-	//	//_float3		vScale = m_pTransformCom->Get_Scaled();
-	//	//_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(90.0f));
-
-	//	//vRight	= vRight * vScale.x;
-	//	//vUp		= vUp * vScale.y;
-	//	//vLook	= vRight * vScale.z;
-
-	//	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
-	//	//m_pTransformCom->Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
-	//	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
-	//}
-	//else // 그냥 한 번 회전
+		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
+		m_pTransformCom->Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
+	}
+	else // Right 을 기준으로 90도 회전
 		m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
 
 	m_fAlpha = 1.0f;

@@ -290,6 +290,10 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 
 	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
 
+	_float4		f4PlayerPoos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4PlayerPoos, vPlayerPos);
+	vPlayerPos = XMVectorSet(f4PlayerPoos.x, 0.0f, f4PlayerPoos.z, f4PlayerPoos.w);
+
 	// 따라가는 속도 조절
 	if (2.2f > fDistanceX)
 		m_pTransformCom->Chase(vPlayerPos, TimeDelta * 0.5, 1.5f);

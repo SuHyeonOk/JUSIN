@@ -764,14 +764,14 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_1/Skeleton_1.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	///* For.Prototype_Component_Model_S_JakeSonsTransform */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
-	//	return E_FAIL;
-	///* For.Prototype_Component_Model_S_JakeSonsTwister */
-	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTwister"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTwister.fbx", PivotMatrix))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Model_S_JakeSonsTransform */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_S_JakeSonsTwister */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTwister"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTwister/JakeSonsTwister.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
 	// Map
@@ -802,15 +802,15 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CBoss_S_Wind::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	//// Skill
-	///* For.Prototype_GameObject_S_JakeSonTransform */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
-	//	CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	///* For.Prototype_GameObject_S_Jake_Son_Twister */
-	//if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son_Twister"),
-	//	CS_Jake_Son_Twister::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	// Skill
+	/* For.Prototype_GameObject_S_JakeSonTransform */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
+		CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_S_Jake_Son_Twister */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son_Twister"),
+		CS_Jake_Son_Twister::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 
@@ -936,11 +936,11 @@ HRESULT CLoader::UI_Texture()
 	// Inventory
 	/* For.Prototype_Component_Texture_UI_Inventory_X */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Inventory_X"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/enchiridion_pc_Key1.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/enchiridion_pc_Key1.dds")))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Inventario */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Inventario"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/inventario.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/inventario.dds")))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -1390,14 +1390,6 @@ HRESULT CLoader::SkeletonTemp()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_E"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_E/Jake_son_E.fbx", PivotMatrix))))
 		return E_FAIL;
-	/* For.Prototype_Component_Model_S_JakeSonsTransform */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTransform"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTransform/JakeSonsTransform.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_S_JakeSonsTwister */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON_BOSS, TEXT("Prototype_Component_Model_S_JakeSonsTwister"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/JakeSonsTwister/JakeSonsTwister.fbx", PivotMatrix))))
-		return E_FAIL;
  
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
@@ -1479,14 +1471,6 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_S_Jake_Son */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_S_JakeSonTransform */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_JakeSonTransform"),
-		CS_Jake_Son_Transform::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	/* For.Prototype_GameObject_S_Jake_Son_Twister */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son_Twister"),
-		CS_Jake_Son_Twister::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	UI_Create();

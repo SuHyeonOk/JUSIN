@@ -424,7 +424,7 @@ _float4 CGameInstance::Get_MousePos()
 	if (m_pPicking == nullptr)
 		return _float4();
 
-	m_pPicking->Get_MousePos();
+	return *m_pPicking->Get_MousePos();
 }
 
 HRESULT CGameInstance::Add_ColGroup(CCollider_Manager::COL_TYPE eColType, CGameObject * pGameObject)
