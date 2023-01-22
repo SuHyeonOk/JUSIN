@@ -102,6 +102,9 @@ void CMainApp::Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_P_WEAPON, CCollider_Manager::COL_BULLET);
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_P_WEAPON, CCollider_Manager::COL_MONSTER);
 
+	//CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_COLLIDER);
+	//CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_MONSTER, CCollider_Manager::COL_COLLIDER);
+
 	CGameInstance::GetInstance()->Reset_Col();		// 위에서 전체적인 충돌처리가 끝나면! 전체 콜라이더 컴포넌트를 소유한 객체들을 리스트 에서 해제, 레퍼런스 카운트를 감소 시킨다.
 }
 

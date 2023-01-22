@@ -96,8 +96,8 @@ HRESULT CTerrain::Render()
 	m_pVIBufferCom->Render();
 
 #ifdef _DEBUG
-	if (CObj_Manager::GetInstance()->Get_NavigationRender())
-		m_pNavigationCom->Render();
+	//if (CObj_Manager::GetInstance()->Get_NavigationRender())
+	//	m_pNavigationCom->Render();
 #endif
 
 	return S_OK;

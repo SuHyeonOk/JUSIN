@@ -62,6 +62,13 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
+	_bool				Get_BossCage() {
+		return m_bBossCage;
+	}
+	void				Set_BossCage(_bool	bCage) {
+		m_bBossCage = bCage;
+	}
+
 	// UI_Inventory
 	_bool				Get_Inventory() {
 		return m_bInventory;
@@ -155,21 +162,25 @@ private:
 
 	_float			m_fAngle = 0.f;
 
+	// Boss Cage 를 사용했냐의 여부
+	_bool			m_bBossCage = false;
+
 private:
-	// Z 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
-	_uint			m_ChangeTarget = 0;
+	// 외부에서 이 키를 눌렀니!
+	_uint			m_ChangeTarget = 0;	// Z 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
 	_int			m_iWeapon_Index = 0;
 	_bool			m_bInventory = false;
 
+	// 플레이어의 체력을 깍기 위해서 필요한 변수
 	_float			m_fMonster_Attck = 0;
 	_double			m_dPlayerAttck_TimeAcc = 0;
 
+	// Level Effect
 	_bool			m_bEffect = false;
 	_double			m_dEffect_TimeAcc = 0;
 	_double			m_dEffect_Up_TimeAcc = 0;
 
 	PLAYERINFO::STATE	m_tPlayerState = PLAYERINFO::STATE::STATE_END;
-	_double				m_dHit_TimaAcc = 0;	// Hit, Stun, Magic 로 변할 때 키 입력 이있게 되면, 먹지 않아서
 
 public:
 	virtual void Free() override;

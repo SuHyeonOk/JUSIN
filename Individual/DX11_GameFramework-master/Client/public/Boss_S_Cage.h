@@ -41,7 +41,6 @@ private:
 	void			Skeleton_Dead_Check();
 
 private:
-	_int			m_iSkeleton_Create_Count = 0;
 	_bool			m_arrSkeleton_Dead_Count[5] = { false };
 	_bool			m_bDead = false;
 	_float			m_fAlpha = 0.6f;

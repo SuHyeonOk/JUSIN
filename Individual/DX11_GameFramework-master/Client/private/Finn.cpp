@@ -72,7 +72,7 @@ void CFinn::Tick(_double TimeDelta)
 		return;
 
 	__super::Tick(TimeDelta);
-
+	
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	//cout << "핀 : " << m_i << endl;
@@ -908,6 +908,21 @@ void CFinn::Cheering_Tick()
 
 	if (m_pModelCom->Get_Finished())
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+}
+
+void CFinn::BossCage()
+{
+	if (false == CObj_Manager::GetInstance()->Get_BossCage())
+		return;
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Pos, vPos);
+
+	if (1.0f > f4Pos.x || 9.5f < f4Pos.x || 14.0f > f4Pos.z || 18.0f < f4Pos.z)
+	{
+		cout << " 반대로 가라 " << endl;
+	}
 }
 
 void CFinn::Anim_Change(_double TimeDelta)

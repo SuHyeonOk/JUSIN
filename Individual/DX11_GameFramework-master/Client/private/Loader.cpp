@@ -54,6 +54,7 @@
 #include "O_Box.h"
 #include "O_BearTrap.h"
 #include "O_Portal.h"
+#include "O_Collider.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -810,6 +811,12 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 	/* For.Prototype_GameObject_S_Jake_Son_Twister */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son_Twister"),
 		CS_Jake_Son_Twister::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Collider
+	/* For.Prototype_GameObject_O_Collider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Collider"),
+		CO_Collider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("·Îµù³¡. "));

@@ -621,6 +621,9 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 	
 	if (0 == m_dSkill_TimeAcc)	// 한 번만!
 	{
+		// Cage 안에 갇혔음을 확인하기 위한 변수
+		CObj_Manager::GetInstance()->Set_BossCage(true);
+
 		// 플레이어 위치를 변경한다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -654,6 +657,8 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 
 	if (nullptr == pGameObject)		// 이 객체가 nullptr 이라면 삭제된 것 이니 다른 스킬을 사용한다.
 	{
+		CObj_Manager::GetInstance()->Set_BossCage(false);
+
 		m_eState = IDLE;
 		m_dSkill_TimeAcc = 0;
 	}

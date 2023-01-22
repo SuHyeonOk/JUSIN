@@ -25,20 +25,18 @@ HRESULT CO_Collider::Initialize_Prototype()
 }
 
 HRESULT CO_Collider::Initialize(void * pArg)
-{	
-	m_wsTag = L"Object_BeapTrap";
-
-	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
+{
+	m_wsTag = L"Object_Collider";
 
 	if (nullptr != pArg)
-		memcpy(&f3Pos, pArg, sizeof(_float3));
+		memcpy(&m_ColliderInfo, pArg, sizeof(m_ColliderInfo));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = m_ColliderInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -47,7 +45,26 @@ HRESULT CO_Collider::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pModelCom->Set_AnimIndex(0);
+
+	switch (m_ColliderInfo.eType)
+	{
+	case COLLIDERINFO::TYPE::CAGE_FRONT:
+		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 50.0f);
+	break;
+
+	case COLLIDERINFO::TYPE::CAGE_BACK:
+		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 15.0f);
+	break;
+
+	case COLLIDERINFO::TYPE::CAGE_SIDE_L:
+		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 15.0f);
+	break;
+
+	case COLLIDERINFO::TYPE::CAGE_SIDE_R:
+		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 15.0f);
+	break;
+	}
+
 	return S_OK;
 }
 
@@ -55,23 +72,27 @@ void CO_Collider::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if(1 == m_pModelCom->Get_AnimIndex(), m_pModelCom->Get_Finished())
-		m_pModelCom->Set_AnimIndex(0);
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_B))
+	{
+		CGameObject::Set_Dead();
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
 }
 
 void CO_Collider::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	m_pModelCom->Play_Animation(TimeDelta);
-
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_COLLIDER, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
+	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
@@ -84,17 +105,6 @@ HRESULT CO_Collider::Render()
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
-	{
-		if (1 == i)		// 안 해도 되는데 그냥 굳이 할 필요도 없어서 없애도 차이 없음
-			continue;
-
-		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 0);
-	}
 
 #ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -111,9 +121,7 @@ void CO_Collider::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		m_pModelCom->Set_AnimIndex(1, false);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::KNOCKBACKHIT);
-		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
+
 	}
 }
 
@@ -129,19 +137,44 @@ HRESULT CO_Collider::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_O_BearTrap"), TEXT("Com_Model"),
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
 	CCollider::COLLIDERDESC			ColliderDesc;
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.f, 1.f, 1.f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+	switch (m_ColliderInfo.eType)
+	{
+		case COLLIDERINFO::TYPE::CAGE_FRONT:
+		{
+			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		}
+		break;
+
+		case COLLIDERINFO::TYPE::CAGE_BACK:
+		{
+			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		}
+		break;
+
+		case COLLIDERINFO::TYPE::CAGE_SIDE_L:
+		{
+			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		}
+		break;
+
+		case COLLIDERINFO::TYPE::CAGE_SIDE_R:
+		{
+			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+		}
+		break;
+	}
+
+
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
@@ -197,7 +230,6 @@ void CO_Collider::Free()
 	__super::Free();
 
 	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
 }

@@ -46,7 +46,7 @@ private:
 private:
 	void	Parts_Tick(const _double & TimeDelta);
 	void	Parts_LateTick(const _double & TimeDelta);
-
+	
 private:
 	void	Player_Tick(_double TimeDelta);
 	void	Player_Skill_Tick(_double TimeDelta);
@@ -69,6 +69,8 @@ private:
 	void	Swim_Tick(_double TimeDelta);
 	void	Change_Tick();
 	void	Cheering_Tick();
+
+	void	BossCage();
 
 	void	Anim_Change(_double TimeDelta);
 

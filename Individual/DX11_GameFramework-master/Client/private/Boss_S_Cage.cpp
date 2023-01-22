@@ -7,6 +7,7 @@
 #include "M_Monster.h"
 #include "M_Skeleton_Archer.h"
 #include "M_Skeleton_Shield.h"
+#include "O_Collider.h"
 
 CBoss_S_Cage::CBoss_S_Cage(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -48,6 +49,9 @@ HRESULT CBoss_S_Cage::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	if (FAILED(Skeleton_Create()))
+		return E_FAIL;
+
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(15.0f));
 
@@ -78,7 +82,6 @@ void CBoss_S_Cage::Tick(_double TimeDelta)
 			CGameObject::Set_Dead();
 	}
 
-	Skeleton_Create();
 	Skeleton_Dead_Check();
 }
 
@@ -166,9 +169,6 @@ HRESULT CBoss_S_Cage::SetUp_ShaderResources()
 
 HRESULT CBoss_S_Cage::Skeleton_Create()
 {
-	if (5 == m_iSkeleton_Create_Count)
-		return S_OK;
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CM_Monster::MONSTERDESC tMonsterDesc;
@@ -180,7 +180,6 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-	++m_iSkeleton_Create_Count;
 
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_SHIELD_1;
 	tMonsterDesc.f3Pos = _float3(5.0f, 0.0f, 14.0f);
@@ -189,7 +188,6 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-	++m_iSkeleton_Create_Count;
 
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_ARCHER_2;
 	tMonsterDesc.f3Pos = _float3(4.0f, 0.0f, 16.0f);
@@ -198,7 +196,6 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-	++m_iSkeleton_Create_Count;
 
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_SHIELD_2;
 	tMonsterDesc.f3Pos = _float3(2.5f, 0.0f, 18.0f);
@@ -207,7 +204,6 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-	++m_iSkeleton_Create_Count;
 
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_ARCHER_3;
 	tMonsterDesc.f3Pos = _float3(1.0f, 0.0f, 15.0f);
@@ -216,7 +212,6 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-	++m_iSkeleton_Create_Count;
 
 	RELEASE_INSTANCE(CGameInstance);
 

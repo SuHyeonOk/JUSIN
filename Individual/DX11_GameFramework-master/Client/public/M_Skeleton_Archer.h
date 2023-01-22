@@ -34,6 +34,8 @@ private:
 	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
+	void	BossCage();
+
 private:
 	_float4				m_f4CenterPos;
 

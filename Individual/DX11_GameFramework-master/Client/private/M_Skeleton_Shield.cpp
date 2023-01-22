@@ -68,6 +68,8 @@ void CM_Skeleton_Shield::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	BossCage();
+
 	Monster_Tick(TimeDelta);
 
 	if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
@@ -415,6 +417,24 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 void CM_Skeleton_Shield::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.1f, 7, 5, 2);
+}
+
+void CM_Skeleton_Shield::BossCage()
+{
+	if (false == CObj_Manager::GetInstance()->Get_BossCage())
+		return;
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Pos, vPos);
+
+	if (1.0f > f4Pos.x || 9.5f < f4Pos.x || 14.0f > f4Pos.z || 18.0f < f4Pos.z)
+	{
+		cout << " 반대로 가라 " << endl;
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		vLook *= -1.0f;
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+	}
 }
 
 CM_Skeleton_Shield * CM_Skeleton_Shield::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
