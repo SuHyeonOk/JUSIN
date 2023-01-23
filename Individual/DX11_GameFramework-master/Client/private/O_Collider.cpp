@@ -87,7 +87,7 @@ void CO_Collider::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_COLLIDER, this);
+	//CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_COLLIDER, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

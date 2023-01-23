@@ -80,7 +80,8 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4Pos;
 		XMStoreFloat4(&f4Pos, vPlayerPos);
 
-		//CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star3Count_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.1f));
 	}
 
 	if (pGameInstance->Key_Pressing(DIK_V))

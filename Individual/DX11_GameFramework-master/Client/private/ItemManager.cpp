@@ -33,7 +33,7 @@ HRESULT CItemManager::RandomPage_Clone(_float3 f3StartPos, _uint iCount)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CPage::PAGEINFO tPageInfo;
-	tPageInfo.fPos = _float3(f3StartPos.x, f3StartPos.y, f3StartPos.z);
+	tPageInfo.fPos = f3StartPos;
 	tPageInfo.bJemp = true;
 
 	for (_uint i = 0; i < iCount; ++i)

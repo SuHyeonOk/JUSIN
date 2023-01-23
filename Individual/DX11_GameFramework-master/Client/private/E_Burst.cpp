@@ -34,10 +34,12 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	if(CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
-		GameObjectDesc.TransformDesc.fSpeedPerSec = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 2.0f);
-	else
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+	//if(CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
+	//	CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
+	//	GameObjectDesc.TransformDesc.fSpeedPerSec = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
+	//else
+	//	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = m_tEffectInfo.f3Pos;
 
@@ -49,6 +51,7 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	
 	m_pTransformCom->Set_Pos();
 	
+	// 크기
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
 		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)			// 랜덤한  크기를 가지는 이미지
@@ -62,10 +65,20 @@ HRESULT CE_Burst::Initialize(void * pArg)
 		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 	}
 
+	// 알파값
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
 		m_fAlpha = 0.5f;
 	else
 		m_fAlpha = 1.0f;
+
+	// 속도
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
+		m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
+		m_fSpeed = 0.3f;
+	else
+		m_fSpeed = 0.2f;
 
 	return S_OK;
 }
@@ -85,14 +98,8 @@ void CE_Burst::Tick(_double TimeDelta)
 	// 입력한 Look 방향으로 이동하기
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = XMLoadFloat4(&_float4(m_tEffectInfo.f4Look.x, m_tEffectInfo.f4Look.y, m_tEffectInfo.f4Look.z, 0.0f));
-
-	// ★ 이동하는 속도 조절
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
-		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
-		vMyPos += XMVector3Normalize(vDistance) * 0.3f * _float(TimeDelta);
-	else
-		vMyPos += XMVector3Normalize(vDistance) * 0.2f * _float(TimeDelta);
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
+	vMyPos += XMVector3Normalize(vDistance) * _float(TimeDelta) * m_fSpeed;
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
 
 	// ★ 알파값 줄어들기
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)	// 그냥 바로 알파값 줄어든다.

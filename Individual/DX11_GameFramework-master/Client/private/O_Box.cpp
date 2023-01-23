@@ -73,10 +73,10 @@ void CO_Box::Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		if (3 > m_pModelCom->Get_Keyframes())
+		if (1 == m_pModelCom->Get_Keyframes())
 		{
 			CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
-			CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f));
+			CEffect_Manager::GetInstance()->Effect_Star3Count_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f));
 		}
 
 		m_pModelCom->Set_AnimIndex(3, false);

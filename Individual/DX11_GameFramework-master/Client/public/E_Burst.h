@@ -51,9 +51,10 @@ private:
 private:
 	EFFECTINFO			m_tEffectInfo;
 
-private:	// Shader
+private:
 	_float				m_fAlpha = 0.0f;
 	_double				m_dNoAlpha_TimeAcc = 0;
+	_float				m_fSpeed = 0.0f;
 
 public:
 	static	CE_Burst*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
