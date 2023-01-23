@@ -90,6 +90,7 @@ void CJake::Tick(_double TimeDelta)
 
 	//RELEASE_INSTANCE(CGameInstance);
 
+	BossCage(TimeDelta);
 	Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
@@ -1071,6 +1072,25 @@ void CJake::JakeSon_Transform_Change()
 		if (CSkill_Manager::PLAYERSKILL::JAKESON == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)	// 스킬을 사용하면
 			m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::JAKESON;
 	}
+}
+
+void CJake::BossCage(const _double TimeDelta)
+{
+	if (false == CObj_Manager::GetInstance()->Get_BossCage())
+		return;
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Pos, vPos);
+
+	if (1.0f > f4Pos.x || 9.5f < f4Pos.x || 14.0f > f4Pos.z || 18.0f < f4Pos.z)
+	{
+		m_dBossCage_TimeAcc += TimeDelta;
+		if (0.1 < m_dBossCage_TimeAcc)
+			m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
+	}
+	else
+		m_dBossCage_TimeAcc = 0;
 }
 
 void CJake::Anim_Change(_double TimeDelta)

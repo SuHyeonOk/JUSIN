@@ -198,7 +198,7 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 	}
 
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_SHIELD_2;
-	tMonsterDesc.f3Pos = _float3(2.5f, 0.0f, 18.0f);
+	tMonsterDesc.f3Pos = _float3(3.0f, 0.0f, 17.5f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Shield_2"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
 	{
 		RELEASE_INSTANCE(CGameInstance);

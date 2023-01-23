@@ -89,8 +89,7 @@ void CFinn::Tick(_double TimeDelta)
 
 	//RELEASE_INSTANCE(CGameInstance);
 
-	//Shader_Time(TimeDelta); // Shader Hit Time
-
+	BossCage(TimeDelta);
 	Parts_Tick(TimeDelta);
 
 	Current_Player(TimeDelta);
@@ -910,7 +909,7 @@ void CFinn::Cheering_Tick()
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::BossCage()
+void CFinn::BossCage(const _double TimeDelta)
 {
 	if (false == CObj_Manager::GetInstance()->Get_BossCage())
 		return;
@@ -921,8 +920,12 @@ void CFinn::BossCage()
 
 	if (1.0f > f4Pos.x || 9.5f < f4Pos.x || 14.0f > f4Pos.z || 18.0f < f4Pos.z)
 	{
-		cout << " 반대로 가라 " << endl;
+		m_dBossCage_TimeAcc += TimeDelta;
+		if (0.1 < m_dBossCage_TimeAcc)
+			m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
 	}
+	else
+		m_dBossCage_TimeAcc = 0;
 }
 
 void CFinn::Anim_Change(_double TimeDelta)

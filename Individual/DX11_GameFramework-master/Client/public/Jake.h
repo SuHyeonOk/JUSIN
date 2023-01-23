@@ -81,6 +81,8 @@ private:
 	HRESULT	JakeSon_Tick(const _double & TimeDelta);
 	void	JakeSon_Transform_Change();
 
+	void	BossCage(const _double TimeDelta);
+
 	void	Anim_Change(_double TimeDelta);
 
 private:
@@ -110,6 +112,10 @@ private:
 
 	//////////////////////////// 플레이어가 아닐 때
 	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
+
+	//////////////////////////// 계속
+
+	_double		m_dBossCage_TimeAcc = 0;
 
 	// 셰이더
 	_bool		m_bShader_Hit = false;
