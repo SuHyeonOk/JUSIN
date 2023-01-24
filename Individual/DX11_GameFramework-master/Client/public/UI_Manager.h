@@ -63,8 +63,12 @@ public:
 	void		Set_LevelGauge_Player(_float fGauge) { m_LevelGauge_Player = fGauge; }
 
 	// 플레이어 체력 게이지
-	_float		Get_HPGauge_Player() { return m_HpGauge_Player; }
-	void		Set_HPGauge_Player(_float fGauge) { m_HpGauge_Player = fGauge; }
+	_float		Get_HPGauge_Player() { 
+		return m_HpGauge_Player;
+	}
+	void		Set_HPGauge_Player(_float fGauge) { 
+		m_HpGauge_Player = fGauge;
+	}
 
 	// 몬스터 체력 게이지
 	_float		Get_HPGauge_Monster() { return m_HpGauge_Monster; }
@@ -77,8 +81,12 @@ public:
 	void		CUI_Manager::UI_Monster_Index(CGameObject * pOther);
 
 	// UI 몬스터 
-	_bool		Get_UI_Monster() { return m_bUI_Monster; }
-	void		Set_Ui_Monster(_bool bUI) { m_bUI_Monster = bUI; }
+	_bool		Get_UI_Monster() { 
+		return m_bUI_Monster;
+	}
+	void		Set_Ui_Monster(_bool bUI) { 
+		m_bUI_Monster = bUI;
+	}
 
 	// 대본
 	_tchar*		Get_Text() { return m_szText; }

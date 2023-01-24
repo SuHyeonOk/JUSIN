@@ -349,15 +349,15 @@ void CM_Gary_Boss::Random_Skill()
 		iMaxRandomNumber = 2;
 
 	_int iRandom = CUtilities_Manager::GetInstance()->Get_Random(0, iMaxRandomNumber);
-
+	
 	// 이전 패턴이랑 다른 경우에 실행한다.
-	//if (m_iSkill_Data == iRandom)
-	//{
-	//	m_dSkill_TimeAcc = 5;
-	//	m_eState = STATE::IDLE;
-	//	return;
-	//}
-	iRandom = 3;
+	if (m_iSkill_Data == iRandom)
+	{
+		m_dSkill_TimeAcc = 5;
+		m_eState = STATE::IDLE;
+		return;
+	}
+
 	if (0 == iRandom)
 		m_eState = A_MOVE;
 	else if (1 == iRandom)

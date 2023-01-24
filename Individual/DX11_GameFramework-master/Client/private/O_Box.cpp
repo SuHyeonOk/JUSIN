@@ -114,7 +114,7 @@ void CO_Box::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -159,8 +159,8 @@ HRESULT CO_Box::Render()
 void CO_Box::On_Collision(CGameObject * pOther)
 {
 	if(IDLE == m_eState)
-		if (CObj_Manager::GetInstance()->Get_Interaction())
-			if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+		if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+			if (L"Player_Weapon" == pOther->Get_Tag())
 				m_eState = OPEN;
 }
 

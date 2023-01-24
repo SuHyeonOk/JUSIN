@@ -24,9 +24,13 @@ public:
 	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // ¢Â
 	_float Get_CamDistance() const { return m_fCamDistance; }
 
-	_bool		Get_Dead() { return m_bDead; }
 	void		Set_Dead() { m_bDead = true; }
-	wstring		Get_Tag() { return m_wsTag; }
+	_bool		Get_Dead() { 
+		return m_bDead;
+	}
+	wstring		Get_Tag() { 
+		return m_wsTag;
+	}
 
 public:
 	virtual HRESULT Initialize_Prototype();

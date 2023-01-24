@@ -62,7 +62,7 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	}
 	else																						// 고정된 크기를 가지는 이미지
 	{
-		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(0.2f, 0.2f, 1.f));
 	}
 
 	// 알파값
