@@ -24,6 +24,8 @@ public:
 		_float4		f4Look = { 0.0f, 0.0f, 0.0f, 0.0f };
 		_float3		f3Color = { 0.0f, 0.0f, 0.0f };
 
+		_float2		f2Size = { 0.0f, 0.0f };
+
 	}EFFECTINFO;
 
 private:

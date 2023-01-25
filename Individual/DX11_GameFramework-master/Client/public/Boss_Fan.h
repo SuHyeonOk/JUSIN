@@ -50,6 +50,7 @@ private:
 private:
 	STATE			m_eState = STATE_END;
 	_float			m_fHP = 0.0f;
+	_float			m_fMaxHP = 0.0f;
 
 	_bool			m_bShader_Hit = false;
 	_double			m_dShader_Hit_TimeAcc = 0;

@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Effect_Manager.h"
+#include "UI_Manager.h"
 
 CBoss_Fan::CBoss_Fan(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -49,6 +50,7 @@ HRESULT CBoss_Fan::Initialize(void * pArg)
 
 	m_eState	= DANCE;
 	m_fHP		= 30.0f;
+	m_fMaxHP	= 30.0f;
 
 	return S_OK;
 }
@@ -254,8 +256,8 @@ void CBoss_Fan::Hit_Tick(const _double & TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 1.2f, f4MyPos.z - 0.7f), _float3(0.9f, 0.0f, 0.1f));
 
-
 		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_fHP / m_fMaxHP);
 	}
 
 	m_dShader_Hit_TimeAcc += TimeDelta;

@@ -55,7 +55,7 @@ private:
 
 	// TODO : 구조 다 짜고, TimeDelta 필요없는 함수는 삭제하기
 	void				Idle_Tick(const _double& TimeDelta);
-	void				Random_Skill();
+	void				Random_Skill(const _double& TimeDelta);
 	void				RandomMove(const _double& TimeDelta);
 
 	HRESULT				A_Move_Tick(const _double& TimeDelta);
@@ -70,6 +70,7 @@ private:
 	void				Die_Tick(const _double& TimeDelta);
 
 	void				Effect_Tick(const _double& TimeDelta);
+	void				Shader_Alpha(const _double & TimeDelta);
 
 private:
 	// 기본 데이터
@@ -104,12 +105,13 @@ private:
 	_bool				m_bHit = false;
 	
 	// 이펙트
-	_bool				m_bEffect_Smoke = false;
 	_bool				m_bEffect = false;
 	_int				m_iEffect_Count = 0;
 	_double				m_dEffect_TimeAcc = 0;
 
 	// 셰이더
+	_bool				m_bShader_Alpha = false;
+	_float				m_fAlpha = 1.f;
 	_bool				m_bShader_Hit = false;
 	_double				m_dShader_Hit_TimeAcc = 0;
 

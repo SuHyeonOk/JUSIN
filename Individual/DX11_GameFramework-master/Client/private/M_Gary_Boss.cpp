@@ -83,24 +83,14 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.2f));
 	}
 
-	if (pGameInstance->Key_Down(DIK_V))
+	if (pGameInstance->Key_Pressing(DIK_V))
 	{
 		Effect_Tick(TimeDelta);
 	}
 	
 	RELEASE_INSTANCE(CGameInstance);
 
-	//_matrix PlayerWorld;
-	//PlayerWorld = m_pTransformCom->Get_WorldMatrix();
-	//_float4x4 f44PlayerWorld;
-	//XMStoreFloat4x4(&f44PlayerWorld, PlayerWorld);
-	//cout << "----------------보스------------------------" << endl;
-	//cout << "World_Right	: " << f44PlayerWorld._11 << " | " << f44PlayerWorld._12 << " | " << f44PlayerWorld._13 << " | " << f44PlayerWorld._14 << endl;
-	//cout << "World_Up		: " << f44PlayerWorld._21 << " | " << f44PlayerWorld._22 << " | " << f44PlayerWorld._23 << " | " << f44PlayerWorld._24 << endl;
-	//cout << "World_Look		: " << f44PlayerWorld._31 << " | " << f44PlayerWorld._32 << " | " << f44PlayerWorld._33 << " | " << f44PlayerWorld._34 << endl;
-	//cout << "World_Pos		: " << f44PlayerWorld._41 << " | " << f44PlayerWorld._42 << " | " << f44PlayerWorld._43 << " | " << f44PlayerWorld._44 << endl;
-	//cout << "----------------보스------------------------" << endl;
-
+	Shader_Alpha(TimeDelta);
 	Effect_Tick(TimeDelta);
 
 	Monster_Tick(TimeDelta);
@@ -142,10 +132,17 @@ HRESULT CM_Gary_Boss::Render()
 		if (i == 0)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			if (m_bShader_Hit)
+		{
+			if (m_bShader_Hit && STATE::HIT == m_eState)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			{
+				if (1 != m_fAlpha)
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+				else
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			}
+		}
 	}
 
 #ifdef _DEBUG
@@ -217,14 +214,20 @@ HRESULT CM_Gary_Boss::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (1 != m_fAlpha)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
 void CM_Gary_Boss::Monster_Tick(const _double & TimeDelta)
 {
 	// 체력이 0 이되면 죽는다.
-	//if (0 >= m_fHP)
-	//	m_eState = DIE;
+	if (0 >= m_fHP)
+		m_eState = DIE;
 
 	Hit_Tick(TimeDelta);	// Hit 상태는 따로 다른 Tick 은 계속 돌아가기를 원한다.
 
@@ -316,6 +319,8 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
  		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
     	if (1 < m_dSkill_TimeAcc)	// 너무 바로 이동해서 1초 있다가 이동
 	 	{
+			m_bShader_Alpha = false;
+
 			m_pTransformCom->Set_Pos(_float3(4.0f, 0.2f, 17.0f));
 			m_bMovePos = false;
 			m_iEffect_Count = 0;
@@ -329,56 +334,86 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	if (7.0f < fDistance)		// 일정 범위 밖 이라면 그냥 이동하고 있는다.
 		RandomMove(TimeDelta);
 
-	m_dSkill_TimeAcc += TimeDelta;
-	if (5 < m_dSkill_TimeAcc)		// 5 초 마다 스킬을 고른다.
+	Random_Skill(TimeDelta);
+}
+
+void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
+{
+	m_dSkill_TimeAcc += TimeDelta;	// 시간초를 딱 센다.
+
+	static _int iRandom;
+	static _bool bRandomSuccess;
+	static _bool bPotalEffect;
+
+	if (3 > m_dSkill_TimeAcc)		// 3초 이전에는 랜덤하게 스킬을 뽑는데
 	{
-		Random_Skill();
+		if (false == bRandomSuccess)
+		{
+			_int	iMinRandomNumber = 0;
+			_int	iMaxRandomNumber = 0;
+
+			// DANCE 스킬의 경우 보스의 체력이 30% 남았을 때 실행된다.
+			_float fHP = m_fHP / m_fMaxHP;
+			if (0.3f > fHP)
+			{
+				iMinRandomNumber = 2;
+				iMaxRandomNumber = 4;
+			}
+			else if (0.8f > fHP)
+			{
+				iMinRandomNumber = 1;
+				iMaxRandomNumber = 3;
+			}
+			else
+			{
+				iMinRandomNumber = 0;
+				iMaxRandomNumber = 2;
+			}
+
+			iRandom = CUtilities_Manager::GetInstance()->Get_Random(iMinRandomNumber, iMaxRandomNumber);
+		}
+
+		// 이전이랑 다른 패턴을 뽑았다면, 더이상 스킬을 뽑지 않고, 그렇지 않은 경우에는 그냥 그 스킬을 실행시킨다.
+		if (m_iSkill_Data != iRandom)
+			bRandomSuccess = true;
+		else
+			bRandomSuccess = false;
+	}
+	else
+	{
+		if (3 == iRandom || 4 == iRandom)
+		{
+			if (false == bPotalEffect)
+			{
+				bPotalEffect = true;
+				m_iEffect_Count = 0;
+			}
+
+			m_bShader_Alpha = true;
+		}
+	}
+
+
+	if (5 < m_dSkill_TimeAcc)
+	{
+		bPotalEffect = false;
+		bRandomSuccess = false;
+		//iRandom = 4;
+		if (0 == iRandom)
+			m_eState = A_MOVE;
+		else if (1 == iRandom)
+			m_eState = A_BULLET;
+		else if (2 == iRandom)
+			m_eState = A_STUN;
+		else if (3 == iRandom)
+			m_eState = A_CAGE;
+		else if (4 == iRandom)
+			m_eState = A_DANCE;
+
+		m_iSkill_Data = iRandom;
 
 		m_dSkill_TimeAcc = 0;
 	}
-}
-
-void CM_Gary_Boss::Random_Skill()
-{
-	_int	iMaxRandomNumber = 0;
-
-	// DANCE 스킬의 경우 보스의 체력이 80%로 남았을 때 실행된다.
-	_float fHP = m_fHP / m_fMaxHP;
-	if (0.3 > fHP)
-		iMaxRandomNumber = 4;
-	else if (0.8 > fHP)
-		iMaxRandomNumber = 3;
-	else
-		iMaxRandomNumber = 2;
-
-	_int iRandom = CUtilities_Manager::GetInstance()->Get_Random(0, iMaxRandomNumber);
-	
-	// 이전 패턴이랑 다른 경우에 실행한다.
-	if (m_iSkill_Data == iRandom)
-	{
-		m_dSkill_TimeAcc = 5;
-		m_eState = STATE::IDLE;
-		return;
-	}
-
-	if (0 == iRandom)
-		m_eState = A_MOVE;
-	else if (1 == iRandom)
-		m_eState = A_BULLET;
-	else if (2 == iRandom)
-		m_eState = A_STUN;
-	else if (3 == iRandom)
-	{
-		m_eState = A_CAGE;
-		m_iEffect_Count = 0;
-	}
-	else if (4 == iRandom)
-	{
-		m_eState = A_DANCE;
-		m_iEffect_Count = 0;
-	}
-
-	m_iSkill_Data = iRandom;
 }
 
 void CM_Gary_Boss::RandomMove(const _double & TimeDelta)
@@ -536,29 +571,29 @@ HRESULT CM_Gary_Boss::A_Bullet_Tick(const _double & TimeDelta)
 
 HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 {
+	m_bHit = false;
+
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
-	if(0 == m_dSkill_TimeAcc)
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), _float3(0.0f, 0.0f, 0.0f));
-	
-	//if(true == m_bEffect_Smoke)		// 이펙트~~~
-	//	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), _float3(0.0f, 0.0f, 0.0f));
+	if (0 == m_dSkill_TimeAcc)
+	{
+		m_bShader_Alpha = true;
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 1.2f, f4MyPos.z - 1.5f), _float3(0.0f, 0.0f, 0.0f), 70, { 0.3f, 2.0f });
+	}
 
 	m_dSkill_TimeAcc += TimeDelta;
-	if (0 < m_dSkill_TimeAcc)
-		m_bEffect_Smoke = true;		// 이펙트 발사
-
 	if (1 < m_dSkill_TimeAcc)
+	{
+		m_bShader_Alpha = false;
 		m_pTransformCom->Set_Pos(_float3(2.43f, 0.0f, 10.75f));		// 특정 위치로 순간이동
+	}
 
 	if (2 < m_dSkill_TimeAcc)
 	{
-		m_bEffect_Smoke = false;	// 이펙트 꺼
-
 		if (false == m_bEffect)	// 한 번만 호출되기 위해서
 		{
 			CEffect_Manager::GetInstance()->Effect_Wave_Fire_Create(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z + 1.0f));			// 뒤
@@ -619,6 +654,10 @@ HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 
 HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 {
+	if(false == m_bMovePos)
+		m_iEffect_Count = 0;
+
+	m_bShader_Alpha = false;
 	m_bMovePos = true;
 
 	m_eAnimState = IDLE;
@@ -665,6 +704,7 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 	{
 		CObj_Manager::GetInstance()->Set_BossCage(false);
 
+		m_bShader_Alpha = true;
 		m_eState = IDLE;
 		m_dSkill_TimeAcc = 0;
 	}
@@ -674,6 +714,10 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 
 void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 {
+	if (false == m_bMovePos)
+		m_iEffect_Count = 0;
+
+	m_bShader_Alpha = false;
 	m_bMovePos = true;
 
 	m_eAnimState = A_DANCE;
@@ -690,6 +734,7 @@ void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 	Fann_Create();
 	if (true == Fann_Dead_Check())	// 생성한 팬이 모두 삭제 되었다면, 다른 패턴
 	{
+		m_bShader_Alpha = true;
 		m_eState = IDLE;
 		m_dSkill_TimeAcc = 0;
 	}
@@ -793,27 +838,29 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 	}
 
 	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.2 > m_dShader_Hit_TimeAcc)
+	{ 
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+	}
+
 	if (0.1 < m_dShader_Hit_TimeAcc)
 		m_bShader_Hit = false;
 
-	if (m_pModelCom->Get_Finished())
-		m_eAnimState = STATE::IDLE;
-
-	if (1.0f < m_dShader_Hit_TimeAcc)
+	if (0.5f < m_dShader_Hit_TimeAcc)
 	{
 		m_dShader_Hit_TimeAcc = 0;
 		m_bShader_Hit = false;
-		m_eAnimState = STATE::IDLE;
 
 		m_bHit = false;
-		//m_eState = STATE::IDLE;
+		m_eState = STATE::IDLE;
 	}
 }
 
 void CM_Gary_Boss::Die_Tick(const _double & TimeDelta)
 {
 	m_eAnimState = STATE::DIE;
-
+	
 }
 
 void CM_Gary_Boss::Effect_Tick(const _double & TimeDelta)
@@ -844,6 +891,25 @@ void CM_Gary_Boss::Effect_Tick(const _double & TimeDelta)
 
 		++m_iEffect_Count;
 		m_dEffect_TimeAcc = 0;
+	}
+}
+
+void CM_Gary_Boss::Shader_Alpha(const _double & TimeDelta)
+{
+	if (false == m_bShader_Alpha && 1 <= m_fAlpha)
+		return;
+
+	m_bHit = false;
+
+	if (true == m_bShader_Alpha)
+	{
+		if(0 < m_fAlpha)
+			m_fAlpha -= _float(TimeDelta) * 1.5f;
+	}
+	else
+	{
+		if (1 > m_fAlpha)
+			m_fAlpha += _float(TimeDelta) * 1.5f;
 	}
 }
 

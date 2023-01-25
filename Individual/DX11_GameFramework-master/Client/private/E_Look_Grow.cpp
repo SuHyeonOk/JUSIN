@@ -207,8 +207,8 @@ void CE_Look_Grow::Size_Tick(const _double & TimeDelta)
 	// 중간 속도
 	else if (CE_Look_Grow::EFFECTINFO::TEXTURETYPE::POTAL_0 == m_tEffectInfo.eTextureType)
 	{
-		m_fSizeX += _float(TimeDelta) * 0.5f;
-		m_fSizeY += _float(TimeDelta) * 0.5f;
+		m_fSizeX += _float(TimeDelta);
+		m_fSizeY += _float(TimeDelta);
 	}
 	// 천천히 커지는
 	else

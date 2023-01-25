@@ -48,7 +48,7 @@ public:
 	HRESULT		Food_Up(_float3 f3Pos);
 	HRESULT		Effect_Ink(_float3 f3Pos, _float3 f3Color);
 	HRESULT		Effect_Random_Ink(_float3 f3Pos, _float3 f3Color);
-	HRESULT		Effect_Smoke_Count(_float3 f3Pos, _float3 f3Color, _int iCount = 10);
+	HRESULT		Effect_Smoke_Count(_float3 f3Pos, _float3 f3Color, _int iCount = 10, _float2 f2Size = {0.3f, 1.0f});
 	HRESULT		Effect_Smoke(_float3 f3Pos, _float3 f3Color);
 	HRESULT		Skill_Marceline_Waves_Create(_float3 f3Pos);
 	HRESULT		Skill_Marceline_Sound_Create(_float3 f3Pos);

@@ -172,41 +172,41 @@ HRESULT CBoss_S_Cage::Skeleton_Create()
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CM_Monster::MONSTERDESC tMonsterDesc;
-
+	
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_ARCHER_1;
-	tMonsterDesc.f3Pos = _float3(7.0f, 0.0f, 17.0f);
+	tMonsterDesc.f3Pos = _float3(8.26577f, 0.0f, 16.0649f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Archer_1"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-
+	
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_SHIELD_1;
-	tMonsterDesc.f3Pos = _float3(5.0f, 0.0f, 14.0f);
+	tMonsterDesc.f3Pos = _float3(5.72343f, 0.0f, 14.6831f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Shield_1"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-
+	
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_ARCHER_2;
-	tMonsterDesc.f3Pos = _float3(4.0f, 0.0f, 16.0f);
+	tMonsterDesc.f3Pos = _float3(4.98903f, 0.0f, 16.8978f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Archer_2"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-
+	
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_SHIELD_2;
-	tMonsterDesc.f3Pos = _float3(3.0f, 0.0f, 17.5f);
+	tMonsterDesc.f3Pos = _float3(3.03312f, 0.0f, 15.1083f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Shield_2"), TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return E_FAIL;
 	}
-
+	
 	tMonsterDesc.eMonsterKind = CM_Monster::MONSTERDESC::SKELETON_ARCHER_3;
-	tMonsterDesc.f3Pos = _float3(1.0f, 0.0f, 15.0f);
+	tMonsterDesc.f3Pos = _float3(2.28258f, 0.0f, 17.4154f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Monster_Skeleton_Archer_3"), TEXT("Prototype_GameObject_M_Skeleton_Archer"), &tMonsterDesc)))
 	{
 		RELEASE_INSTANCE(CGameInstance);

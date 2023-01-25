@@ -34,11 +34,6 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	//if(CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
-	//	CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
-	//	GameObjectDesc.TransformDesc.fSpeedPerSec = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
-	//else
-	//	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = m_tEffectInfo.f3Pos;
@@ -52,8 +47,13 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	
 	// 크기
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
-		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)			// 외부에서 지정한 랜덤한 크기를 가지는 이미지
+	{
+		_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(m_tEffectInfo.f2Size.x, m_tEffectInfo.f2Size.y);
+
+		m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
+	}
+	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)			// 랜덤한  크기를 가지는 이미지
 	{
 		_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 1.0f);
@@ -72,13 +72,14 @@ HRESULT CE_Burst::Initialize(void * pArg)
 		m_fAlpha = 1.0f;
 
 	// 속도
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
-		m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
-	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
-		m_fSpeed = 0.3f;
-	else
-		m_fSpeed = 0.2f;
+	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
+	//if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
+	//	CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
+	//	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
+	//else if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)	// 외부에서 지정한 크기를 가지는 이미지
+	//	m_fSpeed = m_tEffectInfo.fSpeed;
+	//else
+	//	m_fSpeed = 0.2f;
 
 	return S_OK;
 }
