@@ -43,7 +43,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 5.0f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.0f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
@@ -164,6 +164,9 @@ void CM_Gary_Boss::On_Collision(CGameObject * pOther)
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		if (L"Player_Weapon" == pOther->Get_Tag())
 			m_bHit = true;
+
+	if (L"Skill_Paint" == pOther->Get_Tag())
+		m_bHit = true;
 }
 
 HRESULT CM_Gary_Boss::SetUp_Components()

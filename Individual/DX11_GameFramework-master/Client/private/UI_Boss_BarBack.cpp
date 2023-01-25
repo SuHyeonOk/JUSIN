@@ -60,7 +60,7 @@ void CUI_Boss_BarBack::Tick(_double TimeDelta)
 	_float fHPGauge = pGameObject->Get_BossHp() / pGameObject->Get_BossMaxHp();
 
 	if (fHPGauge < m_fHPGauge)
-		m_fHPGauge -= _float(TimeDelta) * 0.2f;
+		m_fHPGauge -= _float(TimeDelta) * 0.1f;
 	else
 		m_fHPGauge = fHPGauge;
 }

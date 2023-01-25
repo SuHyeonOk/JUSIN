@@ -402,13 +402,13 @@ void CUI_::Tick(_double TimeDelta)
 
 	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())	// Boss 전에서만 유아이를 띄운다.
 	{
-		if (true == CUI_Manager::GetInstance()->Get_UI_Monster())
-			return;
-
-		// Boss UI
-		m_vecUI[23]->Tick(TimeDelta);
-		m_vecUI[25]->Tick(TimeDelta);
-		m_vecUI[24]->Tick(TimeDelta);
+		if (false == CUI_Manager::GetInstance()->Get_UI_Monster())
+		{
+			// Boss UI
+			m_vecUI[23]->Tick(TimeDelta);
+			m_vecUI[25]->Tick(TimeDelta);
+			m_vecUI[24]->Tick(TimeDelta);
+		}
 	}
 
 	// Inventory
@@ -544,12 +544,12 @@ void CUI_::Late_Tick(_double TimeDelta)
 
 	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
 	{
-		if (true == CUI_Manager::GetInstance()->Get_UI_Monster())
-			return;
-
-		m_vecUI[23]->Late_Tick(TimeDelta);
-		m_vecUI[25]->Late_Tick(TimeDelta);
-		m_vecUI[24]->Late_Tick(TimeDelta);
+		if (false == CUI_Manager::GetInstance()->Get_UI_Monster())
+		{
+			m_vecUI[23]->Late_Tick(TimeDelta);
+			m_vecUI[25]->Late_Tick(TimeDelta);
+			m_vecUI[24]->Late_Tick(TimeDelta);
+		}
 	}
 
 	m_vecUI[26]->Late_Tick(TimeDelta);

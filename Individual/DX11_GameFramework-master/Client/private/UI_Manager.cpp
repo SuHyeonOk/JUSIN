@@ -37,8 +37,9 @@ void CUI_Manager::UI_Monster_Index(CGameObject * pOther)
 		m_iUI_Monster_Index = 12;
 	else if (L"Monster__Magic_Man" == pOther->Get_Tag())
 		m_iUI_Monster_Index = 13;
-	else if (L"Gary_Boss" == pOther->Get_Tag())	// TODO 몬스터 늘어나면 수정해야 한다.
-		m_iUI_Monster_Index = 14;
+	// TODO 몬스터 늘어나면 수정해야 한다.
+	//else if (L"Gary_Boss" == pOther->Get_Tag())	
+	//	m_iUI_Monster_Index = 14;
 }
 
 void CUI_Manager::Free()

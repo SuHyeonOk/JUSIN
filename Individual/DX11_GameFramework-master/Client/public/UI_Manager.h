@@ -97,13 +97,13 @@ public:
 		m_HpGauge_Monster = fGauge;
 	}
 
-	// UI 몬스터 인덱스
+	// UI 몬스터 인덱스 : 충돌한 몬스터는 이것 이다.
 	_int		Get_UI_Monster_Index() { 
 		return m_iUI_Monster_Index;
 	}
 	void		CUI_Manager::UI_Monster_Index(CGameObject * pOther);
 
-	// UI 몬스터 
+	// UI 몬스터 : 나 지금 몬스터랑 충돌 해서 UI 를 띄운다.
 	_bool		Get_UI_Monster() { 
 		return m_bUI_Monster;
 	}

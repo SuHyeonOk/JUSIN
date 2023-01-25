@@ -27,6 +27,8 @@ HRESULT CBoss_S_Scream::Initialize_Prototype()
 
 HRESULT CBoss_S_Scream::Initialize(void * pArg)
 {	
+	m_wsTag = L"Gary_Boss";
+
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)

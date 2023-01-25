@@ -26,6 +26,8 @@ HRESULT CBoss_S_Wind::Initialize_Prototype()
 
 HRESULT CBoss_S_Wind::Initialize(void * pArg)
 {	
+	m_wsTag = L"Gary_Boss";
+
 	if (nullptr != pArg)
 		memcpy(&m_tSkillInfo, pArg, sizeof(m_tSkillInfo));
 
@@ -124,8 +126,8 @@ void CBoss_S_Wind::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		//CObj_Manager::GetInstance()->Set_Interaction(true);
-		//CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+		CObj_Manager::GetInstance()->Set_Interaction(true);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 	} 
 }
 
