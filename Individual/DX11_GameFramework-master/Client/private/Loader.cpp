@@ -37,6 +37,7 @@
 #include "UI_Inventory_X.h"
 #include "UI_Inventory.h"
 #include "UI_Icon.h"
+#include "UI_CurrentIcon.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -954,6 +955,12 @@ HRESULT CLoader::UI_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Icon"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Icon_%d.png"), 6))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_CurrentIcon */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_CurrentIcon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/inventario selecionador.png")))))
+		return E_FAIL;
+
+
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1073,6 +1080,10 @@ HRESULT CLoader::UI_Create()
 	/* For.Prototype_GameObject_UI_Icon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Icon"),
 		CUI_Icon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_CurrentIcon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_CurrentIcon"),
+		CUI_CurrentIcon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

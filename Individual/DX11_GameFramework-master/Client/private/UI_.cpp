@@ -266,7 +266,7 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 	
-	// [28] : Icon
+	// [28] : Icon_One
 	INVENTORYICON eInventoryIcon;
 	eInventoryIcon = INVENTORYICON::ICON_ONE;
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
@@ -274,35 +274,48 @@ HRESULT CUI_::Initialize(void * pArg)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
+	// [29] : Icon_Two
 	eInventoryIcon = INVENTORYICON::ICON_TWO;
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
 	if (nullptr == pUI)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
+	// [30] : Icon_Three
 	eInventoryIcon = INVENTORYICON::ICON_THREE;
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
 	if (nullptr == pUI)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
+	// [31] : Icon_Four
 	eInventoryIcon = INVENTORYICON::ICON_FOUR;
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
 	if (nullptr == pUI)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
+	// [32] : Icon_Five
 	eInventoryIcon = INVENTORYICON::ICON_FIVE;
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
 	if (nullptr == pUI)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
+	// [33] : Icon_Six
 	eInventoryIcon = INVENTORYICON::ICON_SIX;
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
 	if (nullptr == pUI)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
+
+	// [39] : CurrentIcon
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_CurrentIcon")));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
+
 
 
 
@@ -403,6 +416,8 @@ void CUI_::Tick(_double TimeDelta)
 	if (true == CObj_Manager::GetInstance()->Get_Inventory())
 	{
 		m_vecUI[27]->Tick(TimeDelta);
+
+		m_vecUI[34]->Tick(TimeDelta);	// CurrentIcon
 
 		m_vecUI[28]->Tick(TimeDelta);	// Jake Son 계속 출력한다.
 
@@ -541,6 +556,8 @@ void CUI_::Late_Tick(_double TimeDelta)
 	if (true == CObj_Manager::GetInstance()->Get_Inventory())
 	{
 		m_vecUI[27]->Late_Tick(TimeDelta);
+
+		m_vecUI[34]->Late_Tick(TimeDelta);
 
 		m_vecUI[28]->Late_Tick(TimeDelta);
 

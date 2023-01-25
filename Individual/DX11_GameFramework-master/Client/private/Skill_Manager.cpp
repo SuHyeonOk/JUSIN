@@ -10,7 +10,7 @@ CSkill_Manager::CSkill_Manager()
 {
 }
 
-void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)
+void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)					// 플레이어가 변신 상태인지
 {
 	if (true == bIsCreate)
 		m_bChangeSkill_Create = true;
@@ -94,10 +94,8 @@ void	CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex)
 		m_arrPageCount[PLAYERSKILL::SKILL::JAKESON] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::JAKESON])
-		{
 			SkillIcon(PLAYERSKILL::SKILL::JAKESON);
-			InventoryIcon(PLAYERSKILL::SKILL::JAKESON);
-		}
+		// JakeSon 의 경우에는 인벤토리에 이미 추가 되어 있기 때문에 함수를 호출하지 않는다.
 	}
 
 	//if (L"Item_Page_Paint" == pOther->Get_Tag())
@@ -174,14 +172,14 @@ void	CSkill_Manager::Delete_InventoryIcon(PLAYERSKILL::SKILL eCurrentSkill)
 			// 해당 칸을 비운다.
 			//CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(i), false);
 			
-			m_iCurrentInventtoryIconIndex = _int(i) + 1;
+			m_iNextInventtoryIconIndex = _int(i) + 1;
 			break;
 		}
 	}
 
 
 	// 해당 칸을 비우는 것이 아닌, 뒤에 있던 데이터를 한 칸씩 앞으로 당기고, 가장 마지막을 비운다.
-	for (_int j = m_iCurrentInventtoryIconIndex; j < _int(INVENTORYICON::ICON_END); ++j)
+	for (_int j = m_iNextInventtoryIconIndex; j < _int(INVENTORYICON::ICON_END); ++j)
 	{
 		// 현재 비우려고 하는 인벤토리 Index 의 다음에 데이터가 있다면
 		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON(j)))

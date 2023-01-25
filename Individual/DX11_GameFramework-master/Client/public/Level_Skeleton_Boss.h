@@ -28,6 +28,13 @@ private:
 	HRESULT Ready_Layer_Boss(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Map(const _tchar* pLayerTag);
 
+private:
+	void	ImGui();
+
+private:
+	wstring			m_wstObjName;
+	_float3			m_f3ClickPos = _float3(0.f, 0.f, 0.f);
+
 public:
 	static CLevel_Skleton_Boss* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;

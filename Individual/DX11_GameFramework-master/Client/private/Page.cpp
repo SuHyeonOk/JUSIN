@@ -140,6 +140,8 @@ void CPage::On_Collision(CGameObject * pOther)
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::COIN);
 			else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::FIONA);
+			else if (CSkill_Manager::PLAYERSKILL::SKILL::JAKESON == m_tinPageInfo.ePlayerSkill)
+				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::JAKESON);
 
 			CGameObject::Set_Dead();
 		}
@@ -183,6 +185,13 @@ HRESULT CPage::SetUp_Components()
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_5"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::JAKESON == m_tinPageInfo.ePlayerSkill)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Enchiridion_Page_7"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}

@@ -56,23 +56,11 @@ HRESULT CUI_Icon::Initialize(void * pArg)
 
 void CUI_Icon::Tick(_double TimeDelta)
 {
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//if (pGameInstance->Key_Pressing(DIK_A))
-	//	--m_fX;
-	//if (pGameInstance->Key_Pressing(DIK_D))
-	//	++m_fX;
-	//if (pGameInstance->Key_Pressing(DIK_W))
-	//	++m_fY;
-	//if (pGameInstance->Key_Pressing(DIK_S))
-	//	--m_fY;
-
-	//cout << "m_fX : " << m_fX << " \ " << "m_fY : " << m_fY << endl;
-
-	//RELEASE_INSTANCE(CGameInstance);
-
-	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(m_fX, m_fY, 0.f, 1.f));
-
+	// Jake Son 
+	if(5 <= CUI_Manager::GetInstance()->Get_JakeSon_Count())
+		CUI_Manager::GetInstance()->Set_InventoryIcon(INVENTORYICON::ICON_ONE, CSkill_Manager::PLAYERSKILL::SKILL::JAKESON);
+	else
+		CUI_Manager::GetInstance()->Set_InventoryIcon(INVENTORYICON::ICON_ONE, CSkill_Manager::PLAYERSKILL::SKILL::LOOK_JAKESON);
 }
 
 void CUI_Icon::Late_Tick(_double TimeDelta)
@@ -92,6 +80,21 @@ HRESULT CUI_Icon::Render()
 	m_pShaderCom->Begin(1);
 
 	m_pVIBufferCom->Render();
+
+	if (m_eIconIndex == INVENTORYICON::ICON_ONE)
+	{
+		if (5 <= CUI_Manager::GetInstance()->Get_JakeSon_Count())
+			return S_OK;
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		_tchar szCount[10];
+		wsprintf(szCount, TEXT("%d/5"), CUI_Manager::GetInstance()->Get_JakeSon_Count());
+
+		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(548.667f, 225.467f), 0.f, _float2(0.35f, 0.33f));
+
+		RELEASE_INSTANCE(CGameInstance);
+	}
 
 	return S_OK;
 }

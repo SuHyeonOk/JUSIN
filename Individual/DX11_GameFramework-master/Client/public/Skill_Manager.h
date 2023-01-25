@@ -21,7 +21,7 @@ class CSkill_Manager : public CBase
 public:
 	typedef struct tagPlyaerSkill
 	{
-		enum SKILL { PAINT, MARCELINT, COIN, FIONA, JAKESON, SKILL_END };
+		enum SKILL { PAINT, MARCELINT, COIN, FIONA, LOOK_JAKESON, JAKESON, SKILL_END };
 		SKILL		eSkill = SKILL_END;			// 현재 사용 중 인 스킬
 
 	}PLAYERSKILL;
@@ -81,7 +81,7 @@ private:
 	_int			m_arrPageCount[PLAYERSKILL::SKILL::SKILL_END] = { 0 };
 
 	_bool			m_bChangeSkill_Create = false;
-	_int			m_iCurrentInventtoryIconIndex = 0;
+	_int			m_iNextInventtoryIconIndex = 0;
 
 public:
 	virtual void Free() override;	

@@ -5,6 +5,8 @@
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
 #include "Effect_Manager.h"
+#include "Skill_Manager.h"
+#include "Page.h"
 
 CS_Jake_Son::CS_Jake_Son(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -116,6 +118,25 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z - 0.5f));
 		CUI_Manager::GetInstance()->Set_JakeSon_Count();
 		
+		// 다섯번째 친구는 JakePage 를 남긴다.
+		if (JAKESONINFO::JAKE_SON_E == m_tJakeSonInfo.eJakeSon)
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+			CPage::PAGEINFO tPageInfo;
+			tPageInfo.fPos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
+			tPageInfo.bJemp = true;
+
+			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::JAKESON;
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Page_Monster"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
+			{
+				MSG_BOX("Jake Son Page File");
+				return;
+			}
+
+			RELEASE_INSTANCE(CGameInstance);
+		}
+
 		CGameObject::Set_Dead();
 	}
 }

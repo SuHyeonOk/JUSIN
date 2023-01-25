@@ -144,8 +144,8 @@ void		CObj_Manager::Key_Input()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	// 아이템 사용은 SKILL_END 일 때만 사용할 수 있다.
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill && // 아이템 사용은 SKILL_END 일 때만 사용할 수 있다.
+		false == m_bInventory) // 인벤토리를 닫고 있을 때만 사용할 수 있다.
 	{
 		if (pGameInstance->Key_Down(DIK_1))
 			CSkill_Manager::GetInstance()->Page_Use(ITEM_ONE);
@@ -163,7 +163,10 @@ void		CObj_Manager::Key_Input()
 
 	// Inventory
 	if (pGameInstance->Key_Down(DIK_X))
+	{
+		m_bInteraction = !m_bInteraction;
 		m_bInventory = !m_bInventory;
+	}
 
 	// 상호작용 키 움직이지 못함.
 	if (pGameInstance->Key_Down(DIK_F))
@@ -179,12 +182,12 @@ void		CObj_Manager::Key_Input()
 		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_FAMILY;
 	}
 
-	if (pGameInstance->Key_Down(DIK_M))
-	{
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::JAKESON);
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
-		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
-	}
+	//if (pGameInstance->Key_Down(DIK_M))
+	//{
+	//	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::JAKESON);
+	//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
+	//	m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
+	//}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
