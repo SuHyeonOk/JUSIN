@@ -32,8 +32,14 @@ void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 	if(0 < m_arrPageCount[m_tPlayerSkill.eSkill])								// 예외처리 0보다 클때, 즉 스킬이 있을 때 사용 가능하다.
 		m_arrPageCount[m_tPlayerSkill.eSkill] -= 1;								// 아이템 하나 감소
 
-	if(0 >= m_arrPageCount[m_tPlayerSkill.eSkill])								// 스킬이 0개 이하이면 스킬창 에서 삭제한다.
+	if (0 >= m_arrPageCount[m_tPlayerSkill.eSkill])								// 스킬이 0개 이하이면...
+	{
+		// 스킬 창
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(iIndex, false);
+
+		// 인벤토리
+		Delete_InventoryIcon(m_tPlayerSkill.eSkill);
+	}
 
 	cout <<  "칸에 어떤 스킬이 있는지 : " << 0 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE) << " | " <<
 			 1 << "> " << CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_TWO) << " | " <<
@@ -45,38 +51,53 @@ void	CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex)
 {
 	if (PLAYERSKILL::SKILL::PAINT == iIndex)
 	{
-		m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;		// 충돌한 객체의 개수 관리
+		m_arrPageCount[PLAYERSKILL::SKILL::PAINT] += 1;			// 충돌한 객체의 개수 관리
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::PAINT])		// 아이템 개수가 1개 일 때만 스킬창에 추가할 수 있다.
+		{
 			SkillIcon(PLAYERSKILL::SKILL::PAINT);				// 비어있는 UI 창 확인해서 Icon 넣기
+			InventoryIcon(PLAYERSKILL::SKILL::PAINT);			// 비어있는 인벤창 확인해서 Icon 넣기
+		}
 	}
 	else if (PLAYERSKILL::SKILL::MARCELINT == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::MARCELINT])
+		{
 			SkillIcon(PLAYERSKILL::SKILL::MARCELINT);
+			InventoryIcon(PLAYERSKILL::SKILL::MARCELINT);
+		}
 	}
 	else if (PLAYERSKILL::SKILL::COIN == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::COIN] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::COIN])
+		{
 			SkillIcon(PLAYERSKILL::SKILL::COIN);
+			InventoryIcon(PLAYERSKILL::SKILL::COIN);
+		}
 	}
 	else if (PLAYERSKILL::SKILL::FIONA == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::FIONA] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::FIONA])
+		{
 			SkillIcon(PLAYERSKILL::SKILL::FIONA);
+			InventoryIcon(PLAYERSKILL::SKILL::FIONA);
+		}
 	}
 	else if (PLAYERSKILL::SKILL::JAKESON == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::JAKESON] += 1;
 
 		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::JAKESON])
+		{
 			SkillIcon(PLAYERSKILL::SKILL::JAKESON);
+			InventoryIcon(PLAYERSKILL::SKILL::JAKESON);
+		}
 	}
 
 	//if (L"Item_Page_Paint" == pOther->Get_Tag())
@@ -124,6 +145,55 @@ void	CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill)
 		{
 			CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEMINDEX(i), true);		// 해당 창을 그린다.
 			CUI_Manager::GetInstance()->Set_SkillIcon(ITEMINDEX(i), eSkill);		// 그 곳에 내가 지금 획득한 아이템을 넣어라
+			break;
+		}
+	}
+}
+
+void	CSkill_Manager::InventoryIcon(PLAYERSKILL::SKILL eSkill)
+{
+	for (_int i = _int(INVENTORYICON::ICON_TWO); i < _int(INVENTORYICON::ICON_END); ++i)
+	{
+		if (false == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON(i)))
+		{
+			CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(i), true);		// 해당 창을 그린다.
+			CUI_Manager::GetInstance()->Set_InventoryIcon(INVENTORYICON(i), eSkill);			// 획득한 아이템을 넣는다.
+			break;
+		}
+	}
+}
+
+void	CSkill_Manager::Delete_InventoryIcon(PLAYERSKILL::SKILL eCurrentSkill)
+{
+	for (_int i = _int(INVENTORYICON::ICON_TWO); i < _int(INVENTORYICON::ICON_END); ++i)
+	{
+	 	CSkill_Manager::PLAYERSKILL::SKILL eSkill =	CUI_Manager::GetInstance()->Get_InventoryIcon(INVENTORYICON(i));
+
+		if (eCurrentSkill == eSkill)
+		{
+			// 해당 칸을 비운다.
+			//CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(i), false);
+			
+			m_iCurrentInventtoryIconIndex = _int(i) + 1;
+			break;
+		}
+	}
+
+
+	// 해당 칸을 비우는 것이 아닌, 뒤에 있던 데이터를 한 칸씩 앞으로 당기고, 가장 마지막을 비운다.
+	for (_int j = m_iCurrentInventtoryIconIndex; j < _int(INVENTORYICON::ICON_END); ++j)
+	{
+		// 현재 비우려고 하는 인벤토리 Index 의 다음에 데이터가 있다면
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON(j)))
+		{
+			// 해당 인덱스가 가지고 있는 스킬을 가져와서
+			CSkill_Manager::PLAYERSKILL::SKILL eSkill = CUI_Manager::GetInstance()->Get_InventoryIcon(INVENTORYICON(j));
+			// 이전 칸에 담아준다.
+			CUI_Manager::GetInstance()->Set_InventoryIcon(INVENTORYICON(j - 1), eSkill);
+		}
+		else // 없으면 칸을 비우고 반복문 나간다.
+		{
+			CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(j - 1), false); 
 			break;
 		}
 	}

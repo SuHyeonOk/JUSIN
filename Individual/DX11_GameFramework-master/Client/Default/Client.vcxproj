@@ -253,6 +253,7 @@
     <ClInclude Include="..\public\UI_Boss.h" />
     <ClInclude Include="..\public\UI_Boss_Bar.h" />
     <ClInclude Include="..\public\UI_Boss_BarBack.h" />
+    <ClInclude Include="..\public\UI_Icon.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
     <ClInclude Include="..\public\UI_Inventory.h" />
     <ClInclude Include="..\public\UI_Inventory_X.h" />
@@ -364,6 +365,7 @@
     <ClCompile Include="..\private\UI_Boss.cpp" />
     <ClCompile Include="..\private\UI_Boss_Bar.cpp" />
     <ClCompile Include="..\private\UI_Boss_BarBack.cpp" />
+    <ClCompile Include="..\private\UI_Icon.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
     <ClCompile Include="..\private\UI_Inventory.cpp" />
     <ClCompile Include="..\private\UI_Inventory_X.cpp" />

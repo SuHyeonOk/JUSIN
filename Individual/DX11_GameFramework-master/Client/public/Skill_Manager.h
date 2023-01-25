@@ -65,9 +65,13 @@ public:
 	void		CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex/*CGameObject * pOther*/);										// 현재 먹은 (충돌한) Page 의 종류 관리
 
 public:		// 유아이 관련
-	_int		Get_PageCount(PLAYERSKILL::SKILL iIndex) { return m_arrPageCount[iIndex]; }				
+	_int		Get_PageCount(PLAYERSKILL::SKILL iIndex) { 
+		return m_arrPageCount[iIndex];
+	}				
 
 	void		CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill);										// IconIndex가 비어있는지 확인하고, 인덱스에 값을 채운다.
+	void		CSkill_Manager::InventoryIcon(PLAYERSKILL::SKILL eSkill);
+	void		CSkill_Manager::Delete_InventoryIcon(PLAYERSKILL::SKILL eCurrentSkill);
 
 private:
 	PLAYERSKILL		m_tPlayerSkill;
@@ -77,6 +81,7 @@ private:
 	_int			m_arrPageCount[PLAYERSKILL::SKILL::SKILL_END] = { 0 };
 
 	_bool			m_bChangeSkill_Create = false;
+	_int			m_iCurrentInventtoryIconIndex = 0;
 
 public:
 	virtual void Free() override;	

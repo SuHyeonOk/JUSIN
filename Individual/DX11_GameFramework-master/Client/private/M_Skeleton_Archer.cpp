@@ -364,7 +364,6 @@ void CM_Skeleton_Archer::BossCage()
 
 	if (1.0f > f4Pos.x || 9.5f < f4Pos.x || 14.0f > f4Pos.z || 18.0f < f4Pos.z)
 	{
-		cout << " 반대로 가라 " << endl;
 		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		vLook *= -1.0f;
 		m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);

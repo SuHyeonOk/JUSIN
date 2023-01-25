@@ -525,6 +525,9 @@
     <ClInclude Include="..\public\O_Collider.h">
       <Filter>02.GameObjects\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_Icon.h">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -847,6 +850,9 @@
     </ClCompile>
     <ClCompile Include="..\private\O_Collider.cpp">
       <Filter>02.GameObjects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Icon.cpp">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

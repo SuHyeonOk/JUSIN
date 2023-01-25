@@ -26,6 +26,21 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 인벤토리
+	_bool		Get_IsInventoryIcon_Index(INVENTORYICON iIndex) {
+		return m_bIsIcon_Index[_int(iIndex)];
+	}
+	void		Set_IsInventoryIcon_Index(INVENTORYICON iIndex, _bool bIsIndex) {
+		m_bIsIcon_Index[_int(iIndex)] = bIsIndex;
+	}
+
+	CSkill_Manager::PLAYERSKILL::SKILL		Get_InventoryIcon(INVENTORYICON iIndex) {
+		return m_iUI_Icon_Index[_int(iIndex)];
+	}
+	void		Set_InventoryIcon(INVENTORYICON iIndex, CSkill_Manager::PLAYERSKILL::SKILL iSkill) {
+		m_iUI_Icon_Index[_int(iIndex)] = iSkill;
+	}
+
 	// 제이크 애기
 	_int		Get_JakeSon_Count() {
 		return m_iJakeSon_Count;
@@ -35,8 +50,12 @@ public:
 	}
 
 	// 스킬
-	_bool		Get_IsIcon_Index(ITEMINDEX iIndex) { return m_bIsSkill_Index[iIndex]; }
-	void		Set_IsIcon_Index(ITEMINDEX iIndex, _bool bIsIndex) { m_bIsSkill_Index[iIndex] = bIsIndex; }
+	_bool		Get_IsIcon_Index(ITEMINDEX iIndex) { 
+		return m_bIsSkill_Index[iIndex]; 
+	}
+	void		Set_IsIcon_Index(ITEMINDEX iIndex, _bool bIsIndex) { 
+		m_bIsSkill_Index[iIndex] = bIsIndex;
+	}
 
 	CSkill_Manager::PLAYERSKILL::SKILL		Get_SkillIcon(ITEMINDEX iIndex) { 
 		return m_iUI_Skill_Index[iIndex];
@@ -71,13 +90,17 @@ public:
 	}
 
 	// 몬스터 체력 게이지
-	_float		Get_HPGauge_Monster() { return m_HpGauge_Monster; }
+	_float		Get_HPGauge_Monster() { 
+		return m_HpGauge_Monster; 
+	}
 	void		Set_HPGauge_Monster(_float fGauge) { 
 		m_HpGauge_Monster = fGauge;
 	}
 
 	// UI 몬스터 인덱스
-	_int		Get_UI_Monster_Index() { return m_iUI_Monster_Index; }
+	_int		Get_UI_Monster_Index() { 
+		return m_iUI_Monster_Index;
+	}
 	void		CUI_Manager::UI_Monster_Index(CGameObject * pOther);
 
 	// UI 몬스터 
@@ -97,6 +120,9 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_bool										m_bIsIcon_Index[_int(INVENTORYICON::ICON_END)] = { false };
+	CSkill_Manager::PLAYERSKILL::SKILL			m_iUI_Icon_Index[_int(INVENTORYICON::ICON_END)] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
+
 	_bool										m_bIsSkill_Index[ITEMINDEX_END] = { false };
 	CSkill_Manager::PLAYERSKILL::SKILL			m_iUI_Skill_Index[ITEMINDEX_END] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
 

@@ -266,6 +266,44 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 	
+	// [28] : Icon
+	INVENTORYICON eInventoryIcon;
+	eInventoryIcon = INVENTORYICON::ICON_ONE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
+	eInventoryIcon = INVENTORYICON::ICON_TWO;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
+	eInventoryIcon = INVENTORYICON::ICON_THREE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
+	eInventoryIcon = INVENTORYICON::ICON_FOUR;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
+	eInventoryIcon = INVENTORYICON::ICON_FIVE;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
+	eInventoryIcon = INVENTORYICON::ICON_SIX;
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Icon"), &eInventoryIcon));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+
 
 
 	
@@ -306,13 +344,13 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[12]->Tick(TimeDelta);
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_ONE))
 	{
-		m_vecUI[13]->Tick(TimeDelta);
+		m_vecUI[13]->Tick(TimeDelta);		// 스킬 창에 아이템이 들어오게 되면 아이콘을 출력한다.
 
 		CSkill_Manager::PLAYERSKILL tPlayerSkill;
 		tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE);
 		_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(tPlayerSkill.eSkill);
 		if(1 < iCount)
-			m_vecUI[17]->Tick(TimeDelta);
+			m_vecUI[17]->Tick(TimeDelta);	// 스킬 창에 아이템이 1개 이상이라면 숫자를 표시한다.
 	}
 	if (true == CUI_Manager::GetInstance()->Get_IsIcon_Index(ITEM_TWO))
 	{
@@ -362,9 +400,31 @@ void CUI_::Tick(_double TimeDelta)
 
 	// Inventory
 	m_vecUI[26]->Tick(TimeDelta);
-	if(true == CObj_Manager::GetInstance()->Get_Inventory())
+	if (true == CObj_Manager::GetInstance()->Get_Inventory())
+	{
 		m_vecUI[27]->Tick(TimeDelta);
 
+		m_vecUI[28]->Tick(TimeDelta);	// Jake Son 계속 출력한다.
+
+		//// 1 번째 인벤토리 칸에 어떤 스킬이 있는지 그 스킬의 개수가 1개 이상일 때 출력한다.
+		//CSkill_Manager::PLAYERSKILL::SKILL ePlayerSkill = CUI_Manager::GetInstance()->Get_InventoryIcon(INVENTORYICON::ICON_TWO);
+		//_int iCount = CSkill_Manager::GetInstance()->Get_PageCount(ePlayerSkill);
+		//if (1 < iCount)
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_TWO))
+			m_vecUI[29]->Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_THREE))
+			m_vecUI[30]->Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_FOUR))
+			m_vecUI[31]->Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_FIVE))
+			m_vecUI[32]->Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_SIX))
+			m_vecUI[33]->Tick(TimeDelta);
+	}
 
 
 
@@ -479,7 +539,26 @@ void CUI_::Late_Tick(_double TimeDelta)
 
 	m_vecUI[26]->Late_Tick(TimeDelta);
 	if (true == CObj_Manager::GetInstance()->Get_Inventory())
+	{
 		m_vecUI[27]->Late_Tick(TimeDelta);
+
+		m_vecUI[28]->Late_Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_TWO))
+			m_vecUI[29]->Late_Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_THREE))
+			m_vecUI[30]->Late_Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_FOUR))
+			m_vecUI[31]->Late_Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_FIVE))
+			m_vecUI[32]->Late_Tick(TimeDelta);
+
+		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON::ICON_SIX))
+			m_vecUI[33]->Late_Tick(TimeDelta);
+	}
 
 
 
