@@ -59,6 +59,7 @@ private:
 	void	Attack_Paint_Tick(_double TimeDelta);
 	void	Skill_Marceline_Tick(_double TimeDelta);
 	void	Skill_Coin_Tick(_double TimeDelta);
+	void	Skill_Food_Tick(_double TimeDelta);
 	HRESULT	Skill_Fiona_Tick(_double TimeDelta);
 
 	void	Roolling_Tick(_double TimeDelta);

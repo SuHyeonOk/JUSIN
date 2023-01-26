@@ -460,8 +460,7 @@ void CUI_::Tick(_double TimeDelta)
 		// Shop
 		m_vecUI[35]->Tick(TimeDelta);
 
-		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level() ||
-			3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+		if (3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
 			m_vecUI[37]->Tick(TimeDelta);
 		
 		m_vecUI[36]->Tick(TimeDelta);
@@ -606,8 +605,7 @@ void CUI_::Late_Tick(_double TimeDelta)
 	{
 		m_vecUI[35]->Late_Tick(TimeDelta);
 
-		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level() ||
-			3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+		if (3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
 			m_vecUI[37]->Late_Tick(TimeDelta);
 
 		m_vecUI[36]->Late_Tick(TimeDelta);

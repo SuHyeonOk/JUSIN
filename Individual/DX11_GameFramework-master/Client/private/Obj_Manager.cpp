@@ -292,26 +292,18 @@ void		CObj_Manager::Player_Weapon()
 	{
 		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 
+		//m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
+
 		if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		{
-			//m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(4);
-		}
 		else if (CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		{
-		//	m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(5);
-		}
 		else if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		{
-		//	m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(6);
-		}
 		else if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
-		{
-		//	m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 			CUI_Manager::GetInstance()->Set_Weapon_index(7);
-		}
+		else if (CSkill_Manager::PLAYERSKILL::FOOD == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			CUI_Manager::GetInstance()->Set_Weapon_index(10);
 		else if (CSkill_Manager::PLAYERSKILL::JAKESON == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			CUI_Manager::GetInstance()->Set_Weapon_index(11);
 	}

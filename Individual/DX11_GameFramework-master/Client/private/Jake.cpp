@@ -360,7 +360,11 @@ void CJake::Player_Tick(_double TimeDelta)
 		Skill_Coin_Tick(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::S_FIONA:	// 14
+	case CObj_Manager::PLAYERINFO::S_FOOD:	// 14
+		Skill_Food_Tick(TimeDelta);
+		break;
+
+	case CObj_Manager::PLAYERINFO::S_FIONA:	// 15
 		Skill_Fiona_Tick(TimeDelta);
 		break;
 
@@ -444,6 +448,9 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 
 		if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_COIN);
+
+		if (CSkill_Manager::PLAYERSKILL::FOOD == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_FOOD);
 
 		if (CSkill_Manager::PLAYERSKILL::FIONA == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)			// 변신 스킬의 경우 그 객체에서 모든 것을 처리한다.
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::S_FIONA);
@@ -824,6 +831,24 @@ void CJake::Skill_Coin_Tick(_double TimeDelta)
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
 	CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
+
+	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+	return;
+}
+
+void CJake::Skill_Food_Tick(_double TimeDelta)
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	XMVector3Normalize(vLook * 1.0f);
+	_float4 f4Look;
+	XMStoreFloat4(&f4Look, vLook);
+
+	CItemManager::GetInstance()->Food_Clone(_float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z));
 
 	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);

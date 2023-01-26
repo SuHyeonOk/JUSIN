@@ -127,8 +127,16 @@ HRESULT CUI_ShopSword::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 2)))
-		return E_FAIL;
+	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 2)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 3)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

@@ -79,6 +79,16 @@ void	CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex)
 			InventoryIcon(PLAYERSKILL::SKILL::COIN);
 		}
 	}
+	else if (PLAYERSKILL::SKILL::FOOD == iIndex)
+	{
+		m_arrPageCount[PLAYERSKILL::SKILL::FOOD] += 1;
+
+		if (1 == m_arrPageCount[PLAYERSKILL::SKILL::FOOD])
+		{
+			SkillIcon(PLAYERSKILL::SKILL::FOOD);
+			InventoryIcon(PLAYERSKILL::SKILL::FOOD);
+		}
+	}
 	else if (PLAYERSKILL::SKILL::FIONA == iIndex)
 	{
 		m_arrPageCount[PLAYERSKILL::SKILL::FIONA] += 1;
