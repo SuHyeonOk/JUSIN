@@ -28,7 +28,7 @@ HRESULT CO_Box::Initialize_Prototype()
 
 HRESULT CO_Box::Initialize(void * pArg)
 {	
-	m_wsTag = L"Object_Box";
+	m_wsTag = L"Not_UI";
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 

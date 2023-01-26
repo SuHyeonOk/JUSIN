@@ -69,15 +69,15 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n핀! 큰일났어!! 누군가 우리 왕국을 망쳐놓고 있어!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n핀! 큰일났어!! 누군가 우리 왕국을 망쳐놓고 있어! \n일단 여기에 있는 모든 몬스터를 처치하고,"));
 			break;
 
 		case 1:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n일단 여기에 있는 모든 몬스터를 처치하고, \n열쇠 3개를 찾아서 다른 차원으로 넘어가다 보면 \n우리 왕국을 이렇게 만든 놈을 찾을 수 있을 거야"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n열쇠 3개를 찾아서 다른 차원으로 넘어가 면서 \n우리 왕국을 이렇게 만든 놈을 찾아서 혼내줘!!"));
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n앗 참고로 이 차원의 마지막 열쇠는 \n열쇠 친구가 가지고 있을거야! \n부탁할게 핀!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n그리고 마지막 열쇠는 열쇠 친구가 가지고 있을거야! \n부탁할게 핀!"));
 			break;
 
 		default:

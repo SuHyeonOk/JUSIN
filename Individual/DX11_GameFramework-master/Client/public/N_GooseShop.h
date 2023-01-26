@@ -12,12 +12,12 @@ END
 
 BEGIN(Client)
 
-class CO_BearTrap final : public CGameObject
+class CN_GooseShop final : public CGameObject
 {
 private:
-	CO_BearTrap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CO_BearTrap(const CO_BearTrap& rhs);
-	virtual ~CO_BearTrap() = default;
+	CN_GooseShop(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CN_GooseShop(const CN_GooseShop& rhs);
+	virtual ~CN_GooseShop() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -39,7 +39,7 @@ private:
 	HRESULT			SetUp_ShaderResources();
 
 public:
-	static	CO_BearTrap*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CN_GooseShop*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };

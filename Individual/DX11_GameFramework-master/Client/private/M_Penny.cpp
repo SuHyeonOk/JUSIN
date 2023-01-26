@@ -55,8 +55,8 @@ HRESULT CM_Penny::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
-	m_tMonsterInfo.fHP		= 70.0f; // 3번 이상으로 때려야 한다.
-	m_tMonsterInfo.fMaxHP	= 70.0f;
+	m_tMonsterInfo.fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 5; // 3번 이상으로 때려야 한다.
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
 	m_tMonsterInfo.fExp		= 70.0f;
 	m_tMonsterInfo.fAttack	= 20.0f;
 
@@ -346,6 +346,9 @@ void CM_Penny::Die_Tick(const _double& TimeDelta)
 		tPageInfo.fPos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 		tPageInfo.bJemp = true;
 
+		if (CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END == m_ePlayerSkill)
+			m_ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::PAINT;
+
 		tPageInfo.ePlayerSkill = m_ePlayerSkill;
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Page_Penny"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
 		{
@@ -377,7 +380,7 @@ void CM_Penny::PennyCopy_Create()
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 30, { 0.3f, 2.0f });
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 30);
 
 		for (_int i = 0; i < 5; ++i)
 		{

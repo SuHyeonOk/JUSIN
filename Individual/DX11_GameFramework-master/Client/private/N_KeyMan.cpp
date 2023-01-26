@@ -191,7 +191,7 @@ void CN_KeyMan::Help_UI()
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_1"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return;
@@ -210,7 +210,7 @@ HRESULT CN_KeyMan::UI_Dead()
 	// 물음표 : 한 번 생성되고, 대화를 했다면 삭제된다.
 	if (m_bInteraction)
 	{
-		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
+		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_1"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
 		if (nullptr != pGameObject_UI_3DTexture)
 			pGameObject_UI_3DTexture->Set_Dead();
 	}

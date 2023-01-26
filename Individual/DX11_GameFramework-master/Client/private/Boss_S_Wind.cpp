@@ -26,7 +26,7 @@ HRESULT CBoss_S_Wind::Initialize_Prototype()
 
 HRESULT CBoss_S_Wind::Initialize(void * pArg)
 {	
-	m_wsTag = L"Gary_Boss";
+	m_wsTag = L"Not_UI";
 
 	if (nullptr != pArg)
 		memcpy(&m_tSkillInfo, pArg, sizeof(m_tSkillInfo));

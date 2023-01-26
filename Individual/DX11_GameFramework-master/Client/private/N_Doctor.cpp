@@ -76,11 +76,11 @@ void CN_Doctor::Tick(_double TimeDelta)
 			break;
 
 		case 1:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀 너에게 주려고 준비한 칼이 있는데 \n어떤 해골 몬스터가 완성된 무기를 가져가 버렸어"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀 너에게 도움이 될만한 칼을 준비했는데... \n어떤 꼬맹이가 그 칼을 가져가 버렸어"));
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n그 자식을 찾아서 꼭 칼을 되찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n그 칼을 찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
 			break;
 
 		default:

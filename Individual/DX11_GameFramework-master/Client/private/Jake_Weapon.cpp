@@ -137,7 +137,7 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 	if (CObj_Manager::PLAYERINFO::JAKE != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		return;
 
-	if (L"Gary_Boss" != pOther->Get_Tag())
+	if (L"Not_UI" != pOther->Get_Tag())
 	{
 		CUI_Manager::GetInstance()->Set_Ui_Monster(true);
 		CUI_Manager::GetInstance()->UI_Monster_Index(pOther);

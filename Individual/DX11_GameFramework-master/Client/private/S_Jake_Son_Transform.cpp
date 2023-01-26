@@ -129,7 +129,7 @@ HRESULT CS_Jake_Son_Transform::Render()
 
 void CS_Jake_Son_Transform::On_Collision(CGameObject * pOther)
 {
-	if (L"Gary_Boss" == pOther->Get_Tag())
+	if (L"Not_UI" == pOther->Get_Tag())
 		m_bCollide = true;
 }
 

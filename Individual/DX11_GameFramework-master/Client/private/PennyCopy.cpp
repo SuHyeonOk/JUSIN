@@ -28,7 +28,7 @@ HRESULT CPennyCopy::Initialize_Prototype()
 
 HRESULT CPennyCopy::Initialize(void * pArg)
 {
-	m_wsTag = L"Gary_Boss";
+	m_wsTag = L"Not_UI";
 
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 

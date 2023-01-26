@@ -187,6 +187,9 @@
     <Filter Include="02.GameObjects\Monster\Penny">
       <UniqueIdentifier>{16a22b2a-c103-483b-8075-35a36dd8c4e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\NPC\GooseShop">
+      <UniqueIdentifier>{3bc8562f-d42f-4187-b5a8-957c44d108a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -543,6 +546,9 @@
     <ClInclude Include="..\public\PennyCopy.h">
       <Filter>02.GameObjects\Monster\Penny</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\N_GooseShop.h">
+      <Filter>02.GameObjects\NPC\GooseShop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -880,6 +886,9 @@
     </ClCompile>
     <ClCompile Include="..\private\PennyCopy.cpp">
       <Filter>02.GameObjects\Monster\Penny</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_GooseShop.cpp">
+      <Filter>02.GameObjects\NPC\GooseShop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
