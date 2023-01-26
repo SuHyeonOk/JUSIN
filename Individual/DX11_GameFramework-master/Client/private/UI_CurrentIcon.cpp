@@ -95,7 +95,6 @@ void CUI_CurrentIcon::Tick(_double TimeDelta)
 		CUI_Manager::GetInstance()->Set_SkillIcon(ITEM_FOUR, CUI_Manager::GetInstance()->Get_InventoryIcon(m_eCurrentIcon_Index));
 	}
 
-
 	RELEASE_INSTANCE(CGameInstance);
 
 

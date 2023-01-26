@@ -21,7 +21,7 @@ class CSkill_Manager : public CBase
 public:
 	typedef struct tagPlyaerSkill
 	{
-		enum SKILL { PAINT, MARCELINT, COIN, FIONA, LOOK_JAKESON, JAKESON, SKILL_END };
+		enum SKILL { PAINT, MARCELINT, COIN, FIONA, FOOD, JAKESON, LOOK_JAKESON, SKILL_END };
 		SKILL		eSkill = SKILL_END;			// 현재 사용 중 인 스킬
 
 	}PLAYERSKILL;

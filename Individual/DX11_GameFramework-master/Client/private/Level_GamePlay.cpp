@@ -159,7 +159,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Npc()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_KeyMan__0"), TEXT("Prototype_GameObject_N_KeyMan"), &tNpcDesc)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(5.0f, 0.f, 56.2821f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(1.41737f, 0.0f, 44.9208f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -172,23 +172,6 @@ void		CObj_Manager::Key_Input()
 	if (pGameInstance->Key_Down(DIK_F))
 		m_bInteraction = !m_bInteraction;
 
-	// TODO : 무기변경
-	if (pGameInstance->Key_Down(DIK_U))	// TODO : 1 Map 이 끝나면 변경
-	{
-		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_ROOT;
-	}
-	if (pGameInstance->Key_Down(DIK_I))	// TODO : 중간 보스 잡으면 변경
-	{
-		m_tPlayerInfo.ePlayerWeapon = PLAYERINFO::PLAYERWEAPON::F_FAMILY;
-	}
-
-	//if (pGameInstance->Key_Down(DIK_M))
-	//{
-	//	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::JAKESON);
-	//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::JAKESON);
-	//	m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
-	//}
-
 	RELEASE_INSTANCE(CGameInstance);
 }
 

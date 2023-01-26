@@ -38,6 +38,9 @@
 #include "UI_Inventory.h"
 #include "UI_Icon.h"
 #include "UI_CurrentIcon.h"
+#include "UI_ShopBase.h"
+#include "UI_ShopIndex.h"
+#include "UI_ShopSword.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -983,13 +986,18 @@ HRESULT CLoader::UI_Texture()
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Icon */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Icon"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Icon_%d.png"), 6))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Icon_%d.png"), 7))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_CurrentIcon */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_CurrentIcon"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/inventario selecionador.png")))))
 		return E_FAIL;
 
+	// Shop
+	/* For.Prototype_Component_Texture_UI_Shop */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Shop"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Shop/Shop_%d.png"), 3))))
+		return E_FAIL;
 
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -1116,6 +1124,19 @@ HRESULT CLoader::UI_Create()
 		CUI_CurrentIcon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Shop
+	/* For.Prototype_GameObject_UI_ShopBase */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_ShopBase"),
+		CUI_ShopBase::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_ShopIndex */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_ShopIndex"),
+		CUI_ShopIndex::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_UI_ShopSword */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_ShopSword"),
+		CUI_ShopSword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 
@@ -1448,9 +1469,9 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
  
 	// NPC
-	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_Princess_Bubblegum"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/Princess Bubblegum/Princess Bubblegum.fbx", PivotMatrix))))
+	/* For.Prototype_Component_Model_N_COMMERCE_TEST */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_COMMERCE_TEST"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/COMMERCE_TEST/COMMERCE_TEST.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	// Obj
@@ -1486,6 +1507,10 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_N_Bubblegum */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_Bubblegum"),
 		CN_Bubblegum::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_N_GooseShop */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_GooseShop"),
+		CN_GooseShop::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Item

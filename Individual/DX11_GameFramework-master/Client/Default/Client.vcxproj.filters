@@ -190,6 +190,9 @@
     <Filter Include="02.GameObjects\NPC\GooseShop">
       <UniqueIdentifier>{3bc8562f-d42f-4187-b5a8-957c44d108a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Shop">
+      <UniqueIdentifier>{08492fe4-290e-41a0-8c8c-b5f49ed48666}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -549,6 +552,15 @@
     <ClInclude Include="..\public\N_GooseShop.h">
       <Filter>02.GameObjects\NPC\GooseShop</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UI_ShopBase.h">
+      <Filter>02.GameObjects\UI\Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_ShopIndex.h">
+      <Filter>02.GameObjects\UI\Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_ShopSword.h">
+      <Filter>02.GameObjects\UI\Shop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -889,6 +901,15 @@
     </ClCompile>
     <ClCompile Include="..\private\N_GooseShop.cpp">
       <Filter>02.GameObjects\NPC\GooseShop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_ShopBase.cpp">
+      <Filter>02.GameObjects\UI\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_ShopSword.cpp">
+      <Filter>02.GameObjects\UI\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_ShopIndex.cpp">
+      <Filter>02.GameObjects\UI\Shop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

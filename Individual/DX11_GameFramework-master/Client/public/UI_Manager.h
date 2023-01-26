@@ -26,6 +26,14 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 샵
+	_bool		Get_Shop() {
+		return m_bisShop;
+	}
+	void		Set_Shop(_bool bShop) {
+		m_bisShop = bShop;
+	}
+
 	// 인벤토리
 	_bool		Get_IsInventoryIcon_Index(INVENTORYICON iIndex) {
 		return m_bIsIcon_Index[_int(iIndex)];
@@ -35,10 +43,10 @@ public:
 	}
 
 	CSkill_Manager::PLAYERSKILL::SKILL		Get_InventoryIcon(INVENTORYICON iIndex) {
-		return m_iUI_Icon_Index[_int(iIndex)];
+		return m_arr_IconIndex[_int(iIndex)];
 	}
 	void		Set_InventoryIcon(INVENTORYICON iIndex, CSkill_Manager::PLAYERSKILL::SKILL iSkill) {
-		m_iUI_Icon_Index[_int(iIndex)] = iSkill;
+		m_arr_IconIndex[_int(iIndex)] = iSkill;
 	}
 
 	// 제이크 애기
@@ -58,10 +66,10 @@ public:
 	}
 
 	CSkill_Manager::PLAYERSKILL::SKILL		Get_SkillIcon(ITEMINDEX iIndex) { 
-		return m_iUI_Skill_Index[iIndex];
+		return m_arr_SkillIndex[iIndex];
 	}
 	void									Set_SkillIcon(ITEMINDEX iIndex, CSkill_Manager::PLAYERSKILL::SKILL iSkill) { 
-		m_iUI_Skill_Index[iIndex] = iSkill;
+		m_arr_SkillIndex[iIndex] = iSkill;
 	}
 
 	// 무기
@@ -120,11 +128,13 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_bool			m_bisShop = false;
+
 	_bool										m_bIsIcon_Index[_int(INVENTORYICON::ICON_END)] = { false };
-	CSkill_Manager::PLAYERSKILL::SKILL			m_iUI_Icon_Index[_int(INVENTORYICON::ICON_END)] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
+	CSkill_Manager::PLAYERSKILL::SKILL			m_arr_IconIndex[_int(INVENTORYICON::ICON_END)] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
 
 	_bool										m_bIsSkill_Index[ITEMINDEX_END] = { false };
-	CSkill_Manager::PLAYERSKILL::SKILL			m_iUI_Skill_Index[ITEMINDEX_END] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
+	CSkill_Manager::PLAYERSKILL::SKILL			m_arr_SkillIndex[ITEMINDEX_END] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
 
 	_int			m_iUI_Weapon_index = 0;
 	_int			m_iUI_Weapons = 0;

@@ -173,7 +173,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Penny()
 
 	CM_Monster::MONSTERDESC	tMonsterDesc;
 	tMonsterDesc.eMonsterKind = tMonsterDesc.PENNY;
-	tMonsterDesc.f3Pos = _float3(-24.9771f, 0.0f, 54.0828f);
+	tMonsterDesc.f3Pos = _float3(1.32559f, 0.0f, 59.3413f);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Penny"), TEXT("Prototype_GameObject_M_Penny"), &tMonsterDesc)))
 		return E_FAIL;
@@ -193,7 +193,7 @@ HRESULT CLevel_Skleton::Ready_Layer_Npc()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Doctor__0"), TEXT("Prototype_GameObject_N_Doctor"), &tNpcDesc)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(-30.f, 0.f, 12.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(-16.2501f, 0.0f, 66.1685f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

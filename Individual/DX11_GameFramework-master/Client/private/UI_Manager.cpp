@@ -5,6 +5,7 @@ IMPLEMENT_SINGLETON(CUI_Manager)
 
 CUI_Manager::CUI_Manager()
 {
+
 }
 
 void CUI_Manager::UI_Monster_Index(CGameObject * pOther)

@@ -309,13 +309,27 @@ HRESULT CUI_::Initialize(void * pArg)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
-	// [39] : CurrentIcon
+	// [34] : CurrentIcon
 	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_CurrentIcon")));
 	if (nullptr == pUI)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
-
+	// [35] : ShopBase
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_ShopBase")));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+	// [36] : ShopIndex
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_ShopIndex")));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
+	// [37] : ShopSword
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_ShopSword")));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
 
 
 
@@ -441,6 +455,17 @@ void CUI_::Tick(_double TimeDelta)
 			m_vecUI[33]->Tick(TimeDelta);
 	}
 
+	if (true == CUI_Manager::GetInstance()->Get_Shop())
+	{
+		// Shop
+		m_vecUI[35]->Tick(TimeDelta);
+
+		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level() ||
+			3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+			m_vecUI[37]->Tick(TimeDelta);
+		
+		m_vecUI[36]->Tick(TimeDelta);
+	}
 
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -577,7 +602,16 @@ void CUI_::Late_Tick(_double TimeDelta)
 			m_vecUI[33]->Late_Tick(TimeDelta);
 	}
 
+	if (true == CUI_Manager::GetInstance()->Get_Shop())
+	{
+		m_vecUI[35]->Late_Tick(TimeDelta);
 
+		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level() ||
+			3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+			m_vecUI[37]->Late_Tick(TimeDelta);
+
+		m_vecUI[36]->Late_Tick(TimeDelta);
+	}
 
 
 

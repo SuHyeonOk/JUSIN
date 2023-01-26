@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 
 CN_GooseShop::CN_GooseShop(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -47,9 +48,9 @@ HRESULT CN_GooseShop::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(270.f));
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(210.0f));
 
-	m_pModelCom->Set_AnimIndex(0);
+	m_pModelCom->Set_AnimIndex(0); // 가만히, 어서와, 걷기..?
 	
 	return S_OK;
 }
@@ -57,6 +58,8 @@ HRESULT CN_GooseShop::Initialize(void * pArg)
 void CN_GooseShop::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	
 
 }
 
@@ -109,9 +112,10 @@ void CN_GooseShop::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		
-
-
+		if (true == CObj_Manager::GetInstance()->Get_Interaction())
+			CUI_Manager::GetInstance()->Set_Shop(true);
+		else
+			CUI_Manager::GetInstance()->Set_Shop(false);
 	}
 }
 
