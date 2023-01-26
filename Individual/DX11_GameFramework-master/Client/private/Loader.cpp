@@ -57,6 +57,7 @@
 #include "O_BearTrap.h"
 #include "O_Portal.h"
 #include "O_Collider.h"
+#include "FamilySword.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -686,6 +687,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_M_Penny */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Penny"),
 		CM_Penny::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_FamilySword */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FamilySword"),
+		CFamilySword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// MonsterWeapon

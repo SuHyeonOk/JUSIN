@@ -58,6 +58,7 @@ public:
 	}PLAYERINFO;
 
 public:
+	// 보스 스킬에서 사용한다.
 	CObj_Manager();
 	virtual ~CObj_Manager() = default;
 
@@ -102,6 +103,8 @@ public:
 	}
 
 	// 무기
+	void				Set_Finn_Sword(PLAYERINFO::PLAYERWEAPON eSword) { m_tPlayerInfo.ePlayerWeapon = eSword; }
+
 	_bool				Get_Jake_Shield() { return m_bShield; }
 	void				Set_Jake_Shield(_bool bShield) { m_bShield = bShield; }
 	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }

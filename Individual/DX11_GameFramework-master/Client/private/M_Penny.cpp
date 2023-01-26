@@ -296,9 +296,9 @@ void CM_Penny::Hit_Tick(const _double& TimeDelta)
 	{
 		m_bShader_Hit = false;
 
-		if (3 == iHitCount)
+		if (2 == iHitCount)
 		{
-			iHitCount = 4;
+			iHitCount = 3;
 			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::ATTACK;
 		}
 		else
@@ -358,6 +358,12 @@ void CM_Penny::Die_Tick(const _double& TimeDelta)
 			return;
 		}
 
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_FamilySword"), TEXT("Prototype_GameObject_FamilySword"), &_float3(f4MyPos.x, f4MyPos.y + 0.25f, f4MyPos.z))))
+		{
+			MSG_BOX("Penny FamilySword File");
+			return;
+		}
+		
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }

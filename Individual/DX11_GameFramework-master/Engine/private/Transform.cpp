@@ -373,7 +373,7 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 	return false;
 }
 
-void CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir)
+void CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir, _bool bTurn)
 {
 	// 랜덤 높이로 큰 점프 한 번, 작은 점프 3번을 하면서 랜덤 회전값 만큼 이동한다. (1번 실행)
 	// 이 앞 내용이 다 끝나면 제자리에서 회전한다. (계속 실행)
@@ -411,6 +411,10 @@ void CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight
 	else
 	{
 		Set_Pos(0.f);
+
+		if (false == bTurn)
+			return;
+		
 		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
 		return;

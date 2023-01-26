@@ -100,7 +100,7 @@ public:
 
 public: // sh
 	bool		Jump(_float fHeight, _float fSpeed, _double TimeDelta);
-	void		RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false);
+	void		RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false, _bool bTurn = true);
 
 private:	
 	_float4x4				m_WorldMatrix;

@@ -129,7 +129,7 @@ void CPage::On_Collision(CGameObject * pOther)
 		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 0.0f };
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		if (0 == f4MyPos.y)
+		if (0.0f == f4MyPos.y)
 		{
 			// 충돌한 객체의 스킬 종류를 스킬매니저에 데이터를 넘긴다.
 			if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
