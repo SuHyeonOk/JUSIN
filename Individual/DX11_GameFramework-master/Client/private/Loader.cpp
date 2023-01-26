@@ -58,6 +58,7 @@
 #include "O_Portal.h"
 #include "O_Collider.h"
 #include "FamilySword.h"
+#include "PennyCopy.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -687,6 +688,11 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_M_Penny */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Penny"),
 		CM_Penny::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_PennyCopy */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PennyCopy"),
+		CPennyCopy::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_FamilySword */

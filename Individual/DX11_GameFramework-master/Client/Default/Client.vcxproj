@@ -237,6 +237,7 @@
     <ClInclude Include="..\public\O_TextureObject.h" />
     <ClInclude Include="..\public\Page.h" />
     <ClInclude Include="..\public\FamilySword.h" />
+    <ClInclude Include="..\public\PennyCopy.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Skill_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
@@ -352,6 +353,7 @@
     <ClCompile Include="..\private\O_TextureObject.cpp" />
     <ClCompile Include="..\private\Page.cpp" />
     <ClCompile Include="..\private\FamilySword.cpp" />
+    <ClCompile Include="..\private\PennyCopy.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Skill_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />

@@ -35,8 +35,10 @@ private:
 	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
+	void				PennyCopy_Create();
+
 private:
-	_float4				m_f4CenterPos;
+	_float4				m_f4CenterPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	CSkill_Manager::PLAYERSKILL::SKILL	m_ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL_END;
 

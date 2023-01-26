@@ -58,6 +58,9 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_Skeleton"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Penny()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
 
@@ -158,6 +161,22 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Skleton::Ready_Layer_Penny()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CM_Monster::MONSTERDESC	tMonsterDesc;
+	tMonsterDesc.eMonsterKind = tMonsterDesc.PENNY;
+	tMonsterDesc.f3Pos = _float3(-24.9771f, 0.0f, 54.0828f);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Penny"), TEXT("Prototype_GameObject_M_Penny"), &tMonsterDesc)))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1545,22 +1564,6 @@ HRESULT CLevel_Skleton::Load_Monster()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
-					return E_FAIL;
-			}
-		}
-		for (_int i = 0; i < iMonsterVecCount; i++)
-		{
-			tMonsterDesc.eMonsterKind = tMonsterDesc.PENNY;
-			tMonsterDesc.f3Pos = pObjInfo.ObjPos;
-
-			m_wstObjName = L"Layer_Penny__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Penny"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}

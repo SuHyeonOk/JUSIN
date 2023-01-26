@@ -540,6 +540,9 @@
     <ClInclude Include="..\public\FamilySword.h">
       <Filter>02.GameObjects\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\PennyCopy.h">
+      <Filter>02.GameObjects\Monster\Penny</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -874,6 +877,9 @@
     </ClCompile>
     <ClCompile Include="..\private\FamilySword.cpp">
       <Filter>02.GameObjects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PennyCopy.cpp">
+      <Filter>02.GameObjects\Monster\Penny</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

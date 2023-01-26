@@ -118,7 +118,6 @@ private:
 	_double				m_bRandom_TimeAcc = 0;
 	
 	// Random_Move();
-	_float				m_fRandomAxis = 0.f;
 	_bool				m_bRandomPos = false;
 	_double				m_bRandomMove_TimeAcc = 0;
 

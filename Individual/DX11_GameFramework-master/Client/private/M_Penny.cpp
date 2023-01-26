@@ -43,7 +43,7 @@ HRESULT CM_Penny::Initialize(void * pArg)
 
 	m_tMonsterDesc.eMonsterKind = MonsterDesc.eMonsterKind;
 
-	MonsterDesc.TransformDesc.fSpeedPerSec = 3.f;
+	MonsterDesc.TransformDesc.fSpeedPerSec = 3.5f;
 	MonsterDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	MonsterDesc.TransformDesc.f3Pos = MonsterDesc.f3Pos;
 	m_f4CenterPos = _float4(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z, 1.f);
@@ -242,6 +242,7 @@ void CM_Penny::Find_Tick()
 	if (3.0f > fDistance)
 	{
 		m_pModelCom->Set_AnimIndex(0, false);	// 발견
+		PennyCopy_Create();
 
 		if (m_pModelCom->Animation_Check(0) && m_pModelCom->Get_Finished())
 			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::MOVE;
@@ -258,14 +259,27 @@ void CM_Penny::Idle_Tick(const _double& TimeDelta)
 
 void CM_Penny::Move_Tick(const _double& TimeDelta)
 {
-	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3.5))
-		m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::IDLE;
+	// 내 원점 거리와 내 위치가 멀다면! 무조건 원점으로 돌아간다.
+	_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
+	_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
+
+	if (3.6f < fDiatance)
+	{
+		m_pTransformCom->Chase(vCenterPos, TimeDelta);
+		m_pTransformCom->LookAt(vCenterPos);
+	}
+	else
+	{
+		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3.5f))
+			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::IDLE;
+	}
 }
 
 void CM_Penny::Attack_Tick(const _double& TimeDelta)
 {
 	// 플레이어의 왼쪽 하단 스킬창의 첫번 째 아이템 하나를 뺏어온다.
-	// 그리고 죽을 때 그 아이템을 다 돌려준다.
+	// 그리고 죽을 때 그 아이템을 돌려준다.
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 	m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
@@ -285,6 +299,9 @@ void CM_Penny::Attack_Tick(const _double& TimeDelta)
 
 void CM_Penny::Hit_Tick(const _double& TimeDelta)
 {
+	if (MONSTERINFO::STATE::ATTACK == m_tMonsterInfo.eState)
+		return;
+
 	// 애니메이션 따로 없이, 체력만 깍이면 된다.
 
 	CM_Monster::Effect_Hit({ 0.0f, 0.5f, -0.7f });
@@ -307,28 +324,6 @@ void CM_Penny::Hit_Tick(const _double& TimeDelta)
 			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::MOVE;
 		}
 	}
-
-	//static _int iHitCount;
-
-	//if (3 != iHitCount)
-	//	CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 3.5f);
-
-	//if (m_pModelCom->Get_Finished())
-	//{
-	//	m_bShader_Hit = false;
-	//	cout << iHitCount << endl;
-
-	//	if (3 == iHitCount)
-	//	{
-	//		iHitCount = 4;
-	//		m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::ATTACK;
-	//	}
-	//	else
-	//	{
-	//		++iHitCount;
-	//		m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::MOVE;
-	//	}
-	//}
 }
 
 void CM_Penny::Die_Tick(const _double& TimeDelta)
@@ -354,16 +349,45 @@ void CM_Penny::Die_Tick(const _double& TimeDelta)
 		tPageInfo.ePlayerSkill = m_ePlayerSkill;
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Page_Penny"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
 		{
-			MSG_BOX("Penny Page File");
+			MSG_BOX("Failed to Created : PennyPage");
 			return;
 		}
 
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_FamilySword"), TEXT("Prototype_GameObject_FamilySword"), &_float3(f4MyPos.x, f4MyPos.y + 0.25f, f4MyPos.z))))
 		{
-			MSG_BOX("Penny FamilySword File");
+			MSG_BOX("Failed to Created : FamilySword");
 			return;
 		}
 		
+		RELEASE_INSTANCE(CGameInstance);
+	}
+}
+
+void CM_Penny::PennyCopy_Create()
+{
+	static _bool bCreate;
+
+	if (false == bCreate)
+	{
+		bCreate = true;
+	
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 30, { 0.3f, 2.0f });
+
+		for (_int i = 0; i < 5; ++i)
+		{
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_PennyCopy"), TEXT("Prototype_GameObject_PennyCopy"), &_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z))))
+			{
+				MSG_BOX("Failed to Created : PennyCopy");
+				return;
+			}
+		}
+
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
