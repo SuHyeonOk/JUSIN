@@ -279,7 +279,7 @@ void CM_Magic_Man::Move_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 	// 플레이어가 범위 안 으로 들어오지 않는 경우, IDLE 상태로 돌아간다.
-	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 5))	// 거리 5 범위 이내에서 움직인다.
+	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 5.0f))	// 거리 5 범위 이내에서 움직인다.
 	{
 		m_bAttack = false;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;

@@ -730,7 +730,7 @@ void CLevel_Skleton::ImGui_Monster()
 {
 	const _char* szObjName[] = { "Ghost_1", "Ghost_2", "Ghost_3", 
 		"Skeleton_Archer_1", "Skeleton_Archer_2", 
-		"Skeleton_Shield_1", "Skeleton_Shield_2" };
+		"Skeleton_Shield_1", "Skeleton_Shield_2", "Penny" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_MONSTER", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -852,7 +852,21 @@ void CLevel_Skleton::ImGui_Monster()
 
 			m_iMonster_Count++;
 		}
-		
+		if (7 == iObjNum)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.PENNY;
+			tMonsterDesc.f3Pos = m_f3ClickPos;
+
+			m_wstObjName = L"Layer_Penny__";
+			m_wstObjName += to_wstring(m_iMonster_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_M_Penny"), &tMonsterDesc)))
+				return;
+
+			m_iMonster_Count++;
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -1488,7 +1502,7 @@ HRESULT CLevel_Skleton::Load_Monster()
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
 			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_ARCHER_2;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+			tMonsterDesc.f3Pos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Layer_Skeleton_Archer_2__";
 			m_wstObjName += to_wstring(i);
@@ -1505,7 +1519,7 @@ HRESULT CLevel_Skleton::Load_Monster()
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
 			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_1;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+			tMonsterDesc.f3Pos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Layer_Skeleton_Shield_1__";
 			m_wstObjName += to_wstring(i);
@@ -1521,7 +1535,7 @@ HRESULT CLevel_Skleton::Load_Monster()
 		for (_int i = 0; i < iMonsterVecCount; i++)
 		{
 			tMonsterDesc.eMonsterKind = tMonsterDesc.SKELETON_SHIELD_2;
-			tMonsterDesc.f3Pos = _float3(pObjInfo.ObjPos.x, pObjInfo.ObjPos.y, pObjInfo.ObjPos.z);
+			tMonsterDesc.f3Pos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Layer_Skeleton_Shield_2__";
 			m_wstObjName += to_wstring(i);
@@ -1531,6 +1545,22 @@ HRESULT CLevel_Skleton::Load_Monster()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Skeleton_Shield"), &tMonsterDesc)))
+					return E_FAIL;
+			}
+		}
+		for (_int i = 0; i < iMonsterVecCount; i++)
+		{
+			tMonsterDesc.eMonsterKind = tMonsterDesc.PENNY;
+			tMonsterDesc.f3Pos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Layer_Penny__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Penny"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}

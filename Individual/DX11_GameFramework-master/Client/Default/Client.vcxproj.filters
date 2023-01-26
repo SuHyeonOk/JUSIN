@@ -184,6 +184,9 @@
     <Filter Include="02.GameObjects\UI\Inventory">
       <UniqueIdentifier>{6a75a53a-4476-45cc-86ed-6e1b4fde68d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Penny">
+      <UniqueIdentifier>{16a22b2a-c103-483b-8075-35a36dd8c4e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -531,6 +534,9 @@
     <ClInclude Include="..\public\UI_CurrentIcon.h">
       <Filter>02.GameObjects\UI\Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\M_Penny.h">
+      <Filter>02.GameObjects\Monster\Penny</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -859,6 +865,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_CurrentIcon.cpp">
       <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\M_Penny.cpp">
+      <Filter>02.GameObjects\Monster\Penny</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

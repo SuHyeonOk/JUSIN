@@ -243,7 +243,8 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::BROWN;
 		else if (MONSTERDESC::MONSTERKIND::MAGIC_MAN == m_tMonsterDesc.eMonsterKind)
 			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::PURPLE;
-		else if (MONSTERDESC::MONSTERKIND::MIMIC == m_tMonsterDesc.eMonsterKind)
+		else if (MONSTERDESC::MONSTERKIND::MIMIC == m_tMonsterDesc.eMonsterKind ||
+			MONSTERDESC::MONSTERKIND::PENNY == m_tMonsterDesc.eMonsterKind)
 			tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::RED;
 		else if (MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_1 == m_tMonsterDesc.eMonsterKind ||
 			MONSTERDESC::MONSTERKIND::SKELETON_SHIELD_2 == m_tMonsterDesc.eMonsterKind ||
@@ -287,6 +288,7 @@ void CM_Monster::Effect_Hit(_float3 fPulsPos)
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
 	CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4MyPos.x + fPulsPos.x, f4MyPos.y + fPulsPos.y, f4MyPos.z + fPulsPos.z));
+	cout << "ÀÌÆåÆ®" << endl;
 }
 
 void CM_Monster::Hit_Process(const _double & TimeDelta)

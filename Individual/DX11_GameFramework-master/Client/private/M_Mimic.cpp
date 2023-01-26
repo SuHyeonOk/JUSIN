@@ -53,11 +53,11 @@ HRESULT CM_Mimic::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP = 50.0f;
-	m_tMonsterInfo.fMaxHP = 50.0f;
-	m_tMonsterInfo.fExp = 50.0f;
-	m_tMonsterInfo.fAttack = 15.0f;
+	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
+	m_tMonsterInfo.fHP		= 50.0f;
+	m_tMonsterInfo.fMaxHP	= 50.0f;
+	m_tMonsterInfo.fExp		= 50.0f;
+	m_tMonsterInfo.fAttack	= 15.0f;
 
 	return S_OK;
 }

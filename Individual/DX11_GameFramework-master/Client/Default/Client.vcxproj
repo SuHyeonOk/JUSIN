@@ -219,6 +219,7 @@
     <ClInclude Include="..\public\M_Magic_Man.h" />
     <ClInclude Include="..\public\M_Mimic.h" />
     <ClInclude Include="..\public\M_Monster.h" />
+    <ClInclude Include="..\public\M_Penny.h" />
     <ClInclude Include="..\public\M_Pigs.h" />
     <ClInclude Include="..\public\M_PigWarrior.h" />
     <ClInclude Include="..\public\M_Skeleton_Archer.h" />
@@ -332,6 +333,7 @@
     <ClCompile Include="..\private\M_Magic_Man.cpp" />
     <ClCompile Include="..\private\M_Mimic.cpp" />
     <ClCompile Include="..\private\M_Monster.cpp" />
+    <ClCompile Include="..\private\M_Penny.cpp" />
     <ClCompile Include="..\private\M_Pigs.cpp" />
     <ClCompile Include="..\private\M_PigWarrior.cpp" />
     <ClCompile Include="..\private\M_Skeleton_Archer.cpp" />

@@ -67,7 +67,8 @@ public:
 public:		// 유아이 관련
 	_int		Get_PageCount(PLAYERSKILL::SKILL iIndex) { 
 		return m_arrPageCount[iIndex];
-	}				
+	}		
+	void		CSkill_Manager::Set_Page_Penny(PLAYERSKILL::SKILL iIndex);
 
 	void		CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill);										// IconIndex가 비어있는지 확인하고, 인덱스에 값을 채운다.
 	void		CSkill_Manager::InventoryIcon(PLAYERSKILL::SKILL eSkill);

@@ -801,8 +801,9 @@ void CFinn::KnockBack_Hit_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 	{
-		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 		m_dKnockBack_Hit_TimeAcc = 0;
+		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
 }
 

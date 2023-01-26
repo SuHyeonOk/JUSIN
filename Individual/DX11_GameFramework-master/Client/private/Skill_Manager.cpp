@@ -135,6 +135,12 @@ void	CSkill_Manager::Page_PickUp(PLAYERSKILL::SKILL iIndex)
 	//	endl;
 }
 
+void		CSkill_Manager::Set_Page_Penny(PLAYERSKILL::SKILL iIndex)
+{
+	--m_arrPageCount[iIndex];
+	Delete_InventoryIcon(iIndex);
+}
+
 void	CSkill_Manager::SkillIcon(PLAYERSKILL::SKILL eSkill)
 {
 	for (_int i = 0; i < ITEMINDEX_END; ++i)

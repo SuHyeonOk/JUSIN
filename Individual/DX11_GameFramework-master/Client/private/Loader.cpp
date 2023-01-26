@@ -96,6 +96,7 @@
 #include "M_Ghost.h"
 #include "M_Skeleton_Shield.h"
 #include "M_Skeleton_Archer.h"
+#include "M_Penny.h"
 
 // Boss
 #include "M_Gary_Boss.h"
@@ -631,6 +632,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Skeleton_Shield_4"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/All_Skeleton/Skeleton_Shield_4/Skeleton_Shield_4.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_M_Penny */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_M_Penny"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Penny/Penny.fbx", PivotMatrix))))
+		return E_FAIL;
 
 
 	// Weapon
@@ -677,6 +682,10 @@ HRESULT CLoader::Loading_ForSkeleton()
 	/* For.Prototype_GameObject_M_Skeleton_Archer */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Skeleton_Archer"),
 		CM_Skeleton_Archer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_M_Penny */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Penny"),
+		CM_Penny::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// MonsterWeapon
@@ -853,7 +862,7 @@ HRESULT CLoader::UI_Texture()
 	// Monster
 	/* For.Prototype_Component_Texture_UI_Monster */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/UI_Monster_%d.dds"), 14))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI_Moonster/UI_Monster_%d.dds"), 15))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_UI_Monster_HealthBar_Bar */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Monster_HealthBar_Bar"),
@@ -1314,7 +1323,7 @@ HRESULT CLoader::SkeletonTemp()
 	
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
 		return E_FAIL;
 
 	// 2D Bullet
