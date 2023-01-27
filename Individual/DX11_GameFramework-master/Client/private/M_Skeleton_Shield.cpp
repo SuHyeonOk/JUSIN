@@ -397,7 +397,6 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 		if (m_pModelCom->Get_Finished())
 		{
 			m_iRandomNum = 0;
-			m_bDefense = true;
 
 			m_bShader_Hit = false;
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
@@ -408,6 +407,7 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 		m_pModelCom->Set_AnimIndex(2, false);	// ¹æ¾î
 		if (m_pModelCom->Get_Finished())
 		{
+			m_bDefense = true;
 			m_iRandomNum = 0;
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}

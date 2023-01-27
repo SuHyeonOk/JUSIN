@@ -62,21 +62,32 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_RIGHT) && 5 > m_iShopIndex)	// ¿À¸¥ÂÊ
 	{
+		m_iIndexTexture = 1; // ÆÄ¶õ»ö
 		++m_iShopIndex;
 		m_eShopIndex = SHOPINDEX(m_iShopIndex);
 	}
 
 	if (pGameInstance->Key_Down(DIK_LEFT) && 0 < m_iShopIndex)	// ¿ÞÂÊ								
 	{
+		m_iIndexTexture = 1; // ÆÄ¶õ»ö
 		--m_iShopIndex;
 		m_eShopIndex = SHOPINDEX(m_iShopIndex);
 	}
 
-	if (pGameInstance->Key_Down(DIK_SPACE))	// ¿ÞÂÊ								
+	if (pGameInstance->Key_Down(DIK_SPACE))						// °è»ê								
 	{
+		if (false == Calculation())
+		{
+			m_iIndexTexture = 2;	// »ßºò »¡°£»ö
+			RELEASE_INSTANCE(CGameInstance);
+			return;
+		}
+
 		if (5 == m_iShopIndex)
 		{
 			CObj_Manager::GetInstance()->Set_Finn_Sword(CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT);
+			
+			RELEASE_INSTANCE(CGameInstance);
 			return;
 		}
 
@@ -147,7 +158,7 @@ HRESULT CUI_ShopIndex::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 1)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iIndexTexture)))
 		return E_FAIL;
 
 	return S_OK;
@@ -176,6 +187,69 @@ void CUI_ShopIndex::IndexPosition()
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(117.0f, -78.6667f, 0.f, 1.f));
 		break;
 	}
+}
+
+_bool CUI_ShopIndex::Calculation()
+{
+	switch (m_eShopIndex)
+	{
+	case Client::SHOPINDEX::SHOP_ONE:	// "PAINT"
+	{
+		if (100 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		{
+			CObj_Manager::GetInstance()->Set_Coin(-100);
+			return true;
+		}
+	}
+		break;
+	case Client::SHOPINDEX::SHOP_TWO:	// "MARCELINE"
+	{
+		if (130 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		{
+			CObj_Manager::GetInstance()->Set_Coin(-130);
+			return true;
+		}
+	}
+		break;
+	case Client::SHOPINDEX::SHOP_THREE:	// "GOLD"
+	{
+		if (50 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		{
+			CObj_Manager::GetInstance()->Set_Coin(-50);
+			return true;
+		}
+	}
+		break;
+	case Client::SHOPINDEX::SHOP_FOUR:	// "FIONNA"
+	{
+		if (150 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		{
+			CObj_Manager::GetInstance()->Set_Coin(-150);
+			return true;
+		}
+	}
+		break;
+	case Client::SHOPINDEX::SHOP_FIVE:	// "FOOD"
+	{
+		if (70 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		{
+			CObj_Manager::GetInstance()->Set_Coin(-70);
+			return true;
+		}
+	}
+		break;
+	case Client::SHOPINDEX::SHOP_SIX:	// "SOWRD"
+	{
+		if (300 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		{
+			CObj_Manager::GetInstance()->Set_Coin(-300);
+			return true;
+		}
+	}
+		break;
+	}
+
+	return false;
 }
 
 CUI_ShopIndex * CUI_ShopIndex::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

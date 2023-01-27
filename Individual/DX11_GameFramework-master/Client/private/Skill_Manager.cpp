@@ -183,19 +183,19 @@ void	CSkill_Manager::Delete_InventoryIcon(PLAYERSKILL::SKILL eCurrentSkill)
 	{
 	 	CSkill_Manager::PLAYERSKILL::SKILL eSkill =	CUI_Manager::GetInstance()->Get_InventoryIcon(INVENTORYICON(i));
 
-		if (eCurrentSkill == eSkill)
+		if (eCurrentSkill == eSkill)	// 현재 입력된 인덱스의 스킬을 찾는다.
 		{
 			// 해당 칸을 비운다.
 			//CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(i), false);
 			
-			m_iNextInventtoryIconIndex = _int(i) + 1;
+			m_iNextIndex = _int(i) + 1;	// 그 다음인덱스를 저장하고 그 인덱스 부터 반복문을 돌면서 같은 다음 칸에 스킬이 있는지 확인한다.
 			break;
 		}
 	}
 
 
-	// 해당 칸을 비우는 것이 아닌, 뒤에 있던 데이터를 한 칸씩 앞으로 당기고, 가장 마지막을 비운다.
-	for (_int j = m_iNextInventtoryIconIndex; j < _int(INVENTORYICON::ICON_END); ++j)
+	// 비운칸 뒤에 스킬이 있다면 한 칸씩 앞으로 당기고, 가장 마지막을 비운다.
+	for (_int j = m_iNextIndex; j < _int(INVENTORYICON::ICON_END); ++j)
 	{
 		// 현재 비우려고 하는 인벤토리 Index 의 다음에 데이터가 있다면
 		if (true == CUI_Manager::GetInstance()->Get_IsInventoryIcon_Index(INVENTORYICON(j)))
@@ -207,7 +207,7 @@ void	CSkill_Manager::Delete_InventoryIcon(PLAYERSKILL::SKILL eCurrentSkill)
 		}
 		else // 없으면 칸을 비우고 반복문 나간다.
 		{
-			CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(j - 1), false); 
+			CUI_Manager::GetInstance()->Set_IsInventoryIcon_Index(INVENTORYICON(j - 1), false);
 			break;
 		}
 	}

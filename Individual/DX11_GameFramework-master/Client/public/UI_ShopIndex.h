@@ -33,15 +33,18 @@ private:
 
 private:
 	void			IndexPosition();
+	_bool			Calculation();
 
 private:
+	_int			m_iIndexTexture = 1;
+	
 	CSkill_Manager::PLAYERSKILL::SKILL			m_arr_ShopIndx[_int(SHOPINDEX::SHOP_END)] = { CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END };
 	
 	_int			m_iShopIndex = 0;
 	SHOPINDEX		m_eShopIndex = { SHOPINDEX::SHOP_END };
 
 public:
-	static CUI_ShopIndex*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUI_ShopIndex*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };

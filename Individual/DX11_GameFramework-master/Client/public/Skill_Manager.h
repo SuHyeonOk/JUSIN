@@ -82,7 +82,7 @@ private:
 	_int			m_arrPageCount[PLAYERSKILL::SKILL::SKILL_END] = { 0 };
 
 	_bool			m_bChangeSkill_Create = false;
-	_int			m_iNextInventtoryIconIndex = 0;
+	_int			m_iNextIndex = 0;
 
 public:
 	virtual void Free() override;	

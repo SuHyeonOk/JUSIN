@@ -113,12 +113,12 @@ HRESULT CUI_ShopSword::SetUp_ShaderResources()
 
 	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 2)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 3)))
 			return E_FAIL;
 	}
 	else
 	{
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 3)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 4)))
 			return E_FAIL;
 	}
 

@@ -242,10 +242,12 @@ void CM_Penny::Find_Tick()
 	if (3.0f > fDistance)
 	{
 		m_pModelCom->Set_AnimIndex(0, false);	// 발견
-		PennyCopy_Create();
 
 		if (m_pModelCom->Animation_Check(0) && m_pModelCom->Get_Finished())
+		{
+			PennyCopy_Create();
 			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::MOVE;
+		}
 	}
 	else
 		m_pModelCom->Set_AnimIndex(4);			// 뒤 돌아 있기

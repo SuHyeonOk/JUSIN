@@ -996,7 +996,7 @@ HRESULT CLoader::UI_Texture()
 	// Shop
 	/* For.Prototype_Component_Texture_UI_Shop */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Shop"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Shop/Shop_%d.png"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Shop/Shop_%d.png"), 5))))
 		return E_FAIL;
 
 
