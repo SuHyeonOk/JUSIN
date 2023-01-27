@@ -263,6 +263,26 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian) //임 의의 축을 기준으�
 	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 }
 
+_bool CTransform::MoveTurn(_float fRadian, _double TimeDelta)
+{
+	_float		fCalculating = m_TransformDesc.fRotationPerSec * _float(TimeDelta);
+
+	if (fRadian == fCalculating)
+		return true;
+
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), fCalculating);
+
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
+	_vector		vUp = Get_State(CTransform::STATE_UP);
+	_vector		vLook = Get_State(CTransform::STATE_LOOK);
+
+	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
+	Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
+	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
+
+	return false;
+}
+
 void CTransform::LookAt(_fvector vTargetPos, _bool bIsInv)
 {
 	_float3		vScale = Get_Scaled();

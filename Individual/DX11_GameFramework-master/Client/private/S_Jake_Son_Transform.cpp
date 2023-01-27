@@ -312,7 +312,7 @@ void CS_Jake_Son_Transform::Player_Follow(const _double & TimeDelta)
 
 void CS_Jake_Son_Transform::Attack_Tick(const _double & TimeDelta)
 {
-	m_pTransformCom->LookAt(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	m_pTransformCom->LookAtForLandObject(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pTransformCom->Chase(m_pBoss_TransformCom->Get_State(CTransform::STATE_TRANSLATION), TimeDelta, 0.7f);
 
 	if (m_pModelCom->Get_Finished() && true == m_bCollide)
