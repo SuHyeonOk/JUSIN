@@ -5,6 +5,8 @@
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
 
+#include "UI_ShopIndex.h"
+
 CN_GooseShop::CN_GooseShop(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {

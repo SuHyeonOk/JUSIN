@@ -345,7 +345,7 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50);
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50, { 0.3f, 1.3f });
 		CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
 	
 		// 죽으면서 모든 처리를 원래 플레이어로 돌아올 수 있도록 처리한다.
@@ -369,7 +369,7 @@ void CS_Fiona::Effect_Create(const _double & TimeDelta)
 	m_OnMove = false;
 
 	// 계속 생성
-	CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50);
+	CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50, { 0.3f, 1.3f });
 	CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
 }
 
@@ -459,6 +459,7 @@ void CS_Fiona::Cat_Tick()
 
 void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 {
+	m_bHurts = true;
 	m_bShader_Hit = true;
 
 	m_dShader_Hit_TimeAcc += TimeDelta;
@@ -467,6 +468,7 @@ void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 
 	if (21 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
+		m_bHurts = false;
 		m_bShader_Hit = false;
 		m_dShader_Hit_TimeAcc = 0;
 
@@ -478,7 +480,7 @@ void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 
 void CS_Fiona::Stun_Tick()
 {
-	if (!m_bStun)
+	if (!m_bHurts)
 	{
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4	f4MyPos;
@@ -492,7 +494,7 @@ void CS_Fiona::Stun_Tick()
 		}
 		RELEASE_INSTANCE(CGameInstance);
 
-		m_bStun = true;
+		m_bHurts = true;
 	}
 
 	if (m_pModelCom->Get_Finished())
@@ -500,7 +502,7 @@ void CS_Fiona::Stun_Tick()
 
 	if (2 <= m_iStun_Count)		// 애니메이션 두 번 재생 후 끝
 	{
-		m_bStun = false;
+		m_bHurts = false;
 		m_iStun_Count = 0;
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
@@ -519,6 +521,9 @@ void CS_Fiona::Dance_Tick()
 
 void CS_Fiona::KeyInput(const _double & TimeDelta)
 {
+	if (true == m_bHurts)
+		return;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (m_OnMove)

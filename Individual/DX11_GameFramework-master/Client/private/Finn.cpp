@@ -466,18 +466,29 @@ void CFinn::Player_Follow(_double TimeDelta)
 	else
 		m_pTransformCom->LookAt(vPlayerPos);
 
-	// 따라갈 때 애니메이션
-	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
-		CSkill_Manager::MAGICSKILL::RUN == CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill)
+	// 따라갈 때 애니메이션 (핀의 경우에는 제이크가 변신한 상태일 때 다른 상태 제어가 필요하다.)
+	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
-		if (1.5f < fDistanceX)
+		if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill)
+			m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
+		else if (CSkill_Manager::MAGICSKILL::RUN == CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill)
 			m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+		else
+			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 	}
 	else
 	{
-		if (1.5f > fDistanceX)
-			m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||
+			CObj_Manager::PLAYERINFO::STATE::ROLL == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+		{
+			if (1.5f < fDistanceX)	// 거리 안 에 없을 때는 따라가는 것이 우선!
+				m_tPlayerInfo.eState = m_tPlayerInfo.RUN;
+		}
+		else
+		{
+			if (1.5f > fDistanceX)
+				m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+		}
 	}
 }
 
@@ -524,7 +535,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 			f4Position = { f4Position.x - fAddX, f4Position.y, f4Position.z - fAddZ, 1.f };
 			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4Position.x, f4Position.y, f4Position.z, f4Position.w), m_pNavigationCom);	// 플레이어 근처로 이동
 
-			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 1.0f, f4Position.z - 0.7f), _float3(0.396f, 0.654f, 0.796f), 50);
+			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 1.0f, f4Position.z - 0.7f), _float3(0.396f, 0.654f, 0.796f), 50, { 0.3f, 1.3f });
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 1.0f, f4Position.z - 0.8f));
 
 			m_dNotfollow_TimeAcc = 0;
@@ -905,6 +916,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 			{
 				m_bDiving = false;
 				m_bIsSwim = false;
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
 			}
 		}
 	}

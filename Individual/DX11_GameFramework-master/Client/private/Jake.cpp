@@ -555,7 +555,7 @@ void CJake::Check_Follow(_double TimeDelta)
 			f4Position = { f4Position.x - fAddX, f4Position.y, f4Position.z - fAddZ, 1.f };
 			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4Position.x, f4Position.y, f4Position.z, f4Position.w), m_pNavigationCom);	// 플레이어 근처로 이동
 
-			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f), _float3(0.968f, 0.729f, 0.160f), 50);
+			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f), _float3(0.968f, 0.729f, 0.160f), 50, { 0.3f, 0.7f });
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f));
 
 			m_dNotfollow_TimeAcc = 0;
@@ -973,7 +973,7 @@ void CJake::Swim_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.6f, f4MyPos.z));
+		CEffect_Manager::GetInstance()->Effect_Swim_Create(_float3(f4MyPos.x, 0.5f, f4MyPos.z));
 		m_dEffect_Swim_TimeAcc = 0;
 	}
 
@@ -1002,6 +1002,7 @@ void CJake::Swim_Tick(_double TimeDelta)
 			{
 				m_bDiving = false;
 				m_bIsSwim = false;
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
 			}
 		}
 	}

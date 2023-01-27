@@ -69,9 +69,9 @@ private:
 	vector<CGameObject*>	m_SkillParts;
 	_float3					m_f3Pos = _float3(0.f, 0.f, 0.f);
 
+	_bool					m_bHurts = false;
 	_bool					m_OnMove = false;
 
-	_bool					m_bStun = false;			// 스턴
 	_uint					m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 
 	_float					m_fOriginal_Player_Attack = 0.0f;

@@ -380,7 +380,7 @@ void CM_Magic_Man::Appear(const _double& TimeDelta)
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f), 50);
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f), 50, { 0.3f, 1.5f });
 	
 		m_pTransformCom->Set_Pos(0.f);
 	}

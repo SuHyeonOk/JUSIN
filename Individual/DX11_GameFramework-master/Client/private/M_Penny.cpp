@@ -382,7 +382,7 @@ void CM_Penny::PennyCopy_Create()
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 30);
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 50);
 
 		for (_int i = 0; i < 5; ++i)
 		{
