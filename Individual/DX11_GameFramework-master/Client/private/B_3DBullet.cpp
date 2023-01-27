@@ -96,7 +96,7 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 				XMStoreFloat4(&f4MyPos, vMyPos);
 
 				CEffect_Manager::GetInstance()->Effect_Boom_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f));
-				CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f));
+				CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f), 15, _float2(0.1f, 0.5f));
 			}
 
 			CGameObject::Set_Dead();
@@ -165,7 +165,7 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 
 			CEffect_Manager::GetInstance()->Effect_Boom_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f));
 			CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(1.0f, 0.0f, 0.0f));
-			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f));
+			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f), 15, _float2(0.1f, 0.5f));
 
 			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);

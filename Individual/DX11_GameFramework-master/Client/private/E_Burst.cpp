@@ -72,7 +72,7 @@ HRESULT CE_Burst::Initialize(void * pArg)
 		m_fAlpha = 1.0f;
 
 	// ¼Óµµ
-	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
+	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.4f);
 	//if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
 	//	CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
 	//	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);

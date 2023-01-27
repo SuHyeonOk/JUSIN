@@ -171,7 +171,7 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 					CObj_Manager::GetInstance()->Set_Loading_Count();
 				}
 
-				CObj_Manager::GetInstance()->Set_Clear();
+				CObj_Manager::GetInstance()->Set_KeyClear();
 			}
 			RELEASE_INSTANCE(CGameInstance);
 		}

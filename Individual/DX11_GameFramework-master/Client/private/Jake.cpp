@@ -425,7 +425,7 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkill = true;
 
-	if (m_bSkill)	// COIN 한번만 생성되고, 추가적인 제어 때문에 직접 함수 안에서 처리한다.
+	if (m_bSkill)		// 20 초 동안 실행될 스킬의 시간을 계산한다.
 	{
 		m_dSkill_TimeAcc += TimeDelta;	// 스킬 사용 후 일정시간 뒤 초기화
 		if (20 < m_dSkill_TimeAcc)
@@ -436,6 +436,18 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 			m_bSkill = false;
+			m_dSkill_TimeAcc = 0;
+		}
+	}
+	else				// 스킬을 한 번 금방 사용하고 마는 경우 스킬 재생 시간을 3초로 짧게 준다.
+	{
+		m_dSkill_TimeAcc += TimeDelta;	// 코인과 푸드의 경우 객체가 금방 생성 되었다가 바로 스킬이 끝나도록 하면 2번 실행 되어 다음과 같은 대기 시간을 주었다.
+		if (3 < m_dSkill_TimeAcc)
+		{
+			m_bSkill_Clone = false;
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+
 			m_dSkill_TimeAcc = 0;
 		}
 	}
@@ -826,33 +838,39 @@ void CJake::Skill_Marceline_Tick(_double TimeDelta)
 
 void CJake::Skill_Coin_Tick(_double TimeDelta)
 {
-	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4 f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
+	if (false == m_bSkill_Clone)
+	{
+		m_bSkill_Clone = true;
 
-	CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
 
-	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-	return;
+		return;
+	}
 }
 
 void CJake::Skill_Food_Tick(_double TimeDelta)
 {
-	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_float4 f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
+	if (false == m_bSkill_Clone)
+	{
+		m_bSkill_Clone = true;
 
-	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	XMVector3Normalize(vLook * 1.0f);
-	_float4 f4Look;
-	XMStoreFloat4(&f4Look, vLook);
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
 
-	CItemManager::GetInstance()->Food_Clone(_float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z));
+		// 내 Look 을 기준으로 거리 1만큼을 더 한 위치에 생성 시키고 싶다.
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		XMVector3Normalize(vLook * 1.0f);
+		_float4 f4Look;
+		XMStoreFloat4(&f4Look, vLook);
 
-	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-	CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-	return;
+		CItemManager::GetInstance()->Food_Clone(_float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z));
+
+		return;
+	}
 }
 
 HRESULT CJake::Skill_Fiona_Tick(_double TimeDelta)

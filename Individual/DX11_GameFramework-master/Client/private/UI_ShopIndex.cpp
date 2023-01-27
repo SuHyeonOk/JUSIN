@@ -60,13 +60,13 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_RIGHT))	// 坷弗率
+	if (pGameInstance->Key_Down(DIK_RIGHT) && 5 > m_iShopIndex)	// 坷弗率
 	{
 		++m_iShopIndex;
 		m_eShopIndex = SHOPINDEX(m_iShopIndex);
 	}
 
-	if (pGameInstance->Key_Down(DIK_LEFT))	// 哭率								
+	if (pGameInstance->Key_Down(DIK_LEFT) && 0 < m_iShopIndex)	// 哭率								
 	{
 		--m_iShopIndex;
 		m_eShopIndex = SHOPINDEX(m_iShopIndex);
@@ -76,7 +76,7 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 	{
 		if (5 == m_iShopIndex)
 		{
-			CObj_Manager::GetInstance()->Set_Finn_Sword(CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY);
+			CObj_Manager::GetInstance()->Set_Finn_Sword(CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT);
 			return;
 		}
 

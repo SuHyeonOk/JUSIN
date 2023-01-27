@@ -50,22 +50,6 @@ HRESULT CUI_ShopSword::Initialize(void * pArg)
 
 void CUI_ShopSword::Tick(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Pressing(DIK_A))
-		--m_fX;
-	if (pGameInstance->Key_Pressing(DIK_D))
-		++m_fX;
-	if (pGameInstance->Key_Pressing(DIK_W))
-		++m_fY;
-	if (pGameInstance->Key_Pressing(DIK_S))
-		--m_fY;
-
-	cout << "m_fX : " << m_fX << " \ " << "m_fY : " << m_fY << endl;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(m_fX, m_fY, 0.f, 1.f));
 
 }
 
