@@ -48,7 +48,7 @@ HRESULT CN_GooseShop::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(210.0f));
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(200.0f));
 
 	m_pModelCom->Set_AnimIndex(0); // 가만히, 어서와, 걷기..?
 	

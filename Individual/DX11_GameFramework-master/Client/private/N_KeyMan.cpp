@@ -69,15 +69,23 @@ void CN_KeyMan::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n핀님! 큰일났어요!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n핀님! 제이크님! 큰일났어요.!!"));
 			break;
 
 		case 1:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n제가 가지고 있던 열쇠를 어떤 마법사가 빼앗아 갔어요!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n제가 가지고 있던 열쇠를 어떤 마법사가 빼앗아 갔어요.!!"));
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n부탁드려요 꼭 열쇠를 찾아서 저희 왕국을 지켜주세요!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n부탁드려요 꼭 열쇠를 찾아서 저희 왕국을 지켜주세요.!"));
+			break;
+
+		case 3:
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n마법사를 혼내주셔서 정말 감사합니다! /n제가 좋은 정보 하나 드릴게요!"));
+			break;
+
+		case 4:
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n거위 아저씨께서 저희 왕국을 지켜주는 증거로 열쇠 3개를 모아오면 \n특별한 물건을 판매하신다고 하셨어요!"));
 			break;
 
 		default:

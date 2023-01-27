@@ -99,8 +99,8 @@ void CS_Fiona::Tick(_double TimeDelta)
 		CGameObject::Set_Dead();
 
 	// 죽을 때의 처리
-	Death_Set(TimeDelta);
 	Effect_Create(TimeDelta);
+	Death_Set(TimeDelta);
 	
 	// 실행중 실제 플레이어의 좌표 옮기기
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
@@ -345,12 +345,9 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
-	}
-
-	if (22 < m_bSkillClone_TimeAcc)
-	{
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50);
+		CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
+	
 		// 죽으면서 모든 처리를 원래 플레이어로 돌아올 수 있도록 처리한다.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
@@ -366,14 +363,14 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 void CS_Fiona::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (1 < m_bSkillClone_TimeAcc)
+	if (0 != m_bSkillClone_TimeAcc)
 		return;
 
 	m_OnMove = false;
 
 	// 계속 생성
-	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f));
-	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
+	CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50);
+	CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)

@@ -350,8 +350,12 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.2f);
 
-  	if (!m_bItem)	// 辆捞 积己
+	static _bool bItem;
+
+  	if (false == bItem)	// 辆捞 积己
 	{
+		bItem = true; 
+
 		// Item
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;
@@ -359,27 +363,26 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 
 		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 5);
 		CItemManager::GetInstance()->Key_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
-
-		m_bItem = true;
 	}
 }
 
 void CM_Magic_Man::Appear(const _double& TimeDelta)
 {
+	static _bool bPlayerFind;
+
+	if (true == bPlayerFind)
+		return;
+
 	if (5.f >= CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 	{
-		if (2 < m_Appear_TimeAcc)
-		{
-			m_pTransformCom->Set_Pos(0.f);
-			return;
-		}
-
+		bPlayerFind = true;
+		
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		m_Appear_TimeAcc += TimeDelta;
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f), 50);
+	
+		m_pTransformCom->Set_Pos(0.f);
 	}
 }
 

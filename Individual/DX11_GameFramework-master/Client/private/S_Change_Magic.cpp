@@ -78,8 +78,8 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	// 죽을 때 처리
-	Death_Set(TimeDelta);
 	Effect_Create(TimeDelta);
+	Death_Set(TimeDelta);
 
 	// Jake 의 자리 옮기기
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
@@ -269,16 +269,14 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 	{
 		m_OnMove = false;
 
+		// 이펙트
 		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
-	}
-
-	if (22 < m_dSkillClone_TimeAcc)
-	{
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.5f, 1.0f), 50);
+		CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f));
+	
 		// 죽을때 플레이어 원래 상태로 돌려놓는다.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END);
@@ -287,7 +285,7 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		CJake * pGameObject = dynamic_cast<CJake*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), 0));
 		if (nullptr == pGameObject)
 			return E_FAIL;
-		
+
 		pGameObject->Set_Change();
 		RELEASE_INSTANCE(CGameInstance);
 
@@ -295,7 +293,6 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 		CGameObject::Set_Dead();
 
 		m_dSkillClone_TimeAcc = 0;
-		return S_OK;
 	}
 
 	return S_OK;
@@ -304,13 +301,13 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 void CS_Change_Magic::Effect_Create(const _double & TimeDelta)
 {
 	// 이펙트
-	if (1 < m_dSkillClone_TimeAcc)
+	if (0 != m_dSkillClone_TimeAcc)
 		return;
 
 	m_OnMove = false;
 
-	CEffect_Manager::GetInstance()->Effect_Smoke(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f));
-	CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
+	CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.5f, 1.0f), 50);
+	CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f));
 }
 
 void CS_Change_Magic::Skill_Tick(const _double & TimeDelta)

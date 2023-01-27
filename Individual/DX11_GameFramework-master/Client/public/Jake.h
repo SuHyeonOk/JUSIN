@@ -123,13 +123,7 @@ private:
 	_double		m_dShader_Hit_TimeAcc = 0;
 
 	// ¿Ã∆Â∆Æ
-	_float		m_fEffect_SiwmY = 0.6f;
 	_double		m_dEffect_Swim_TimeAcc = 0;
-
-	_bool		m_bEffect_Follow = false;
-	_double		m_bEffect_Follow_TimeAcc = 0;
-
-	_int m_i = 0;
 
 public:
 	static CJake*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

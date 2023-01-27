@@ -72,7 +72,7 @@ void CN_Doctor::Tick(_double TimeDelta)
 		switch (m_Script_Count)
 		{
 		case 0:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀! 여기까지 오느라 고생했어"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n핀! 제이크! 여기까지 오느라 고생했어"));
 			break;
 
 		case 1:
@@ -80,7 +80,7 @@ void CN_Doctor::Tick(_double TimeDelta)
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n그 칼을 찾고, \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("닥터 공주 : \n그 칼을 찾고, 포탈도 열어서 \n우리 마을을 이렇게 만든 녀석을 혼내줘!!"));
 			break;
 
 		default:

@@ -80,6 +80,10 @@ void CN_Bubblegum::Tick(_double TimeDelta)
 			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n그리고 마지막 열쇠는 열쇠 친구가 가지고 있을거야! \n부탁할게 핀!"));
 			break;
 
+		case 3:
+			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n앗! 제이크는 아까 먼저 출발했어 얼른 따라가봐!"));
+			break;
+
 		default:
 			CUI_Manager::GetInstance()->Set_Text(TEXT("버블검 공주 : \n핀, 제이크 화이팅!"));
 			break;

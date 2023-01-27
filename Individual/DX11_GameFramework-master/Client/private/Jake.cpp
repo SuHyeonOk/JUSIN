@@ -445,7 +445,6 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 		if (3 < m_dSkill_TimeAcc)
 		{
 			m_bSkill_Clone = false;
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 
 			m_dSkill_TimeAcc = 0;
@@ -532,8 +531,6 @@ void CJake::Check_Follow(_double TimeDelta)
 		m_dNotfollow_TimeAcc += TimeDelta;
 		if (3.0 < m_dNotfollow_TimeAcc) // 따라오지 못 하는 시간이 5 초를 넘어간다면
 		{
-			m_bEffect_Follow = true;
-
 			_vector		vMyLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 			_float fLookX = XMVectorGetX(vMyLook);
 			_float fLookZ = XMVectorGetZ(vMyLook);
@@ -552,41 +549,20 @@ void CJake::Check_Follow(_double TimeDelta)
 			// 좌표 이동
 			CNavigation * pNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
 
-			_float4 f4MyPos;
-			XMStoreFloat4(&f4MyPos, vPlayerPos);
+			_float4 f4Position;
+			XMStoreFloat4(&f4Position, vPlayerPos);
 			m_pNavigationCom->Set_CellIndex(pNavigationCom->Get_CellIndex());
-			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4MyPos.x - fAddX, f4MyPos.y, f4MyPos.z - fAddZ, 1.f), m_pNavigationCom);	// 플레이어 근처로 이동
+			f4Position = { f4Position.x - fAddX, f4Position.y, f4Position.z - fAddZ, 1.f };
+			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4Position.x, f4Position.y, f4Position.z, f4Position.w), m_pNavigationCom);	// 플레이어 근처로 이동
 
-			//// 오브젝트 포탈 생성
-			//CO_TextureObject::TEXTUREOBJECT tTextureObject;
-			//tTextureObject.eTextureType = tTextureObject.MOVE_PORTAL;
-			//tTextureObject.f3Pos = _float3(f4MyPos.x - fAddX, f4MyPos.y + 1.0f, (f4MyPos.z - fAddZ) - 0.5f);
-			//if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Portal_Jake"), TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
-			//	return;
+			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f), _float3(0.968f, 0.729f, 0.160f), 50);
+			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f));
 
 			m_dNotfollow_TimeAcc = 0;
 		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
-
-	// 이펙트
-	if (m_bEffect_Follow)
-	{
-		m_bEffect_Follow_TimeAcc += TimeDelta;
-		if (0.3 < m_bEffect_Follow_TimeAcc)
-		{
-			m_bEffect_Follow = false;
-			m_bEffect_Follow_TimeAcc = 0;
-		}
-
-		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
-
-		CEffect_Manager::GetInstance()->Effect_Smoke(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.7f), _float3(0.968f, 0.729f, 0.160f));
-		CEffect_Manager::GetInstance()->Effect_Star3_Create(_float3(f4PlayerPos.x, f4PlayerPos.y + 0.7f, f4PlayerPos.z - 0.8f));
-	}
 
 
 	//// 일정시간 동안 Jake 가 근처에 있지 않다면 Jake 를 내 근처로 이동시킨다.
@@ -847,6 +823,7 @@ void CJake::Skill_Coin_Tick(_double TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
 
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		return;
 	}
 }
@@ -866,9 +843,9 @@ void CJake::Skill_Food_Tick(_double TimeDelta)
 		XMVector3Normalize(vLook * 1.0f);
 		_float4 f4Look;
 		XMStoreFloat4(&f4Look, vLook);
-
 		CItemManager::GetInstance()->Food_Clone(_float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z));
 
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		return;
 	}
 }

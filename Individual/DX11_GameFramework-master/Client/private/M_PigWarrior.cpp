@@ -81,14 +81,15 @@ void CM_PigWarrior::Tick(_double TimeDelta)
 
 	Monster_Tick(TimeDelta);
 
-	m_MonsterParts[0]->Tick(TimeDelta);
+	if (CM_Monster::MONSTERINFO::STATE::ATTACK == m_tMonsterInfo.eState)
+		m_MonsterParts[0]->Tick(TimeDelta);
 	m_MonsterParts[1]->Tick(TimeDelta);
 }
 
 void CM_PigWarrior::Late_Tick(_double TimeDelta)
 {
-
-	m_MonsterParts[0]->Late_Tick(TimeDelta);
+	if (CM_Monster::MONSTERINFO::STATE::ATTACK == m_tMonsterInfo.eState)
+		m_MonsterParts[0]->Late_Tick(TimeDelta);
 	m_MonsterParts[1]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);
@@ -109,9 +110,15 @@ HRESULT CM_PigWarrior::Render()
 		for (_uint i = 0; i < iNumMeshes; ++i)
 		{
 			if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
-				if (2 == i)	continue;	// ²Ü¹ú Ä® ¾ø¾Ö±â
-			if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
-				if (1 == i) continue;	// ³ëµ¿ÀÚ Ä® ¾ø¾Ö±â
+				if (1 == i) continue;	// ²Ü¹ú ³¿ºñ ¾ø¾Ö±â
+
+			if (CM_Monster::MONSTERINFO::STATE::ATTACK == m_tMonsterInfo.eState)
+			{
+				if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
+					if (2 == i)	continue;	// ²Ü¹ú Ä® ¾ø¾Ö±â
+				if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
+					if (1 == i) continue;	// ³ëµ¿ÀÚ Ä® ¾ø¾Ö±â
+			}
 
 			m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
@@ -127,9 +134,15 @@ HRESULT CM_PigWarrior::Render()
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
-			if (2 == i)	continue;	// ²Ü¹ú Ä® ¾ø¾Ö±â
-		if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
-			if (1 == i) continue;	// ³ëµ¿ÀÚ Ä® ¾ø¾Ö±â
+			if (1 == i) continue;	// ²Ü¹ú ³¿ºñ ¾ø¾Ö±â
+
+		if (CM_Monster::MONSTERINFO::STATE::ATTACK == m_tMonsterInfo.eState)
+		{
+			if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_BEE)
+				if (2 == i)	continue;	// ²Ü¹ú Ä® ¾ø¾Ö±â
+			if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.W_WORKE)
+				if (1 == i) continue;	// ³ëµ¿ÀÚ Ä® ¾ø¾Ö±â
+		}
 
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 

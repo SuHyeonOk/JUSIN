@@ -371,39 +371,18 @@ HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)
 	return S_OK;
 }
 
-HRESULT CEffect_Manager::Effect_Star3_Create(_float3 f3Pos, const _float3 & f3Color)
+HRESULT CEffect_Manager::Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Burst::EFFECTINFO	tEffetInfo;
-	tEffetInfo.f3Pos = f3Pos;
-	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE;
-	tEffetInfo.f3Color = f3Color;
-
-	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
-	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
-	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-	return S_OK;
-}
-
-HRESULT CEffect_Manager::Effect_Star3Count_Create(_float3 f3Pos, const _float3 & f3Color)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CE_Burst::EFFECTINFO	tEffetInfo;
-	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE;
-	tEffetInfo.f3Pos = f3Pos;
-	tEffetInfo.f3Color = f3Color;
 
 	for (_int i = 0; i < 20; ++i)
 	{
+		tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE;
+		tEffetInfo.f3Pos = f3Pos;
+		tEffetInfo.f3Color = f3Color;
+
 		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
 		_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
 		_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
@@ -618,29 +597,6 @@ HRESULT CEffect_Manager::Effect_Smoke_Count(_float3 f3Pos, _float3 f3Color, _int
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
 			return E_FAIL;
 	}
-
-	RELEASE_INSTANCE(CGameInstance);
-	return S_OK;
-}
-
-HRESULT CEffect_Manager::Effect_Smoke(_float3 f3Pos, _float3 f3Color)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CE_Burst::EFFECTINFO	tEffetInfo;
-	tEffetInfo.f3Pos = f3Pos;
-	tEffetInfo.f3Color = f3Color;
-	tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE;
-	tEffetInfo.f2Size = { 0.3f, 1.0f };
-
-	_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
-	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-	vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
-	XMStoreFloat4(&tEffetInfo.f4Look, vLook);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Burst"), &tEffetInfo)))
-		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 	return S_OK;

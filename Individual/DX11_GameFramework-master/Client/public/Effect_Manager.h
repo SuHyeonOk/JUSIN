@@ -35,8 +35,7 @@ public:
 	HRESULT		Effect_Shield_Create(_float3 f3Pos);
 
 	HRESULT		Effect_Star_Create(_float3 f3Pos);
-	HRESULT		Effect_Star3_Create(_float3 f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
-	HRESULT		Effect_Star3Count_Create(_float3 f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
+	HRESULT		Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
 	HRESULT		Effect_StarRandom_Create(_float3 f3Pos, const _float3 & f3Color);
 
 	HRESULT		Effect_Paint_Circle_Create(_float3 f3Pos, const _float3 & f3Color);
@@ -49,7 +48,6 @@ public:
 	HRESULT		Effect_Ink(_float3 f3Pos, _float3 f3Color);
 	HRESULT		Effect_Random_Ink(_float3 f3Pos, _float3 f3Color);
 	HRESULT		Effect_Smoke_Count(_float3 f3Pos, _float3 f3Color, _int iCount = 10, _float2 f2Size = {0.3f, 1.0f});
-	HRESULT		Effect_Smoke(_float3 f3Pos, _float3 f3Color);
 	HRESULT		Skill_Marceline_Waves_Create(_float3 f3Pos);
 	HRESULT		Skill_Marceline_Sound_Create(_float3 f3Pos);
 	HRESULT		DieCenter_Create(CE_DieCenter::DIECENTERINFO tDieCenter);
