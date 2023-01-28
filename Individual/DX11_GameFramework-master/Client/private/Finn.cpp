@@ -390,10 +390,15 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 	if (m_bIsSwim)		// 수영 중 에는 스킬 사용 금지
 		return;
 
+	static _bool OneSkillStart;
+
 	// 전체적으로 스킬을 on 한다.
-	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill || 
+	if (CSkill_Manager::PLAYERSKILL::PAINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
 		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkillStart = true;
+	else if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::FOOD == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		OneSkillStart = true;
 
 	if (m_bSkillStart)	// 20 초 동안 실행될 스킬의 시간을 계산한다.
 	{
@@ -409,14 +414,13 @@ void CFinn::Player_Skill_Tick(_double TimeDelta)
 			m_dSkill_TimeAcc = 0;
 		}
 	}
-	else				// 스킬을 한 번 금방 사용하고 마는 경우 스킬 재생 시간을 3초로 짧게 준다.
+	if(OneSkillStart)				// 스킬을 한 번 금방 사용하고 마는 경우 스킬 재생 시간을 3초로 짧게 준다.
 	{
 		m_dSkill_TimeAcc += TimeDelta;	// 코인과 푸드의 경우 객체가 금방 생성 되었다가 바로 스킬이 끝나도록 하면 2번 실행 되어 다음과 같은 대기 시간을 주었다.
 		if (3 < m_dSkill_TimeAcc)
 		{
+			OneSkillStart = false;
 			m_bSkill_Clone = false;
-			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
-
 			m_dSkill_TimeAcc = 0;
 		}
 	}
@@ -469,6 +473,8 @@ void CFinn::Player_Follow(_double TimeDelta)
 	// 따라갈 때 애니메이션 (핀의 경우에는 제이크가 변신한 상태일 때 다른 상태 제어가 필요하다.)
 	if (CObj_Manager::PLAYERINFO::STATE::MAGIC == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
+		cout << CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill << endl;
+
 		if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill)
 			m_tPlayerInfo.eState = m_tPlayerInfo.CHANGE;
 		else if (CSkill_Manager::MAGICSKILL::RUN == CSkill_Manager::GetInstance()->GetInstance()->Get_Magic_Skill().eSkill)
@@ -559,7 +565,7 @@ void CFinn::Key_Input(_double TimeDelta)
 
 	static _bool bMoveTurn;
 
-	if (m_OnMove && bMoveTurn)
+	if (m_OnMove)
 	{
 		if (CObj_Manager::PLAYERINFO::SWIM == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 			m_pTransformCom->Go_Straight(TimeDelta, 2.f, m_pNavigationCom);
@@ -572,7 +578,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 #pragma region 이동
-	if (pGameInstance->Key_Pressing(DIK_UP))
+	/*if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		m_OnMove = true;
 		if (true == m_pTransformCom->MoveTurn(XMConvertToRadians(0.0f), TimeDelta))
@@ -631,48 +637,48 @@ void CFinn::Key_Input(_double TimeDelta)
 			if (true == m_pTransformCom->MoveTurn(XMConvertToRadians(45.0f), TimeDelta))
 				bMoveTurn = true;
 		}
+	}*/
+
+	if (pGameInstance->Key_Pressing(DIK_UP))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
 	}
+	if (pGameInstance->Key_Pressing(DIK_RIGHT))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
 
-	//if (pGameInstance->Key_Pressing(DIK_UP))
-	//{
-	//	m_OnMove = true;
-	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+		if (pGameInstance->Key_Pressing(DIK_UP))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_DOWN))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
 
-	//	if (pGameInstance->Key_Pressing(DIK_RIGHT))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-	//	if (pGameInstance->Key_Pressing(DIK_LEFT))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-	//}
-	//if (pGameInstance->Key_Pressing(DIK_RIGHT))
-	//{
-	//	m_OnMove = true;
-	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
+		if (pGameInstance->Key_Pressing(DIK_RIGHT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+		if (pGameInstance->Key_Pressing(DIK_LEFT))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
+	if (pGameInstance->Key_Pressing(DIK_LEFT))
+	{
+		m_OnMove = true;
+		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
 
-	//	if (pGameInstance->Key_Pressing(DIK_UP))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-	//	if (pGameInstance->Key_Pressing(DIK_DOWN))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	//}
-	//if (pGameInstance->Key_Pressing(DIK_DOWN))
-	//{
-	//	m_OnMove = true;
-	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
-
-	//	if (pGameInstance->Key_Pressing(DIK_RIGHT))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
-	//	if (pGameInstance->Key_Pressing(DIK_LEFT))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	//}
-	//if (pGameInstance->Key_Pressing(DIK_LEFT))
-	//{
-	//	m_OnMove = true;
-	//	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
-
-	//	if (pGameInstance->Key_Pressing(DIK_UP))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
-	//	if (pGameInstance->Key_Pressing(DIK_DOWN))
-	//		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
-	//}
+		if (pGameInstance->Key_Pressing(DIK_UP))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+	}
 #pragma endregion
 
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
@@ -809,6 +815,7 @@ void CFinn::Skill_Coin_Tick(_double TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
 
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		return;
 	}
@@ -831,6 +838,7 @@ void CFinn::Skill_Food_Tick(_double TimeDelta)
 		XMStoreFloat4(&f4Look, vLook);
 		CItemManager::GetInstance()->Food_Clone(_float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z));
 
+		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		return;
 	}

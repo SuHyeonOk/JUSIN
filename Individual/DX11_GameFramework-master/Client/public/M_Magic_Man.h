@@ -38,12 +38,16 @@ private:
 private:
 	void				Appear(const _double& TimeDelta);
 	void				Hit_Process(const _double & TimeDelta);
+	void				Teleporting();
+	void				SmokeEffect();
+	void				Shader_Alpha(const _double & TimeDelta);
 
 private:
 	_float4				m_f4CenterPos;
 
 	_bool				m_bFind = false;
 	_bool				m_bAttack = false;
+	_bool				m_bShader_Alpha = false;	// true : 알파값 감소 / false : 알파값 증가.
 
 public:
 	static	CM_Magic_Man*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

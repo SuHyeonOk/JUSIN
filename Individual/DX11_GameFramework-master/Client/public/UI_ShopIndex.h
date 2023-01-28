@@ -18,6 +18,13 @@ private:
 	virtual ~CUI_ShopIndex() = default;
 
 public:
+	void		Reset() {
+		m_iIndexTexture = 1;
+		m_iShopIndex = 0;
+		m_eShopIndex = SHOPINDEX::SHOP_ONE;
+	}
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual void		Tick(_double TimeDelta) override;

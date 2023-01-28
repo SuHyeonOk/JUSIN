@@ -7,6 +7,8 @@
 #include "UI_SkillIcon.h"
 #include "Skill_Manager.h"
 
+#include "UI_ShopIndex.h"
+
 CUI_::CUI_(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -465,7 +467,13 @@ void CUI_::Tick(_double TimeDelta)
 		
 		m_vecUI[36]->Tick(TimeDelta);
 	}
+	else
+	{
+		//CUI_ShopIndex* pUI_ShopIdex = dynamic_cast<CUI_ShopIndex*>(m_vecUI[36]);
+		//pUI_ShopIdex->Reset();
 
+		((CUI_ShopIndex*)m_vecUI[36])->Reset();
+	}
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

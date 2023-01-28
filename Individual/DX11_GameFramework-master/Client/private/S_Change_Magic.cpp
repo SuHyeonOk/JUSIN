@@ -93,11 +93,7 @@ void CS_Change_Magic::Tick(_double TimeDelta)
 	{
 		m_dAttack_TimeAcc += TimeDelta;
 		if (1.6 < m_dAttack_TimeAcc)
-		{
-			CUI_Manager::GetInstance()->Set_Ui_Monster(false);
-			//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 			return;
-		}
 
 		if (1.4 < m_dAttack_TimeAcc)
 			m_SkillParts[0]->Tick(TimeDelta);

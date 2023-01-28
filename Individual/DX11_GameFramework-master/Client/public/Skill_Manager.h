@@ -54,8 +54,12 @@ public:		// 플레이어
 	void						Set_Player_Skill(PLAYERSKILL::SKILL eSkillState) { 
 		m_tPlayerSkill.eSkill = eSkillState; }
 
-	MAGICSKILL					Get_Magic_Skill() { return m_tMagicSkill; }
-	void						Set_Magic_Skill(MAGICSKILL::SKILLSTATE eSkillState) { m_tMagicSkill.eSkill = eSkillState; }
+	MAGICSKILL					Get_Magic_Skill() { 
+		return m_tMagicSkill;
+	}
+	void						Set_Magic_Skill(MAGICSKILL::SKILLSTATE eSkillState) {
+		m_tMagicSkill.eSkill = eSkillState; 
+	}
 
 	FIONASKILL					Get_Fiona_Skill() { return m_tFionaSkill; }
 	void						Set_Fiona_Skill(FIONASKILL::SKILLSTATE eSkillState) { m_tFionaSkill.eSkill = eSkillState; }

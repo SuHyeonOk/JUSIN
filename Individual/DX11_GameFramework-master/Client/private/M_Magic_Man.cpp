@@ -61,6 +61,8 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos(_float3(MonsterDesc.f3Pos.x, 100.f, MonsterDesc.f3Pos.z));	// 처음에는 높이 있어서 보이지 않는다.
 
+	m_fAlpha = 0.0f;
+
 	return S_OK;
 }
 
@@ -70,6 +72,7 @@ void CM_Magic_Man::Tick(_double TimeDelta)
 
 	Appear(TimeDelta);
 	Hit_Process(TimeDelta);
+	Shader_Alpha(TimeDelta);
 
 	Monster_Tick(TimeDelta);
 }
@@ -115,7 +118,12 @@ HRESULT CM_Magic_Man::Render()
 			if (m_bShader_Hit)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			{
+				if (1 != m_fAlpha)
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
+				else
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			}
 		}
 	}
 
@@ -187,7 +195,7 @@ HRESULT CM_Magic_Man::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (m_tMonsterInfo.eState == m_tMonsterInfo.DIE)
+	if (1 != m_fAlpha)
 	{
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 			return E_FAIL;
@@ -278,11 +286,24 @@ void CM_Magic_Man::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 3.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-	// 플레이어가 범위 안 으로 들어오지 않는 경우, IDLE 상태로 돌아간다.
-	if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 5.0f))	// 거리 5 범위 이내에서 움직인다.
+	// 내 원점 거리와 내 위치가 멀다면! 무조건 원점으로 돌아간다.
+	_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
+	_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
+
+	if (5.1f < fDiatance)
 	{
-		m_bAttack = false;
-		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		m_pTransformCom->Chase(vCenterPos, TimeDelta);
+		m_pTransformCom->LookAt(vCenterPos);
+	}
+	else
+	{
+		// 플레이어가 범위 안 으로 들어오지 않는 경우, IDLE 상태로 돌아간다.
+		if (!CM_Monster::Random_Move(m_pTransformCom, m_f4CenterPos, TimeDelta, 5.0f))	// 거리 5 범위 이내에서 움직인다.
+		{
+			m_bAttack = false;
+			m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+		}
 	}
 }
 
@@ -336,7 +357,10 @@ void CM_Magic_Man::Hit_Tick(const _double& TimeDelta)
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+
+		m_bShader_Alpha = true;
+		SmokeEffect();
+		Teleporting();
 	}
 }
 
@@ -376,12 +400,7 @@ void CM_Magic_Man::Appear(const _double& TimeDelta)
 	if (5.f >= CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 	{
 		bPlayerFind = true;
-		
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x + 0.2f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f), _float3(0.8f, 0.5f, 1.0f), 50, { 0.3f, 1.5f });
-	
+		SmokeEffect();
 		m_pTransformCom->Set_Pos(0.f);
 	}
 }
@@ -399,15 +418,15 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 	if (0.1 < m_dPlayer_Attack_TimeAcc)
 		m_bShader_Hit = false;
 
-	// 몬스터 상태 변경
-	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-
 	// 공격 당할 때 플레이어 바라보기
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
+		// 몬스터 상태 변경
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
@@ -419,6 +438,54 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;
 		return;
+	}
+}
+
+void CM_Magic_Man::Teleporting()
+{
+	// 공격을 받고난 후 생성된 원점을 기준으로 랜덤한 위치로 거리 3이내로 순간이동한다.
+
+	// 좌표 이동
+	_float fRandomRangeX = CUtilities_Manager::GetInstance()->Get_Random(-2.4f, 2.4f);
+	_float fRandomRangeZ = CUtilities_Manager::GetInstance()->Get_Random(-2.4f, 2.4f);
+	_vector vCenterPos = XMVectorSet(m_f4CenterPos.x + fRandomRangeX, m_f4CenterPos.y, m_f4CenterPos.z + fRandomRangeZ, m_f4CenterPos.w);
+
+	_float4 f4RandomPos;
+	XMStoreFloat4(&f4RandomPos, vCenterPos);
+
+	m_pTransformCom->Set_Pos({ f4RandomPos.x, f4RandomPos.y, f4RandomPos.z });
+	
+	SmokeEffect();
+
+	// 다음 state
+	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+
+	m_tMonsterInfo.fHP = 100.0f;
+}
+
+void CM_Magic_Man::SmokeEffect()
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4MyPos;
+	XMStoreFloat4(&f4MyPos, vMyPos);
+	CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.7f), _float3(0.8f, 0.5f, 1.0f), 20, { 0.3f, 1.5f });
+}
+
+void CM_Magic_Man::Shader_Alpha(const _double & TimeDelta)
+{
+	cout << "몬스터 알파값 : " << m_fAlpha << endl;
+
+	if (false == m_bShader_Alpha)
+		return;
+
+	if (0 < m_fAlpha)
+		m_fAlpha -= _float(TimeDelta) * 1.5f;
+	else 
+	{
+		m_fAlpha += _float(TimeDelta) * 1.5f;
+		
+		if (1 > m_fAlpha)
+			m_bShader_Alpha = false;
 	}
 }
 

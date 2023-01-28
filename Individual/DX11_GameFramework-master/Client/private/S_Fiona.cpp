@@ -352,6 +352,7 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+		CObj_Manager::GetInstance()->Set_Interaction(false);
 
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
 		CGameObject::Set_Dead();

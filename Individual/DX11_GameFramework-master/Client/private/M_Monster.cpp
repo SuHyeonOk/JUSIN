@@ -66,7 +66,12 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	{
+		if (MONSTERINFO::STATE::DIE == m_tMonsterInfo.eState)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		else
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	}
 
 	RELEASE_INSTANCE(CGameInstance)
 }
@@ -288,7 +293,6 @@ void CM_Monster::Effect_Hit(_float3 fPulsPos)
 	XMStoreFloat4(&f4MyPos, vMyPos);
 
 	CEffect_Manager::GetInstance()->Effect_Hit_Create(_float3(f4MyPos.x + fPulsPos.x, f4MyPos.y + fPulsPos.y, f4MyPos.z + fPulsPos.z));
-	cout << "이펙트" << endl;
 }
 
 void CM_Monster::Hit_Process(const _double & TimeDelta)
@@ -304,15 +308,15 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 	if (0.1 < m_dPlayer_Attack_TimeAcc)
 		m_bShader_Hit = false;
 
-	// 몬스터 상태 변경
-	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-
 	// 공격 당할 때 플레이어 바라보기
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)											
 	{
+		// 몬스터 상태 변경
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기

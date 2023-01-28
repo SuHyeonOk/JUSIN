@@ -258,8 +258,6 @@ void CM_Mimic::Find_Tick()
 
 void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 {
-	CObj_Manager::GetInstance()->Set_Interaction(true);
-
 	if (!m_bPlayer_Attack)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 }
@@ -328,12 +326,12 @@ void CM_Mimic::Hit_Process(const _double & TimeDelta)
 	if (0.1 < m_dPlayer_Attack_TimeAcc)
 		m_bShader_Hit = false;
 
-	// 몬스터 상태 변경
-	m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
-
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
+		// 몬스터 상태 변경
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
 	}
