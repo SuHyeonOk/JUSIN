@@ -52,8 +52,8 @@ void CUI_3DTexture::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 	
-	if (m_tTextureInfo.eTextureType == m_tTextureInfo.TYPE_FIND)
-		Find_Tick(TimeDelta);
+	if (m_tTextureInfo.eTextureType != m_tTextureInfo.TYPE_TALK)
+		DeadShader_Tick(TimeDelta);
 }
 
 void CUI_3DTexture::Late_Tick(_double TimeDelta)
@@ -77,7 +77,7 @@ HRESULT CUI_3DTexture::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(0);	// pass
+	m_pShaderCom->Begin(2);	// pass
 
 	m_pVIBufferCom->Render();
 
@@ -110,6 +110,12 @@ HRESULT CUI_3DTexture::SetUp_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
+	else if (m_tTextureInfo.eTextureType == m_tTextureInfo.TYPE_SURPRISED)
+	{
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Surprised"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -134,19 +140,30 @@ HRESULT CUI_3DTexture::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
-void CUI_3DTexture::Find_Tick(const _double & TimeDelta)
+void CUI_3DTexture::DeadShader_Tick(const _double & TimeDelta)
 {
 	// 일정 시간 있다가 사라진다.
 	m_pTransformCom->Set_Pos(_float3(m_tTextureInfo.f3Pos.x, m_tTextureInfo.f3Pos.y, m_tTextureInfo.f3Pos.z));
 
-	m_dTexture_TimeAcc += TimeDelta;
-	if (0.5 < m_dTexture_TimeAcc)
+	if (m_tTextureInfo.f2Size.x > m_fSize)
 	{
+		m_fAlpha = 1.0f;
+		m_fSize += _float(TimeDelta);
+		m_pTransformCom->Set_Scaled(_float3(m_fSize, m_fSize, 1.f));
+	}
+	else
+		m_fAlpha -= _float(TimeDelta) * 2.0f;
+
+	if (0 > m_fAlpha)
+	{
+		m_fSize = 0.0f;
 		CGameObject::Set_Dead();
-		m_dTexture_TimeAcc = 0;
 	}
 }
 

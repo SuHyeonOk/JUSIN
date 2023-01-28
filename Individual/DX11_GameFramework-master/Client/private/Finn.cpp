@@ -67,7 +67,7 @@ HRESULT CFinn::Initialize(void * pArg)
 }
 
 void CFinn::Tick(_double TimeDelta)
-{
+ {
 	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
 		return;
 
@@ -303,6 +303,9 @@ void CFinn::Parts_LateTick(const _double & TimeDelta)
 
 void CFinn::Player_Tick(_double TimeDelta)
 {
+	if (1 != m_fAlpha)	// 부활 해야 하는 시간을 줘야한다.
+		return;
+
 	// 내가 플레이어가 아닐 때에도 해야하는 행동
 	Change_Tick();
 	Cheering_Tick();
@@ -373,9 +376,11 @@ void CFinn::Current_Player(_double TimeDelta)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
-
-		Key_Input(TimeDelta);
 		Current_HP(TimeDelta);
+
+		if (1 != m_fAlpha)	// 부활 해야 하는 시간을 줘야한다.
+			return;
+		Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -1040,6 +1045,7 @@ void CFinn::BossCage(const _double & TimeDelta)
 
 void CFinn::Current_HP(const _double & TimeDelta)
 {
+	m_bShader_Hit = false;
 	static _bool	bRevive;
 
 	if (0 >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)

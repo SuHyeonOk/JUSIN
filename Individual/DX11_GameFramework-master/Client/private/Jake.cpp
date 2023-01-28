@@ -403,8 +403,11 @@ void CJake::Current_Player(_double TimeDelta)
 	{
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
 		Player_Skill_Tick(TimeDelta);
-		Key_Input(TimeDelta);
 		Current_HP(TimeDelta);
+
+		if (1 != m_fAlpha)	// 부활 해야 하는 시간을 줘야한다.
+			return;
+		Key_Input(TimeDelta);
 	}
 	else
 	{
@@ -1115,6 +1118,7 @@ void CJake::BossCage(const _double TimeDelta)
 
 void CJake::Current_HP(const _double & TimeDelta)
 {
+	m_bShader_Hit = false;
 	static _bool	bRevive;
 
 	if (0 >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
@@ -1141,7 +1145,7 @@ void CJake::Current_HP(const _double & TimeDelta)
 		if (1 > m_fAlpha)
 			m_fAlpha += _float(TimeDelta) * 1.5f;
 
-		if (1 < m_fAlpha)
+		if (10 <= m_pModelCom->Get_Keyframes())	// TODO : 나중에 릴리즈로 돌리
 		{
 			m_fAlpha = 1;
 			bRevive = false;

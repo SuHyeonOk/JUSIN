@@ -10,6 +10,7 @@
 
 #include "E_DieCenter.h"
 #include "Page.h"
+#include "UI_3DTexture.h"
 
 CM_Penny::CM_Penny(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CM_Monster(pDevice, pContext)
@@ -67,6 +68,30 @@ void CM_Penny::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_Y))
+	{
+		_vector vPosition = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Position, vPosition);
+
+		CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+		tTextureInfo.eTextureType = tTextureInfo.TYPE_SURPRISED;
+		tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+		if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+			tTextureInfo.f3Pos = _float3(f4Position.x, f4Position.y + 1.8f, f4Position.z - 0.5f);
+		else
+			tTextureInfo.f3Pos = _float3(f4Position.x, f4Position.y + 1.1f, f4Position.z - 0.5f);
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Texture_UI_Surprised"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	Monster_Tick(TimeDelta);
 }
@@ -289,6 +314,32 @@ void CM_Penny::Attack_Tick(const _double& TimeDelta)
 	if (1.0f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 	{
 		// 플레이어가 당황하는 느낌표를 띄운다.
+		static _bool b3DUI;
+
+		if (false == b3DUI)
+		{
+			b3DUI = true;
+
+			_vector vPosition = CObj_Manager::GetInstance()->Get_Player_Transform();
+			_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+			XMStoreFloat4(&f4Position, vPosition);
+
+			CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+			tTextureInfo.eTextureType = tTextureInfo.TYPE_SURPRISED;
+			tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+			if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				tTextureInfo.f3Pos = _float3(f4Position.x, f4Position.y + 1.8f, f4Position.z - 0.5f);
+			else
+				tTextureInfo.f3Pos = _float3(f4Position.x, f4Position.y + 1.1f, f4Position.z - 0.5f);
+
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Texture_UI_Surprised"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+			{
+				RELEASE_INSTANCE(CGameInstance);
+				return;
+			}
+			RELEASE_INSTANCE(CGameInstance);
+		}
 
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEM_ONE, false);
 		m_ePlayerSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE);

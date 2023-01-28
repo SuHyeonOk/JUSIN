@@ -876,6 +876,10 @@ HRESULT CLoader::UI_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_LooseEnemy_FX"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LooseEnemy_FX/LooseEnemy_FX.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_UI_Surprised */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Surprised"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/FindEnemy_FX/Finn and Jake are surprised.png")))))
+		return E_FAIL;
 
 	// Npc
 	/* For.Prototype_Component_Texture_UI_Talk */
@@ -1362,7 +1366,7 @@ HRESULT CLoader::Effect_Create()
 HRESULT CLoader::SkeletonTemp()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
+
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
