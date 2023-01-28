@@ -110,7 +110,12 @@ void CJake::Late_Tick(_double TimeDelta)
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	{
+		if (1 != m_fAlpha)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		else
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	}
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
@@ -142,7 +147,10 @@ HRESULT CJake::Render()
 			if (m_bShader_Hit && CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+				if (1 != m_fAlpha)
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);	// 죽을 때
+				else
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// 평소
 	}
 
 #ifdef _DEBUG
@@ -221,22 +229,11 @@ HRESULT CJake::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	/* For.Lights */
-	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (nullptr == pLightDesc)
-		return E_FAIL;
-	//
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
-	//	return E_FAIL;
+	if (1 != m_fAlpha)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -407,6 +404,7 @@ void CJake::Current_Player(_double TimeDelta)
 		CObj_Manager::GetInstance()->Tick_Player_Transform();
 		Player_Skill_Tick(TimeDelta);
 		Key_Input(TimeDelta);
+		Current_HP(TimeDelta);
 	}
 	else
 	{
@@ -1113,6 +1111,44 @@ void CJake::BossCage(const _double TimeDelta)
 	}
 	else
 		m_dBossCage_TimeAcc = 0;
+}
+
+void CJake::Current_HP(const _double & TimeDelta)
+{
+	static _bool	bRevive;
+
+	if (0 >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
+	{
+		m_pModelCom->Set_AnimIndex(45, false);
+
+		if (0 < m_fAlpha)
+			m_fAlpha -= _float(TimeDelta) * 1.5f;
+
+		if (0 > m_fAlpha)
+		{
+			CObj_Manager::GetInstance()->Set_Heart(-1);
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+			bRevive = true;
+		}
+	}
+	else
+	{
+		if (false == bRevive)
+			return;
+
+		m_pModelCom->Set_AnimIndex(44, false);
+
+		if (1 > m_fAlpha)
+			m_fAlpha += _float(TimeDelta) * 1.5f;
+
+		if (1 < m_fAlpha)
+		{
+			m_fAlpha = 1;
+			bRevive = false;
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+			CObj_Manager::GetInstance()->Set_Interaction(false);	// 공격 받다가 죽기 때문에 false 로 변경해 준다.
+		}
+	}
 }
 
 void CJake::Anim_Change(_double TimeDelta)

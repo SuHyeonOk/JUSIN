@@ -81,9 +81,9 @@ private:
 	HRESULT	Magic_Tick(_double TimeDelta);
 	HRESULT	JakeSon_Tick(const _double & TimeDelta);
 	void	JakeSon_Transform_Change();
-
 	void	BossCage(const _double TimeDelta);
 
+	void	Current_HP(const _double & TimeDelta);
 	void	Anim_Change(_double TimeDelta);
 
 private:
@@ -119,6 +119,7 @@ private:
 	_double		m_dBossCage_TimeAcc = 0;
 
 	// ºŒ¿Ã¥ı
+	_float		m_fAlpha = 1.f;
 	_bool		m_bShader_Hit = false;
 	_double		m_dShader_Hit_TimeAcc = 0;
 

@@ -139,11 +139,17 @@ void CPennyCopy::On_Collision(CGameObject * pOther)
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (L"Player_Weapon" == pOther->Get_Tag())
+		{
 			m_eState = HIT;
+			CObj_Manager::GetInstance()->Set_Player_MinusHP(15.0f);
+		}
 	}
 
 	if (L"Skill_Paint" == pOther->Get_Tag())
+	{
 		m_eState = HIT;
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(15.0f);
+	}
 }
 
 HRESULT CPennyCopy::SetUp_Components()

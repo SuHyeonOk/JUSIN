@@ -73,22 +73,6 @@ void CFinn::Tick(_double TimeDelta)
 
 	__super::Tick(TimeDelta);
 	
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//cout << "핀 : " << m_i << endl;
-
-	//if (pGameInstance->Key_Down(DIK_P))
-	//{
-	//	m_i++;
-	//}
-	//if (pGameInstance->Key_Down(DIK_O))
-	//{
-	//	m_i--;
-	//}
-	//m_pModelCom->Set_AnimIndex(m_i, false);
-
-	//RELEASE_INSTANCE(CGameInstance);
-
 	BossCage(TimeDelta);
 	Parts_Tick(TimeDelta);
 
@@ -108,7 +92,12 @@ void CFinn::Late_Tick(_double TimeDelta)
 	m_pModelCom->Play_Animation(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	{
+		if (1 != m_fAlpha)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		else
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	}
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
@@ -132,13 +121,16 @@ HRESULT CFinn::Render()
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 
 		if (i == 0)
-			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);		// 그림자
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);			// 그림자
 		else
 		{
 			if (m_bShader_Hit && CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState)
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);	// Hit 시
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);		// Hit 시
 			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// 평소
+				if (1 != m_fAlpha)
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);	// 죽을 때
+				else
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// 평소
 		}
 	}
 
@@ -221,10 +213,16 @@ HRESULT CFinn::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	/* For.Lights */
-	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (nullptr == pLightDesc)
-		return E_FAIL;
+	if (1 != m_fAlpha)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
+	///* For.Lights */
+	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
+	//if (nullptr == pLightDesc)
+	//	return E_FAIL;
 
 
 	return S_OK;
@@ -377,6 +375,7 @@ void CFinn::Current_Player(_double TimeDelta)
 		Player_Skill_Tick(TimeDelta);
 
 		Key_Input(TimeDelta);
+		Current_HP(TimeDelta);
 	}
 	else
 	{
@@ -1020,7 +1019,7 @@ void CFinn::Cheering_Tick()
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
 }
 
-void CFinn::BossCage(const _double TimeDelta)
+void CFinn::BossCage(const _double & TimeDelta)
 {
 	if (false == CObj_Manager::GetInstance()->Get_BossCage())
 		return;
@@ -1037,6 +1036,44 @@ void CFinn::BossCage(const _double TimeDelta)
 	}
 	else
 		m_dBossCage_TimeAcc = 0;
+}
+
+void CFinn::Current_HP(const _double & TimeDelta)
+{
+	static _bool	bRevive;
+
+	if (0 >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
+	{
+		m_pModelCom->Set_AnimIndex(42, false);
+
+		if (0 < m_fAlpha)
+			m_fAlpha -= _float(TimeDelta) * 1.5f;
+
+		if (0 > m_fAlpha)
+		{
+			CObj_Manager::GetInstance()->Set_Heart(-1);
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+			bRevive = true;
+		}
+	}
+	else
+	{
+		if (false == bRevive)
+			return;
+
+		m_pModelCom->Set_AnimIndex(41, false);
+
+		if (1 > m_fAlpha)
+			m_fAlpha += _float(TimeDelta) * 1.5f;
+		
+		if (1 < m_fAlpha)
+		{
+			m_fAlpha = 1;
+			bRevive = false;
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+			CObj_Manager::GetInstance()->Set_Interaction(false);	// 공격 받다가 죽기 때문에 false 로 변경해 준다.
+		}
+	}
 }
 
 void CFinn::Anim_Change(_double TimeDelta)

@@ -123,7 +123,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 
 	//cout << CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill << endl;
 
-	// 몬스터 에게 공격 당했을 때
+	// 플레이어 체력 관리 몬스터 에게 공격 당했을 때
 	if (0 < m_fMonster_Attck)
 	{
 		if (0 == m_dPlayerAttck_TimeAcc && 0 < m_tPlayerInfo.fHP)
@@ -131,6 +131,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 			m_tPlayerInfo.fHP -= m_fMonster_Attck;
 			CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 		}
+
 		m_dPlayerAttck_TimeAcc += TimeDelta;
 		if (0.7 < m_dPlayerAttck_TimeAcc)
 		{

@@ -1,4 +1,4 @@
-	#pragma once
+#pragma once
 
 #include "Client_Defines.h"
 #include "GameObject.h"
@@ -66,13 +66,13 @@ private:
 	void	Hit_Tick(_double TimeDelta);
 	void	KnockBack_Hit_Tick(_double TimeDelta);
 	void	Stun_Tick();
-
 	void	Swim_Tick(_double TimeDelta);
 	void	Change_Tick();
 	void	Cheering_Tick();
 
-	void	BossCage(const _double TimeDelta);
+	void	BossCage(const _double & TimeDelta);
 
+	void	Current_HP(const _double & TimeDelta);
 	void	Anim_Change(_double TimeDelta);
 
 private:
@@ -106,6 +106,7 @@ private:
 	_double		m_dBossCage_TimeAcc = 0;
 
 	// ºŒ¿Ã¥ı
+	_float		m_fAlpha = 1.f;
 	_bool		m_bShader_Hit = false;
 	_double		m_dShader_Hit_TimeAcc = 0;
 

@@ -109,7 +109,7 @@ void CHeart::On_Collision(CGameObject * pOther)
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
 		CGameObject::Set_Dead();
-		CObj_Manager::GetInstance()->Set_Heart();
+		CObj_Manager::GetInstance()->Set_Heart(+1);
 	}
 }
 

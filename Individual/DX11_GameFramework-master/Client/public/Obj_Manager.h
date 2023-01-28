@@ -118,10 +118,9 @@ public:
 	void				CObj_Manager::Set_Player_PlusHP(_float fHP);
 	void				CObj_Manager::Set_Player_MinusHP(_float fAttack);
 
-	void				Set_Coin(_int iCount) { m_tPlayerInfo.iCoin += iCount; }
-	void				Set_Key() { m_tPlayerInfo.iKey += 1; }
-	void				Set_KeyClear() { m_tPlayerInfo.iKey -= 3; }
-	void				Set_Heart() { m_tPlayerInfo.iHeart += 1; }
+	void				Set_Coin(_int iNumber) { m_tPlayerInfo.iCoin += iNumber; }
+	void				Set_Key(_int iNumber) { m_tPlayerInfo.iKey += iNumber; }
+	void				Set_Heart(_int iNumber) { m_tPlayerInfo.iHeart += iNumber; }
 
 	// UI Talk
 	_bool				Get_Interaction() { return m_bInteraction; }
@@ -132,18 +131,14 @@ public:	// 다른 객체에세 플레이어의 주소를 전달하기 위한 기능, 거리 계산 기능
 	_vector				CObj_Manager::Get_Player_Transform();					// 현재 Player 의 POS 를 가져온다.
 	_float				CObj_Manager::Get_Player_Distance(_fvector	_MyPos);	// Player 와 내 거리
 
-	// 플레이어 스킬에서 Rotation() 을 위해서
-	_float				Get_Angle() { return XMConvertToRadians(m_fAngle); }
-	void				Set_Angle(_float fAngle) { m_fAngle = fAngle; }
-
 public:
 	HRESULT		CObj_Manager::Initialized();
 	void		CObj_Manager::Tick(_double TimeDelta);
 
 private:
-	void		CObj_Manager::Current_Player();		// 현재 플레이어가 누구인지 Tick
-	void		CObj_Manager::Player_Exp(const _double & TimeDelta);			// 현재 플레이어의 경험치를 Tick
-	void		CObj_Manager::Player_Weapon();		// 현재 플레이어의 무기 출력
+	void		CObj_Manager::Current_Player();							// 현재 플레이어가 누구인지 Tick
+	void		CObj_Manager::Player_Exp(const _double & TimeDelta);	// 현재 플레이어의 경험치를 Tick
+	void		CObj_Manager::Player_Weapon();							// 현재 플레이어의 무기 출력
 
 private:
 	void		CObj_Manager::Key_Input();
@@ -160,17 +155,15 @@ private: // KeyInput
 	_bool			m_bInteraction = false;
 
 private:
-	_bool			m_bShield = false;
-	_bool			m_bMonster_Crash = false;	// 플레이어가 지금 몬스터와 충돌 했는지
-
-	_float			m_fAngle = 0.f;
+	_bool			m_bShield = false;			// 제이크의 쉴드가 충돌이 되었다면 플레이어의 체력을 감소하지 않는다.
+	_bool			m_bMonster_Crash = false;	// 플레이어가 지금 몬스터와 충돌 했는지 확인하고 체력을 감소한다.
 
 	// Boss Cage 를 사용했냐의 여부
 	_bool			m_bBossCage = false;
 
 private:
 	// 외부에서 이 키를 눌렀니!
-	_uint			m_ChangeTarget = 0;	// Z 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
+	_uint			m_ChangeTarget = 0;			// Z 키를 누를 때 마다 Player 가 달라진다. 0:Finn / 2:Jake / 3:Free / 4:Reset->Finn
 	_int			m_iWeapon_Index = 0;
 	_bool			m_bInventory = false;
 

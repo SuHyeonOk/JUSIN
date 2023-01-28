@@ -61,7 +61,7 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 	m_tMonsterInfo.fHP		= 100.0f;
 	m_tMonsterInfo.fMaxHP	= 100.0f;
 	m_tMonsterInfo.fExp		= 30.0f;
-	m_tMonsterInfo.fAttack	= 10.0f;
+	m_tMonsterInfo.fAttack	= 70.0f;
 
 	m_fAlpha = 0.7f;
 

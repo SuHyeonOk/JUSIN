@@ -288,6 +288,8 @@ void CM_Penny::Attack_Tick(const _double& TimeDelta)
 
 	if (1.0f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 	{
+		// 플레이어가 당황하는 느낌표를 띄운다.
+
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEM_ONE, false);
 		m_ePlayerSkill = CUI_Manager::GetInstance()->Get_SkillIcon(ITEM_ONE);
 
@@ -315,9 +317,9 @@ void CM_Penny::Hit_Tick(const _double& TimeDelta)
 	{
 		m_bShader_Hit = false;
 
-		if (2 == iHitCount)
+		if (1 == iHitCount)
 		{
-			iHitCount = 3;
+			iHitCount = 2;
 			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::ATTACK;
 		}
 		else
@@ -381,8 +383,7 @@ void CM_Penny::PennyCopy_Create()
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 50);
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y + 0.6f, f4MyPos.z - 0.5f), _float3(0.5f, 0.5f, 0.5f), 50, { 0.3f, 1.2f });
 
 		for (_int i = 0; i < 5; ++i)
 		{
