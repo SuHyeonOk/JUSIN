@@ -72,8 +72,6 @@ void CM_Mimic::Tick(_double TimeDelta)
 
 void CM_Mimic::Late_Tick(_double TimeDelta)
 {
-
-
 	__super::Late_Tick(TimeDelta);
 }
 
@@ -234,26 +232,7 @@ void CM_Mimic::Find_Tick()
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-	_vector	vMyPos;
-	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
-	_float4	f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
-
-	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
-	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
-	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-	tTextureInfo.f3Pos = _float3(f4MyPos.x - 3.6f, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
-	{
-		RELEASE_INSTANCE(CGameInstance);
-		return;
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Mimic::Attack_Tick(const _double& TimeDelta)
@@ -264,6 +243,29 @@ void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 
 void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 {
+	if (0 == m_pModelCom->Get_Keyframes())
+	{
+		_vector	vMyPos;
+		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+		tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
+		tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+		tTextureInfo.f3Pos = _float3(f4MyPos.x - 3.6f, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return;
+		}
+
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 }
@@ -337,7 +339,7 @@ void CM_Mimic::Hit_Process(const _double & TimeDelta)
 	}
 	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
 	m_dPlayer_Attack_TimeAcc += TimeDelta;
-	if (0.5 < m_dPlayer_Attack_TimeAcc)
+	if (0.7 < m_dPlayer_Attack_TimeAcc)
 	{
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;

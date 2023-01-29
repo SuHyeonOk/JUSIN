@@ -68,6 +68,12 @@ void CM_Skeleton_Shield::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.SKELETON_SHIELD_2)
+	{
+		cout << "SKELETON_SHIELD_2 : " << m_bDefense << " | 몬스터 체력 " << m_tMonsterInfo.fHP << endl;
+
+	}
+
 	BossCage();
 
 	Monster_Tick(TimeDelta);
@@ -129,10 +135,25 @@ HRESULT CM_Skeleton_Shield::Render()
 
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
-  	if (!m_bDefense)
-		CM_Monster::On_Collision(pOther);
-	else
-		m_bDefense = false;
+	// 해당 몬스터의 경우 방어를 하여 체력을 감소하지 못 하게 해야 하기 때문에 다음과 같은 처리를 했다.
+	// 플레이어의 무기와 충돌했다면 무조건 HIT 상태로 넘어간다.
+	// 그럼 HIT 에서는 랜덤으로 방어, 또는 공격을 받도록 되어 있다. 공격을 받을 경우에 부모의 On_Collision() 을 호출한다.
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		if (L"Player_Weapon" == pOther->Get_Tag())
+			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;	
+	}
+
+	if (L"Skill_Paint" == pOther->Get_Tag())
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+	// 마르셀린의 경우 공격을 무조건으로 받아야 하기 때문에 다음과 같이 부모의 On_Collision() 을 호출했다.
+	if (L"Skill_Marceline" == pOther->Get_Tag())
+	{
+		CM_Monster::On_Collision(m_pOther);
+	}
+
+	m_pOther = pOther;
 }
 
 HRESULT CM_Skeleton_Shield::SetUp_Components()
@@ -390,10 +411,11 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 
 	if (1 == m_iRandomNum)
 	{
+		CM_Monster::On_Collision(m_pOther);
 		CM_Monster::Effect_Hit();
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
-		m_pModelCom->Set_AnimIndex(3, false);	// Hit
+		m_pModelCom->Set_AnimIndex(2, false);	// Hit
 		if (m_pModelCom->Get_Finished())
 		{
 			m_iRandomNum = 0;
@@ -402,13 +424,16 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 		}
 	}
-	else
+	else if (2 == m_iRandomNum)
 	{
-		m_pModelCom->Set_AnimIndex(2, false);	// 방어
+		m_bDefense = true;
+
+		m_pModelCom->Set_AnimIndex(3, false);	// 방어
 		if (m_pModelCom->Get_Finished())
 		{
-			m_bDefense = true;
 			m_iRandomNum = 0;
+
+			m_bDefense = false;
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}
 	}

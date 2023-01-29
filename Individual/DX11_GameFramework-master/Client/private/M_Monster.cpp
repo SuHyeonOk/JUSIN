@@ -67,7 +67,7 @@ void CM_Monster::Late_Tick(const _double& TimeDelta)
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
 	{
-		if (MONSTERINFO::STATE::DIE == m_tMonsterInfo.eState)
+		if (1 != m_fAlpha)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 		else
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -323,7 +323,7 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 	}
 	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
  	m_dPlayer_Attack_TimeAcc += TimeDelta;
-	if (0.5 < m_dPlayer_Attack_TimeAcc)											
+	if (0.7 < m_dPlayer_Attack_TimeAcc)											
 	{
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;

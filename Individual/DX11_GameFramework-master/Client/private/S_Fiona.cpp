@@ -60,7 +60,7 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 
 	// FIONE 일 때는 플레이어의 평소 공격력의 1.5배가 된다.
 	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
-	m_fSword_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.f;
+	m_fSword_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f;
 	m_fCat_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 2.f;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -207,7 +207,7 @@ HRESULT CS_Fiona::SetUp_Components()
 
 	if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
 		m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
-	else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+	else if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
 		m_pNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton_Boss.txt"));
 
 	return S_OK;

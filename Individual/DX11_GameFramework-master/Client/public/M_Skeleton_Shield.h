@@ -36,9 +36,10 @@ private:
 	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
-	void	BossCage();
+	void				BossCage();
 
 private:
+	CGameObject*			m_pOther = { nullptr };
 	vector<CGameObject*>	m_MonsterParts;
 	_float4					m_f4CenterPos;
 

@@ -54,14 +54,14 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
-	m_tMonsterInfo.fHP		= 70.0f;
-	m_tMonsterInfo.fMaxHP	= 70.0f;
+	m_tMonsterInfo.fHP		= 150.0f;
+	m_tMonsterInfo.fMaxHP	= 150.0f;
 	m_tMonsterInfo.fExp		= 70.0f;
 	m_tMonsterInfo.fAttack	= 20.0f;
 
 	m_pTransformCom->Set_Pos(_float3(MonsterDesc.f3Pos.x, 100.f, MonsterDesc.f3Pos.z));	// 처음에는 높이 있어서 보이지 않는다.
 
-	m_fAlpha = 0.0f;
+	m_fAlpha = 1.0f;
 
 	return S_OK;
 }
@@ -143,8 +143,6 @@ void CM_Magic_Man::On_Collision(CGameObject * pOther)
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())
 		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
-
-	//CM_Monster::On_Collision(pOther);
 }
 
 HRESULT CM_Magic_Man::SetUp_Components()
@@ -433,7 +431,7 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 	}
 	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
 	m_dPlayer_Attack_TimeAcc += TimeDelta;
-	if (0.5 < m_dPlayer_Attack_TimeAcc)
+	if (0.7 < m_dPlayer_Attack_TimeAcc)
 	{
 		m_bPlayer_Attack = false;
 		m_dPlayer_Attack_TimeAcc = 0;
@@ -473,19 +471,27 @@ void CM_Magic_Man::SmokeEffect()
 
 void CM_Magic_Man::Shader_Alpha(const _double & TimeDelta)
 {
-	cout << "몬스터 알파값 : " << m_fAlpha << endl;
-
 	if (false == m_bShader_Alpha)
 		return;
 
-	if (0 < m_fAlpha)
+	static _bool bAlpha;
+
+	if (false == bAlpha)
+	{
 		m_fAlpha -= _float(TimeDelta) * 1.5f;
-	else 
+
+		if (0 > m_fAlpha)
+			bAlpha = true;
+	}
+	else // true == bAlpha
 	{
 		m_fAlpha += _float(TimeDelta) * 1.5f;
-		
-		if (1 > m_fAlpha)
+
+		if (1 < m_fAlpha)
+		{
+			bAlpha = false;
 			m_bShader_Alpha = false;
+		}
 	}
 }
 

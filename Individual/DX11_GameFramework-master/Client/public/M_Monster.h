@@ -99,7 +99,7 @@ protected:	// 멤버 변수로 쓰이는 것
 	MONSTERDESC			m_tMonsterDesc;
 
 protected:	// Shader
-	_float				m_fAlpha = 1.f;
+	_float				m_fAlpha = 1.0f;
 	_bool				m_bShader_Hit = false;
 
 protected:	

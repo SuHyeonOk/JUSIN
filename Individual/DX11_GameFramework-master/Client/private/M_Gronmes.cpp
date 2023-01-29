@@ -290,24 +290,26 @@ void CM_Gronmes::Find_Tick()
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
-	_vector	vMyPos;
-	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4	f4MyPos;
-	XMStoreFloat4(&f4MyPos, vMyPos);
-
-	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
-	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
-	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+	if (0 == m_pModelCom->Get_Keyframes())
 	{
+		_vector	vMyPos;
+		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+		tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
+		tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+		tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 2.0f, f4MyPos.z - 0.5f);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return;
+		}
 		RELEASE_INSTANCE(CGameInstance);
-		return;
 	}
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CM_Gronmes::Attack_Tick(const _double& TimeDelta)
