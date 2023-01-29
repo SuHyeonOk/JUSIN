@@ -17,7 +17,7 @@ class CFood final : public CGameObject
 public:
 	typedef struct tagFoodInfo
 	{
-		enum FOODKIND { ROYAL_TART, BURRITO, FOOD_END };
+		enum FOODKIND { APPLE_PIE, ROYAL_TART, BURRITO, CHEWED, SOY_PEOPLE, FOOD_END };
 
 		_float3		fPos = _float3(0.f, 0.f, 0.f);
 		FOODKIND	eFoodKind;
@@ -49,25 +49,29 @@ private:
 	HRESULT SetUp_ShaderResources();
 
 private:
+	void		Chewed_Food(const _double & TimeDelta);
+	void		Soy_People(const _double & TimeDelta);
 	void		Effect_Create(const _double& TimeDelta);
 
 private:
-	FOODINFO	m_tinFoodInfo;
 	FOODINFO	m_tFoodInfo;
 
+	_bool		m_bNewFood = false;
 	_bool		m_bPlayer_Collider = false;
+
+	_double		m_Food_TimeAcc = 0;
 
 	_double		m_dDead_TimeAcc = 0;
 	_double		m_dFoodUp_TimeAcc = 0;
 	_double		m_dFoodHp_TimeAcc = 0;
 	_bool		m_bBeneficial = false;
 
-	_double		m_dKeyDown_TimeAcc = 0;
+	_double		m_dKeyDown_TimeAcc = 0;	// Test
 
 public:
-	static	CFood* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg = nullptr) override;
-	virtual void Free() override;
+	static	CFood*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject*	Clone(void* pArg = nullptr) override;
+	virtual void			Free() override;
 };
 
 END

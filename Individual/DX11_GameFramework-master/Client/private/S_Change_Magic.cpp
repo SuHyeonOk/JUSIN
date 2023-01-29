@@ -275,7 +275,7 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 	
 		// 죽을때 플레이어 원래 상태로 돌려놓는다.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL::SKILL_END);
+		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::SKILLSTATE::SKILLSTATE_END);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CJake * pGameObject = dynamic_cast<CJake*>(pGameInstance->Get_GameObjectPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Prototype_GameObject_Jake"), 0));
@@ -367,7 +367,8 @@ void CS_Change_Magic::KeyInput(const _double & TimeDelta)
 
 	if (m_OnMove)
 	{
-		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::RUN);
+		cout << "제이크 RUN 눌렀어" << endl;
+  		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::RUN);
 	}
 
 	if (m_OnMove && 15 <= m_pModelCom->Get_Keyframes())
@@ -426,7 +427,10 @@ void CS_Change_Magic::KeyInput(const _double & TimeDelta)
 	}
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
+	{
+		cout << "제이크 ATTACK 눌렀어" << endl;
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::ATTACK);
+	}
 
 
 	RELEASE_INSTANCE(CGameInstance);

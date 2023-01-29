@@ -74,22 +74,6 @@ void CJake::Tick(_double TimeDelta)
 	
 	__super::Tick(TimeDelta);
 
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//cout << "제이크 : " <<m_i << endl;
-
-	//if (pGameInstance->Key_Down(DIK_P))
-	//{
-	//	m_i++;
-	//}
-	//if (pGameInstance->Key_Down(DIK_O))
-	//{
-	//	m_i--;
-	//}
-	//m_pModelCom->Set_AnimIndex(m_i, false);
-
-	//RELEASE_INSTANCE(CGameInstance);
-
 	BossCage(TimeDelta);
 	Parts_Tick(TimeDelta);
 
@@ -426,6 +410,10 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 		CSkill_Manager::PLAYERSKILL::MARCELINT == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		m_bSkill = true;
 
+	if (CSkill_Manager::PLAYERSKILL::COIN == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill ||
+		CSkill_Manager::PLAYERSKILL::FOOD == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
+		m_bOneSkillStart = true;
+
 	if (m_bSkill)		// 20 초 동안 실행될 스킬의 시간을 계산한다.
 	{
 		m_dSkill_TimeAcc += TimeDelta;	// 스킬 사용 후 일정시간 뒤 초기화
@@ -440,14 +428,17 @@ void CJake::Player_Skill_Tick(_double TimeDelta)
 			m_dSkill_TimeAcc = 0;
 		}
 	}
-	else				// 스킬을 한 번 금방 사용하고 마는 경우 스킬 재생 시간을 3초로 짧게 준다.
+
+	if (m_bOneSkillStart)	// 3 초 동안 실행될 스킬의 시간을 계산한다.
 	{
-		m_dSkill_TimeAcc += TimeDelta;	// 코인과 푸드의 경우 객체가 금방 생성 되었다가 바로 스킬이 끝나도록 하면 2번 실행 되어 다음과 같은 대기 시간을 주었다.
+		m_dSkill_TimeAcc += TimeDelta;
 		if (3 < m_dSkill_TimeAcc)
 		{
-			m_bSkill_Clone = false;
-			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+			m_bOneSkillStart = false;
 
+			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+			m_bSkill_Clone = false;
 			m_dSkill_TimeAcc = 0;
 		}
 	}
@@ -815,7 +806,7 @@ void CJake::Skill_Marceline_Tick(_double TimeDelta)
 
 void CJake::Skill_Coin_Tick(_double TimeDelta)
 {
-	if (false == m_bSkill_Clone)
+	if (!m_bSkill_Clone)
 	{
 		m_bSkill_Clone = true;
 
@@ -823,9 +814,6 @@ void CJake::Skill_Coin_Tick(_double TimeDelta)
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 동전 생성
-
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		return;
 	}
 }
 
@@ -845,9 +833,6 @@ void CJake::Skill_Food_Tick(_double TimeDelta)
 		_float4 f4Look;
 		XMStoreFloat4(&f4Look, vLook);
 		CItemManager::GetInstance()->Food_Clone(_float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z));
-
-		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
-		return;
 	}
 }
 

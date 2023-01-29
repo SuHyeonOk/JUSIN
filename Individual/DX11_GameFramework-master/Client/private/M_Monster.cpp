@@ -209,7 +209,6 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 	{
 		// 몬스터 죽으면 UI 초기화
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
 		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 
 		// 알파값이 다 사라지면 죽음

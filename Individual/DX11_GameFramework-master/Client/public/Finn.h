@@ -92,6 +92,7 @@ private:
 	_bool		m_bIsSwim = false;
 
 	// Skill
+	_bool		m_bOneSkillStart = false;
 	_bool		m_bSkillStart = false;				// 스킬이 시작 되었다.
 	_double		m_dSkill_TimeAcc = 0;
 

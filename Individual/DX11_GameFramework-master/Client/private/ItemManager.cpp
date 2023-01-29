@@ -23,7 +23,7 @@ HRESULT CItemManager::Food_Clone(_float3 f3StartPos)
 
 	CFood::FOODINFO tFoodInfo;
 	tFoodInfo.fPos = f3StartPos;
-	tFoodInfo.eFoodKind = CFood::FOODINFO::FOODKIND(CUtilities_Manager::GetInstance()->Get_Random(0, 1));
+	tFoodInfo.eFoodKind = CFood::FOODINFO::FOODKIND(CUtilities_Manager::GetInstance()->Get_Random(0, 4));
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Food_Item"), TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 		return E_FAIL;

@@ -59,15 +59,6 @@ void CBoss_Fan::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_Y))
-	{
-		CGameObject::Set_Dead();
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
 	Monster_Tick(TimeDelta);
 }
 

@@ -376,7 +376,7 @@ void CM_Tree_Witch::Hit_Tick(const _double& TimeDelta)
 
 void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 {
-	//CM_Monster::Die(TimeDelta, 1.2f, 10, 3, 2);
+	//CM_Monster::Die(TimeDelta, 1.5f, 10, 3, 2);
 
 	// 몬스터가 죽고 나면 할 행동
 
@@ -384,7 +384,7 @@ void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 	{
 		// 몬스터 죽으면 UI 초기화
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(1.0f);
-		//CObj_Manager::GetInstance()->Set_Monster_Crash(false);
+		CUI_Manager::GetInstance()->Set_Ui_Monster(false);
 
 		// 알파값이 다 사라지면 죽음
 		CGameObject::Set_Dead();
@@ -403,7 +403,7 @@ void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 
 		CE_DieCenter::DIECENTERINFO tDieCenterInfo;									
 		tDieCenterInfo.eMonsterKind = CE_DieCenter::DIECENTERINFO::BROWN;
-		tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + 1.5f, vf4MyPos.z - 1.f);
+		tDieCenterInfo.f3Pos = _float3(vf4MyPos.x, vf4MyPos.y + 1.5f, vf4MyPos.z - 1.f);	// 요거 때문에 부모 것을 호출하지 않음 - 1.f
 		CEffect_Manager::GetInstance()->DieCenter_Create(tDieCenterInfo);
 	}
 

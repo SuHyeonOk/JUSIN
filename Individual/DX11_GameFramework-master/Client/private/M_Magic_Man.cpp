@@ -350,13 +350,13 @@ void CM_Magic_Man::Attack_Tick(const _double& TimeDelta)
 
 void CM_Magic_Man::Hit_Tick(const _double& TimeDelta)
 {
+	m_bShader_Alpha = true;
 	m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
 	if (m_pModelCom->Get_Finished())
 	{
 		m_bShader_Hit = false;
 
-		m_bShader_Alpha = true;
 		SmokeEffect();
 		Teleporting();
 	}
@@ -457,8 +457,6 @@ void CM_Magic_Man::Teleporting()
 
 	// ¥Ÿ¿Ω state
 	m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
-
-	m_tMonsterInfo.fHP = 100.0f;
 }
 
 void CM_Magic_Man::SmokeEffect()
@@ -485,10 +483,11 @@ void CM_Magic_Man::Shader_Alpha(const _double & TimeDelta)
 	}
 	else // true == bAlpha
 	{
-		m_fAlpha += _float(TimeDelta) * 1.5f;
+		m_fAlpha += _float(TimeDelta) * 1.7f;
 
 		if (1 < m_fAlpha)
 		{
+			m_fAlpha = 1.0f;
 			bAlpha = false;
 			m_bShader_Alpha = false;
 		}

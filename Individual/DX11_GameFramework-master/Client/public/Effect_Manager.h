@@ -43,6 +43,7 @@ public:
 	HRESULT		Effect_Swim_Create(_float3 f3Pos);
 	HRESULT		Effect_Hit_Create(_float3 f3Pos);
 	HRESULT		Beneficial(_float3 f3Pos, _float3 f3Color);
+	HRESULT		Food_MinusHp(_float3 f3Pos);
 	HRESULT		Food_Hp(_float3 f3Pos);
 	HRESULT		Food_Up(_float3 f3Pos);
 	HRESULT		Effect_Ink(_float3 f3Pos, _float3 f3Color);

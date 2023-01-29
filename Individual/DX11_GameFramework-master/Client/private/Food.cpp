@@ -35,23 +35,11 @@ HRESULT CFood::Initialize(void * pArg)
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	if (nullptr != pArg)
-		memcpy(&m_tinFoodInfo, pArg, sizeof(FOODINFO));
+		memcpy(&m_tFoodInfo, pArg, sizeof(FOODINFO));
 
-	if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
-	{
-		m_wsTag = L"Item_Food_Tart";
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinFoodInfo.fPos.x, m_tinFoodInfo.fPos.y, m_tinFoodInfo.fPos.z);
-	}
-	else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
-	{
-		m_wsTag = L"Item_Food_Burrito";
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinFoodInfo.fPos.x, m_tinFoodInfo.fPos.y, m_tinFoodInfo.fPos.z);
-	}
-
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	GameObjectDesc.TransformDesc.f3Pos = _float3(m_tFoodInfo.fPos.x, m_tFoodInfo.fPos.y, m_tFoodInfo.fPos.z);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -71,6 +59,28 @@ void CFood::Tick(_double TimeDelta)
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 
 	Effect_Create(TimeDelta);
+
+	if (true == m_bNewFood)
+	{
+		if (FOODINFO::CHEWED == m_tFoodInfo.eFoodKind)
+			Chewed_Food(TimeDelta);
+		else if (FOODINFO::SOY_PEOPLE == m_tFoodInfo.eFoodKind)
+			Soy_People(TimeDelta);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -92,8 +102,6 @@ void CFood::Tick(_double TimeDelta)
 		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 		_float4 f4Pos;
 		XMStoreFloat4(&f4Pos, vPlayerPos);
-
-
 	}
 	else
 		m_dKeyDown_TimeAcc = 0;
@@ -162,10 +170,14 @@ void CFood::On_Collision(CGameObject * pOther)
 		{
 			m_bPlayer_Collider = true;
 
-			if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
+			if (FOODINFO::APPLE_PIE == m_tFoodInfo.eFoodKind)		// 그냥 체력 30 추가
 				CObj_Manager::GetInstance()->Set_Player_PlusHP(30.0f);
-			else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
+			else if (FOODINFO::ROYAL_TART == m_tFoodInfo.eFoodKind)	// 전체 체력의 반 추가
+				CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax / 2.0f);
+			else if (FOODINFO::BURRITO == m_tFoodInfo.eFoodKind)	// 전체 체력 추가
 				CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+			else
+				m_bNewFood = true;
 		}
 	}
 }
@@ -182,17 +194,38 @@ HRESULT CFood::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.ROYAL_TART)
+	if (m_tFoodInfo.eFoodKind == FOODINFO::ROYAL_TART)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Royal_Tart"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
-	else if (m_tinFoodInfo.eFoodKind == m_tFoodInfo.BURRITO)
+	else if (m_tFoodInfo.eFoodKind == FOODINFO::BURRITO)
 	{
 		/* For.Com_Model */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Burrito"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (m_tFoodInfo.eFoodKind == FOODINFO::APPLE_PIE)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Apple_Pie"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (m_tFoodInfo.eFoodKind == FOODINFO::CHEWED)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Chewed_Food"), TEXT("Com_Model"),
+			(CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else if (m_tFoodInfo.eFoodKind == FOODINFO::SOY_PEOPLE)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Soy_People"), TEXT("Com_Model"),
 			(CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
@@ -231,9 +264,66 @@ HRESULT CFood::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CFood::Chewed_Food(const _double & TimeDelta)
+{
+	// 10초 동안 플레이어 체력 1씩 증가.
+
+	m_dDead_TimeAcc += TimeDelta;
+	if (10 < m_dDead_TimeAcc)
+		CGameObject::Set_Dead();
+
+	m_Food_TimeAcc += TimeDelta;
+	if (1 < m_Food_TimeAcc)
+	{
+		CObj_Manager::GetInstance()->Set_Player_PlusHP(5.0f);
+		m_Food_TimeAcc = 0;
+	}
+
+	// 이펙트
+	m_dFoodHp_TimeAcc += TimeDelta;
+	if (0.5 < m_dFoodHp_TimeAcc)
+	{
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		CEffect_Manager::GetInstance()->Food_Hp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+		m_dFoodHp_TimeAcc = 0;
+	}
+}
+
+void CFood::Soy_People(const _double & TimeDelta)
+{
+	// 10초 동안 플레이어 체력 1씩 감소.
+
+	m_dDead_TimeAcc += TimeDelta;
+	if (10 < m_dDead_TimeAcc)
+		CGameObject::Set_Dead();
+
+	m_Food_TimeAcc += TimeDelta;
+	if (1 < m_Food_TimeAcc)
+	{
+		CObj_Manager::GetInstance()->Set_Player_PlusHP(-5.0f);
+		m_Food_TimeAcc = 0;
+	}
+
+	// 이펙트
+	m_dFoodHp_TimeAcc += TimeDelta;
+	if (0.5 < m_dFoodHp_TimeAcc)
+	{
+		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+		_float4 f4PlayerPos;
+		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
+		CEffect_Manager::GetInstance()->Food_MinusHp(_float3(f4PlayerPos.x, f4PlayerPos.y, f4PlayerPos.z));
+		m_dFoodHp_TimeAcc = 0;
+	}
+}
+
 void CFood::Effect_Create(const _double & TimeDelta)
 {
-	if (!m_bPlayer_Collider)
+	if (true == m_bNewFood)
+		return;
+
+	if (false == m_bPlayer_Collider)
 		return;
 
 	m_dDead_TimeAcc += TimeDelta;
