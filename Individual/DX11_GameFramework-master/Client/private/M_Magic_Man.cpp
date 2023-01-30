@@ -416,16 +416,14 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 	if (0.1 < m_dPlayer_Attack_TimeAcc)
 		m_bShader_Hit = false;
 
-	// 공격 당할 때 플레이어 바라보기
-	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
-		// 몬스터 상태 변경
-		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;														// 몬스터 상태 변경
 
-		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());					// 플레이어를 바라보면서
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백
+
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
 		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
 	}

@@ -272,6 +272,7 @@ void CCoin::Random_Jump(const _double & TimeDelta)
 	}
 	else
 	{
+		m_pTransformCom->Set_Pos(0.0f);
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	}
 }

@@ -36,6 +36,7 @@ private:
 	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
 
+	void				Hit_Process(const _double & TimeDelta);
 	void				BossCage();
 
 private:
@@ -47,7 +48,6 @@ private:
 	_bool					m_bAttack = false;
 
 	_int					m_iRandomNum = 0;
-	_bool					m_bDefense = false;
 
 public:
 	static	CM_Skeleton_Shield*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

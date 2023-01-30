@@ -5,6 +5,7 @@
 #include "Obj_Manager.h"
 #include "ItemManager.h"
 #include "Utilities_Manager.h"
+#include "UI_Manager.h"
 
 #include "W_Skeleton_Shield.h"
 #include "Bone.h"
@@ -66,11 +67,12 @@ HRESULT CM_Skeleton_Shield::Initialize(void * pArg)
 
 void CM_Skeleton_Shield::Tick(_double TimeDelta)
 {
-	__super::Tick(TimeDelta);
+	//__super::Tick(TimeDelta);
 
 	BossCage();
 
 	Monster_Tick(TimeDelta);
+	Hit_Process(TimeDelta);
 
 	if (m_tMonsterInfo.ATTACK == m_tMonsterInfo.eState)
 		m_MonsterParts[0]->Tick(TimeDelta);
@@ -129,8 +131,18 @@ HRESULT CM_Skeleton_Shield::Render()
 
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
-	if (false == m_bDefense)
-		CM_Monster::On_Collision(pOther);
+	// 이 몬스터의 경우에는 방
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		if (L"Player_Weapon" == pOther->Get_Tag())
+			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+	}
+
+	if (L"Skill_Paint" == pOther->Get_Tag())
+		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
+
+	if (L"Skill_Marceline" == pOther->Get_Tag())
+		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
 }
 
 HRESULT CM_Skeleton_Shield::SetUp_Components()
@@ -385,9 +397,10 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 {
 	if (0 == m_iRandomNum)
 		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(1, 2);
-
+	m_iRandomNum = 2;
 	if (1 == m_iRandomNum)
 	{
+		m_bPlayer_Attack = true;
 		CM_Monster::Effect_Hit();
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
@@ -402,14 +415,11 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 	}
 	else if (2 == m_iRandomNum)
 	{
-		m_bDefense = true;
-
 		m_pModelCom->Set_AnimIndex(3, false);	// 방어
 		if (m_pModelCom->Get_Finished())
 		{
 			m_iRandomNum = 0;
-
-			m_bDefense = false;
+			
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 		}
 	}
@@ -418,6 +428,38 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 void CM_Skeleton_Shield::Die_Tick(const _double& TimeDelta)
 {
 	CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 6);
+}
+
+void CM_Skeleton_Shield::Hit_Process(const _double & TimeDelta)
+{
+	if (!m_bPlayer_Attack)		// 플레이어와 충돌 했을 때
+		return;
+
+	// 몬스터 공격 받는 중...
+
+	// 몬스터 Hit 셰이더 흰색 깜박!
+	m_bShader_Hit = true;
+
+	if (0.1 < m_dPlayer_Attack_TimeAcc)
+		m_bShader_Hit = false;
+
+	// 맨 처음 한 번 체력을 깍는다.
+	if (0 == m_dPlayer_Attack_TimeAcc)
+	{
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());					// 플레이어를 바라보면서
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백
+
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI 에 내 체력 넘겨주기
+	}
+	// 몬스터 무적 상태 (안 하면 계속 공격 받음)
+	m_dPlayer_Attack_TimeAcc += TimeDelta;
+	if (0.7 < m_dPlayer_Attack_TimeAcc)
+	{
+		m_bPlayer_Attack = false;
+		m_dPlayer_Attack_TimeAcc = 0;
+		return;
+	}
 }
 
 void CM_Skeleton_Shield::BossCage()
