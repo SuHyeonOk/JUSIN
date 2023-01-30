@@ -87,9 +87,11 @@ private:
 	_bool				m_bMovePos = false;
 	_bool				m_bSkill = false;
 	_double				m_dSkill_TimeAcc = 0;
-	
-	// A_Bullet_Tick()
+
 	_int				m_iBullet_Count = 0;
+
+	// A_Move_Tick()
+	_bool				m_bAttack_Animation = false;
 
 	// A_Move_Tick()
 	_float4				m_f4PlayerPos = { 0.0f, 0.0f, 0.0f, 1.0f };

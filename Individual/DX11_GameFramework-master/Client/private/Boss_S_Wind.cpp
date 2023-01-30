@@ -107,7 +107,7 @@ HRESULT CBoss_S_Wind::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(4);
+	m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 
@@ -153,7 +153,7 @@ HRESULT CBoss_S_Wind::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+	ColliderDesc.vSize = _float3(0.6f, 0.6f, 0.6f);
 	ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

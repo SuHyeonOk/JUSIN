@@ -381,15 +381,10 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Find_Tick()
 {
-	m_bFind = true;	// 플레이어를 찾았다면 플레이어에게 다가가기 위해서 MOVE로 이동한다.
-
-	if (25 == m_pModelCom->Get_Keyframes())
-		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-
-	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-
-	if (0 == m_pModelCom->Get_Keyframes())
+	if (false == m_bFindUI)
 	{
+		m_bFindUI = true;
+
 		// 3D UI 로 느낌표를 띄워주기 위해서 작성한 코드
 		_vector	vMyPos;
 		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -411,6 +406,16 @@ void CM_PigWarrior::Find_Tick()
 
 		RELEASE_INSTANCE(CGameInstance);
 	}
+
+	m_bFind = true;	// 플레이어를 찾았다면 플레이어에게 다가가기 위해서 MOVE로 이동한다.
+
+	if (25 == m_pModelCom->Get_Keyframes())
+	{
+		m_bFindUI = false;
+		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
+	}
+
+	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 }
 
 void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)

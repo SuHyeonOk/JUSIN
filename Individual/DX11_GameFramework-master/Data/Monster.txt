@@ -2,7 +2,9 @@ Layer_PigWarrior_BEE__0|-2.44267|0|1.64792
 Layer_Pigs_COWBOY__0|-20.8992|-4.76837e-07|3.08911
 Layer_PigWarrior_WORKER__0|-40.5548|0|37.1877
 Layer_Pigs_SR__0|-35.3444|0|49.6137
-Layer_Gronmes_BLUE__0|-9.00075|-9.53674e-07|38.1613
+Layer_PigWarrior_BEE__1|-35.3444|0|49.6137
+Layer_Gronmes_BLUE__0|-35.3444|0|49.6137
+Layer_Gronmes_BLUE__1|-9.00075|-9.53674e-07|38.1613
 Layer_Gronmes_RED__0|-22.0256|0|59.3596
 Layer_Gronmes_YELLOW__0|-9.34955|0|61.1688
 Layer_Tree_Witch__0|-27.8394|0|39.6953
