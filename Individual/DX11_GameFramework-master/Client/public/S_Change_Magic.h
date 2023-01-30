@@ -62,6 +62,8 @@ private:
 	_float3					m_f3Pos = _float3(0.f, 0.f, 0.f);
 	
 	_bool					m_OnMove = false;
+	_float					m_fAngle = 0.0f;
+	_float4					m_f4NewLook = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	_double					m_dSkillClone_TimeAcc = 0;
 	_double					m_dAttack_TimeAcc = 0;

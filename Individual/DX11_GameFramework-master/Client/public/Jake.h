@@ -91,6 +91,8 @@ private:
 	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
 
 	_bool		m_OnMove = false;			// Key_Input() : 키를 누르면 treu 됨
+	_float		m_fAngle = 0.0f;
+	_float4		m_f4NewLook = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	//////////////////////////// 플레이어 일 때
 	_bool		m_bStru = false;			// 스턴

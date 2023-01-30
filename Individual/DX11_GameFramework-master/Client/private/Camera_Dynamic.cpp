@@ -139,19 +139,22 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_UP))
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)	// 플레이어가 공격중인 상태에서는 움직이지 않는다.
 	{
-		if (-12.1f < m_fYZ_Move)
-			m_fYZ_Move -= _float(TimeDelta) * 0.1f;
+		if (pGameInstance->Key_Pressing(DIK_UP))
+		{
+			if (-12.1f < m_fYZ_Move)
+				m_fYZ_Move -= _float(TimeDelta) * 0.1f;
 
-		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
-	}
-	if (pGameInstance->Key_Pressing(DIK_DOWN))
-	{
-		if (-11.9f > m_fYZ_Move)
-			m_fYZ_Move += _float(TimeDelta) * 0.1f;
-	
-		m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+			m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+		}
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+		{
+			if (-11.9f > m_fYZ_Move)
+				m_fYZ_Move += _float(TimeDelta) * 0.1f;
+
+			m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+		}
 	}
 
 	CObj_Manager::PLAYERINFO	ePlayerInfo;

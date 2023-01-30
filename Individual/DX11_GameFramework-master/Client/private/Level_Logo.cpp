@@ -48,7 +48,7 @@ void CLevel_Logo::Late_Tick(_double TimeDelta)
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
 			return;
 	}
-
+#ifdef F2_SKELETON
 	if (pGameInstance->Key_Down(DIK_F2))
 	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
@@ -60,6 +60,7 @@ void CLevel_Logo::Late_Tick(_double TimeDelta)
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON_BOSS))))
 			return;
 	}
+#endif
 
 	Safe_Release(pGameInstance);
 }

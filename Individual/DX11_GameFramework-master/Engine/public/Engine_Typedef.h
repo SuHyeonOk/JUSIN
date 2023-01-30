@@ -27,10 +27,10 @@ namespace Engine
 	typedef		XMFLOAT3				_float3;
 	typedef		XMFLOAT4				_float4;
 	typedef		XMVECTOR				_vector;
-	typedef		FXMVECTOR				_fvector;
-	typedef		CXMVECTOR				_cvector;
-	typedef		HXMVECTOR				_hvector;
-	typedef		GXMVECTOR				_gvector;
+	typedef		FXMVECTOR				_fvector;	// 매개변수로 3개 이하
+	typedef		CXMVECTOR				_cvector;	// 4개
+	typedef		HXMVECTOR				_hvector;	// 6개
+	typedef		GXMVECTOR				_gvector;	// 7개
 
 	typedef		XMFLOAT4X4				_float4x4;
 	typedef		XMMATRIX				_matrix;

@@ -51,7 +51,8 @@ private:
 	HRESULT		SetUp_ShaderResources();
 
 private:
-	void		CurrentState(_double TimeDelta);
+	void		CurrentState(const _double & TimeDelta);
+	void		Random_Jump(const _double & TimeDelta);
 
 private:
 	COININFO	m_tinCoinInfo;
@@ -63,10 +64,16 @@ private:
 
 	_bool		m_bOneCheck = false;
 
+	// RandomJump()
+	_bool		m_bBigJump = false;		// 큰 점프 후 작은 점프 3번
+	_float		m_fSmallJump = 0.0f;	// 작은 점프를 저장할 변수
+	_bool		m_bRotation = false;	// 점프 가 끝나면 회전할 것 인지
+	_bool		m_bOneDir = false;		// 점프 중 방향 한 번 저장
+
 public:
-	static	CCoin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg = nullptr) override;
-	virtual void Free() override;
+	static	CCoin*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject*	Clone(void* pArg = nullptr) override;
+	virtual void			Free() override;
 };
 
 END

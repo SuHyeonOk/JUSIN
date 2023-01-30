@@ -71,6 +71,8 @@ private:
 
 	_bool					m_bHurts = false;
 	_bool					m_OnMove = false;
+	_float					m_fAngle = 0.0f;
+	_float4					m_f4NewLook = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	_uint					m_iStun_Count = 0;			// 스턴 애니메이션 두 번
 

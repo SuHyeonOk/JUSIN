@@ -77,7 +77,6 @@ public:
 	// Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
 	void Turn(_fvector vAxis, _double TimeDelta);		/* Dynamic 어느 축을 기준으로 시간만큼 회전하는지*/
 	void Rotation(_fvector vAxis, _float fRadian);		/* Static 어떤 축을 기준으로 어느 각도를 바라보는지*/
-	_bool MoveTurn(_float fRadian, _double TimeDelta);		// 플레이어가 이동할 때 사용할 Turn
 
 	/* 쳐다본다. */
 	/*void LookAt(const CTransform* pTarget);*/
@@ -101,24 +100,19 @@ public:
 
 public: // sh
 	bool		Jump(_float fHeight, _float fSpeed, _double TimeDelta);
-	void		RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false, _bool bTurn = true);
+	//void		RandomJump(_float iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir = false, _bool bTurn = true);
+	_vector		LinearVector(_fvector vSour, _fvector vDest, _float fAngle);
+	void		PlayerMove(_fvector vNewLook, const _double & TimeDelta);
 
 private:	
 	_float4x4				m_WorldMatrix;
 	TRANSFORMDESC			m_TransformDesc;
 
 private:
+	_float		m_fAngle = 0.0f;	// 플레이어가 이동할 Look 을 천천히 계산한다.
+
 	// Jump()
 	_bool		m_bJump = false;
-
-	// RandomJump()
-	// 큰 점프 후 작은 점프 3번
-	_bool		m_bBigJump = false;
-	_float		m_fSmallJump = 0.0f;
-	// 점프 후 회전
-	_bool		m_bRotation = false; //
-	// 점프 중 방향 한 번만 저장
-	_bool		m_bOneDir = false;
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

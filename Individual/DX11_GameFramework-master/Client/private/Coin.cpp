@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Utilities_Manager.h"
 
 CCoin::CCoin(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -226,14 +227,54 @@ HRESULT CCoin::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CCoin::CurrentState(_double TimeDelta)
+void CCoin::CurrentState(const _double & TimeDelta)
 {
 	if (m_tinCoinInfo.eState == m_tCoinInfo.IDLE)	// 평상시에 회전하고 있다
 	{
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	}
 	else											// 동전 튀어나오는
-		m_pTransformCom->RandomJump(1200, 6.f, 0.5f, TimeDelta);
+		Random_Jump(TimeDelta);
+}
+
+void CCoin::Random_Jump(const _double & TimeDelta)
+{
+	_float fRandonHight = CUtilities_Manager::GetInstance()->Get_Random(0.6f, 7.0f);
+	_float fSpeed = CUtilities_Manager::GetInstance()->Get_Random(6.0, 8.0f);
+	_float fminusHeight = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 0.6f);
+
+	if (!m_bBigJump) // 큰 점프
+	{
+		m_fSmallJump = 0.f;
+
+		if (m_pTransformCom->Jump(fRandonHight, fSpeed, TimeDelta))
+			m_bBigJump = true;
+	}
+	else // 작은 점프
+	{
+		if (fRandonHight <= m_fSmallJump)
+			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
+
+		if (m_pTransformCom->Jump((fRandonHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
+			m_fSmallJump += fminusHeight;
+	}
+
+	if (!m_bRotation)
+	{
+		if (!m_bOneDir)
+		{
+			m_bOneDir = true;
+
+			_float fRandonRot = (_float)(rand() % 360);
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonRot));
+		}
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+	else
+	{
+		m_pTransformCom->Set_Pos(0.f);
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	}
 }
 
 CCoin * CCoin::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

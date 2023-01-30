@@ -18,8 +18,8 @@ public:
 	virtual ~CUtilities_Manager() = default;
 
 public:	// ·£´ı°ª »Ì´Â ÇÔ¼ö
-	_int Get_Random(_int iStart, _int iEnd);
-	_float Get_Random(_float fStart, _float fEnd);
+	_int	Get_Random(_int iStart, _int iEnd);
+	_float	Get_Random(_float fStart, _float fEnd);
 
 public:	// ·£´ıÇÑ ÁÂÇ¥ »Ì´Â ÇÔ¼ö
 	_bool	Get_RandomPos(CTransform* pTransform, _float4 f4FirstPos, _float fRange, _double TimeDelta, _float fStart = 0.f, _float fEnd = 5.f);

@@ -531,49 +531,49 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	{
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::RUN);
 		m_pTransformCom->Go_Straight(TimeDelta, m_pNavigationCom);
+		m_pTransformCom->PlayerMove(XMVectorSet(m_f4NewLook.x, m_f4NewLook.y, m_f4NewLook.z, m_f4NewLook.w), TimeDelta);
 	}
 		
 #pragma region ÀÌµ¿
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(0.f));
+		m_f4NewLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
+			m_f4NewLook = { 0.5f, 0.0f, 0.5f, 0.0f };
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+			m_f4NewLook = { -0.5f, 0.0f, 0.5f, 0.0f };
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
 		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(90.f));
+		m_f4NewLook = { 1.0f, 0.0f, 0.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(45.f));
-
+			m_f4NewLook = { 0.5f, 0.0f, 0.5f, 0.0f };
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+			m_f4NewLook = { 0.5f, 0.0f, -0.5f, 0.0f };
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
 		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(180.f));
+		m_f4NewLook = { 0.0f, 0.0f, -1.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(135.f));
+			m_f4NewLook = { 0.5f, 0.0f, -0.5f, 0.0f };
 		if (pGameInstance->Key_Pressing(DIK_LEFT))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+			m_f4NewLook = { -0.5f, 0.0f, -0.5f, 0.0f };
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
 		m_OnMove = true;
-		m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(270.f));
+		m_f4NewLook = { -1.0f, 0.0f, 0.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(315.f));
+			m_f4NewLook = { -0.5f, 0.0f, 0.5f, 0.0f };
 		if (pGameInstance->Key_Pressing(DIK_DOWN))
-			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(225.f));
+			m_f4NewLook = { -0.5f, 0.0f, -0.5f, 0.0f };
 	}
 #pragma endregion
 

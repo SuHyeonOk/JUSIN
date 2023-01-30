@@ -65,10 +65,8 @@ void CPage::Tick(_double TimeDelta)
 
 	// 만약 점프 상태라면 뛰어서 떨어진다.
 	if (true == m_tinPageInfo.bJemp)
-		m_pTransformCom->RandomJump(600, 6.f, 0.5f, TimeDelta);
+		Random_Jump(TimeDelta);
 
-	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-	//m_pTransformCom->Jump(0.5f, 0.3f, TimeDelta);
 }
 
 void CPage::Late_Tick(_double TimeDelta)
@@ -228,6 +226,45 @@ HRESULT CPage::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CPage::Random_Jump(const _double & TimeDelta)
+{
+	_float fRandonHight = 6.0f;
+	_float fSpeed = 6.0f;
+	_float fminusHeight = 0.5f;
+
+	if (!m_bBigJump) // 큰 점프
+	{
+		m_fSmallJump = 0.f;
+
+		if (m_pTransformCom->Jump(fRandonHight, fSpeed, TimeDelta))
+			m_bBigJump = true;
+	}
+	else // 작은 점프
+	{
+		if (fRandonHight <= m_fSmallJump)
+			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
+
+		if (m_pTransformCom->Jump((fRandonHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
+			m_fSmallJump += fminusHeight;
+	}
+
+	if (!m_bRotation)
+	{
+		if (!m_bOneDir)
+		{
+			m_bOneDir = true;
+
+			_float fRandonRot = (_float)(rand() % 360);
+			m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonRot));
+		}
+		m_pTransformCom->Go_Straight(TimeDelta);
+	}
+	else
+	{
+		m_pTransformCom->Set_Pos(0.f);
+	}
 }
 
 //_bool CPage::Rotation(_double dStartTime, _double dStopTime, _double TimeDelta)

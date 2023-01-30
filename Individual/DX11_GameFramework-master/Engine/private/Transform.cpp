@@ -263,26 +263,6 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian) //임 의의 축을 기준으�
 	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 }
 
-_bool CTransform::MoveTurn(_float fRadian, _double TimeDelta)
-{
-	_float		fCalculating = m_TransformDesc.fRotationPerSec * _float(TimeDelta);
-
-	if (fRadian == fCalculating)
-		return true;
-
-	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), fCalculating);
-
-	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
-	_vector		vUp = Get_State(CTransform::STATE_UP);
-	_vector		vLook = Get_State(CTransform::STATE_LOOK);
-
-	Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
-	Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
-	Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
-
-	return false;
-}
-
 void CTransform::LookAt(_fvector vTargetPos, _bool bIsInv)
 {
 	_float3		vScale = Get_Scaled();
@@ -366,8 +346,8 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 {
 	// fHeight 까지 fSpeed 로 올라 갔다가 0에 닿으면 true 를 return 한다.
 
-	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
 	_vector	vUp = Get_State(CTransform::STATE_UP);
+	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
 
 	_float4 f4Position;
 	XMStoreFloat4(&f4Position, vPosition);
@@ -393,51 +373,92 @@ bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
 	return false;
 }
 
-void CTransform::RandomJump(_int iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir, _bool bTurn)
+//void CTransform::RandomJump(_float iRandHeight, _float fSpeed, _float fminusHeight, _double TimeDelta, _bool bOneDir, _bool bTurn)
+//{
+//	// 랜덤 높이로 큰 점프 한 번, 작은 점프 3번을 하면서 랜덤 회전값 만큼 이동한다. (1번 실행)
+//	// 이 앞 내용이 다 끝나면 제자리에서 회전한다. (계속 실행)
+//
+//	// (_float)(rand() % 1000) / 150.1
+//	//_float fRandonHight = (_float)(rand() % iRandHeight) / 150.1f;
+//
+//	_float fRandonHight	= iRandHeight;
+//
+//	if (!m_bBigJump) // 큰 점프
+//	{
+//		m_fSmallJump = 0.f;
+//
+//		if (Jump(fRandonHight, fSpeed, TimeDelta))
+//			m_bBigJump = true;
+//	}
+//	else // 작은 점프
+//	{
+//		if (fRandonHight <= m_fSmallJump)
+//			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
+//
+//		if (Jump((fRandonHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
+//			m_fSmallJump += fminusHeight;
+//	}
+//
+//	if (!m_bRotation)
+//	{
+//		if (!m_bOneDir)
+//		{
+//			m_bOneDir = true;
+//
+//			_float fRandonRot = (_float)(rand() % 360);
+//			Rotation(Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonRot));
+//		}
+//		Go_Straight(TimeDelta);
+//	}
+//	else
+//	{
+//		Set_Pos(0.f);
+//
+//		if (false == bTurn)
+//			return;
+//		
+//		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+//	}
+//}
+
+_vector CTransform::LinearVector(_fvector vSour, _fvector vDest, _float fAngle)
 {
-	// 랜덤 높이로 큰 점프 한 번, 작은 점프 3번을 하면서 랜덤 회전값 만큼 이동한다. (1번 실행)
-	// 이 앞 내용이 다 끝나면 제자리에서 회전한다. (계속 실행)
+	// XMVector3Normalize : 방향 벡터 이기 때문에 Normalize 을 한다.
+	// XMVectorSetW : 방향 벡터이기 때문에 w 값을 0.0f 로 초기화 해준다.
+	return XMVectorSetW(XMVector3Normalize(vSour * (1 - fAngle) + (vDest * fAngle)), 0.0f);
+}
 
-	// (_float)(rand() % 1000) / 150.1
-	_float fRandonHight = (_float)(rand() % iRandHeight) / 150.1f;
+void CTransform::PlayerMove(_fvector vNewLook, const _double & TimeDelta)
+{
+	// 계속 적으로 내적을 하고 결과에 따라 Look 이 변경될 때 다음을 실행한다.
+	_vector vCurrentLook = Get_State(CTransform::STATE_LOOK);
 
-	if (!m_bBigJump) // 큰 점프
+	_float fArithmetic = XMVectorGetX(XMVector3Dot(vCurrentLook, vNewLook));
+	
+	if (1.0f != fArithmetic)
 	{
-		m_fSmallJump = 0.f;
-
-		if (Jump(fRandonHight, fSpeed, TimeDelta))
-			m_bBigJump = true;
+		if (1 > m_fAngle)
+			m_fAngle += _float(TimeDelta);
 	}
-	else // 작은 점프
+	else //if (1.0f == fArithmetic)
 	{
-		if (fRandonHight <= m_fSmallJump)
-			m_bRotation = true; // 큰 점프 후 작은 점프 3번 후 회전
-
-		if (Jump((fRandonHight - m_fSmallJump), (fSpeed + m_fSmallJump), TimeDelta))
-			m_fSmallJump += fminusHeight;
+		m_fAngle = 0;
 	}
 
-	if (!m_bRotation)
+	if (-1.0f == fArithmetic)
 	{
-		if (!m_bOneDir)
-		{
-			_float fRandonRot = (_float)(rand() % 360);
-			Rotation(Get_State(CTransform::STATE_UP), XMConvertToRadians(fRandonRot));
-
-			m_bOneDir = true;
-		}
-		Go_Straight(TimeDelta);
+		Turn({ 0.0f, 1.0f, 0.0f, 1.0f }, TimeDelta * 10.0);
 	}
 	else
 	{
-		Set_Pos(0.f);
+		// LinearVector() 함수를 이용하여 내가 바라봐야 하는 Look 에 대한 값을 m_fAngle 을 통해 천천히 받아온다.
+		_vector vTempLook = LinearVector(vCurrentLook, vNewLook, m_fAngle);
+		_vector vTempRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vTempLook);
+		_vector vTempUp = XMVector3Cross(vTempLook, vTempRight);
 
-		if (false == bTurn)
-			return;
-		
-		Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
-
-		return;
+		Set_State(CTransform::STATE_RIGHT, vTempRight);
+		Set_State(CTransform::STATE_UP, vTempUp);
+		Set_State(CTransform::STATE_LOOK, vTempLook);
 	}
 }
 
