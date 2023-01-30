@@ -417,7 +417,7 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.1f, 7, 5, 2);
+	CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 6);
 }
 
 void CM_Skeleton_Shield::BossCage()

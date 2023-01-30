@@ -350,7 +350,7 @@ void CM_Skeleton_Archer::Hit_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.1f, 6, 4, 2);
+	CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 5);
 }
 
 void CM_Skeleton_Archer::BossCage()

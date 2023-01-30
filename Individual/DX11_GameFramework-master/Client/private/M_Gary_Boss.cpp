@@ -59,8 +59,8 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_eState		= IDLE;
 	m_eAnimState	= IDLE;
-	m_fHP			= 1000.0f;
-	m_fMaxHP		= 1000.0f;
+	m_fHP			= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1000.0f;
+	m_fMaxHP		= m_fHP;
 	m_fAttack		= 50.0f;
 	m_fExp			= 1000.0f;
 

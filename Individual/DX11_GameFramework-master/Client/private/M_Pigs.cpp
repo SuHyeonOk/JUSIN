@@ -349,7 +349,7 @@ void CM_Pigs::Hit_Tick(const _double& TimeDelta)
 
 void CM_Pigs::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.0f, 5, 2, 0);
+	CM_Monster::Die(TimeDelta, 1.0f, 7, 5, 3);
 }
 
 CM_Pigs * CM_Pigs::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

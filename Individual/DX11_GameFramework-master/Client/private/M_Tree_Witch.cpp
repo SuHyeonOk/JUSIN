@@ -376,8 +376,6 @@ void CM_Tree_Witch::Hit_Tick(const _double& TimeDelta)
 
 void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 {
-	//CM_Monster::Die(TimeDelta, 1.5f, 10, 3, 2);
-
 	// 몬스터가 죽고 나면 할 행동
 
 	if (0.0f >= m_fAlpha)
@@ -416,7 +414,7 @@ void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 		_float4 vf4MyPos;
 		XMStoreFloat4(&vf4MyPos, vMyPos);
 
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 10, 3, 2); 	// 동전 생성
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 13, 5, 6); 	// 동전 생성
 
 		m_OneCoin = true;
 	}

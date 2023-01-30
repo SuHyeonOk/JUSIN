@@ -915,7 +915,7 @@ void CFinn::Skill_Coin_Tick(_double TimeDelta)
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
-		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 3, 3, 6); 	// 悼傈 积己
+		CItemManager::GetInstance()->RandomCoin_Clone(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), 5, 5, 12); 	// 悼傈 积己
 	}
 }
 

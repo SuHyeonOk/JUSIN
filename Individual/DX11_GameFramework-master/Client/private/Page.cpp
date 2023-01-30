@@ -230,8 +230,8 @@ HRESULT CPage::SetUp_ShaderResources()
 
 void CPage::Random_Jump(const _double & TimeDelta)
 {
-	_float fRandonHight = 6.0f;
-	_float fSpeed = 6.0f;
+	_float fRandonHight = 1.0f;
+	_float fSpeed = 7.0f;
 	_float fminusHeight = 0.5f;
 
 	if (!m_bBigJump) // Å« Á¡ÇÁ
