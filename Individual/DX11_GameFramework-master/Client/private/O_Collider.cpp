@@ -46,25 +46,6 @@ HRESULT CO_Collider::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	switch (m_ColliderInfo.eType)
-	{
-	case COLLIDERINFO::TYPE::CAGE_FRONT:
-		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 50.0f);
-	break;
-
-	case COLLIDERINFO::TYPE::CAGE_BACK:
-		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 15.0f);
-	break;
-
-	case COLLIDERINFO::TYPE::CAGE_SIDE_L:
-		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 15.0f);
-	break;
-
-	case COLLIDERINFO::TYPE::CAGE_SIDE_R:
-		m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 15.0f);
-	break;
-	}
-
 	return S_OK;
 }
 
@@ -87,7 +68,7 @@ void CO_Collider::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	//CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_COLLIDER, this);
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -119,10 +100,19 @@ HRESULT CO_Collider::Render()
 
 void CO_Collider::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	switch (m_ColliderInfo.eType)
 	{
-
+	case COLLIDERINFO::TYPE::CUTSCENE_ONE:
+	{
+		if (L"Finn" == pOther->Get_Tag())
+		{
+			CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE);
+			CGameObject::Set_Dead();
+		}
 	}
+	break;
+	}
+
 }
 
 HRESULT CO_Collider::SetUp_Components()
@@ -144,39 +134,17 @@ HRESULT CO_Collider::SetUp_Components()
 
 	switch (m_ColliderInfo.eType)
 	{
-		case COLLIDERINFO::TYPE::CAGE_FRONT:
-		{
-			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-		}
-		break;
+	case COLLIDERINFO::TYPE::CUTSCENE_ONE:
+	{
+		ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
 
-		case COLLIDERINFO::TYPE::CAGE_BACK:
-		{
-			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-		}
-		break;
-
-		case COLLIDERINFO::TYPE::CAGE_SIDE_L:
-		{
-			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-		}
-		break;
-
-		case COLLIDERINFO::TYPE::CAGE_SIDE_R:
-		{
-			ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-			ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-		}
-		break;
+		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+			(CComponent**)&m_pColliderCom, &ColliderDesc)))
+			return E_FAIL;
 	}
-
-
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
-		(CComponent**)&m_pColliderCom, &ColliderDesc)))
-		return E_FAIL;
+	break;
+	}
 
 	return S_OK;
 }

@@ -42,15 +42,15 @@ private:
 	HRESULT SetUp_Components();
 
 private:
+	void	Shake_Camera(_double TimeDelta);
 	void	Key_Input(_double TimeDelta);
 	void	ToFollow(_double TimeDelta);
-	void	Shake_Camera(_double TimeDelta);
+	
+	void	Action_Garden(const _double & TimeDelta);
 
 private:
 	CCamera::CAMERADESC			m_CameraDesc;
 	CAMERAINFO					m_eCameraInfo;
-
-	_float		m_fSpeed = 0.f;
 
 	// Shake_Camera 와 관련된 변수
 	_bool		m_bShake = false;
@@ -58,9 +58,8 @@ private:
 	_double		m_dShakeTimeNow = 0;
 	_int		m_iShakePower = 0;
 
-	_float4		m_vMinCamPos;
-
 	_float		m_fYZ_Move = -12.0f;
+
 
 public:
 	static CCamera_Dynamic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

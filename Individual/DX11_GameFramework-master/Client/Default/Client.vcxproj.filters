@@ -193,6 +193,9 @@
     <Filter Include="02.GameObjects\UI\Shop">
       <UniqueIdentifier>{08492fe4-290e-41a0-8c8c-b5f49ed48666}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\CutScene">
+      <UniqueIdentifier>{f43f43ba-5629-4594-a32d-cd26f707ab51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -561,6 +564,12 @@
     <ClInclude Include="..\public\UI_ShopSword.h">
       <Filter>02.GameObjects\UI\Shop</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Camera_Action.h">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_CutScene.h">
+      <Filter>02.GameObjects\UI\CutScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -910,6 +919,12 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_ShopIndex.cpp">
       <Filter>02.GameObjects\UI\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_Action.cpp">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_CutScene.cpp">
+      <Filter>02.GameObjects\UI\CutScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

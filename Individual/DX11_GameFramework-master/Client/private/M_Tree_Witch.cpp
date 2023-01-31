@@ -35,7 +35,7 @@ HRESULT CM_Tree_Witch::Initialize_Prototype()
 HRESULT CM_Tree_Witch::Initialize(void * pArg)
 {
 	m_wsTag = L"Monster__TreeWitch";
-
+	
 	CM_Monster::MONSTERDESC		MonsterDesc;
 	ZeroMemory(&MonsterDesc, sizeof(MonsterDesc));
 
@@ -45,7 +45,7 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 	m_tMonsterDesc.eMonsterKind					= MonsterDesc.eMonsterKind;
 	MonsterDesc.TransformDesc.fSpeedPerSec		= 2.f;
 	MonsterDesc.TransformDesc.fRotationPerSec	= XMConvertToRadians(90.0f);
-	MonsterDesc.TransformDesc.f3Pos				= _float3(MonsterDesc.f3Pos.x, MonsterDesc.f3Pos.y, MonsterDesc.f3Pos.z);
+	MonsterDesc.TransformDesc.f3Pos				= MonsterDesc.f3Pos;
 
 	if (FAILED(CM_Monster::Initialize(&MonsterDesc)))
 		return E_FAIL;
@@ -58,6 +58,8 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 	m_tMonsterInfo.fMaxHP	= 70.0f;
 	m_tMonsterInfo.fExp		= 50.0f;
 	m_tMonsterInfo.fAttack	= 12.0f;
+
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(195.f));
 
 	return S_OK;
 }

@@ -179,6 +179,7 @@
     <ClInclude Include="..\public\B_2DBullet.h" />
     <ClInclude Include="..\public\B_3DBullet.h" />
     <ClInclude Include="..\public\B_AnimBullet.h" />
+    <ClInclude Include="..\public\Camera_Action.h" />
     <ClInclude Include="..\public\Camera_Dynamic.h" />
     <ClInclude Include="..\public\Client_Defines.h" />
     <ClInclude Include="..\public\Coin.h" />
@@ -258,6 +259,7 @@
     <ClInclude Include="..\public\UI_Boss_Bar.h" />
     <ClInclude Include="..\public\UI_Boss_BarBack.h" />
     <ClInclude Include="..\public\UI_CurrentIcon.h" />
+    <ClInclude Include="..\public\UI_CutScene.h" />
     <ClInclude Include="..\public\UI_Icon.h" />
     <ClInclude Include="..\public\UI_Informacion.h" />
     <ClInclude Include="..\public\UI_Inventory.h" />
@@ -300,6 +302,7 @@
     <ClCompile Include="..\private\B_2DBullet.cpp" />
     <ClCompile Include="..\private\B_3DBullet.cpp" />
     <ClCompile Include="..\private\B_AnimBullet.cpp" />
+    <ClCompile Include="..\private\Camera_Action.cpp" />
     <ClCompile Include="..\private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\Coin.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />
@@ -378,6 +381,7 @@
     <ClCompile Include="..\private\UI_Boss_Bar.cpp" />
     <ClCompile Include="..\private\UI_Boss_BarBack.cpp" />
     <ClCompile Include="..\private\UI_CurrentIcon.cpp" />
+    <ClCompile Include="..\private\UI_CutScene.cpp" />
     <ClCompile Include="..\private\UI_Icon.cpp" />
     <ClCompile Include="..\private\UI_Informacion.cpp" />
     <ClCompile Include="..\private\UI_Inventory.cpp" />

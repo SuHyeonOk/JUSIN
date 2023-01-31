@@ -108,8 +108,8 @@ void CM_Gary_Boss::Late_Tick(_double TimeDelta)
 
 	CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+	if (nullptr != m_pRendererCom/* &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f)*/)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
@@ -133,7 +133,7 @@ HRESULT CM_Gary_Boss::Render()
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
 		{
-			if (m_bShader_Hit && STATE::HIT == m_eState)
+ 			if (true == m_bShader_Hit)
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 			else
 			{
@@ -398,7 +398,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		iRandom = 0;   // Temp
+		//iRandom = 0;   // Temp
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)
@@ -457,7 +457,6 @@ void CM_Gary_Boss::RandomMove(const _double & TimeDelta)
 		m_eAnimState = STATE::IDLE;
 		m_bMove = false;				// 다시 랜덤한 좌표를 구한다.
 	}
-
 }
 
 HRESULT CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
@@ -841,6 +840,7 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 	if (false == m_bHit)
 		return;
 
+
 	if (0 == m_dShader_Hit_TimeAcc)
 	{
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -863,7 +863,7 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 	if (0.1 < m_dShader_Hit_TimeAcc)
 		m_bShader_Hit = false;
 
-	if (0.5f < m_dShader_Hit_TimeAcc)
+	if (0.4 < m_dShader_Hit_TimeAcc)
 	{
 		m_dShader_Hit_TimeAcc = 0;
 		m_bShader_Hit = false;

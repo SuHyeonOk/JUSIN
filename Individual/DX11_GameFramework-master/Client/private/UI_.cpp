@@ -333,8 +333,11 @@ HRESULT CUI_::Initialize(void * pArg)
 		return E_FAIL;
 	m_vecUI.push_back(pUI);
 
-
-
+	// [38] : CutScene
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_CutScene")));
+	if (nullptr == pUI)
+		return E_FAIL;
+	m_vecUI.push_back(pUI);
 	
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -346,6 +349,12 @@ void CUI_::Tick(_double TimeDelta)
 {
 	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
 		return;
+
+	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		m_vecUI[38]->Tick(TimeDelta);
+		return;
+	}
 
 	if(CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Tick(TimeDelta);
@@ -508,6 +517,12 @@ void CUI_::Late_Tick(_double TimeDelta)
 {
 	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
 		return;
+
+	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		m_vecUI[38]->Late_Tick(TimeDelta);
+		return;
+	}
 
 	if (CUI_Manager::GetInstance()->Get_Talk())
 		m_vecUI[0]->Late_Tick(TimeDelta);

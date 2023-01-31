@@ -1,22 +1,21 @@
 	#include "stdafx.h"
-#include "..\public\Camera_Dynamic.h"
+#include "..\public\Camera_Action.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
-#include "Skill_Manager.h"
-#include "O_Collider.h"
 
-CCamera_Dynamic::CCamera_Dynamic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+#include "Obj_Manager.h"
+
+CCamera_Action::CCamera_Action(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CCamera(pDevice, pContext)
 {
 }
 
-CCamera_Dynamic::CCamera_Dynamic(const CCamera_Dynamic & rhs)
+CCamera_Action::CCamera_Action(const CCamera_Action & rhs)
 	: CCamera(rhs)
 {
 }
 
-HRESULT CCamera_Dynamic::Initialize_Prototype()
+HRESULT CCamera_Action::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,7 +23,7 @@ HRESULT CCamera_Dynamic::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CCamera_Dynamic::Initialize(void * pArg)
+HRESULT CCamera_Action::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
 		memcpy(&m_eCameraInfo, pArg, sizeof(CAMERAINFO));
@@ -38,7 +37,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 	m_CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	m_CameraDesc.vUp = _float4(0.f, 1.f, 0.f, 0.f);
 
-	m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
+	m_fSpeed = m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
 
@@ -51,50 +50,16 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
 
+	m_vMinCamPos = _float4(0.f, 4.5f, -5.f, 1.f);
+
 	return S_OK;
 }
 
-void CCamera_Dynamic::Tick(_double TimeDelta)
+void CCamera_Action::Tick(_double TimeDelta)
 {
-	switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	{
-	case CObj_Manager::PLAYERINFO::PLAYER::FINN:
-		ToFollow(TimeDelta);
-		break;
-	case CObj_Manager::PLAYERINFO::PLAYER::JAKE:
-		ToFollow(TimeDelta);
-		break;
-	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
-		Action_Garden(TimeDelta);
-		break;
-#ifdef F2_SKELETON
-	case CObj_Manager::PLAYERINFO::PLAYER::FREE:
-		Key_Input(TimeDelta);
-		break;
-#endif
-	}
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_Y))
-	{
-		CO_Collider::COLLIDERINFO		tColliderInfo;
-		tColliderInfo.eType = CO_Collider::COLLIDERINFO::CUTSCENE_ONE;
-		tColliderInfo.f3Pos = _float3(-36.4221f, 0.0f, 42.2799f);
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
-			return;
-	}
-	if (pGameInstance->Key_Down(DIK_T))
-	{
-		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
-
-		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, CObj_Manager::GetInstance()->Get_Player_Transform());	// 현재 플레이어의 좌표로 이동 시킨다.
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 
 
+	ToFollow(TimeDelta);
 
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{
@@ -109,14 +74,14 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 }
 
-void CCamera_Dynamic::Late_Tick(_double TimeDelta)
+void CCamera_Action::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);	
 
 	
 }
 
-HRESULT CCamera_Dynamic::Render()
+HRESULT CCamera_Action::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -124,52 +89,13 @@ HRESULT CCamera_Dynamic::Render()
 	return S_OK;
 }
 
-HRESULT CCamera_Dynamic::SetUp_Components()
+HRESULT CCamera_Action::SetUp_Components()
 {
 
 	return S_OK;
 }
 
-void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
-{
-	if (!m_bShake)
-		return;
-
-	m_dShakeTimeNow += TimeDelta;
-
-	_float fRand = 0.f;
-
-	if (m_dShakeTime > m_dShakeTimeNow)
-	{
-		fRand = (rand() % (m_iShakePower * 2) - m_iShakePower * 0.5f) * 0.03f;
-		m_CameraDesc.vAt.y += fRand;
-	}
-	else
-	{
-		m_dShakeTimeNow = 0;
-		m_bShake = false;
-	}
-
-	// TODO : 플레이어의 좌표를 가져오게 되면 수정하기
-
-	_vector vPos, vLook, vEyeResult, vAtResult;
-	vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-	vEyeResult = vPos * 0.3f * vLook;
-	vAtResult = vPos * vLook;
-
-	_float4 f4Pos, f4Look, f4EyeResult, f4AtResult;
-	XMStoreFloat4(&f4EyeResult, vEyeResult);
-	XMStoreFloat4(&f4AtResult, vAtResult);
-
-	m_CameraDesc.vEye.y += fRand;
-
-	m_CameraDesc.vEye = f4EyeResult;
-	m_CameraDesc.vAt = f4AtResult;
-}
-
-void CCamera_Dynamic::Key_Input(_double TimeDelta)
+void CCamera_Action::Key_Input(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -211,7 +137,7 @@ void CCamera_Dynamic::Key_Input(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CCamera_Dynamic::ToFollow(_double TimeDelta)
+void CCamera_Action::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -232,28 +158,6 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 			m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
 		}
 	}
-
-	_vector vPlayerPos, vTargetPos;
-	vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-
-	_float4 vf4TargetPos;
-	XMStoreFloat4(&vf4TargetPos, vPlayerPos);
-	vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
-	vTargetPos = XMLoadFloat4(&vf4TargetPos);
-
-	// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
-
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
-	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
-
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
-
-	if (7.f < fDistanceX || 6.f > fDistanceX)	// 빠르게 따라간다.		
-		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45);
-	else										// 그냥 따라간다.
-		m_pTransformCom->Chase(vTargetPos, TimeDelta);
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	//CObj_Manager::PLAYERINFO	ePlayerInfo;
 	//ePlayerInfo = CObj_Manager::GetInstance()->Get_Current_Player();
@@ -332,39 +236,66 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 	//	//m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
 	//}
+
+	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::PLAYER::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::PLAYER::RESET == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		_vector vPlayerPos, vTargetPos;
+		vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
+
+		_float4 vf4TargetPos;
+		XMStoreFloat4(&vf4TargetPos, vPlayerPos);
+		vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
+		vTargetPos = XMLoadFloat4(&vf4TargetPos);
+
+		// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
+
+		_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+		_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+
+		_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+		if (7.f < fDistanceX || 6.f > fDistanceX)	// 빠르게 따라간다.		
+			m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45);
+		else										// 그냥 따라간다.
+			m_pTransformCom->Chase(vTargetPos, TimeDelta);
+	}
+#ifdef F2_SKELETON
+	else
+	{
+		Key_Input(TimeDelta);
+	}
+#endif
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CCamera_Dynamic::Action_Garden(const _double & TimeDelta)
+CCamera_Action * CCamera_Action::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
-	m_pTransformCom->Chase(XMVectorSet(-14.0277f, 3.7f, 42.1254f, 1.0f), TimeDelta * 2.0f);
-}
-
-CCamera_Dynamic * CCamera_Dynamic::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-{
- 	CCamera_Dynamic*		pInstance = new CCamera_Dynamic(pDevice, pContext);
+ 	CCamera_Action*		pInstance = new CCamera_Action(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CCamera_Dynamic");
+		MSG_BOX("Failed to Created : CCamera_Action");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CCamera_Dynamic::Clone(void * pArg)
+CGameObject * CCamera_Action::Clone(void * pArg)
 {
-	CCamera_Dynamic*		pInstance = new CCamera_Dynamic(*this);
+	CCamera_Action*		pInstance = new CCamera_Action(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CCamera_Dynamic");
+		MSG_BOX("Failed to Cloned : CCamera_Action");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CCamera_Dynamic::Free()
+void CCamera_Action::Free()
 {
 	__super::Free();
 

@@ -41,6 +41,7 @@
 #include "UI_ShopBase.h"
 #include "UI_ShopIndex.h"
 #include "UI_ShopSword.h"
+#include "UI_CutScene.h"
 
 // Effect
 #include "Effect_Rect_Instancing.h"
@@ -578,6 +579,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Mimic"),
 		CM_Mimic::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Collider
+	/* For.Prototype_GameObject_O_Collider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Collider"),
+		CO_Collider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
@@ -862,11 +869,7 @@ HRESULT CLoader::Loading_ForSkeleton_Boss()
 		CS_Jake_Son_Twister::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Collider
-	/* For.Prototype_GameObject_O_Collider */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Collider"),
-		CO_Collider::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 
@@ -1017,6 +1020,11 @@ HRESULT CLoader::UI_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Shop/Shop_%d.png"), 5))))
 		return E_FAIL;
 
+	// CutScene
+	/* For.Prototype_Component_Texture_UI_CutScene */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_CutScene"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/CutScene/CutScene.png")))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1156,6 +1164,10 @@ HRESULT CLoader::UI_Create()
 		CUI_ShopSword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_UI_CutScene */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_CutScene"),
+		CUI_CutScene::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 

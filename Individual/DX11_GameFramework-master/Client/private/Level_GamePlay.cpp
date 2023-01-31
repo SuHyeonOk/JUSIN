@@ -17,6 +17,7 @@
 #include "Coin.h"
 #include "Page.h"
 #include "S_Jake_Son.h"
+#include "O_Collider.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -159,7 +160,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Npc()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_KeyMan__0"), TEXT("Prototype_GameObject_N_KeyMan"), &tNpcDesc)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(1.41737f, 0.0f, 44.9208f))))
+	CO_Collider::COLLIDERINFO		tColliderInfo;
+	tColliderInfo.eType = CO_Collider::COLLIDERINFO::CUTSCENE_ONE;
+	tColliderInfo.f3Pos = _float3(-36.4221f, 0.0f, 42.2799f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

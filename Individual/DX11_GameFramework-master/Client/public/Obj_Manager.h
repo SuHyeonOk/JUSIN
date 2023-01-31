@@ -23,7 +23,7 @@ public:
 #ifdef F2_SKELETON 
 			FREE, 
 #endif
-			RESET, PLAYER_END };
+			RESET, CUTSCENE_ONE, PLAYER_END };
 		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
 
 		enum STATE {
@@ -39,10 +39,6 @@ public:
 
 		enum JAKEWEAPON { LFIST, RFIST, SHIELD, JAKEWERPON_END };
 		JAKEWEAPON			eJakeWeapon = JAKEWERPON_END;
-
-		enum ITEM { ITEM_END };
-		ITEM		eItem = ITEM_END;
-
 
 		_float	fHP;		// 몬스터"가" 체력을 깍을 때 필요
 		_float	fHPMax;
@@ -63,6 +59,12 @@ public:
 	virtual ~CObj_Manager() = default;
 
 public:
+	// 카메라가 바라보는 곳을 이동 시키기 위해서
+	void				Set_Camera(PLAYERINFO::PLAYER	eCamera) {
+		m_tPlayerInfo.ePlayer = eCamera;
+	}
+
+	// 보스 몬스터에서 사용할 변수
 	_bool				Get_BossCage() {
 		return m_bBossCage;
 	}
