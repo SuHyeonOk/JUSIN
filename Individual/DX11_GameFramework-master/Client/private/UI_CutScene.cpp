@@ -116,7 +116,7 @@ HRESULT CUI_CutScene::Render()
 			break;
 
 		case 2:
-			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 얼른 나좀 구하러 와줘"), _float2(508.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 얼른 나좀 구하러 와줘!"), _float2(508.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
 			break;
 		}
 	}

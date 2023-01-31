@@ -570,6 +570,9 @@
     <ClInclude Include="..\public\UI_CutScene.h">
       <Filter>02.GameObjects\UI\CutScene</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Player_Talk.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -925,6 +928,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_CutScene.cpp">
       <Filter>02.GameObjects\UI\CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Talk.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

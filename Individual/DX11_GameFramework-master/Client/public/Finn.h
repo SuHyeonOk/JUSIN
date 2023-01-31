@@ -75,6 +75,8 @@ private:
 	void	Current_HP(const _double & TimeDelta);
 	void	Anim_Change(_double TimeDelta);
 
+	HRESULT	Talk(const _double & TimeDelta);
+
 private:
 	vector<CGameObject*>		m_PlayerParts;
 	CObj_Manager::PLAYERINFO	m_tPlayerInfo;
@@ -85,7 +87,7 @@ private:
 
 	//////////////////////////// 플레이어 일 때
 
-	_double		m_dKnockBack_Hit_TimeAcc = 0;
+	_double		m_dKnockBack_Hit_TimeAcc = 0.0;
 
 	_bool		m_bStun = false;			// 스턴
 	_uint		m_iStun_Count = 0;			// 스턴 애니메이션 두 번
@@ -96,25 +98,28 @@ private:
 	// Skill
 	_bool		m_bOneSkillStart = false;
 	_bool		m_bSkillStart = false;				// 스킬이 시작 되었다.
-	_double		m_dSkill_TimeAcc = 0;
+	_double		m_dSkill_TimeAcc = 0.0;
 
 	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
 
 	//////////////////////////// 플레이어가 아닐 때
 
-	_double		m_dNotfollow_TimeAcc = 0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
+	_double		m_dNotfollow_TimeAcc = 0.0;	// Check_Follow() : Player 를 따라가지 못 하는 시간
 
 	//////////////////////////// 계속
 
-	_double		m_dBossCage_TimeAcc = 0;
+	_double		m_dBossCage_TimeAcc = 0.0;
 
 	// 셰이더
 	_float		m_fAlpha = 1.f;
 	_bool		m_bShader_Hit = false;
-	_double		m_dShader_Hit_TimeAcc = 0;
+	_double		m_dShader_Hit_TimeAcc = 0.0;
 
 	// 이펙트
-	_double		m_dEffect_Swim_TimeAcc = 0;
+	_double		m_dEffect_Swim_TimeAcc = 0.0;
+
+	// 대화
+	_double		m_dTalk_TimeAcc = 0.0;
 
 public:
 	static CFinn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

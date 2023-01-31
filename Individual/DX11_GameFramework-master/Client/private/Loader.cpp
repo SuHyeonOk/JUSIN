@@ -55,6 +55,7 @@
 #include "E_Look_Grow.h"
 #include "E_Alpha_Rotation.h"
 #include "E_Look_Up.h"
+#include "Player_Talk.h"
 
 // Obj
 #include "O_Box.h"
@@ -1334,7 +1335,15 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Golden_Wings_Stars_D.png")))))
 		return E_FAIL;
 	
-
+	// PlayerTalk
+	/* For.Prototype_Component_Texture_PlayerTalk_Jake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_PlayerTalk_Jake"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/PlayerTalk/Jake_%d.png"), 7))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_PlayerTalk_Finn */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_PlayerTalk_Finn"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/PlayerTalk/Finn_%d.png"), 7))))
+		return E_FAIL;
 
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -1386,6 +1395,11 @@ HRESULT CLoader::Effect_Create()
 	/* For.Prototype_GameObject_E_Look_Up*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Look_Up"),
 		CE_Look_Up::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// PlayerTalk
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Talk"),
+		CPlayer_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

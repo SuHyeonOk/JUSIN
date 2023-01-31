@@ -11,6 +11,7 @@
 
 #include "S_PaintWork.h"
 #include "S_Fiona.h"
+#include "Player_Talk.h"
 
 CJake::CJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -395,6 +396,7 @@ void CJake::Current_Player(_double TimeDelta)
 	}
 	else
 	{
+		Talk(TimeDelta);
 		Player_Follow(TimeDelta);
 		Check_Follow(TimeDelta);
 	}
@@ -1205,6 +1207,53 @@ void CJake::Anim_Change(_double TimeDelta)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(m_tPlayerInfo.eState);
 		m_tPlayerInfo.ePreState = m_tPlayerInfo.eState;
 	}
+}
+
+HRESULT CJake::Talk(const _double & TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_C))
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CPlayer_Talk::PLAYERTALKINFO	 tPlayerInfo;
+		tPlayerInfo.eTextureType = CPlayer_Talk::PLAYERTALKINFO::TYPE::JAKE;
+		tPlayerInfo.pTarget_TransformCom = m_pTransformCom;
+
+		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_PlayerTalk"), TEXT("Prototype_GameObject_Player_Talk"), &tPlayerInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return E_FAIL;
+		}
+	}
+
+
+	m_dTalk_TimeAcc += TimeDelta;
+	if (20 < m_dTalk_TimeAcc)
+		m_dTalk_TimeAcc = 0;
+
+	if (0 == m_dTalk_TimeAcc)
+	{
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4	f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		CPlayer_Talk::PLAYERTALKINFO	 tPlayerInfo;
+		tPlayerInfo.eTextureType = CPlayer_Talk::PLAYERTALKINFO::TYPE::JAKE;
+		tPlayerInfo.pTarget_TransformCom = m_pTransformCom;
+
+		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_PlayerTalk"), TEXT("Prototype_GameObject_Player_Talk"), &tPlayerInfo)))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return E_FAIL;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
 }
 
 CJake * CJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
