@@ -573,6 +573,9 @@
     <ClInclude Include="..\public\Player_Talk.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\JakeCopy.h">
+      <Filter>02.GameObjects\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -931,6 +934,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Player_Talk.cpp">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\JakeCopy.cpp">
+      <Filter>02.GameObjects\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

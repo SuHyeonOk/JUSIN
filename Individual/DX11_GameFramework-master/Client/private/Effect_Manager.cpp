@@ -351,7 +351,7 @@ HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	for (_int i = 0; i < 7; ++i)
+	for (_int i = 0; i < 4; ++i)
 	{
 		CE_Burst::EFFECTINFO	tEffetInfo;
 		tEffetInfo.f3Pos = f3Pos;
@@ -371,13 +371,13 @@ HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)
 	return S_OK;
 }
 
-HRESULT CEffect_Manager::Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Color)
+HRESULT CEffect_Manager::Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Color, _int iCount)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	CE_Burst::EFFECTINFO	tEffetInfo;
 
-	for (_int i = 0; i < 20; ++i)
+	for (_int i = 0; i < iCount; ++i)
 	{
 		tEffetInfo.eTextureType = CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE;
 		tEffetInfo.f3Pos = f3Pos;

@@ -202,6 +202,7 @@
     <ClInclude Include="..\public\Heart.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
     <ClInclude Include="..\public\Jake.h" />
+    <ClInclude Include="..\public\JakeCopy.h" />
     <ClInclude Include="..\public\Jake_Weapon.h" />
     <ClInclude Include="..\public\Key.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="..\private\Heart.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
     <ClCompile Include="..\private\Jake.cpp" />
+    <ClCompile Include="..\private\JakeCopy.cpp" />
     <ClCompile Include="..\private\Jake_Weapon.cpp" />
     <ClCompile Include="..\private\Key.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />

@@ -64,6 +64,7 @@
 #include "O_Collider.h"
 #include "FamilySword.h"
 #include "PennyCopy.h"
+#include "JakeCopy.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -440,6 +441,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_M_Mimic"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Monster/Mimic_Monster/Mimic_Monster.fbx", PivotMatrix))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_JakeCopy */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_JakeCopy"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/JakeCopy/JakeCopy.fbx", PivotMatrix))))
+		return E_FAIL;
+	
 #pragma endregion
 
 #pragma region ¼ÎÀÌ´õ
@@ -579,6 +586,12 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_M_Mimic */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_M_Mimic"),
 		CM_Mimic::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// JakeCopy
+	/* For.Prototype_GameObject_JakeCopy */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_JakeCopy"),
+		CJakeCopy::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Collider

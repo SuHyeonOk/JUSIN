@@ -166,6 +166,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_Npc()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(1.41737f, 0.0f, 44.9208f))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_JakeCopy"), TEXT("Prototype_GameObject_JakeCopy"), &_float3(-13.5f, 0.2f, 48.0f))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -226,7 +232,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-9.f, 0.f, -10.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-13.5f, 0.2f, 48.0f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -250,7 +256,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
 		return E_FAIL;
 
 	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_C;
-	tJakeSonInfo.fPos = _float3(-14.0f, 0.2f, 48.0f);
+	tJakeSonInfo.fPos = _float3(-14.0f, 0.2f, 60.0f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
 		return E_FAIL;
 

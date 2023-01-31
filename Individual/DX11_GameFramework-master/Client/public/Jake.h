@@ -27,6 +27,8 @@ public:
 		m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::IDLE;
 	}
 
+	_bool	Get_FinnMeet() { return m_bFinn_Meet; }
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -133,6 +135,9 @@ private:
 
 	// ´ëÈ­
 	_double		m_dTalk_TimeAcc = 0.0;
+
+	// ÇÉ°ú ¸¸³µ´ÂÁö
+	_bool		m_bFinn_Meet = false;
 
 public:
 	static CJake*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

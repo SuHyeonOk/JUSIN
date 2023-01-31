@@ -35,7 +35,7 @@ public:
 	HRESULT		Effect_Shield_Create(_float3 f3Pos);
 
 	HRESULT		Effect_Star_Create(_float3 f3Pos);
-	HRESULT		Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));
+	HRESULT		Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f), _int iCount = 20);
 	HRESULT		Effect_StarRandom_Create(_float3 f3Pos, const _float3 & f3Color);
 
 	HRESULT		Effect_Paint_Circle_Create(_float3 f3Pos, const _float3 & f3Color);

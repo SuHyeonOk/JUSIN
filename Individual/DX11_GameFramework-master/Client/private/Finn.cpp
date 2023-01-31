@@ -1283,7 +1283,7 @@ HRESULT CFinn::Talk(const _double & TimeDelta)
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
 		CPlayer_Talk::PLAYERTALKINFO	 tPlayerInfo;
-		tPlayerInfo.eTextureType = CPlayer_Talk::PLAYERTALKINFO::TYPE::JAKE;
+		tPlayerInfo.eTextureType = CPlayer_Talk::PLAYERTALKINFO::TYPE::FINN;
 		tPlayerInfo.pTarget_TransformCom = m_pTransformCom;
 
 		if (FAILED(pGameInstance->Clone_GameObject(CObj_Manager::GetInstance()->Get_Current_Level(), TEXT("Layer_PlayerTalk"), TEXT("Prototype_GameObject_Player_Talk"), &tPlayerInfo)))

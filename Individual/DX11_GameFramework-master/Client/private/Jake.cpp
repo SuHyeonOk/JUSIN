@@ -58,11 +58,21 @@ HRESULT CJake::Initialize(void * pArg)
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Pos();
-	m_pModelCom->Set_AnimIndex(18);
-
 	m_tPlayerInfo.ePlayer = m_tPlayerInfo.JAKE;
 	m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+
+	m_pTransformCom->Set_Pos();
+	m_pModelCom->Set_AnimIndex(18);
+	m_pNavigationCom->Set_CellIndex(346);
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(180.f));
+
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	_vector vUp = XMVector3Cross(vLook, vRight);
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 
 	return S_OK;
 }
@@ -396,9 +406,30 @@ void CJake::Current_Player(_double TimeDelta)
 	}
 	else
 	{
-		Talk(TimeDelta);
-		Player_Follow(TimeDelta);
-		Check_Follow(TimeDelta);
+		if (false == m_bFinn_Meet)
+		{
+			m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::STATE::IDLE;
+			
+			if (1.5f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+			{
+				m_bFinn_Meet = true;
+
+				_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+				_float4 f4MyPos;
+				XMStoreFloat4(&f4MyPos, vMyPos);
+
+				CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x - 0.5f, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
+				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x - 0.5f, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
+			}
+
+			return;
+		}
+		else		// 플레이어와 핀이 만난 순간 부터 제이크를 플레이 할 수 있다.
+		{
+			Talk(TimeDelta);
+			Player_Follow(TimeDelta);
+			Check_Follow(TimeDelta);
+		}
 	}
 }
 
