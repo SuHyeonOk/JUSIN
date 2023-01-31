@@ -144,7 +144,7 @@ HRESULT CW_PigWarrior::SetUp_Components()
 		/* For.Com_SPHERE */
 		ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 		ColliderDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
-		ColliderDesc.vCenter = _float3(0.f, 0.f, -0.5f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, -0.8f);
 	}
 	else if (WEAPONDESC::WARRIORTYPE::CYLINDER == m_WeaponDesc.eWarriorType)	// ¿ä±â
 	{

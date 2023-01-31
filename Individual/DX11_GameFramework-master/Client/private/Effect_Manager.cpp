@@ -347,11 +347,11 @@ HRESULT CEffect_Manager::Effect_Shield_Create(_float3 f3Pos)
 	return S_OK;
 }
 
-HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos)
+HRESULT CEffect_Manager::Effect_Star_Create(_float3 f3Pos, _int iCount)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	for (_int i = 0; i < 4; ++i)
+	for (_int i = 0; i < iCount; ++i)
 	{
 		CE_Burst::EFFECTINFO	tEffetInfo;
 		tEffetInfo.f3Pos = f3Pos;

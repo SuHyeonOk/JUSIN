@@ -5,8 +5,6 @@
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
 
-#include "Camera_Dynamic.h"
-
 CUI_CutScene::CUI_CutScene(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)
 {
@@ -191,20 +189,20 @@ void CUI_CutScene::CutSceneOne_Talk(const _double & TimeDelta)
 	{
 		// 카메라 원래대로 되돌리기
 		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);						// 플레이어 보이도록 수정
-
 		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);					// 카메라의 좌표를 플레이어로 변경
 		CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), m_pTransformComTag, 0));
-		pCameraTransformCom->Set_State(CTransform::STATE_TRANSLATION, CObj_Manager::GetInstance()->Get_Player_Transform());	// 현재 플레이어의 좌표로 이동 시킨다.
+		pCameraTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-36.4833f, 3.69427f, 36.0742f, 1.0f));	// 현재 플레이어의 좌표로 이동 시킨다.
 		RELEASE_INSTANCE(CGameInstance);
+
+		m_fSizeY += _float(TimeDelta) * 100.0f;
 
 		// 다음 사용을 위한 값 초기화
 		m_Script_Count = 0;
 		m_bSize_Change = false;
 		m_fSizeY = 720.f * 1.9f;
 		m_Script_TimeAcc = 0.0;
-
 		return;
 	}
 

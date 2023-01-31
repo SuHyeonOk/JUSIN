@@ -40,7 +40,7 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 	m_CameraDesc.TransformDesc.fSpeedPerSec = 2.f;
 	m_CameraDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	m_CameraDesc.TransformDesc.f3Pos = _float3(m_eCameraInfo.f3Pos.x, m_eCameraInfo.f3Pos.y, m_eCameraInfo.f3Pos.z);
+	m_CameraDesc.TransformDesc.f3Pos = m_eCameraInfo.f3Pos;
 
 	if (FAILED(CCamera::Initialize(&m_CameraDesc)))
 		return E_FAIL;
@@ -74,8 +74,8 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 #endif
 	}
 
+	// Test
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	if (pGameInstance->Key_Down(DIK_Y))
 	{
 		CO_Collider::COLLIDERINFO		tColliderInfo;
@@ -84,17 +84,17 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
 			return;
 	}
-	if (pGameInstance->Key_Down(DIK_T))
-	{
-		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
-
-		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, CObj_Manager::GetInstance()->Get_Player_Transform());	// 현재 플레이어의 좌표로 이동 시킨다.
-	}
-
 	RELEASE_INSTANCE(CGameInstance);
 
+	//////////////////////////// 디버그용
+	_vector vddMyPos;
+	vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
+	_float4	f4ddMyPos;
+	XMStoreFloat4(&f4ddMyPos, vddMyPos);
+
+	cout << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
+	//////////////////////////// 디버그용
 
 	//if (pGameInstance->Key_Down(DIK_U))
 	//{

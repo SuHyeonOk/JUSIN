@@ -75,7 +75,7 @@ void CO_Box::Tick(_double TimeDelta)
 
 		if (0 == m_pModelCom->Get_Keyframes())
 		{
-			CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
+			CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), 3);
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
 		}
 

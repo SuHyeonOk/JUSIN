@@ -47,6 +47,7 @@ HRESULT CJakeCopy::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(180.f));
 
 	return S_OK;
 }
@@ -97,7 +98,11 @@ HRESULT CJakeCopy::Render()
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 0);
+		
+		if (i == 0)
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
+		else
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 0);
 	}
 
 	return S_OK;

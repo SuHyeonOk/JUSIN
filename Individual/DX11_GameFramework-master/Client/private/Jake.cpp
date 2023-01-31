@@ -66,14 +66,13 @@ HRESULT CJake::Initialize(void * pArg)
 	m_pNavigationCom->Set_CellIndex(346);
 	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(180.f));
 
-	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-	_vector vUp = XMVector3Cross(vLook, vRight);
+	//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	//_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	//_vector vUp = XMVector3Cross(vLook, vRight);
 
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
-
+	//m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
 	return S_OK;
 }
 
@@ -409,17 +408,19 @@ void CJake::Current_Player(_double TimeDelta)
 		if (false == m_bFinn_Meet)
 		{
 			m_tPlayerInfo.eState = CObj_Manager::PLAYERINFO::STATE::IDLE;
-			
+			m_pTransformCom->LookAt(XMVectorSetY(CObj_Manager::GetInstance()->Get_Player_Transform(), 0.0f));
+
 			if (1.5f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
 			{
 				m_bFinn_Meet = true;
-
+				
+				// 이펙트
 				_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 				_float4 f4MyPos;
 				XMStoreFloat4(&f4MyPos, vMyPos);
 
-				CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x - 0.5f, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
-				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x - 0.5f, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
+				CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x - 0.75f, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
+				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x - 0.75f, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
 			}
 
 			return;
@@ -512,15 +513,13 @@ void CJake::Player_Follow(_double TimeDelta)
 	// 수영 중 일 때는 Look 을 변경해서 따라간다. (플레이어가 수영 중 일 때는 Look 이 아래를 따라가서..)
 	if (CObj_Manager::PLAYERINFO::SWIM == CObj_Manager::GetInstance()->Get_Current_Player().eState)		// 플레이어가 수영 중 인데
 	{
-		_float4 f4PlayerPos;
-		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
 		if (1 == m_pNavigationCom->Get_CellType())
-			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, -0.3f, f4PlayerPos.z, f4PlayerPos.w));	// 나도 수영 중 이라면 낮게 보고,
+			m_pTransformCom->LookAt(XMVectorSetY(CObj_Manager::GetInstance()->Get_Player_Transform(), -0.3f));	// 나도 수영 중 이라면 낮게 보고,
 		else
-			m_pTransformCom->LookAt(XMVectorSet(f4PlayerPos.x, 0.f, f4PlayerPos.z, f4PlayerPos.w));		// 난 수영 중이 아니라면 0 을 본다.
+			m_pTransformCom->LookAt(XMVectorSetY(CObj_Manager::GetInstance()->Get_Player_Transform(), 0.0f));	// 난 수영 중이 아닌데 플레이어가 수영 중 이라면 0.0f 를 바라보게 한다.
 	}
 	else
-		m_pTransformCom->LookAt(vPlayerPos);
+		m_pTransformCom->LookAt(XMVectorSetY(CObj_Manager::GetInstance()->Get_Player_Transform(), 0.0f));
 
 	// 따라갈 때 애니메이션
 	if (CObj_Manager::PLAYERINFO::STATE::RUN == CObj_Manager::GetInstance()->Get_Current_Player().eState ||

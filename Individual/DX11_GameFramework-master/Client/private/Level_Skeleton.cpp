@@ -325,7 +325,7 @@ void CLevel_Skleton::ImGui()
 void CLevel_Skleton::ImGui_Food()
 {
 #pragma region Food
-	const _char* szObjName[] = { "Royal_Tart", "Burrito" };
+	const _char* szObjName[] = { "Apple_Pie", "Royal_Tart", "Burrito" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_FOOD", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -343,10 +343,10 @@ void CLevel_Skleton::ImGui_Food()
 
 		if (0 == iObjNum)
 		{
-			fFoodInfo.eFoodKind = fFoodInfo.ROYAL_TART;
+			fFoodInfo.eFoodKind = fFoodInfo.APPLE_PIE;
 			fFoodInfo.fPos = m_f3ClickPos;
 
-			m_wstObjName = L"Royal_Tart__";
+			m_wstObjName = L"Apple_Pie__";
 			m_wstObjName += to_wstring(m_iRoyal_Tart_Count); // 문자열에 상수 더하기
 
 			m_szObjName = m_wstObjName.c_str();	// wstring -> conat wchar*
@@ -358,6 +358,22 @@ void CLevel_Skleton::ImGui_Food()
 		}
 
 		if (1 == iObjNum)
+		{
+			fFoodInfo.eFoodKind = fFoodInfo.ROYAL_TART;
+			fFoodInfo.fPos = m_f3ClickPos;
+
+			m_wstObjName = L"Royal_Tart__";
+			m_wstObjName += to_wstring(m_iRoyal_Tart_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+				return;
+
+			m_iRoyal_Tart_Count++;
+		}
+
+		if (2 == iObjNum)
 		{
 			fFoodInfo.eFoodKind = fFoodInfo.BURRITO;
 			fFoodInfo.fPos = m_f3ClickPos;
@@ -957,6 +973,23 @@ HRESULT CLevel_Skleton::Load_Food()
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tFoodInfo.eFoodKind = tFoodInfo.APPLE_PIE;
+			tFoodInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Apple_Pie__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstFoodNameTemp(pObjInfo.ObjName); // tchar -> wstring
+
+			if (m_wstObjName == wstFoodNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+					return E_FAIL;
+			}
+		}
+
 		for (_int i = 0; i < iFoodVecCount; i++)
 		{
 			tFoodInfo.eFoodKind = tFoodInfo.ROYAL_TART;

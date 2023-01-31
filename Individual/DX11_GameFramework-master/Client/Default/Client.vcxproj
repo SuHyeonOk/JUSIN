@@ -179,7 +179,6 @@
     <ClInclude Include="..\public\B_2DBullet.h" />
     <ClInclude Include="..\public\B_3DBullet.h" />
     <ClInclude Include="..\public\B_AnimBullet.h" />
-    <ClInclude Include="..\public\Camera_Action.h" />
     <ClInclude Include="..\public\Camera_Dynamic.h" />
     <ClInclude Include="..\public\Client_Defines.h" />
     <ClInclude Include="..\public\Coin.h" />
@@ -304,7 +303,6 @@
     <ClCompile Include="..\private\B_2DBullet.cpp" />
     <ClCompile Include="..\private\B_3DBullet.cpp" />
     <ClCompile Include="..\private\B_AnimBullet.cpp" />
-    <ClCompile Include="..\private\Camera_Action.cpp" />
     <ClCompile Include="..\private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\Coin.cpp" />
     <ClCompile Include="..\Private\DataManager.cpp" />

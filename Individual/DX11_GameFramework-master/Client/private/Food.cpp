@@ -90,7 +90,7 @@ void CFood::Tick(_double TimeDelta)
 		_float4 f4Pos;
 		XMStoreFloat4(&f4Pos, vPlayerPos);
 
-		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.0f), 3);
 		CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
 	}
 

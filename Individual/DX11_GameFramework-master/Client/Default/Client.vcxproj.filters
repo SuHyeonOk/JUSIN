@@ -564,9 +564,6 @@
     <ClInclude Include="..\public\UI_ShopSword.h">
       <Filter>02.GameObjects\UI\Shop</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Camera_Action.h">
-      <Filter>02.GameObjects\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\UI_CutScene.h">
       <Filter>02.GameObjects\UI\CutScene</Filter>
     </ClInclude>
@@ -925,9 +922,6 @@
     </ClCompile>
     <ClCompile Include="..\private\UI_ShopIndex.cpp">
       <Filter>02.GameObjects\UI\Shop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Camera_Action.cpp">
-      <Filter>02.GameObjects\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_CutScene.cpp">
       <Filter>02.GameObjects\UI\CutScene</Filter>
