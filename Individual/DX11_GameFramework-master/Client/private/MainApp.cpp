@@ -98,6 +98,7 @@ void CMainApp::Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_M_WEAPON);
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_P_WEAPON, CCollider_Manager::COL_BULLET);
 	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_P_WEAPON, CCollider_Manager::COL_MONSTER);
+	CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_OBJ, CCollider_Manager::COL_MONSTER);
 
 	//CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_PLAYER, CCollider_Manager::COL_COLLIDER);
 	//CGameInstance::GetInstance()->Update_Col(CCollider_Manager::COL_MONSTER, CCollider_Manager::COL_COLLIDER);

@@ -19,9 +19,6 @@
     <Filter Include="97.ShaderFiles">
       <UniqueIdentifier>{9a0f34b9-2838-4e5d-87a4-eb8bf6420099}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Terrain">
-      <UniqueIdentifier>{f3c0df30-d83d-4caf-8604-41033dbb6dda}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{b9ad9fc5-4efa-4624-ba10-b57dc2aed216}</UniqueIdentifier>
     </Filter>
@@ -193,8 +190,11 @@
     <Filter Include="02.GameObjects\UI\CutScene">
       <UniqueIdentifier>{f43f43ba-5629-4594-a32d-cd26f707ab51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Item\Map">
+    <Filter Include="02.GameObjects\Map">
       <UniqueIdentifier>{7c83f2f1-d10e-45a7-9d0b-8751ff0bb839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\Terrain">
+      <UniqueIdentifier>{f3c0df30-d83d-4caf-8604-41033dbb6dda}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -238,7 +238,7 @@
       <Filter>02.GameObjects\BackGround</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Terrain.h">
-      <Filter>02.GameObjects\Terrain</Filter>
+      <Filter>02.GameObjects\Map\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Camera_Dynamic.h">
       <Filter>02.GameObjects\Camera</Filter>
@@ -355,10 +355,10 @@
       <Filter>01.Levels\03.Skeleton</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Map_Garden.h">
-      <Filter>02.GameObjects\Item\Map</Filter>
+      <Filter>02.GameObjects\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Map_Skeleton.h">
-      <Filter>02.GameObjects\Item\Map</Filter>
+      <Filter>02.GameObjects\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\public\O_Portal.h">
       <Filter>02.GameObjects\Object</Filter>
@@ -385,7 +385,7 @@
       <Filter>01.Levels\04. Skeleton_Boss</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Map_Skeleton_Boss.h">
-      <Filter>02.GameObjects\Item\Map</Filter>
+      <Filter>02.GameObjects\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_PaintWork.h">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
@@ -600,7 +600,7 @@
       <Filter>02.GameObjects\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Terrain.cpp">
-      <Filter>02.GameObjects\Terrain</Filter>
+      <Filter>02.GameObjects\Map\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Camera_Dynamic.cpp">
       <Filter>02.GameObjects\Camera</Filter>
@@ -714,10 +714,10 @@
       <Filter>01.Levels\03.Skeleton</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Map_Skeleton.cpp">
-      <Filter>02.GameObjects\Item\Map</Filter>
+      <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Map_Garden.cpp">
-      <Filter>02.GameObjects\Item\Map</Filter>
+      <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\O_Portal.cpp">
       <Filter>02.GameObjects\Object</Filter>
@@ -744,7 +744,7 @@
       <Filter>01.Levels\04. Skeleton_Boss</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Map_Skeleton_Boss.cpp">
-      <Filter>02.GameObjects\Item\Map</Filter>
+      <Filter>02.GameObjects\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_PaintWork.cpp">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>

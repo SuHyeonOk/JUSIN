@@ -8,7 +8,6 @@ class CModel;
 class CShader;
 class CRenderer;
 class CCollider;
-class CNavigation;
 END
 
 BEGIN(Client)
@@ -47,7 +46,6 @@ private:
 	CRenderer*			m_pRendererCom = nullptr;
 	CModel*				m_pModelCom = nullptr;
 	CCollider*			m_pColliderCom = nullptr;
-	CNavigation*		m_pNavigationCom = nullptr;
 
 private:
 	HRESULT				SetUp_Components();
@@ -71,6 +69,7 @@ private:
 
 	void				Hit_Tick(const _double& TimeDelta);
 	void				Die_Tick(const _double& TimeDelta);
+	void				LookChange(const _double& TimeDelta);
 
 	void				Effect_Tick(const _double& TimeDelta);
 	void				Shader_Alpha(const _double & TimeDelta);
@@ -110,6 +109,9 @@ private:
 
 	// Hit()
 	_bool				m_bHit = false;
+
+	_bool				m_bLookChange = false;
+	_double				m_dLookChange_TimeAcc = 0.0;
 	
 	// ¿Ã∆Â∆Æ
 	_bool				m_bEffect = false;

@@ -22,7 +22,9 @@ public:
 		m_iNeighborIndices[eNeighbor] = pNeighbor->m_iIndex;
 	}
 
-	_int	Get_CellType() { return m_iCellType; }
+	_int	Get_CellType() { 
+		return m_iCellType;
+	}
 
 public:
 	HRESULT Initialize(const _float3* pPoints, _int iIndex, _int iNaviType);

@@ -69,8 +69,6 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
  {
-	cout << m_pNavigationCom->Get_CellIndex() << endl;
-
 	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
 		return;
 

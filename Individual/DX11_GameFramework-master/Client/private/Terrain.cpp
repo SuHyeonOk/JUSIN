@@ -79,8 +79,15 @@ void CTerrain::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if(nullptr != m_pRendererCom)
+	if (nullptr != m_pRendererCom)
+	{
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+#ifdef _DEBUG
+		if (CObj_Manager::GetInstance()->Get_NavigationRender())
+			m_pRendererCom->Add_DebugRenderGroup(m_pNavigationCom);
+#endif
+	}
 }
 
 HRESULT CTerrain::Render()

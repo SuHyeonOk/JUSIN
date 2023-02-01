@@ -79,9 +79,6 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 
 	if (true == m_bCutSceneEnd)							// 객체 내 에서 컷씬이 끝나면 한 번만 진행할 수 있도록 하고, 지속적으로 실행 되어야할 함수를 실행 시킨다.
 	{
-		if (1 != m_pNavigationCom->Get_CellType())		// 네비로 갈 수 없는 길 이라면 Look 을 변경한다.
-			m_pTransformCom->LookAt(m_pTransformCom->Get_State(CTransform::STATE_LOOK) * -1.0f);
-
 		Shader_Alpha(TimeDelta);
 		Effect_Tick(TimeDelta);
 
@@ -142,8 +139,6 @@ HRESULT CM_Gary_Boss::Render()
 	{
 		if (nullptr != m_pColliderCom)
 			m_pColliderCom->Render();
-
-		m_pNavigationCom->Render();
 	}
 #endif
 
@@ -152,6 +147,9 @@ HRESULT CM_Gary_Boss::Render()
 
 void CM_Gary_Boss::On_Collision(CGameObject * pOther)
 {
+	//if (L"Object_Collider" == pOther->Get_Tag())	// 중간에 해골을 만나게 되면 Look 을 변경하라
+	//	m_bLookChange = true;
+
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		if (L"Player_Weapon" == pOther->Get_Tag())
 			m_bHit = true;
@@ -186,16 +184,6 @@ HRESULT CM_Gary_Boss::SetUp_Components()
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
-		return E_FAIL;
-
-	/* For.Com_Navigation */
-	CNavigation::NAVIDESC			NaviDesc;
-	ZeroMemory(&NaviDesc, sizeof(CNavigation::NAVIDESC));
-
-	NaviDesc.iCurrentIndex = 0;
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"), TEXT("Com_Navigation"),
-		(CComponent**)&m_pNavigationCom, &NaviDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -337,8 +325,8 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 
 	if (7.0f < fDistance)      // 일정 범위 밖 이라면 그냥 이동하고 있는다.
 		RandomMove(TimeDelta);
-	else
-		Random_Skill(TimeDelta);
+	
+	Random_Skill(TimeDelta);
 }
 
 void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
@@ -402,7 +390,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		//iRandom = 0;   // Temp
+		//iRandom = 0;   // Test
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)
@@ -449,7 +437,7 @@ void CM_Gary_Boss::RandomMove(const _double & TimeDelta)
 
 	// 랜덤한 좌표로 이동한다.
 	_vector vMovePos = XMVectorSet(m_f4MovemPos.x, m_f4MovemPos.y, m_f4MovemPos.z, m_f4MovemPos.w);
-	m_pTransformCom->Chase(vMovePos, TimeDelta, 0.0f, m_pNavigationCom);
+	m_pTransformCom->Chase(vMovePos, TimeDelta, 0.0f);
 	m_pTransformCom->LookAt(vMovePos);
 
 	_vector vDistance = vMovePos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -476,7 +464,7 @@ HRESULT CM_Gary_Boss::A_Move_Tick(const _double & TimeDelta)
 	}
 
 	_vector vPlayerPos = XMVectorSet(m_f4PlayerPos.x, 0.0f, m_f4PlayerPos.z, m_f4PlayerPos.w);
-	m_pTransformCom->Chase(vPlayerPos, TimeDelta * 1.7, 1.9f, m_pNavigationCom);   // 거리가 멀 때만 플레이어를 따라간다.
+	m_pTransformCom->Chase(vPlayerPos, TimeDelta * 1.7, 1.9f);   // 거리가 멀 때만 플레이어를 따라간다.
 	m_pTransformCom->LookAt(vPlayerPos);
 
 	_vector vDistance = vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -703,7 +691,10 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 		pJake_TransformCom->Set_Pos(_float3(8.0f, 0.0f, 14.5f));
 		pJake_NavigationCom->Set_CellIndex(400);
 
-		// 이펙트
+		// 플레이어 에게 이펙트
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(8.0f, 1.5f, 14.0f - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(8.0f, 1.5f, 14.0f - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(8.0f, 1.5f, 14.0f - 1.2f));
 
 
 		// Cage 를 생성한다.
@@ -847,16 +838,18 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 	if (false == m_bHit)
 		return;
 
-
 	if (0 == m_dShader_Hit_TimeAcc)
-	{
+	{ 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 		XMStoreFloat4(&f4MyPos, vMyPos);
 		CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 1.2f, f4MyPos.z - 0.7f), _float3(0.9f, 0.0f, 0.1f));
 
 		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
-		m_eAnimState = STATE::HIT;
+		
+		if(m_eState == STATE::IDLE || m_eState == STATE::MOVE)
+			m_eAnimState = STATE::HIT;
+
 		m_bShader_Hit = true;
 	}
 
@@ -864,7 +857,7 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 	if (0.2 > m_dShader_Hit_TimeAcc)
 	{
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
-		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f, m_pNavigationCom);
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 	}
 
 	if (0.1 < m_dShader_Hit_TimeAcc)
@@ -876,7 +869,9 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 		m_bShader_Hit = false;
 
 		m_bHit = false;
-		m_eState = STATE::IDLE;
+
+		if(STATE::HIT == m_eAnimState)
+			m_eState = STATE::IDLE;
 	}
 }
 
@@ -884,6 +879,19 @@ void CM_Gary_Boss::Die_Tick(const _double & TimeDelta)
 {
 	m_eAnimState = STATE::DIE;
 
+}
+
+void CM_Gary_Boss::LookChange(const _double & TimeDelta)
+{
+	m_pTransformCom->Go_Backward(_float(TimeDelta) * 5.0f);
+	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, m_pTransformCom->Get_State(CTransform::STATE_LOOK) * -1.0f);
+
+	m_dLookChange_TimeAcc += TimeDelta;
+	if (0.5 < m_dLookChange_TimeAcc)
+	{
+		m_bLookChange = false;
+		m_dLookChange_TimeAcc = 0.0;
+	}
 }
 
 void CM_Gary_Boss::Effect_Tick(const _double & TimeDelta)
@@ -942,15 +950,29 @@ void CM_Gary_Boss::CutScene_Tick(const _double & TimeDelta)
 		return;
 
 	Shader_Alpha(TimeDelta);
-	Effect_Tick(TimeDelta);
 
-	m_dEffect_TimeAcc += TimeDelta;
-	if (1.0 < m_dEffect_TimeAcc)
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Pos, vPos);
+
+	if (0 == m_dSkill_TimeAcc)
 	{
-		m_iEffect_Count = 0;
-		Effect_Tick(TimeDelta); 
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(4.0f, 0.0f, 17.0f, 1.0f));	// 좌표 처음으로 이동
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(f4Pos.x, f4Pos.y + 1.5f, f4Pos.z - 1.2f));
+	}
+	
+	if(0.9 < m_dSkill_TimeAcc)
+		Effect_Tick(TimeDelta);
 
+	m_dSkill_TimeAcc += TimeDelta;
+	if (1.0 < m_dSkill_TimeAcc)
+	{
+		m_pModelCom->Set_AnimIndex(5);
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(4.0f, 0.0f, 17.0f, 1.0f));	// 좌표 처음으로 이동
+	}
+	if (2.5 < m_dSkill_TimeAcc)
+	{
 		m_bCutSceneEnd = true;
 		m_dEffect_TimeAcc = 0.0;
 	}

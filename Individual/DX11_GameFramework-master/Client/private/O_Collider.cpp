@@ -93,7 +93,6 @@ HRESULT CO_Collider::Render()
 void CO_Collider::On_Collision(CGameObject * pOther)
 {
 	// 충돌 하는 순간 카메라 전환이 되는데 이 때 그냥 두게 되면 플레이어가 찌부 되어서 잠시 없애둔다.
-	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 
 	switch (m_ColliderInfo.eType)
 	{
@@ -102,6 +101,7 @@ void CO_Collider::On_Collision(CGameObject * pOther)
 		if (L"Finn" == pOther->Get_Tag())
 		{
 			CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE);
+			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 			CGameObject::Set_Dead();
 		}
 	}
@@ -110,9 +110,14 @@ void CO_Collider::On_Collision(CGameObject * pOther)
 		if (L"Finn" == pOther->Get_Tag())
 		{
 			CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO);
+			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 			CGameObject::Set_Dead();
 		}
 	}
+	break;
+
+	case COLLIDERINFO::TYPE::BOSS:
+		_int a = 0;
 	break;
 	}
 
@@ -135,8 +140,16 @@ HRESULT CO_Collider::SetUp_Components()
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 
-	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-	ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
+	if (COLLIDERINFO::TYPE::BOSS == m_ColliderInfo.eType)
+	{
+		ColliderDesc.vSize = _float3(2.0f, 2.0f, 2.0f);
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
+	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
