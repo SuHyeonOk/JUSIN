@@ -1348,6 +1348,10 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Boss_Potal_2"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Artifact_FX_1.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_CutScene_Fire */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_CutScene_Fire"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/CutScene_Fire_%d.png"), 4))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_E_Potal_Star */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Potal_Star"),

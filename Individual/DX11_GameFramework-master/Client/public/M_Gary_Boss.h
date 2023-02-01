@@ -75,6 +75,7 @@ private:
 	void				Shader_Alpha(const _double & TimeDelta);
 
 	void				CutScene_Tick(const _double & TimeDelta);
+	void				CutScene_Effect();
 
 private:
 	// 기본 데이터

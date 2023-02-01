@@ -96,6 +96,20 @@ HRESULT CEffect_Manager::Effect_Boss_Potal_Create(const _float3 & f3Pos)
 	return S_OK;
 }
 
+HRESULT CEffect_Manager::Effect_Boss_CutScene(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Alpha_Change::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_Boss_SkeletonBig(const _float3 & f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

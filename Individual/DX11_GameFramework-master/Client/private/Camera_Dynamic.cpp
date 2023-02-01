@@ -62,11 +62,13 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 	case CObj_Manager::PLAYERINFO::PLAYER::JAKE:
 		ToFollow(TimeDelta);
 		break;
-	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
+	default:
+	{
+	if(LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 		Action_Garden(TimeDelta);
-		break;
-	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO:
+	else
 		Action_SkeletonBoss(TimeDelta);
+	}
 		break;
 #ifdef F2_SKELETON
 	case CObj_Manager::PLAYERINFO::PLAYER::FREE:

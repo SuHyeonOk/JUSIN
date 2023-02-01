@@ -40,8 +40,7 @@ HRESULT CUI_CutScene::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_fSizeX = 1280.f;
-	//m_fSizeY = 720.f * 1.9f;
-	m_fSizeY = 720.f * 1.3f;
+	m_fSizeY = 720.f * 1.9f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
@@ -55,13 +54,13 @@ void CUI_CutScene::Tick(_double TimeDelta)
 {
 	TalkTexture_Tick(TimeDelta);
 
-	switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	switch (CObj_Manager::GetInstance()->Get_Current_Level())
 	{
-	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
+	case LEVEL_GAMEPLAY:
 		CutSceneOne_Talk(TimeDelta);
 		break;
 
-	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO:
+	case LEVEL_SKELETON_BOSS:
 		CutSceneTwo_Talk(TimeDelta);
 		break;
 	}
@@ -92,7 +91,7 @@ HRESULT CUI_CutScene::Render()
 		--m_fX;
 	if (pGameInstance->Key_Pressing(DIK_D))
 		++m_fX;
-	
+
 	if (pGameInstance->Key_Down(DIK_R))
 	{
 		m_bSize_Change = false;
@@ -106,58 +105,54 @@ HRESULT CUI_CutScene::Render()
 		m_Script_Count = 0;
 
 	cout << "m_fX : " << m_fX << endl;
-
+	RELEASE_INSTANCE(CGameInstance);
 
 
 	// 대본
 
-	if (true == m_bSize_Change)
+	if (false == m_bSize_Change)
+		return S_OK;
+
+	switch (CObj_Manager::GetInstance()->Get_Current_Level())
 	{
-		switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	case LEVEL_GAMEPLAY:
+	{
+		switch (m_Script_Count)
 		{
-		case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
-		{
-			switch (m_Script_Count)
-			{
-			case 0:
-				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀!!! 어디 있다가 이제 오는거야"), _float2(494.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-				break;
-
-			case 1:
-				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("저기 할머니가 자꾸 날 깔아 뭉개려고해서 여기까지 도망쳤어"), _float2(381.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-				break;
-
-			case 2:
-				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 얼른 나좀 구하러 와줘!"), _float2(508.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-				break;
-			}
-		}
+		case 0:
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀!!! 어디 있다가 이제 오는거야"), _float2(494.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
 			break;
 
-		case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO:
-		{
-			switch (m_Script_Count)
-			{
-			case 0:
-				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("음 하하하! 날 찾으러 여기까지 왔다니 대단하지만"), _float2(430.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-				break;
+		case 1:
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("저기 할머니가 자꾸 날 깔아 뭉개려고해서 여기까지 도망쳤어"), _float2(381.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			break;
 
-			case 1:
-				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("너희들은 여기까지다."), _float2(570.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-				break;
-
-			case 2:
-				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("어디 한 번 즐겨볼까!!!"), _float2(558.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-				break;
-			}
-		}
+		case 2:
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 얼른 나좀 구하러 와줘!"), _float2(508.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
 			break;
 		}
-
-		
 	}
-	
-	RELEASE_INSTANCE(CGameInstance);
+	break;
+
+	case LEVEL_SKELETON_BOSS:
+	{
+		switch (m_Script_Count)
+		{
+		case 0:
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("음 하하하! 날 찾으러 여기까지 왔다니 대단하지만"), _float2(430.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			break;
+
+		case 1:
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("너희들은 여기까지다."), _float2(570.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			break;
+
+		case 2:
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("어디 한 번 즐겨볼까!!!"), _float2(558.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			break;
+		}
+		break;
+		}
+	}
 
 	return S_OK;
 }
@@ -254,33 +249,33 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 	if (false == m_bSize_Change)
 		return;
 
-	if (2 < m_Script_Count)
-	{
-		// 카메라 원래대로 되돌리기
-		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);						// 플레이어 보이도록 수정
-		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
+	//if (2 < m_Script_Count)
+	//{
+	//	// 카메라 원래대로 되돌리기
+	//	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);						// 플레이어 보이도록 수정
+	//	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
 
-		// 다음 사용을 위한 값 초기화
-		m_Script_Count = 0;
-		m_bSize_Change = false;
-		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
-		m_Script_TimeAcc = 0.0;
+	//	// 다음 사용을 위한 값 초기화
+	//	m_Script_Count = 0;
+	//	m_bSize_Change = false;
+	//	m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
+	//	m_Script_TimeAcc = 0.0;
 
-		// 컷씬이 끝났음을 알려준다.
-		CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
-		CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
-		pGameObject->Set_CutScene();
-		RELEASE_INSTANCE(CGameInstance);
+	//	// 컷씬이 끝났음을 알려준다.
+	//	CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
+	//	CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
+	//	pGameObject->Set_CutScene();
+	//	RELEASE_INSTANCE(CGameInstance);
 
-		return;
-	}
+	//	return;
+	//}
 
-	m_Script_TimeAcc += TimeDelta;
-	if (2.5 < m_Script_TimeAcc)
-	{
-		++m_Script_Count;
-		m_Script_TimeAcc = 0.0;
-	}
+	//m_Script_TimeAcc += TimeDelta;
+	//if (2.5 < m_Script_TimeAcc)
+	//{
+	//	++m_Script_Count;
+	//	m_Script_TimeAcc = 0.0;
+	//}
 }
 
 CUI_CutScene * CUI_CutScene::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

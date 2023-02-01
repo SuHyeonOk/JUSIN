@@ -71,6 +71,20 @@ void CE_FlyingEnvironment::Tick(_double TimeDelta)
 	// 이미지를 원하는 만큼 돌리고, 랜덤한 방향으로 날아가며, 알파값이 줄어들면서 사라진다.
 	__super::Tick(TimeDelta);
 
+	//// ★ 카메라를 바라보고 랜덤한 곳으로 회전하면서 이동하기
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//RELEASE_INSTANCE(CGameInstance);
+
+	//m_pTransformCom->LookAt(vCameraPos, true);
+
+	//// 입력한 Look 방향으로 이동하기
+	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//_vector vDistance = XMLoadFloat4(&m_f4RandomLook);
+	//vMyPos += XMVector3Normalize(vDistance) * (_float(TimeDelta) * 0.1f);
+	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+
 	m_pTransformCom->Go_Straight(TimeDelta);
 
 	m_dChange_TimeAcc += TimeDelta;
@@ -177,12 +191,13 @@ HRESULT CE_FlyingEnvironment::SetUp_ShaderResources()
 
 void CE_FlyingEnvironment::Ready_Butterflies()
 {
-	//_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 90.0f);
+	//_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(270.0f, 360.0f);
 	//_matrix	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
 	//_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
 	//vLook = XMVector3TransformCoord(vLook, RotationMatrix);
-
+	//XMStoreFloat4(&m_f4RandomLook, vLook);
 	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+
 	m_pTransformCom->Set_Pos(CUtilities_Manager::GetInstance()->Get_Random(1.0f, 2.0f));
 }
 

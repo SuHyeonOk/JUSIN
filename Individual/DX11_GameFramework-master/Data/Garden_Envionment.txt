@@ -12,3 +12,6 @@ Butterflies_Yellow3|-11.637|0|4.10717
 Butterflies_Yellow4|-18.1793|0|7.76871
 Butterflies_Yellow5|-18.1793|0|7.76871
 Butterflies_Yellow6|-37.8844|0|8.2791
+Butterflies_Bule0|-42.3437|0|23.579
+Butterflies_Red1|-42.8994|0|24.037
+Butterflies_Yellow2|-43.0998|-2.38419e-07|24.6989

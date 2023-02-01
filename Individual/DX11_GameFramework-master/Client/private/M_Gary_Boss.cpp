@@ -73,7 +73,10 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	if (false == m_bCutScene)							// 외부에서 컷씬이 끝났음을 알려준다.
+	{
+		CutScene_Effect();
 		return;
+	}
 	else
 		CutScene_Tick(TimeDelta);						// 컷 씬이 한 번 실행 되고 난 후에 더 이상 실행 되지 않을 함수 이다.
 
@@ -976,6 +979,20 @@ void CM_Gary_Boss::CutScene_Tick(const _double & TimeDelta)
 	{
 		m_bCutSceneEnd = true;
 		m_dEffect_TimeAcc = 0.0;
+	}
+}
+
+void CM_Gary_Boss::CutScene_Effect()
+{
+	static _bool	bCutSceneEffect;
+
+	if (false == bCutSceneEffect)
+	{
+		bCutSceneEffect = true;
+
+		//CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 6.2f, 1.5f, 21.0f });
+		//CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 7.2f, 1.5f, 20.5f });
+		CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 5.2f, 1.5f, 20.5f });
 	}
 }
 

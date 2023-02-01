@@ -419,7 +419,7 @@ void CJake::Current_Player(_double TimeDelta)
 				_float4 f4MyPos;
 				XMStoreFloat4(&f4MyPos, vMyPos);
 
-				CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x - 0.75f, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f));
+				CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x - 0.75f, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), 20);
 				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x - 0.75f, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
 			}
 

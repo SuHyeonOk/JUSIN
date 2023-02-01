@@ -52,11 +52,15 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType || 
 		CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE == m_tEffectInfo.eTextureType)
+		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
 	
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
 		m_iDead_Number = 10;
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
 		m_iDead_Number = 3;
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE == m_tEffectInfo.eTextureType)
+		m_iDead_Number = 40;
 
 	return S_OK;
 }
@@ -89,7 +93,8 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 		}
 
 		if (m_iDead_Number <= m_iDead_Count)
-			CGameObject::Set_Dead();
+			m_iDead_Number = 0;
+			//CGameObject::Set_Dead();
 	}
 	else
 	{
@@ -154,6 +159,8 @@ HRESULT CE_Alpha_Change::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Boom_Fire"));
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Burn"));
+	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_CutScene_Fire"));
 	
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

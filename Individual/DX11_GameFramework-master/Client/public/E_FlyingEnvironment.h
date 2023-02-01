@@ -52,13 +52,14 @@ private:
 private:
 	EFFECTINFO				m_tEffectInfo = {};
 
-private:	// Shader
+private:
 	_int					m_iTexture_Index = 0;
 	_int					m_iTextureDead_Count = 0;
 	_double					m_dChange_TimeAcc = 0.0;
 	_float					m_fAlpha = 1.0f;
 
 	_bool					m_bFindPlayer = false;
+	_float4					m_f4RandomLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 
 public:
 	static	CE_FlyingEnvironment*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -16,6 +16,7 @@
 #include "Coin.h"
 #include "Page.h"
 #include "O_Collider.h"
+#include "E_Alpha_Change.h"
 
 CLevel_Skleton_Boss::CLevel_Skleton_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
