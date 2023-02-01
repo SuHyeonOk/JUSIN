@@ -190,6 +190,7 @@
     <ClInclude Include="..\public\E_Beneficial.h" />
     <ClInclude Include="..\public\E_DieCenter.h" />
     <ClInclude Include="..\public\E_Food_Up.h" />
+    <ClInclude Include="..\public\E_Look_Alpha.h" />
     <ClInclude Include="..\public\E_Look_Grow.h" />
     <ClInclude Include="..\public\E_Look_Up.h" />
     <ClInclude Include="..\public\E_NoLook_Grow.h" />
@@ -313,6 +314,7 @@
     <ClCompile Include="..\private\E_Beneficial.cpp" />
     <ClCompile Include="..\private\E_DieCenter.cpp" />
     <ClCompile Include="..\private\E_Food_Up.cpp" />
+    <ClCompile Include="..\private\E_Look_Alpha.cpp" />
     <ClCompile Include="..\private\E_Look_Grow.cpp" />
     <ClCompile Include="..\private\E_Look_Up.cpp" />
     <ClCompile Include="..\private\E_NoLook_Grow.cpp" />

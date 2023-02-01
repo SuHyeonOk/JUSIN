@@ -11,13 +11,13 @@
 #include "E_Alpha_Change.h"
 #include "E_Alpha_Rotation.h"
 #include "E_Look_Up.h"
+#include "E_Look_Alpha.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
 {
 }
-
 
 HRESULT CEffect_Manager::Effect_Potal_StarColor_Create(const _float3 & f3Pos, const _float3 & f3Color)
 {
@@ -89,6 +89,21 @@ HRESULT CEffect_Manager::Effect_Boss_Potal_Create(const _float3 & f3Pos)
 	tEffectInfo.eTextureType = CE_Look_Grow::EFFECTINFO::POTAL_0;		// °ñ¹ðÀÌ
 	tEffectInfo.f3Pos = f3Pos;
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Grow"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Boss_SkeletonBig(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Look_Alpha::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Alpha::EFFECTINFO::BIGSKELETON_TEXTURE;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Alpha"), &tEffectInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
