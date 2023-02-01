@@ -57,6 +57,7 @@
 #include "E_Look_Up.h"
 #include "E_Look_Alpha.h"
 #include "Player_Talk.h"
+#include "E_FlyingEnvironment.h"
 
 // Obj
 #include "O_Box.h"
@@ -1363,6 +1364,21 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/PlayerTalk/Finn_%d.png"), 7))))
 		return E_FAIL;
 
+	// Environment
+	/* For.Prototype_Component_Texture_Butterflies_Bule */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_Bule"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_Bule_%d.png"), 4))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_Butterflies_Red */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_Red"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_Red_%d.png"), 4))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_Butterflies_Yellow */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_Yellow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_Yellow_%d.png"), 4))))
+		return E_FAIL;
+
+
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -1422,6 +1438,11 @@ HRESULT CLoader::Effect_Create()
 	// PlayerTalk
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Talk"),
 		CPlayer_Talk::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_E_FlyingEnvironment*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_FlyingEnvironment"),
+		CE_FlyingEnvironment::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

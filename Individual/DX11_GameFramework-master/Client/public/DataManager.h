@@ -22,6 +22,7 @@ public:
 	virtual ~CDataManager() = default;
 
 public:
+	vector<OBJINFO>	CDataManager::Get_EnvironmentInfo() { return m_vecEnvironmentInfo; }
 	vector<OBJINFO>	CDataManager::Get_FoodInfo() { return m_vecFoodInfo; }
 	vector<OBJINFO>	CDataManager::Get_CoinInfo() { return m_vecCoinInfo; }
 	vector<OBJINFO>	CDataManager::Get_PageInfo() { return m_vecPageInfo; }
@@ -29,6 +30,7 @@ public:
 	vector<OBJINFO>	CDataManager::Get_ObjectInfo() { return m_vecObjectInfo; }
 	vector<OBJINFO>	CDataManager::Get_MonsterInfo() { return m_vecMonsterInfo; }
 
+	void			CDataManager::Set_Environment(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_FoodInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_CoinInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_PageInfo(const _tchar& ObjName, const _float3& ObjPos);
@@ -37,6 +39,7 @@ public:
 	void			CDataManager::Set_MonsterInfo(const _tchar& ObjName, const _float3& ObjPos);
 
 private:
+	vector<OBJINFO>	m_vecEnvironmentInfo;
 	vector<OBJINFO>	m_vecFoodInfo;
 	vector<OBJINFO>	m_vecCoinInfo;
 	vector<OBJINFO>	m_vecPageInfo;

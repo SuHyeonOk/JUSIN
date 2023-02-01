@@ -18,6 +18,7 @@
 #include "Page.h"
 #include "S_Jake_Son.h"
 #include "O_Collider.h"
+#include "E_FlyingEnvironment.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -66,6 +67,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	Load_Item();
 	Load_Object();
 	Load_Monster();
+	Load_Envionment();
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI"), TEXT("Prototype_GameObject_UI"))))
@@ -281,7 +283,7 @@ void CLevel_GamePlay::ImGui()
 {
 	ImGui::Begin("GamePlayTool");
 
-	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Item", "Object", "Monster" };
+	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Item", "Object", "Monster", "Envionmen" };
 	static int iItemNum = 0;
 	ImGui::Combo("##2", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
@@ -297,6 +299,8 @@ void CLevel_GamePlay::ImGui()
 		ImGui_Object();
 	else if (6 == iItemNum)
 		ImGui_Monster();
+	else if (7 == iItemNum)
+		ImGui_Envionment();
 
 	ImGui::End();
 
@@ -927,6 +931,91 @@ void CLevel_GamePlay::ImGui_Monster()
 
 	if(ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/Monster.txt", SW_SHOW);
+}
+
+void CLevel_GamePlay::ImGui_Envionment()
+{
+	const _char* szObjName[] = { "Butterflies_Bule", "Butterflies_Red", "Butterflies_Yellow" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_Envionmen", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+
+	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
+
+		if (0 == iObjNum)
+		{
+			m_wstObjName = L"Butterflies_Bule";
+			m_wstObjName += to_wstring(m_iItem_Count);
+
+			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE;
+			tEffectInfo.f3Pos = m_f3ClickPos;
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return;
+
+			m_iItem_Count++;
+		}
+		else if (1 == iObjNum)
+		{
+			m_wstObjName = L"Butterflies_Red";
+			m_wstObjName += to_wstring(m_iItem_Count);
+
+			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED;
+			tEffectInfo.f3Pos = m_f3ClickPos;
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return;
+
+			m_iItem_Count++;
+		}
+		else if (2 == iObjNum)
+		{
+			m_wstObjName = L"Butterflies_Yellow";
+			m_wstObjName += to_wstring(m_iItem_Count);
+
+			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW;
+			tEffectInfo.f3Pos = m_f3ClickPos;
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return;
+
+			m_iItem_Count++;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Envionmen Save"))
+	{
+		wofstream fout("../../Data/Garden_Envionment.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/Garden_Envionment.txt", SW_SHOW);
 }
 
 HRESULT CLevel_GamePlay::Load_Food()
@@ -1648,6 +1737,109 @@ HRESULT CLevel_GamePlay::Load_Monster()
 			if (m_wstObjName == wstObjNameTemp)
 			{
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))	// ¿ä±â
+					return E_FAIL;
+			}
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Load_Envionment()
+{
+	wifstream		fin("../../Data/Garden_Envionment.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return E_FAIL;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		CDataManager::GetInstance()->Set_Environment(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_EnvironmentInfo();
+	_int iCoinVecCount = _int(eVecObjInfo.size());
+
+	for (auto& pObjInfo : eVecObjInfo)
+	{
+		for (_int i = 0; i < iCoinVecCount; i++)
+		{
+			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE;
+			tEffectInfo.f3Pos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Butterflies_Bule";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+					return E_FAIL;
+			}
+		}
+
+		for (_int i = 0; i < iCoinVecCount; i++)
+		{
+			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED;
+			tEffectInfo.f3Pos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Butterflies_Red";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+					return E_FAIL;
+			}
+		}
+
+		for (_int i = 0; i < iCoinVecCount; i++)
+		{
+			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW;
+			tEffectInfo.f3Pos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Butterflies_Yellow";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstObjNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstObjNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 					return E_FAIL;
 			}
 		}

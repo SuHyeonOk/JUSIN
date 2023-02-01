@@ -1,0 +1,14 @@
+Butterflies_Bule0|-13.5605|0|-7.98897
+Butterflies_Bule1|-4.9752|0|8.57258
+Butterflies_Bule2|-28.2011|0|8.37679
+Butterflies_Bule3|-38.1951|0|4.0867
+Butterflies_Red0|-5.54029|0|-4.51471
+Butterflies_Red1|-8.8462|0|5.19436
+Butterflies_Red2|-27.0501|0|8.32587
+Butterflies_Yellow0|0.852055|0|-2.13589
+Butterflies_Yellow1|-10.5114|0|4.07063
+Butterflies_Yellow2|-11.637|0|4.10717
+Butterflies_Yellow3|-11.637|0|4.10717
+Butterflies_Yellow4|-18.1793|0|7.76871
+Butterflies_Yellow5|-18.1793|0|7.76871
+Butterflies_Yellow6|-37.8844|0|8.2791

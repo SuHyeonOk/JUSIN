@@ -7,6 +7,15 @@ CDataManager::CDataManager()
 {
 }
 
+void			CDataManager::Set_Environment(const _tchar& ObjName, const _float3& ObjPos)
+{
+	OBJINFO		eObjInfo;
+	memcpy(eObjInfo.ObjName, &ObjName, sizeof(_char[MAX_PATH]));
+	eObjInfo.ObjPos = ObjPos;
+
+	m_vecEnvironmentInfo.push_back(eObjInfo);
+}
+
 void CDataManager::Set_FoodInfo(const _tchar & ObjName, const _float3 & ObjPos)
 {
 	OBJINFO		eObjInfo;

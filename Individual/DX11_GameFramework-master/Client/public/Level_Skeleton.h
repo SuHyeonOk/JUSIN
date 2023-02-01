@@ -38,6 +38,7 @@ private:
 	void	ImGui_Item();
 	void	ImGui_Object();
 	void	ImGui_Monster();
+	void	ImGui_Envionment();
 
 private:
 	HRESULT	Load_Food();
@@ -46,6 +47,7 @@ private:
 	HRESULT	Load_Item();
 	HRESULT	Load_Object();
 	HRESULT	Load_Monster();
+	HRESULT	Load_Envionment();
 
 private:
 	const _tchar*	m_szObjName;

@@ -399,7 +399,7 @@ HRESULT CEffect_Manager::Effect_Star3_Count(_float3 f3Pos, const _float3 & f3Col
 		tEffetInfo.f3Color = f3Color;
 
 		_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f);	// 랜덤으로
-		_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
+		_matrix	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
 		_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
 		vLook = XMVector3TransformCoord(vLook, RotationMatrix);		// Look 을 만들어서 넘긴다.
 		XMStoreFloat4(&tEffetInfo.f4Look, vLook);

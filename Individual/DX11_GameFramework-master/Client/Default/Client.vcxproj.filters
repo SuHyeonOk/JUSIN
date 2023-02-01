@@ -576,6 +576,9 @@
     <ClInclude Include="..\public\E_Look_Alpha.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\E_FlyingEnvironment.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -936,6 +939,9 @@
       <Filter>02.GameObjects\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\private\E_Look_Alpha.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\E_FlyingEnvironment.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>
