@@ -13,6 +13,11 @@ private:
 	virtual ~CM_Skeleton_Shield() = default;
 
 public:
+	_bool	Get_Dance() {
+		return m_bDance;
+	}
+
+public:
 	virtual HRESULT		Initialize_Prototype()					override;
 	virtual HRESULT		Initialize(void* pArg)					override;
 	virtual void		Tick(_double TimeDelta)					override;
@@ -35,6 +40,7 @@ private:
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
 	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
+	void				Dance_Tick();
 
 	void				Hit_Process(const _double & TimeDelta);
 	void				BossCage();
@@ -44,6 +50,7 @@ private:
 	vector<CGameObject*>	m_MonsterParts;
 	_float4					m_f4CenterPos;
 
+	_bool					m_bDance = false;
 	_bool					m_bFind = false;
 	_bool					m_bAttack = false;
 

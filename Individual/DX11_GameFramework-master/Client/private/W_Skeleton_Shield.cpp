@@ -3,7 +3,6 @@
 
 #include "GameInstance.h"
 #include "Bone.h"
-
 #include "Obj_Manager.h"
 
 CW_Skeleton_Shield::CW_Skeleton_Shield(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

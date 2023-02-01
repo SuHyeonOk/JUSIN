@@ -104,7 +104,7 @@ void CM_Monster::On_Collision(CGameObject * pOther)
 		m_bPlayer_Attack = true;
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())
-		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
+		m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::DANCE;
 }
 
 _bool CM_Monster::Random_Move(CTransform * pTransform, _float4 f4CenterPos, _double TimeDelta, _float fRange)
@@ -309,9 +309,17 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)											
 	{
-		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;														// 몬스터 상태 변경
+		if (m_tMonsterInfo.eState != CM_Monster::MONSTERINFO::STATE::DANCE)
+		{
+			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;													// 몬스터 상태 변경
+			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());				// 플레이어를 바라보면서
+		}
+		else
+		{
+			CM_Monster::Effect_Hit();																	// 마르셀린에게 공격을 당할 때는 몬스터에서 처리해 주지 않기 때문에 여기서 한다.
+			m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
+		}
 
-		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());					// 플레이어를 바라보면서
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백
 
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기

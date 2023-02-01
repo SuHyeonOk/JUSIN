@@ -131,7 +131,7 @@ HRESULT CM_Skeleton_Shield::Render()
 
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
-	// 이 몬스터의 경우에는 방
+	// 이 몬스터의 경우에는 방패를 들고 있기 때문에 따로 처리했다.
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (L"Player_Weapon" == pOther->Get_Tag())
@@ -142,7 +142,10 @@ void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;
 
 	if (L"Skill_Marceline" == pOther->Get_Tag())
-		m_tMonsterInfo.eState = m_tMonsterInfo.DANCE;
+	{
+		m_bDance = true;
+		m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::DANCE;
+	}
 }
 
 HRESULT CM_Skeleton_Shield::SetUp_Components()
@@ -307,7 +310,7 @@ void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 		break;
 
 	case MONSTERINFO::STATE::DANCE:
-		CM_Monster::Dance_Time();
+		Dance_Tick();
 		m_pModelCom->Set_AnimIndex(7);
 		break;
 	}
@@ -397,20 +400,33 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 {
 	if (0 == m_iRandomNum)
 		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(1, 2);
-	m_iRandomNum = 2;
+	
+	if (true == m_bDance)		// 마르셀린 아이템 사용중 에는 무조건 공격을 받는다.
+		m_iRandomNum = 1;
+
 	if (1 == m_iRandomNum)
 	{
 		m_bPlayer_Attack = true;
 		CM_Monster::Effect_Hit();
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.2f);
 
-		m_pModelCom->Set_AnimIndex(2, false);	// Hit
-		if (m_pModelCom->Get_Finished())
+		if (false == m_bDance)
+		{
+			m_pModelCom->Set_AnimIndex(2, false);	// Hit
+			if (m_pModelCom->Get_Finished())
+			{
+				m_iRandomNum = 0;
+				m_bShader_Hit = false;
+
+				m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::ATTACK;
+			}
+		}
+		else
 		{
 			m_iRandomNum = 0;
-
 			m_bShader_Hit = false;
-			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
+
+			m_tMonsterInfo.eState = CM_Monster::MONSTERINFO::STATE::IDLE;
 		}
 	}
 	else if (2 == m_iRandomNum)
@@ -430,6 +446,15 @@ void CM_Skeleton_Shield::Die_Tick(const _double& TimeDelta)
 	CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 6);
 }
 
+void CM_Skeleton_Shield::Dance_Tick()
+{
+	if (CObj_Manager::PLAYERINFO::STATE::S_MARCELINE != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		m_bDance = false;
+		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	}
+}
+
 void CM_Skeleton_Shield::Hit_Process(const _double & TimeDelta)
 {
 	if (!m_bPlayer_Attack)		// 플레이어와 충돌 했을 때
@@ -446,7 +471,8 @@ void CM_Skeleton_Shield::Hit_Process(const _double & TimeDelta)
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
-		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());					// 플레이어를 바라보면서
+		if (false == m_bDance)
+			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());				// 플레이어를 바라보면서
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백
 
 		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// 플레이어의 공격력 으로 몬스터 체력 깍기
