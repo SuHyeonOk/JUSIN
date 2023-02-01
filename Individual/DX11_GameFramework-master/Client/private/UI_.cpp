@@ -350,7 +350,8 @@ void CUI_::Tick(_double TimeDelta)
 	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
 		return;
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		m_vecUI[38]->Tick(TimeDelta);
 		return;
@@ -518,7 +519,8 @@ void CUI_::Late_Tick(_double TimeDelta)
 	if (LEVEL_LOADING == CObj_Manager::GetInstance()->Get_Current_Level())
 		return;
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		m_vecUI[38]->Late_Tick(TimeDelta);
 		return;

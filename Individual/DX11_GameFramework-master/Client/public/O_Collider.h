@@ -16,7 +16,7 @@ class CO_Collider final : public CGameObject
 public:
 	typedef struct tagColliderInfo
 	{
-		enum TYPE		{ CUTSCENE_ONE, TYPE_END };
+		enum TYPE		{ CUTSCENE_ONE, CUTSCENE_TWO, TYPE_END };
 		TYPE			eType = TYPE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };

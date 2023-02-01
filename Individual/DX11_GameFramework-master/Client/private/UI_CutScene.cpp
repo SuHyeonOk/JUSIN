@@ -5,6 +5,8 @@
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
 
+#include "M_Gary_Boss.h"	// 몬스터에게 컷 씬이 끝났음을 알린다.
+
 CUI_CutScene::CUI_CutScene(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)
 {
@@ -38,7 +40,8 @@ HRESULT CUI_CutScene::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_fSizeX = 1280.f;
-	m_fSizeY = 720.f * 1.9f;
+	//m_fSizeY = 720.f * 1.9f;
+	m_fSizeY = 720.f * 1.3f;
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
@@ -52,9 +55,16 @@ void CUI_CutScene::Tick(_double TimeDelta)
 {
 	TalkTexture_Tick(TimeDelta);
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
 		CutSceneOne_Talk(TimeDelta);
+		break;
 
+	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO:
+		CutSceneTwo_Talk(TimeDelta);
+		break;
+	}
 }
 
 void CUI_CutScene::Late_Tick(_double TimeDelta)
@@ -103,20 +113,48 @@ HRESULT CUI_CutScene::Render()
 
 	if (true == m_bSize_Change)
 	{
-		switch (m_Script_Count)
+		switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 		{
-		case 0:
-			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀!!! 어디 있다가 이제 오는거야"), _float2(494.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+		case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
+		{
+			switch (m_Script_Count)
+			{
+			case 0:
+				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀!!! 어디 있다가 이제 오는거야"), _float2(494.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+				break;
+
+			case 1:
+				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("저기 할머니가 자꾸 날 깔아 뭉개려고해서 여기까지 도망쳤어"), _float2(381.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+				break;
+
+			case 2:
+				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 얼른 나좀 구하러 와줘!"), _float2(508.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+				break;
+			}
+		}
 			break;
 
-		case 1:
-			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("저기 할머니가 자꾸 날 깔아 뭉개려고해서 여기까지 도망쳤어"), _float2(381.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
-			break;
+		case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO:
+		{
+			switch (m_Script_Count)
+			{
+			case 0:
+				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("음 하하하! 날 찾으러 여기까지 왔다니 대단하지만"), _float2(430.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+				break;
 
-		case 2:
-			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("핀 얼른 나좀 구하러 와줘!"), _float2(508.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			case 1:
+				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("너희들은 여기까지다."), _float2(570.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+				break;
+
+			case 2:
+				pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("어디 한 번 즐겨볼까!!!"), _float2(558.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+				break;
+			}
+		}
 			break;
 		}
+
+		
 	}
 	
 	RELEASE_INSTANCE(CGameInstance);
@@ -196,18 +234,49 @@ void CUI_CutScene::CutSceneOne_Talk(const _double & TimeDelta)
 		pCameraTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-36.4833f, 3.69427f, 36.0742f, 1.0f));	// 현재 플레이어의 좌표로 이동 시킨다.
 		RELEASE_INSTANCE(CGameInstance);
 
-		m_fSizeY += _float(TimeDelta) * 100.0f;
-
-		// 다음 사용을 위한 값 초기화
 		m_Script_Count = 0;
 		m_bSize_Change = false;
-		m_fSizeY = 720.f * 1.9f;
+		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
 		m_Script_TimeAcc = 0.0;
 		return;
 	}
 
 	m_Script_TimeAcc += TimeDelta;
-	if (3.0 < m_Script_TimeAcc)
+	if (2.5 < m_Script_TimeAcc)
+	{
+		++m_Script_Count;
+		m_Script_TimeAcc = 0.0;
+	}
+}
+
+void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
+{
+	if (false == m_bSize_Change)
+		return;
+
+	if (2 < m_Script_Count)
+	{
+		// 카메라 원래대로 되돌리기
+		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);						// 플레이어 보이도록 수정
+		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
+
+		// 다음 사용을 위한 값 초기화
+		m_Script_Count = 0;
+		m_bSize_Change = false;
+		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
+		m_Script_TimeAcc = 0.0;
+
+		// 컷씬이 끝났음을 알려준다.
+		CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
+		CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
+		pGameObject->Set_CutScene();
+		RELEASE_INSTANCE(CGameInstance);
+
+		return;
+	}
+
+	m_Script_TimeAcc += TimeDelta;
+	if (2.5 < m_Script_TimeAcc)
 	{
 		++m_Script_Count;
 		m_Script_TimeAcc = 0.0;

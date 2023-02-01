@@ -1712,6 +1712,14 @@ HRESULT CLoader::SkeletonBossTemp()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_W_Skeleton_Shield"),
 		CW_Skeleton_Shield::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Collider
+	/* For.Prototype_GameObject_O_Collider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Collider"),
+		CO_Collider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 	lstrcpy(m_szLoadingText, TEXT("·Îµù³¡. "));
 
 	Safe_Release(pGameInstance);

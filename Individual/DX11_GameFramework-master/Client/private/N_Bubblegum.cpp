@@ -41,7 +41,7 @@ HRESULT CN_Bubblegum::Initialize(void * pArg)
 	NpcDesc.eNpcType = NpcDesc.BUBBLEGUM;
 	NpcDesc.TransformDesc.fSpeedPerSec = 0.f;
 	NpcDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	NpcDesc.TransformDesc.f3Pos = _float3(NpcDesc.TransformDesc.f3Pos.x, NpcDesc.TransformDesc.f3Pos.y, NpcDesc.TransformDesc.f3Pos.z);
+	NpcDesc.TransformDesc.f3Pos = NpcDesc.TransformDesc.f3Pos;
 
 	if (FAILED(CN_NPC::Initialize(&NpcDesc)))
 		return E_FAIL;

@@ -47,6 +47,7 @@ private:
 	void	ToFollow(_double TimeDelta);
 	
 	void	Action_Garden(const _double & TimeDelta);
+	void	Action_SkeletonBoss(const _double & TimeDelta);
 
 private:
 	CCamera::CAMERADESC			m_CameraDesc;
@@ -59,8 +60,6 @@ private:
 	_int		m_iShakePower = 0;
 
 	_float		m_fYZ_Move = -12.0f;
-
-
 public:
 	static CCamera_Dynamic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -189,28 +189,32 @@ void		CObj_Manager::Current_Player()
 		}
 	}
 
-	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE != CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
-		switch (m_ChangeTarget)
-		{
-		case PLAYERINFO::FINN:
-			m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
-			break;
+		RELEASE_INSTANCE(CGameInstance);
+		return;
+	}
+		
+	switch (m_ChangeTarget)
+	{
+	case PLAYERINFO::FINN:
+		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FINN;
+		break;
 
-		case PLAYERINFO::JAKE:
-			m_tPlayerInfo.ePlayer = m_tPlayerInfo.JAKE;
-			break;
+	case PLAYERINFO::JAKE:
+		m_tPlayerInfo.ePlayer = m_tPlayerInfo.JAKE;
+		break;
 
 #ifdef F2_SKELETON
-		case PLAYERINFO::FREE:
-			m_tPlayerInfo.ePlayer = m_tPlayerInfo.FREE; // ▣ 추 후 삭제 해야함
-			break;
+	case PLAYERINFO::FREE:
+		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FREE; // ▣ 추 후 삭제 해야함
+		break;
 #endif
 
-		case PLAYERINFO::RESET:
-			m_ChangeTarget = 0; // 즉, Finn
-			break;
-		}
+	case PLAYERINFO::RESET:
+		m_ChangeTarget = 0; // 즉, Finn
+		break;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

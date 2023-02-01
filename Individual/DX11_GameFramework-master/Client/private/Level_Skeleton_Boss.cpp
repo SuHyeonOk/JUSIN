@@ -15,9 +15,7 @@
 #include "Food.h"
 #include "Coin.h"
 #include "Page.h"
-
-#include "S_Jake_Son.h"
-#include "Page.h"
+#include "O_Collider.h"
 
 CLevel_Skleton_Boss::CLevel_Skleton_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -68,8 +66,6 @@ HRESULT CLevel_Skleton_Boss::Initialize()
 void CLevel_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-	ImGui();
 }
 
 void CLevel_Skleton_Boss::Late_Tick(_double TimeDelta)
@@ -178,6 +174,12 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	CO_Collider::COLLIDERINFO		tColliderInfo;
+	tColliderInfo.eType = CO_Collider::COLLIDERINFO::CUTSCENE_TWO;
+	tColliderInfo.f3Pos = _float3(7.0f, 0.f, 0.f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
+		return E_FAIL;
+
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
 		return E_FAIL;
 
@@ -204,7 +206,7 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Camera(const _tchar * pLayerTag)
 
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
 	eCameraInfo.eLevel = LEVEL_SKELETON_BOSS;
-	eCameraInfo.f3Pos = _float3(7.0f, 0.f, 0.f);
+	eCameraInfo.f3Pos = _float3(6.0f, 3.0f, 12.6f);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 
@@ -234,14 +236,14 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Jake(const _tchar * pLayerTag)
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	return S_OK;
+	return S_OK; 
 }
 
 HRESULT CLevel_Skleton_Boss::Ready_Layer_Boss(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, pLayerTag, TEXT("Prototype_GameObject_M_Gary_Boss"), &_float3(4.0f, 0.0f, 17.0f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, pLayerTag, TEXT("Prototype_GameObject_M_Gary_Boss"), &_float3(6.2f, 1.5f, 20.0f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -259,87 +261,6 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_Map(const _tchar * pLayerTag)
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
-}
-
-void CLevel_Skleton_Boss::ImGui()
-{
-	const _char* szObjName[] = { "Box", "JakeSon_Test", "Page_Paint","Page_Marcelint", "Page_Coin", "Page_Fiona", "Page_JakeSon" };
-	static int iObjNum = 0;
-	ImGui::Combo("##2_Object", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
-
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	_float4		f4MousePos;
-	f4MousePos = pGameInstance->Get_MousePos();
-
-	CPage::PAGEINFO		tPageInfo;
-
-	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	{
-		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
-
-		if (0 == iObjNum)
-		{
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_O_Box"), TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
-				return;
-		}
-		else if (1 == iObjNum)
-		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-			CS_Jake_Son::JAKESONINFO tJakeSonInfo;
-			tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_E;
-			tJakeSonInfo.fPos = m_f3ClickPos;
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_S_Jake_Son"), TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
-				return;
-
-			RELEASE_INSTANCE(CGameInstance);
-
-		}
-		if (2 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::PAINT;
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_Page"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-		}
-		if (3 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT;
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_Page"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-		}
-		if (4 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::COIN;
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_Page"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-		}
-		if (5 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::FIONA;
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_Page"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-		}
-		if (6 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::JAKESON;
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Prototype_GameObject_Page"), TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-		}
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 CLevel_Skleton_Boss * CLevel_Skleton_Boss::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

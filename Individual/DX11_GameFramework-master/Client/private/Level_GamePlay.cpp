@@ -246,7 +246,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
 
 	CS_Jake_Son::JAKESONINFO tJakeSonInfo;
 	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_A;
-	tJakeSonInfo.fPos = _float3(-16.23, 0.2f, 7.0f);
+	tJakeSonInfo.fPos = _float3(-16.23f, 0.2f, 7.0f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
 		return E_FAIL;
 

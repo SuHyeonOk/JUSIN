@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Skill_Manager.h"
 
 CO_Collider::CO_Collider(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -91,6 +92,9 @@ HRESULT CO_Collider::Render()
 
 void CO_Collider::On_Collision(CGameObject * pOther)
 {
+	// 충돌 하는 순간 카메라 전환이 되는데 이 때 그냥 두게 되면 플레이어가 찌부 되어서 잠시 없애둔다.
+	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
+
 	switch (m_ColliderInfo.eType)
 	{
 	case COLLIDERINFO::TYPE::CUTSCENE_ONE:
@@ -98,6 +102,14 @@ void CO_Collider::On_Collision(CGameObject * pOther)
 		if (L"Finn" == pOther->Get_Tag())
 		{
 			CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE);
+			CGameObject::Set_Dead();
+		}
+	}
+	case COLLIDERINFO::TYPE::CUTSCENE_TWO:
+	{
+		if (L"Finn" == pOther->Get_Tag())
+		{
+			CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO);
 			CGameObject::Set_Dead();
 		}
 	}
@@ -123,19 +135,12 @@ HRESULT CO_Collider::SetUp_Components()
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 
-	switch (m_ColliderInfo.eType)
-	{
-	case COLLIDERINFO::TYPE::CUTSCENE_ONE:
-	{
-		ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-		ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
+	ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
+	ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
 
-		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
-			(CComponent**)&m_pColliderCom, &ColliderDesc)))
-			return E_FAIL;
-	}
-	break;
-	}
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+		(CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

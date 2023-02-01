@@ -43,9 +43,6 @@
     <Filter Include="01.Levels\02.GamePlay">
       <UniqueIdentifier>{22df0cdb-5b80-4341-b095-9cf9d96f954c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Map">
-      <UniqueIdentifier>{7c83f2f1-d10e-45a7-9d0b-8751ff0bb839}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Monster">
       <UniqueIdentifier>{fd15bb03-f55a-4792-beaf-83947147a9b8}</UniqueIdentifier>
     </Filter>
@@ -195,6 +192,9 @@
     </Filter>
     <Filter Include="02.GameObjects\UI\CutScene">
       <UniqueIdentifier>{f43f43ba-5629-4594-a32d-cd26f707ab51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Item\Map">
+      <UniqueIdentifier>{7c83f2f1-d10e-45a7-9d0b-8751ff0bb839}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -355,10 +355,10 @@
       <Filter>01.Levels\03.Skeleton</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Map_Garden.h">
-      <Filter>02.GameObjects\Map</Filter>
+      <Filter>02.GameObjects\Item\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Map_Skeleton.h">
-      <Filter>02.GameObjects\Map</Filter>
+      <Filter>02.GameObjects\Item\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\public\O_Portal.h">
       <Filter>02.GameObjects\Object</Filter>
@@ -385,7 +385,7 @@
       <Filter>01.Levels\04. Skeleton_Boss</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Map_Skeleton_Boss.h">
-      <Filter>02.GameObjects\Map</Filter>
+      <Filter>02.GameObjects\Item\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\public\S_PaintWork.h">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>
@@ -714,10 +714,10 @@
       <Filter>01.Levels\03.Skeleton</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Map_Skeleton.cpp">
-      <Filter>02.GameObjects\Map</Filter>
+      <Filter>02.GameObjects\Item\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Map_Garden.cpp">
-      <Filter>02.GameObjects\Map</Filter>
+      <Filter>02.GameObjects\Item\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\O_Portal.cpp">
       <Filter>02.GameObjects\Object</Filter>
@@ -744,7 +744,7 @@
       <Filter>01.Levels\04. Skeleton_Boss</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Map_Skeleton_Boss.cpp">
-      <Filter>02.GameObjects\Map</Filter>
+      <Filter>02.GameObjects\Item\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\private\S_PaintWork.cpp">
       <Filter>02.GameObjects\PlayerSkill\PaintWork</Filter>

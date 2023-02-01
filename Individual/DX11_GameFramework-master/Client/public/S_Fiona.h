@@ -21,13 +21,13 @@ private:
 	virtual ~CS_Fiona() = default;
 
 public:
-	virtual HRESULT		Initialize_Prototype() override;
-	virtual HRESULT		Initialize(void* pArg) override;
-	virtual void		Tick(_double TimeDelta) override;
-	virtual void		Late_Tick(_double TimeDelta) override;
-	virtual HRESULT		Render() override;
+	virtual HRESULT			Initialize_Prototype() override;
+	virtual HRESULT			Initialize(void* pArg) override;
+	virtual void			Tick(_double TimeDelta) override;
+	virtual void			Late_Tick(_double TimeDelta) override;
+	virtual HRESULT			Render() override;
 
-	virtual void		On_Collision(CGameObject* pOther) override;
+	virtual void			On_Collision(CGameObject* pOther) override;
 
 private:
 	CShader*				m_pShaderCom = nullptr;
@@ -42,28 +42,28 @@ private:
 	CCollider*				m_pPlayer_ColliderCom = nullptr;
 
 private:
-	HRESULT SetUp_Components();
-	HRESULT SetUp_ShaderResources();
-
-	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
-
-private:
-	void	Parts_Tick(const _double & TimeDelta);
-	void	Parts_LateTick(const _double & TimeDelta);
+	HRESULT					SetUp_Components();
+	HRESULT					SetUp_ShaderResources();
+							
+	HRESULT					Ready_Parts();	// 나 에서 생성할 객체들
 
 private:
-	void				Death_Set(const _double & TimeDelta);
-	void				Effect_Create(const _double & TimeDelta);
+	void					Parts_Tick(const _double & TimeDelta);
+	void					Parts_LateTick(const _double & TimeDelta);
 
 private:
-	void				KeyInput(const _double & TimeDelta);
+	void					Death_Set(const _double & TimeDelta);
+	void					Effect_Create(const _double & TimeDelta);
 
-	void				Skill_Tick(const _double & TimeDelta);
-	void				Attack_Tick();
-	void				Cat_Tick();
-	void				Hit_Tick(const _double & TimeDelta);
-	void				Stun_Tick();
-	void				Dance_Tick();
+private:
+	void					KeyInput(const _double & TimeDelta);
+
+	void					Skill_Tick(const _double & TimeDelta);
+	void					Attack_Tick();
+	void					Cat_Tick();
+	void					Hit_Tick(const _double & TimeDelta);
+	void					Stun_Tick();
+	void					Dance_Tick();
 
 private:
 	vector<CGameObject*>	m_SkillParts;
@@ -84,8 +84,8 @@ private:
 	_double					m_dCat_Attack_TimeAcc = 0;
 
 	// 셰이더
-	_bool		m_bShader_Hit = false;
-	_double		m_dShader_Hit_TimeAcc = 0;
+	_bool					m_bShader_Hit = false;
+	_double					m_dShader_Hit_TimeAcc = 0;
 
 public:
 	static CS_Fiona* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

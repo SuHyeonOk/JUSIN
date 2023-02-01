@@ -33,6 +33,7 @@ private:
 private:
 	void			TalkTexture_Tick(const _double & TimeDelta);
 	void			CutSceneOne_Talk(const _double & TimeDelta);
+	void			CutSceneTwo_Talk(const _double & TimeDelta);
 
 private:
 	_bool			m_bSize_Change = false;

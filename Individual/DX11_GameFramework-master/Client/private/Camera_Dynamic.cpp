@@ -3,8 +3,6 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
-#include "Skill_Manager.h"
-#include "O_Collider.h"
 
 CCamera_Dynamic::CCamera_Dynamic(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CCamera(pDevice, pContext)
@@ -67,44 +65,15 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE:
 		Action_Garden(TimeDelta);
 		break;
+	case CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO:
+		Action_SkeletonBoss(TimeDelta);
+		break;
 #ifdef F2_SKELETON
 	case CObj_Manager::PLAYERINFO::PLAYER::FREE:
 		Key_Input(TimeDelta);
 		break;
 #endif
 	}
-
-	// Test
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (pGameInstance->Key_Down(DIK_Y))
-	{
-		CO_Collider::COLLIDERINFO		tColliderInfo;
-		tColliderInfo.eType = CO_Collider::COLLIDERINFO::CUTSCENE_ONE;
-		tColliderInfo.f3Pos = _float3(-36.4221f, 0.0f, 42.2799f);
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
-			return;
-	}
-	RELEASE_INSTANCE(CGameInstance);
-
-	//////////////////////////// 디버그용
-	_vector vddMyPos;
-	vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4	f4ddMyPos;
-	XMStoreFloat4(&f4ddMyPos, vddMyPos);
-
-	cout << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
-	//////////////////////////// 디버그용
-
-	//if (pGameInstance->Key_Down(DIK_U))
-	//{
-	//	Shake_Camera(1, 2);
-	//}
-
-	//if(m_bShake)
-	//	Shake_Camera(TimeDelta);
-	//
-	////m_pTransformCom->LookAt()
 
 	__super::Tick(TimeDelta);
 }
@@ -336,8 +305,12 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 void CCamera_Dynamic::Action_Garden(const _double & TimeDelta)
 {
-	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 	m_pTransformCom->Chase(XMVectorSet(-14.0277f, 3.7f, 42.1254f, 1.0f), TimeDelta * 2.0f);
+}
+
+void CCamera_Dynamic::Action_SkeletonBoss(const _double & TimeDelta)
+{
+	m_pTransformCom->Set_Pos(_float3(6.0f, 4.7f, 15.0f));
 }
 
 CCamera_Dynamic * CCamera_Dynamic::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

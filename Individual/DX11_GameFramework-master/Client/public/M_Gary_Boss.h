@@ -8,6 +8,7 @@ class CModel;
 class CShader;
 class CRenderer;
 class CCollider;
+class CNavigation;
 END
 
 BEGIN(Client)
@@ -23,6 +24,8 @@ private:
 	virtual ~CM_Gary_Boss() = default;
 
 public:
+	void				Set_CutScene() { m_bCutScene = true; }
+
 	_float				Get_BossHp() {
 		return m_fHP;
 	}
@@ -44,6 +47,7 @@ private:
 	CRenderer*			m_pRendererCom = nullptr;
 	CModel*				m_pModelCom = nullptr;
 	CCollider*			m_pColliderCom = nullptr;
+	CNavigation*		m_pNavigationCom = nullptr;
 
 private:
 	HRESULT				SetUp_Components();
@@ -53,7 +57,6 @@ private:
 	void				Monster_Tick(const _double& TimeDelta);
 	void				Anim_Change();
 
-	// TODO : 구조 다 짜고, TimeDelta 필요없는 함수는 삭제하기
 	void				Idle_Tick(const _double& TimeDelta);
 	void				Random_Skill(const _double& TimeDelta);
 	void				RandomMove(const _double& TimeDelta);
@@ -71,6 +74,8 @@ private:
 
 	void				Effect_Tick(const _double& TimeDelta);
 	void				Shader_Alpha(const _double & TimeDelta);
+
+	void				CutScene_Tick(const _double & TimeDelta);
 
 private:
 	// 기본 데이터
@@ -116,6 +121,10 @@ private:
 	_float				m_fAlpha = 1.f;
 	_bool				m_bShader_Hit = false;
 	_double				m_dShader_Hit_TimeAcc = 0;
+
+	// CutScene
+	_bool				m_bCutScene = false;
+	_bool				m_bCutSceneEnd = false;
 
 public:
 	static	CM_Gary_Boss*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
