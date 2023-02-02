@@ -62,6 +62,8 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_RIGHT) && 5 > m_iShopIndex)	// ¿À¸¥ÂÊ
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click.ogg"), 0.7f);
+
 		m_iIndexTexture = 1; // ÆÄ¶õ»ö
 		++m_iShopIndex;
 		m_eShopIndex = SHOPINDEX(m_iShopIndex);
@@ -69,6 +71,8 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_LEFT) && 0 < m_iShopIndex)	// ¿ÞÂÊ								
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click.ogg"), 0.7f);
+		
 		m_iIndexTexture = 1; // ÆÄ¶õ»ö
 		--m_iShopIndex;
 		m_eShopIndex = SHOPINDEX(m_iShopIndex);
@@ -76,6 +80,8 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))						// °è»ê								
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
+
 		if (false == Calculation())
 		{
 			m_iIndexTexture = 2;	// »ßºò »¡°£»ö

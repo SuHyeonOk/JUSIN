@@ -158,6 +158,8 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 
 			if (pGameInstance->Key_Down(DIK_RETURN))
 			{
+				pGameInstance->Play_Sound(TEXT("sfx_portal_activate2.ogg"), 1.0f);
+
 				if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 				{
 					CGameObject::Set_Dead();

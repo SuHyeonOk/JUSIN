@@ -111,6 +111,10 @@ void CO_BearTrap::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Cine_Witch_Death_Fall_Wood.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		m_pModelCom->Set_AnimIndex(1, false);
 		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::KNOCKBACKHIT);

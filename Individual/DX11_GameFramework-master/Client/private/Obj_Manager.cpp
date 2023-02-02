@@ -245,6 +245,13 @@ void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 		// 플레이어 상태 변경
 		m_tPlayerInfo.eState = PLAYERINFO::STATE::LEVEL_UP;
 
+		if (0 == m_dEffect_Up_TimeAcc)
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_character_levelup.ogg"), 0.7f);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+
 		m_dEffect_Up_TimeAcc += TimeDelta;
 		if (0.35 < m_dEffect_Up_TimeAcc)
 		{

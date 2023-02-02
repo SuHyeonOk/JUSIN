@@ -938,12 +938,12 @@ void CM_Gary_Boss::Shader_Alpha(const _double & TimeDelta)
 
 	if (true == m_bShader_Alpha)
 	{
-		if (0 < m_fAlpha)
+		if (0.0f < m_fAlpha)
 			m_fAlpha -= _float(TimeDelta) * 1.5f;
 	}
 	else
 	{
-		if (1 > m_fAlpha)
+		if (1.0f > m_fAlpha)
 			m_fAlpha += _float(TimeDelta) * 1.5f;
 	}
 }

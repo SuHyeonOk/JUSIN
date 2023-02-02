@@ -57,6 +57,10 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 	// 총알 공격력 다르게 설정
 	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.25f);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("sfx_bombdrop.ogg"), 1.0f);
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
@@ -129,6 +133,10 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 		// 죽을 때 원래 공격력으로 변경
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_tBulletInfo.fAttack);
 
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_block.ogg"), 0.5f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		CGameObject::Set_Dead();
 		m_dBullet_TimeAcc = 0;
 	}
@@ -199,6 +207,10 @@ void CS_PaintWork::On_Collision(CGameObject * pOther)
 		CEffect_Manager::GetInstance()->Effect_Paint_Firecracker_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.1f), _float3(0.9f, 1.0f, 0.6f));
 		CEffect_Manager::GetInstance()->Effect_StarRandom_Create(_float3(f4MyPos.x, f4MyPos.y + 0.5f, f4MyPos.z - 0.2f), _float3(0.9f, 1.0f, 0.6f));
 	}
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("sfx_block.ogg"), 0.5f);
+	RELEASE_INSTANCE(CGameInstance);
 
 	CGameObject::Set_Dead();
 }

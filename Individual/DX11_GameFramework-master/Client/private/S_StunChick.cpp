@@ -46,6 +46,10 @@ HRESULT CS_StunChick::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("the sound of a chick.mp3"), 0.7f);
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 

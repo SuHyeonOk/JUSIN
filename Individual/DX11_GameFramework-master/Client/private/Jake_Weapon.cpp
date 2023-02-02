@@ -64,6 +64,10 @@ void CJake_Weapon::Tick(_double TimeDelta)
 		{
 			if (!m_bEffect_Shield)
 			{
+				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+				pGameInstance->Play_Sound(TEXT("sfx_brainbeast_shield.ogg"), 0.7f);
+				RELEASE_INSTANCE(CGameInstance);
+
 				_vector vMyPos = m_WeaponDesc.pTargetTransform->Get_State(CTransform::STATE_TRANSLATION);
 				_float4 f4MyPos;
 				XMStoreFloat4(&f4MyPos, vMyPos);
@@ -145,7 +149,9 @@ void CJake_Weapon::On_Collision(CGameObject * pOther)
 
 	// 내가 제이크 쉴드야
 	if (CObj_Manager::PLAYERINFO::JAKEWEAPON::SHIELD == m_WeaponDesc.eWeaponType)
+	{
 		CObj_Manager::GetInstance()->Set_Jake_Shield(true);	// 나 충돌했어
+	}
 
 }
 

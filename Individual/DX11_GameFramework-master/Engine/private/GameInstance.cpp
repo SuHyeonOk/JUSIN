@@ -489,6 +489,7 @@ _bool CGameInstance::isInFrustum_LocalSpace(_fvector vLocalPos, _float fRange)
 
 	return m_pFrustum->isInFrustum_LocalSpace(vLocalPos, fRange);
 }
+
 void CGameInstance::Play_Sound(const _tchar * pSoundKey, _float fVolume, _bool bIsBGM, _int iManualChannelIndex)
 {
 	if (nullptr == m_pSound_Manager)
