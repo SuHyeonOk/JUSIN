@@ -249,33 +249,33 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 	if (false == m_bSize_Change)
 		return;
 
-	//if (2 < m_Script_Count)
-	//{
-	//	// 카메라 원래대로 되돌리기
-	//	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);						// 플레이어 보이도록 수정
-	//	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
+	if (2 < m_Script_Count)
+	{
+		// 카메라 원래대로 되돌리기
+		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);						// 플레이어 보이도록 수정
+		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
 
-	//	// 다음 사용을 위한 값 초기화
-	//	m_Script_Count = 0;
-	//	m_bSize_Change = false;
-	//	m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
-	//	m_Script_TimeAcc = 0.0;
+		// 다음 사용을 위한 값 초기화
+		m_Script_Count = 0;
+		m_bSize_Change = false;
+		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
+		m_Script_TimeAcc = 0.0;
 
-	//	// 컷씬이 끝났음을 알려준다.
-	//	CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
-	//	CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
-	//	pGameObject->Set_CutScene();
-	//	RELEASE_INSTANCE(CGameInstance);
+		// 컷씬이 끝났음을 알려준다.
+		CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
+		CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
+		pGameObject->Set_CutScene();
+		RELEASE_INSTANCE(CGameInstance);
 
-	//	return;
-	//}
+		return;
+	}
 
-	//m_Script_TimeAcc += TimeDelta;
-	//if (2.5 < m_Script_TimeAcc)
-	//{
-	//	++m_Script_Count;
-	//	m_Script_TimeAcc = 0.0;
-	//}
+	m_Script_TimeAcc += TimeDelta;
+	if (2.5 < m_Script_TimeAcc)
+	{
+		++m_Script_Count;
+		m_Script_TimeAcc = 0.0;
+	}
 }
 
 CUI_CutScene * CUI_CutScene::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

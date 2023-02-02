@@ -73,13 +73,6 @@ HRESULT CE_Burst::Initialize(void * pArg)
 
 	// 속도
 	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.4f);
-	//if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
-	//	CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
-	//	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f);
-	//else if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)	// 외부에서 지정한 크기를 가지는 이미지
-	//	m_fSpeed = m_tEffectInfo.fSpeed;
-	//else
-	//	m_fSpeed = 0.2f;
 
 	return S_OK;
 }

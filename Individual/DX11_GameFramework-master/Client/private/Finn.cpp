@@ -373,9 +373,10 @@ void CFinn::Player_Tick(_double TimeDelta)
 
 void CFinn::Current_Player(_double TimeDelta)
 {
+	Sound_Tick();
+	
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)					// Player 나라면
 	{
-		Sound_Tick();
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
 		Current_HP(TimeDelta);
@@ -1063,8 +1064,6 @@ void CFinn::Stun_Tick()
 
 void CFinn::Swim_Tick(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	
 	CObj_Manager::GetInstance()->Set_Interaction(false);	// 보스전 할 때 보스 스킬 피하기 위해서 들어간다.
 
 	// 수영 이펙트
@@ -1086,16 +1085,17 @@ void CFinn::Swim_Tick(_double TimeDelta)
 	if (!m_bDiving)
 		m_pModelCom->Set_AnimIndex(40, false);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 	if (40 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
-		
+		//pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
 		m_bDiving = true;
 	}
 
 	if (m_bDiving)
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_character_underwater.ogg"), 0.7f);
+		//pGameInstance->Play_Sound(TEXT("sfx_character_underwater.ogg"), 0.7f, true, 3);
 
 		m_pModelCom->Set_AnimIndex(52);
 

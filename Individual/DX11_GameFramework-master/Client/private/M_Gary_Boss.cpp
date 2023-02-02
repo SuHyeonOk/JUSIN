@@ -74,7 +74,7 @@ void CM_Gary_Boss::Tick(_double TimeDelta)
 
 	if (false == m_bCutScene)							// 외부에서 컷씬이 끝났음을 알려준다.
 	{
-		CutScene_Effect();
+		//CutScene_Effect();
 		return;
 	}
 	else

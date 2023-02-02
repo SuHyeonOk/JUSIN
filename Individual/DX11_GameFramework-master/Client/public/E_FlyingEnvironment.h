@@ -60,6 +60,7 @@ private:
 
 	_bool					m_bFindPlayer = false;
 	_float4					m_f4RandomLook = { 0.0f, 0.0f, 1.0f, 0.0f };
+	_float					m_fRandomAxis = 0.0f;
 
 public:
 	static	CE_FlyingEnvironment*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

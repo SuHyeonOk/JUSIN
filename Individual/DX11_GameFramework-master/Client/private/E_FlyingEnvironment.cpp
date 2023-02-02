@@ -40,9 +40,6 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
- 	if (FAILED(SetUp_Components()))
-		return E_FAIL;
-
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
@@ -52,6 +49,9 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 	{
 		Ready_Butterflies();
 	}
+
+	if (FAILED(SetUp_Components()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -71,21 +71,21 @@ void CE_FlyingEnvironment::Tick(_double TimeDelta)
 	// 이미지를 원하는 만큼 돌리고, 랜덤한 방향으로 날아가며, 알파값이 줄어들면서 사라진다.
 	__super::Tick(TimeDelta);
 
-	//// ★ 카메라를 바라보고 랜덤한 곳으로 회전하면서 이동하기
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//RELEASE_INSTANCE(CGameInstance);
+	// ★ 카메라를 바라보고 랜덤한 곳으로 회전하면서 이동하기
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	RELEASE_INSTANCE(CGameInstance);
 
-	//m_pTransformCom->LookAt(vCameraPos, true);
+	m_pTransformCom->LookAt(vCameraPos, true);
 
-	//// 입력한 Look 방향으로 이동하기
-	//_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//_vector vDistance = XMLoadFloat4(&m_f4RandomLook);
-	//vMyPos += XMVector3Normalize(vDistance) * (_float(TimeDelta) * 0.1f);
-	//m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
+	// 입력한 Look 방향으로 이동하기
+	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_vector vDistance = XMLoadFloat4(&m_f4RandomLook);
+	vMyPos += XMVector3Normalize(vDistance) * (_float(TimeDelta) * 0.3f);
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSetW(vMyPos, 1.0f));
 
-	m_pTransformCom->Go_Straight(TimeDelta);
+	//m_pTransformCom->Go_Straight(TimeDelta);
 
 	m_dChange_TimeAcc += TimeDelta;
 	if (0.07 < m_dChange_TimeAcc)
@@ -148,12 +148,26 @@ HRESULT CE_FlyingEnvironment::SetUp_Components()
 
 	_tchar	m_szTextureName[MAX_PATH] = L"";
 
-	if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE == m_tEffectInfo.eType)
-		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Bule"));
-	else if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED == m_tEffectInfo.eType)
-		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Red"));
-	else if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW == m_tEffectInfo.eType)
-		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Yellow"));
+	if (150 > m_fRandomAxis || 320 < m_fRandomAxis)
+	{
+		// 오른쪽으로 날아가는 나비
+		if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE == m_tEffectInfo.eType)
+			wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Bule"));
+		else if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED == m_tEffectInfo.eType)
+			wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Red"));
+		else if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW == m_tEffectInfo.eType)
+			wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Yellow"));
+	}
+	else
+	{
+		// 왼쪽으로 날아가는 나비
+		if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE == m_tEffectInfo.eType)
+			wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_BuleL"));
+		else if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED == m_tEffectInfo.eType)
+			wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_RedL"));
+		else if (CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW == m_tEffectInfo.eType)
+			wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_YellowL"));
+	}
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -191,12 +205,11 @@ HRESULT CE_FlyingEnvironment::SetUp_ShaderResources()
 
 void CE_FlyingEnvironment::Ready_Butterflies()
 {
-	//_float fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(270.0f, 360.0f);
-	//_matrix	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMConvertToRadians(fRandomAxis));
-	//_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-	//vLook = XMVector3TransformCoord(vLook, RotationMatrix);
-	//XMStoreFloat4(&m_f4RandomLook, vLook);
-	//m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+	m_fRandomAxis = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 360.0f);
+	_matrix	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(m_fRandomAxis));
+	_vector vLook = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	vLook = XMVector3TransformCoord(vLook, RotationMatrix);
+	XMStoreFloat4(&m_f4RandomLook, vLook);
 
 	m_pTransformCom->Set_Pos(CUtilities_Manager::GetInstance()->Get_Random(1.0f, 2.0f));
 }

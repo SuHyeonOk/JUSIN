@@ -582,6 +582,9 @@ void CJake::Check_Follow(_double TimeDelta)
 			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f), _float3(0.968f, 0.729f, 0.160f), 50, { 0.3f, 0.7f });
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f));
 
+			// 사운드
+			pGameInstance->Play_Sound(TEXT("sfx_character_teleport.ogg"), 0.7f);
+
 			m_dNotfollow_TimeAcc = 0;
 		}
 	}
@@ -730,11 +733,17 @@ void CJake::Key_Input(_double TimeDelta)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::S_PAINT);
 		}
 		else
+		{
+			pGameInstance->Play_Sound(TEXT("Jake_Attack.mp3"), 0.7f, false, 1);
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+		}
 	}
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
+	{
+		pGameInstance->Play_Sound(TEXT("roll.ogg"), 0.7f);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -1004,11 +1013,17 @@ void CJake::Swim_Tick(_double TimeDelta)
 	if (!m_bDiving)
 		m_pModelCom->Set_AnimIndex(43, false);	// DIVING
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
 	if (43 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	{
 		m_bDiving = true;
+	}
 
 	if (m_bDiving)
 	{
+		//pGameInstance->Play_Sound(TEXT("sfx_character_underwater.ogg"), 0.7f, true, 3);
+
 		m_pModelCom->Set_AnimIndex(57);			// SWIM
 
 		// CellType 이 1 이라면 내라가다가.
@@ -1026,6 +1041,8 @@ void CJake::Swim_Tick(_double TimeDelta)
 			}
 		}
 	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CJake::Change_Tick()
@@ -1143,6 +1160,15 @@ void CJake::Current_HP(const _double & TimeDelta)
 	if (0 >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
 	{
 		m_pModelCom->Set_AnimIndex(45, false);
+
+		if (1 == m_fAlpha)
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("v_Jake_Dying.ogg"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("v_Finn_GameOver_Jake.ogg"), 1.0f);
+			RELEASE_INSTANCE(CGameInstance);
+
+		}
 
 		if (0 < m_fAlpha)
 			m_fAlpha -= _float(TimeDelta) * 1.5f;
@@ -1284,6 +1310,16 @@ HRESULT CJake::Talk(const _double & TimeDelta)
 
 	RELEASE_INSTANCE(CGameInstance);
 	return S_OK;
+}
+
+void CJake::Sound_Tick()
+{
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Stop_Sound(1);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 CJake * CJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -89,6 +89,7 @@ private:
 	void	Anim_Change(_double TimeDelta);
 
 	HRESULT	Talk(const _double & TimeDelta);
+	void	Sound_Tick();
 
 private:
 	vector<CGameObject*>		m_PlayerParts;

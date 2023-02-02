@@ -1381,6 +1381,18 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_Yellow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_Yellow_%d.png"), 4))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_Butterflies_BuleL */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_BuleL"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_BuleL_%d.png"), 4))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_Butterflies_RedL */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_RedL"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_RedL_%d.png"), 4))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_Butterflies_YellowL */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_YellowL"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_YellowL_%d.png"), 4))))
+		return E_FAIL;
 
 
 
