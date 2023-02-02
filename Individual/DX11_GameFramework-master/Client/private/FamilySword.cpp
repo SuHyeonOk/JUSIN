@@ -101,6 +101,10 @@ void CFamilySword::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_level_up.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		CGameObject::Set_Dead();
 		CObj_Manager::GetInstance()->Set_Finn_Sword(CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_FAMILY);
 	}

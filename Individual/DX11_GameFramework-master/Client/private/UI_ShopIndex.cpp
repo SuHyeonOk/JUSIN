@@ -80,17 +80,24 @@ void CUI_ShopIndex::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))						// °è»ê								
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
-
 		if (false == Calculation())
 		{
+			if(CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				pGameInstance->Play_Sound(TEXT("v_Finn_NoMoney.ogg"), 1.0f);
+			else
+				pGameInstance->Play_Sound(TEXT("v_Jake_NoMoney.ogg"), 1.0f);
+
 			m_iIndexTexture = 2;	// »ßºò »¡°£»ö
 			RELEASE_INSTANCE(CGameInstance);
 			return;
 		}
+		else
+			pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
 
 		if (5 == m_iShopIndex)
 		{
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_level_up.ogg"), 0.7f);
+
 			CObj_Manager::GetInstance()->Set_Finn_Sword(CObj_Manager::PLAYERINFO::PLAYERWEAPON::F_ROOT);
 			
 			RELEASE_INSTANCE(CGameInstance);

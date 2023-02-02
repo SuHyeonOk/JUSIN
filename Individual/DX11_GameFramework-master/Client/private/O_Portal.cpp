@@ -55,28 +55,30 @@ void CO_Portal::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
 	_vector vStart = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vEnd = CObj_Manager::GetInstance()->Get_Player_Transform();
 	_float fLength = XMVectorGetX(XMVector4Length(vStart - vEnd));
 
-	_float fDistanceVolume = 0.0f;
-	if (5.0f > fLength)
-	{
-		if (1.0f > fDistanceVolume)
-			fDistanceVolume += _float(TimeDelta) * 15.0f;
-	}
-	else
-	{
-		if (0.0f < fDistanceVolume)
-			fDistanceVolume -= _float(TimeDelta) * 15.0f;
-	}
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_float fVolume = (1.f - (fLength / 5.0f)) * fDistanceVolume;
+	//_float fDistanceVolume = 0.0f;
+	//if (5.0f > fLength)
+	//{
+	//	if (1.0f > fDistanceVolume)
+	//		fDistanceVolume += _float(TimeDelta) * 15.0f;
+	//}
+	//else
+	//{
+	//	if (0.0f < fDistanceVolume)
+	//		fDistanceVolume -= _float(TimeDelta) * 15.0f;
+	//}
 
-	pGameInstance->Play_Sound(TEXT("sfx_portal_loop.ogg"), fVolume);
-	RELEASE_INSTANCE(CGameInstance);
+	//_float fVolume = (1.f - (fLength / 5.0f)) * fDistanceVolume;
+
+	//if(0 < fVolume)
+	//	pGameInstance->Play_Sound(TEXT("sfx_portal_loop.ogg"), fVolume, true, 4);
+
+	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CO_Portal::Late_Tick(_double TimeDelta)

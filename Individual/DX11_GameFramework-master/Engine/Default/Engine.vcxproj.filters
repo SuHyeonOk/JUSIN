@@ -151,9 +151,6 @@
     <Filter Include="01.Utility\07.Fonts">
       <UniqueIdentifier>{b590f9a6-a2d1-446b-b28b-64a4a2669499}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\77.Picking">
-      <UniqueIdentifier>{da175690-3d23-4715-9074-b6e7d6c36736}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\07.Fonts\Manager">
       <UniqueIdentifier>{2ea85e2c-0d70-4c33-a4df-fd0e852ec092}</UniqueIdentifier>
     </Filter>
@@ -166,7 +163,10 @@
     <Filter Include="01.Utility\09.RenderTargets\Manager">
       <UniqueIdentifier>{88c10c04-7d46-48dd-92ff-4e5199359727}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\78. Sound">
+    <Filter Include="01.Utility\10.Picking">
+      <UniqueIdentifier>{da175690-3d23-4715-9074-b6e7d6c36736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\11. Sound">
       <UniqueIdentifier>{d4748387-2aea-48e4-ba46-bf44dca95ff3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -328,7 +328,7 @@
       <Filter>00.System\00.Device\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Picking.h">
-      <Filter>01.Utility\77.Picking</Filter>
+      <Filter>01.Utility\10.Picking</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh.h">
       <Filter>01.Utility\03.Components\06. Model\Mesh</Filter>
@@ -391,10 +391,10 @@
       <Filter>01.Utility\09.RenderTargets\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Sound_Manager.h">
-      <Filter>01.Utility\78. Sound</Filter>
+      <Filter>01.Utility\11. Sound</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Sound.h">
-      <Filter>01.Utility\78. Sound</Filter>
+      <Filter>01.Utility\11. Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -531,7 +531,7 @@
       <Filter>00.System\00.Device\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Picking.cpp">
-      <Filter>01.Utility\77.Picking</Filter>
+      <Filter>01.Utility\10.Picking</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>01.Utility\03.Components\06. Model</Filter>
@@ -594,10 +594,10 @@
       <Filter>01.Utility\09.RenderTargets\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Sound_Manager.cpp">
-      <Filter>01.Utility\78. Sound</Filter>
+      <Filter>01.Utility\11. Sound</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Sound.cpp">
-      <Filter>01.Utility\78. Sound</Filter>
+      <Filter>01.Utility\11. Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

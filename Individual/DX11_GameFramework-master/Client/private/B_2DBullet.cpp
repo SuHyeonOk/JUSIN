@@ -36,18 +36,25 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_pigs_attack_1.ogg"), 0.7f);
+
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 	}
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks.ogg"), 0.7f);
+
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
 	}
+	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -123,6 +130,10 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 
 		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 1.0f);
+			RELEASE_INSTANCE(CGameInstance);
+
 			if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
 				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
 			else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
@@ -181,6 +192,10 @@ void CB_2DBullet::On_Collision(CGameObject * pOther)
 	{
 		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 1.0f);
+			RELEASE_INSTANCE(CGameInstance);
+
 			_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 			_float4 f4MyPos;
 			XMStoreFloat4(&f4MyPos, vMyPos);

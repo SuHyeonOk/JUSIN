@@ -54,7 +54,7 @@ HRESULT CS_Marceline::Initialize(void * pArg)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	pGameInstance->Stop_Sound(0);
-	pGameInstance->Play_Sound(TEXT("Scroll_Marceline.mp3"), 1.0f);
+	pGameInstance->Play_Sound(TEXT("Scroll_Marceline.mp3"), 0.5f);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -209,6 +209,10 @@ void CS_Marceline::State_Tick()
 	{
 		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+			RELEASE_INSTANCE(CGameInstance);
+
 			CGameObject::Set_Dead();
 			CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		}

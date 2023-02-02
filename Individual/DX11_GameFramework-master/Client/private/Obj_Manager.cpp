@@ -6,6 +6,7 @@
 #include "UI_Manager.h"
 #include "Skill_Manager.h"
 #include "Effect_Manager.h"
+#include "Utilities_Manager.h"
 
 IMPLEMENT_SINGLETON(CObj_Manager)
 
@@ -98,6 +99,22 @@ void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 		return;
 	}
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	_tchar szSoundName[MAX_PATH];
+
+	if (PLAYERINFO::PLAYER::FINN == m_tPlayerInfo.ePlayer)
+	{
+		wsprintf(szSoundName, TEXT("v_Finn_Hit%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 3));
+		pGameInstance->Play_Sound(szSoundName, 0.7f);
+	}
+	else
+	{
+		wsprintf(szSoundName, TEXT("v_Jake_Hit%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 3));
+		pGameInstance->Play_Sound(szSoundName, 0.7f);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	m_fMonster_Attck = fAttack;
 }
 
@@ -165,6 +182,8 @@ void		CObj_Manager::Key_Input()
 	// Inventory
 	if (pGameInstance->Key_Down(DIK_X))
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_map_open.ogg"), 0.7f);
+
 		m_bInteraction = !m_bInteraction;
 		m_bInventory = !m_bInventory;
 	}
@@ -184,6 +203,11 @@ void		CObj_Manager::Current_Player()
 	{
 		if (pGameInstance->Key_Down(DIK_Z))		// 플레이어가 변신 또는 스킬 사용중 일 때는 변경하지 못 한다.
 		{
+			if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				pGameInstance->Play_Sound(TEXT("v_Jake_Swap.ogg"), 1.0f);
+			else
+				pGameInstance->Play_Sound(TEXT("v_Finn_Swap.ogg"), 1.0f);
+
 			m_ChangeTarget++;
 			Set_Current_Player_State(PLAYERINFO::CHANGE);
 		}

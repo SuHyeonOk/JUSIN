@@ -94,12 +94,12 @@ void CSound_Manager::Play_Sound(const _tchar *pSoundKey, _float fVolume, _bool b
 		return;
 
 	FMOD_BOOL bPlayFlag = FALSE;	
-	_uint iPlayIndex = 0;
+	_int iPlayIndex = -1;
 	if (iManualChannelIndex == -1)
 	{
 		for (_uint i = m_iNumManualChannels; i < MAX_CHANNEL_COUNT; i++)
 		{
-			if (FMOD_Channel_IsPlaying(m_Channels[i].first, &bPlayFlag))
+			if (m_Channels[i].second == NO_USE_CHNNEL)
 			{
 				iPlayIndex = i;				
 				break;

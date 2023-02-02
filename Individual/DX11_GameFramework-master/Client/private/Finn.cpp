@@ -79,8 +79,6 @@ void CFinn::Tick(_double TimeDelta)
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
-
-
 }
 
 void CFinn::Late_Tick(_double TimeDelta)
@@ -377,6 +375,7 @@ void CFinn::Current_Player(_double TimeDelta)
 {
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)					// Player 나라면
 	{
+		Sound_Tick();
 		CObj_Manager::GetInstance()->Tick_Player_Transform();		// 현재 플레이어의 좌표를 Tick
 		Player_Skill_Tick(TimeDelta);
 		Current_HP(TimeDelta);
@@ -552,8 +551,12 @@ void CFinn::Check_Follow(_double TimeDelta)
 			f4Position = { f4Position.x - fAddX, f4Position.y, f4Position.z - fAddZ, 1.f };
 			m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(f4Position.x, f4Position.y, f4Position.z, f4Position.w), m_pNavigationCom);	// 플레이어 근처로 이동
 
+			// 이펙트
 			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4Position.x, f4Position.y + 1.0f, f4Position.z - 0.7f), _float3(0.396f, 0.654f, 0.796f), 50, { 0.3f, 1.3f });
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 1.0f, f4Position.z - 0.8f));
+
+			// 사운드
+			pGameInstance->Play_Sound(TEXT("sfx_character_teleport.ogg"), 0.7f);
 
 			m_dNotfollow_TimeAcc = 0;
 		}
@@ -802,11 +805,18 @@ void CFinn::Key_Input(_double TimeDelta)
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::S_PAINT);
 		}
 		else
+		{
+			pGameInstance->Play_Sound(TEXT("Finn_Attack.mp3"), 0.7f, false, 1);
+			pGameInstance->Play_Sound(TEXT("Finn_Sword.mp3"), 0.7f, false, 2);
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
+		}
 	}
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
+	{
+		pGameInstance->Play_Sound(TEXT("roll.ogg"), 0.7f);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }
@@ -816,7 +826,13 @@ void CFinn::Space_Attack_Tick(_double TimeDelta)
 	m_OnMove = false;
 
 	if (m_pModelCom->Get_Finished())
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance); 
+		pGameInstance->Stop_Sound(1);
+		RELEASE_INSTANCE(CGameInstance);
+
 		m_tPlayerInfo.eState = m_tPlayerInfo.IDLE;
+	}
 }
 
 void CFinn::Attack_Paint_Tick(_double TimeDelta)
@@ -1047,6 +1063,8 @@ void CFinn::Stun_Tick()
 
 void CFinn::Swim_Tick(_double TimeDelta)
 {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	
 	CObj_Manager::GetInstance()->Set_Interaction(false);	// 보스전 할 때 보스 스킬 피하기 위해서 들어간다.
 
 	// 수영 이펙트
@@ -1069,10 +1087,16 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(40, false);
 
 	if (40 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	{
+		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
+		
 		m_bDiving = true;
+	}
 
 	if (m_bDiving)
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_character_underwater.ogg"), 0.7f);
+
 		m_pModelCom->Set_AnimIndex(52);
 
 		// CellType 이 1 이라면 내려가다가
@@ -1089,6 +1113,8 @@ void CFinn::Swim_Tick(_double TimeDelta)
 			}
 		}
 	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFinn::Change_Tick()
@@ -1145,6 +1171,15 @@ void CFinn::Current_HP(const _double & TimeDelta)
 	if (0 >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
 	{
 		m_pModelCom->Set_AnimIndex(42, false);
+
+		if (1 == m_fAlpha)
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("v_Finn_Dying.ogg"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("v_Jake_GameOver_Finn.ogg"), 1.0f);
+			RELEASE_INSTANCE(CGameInstance);
+
+		}
 
 		if (0 < m_fAlpha)
 			m_fAlpha -= _float(TimeDelta) * 1.5f;
@@ -1297,6 +1332,17 @@ HRESULT CFinn::Talk(const _double & TimeDelta)
 
 	RELEASE_INSTANCE(CGameInstance);
 	return S_OK;
+}
+
+void CFinn::Sound_Tick()
+{
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Stop_Sound(1);
+		pGameInstance->Stop_Sound(2);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 CFinn * CFinn::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

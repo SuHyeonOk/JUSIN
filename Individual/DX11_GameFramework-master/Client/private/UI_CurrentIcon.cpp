@@ -57,6 +57,7 @@ void CUI_CurrentIcon::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_RIGHT) && 12 > m_iCurrentIcon_Index)	// 아래
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click.ogg"), 0.7f);
 		m_fCurrentIndexY -= 44.333f;
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-138.0f, m_fCurrentIndexY, 0.f, 1.f));
 	
@@ -66,6 +67,7 @@ void CUI_CurrentIcon::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_LEFT) && 0 < m_iCurrentIcon_Index)	// 위								
 	{																			
+		pGameInstance->Play_Sound(TEXT("sfx_click.ogg"), 0.7f);
 		m_fCurrentIndexY += 44.333f;
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-138.0f, m_fCurrentIndexY, 0.f, 1.f));
 	
@@ -76,21 +78,25 @@ void CUI_CurrentIcon::Tick(_double TimeDelta)
 	// 현재 인벤토리에 해당하는 스킬을 넣어주어야 한다.
 	if (pGameInstance->Key_Down(DIK_1))
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEM_ONE, true);
 		CUI_Manager::GetInstance()->Set_SkillIcon(ITEM_ONE, CUI_Manager::GetInstance()->Get_InventoryIcon(m_eCurrentIcon_Index));
 	}
 	if (pGameInstance->Key_Down(DIK_2))
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEM_TWO, true);
 		CUI_Manager::GetInstance()->Set_SkillIcon(ITEM_TWO, CUI_Manager::GetInstance()->Get_InventoryIcon(m_eCurrentIcon_Index));
 	}	
 	if (pGameInstance->Key_Down(DIK_3)) 
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEM_THREE, true);
 		CUI_Manager::GetInstance()->Set_SkillIcon(ITEM_THREE, CUI_Manager::GetInstance()->Get_InventoryIcon(m_eCurrentIcon_Index));
 	}
 	if (pGameInstance->Key_Down(DIK_4))
 	{
+		pGameInstance->Play_Sound(TEXT("sfx_click2.ogg"), 0.7f);
 		CUI_Manager::GetInstance()->Set_IsIcon_Index(ITEM_FOUR, true);
 		CUI_Manager::GetInstance()->Set_SkillIcon(ITEM_FOUR, CUI_Manager::GetInstance()->Get_InventoryIcon(m_eCurrentIcon_Index));
 	}

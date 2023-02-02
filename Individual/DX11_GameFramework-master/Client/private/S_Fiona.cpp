@@ -85,7 +85,8 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	
 	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
-	pGameInstance->Play_Sound(TEXT("Scroll_fiona.ogg"), 1.0f);
+	pGameInstance->Stop_Sound(0);
+	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.5f, false, 3);
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -340,7 +341,6 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		pFollow_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION) * 0.99f);
 		pFollow_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
-		RELEASE_INSTANCE(CGameInstance);
 
 		// 위에서 좌표를 옮겨 두고, 이펙트 처리
 		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -357,6 +357,11 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		CObj_Manager::GetInstance()->Set_Interaction(false);
 
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
+
+		pGameInstance->Stop_Sound(3);
+		pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+		RELEASE_INSTANCE(CGameInstance);
+
 		CGameObject::Set_Dead();
 
 		m_bSkillClone_TimeAcc = 0;

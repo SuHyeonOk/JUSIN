@@ -293,6 +293,10 @@ void CM_Penny::Attack_Tick(const _double& TimeDelta)
 
 		if (false == b3DUI)
 		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			// »ç¿îµå
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_throwing_pie.ogg"), 1.0f);
+
 			b3DUI = true;
 
 			_vector vPosition = CObj_Manager::GetInstance()->Get_Player_Transform();
@@ -307,7 +311,6 @@ void CM_Penny::Attack_Tick(const _double& TimeDelta)
 			else
 				tTextureInfo.f3Pos = _float3(f4Position.x, f4Position.y + 1.1f, f4Position.z - 0.5f);
 
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_Texture_UI_Surprised"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
 			{
 				RELEASE_INSTANCE(CGameInstance);

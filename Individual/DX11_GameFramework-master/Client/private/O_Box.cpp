@@ -161,7 +161,13 @@ void CO_Box::On_Collision(CGameObject * pOther)
 	if(IDLE == m_eState)
 		if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 			if (L"Player_Weapon" == pOther->Get_Tag())
+			{
 				m_eState = OPEN;
+
+				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+				pGameInstance->Play_Sound(TEXT("sfx_open_chest.ogg"), 1.0f);
+				RELEASE_INSTANCE(CGameInstance);
+			}
 }
 
 HRESULT CO_Box::SetUp_Components()

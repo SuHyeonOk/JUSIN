@@ -58,7 +58,7 @@ HRESULT CS_PaintWork::Initialize(void * pArg)
 	CObj_Manager::GetInstance()->Set_Player_Attack(CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.25f);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("sfx_bombdrop.ogg"), 1.0f);
+	pGameInstance->Play_Sound(TEXT("sfx_magic_drop.ogg"), 1.0f);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -134,7 +134,7 @@ void CS_PaintWork::Late_Tick(_double TimeDelta)
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_tBulletInfo.fAttack);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("sfx_block.ogg"), 0.5f);
+		pGameInstance->Play_Sound(TEXT("sfx_magic_end.ogg"), 0.5f);
 		RELEASE_INSTANCE(CGameInstance);
 
 		CGameObject::Set_Dead();
@@ -209,7 +209,7 @@ void CS_PaintWork::On_Collision(CGameObject * pOther)
 	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("sfx_block.ogg"), 0.5f);
+	pGameInstance->Play_Sound(TEXT("sfx_magic_end.ogg"), 0.5f);
 	RELEASE_INSTANCE(CGameInstance);
 
 	CGameObject::Set_Dead();

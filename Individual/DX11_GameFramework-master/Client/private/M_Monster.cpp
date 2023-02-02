@@ -309,6 +309,10 @@ void CM_Monster::Hit_Process(const _double & TimeDelta)
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)											
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		if (m_tMonsterInfo.eState != CM_Monster::MONSTERINFO::STATE::DANCE)
 		{
 			m_tMonsterInfo.eState = m_tMonsterInfo.HIT;													// 몬스터 상태 변경
