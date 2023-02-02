@@ -108,6 +108,10 @@ void CHeart::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_pickup_ruby.ogg"), 1.0f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		CGameObject::Set_Dead();
 		CObj_Manager::GetInstance()->Set_Heart(+1);
 	}

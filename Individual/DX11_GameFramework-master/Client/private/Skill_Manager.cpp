@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "UI_Manager.h"
+#include "Obj_Manager.h"
 
 IMPLEMENT_SINGLETON(CSkill_Manager)
 
@@ -21,6 +22,32 @@ void	CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate)					// 플레이어가 �
 	}
 }
 
+void	CSkill_Manager::Skill_Sound(CSkill_Manager::PLAYERSKILL::SKILL eSkill)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tPlayerSkill.eSkill)
+	{
+		if(CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+			pGameInstance->Play_Sound(TEXT("v_Finn_PageUse_Paintworks.ogg"), 1.0f);
+		else
+			pGameInstance->Play_Sound(TEXT("v_Jake_PageUse_Paintworks.ogg"), 1.0f);
+	}
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::FOOD == m_tPlayerSkill.eSkill)
+	{
+		if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+			pGameInstance->Play_Sound(TEXT("v_Finn_PageUse_FoodGood.ogg"), 1.0f);
+		else
+			pGameInstance->Play_Sound(TEXT("v_Jake_PageUse_FoodGood.ogg"), 1.0f);
+	}
+	else if (CSkill_Manager::PLAYERSKILL::SKILL::JAKESON == m_tPlayerSkill.eSkill)
+	{
+		pGameInstance->Play_Sound(TEXT("v_Finn_PageUse_PartyGod.ogg"), 1.0f);
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
 void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 {
 	if(false == CUI_Manager::GetInstance()->Get_IsIcon_Index(iIndex))			// 왼쪽 하단 스킬이 비어있다면 사용하지 못 한다.
@@ -28,6 +55,8 @@ void	CSkill_Manager::Page_Use(ITEMINDEX	iIndex)
 	
 	m_tPlayerSkill.eSkill = CUI_Manager::GetInstance()->Get_SkillIcon(iIndex);	// 현재 내가 누른 인덱스
 	CSkill_Manager::GetInstance()->Set_Player_Skill(m_tPlayerSkill.eSkill);
+
+	Skill_Sound(m_tPlayerSkill.eSkill);
 
 	if(0 < m_arrPageCount[m_tPlayerSkill.eSkill])								// 예외처리 0보다 클때, 즉 스킬이 있을 때 사용 가능하다.
 		m_arrPageCount[m_tPlayerSkill.eSkill] -= 1;								// 아이템 하나 감소

@@ -61,7 +61,7 @@ void CBackGround::Tick(_double TimeDelta)
 		bOneSound = true;
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("Story1.ogg"), 0.5f);
+		pGameInstance->Play_Sound(TEXT("v_Finn_Title.ogg"), 1.0f);
 		RELEASE_INSTANCE(CGameInstance);
 	}
 

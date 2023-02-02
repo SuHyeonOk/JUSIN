@@ -31,7 +31,7 @@ HRESULT CMap_Skleton_Boss::Initialize(void * pArg)
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.5f, true);
+	pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.1f, true);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

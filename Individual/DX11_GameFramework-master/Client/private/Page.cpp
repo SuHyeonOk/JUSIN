@@ -130,16 +130,68 @@ void CPage::On_Collision(CGameObject * pOther)
 		if (0.0f == f4MyPos.y)
 		{
 			// 충돌한 객체의 스킬 종류를 스킬매니저에 데이터를 넘긴다.
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			if (CSkill_Manager::PLAYERSKILL::SKILL::PAINT == m_tinPageInfo.ePlayerSkill)
+			{
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::PAINT);
+				if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				{
+					pGameInstance->Play_Sound(TEXT("v_Finn_PagePickup_Paintworks.ogg"), 1.0f);
+				}
+				else
+				{
+					pGameInstance->Play_Sound(TEXT("v_Jake_PagePickup_Paintworks.ogg"), 1.0f);
+				}
+			}
 			else if (CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT == m_tinPageInfo.ePlayerSkill)
+			{
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT);
+				if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				{
+					pGameInstance->Play_Sound(TEXT("v_Finn_PageUse_Marceline.ogg"), 1.0f);
+				}
+				else
+				{
+					pGameInstance->Play_Sound(TEXT("v_Jake_PageUse_Marceline.ogg"), 1.0f);
+				}
+			}
 			else if (CSkill_Manager::PLAYERSKILL::SKILL::COIN == m_tinPageInfo.ePlayerSkill)
+			{
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::COIN);
+				if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				{
+					pGameInstance->Play_Sound(TEXT("v_Finn_PagePickup_Gold.ogg"), 1.0f);
+				}
+				else
+				{
+					pGameInstance->Play_Sound(TEXT("v_Jake_PagePickup_Gold.ogg"), 1.0f);
+				}
+			}
 			else if (CSkill_Manager::PLAYERSKILL::SKILL::FIONA == m_tinPageInfo.ePlayerSkill)
+			{
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::FIONA);
+				if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				{
+					pGameInstance->Play_Sound(TEXT("v_Finn_PickupItem1.ogg"), 1.0f);
+				}
+				else
+				{
+					pGameInstance->Play_Sound(TEXT("v_Jake_PickupItem1.ogg"), 1.0f);
+				}
+			}
 			else if (CSkill_Manager::PLAYERSKILL::SKILL::JAKESON == m_tinPageInfo.ePlayerSkill)
+			{
 				CSkill_Manager::GetInstance()->Page_PickUp(CSkill_Manager::PLAYERSKILL::SKILL::JAKESON);
+				if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+				{
+					pGameInstance->Play_Sound(TEXT("sfx_pickup_general.ogg"), 1.0f);
+				}
+				else
+				{
+					pGameInstance->Play_Sound(TEXT("sfx_pickup_general.ogg"), 1.0f);
+				}
+			}
+			RELEASE_INSTANCE(CGameInstance);
 
 			CGameObject::Set_Dead();
 		}

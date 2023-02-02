@@ -170,6 +170,10 @@ void CFood::On_Collision(CGameObject * pOther)
 		{
 			m_bPlayer_Collider = true;
 
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_food_good.ogg"), 1.0f);
+			RELEASE_INSTANCE(CGameInstance);
+
 			if (FOODINFO::APPLE_PIE == m_tFoodInfo.eFoodKind)		// 그냥 체력 30 추가
 				CObj_Manager::GetInstance()->Set_Player_PlusHP(30.0f);
 			else if (FOODINFO::ROYAL_TART == m_tFoodInfo.eFoodKind)	// 전체 체력의 반 추가

@@ -31,7 +31,7 @@ HRESULT CMap_Garden::Initialize(void * pArg)
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.5f, true);
+	pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.1f, true);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

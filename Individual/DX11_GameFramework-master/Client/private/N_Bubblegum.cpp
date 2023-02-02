@@ -216,7 +216,9 @@ HRESULT CN_Bubblegum::UI_Dead()
 	{
 		CUI_3DTexture * pGameObject_UI_3DTexture = dynamic_cast<CUI_3DTexture*>(pGameInstance->Get_GameObjectPtr(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Help_0"), TEXT("Prototype_GameObject_UI_3DTexture"), 0));
 		if (nullptr != pGameObject_UI_3DTexture)
+		{
 			pGameObject_UI_3DTexture->Set_Dead();
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

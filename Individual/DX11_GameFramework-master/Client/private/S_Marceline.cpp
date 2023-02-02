@@ -52,6 +52,10 @@ HRESULT CS_Marceline::Initialize(void * pArg)
 
 	m_eState = DOWN;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("Scroll_Marceline1 #897279.ogg"), 0.8f);
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
