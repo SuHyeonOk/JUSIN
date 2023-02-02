@@ -57,11 +57,35 @@ void CUI_CutScene::Tick(_double TimeDelta)
 	switch (CObj_Manager::GetInstance()->Get_Current_Level())
 	{
 	case LEVEL_GAMEPLAY:
+	{
 		CutSceneOne_Talk(TimeDelta);
+
+		if (false == m_bSound)
+		{
+			m_bSound = true;
+
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Stop_Sound(0);
+			pGameInstance->Play_Sound(TEXT("Intro2_Loop.ogg"), 0.7f, true, 3);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+	}
 		break;
 
 	case LEVEL_SKELETON_BOSS:
+	{
 		CutSceneTwo_Talk(TimeDelta);
+
+		if (false == m_bSound)
+		{
+			m_bSound = true;
+
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Stop_Sound(0);
+			pGameInstance->Play_Sound(TEXT("sfx_scream.ogg"), 0.7f, true, 3);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+	}
 		break;
 	}
 }
@@ -85,33 +109,11 @@ HRESULT CUI_CutScene::Render()
 
 	m_pVIBufferCom->Render();
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Pressing(DIK_A))
-		--m_fX;
-	if (pGameInstance->Key_Pressing(DIK_D))
-		++m_fX;
-
-	if (pGameInstance->Key_Down(DIK_R))
-	{
-		m_bSize_Change = false;
-		m_Script_Count = 0;
-		m_fSizeY = 720.f * 1.9f;
-	}
-
-	if (pGameInstance->Key_Down(DIK_E))
-		++m_Script_Count;
-	if (pGameInstance->Key_Down(DIK_W))
-		m_Script_Count = 0;
-
-	cout << "m_fX : " << m_fX << endl;
-	RELEASE_INSTANCE(CGameInstance);
-
+	if (false == m_bSize_Change)	// 검정색 이 다 내려오기 전 까지는 리턴 시킨다.
+		return S_OK;
 
 	// 대본
-
-	if (false == m_bSize_Change)
-		return S_OK;
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	switch (CObj_Manager::GetInstance()->Get_Current_Level())
 	{
@@ -227,12 +229,18 @@ void CUI_CutScene::CutSceneOne_Talk(const _double & TimeDelta)
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);					// 카메라의 좌표를 플레이어로 변경
 		CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), m_pTransformComTag, 0));
 		pCameraTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-36.4833f, 3.69427f, 36.0742f, 1.0f));	// 현재 플레이어의 좌표로 이동 시킨다.
-		RELEASE_INSTANCE(CGameInstance);
 
+		// 다음 사용을 위한 값 초기화
+		m_bSound = false;
 		m_Script_Count = 0;
 		m_bSize_Change = false;
 		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
 		m_Script_TimeAcc = 0.0;
+
+		pGameInstance->Stop_Sound(3);
+		pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.1f, true, 0);
+		RELEASE_INSTANCE(CGameInstance);
+
 		return;
 	}
 
@@ -256,6 +264,7 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
 
 		// 다음 사용을 위한 값 초기화
+		m_bSound = false;
 		m_Script_Count = 0;
 		m_bSize_Change = false;
 		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
@@ -265,6 +274,9 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 		CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
 		CM_Gary_Boss * pGameObject = dynamic_cast<CM_Gary_Boss*>(pGameInstance->Get_GameObjectPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Prototype_GameObject_Boss_S_Cage"), 0));
 		pGameObject->Set_CutScene();
+
+		pGameInstance->Stop_Sound(3);
+		pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.1f, true, 0);
 		RELEASE_INSTANCE(CGameInstance);
 
 		return;

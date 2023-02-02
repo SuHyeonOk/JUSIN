@@ -54,6 +54,18 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 		XMStoreFloat4(&m_f4Distance, vDistance);
 	}
 
+	// 사운드
+	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROCK)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_fire_attack1.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
+	{
+
+	}
+
 	return S_OK;
 }
 
@@ -95,8 +107,14 @@ void CB_3DBullet::Late_Tick(_double TimeDelta)
 				_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 				XMStoreFloat4(&f4MyPos, vMyPos);
 
+				// 이펙트
 				CEffect_Manager::GetInstance()->Effect_Boom_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f));
 				CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f), 15, _float2(0.1f, 0.5f));
+			
+				// 사운드
+				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+				pGameInstance->Play_Sound(TEXT("sfx_fire_attack3.ogg"), 0.7f);
+				RELEASE_INSTANCE(CGameInstance);
 			}
 
 			CGameObject::Set_Dead();
@@ -163,12 +181,18 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 			_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 			XMStoreFloat4(&f4MyPos, vMyPos);
 
+			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);
+
+			// 이펙트 (플레이어와 충돌 했기 때문에 추가적으로 hit 이펙트가 나온다.)
 			CEffect_Manager::GetInstance()->Effect_Boom_Fire_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f));
 			CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(1.0f, 0.0f, 0.0f));
 			CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z - 0.5f), _float3(0.0f, 0.0f, 0.0f), 15, _float2(0.1f, 0.5f));
 
-			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);
+			// 사운드
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_fire_attack3.ogg"), 0.7f);
+			RELEASE_INSTANCE(CGameInstance);
 		}
 		else
 		{

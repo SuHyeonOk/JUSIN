@@ -52,6 +52,11 @@ HRESULT CBoss_Fan::Initialize(void * pArg)
 	m_fHP		= 30.0f;
 	m_fMaxHP	= 30.0f;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("sfx_quest_accept.ogg"), 0.7f);
+	RELEASE_INSTANCE(CGameInstance);
+
+
 	return S_OK;
 }
 

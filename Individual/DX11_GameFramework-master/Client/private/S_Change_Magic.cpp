@@ -68,6 +68,8 @@ HRESULT CS_Change_Magic::Initialize(void * pArg)
 
 	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
+
+	pGameInstance->Play_Sound(TEXT("sfx_gary_attack.ogg"), 0.7f);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -283,10 +285,12 @@ HRESULT CS_Change_Magic::Death_Set(const _double & TimeDelta)
 			return E_FAIL;
 
 		pGameObject->Set_Change();
-		RELEASE_INSTANCE(CGameInstance);
 
 		CObj_Manager::GetInstance()->Set_Interaction(false);
 		CGameObject::Set_Dead();
+
+		pGameInstance->Play_Sound(TEXT("sfx_gary_attack.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
 
 		m_dSkillClone_TimeAcc = 0;
 	}

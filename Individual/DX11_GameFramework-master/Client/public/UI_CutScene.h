@@ -40,6 +40,8 @@ private:
 	_int			m_Script_Count = { 0 };
 	_double			m_Script_TimeAcc = { 0.0 };
 
+	_bool			m_bSound = false;
+
 public:
 	static CUI_CutScene*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

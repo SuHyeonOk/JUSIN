@@ -262,6 +262,11 @@ void CM_Monster::Die(const _double & TimeDelta, _float fPlusY, _uint iBronzeCoun
 
 	if (!m_OneCoin)															// 한 번만
 	{
+		// 사운드
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enemy_die.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		// 플레이어 UI 관리
 		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
 		CUI_Manager::GetInstance()->Set_LevelGauge_Player(CObj_Manager::GetInstance()->Get_Current_Player().fExp / CObj_Manager::GetInstance()->Get_Current_Player().fExpMax);

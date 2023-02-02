@@ -295,7 +295,7 @@ void CM_Penny::Attack_Tick(const _double& TimeDelta)
 		{
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			// »ç¿îµå
-			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_throwing_pie.ogg"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("sfx_penny_attack.ogg"), 1.0f);
 
 			b3DUI = true;
 
