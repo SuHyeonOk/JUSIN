@@ -79,6 +79,8 @@ void CFinn::Tick(_double TimeDelta)
 
 	Current_Player(TimeDelta);
 	Player_Tick(TimeDelta);
+
+
 }
 
 void CFinn::Late_Tick(_double TimeDelta)

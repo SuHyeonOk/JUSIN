@@ -55,6 +55,16 @@ void CBackGround::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	static _bool bOneSound;
+	if (false == bOneSound)
+	{
+		bOneSound = true;
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Story1.ogg"), 0.5f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	if (LEVEL_LOGO == CObj_Manager::GetInstance()->Get_Current_Level())
 		m_iLevel_Texture = 0;			// logo ÀÌ¹ÌÁö
 	else

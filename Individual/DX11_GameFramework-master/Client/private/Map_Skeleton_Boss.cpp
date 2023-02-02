@@ -30,13 +30,16 @@ HRESULT CMap_Skleton_Boss::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.5f, true);
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
 void CMap_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
 }
 
 void CMap_Skleton_Boss::Late_Tick(_double TimeDelta)

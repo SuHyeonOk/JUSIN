@@ -9,6 +9,7 @@
 #include "PipeLine.h"
 #include "Picking.h"
 #include "Collider_Manager.h"
+#include "Sound_Manager.h"
 
 BEGIN(Engine)
 
@@ -107,6 +108,13 @@ public: /* For.Frustum */
 	_bool isInFrustum_WorldSpace(_fvector vWorldPos, _float fRange = 0.f);
 	_bool isInFrustum_LocalSpace(_fvector vLocalPos, _float fRange = 0.f);
 
+public: /* For.Sound_Manager */
+	void Play_Sound(const _tchar *pSoundKey, _float fVolume, _bool bIsBGM = false, _int iManualChannelIndex = -1);
+	void Stop_Sound(_uint iManualChannelIndex);
+	void Set_Volume(_uint iManualChannelIndex, _float fVolume);
+	void Set_MasterVolume(_float fVolume);
+	void Set_SoundDesc(const _tchar *pSoundKey, CSound::SOUND_DESC& SoundDesc);
+
 private:
 	static _uint					m_iStaticLevelIndex;
 
@@ -126,6 +134,7 @@ private:
 	class CFont_Manager*			m_pFont_Manager = nullptr;
 	class CFrustum*					m_pFrustum = nullptr;
 	class CTarget_Manager*			m_pTarget_Manager = nullptr;
+	class CSound_Manager*			m_pSound_Manager = { nullptr };
 
 public:
 	static void Release_Engine();

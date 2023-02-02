@@ -30,13 +30,17 @@ HRESULT CMap_Skeleton::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.5f, true);
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
 void CMap_Skeleton::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
+	
 }
 
 void CMap_Skeleton::Late_Tick(_double TimeDelta)

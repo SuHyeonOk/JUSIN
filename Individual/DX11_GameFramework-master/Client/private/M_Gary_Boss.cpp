@@ -990,8 +990,8 @@ void CM_Gary_Boss::CutScene_Effect()
 	{
 		bCutSceneEffect = true;
 
-		//CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 6.2f, 1.5f, 21.0f });
-		//CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 7.2f, 1.5f, 20.5f });
+		CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 6.2f, 1.5f, 21.0f });
+		CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 7.2f, 1.5f, 20.5f });
 		CEffect_Manager::GetInstance()->Effect_Boss_CutScene({ 5.2f, 1.5f, 20.5f });
 	}
 }
