@@ -12,11 +12,41 @@
 #include "E_Alpha_Rotation.h"
 #include "E_Look_Up.h"
 #include "E_Look_Alpha.h"
+#include "E_NoLook_Alpha.h"
 
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
 {
+}
+
+HRESULT CEffect_Manager::Effect_TreeBullet(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	for (_int i = 0; i < 15; ++i)
+	{
+		_float	fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-2.0f, 2.0f);
+		_float	fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-2.0f, 2.0f);
+
+		_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, 1.0f, fRandomZ, 1.0f));
+
+		_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 2.0f);
+
+		_vector vRandomPos = vTempPos * fRandomRange;
+		_float4 f4RandomPos;
+		XMStoreFloat4(&f4RandomPos, vRandomPos);
+
+		CE_NoLook_Alpha::EFFECTINFO tEffectInfo;
+		tEffectInfo.eTextureType = CE_NoLook_Alpha::EFFECTINFO::TREEBULLET_TEXTURE;
+		tEffectInfo.f3Pos = _float3(f3Pos.x + f4RandomPos.x, f3Pos.y + 0.6f, f3Pos.z + f4RandomPos.z);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_NoLook_Alpha"), &tEffectInfo)))
+			return E_FAIL;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CEffect_Manager::Effect_Potal_StarColor_Create(const _float3 & f3Pos, const _float3 & f3Color)

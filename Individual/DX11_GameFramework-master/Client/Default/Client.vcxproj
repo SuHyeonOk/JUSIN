@@ -194,6 +194,7 @@
     <ClInclude Include="..\public\E_Look_Alpha.h" />
     <ClInclude Include="..\public\E_Look_Grow.h" />
     <ClInclude Include="..\public\E_Look_Up.h" />
+    <ClInclude Include="..\public\E_NoLook_Alpha.h" />
     <ClInclude Include="..\public\E_NoLook_Grow.h" />
     <ClInclude Include="..\public\E_Alpha_Rotation.h" />
     <ClInclude Include="..\public\E_Burst.h" />
@@ -319,6 +320,7 @@
     <ClCompile Include="..\private\E_Look_Alpha.cpp" />
     <ClCompile Include="..\private\E_Look_Grow.cpp" />
     <ClCompile Include="..\private\E_Look_Up.cpp" />
+    <ClCompile Include="..\private\E_NoLook_Alpha.cpp" />
     <ClCompile Include="..\private\E_NoLook_Grow.cpp" />
     <ClCompile Include="..\private\E_Alpha_Rotation.cpp" />
     <ClCompile Include="..\private\E_Burst.cpp" />

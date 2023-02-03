@@ -58,6 +58,7 @@
 #include "E_Look_Alpha.h"
 #include "Player_Talk.h"
 #include "E_FlyingEnvironment.h"
+#include "E_NoLook_Alpha.h"
 
 // Obj
 #include "O_Box.h"
@@ -1394,6 +1395,11 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_YellowL_%d.png"), 4))))
 		return E_FAIL;
 
+	// TreeMonster
+	/* For.Prototype_Component_Texture_Tree_Witch */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Tree_Witch"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Tree_Witch/tree_witch_pinches_2_D.png")))))
+		return E_FAIL;
 
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -1410,6 +1416,10 @@ HRESULT CLoader::Effect_Create()
 		CE_DieCenter::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_E_NoLook_Alpha*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_NoLook_Alpha"),
+		CE_NoLook_Alpha::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* For.Prototype_GameObject_E_NoLook_Grow */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_NoLook_Grow"),
 		CE_NoLook_Grow::Create(m_pDevice, m_pContext))))
@@ -1456,10 +1466,13 @@ HRESULT CLoader::Effect_Create()
 		CPlayer_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Environment
 	/* For.Prototype_GameObject_E_FlyingEnvironment*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_FlyingEnvironment"),
 		CE_FlyingEnvironment::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+
 
 	RELEASE_INSTANCE(CGameInstance);
 

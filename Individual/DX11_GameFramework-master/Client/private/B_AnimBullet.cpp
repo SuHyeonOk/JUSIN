@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Effect_Manager.h"
 
 CB_AnimBullet::CB_AnimBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -34,14 +35,18 @@ HRESULT CB_AnimBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)	// 요기 (검색해서 각기 설정해 주면 된다.)
 	{
+		// 사운드
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		pGameInstance->Play_Sound(TEXT("sfx_treewitch_dead.ogg"), 0.7f);
 		RELEASE_INSTANCE(CGameInstance);
 
+		// 이펙트
+		CEffect_Manager::GetInstance()->Effect_TreeBullet(m_tBulletInfo.f3Start_Pos);
+
 		m_wsTag = L"3DBullet_Roots";
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+		GameObjectDesc.TransformDesc.f3Pos = m_tBulletInfo.f3Start_Pos;
 	}
 
 
