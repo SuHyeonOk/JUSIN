@@ -237,7 +237,7 @@ void CUI_CutScene::CutSceneOne_Talk(const _double & TimeDelta)
 		m_Script_TimeAcc = 0.0;
 
 		pGameInstance->Stop_Sound(3);
-		pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.3f, true, 0);
+		pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.2f, true, 0);
 		RELEASE_INSTANCE(CGameInstance);
 
 		return;
@@ -274,7 +274,7 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 		pGameObject->Set_CutScene();
 
 		pGameInstance->Stop_Sound(3);
-		pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.3f, true, 0);
+		pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.2f, true, 0);
 		RELEASE_INSTANCE(CGameInstance);
 
 		return;

@@ -65,6 +65,11 @@ HRESULT CBoss_S_Wind::Initialize(void * pArg)
 	m_fSizeX = 1.0f;
 	m_fSizeY = 1.0f;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("sfx_portal_activate.ogg"), 0.7f);
+	RELEASE_INSTANCE(CGameInstance);
+
+
 	return S_OK;
 }
 

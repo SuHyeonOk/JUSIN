@@ -56,8 +56,11 @@ private:
 
 	_int					m_iRandomNum = 0;
 
+	_bool					m_bSword_Sound = false;
+	_bool					m_bShield_Sound = false;
+
 public:
-	static	CM_Skeleton_Shield*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CM_Skeleton_Shield*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free()						override;
 };

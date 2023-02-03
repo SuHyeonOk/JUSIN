@@ -45,6 +45,9 @@ private:
 	
 	_bool					m_bFindUI = false;
 
+	_bool					m_bIdle_Sound = false;
+	_bool					m_bSword_Sound = false;
+
 public:
 	static	CM_PigWarrior*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;

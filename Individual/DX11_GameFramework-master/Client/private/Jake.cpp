@@ -583,7 +583,7 @@ void CJake::Check_Follow(_double TimeDelta)
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f));
 
 			// 사운드
-			pGameInstance->Play_Sound(TEXT("sfx_character_teleport.ogg"), 0.7f);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_splash_pie.ogg"), 0.7f);
 
 			m_dNotfollow_TimeAcc = 0;
 		}
@@ -678,6 +678,8 @@ void CJake::Key_Input(_double TimeDelta)
 #pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
+		pGameInstance->Stop_Sound(1);
+		
 		m_OnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 
@@ -688,6 +690,8 @@ void CJake::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
+		pGameInstance->Stop_Sound(1);
+		
 		m_OnMove = true;
 		m_f4NewLook = { 1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -698,6 +702,8 @@ void CJake::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
+		pGameInstance->Stop_Sound(1);
+		
 		m_OnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, -1.0f, 0.0f };
 
@@ -708,6 +714,8 @@ void CJake::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
+		pGameInstance->Stop_Sound(1);
+		
 		m_OnMove = true;
 		m_f4NewLook = { -1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -741,6 +749,7 @@ void CJake::Key_Input(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_LSHIFT))
 	{
+		pGameInstance->Stop_Sound(1);
 		pGameInstance->Play_Sound(TEXT("roll.ogg"), 0.7f);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ROLL);
 	}
@@ -1015,6 +1024,13 @@ void CJake::Swim_Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	
+	static _bool bSound;
+	if (false == bSound)
+	{
+		bSound = true;
+		pGameInstance->Play_Sound(TEXT("sfx_character_outofwater.ogg"), 1.0f);
+	}
+
 	if (43 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 	{
 		m_bDiving = true;
@@ -1022,7 +1038,12 @@ void CJake::Swim_Tick(_double TimeDelta)
 
 	if (m_bDiving)
 	{
-		//pGameInstance->Play_Sound(TEXT("sfx_character_underwater.ogg"), 0.7f, true, 3);
+		static _bool bSounding;
+		if (false == bSounding)
+		{
+			bSounding = true;
+			pGameInstance->Play_Sound(TEXT("sfx_character_drowning.ogg"), 1.0f, true, 3);
+		}
 
 		m_pModelCom->Set_AnimIndex(57);			// SWIM
 
@@ -1035,6 +1056,11 @@ void CJake::Swim_Tick(_double TimeDelta)
 			m_pModelCom->Set_AnimIndex(53);		// RUN
 			if (m_pTransformCom->Go_SwinUp(TimeDelta, 5.f))	// 0 까지 올라왔다면
 			{
+				bSound = false;
+				bSounding = false;
+				pGameInstance->Stop_Sound(3);
+				pGameInstance->Play_Sound(TEXT("sfx_character_splah.ogg"), 1.0f);
+				
 				m_bDiving = false;
 				m_bIsSwim = false;
 				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::IDLE);
@@ -1314,12 +1340,12 @@ HRESULT CJake::Talk(const _double & TimeDelta)
 
 void CJake::Sound_Tick()
 {
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Stop_Sound(1);
-		RELEASE_INSTANCE(CGameInstance);
-	}
+	//if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)
+	//{
+	//	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	//	pGameInstance->Stop_Sound(1);
+	//	RELEASE_INSTANCE(CGameInstance);
+	//}
 }
 
 CJake * CJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

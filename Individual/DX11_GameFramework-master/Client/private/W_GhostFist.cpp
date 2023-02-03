@@ -47,7 +47,6 @@ HRESULT CW_GhostFist::Initialize(void * pArg)
 void CW_GhostFist::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
 }
 
 void CW_GhostFist::Late_Tick(_double TimeDelta)
@@ -95,6 +94,10 @@ void CW_GhostFist::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_glub_attack.ogg"), 0.5f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_WeaponDesc.fAttack);

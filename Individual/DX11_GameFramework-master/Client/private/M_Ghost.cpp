@@ -77,7 +77,9 @@ void CM_Ghost::Tick(_double TimeDelta)
 
 	// 주먹 무기
 	if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
+	{
 		m_MonsterParts[0]->Tick(TimeDelta);
+	}
 
 	// 전체적인 몬스터 상태
 	Monster_Tick(TimeDelta);
@@ -302,6 +304,7 @@ void CM_Ghost::Idle_Tick(const _double& TimeDelta)
 void CM_Ghost::Move_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
 	if (!m_bAttack && 4.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 	

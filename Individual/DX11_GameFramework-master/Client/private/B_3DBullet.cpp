@@ -55,16 +55,20 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 	}
 
 	// »ç¿îµå
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROCK)
 	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		pGameInstance->Play_Sound(TEXT("sfx_fire_attack1.ogg"), 0.7f);
-		RELEASE_INSTANCE(CGameInstance);
+	}
+	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_SKELETON)
+	{
+		pGameInstance->Play_Sound(TEXT("Skeleton_Bullet.mp3"), 0.7f);
 	}
 	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
 	{
-
+		pGameInstance->Play_Sound(TEXT("sfx_general_healing.ogg"), 0.7f);
 	}
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }

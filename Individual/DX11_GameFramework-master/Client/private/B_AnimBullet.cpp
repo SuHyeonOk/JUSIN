@@ -34,6 +34,10 @@ HRESULT CB_AnimBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROOTS)	// 요기 (검색해서 각기 설정해 주면 된다.)
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_treewitch_dead.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		m_wsTag = L"3DBullet_Roots";
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);

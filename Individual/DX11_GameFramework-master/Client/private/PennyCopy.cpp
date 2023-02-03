@@ -54,6 +54,16 @@ HRESULT CPennyCopy::Initialize(void * pArg)
 
 	m_eState = MOVE;
 
+	static _bool	bSound;
+	if (false == bSound)
+	{
+		bSound = true;
+	
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Penny_Copy.mp3"), 0.5f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	return S_OK;
 }
 

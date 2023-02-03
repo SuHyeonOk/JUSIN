@@ -324,6 +324,21 @@ void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 {
 	// IDLE 일 때, MOVE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	
+	if (7.0f > fDistance)
+	{
+		if (false == m_bIdle_Sound)
+		{
+			m_bIdle_Sound = true;
+
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			_tchar szSoundName[MAX_PATH];
+			wsprintf(szSoundName, TEXT("v_g_Squill%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 8));
+			pGameInstance->Play_Sound(szSoundName, 0.7f);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+	}
+
 	if (!m_bAttack && 3.f > fDistance)	// ※ 플레이어 탐색 범위		
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
@@ -334,6 +349,8 @@ void CM_PigWarrior::Idle_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 {
+	m_bIdle_Sound = false;
+
 	// 1 : 플레이어를 찾았을 때의 MOVE
 	// 2 : 플레이어를 찾지 못 하고 랜덤으로 이동하는 MOVE
 
@@ -381,6 +398,8 @@ void CM_PigWarrior::Move_Tick(const _double& TimeDelta)
 
 void CM_PigWarrior::Find_Tick()
 {
+	m_bIdle_Sound = false;
+
 	if (false == m_bFindUI)
 	{
 		m_bFindUI = true;
@@ -420,6 +439,14 @@ void CM_PigWarrior::Find_Tick()
 
 void CM_PigWarrior::Attack_Tick(const _double& TimeDelta)
 {
+	if (false == m_bSword_Sound)
+	{
+		m_bSword_Sound = true;
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_throwing_pie.ogg"), 1.0f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	m_bFind = false;
 
 	_int	iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(0, 1);

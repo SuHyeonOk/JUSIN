@@ -387,10 +387,19 @@ void CM_Skeleton_Shield::Find_Tick()
 
 void CM_Skeleton_Shield::Attack_Tick(const _double& TimeDelta)
 {
+	if (false == m_bSword_Sound)
+	{
+		m_bSword_Sound = true;
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_throwing_pie.ogg"), 1.0f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	m_bFind = false;
 
 	if (m_pModelCom->Get_Finished())
 	{
+		m_bSword_Sound = false;
 		m_bAttack = true;
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 	}
@@ -431,9 +440,19 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 	}
 	else if (2 == m_iRandomNum)
 	{
+		if (false == m_bShield_Sound)
+		{
+			m_bShield_Sound = true;
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("Skeleton_Shield.mp3"), 1.0f);
+			RELEASE_INSTANCE(CGameInstance);
+
+		}
+
 		m_pModelCom->Set_AnimIndex(3, false);	// ¹æ¾î
 		if (m_pModelCom->Get_Finished())
 		{
+			m_bShield_Sound = false;
 			m_iRandomNum = 0;
 			
 			m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;

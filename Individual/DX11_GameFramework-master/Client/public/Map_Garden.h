@@ -36,6 +36,7 @@ private:
 
 private:
 	_double					m_dWindSound_TimeAcc = 0.0f;
+	_double					m_dFallSound_TimeAcc = 0.0f;
 
 public:
 	static	CMap_Garden*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

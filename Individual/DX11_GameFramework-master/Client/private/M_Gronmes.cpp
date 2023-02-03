@@ -260,7 +260,7 @@ void CM_Gronmes::Monster_Tick(const _double& TimeDelta)
 void CM_Gronmes::Idle_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (5.0f > fDistance)
+	if (7.0f > fDistance)
 	{
 		if (false == m_bIdle_Sound)
 		{

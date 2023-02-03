@@ -237,8 +237,20 @@ void CM_Mimic::Find_Tick()
 
 void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 {
+	if (false == m_bAttack_Sound)
+	{
+		m_bAttack_Sound = true;
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_fakechest_attack.ogg"), 1.0f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	if (!m_bPlayer_Attack)
+	{
+		m_bAttack_Sound = false;
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
+	}
 }
 
 void CM_Mimic::Hit_Tick(const _double& TimeDelta)

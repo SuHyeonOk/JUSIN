@@ -35,6 +35,9 @@ private:
 
 	void				Hit_Process(const _double & TimeDelta);
 
+private:
+	_bool				m_bAttack_Sound = false;
+
 public:
 	static	CM_Mimic*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
