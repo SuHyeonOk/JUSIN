@@ -31,8 +31,7 @@ HRESULT CMap_Skeleton::Initialize(void * pArg)
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Stop_Sound(0);
-	pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+	pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.3f, true, 0);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

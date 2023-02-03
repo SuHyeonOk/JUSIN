@@ -68,19 +68,7 @@ void CO_Box::Tick(_double TimeDelta)
 		m_pModelCom->Set_AnimIndex(1);
 		break;
 	case Client::CO_Box::OPEN:
-	{
-		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		if (0 == m_pModelCom->Get_Keyframes())
-		{
-			CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), 3);
-			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
-		}
-
 		m_pModelCom->Set_AnimIndex(3, false);
-	}
 		break;
 	case Client::CO_Box::STOP:
 		m_pModelCom->Set_AnimIndex(2);
@@ -163,6 +151,13 @@ void CO_Box::On_Collision(CGameObject * pOther)
 			if (L"Player_Weapon" == pOther->Get_Tag())
 			{
 				m_eState = OPEN;
+
+				_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+				_float4 f4MyPos;
+				XMStoreFloat4(&f4MyPos, vMyPos);
+
+				CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.0f), 20);
+				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y + 1.0f, f4MyPos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
 
 				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 				pGameInstance->Play_Sound(TEXT("sfx_open_chest.ogg"), 1.0f);

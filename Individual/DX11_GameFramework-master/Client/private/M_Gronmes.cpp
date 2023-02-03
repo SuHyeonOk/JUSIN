@@ -259,17 +259,19 @@ void CM_Gronmes::Monster_Tick(const _double& TimeDelta)
 
 void CM_Gronmes::Idle_Tick(const _double& TimeDelta)
 {
-	if (false == m_bIdle_Sound)
+	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	if (5.0f > fDistance)
 	{
-		m_bIdle_Sound = true;
+		if (false == m_bIdle_Sound)
+		{
+			m_bIdle_Sound = true;
 
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("sfx_gnomes_idle.ogg"), 0.5f);
-		RELEASE_INSTANCE(CGameInstance);
-
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_gnomes_idle.ogg"), 0.5f);
+			RELEASE_INSTANCE(CGameInstance);
+		}
 	}
 
-	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 3.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 

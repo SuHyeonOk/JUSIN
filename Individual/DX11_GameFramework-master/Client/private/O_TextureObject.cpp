@@ -162,12 +162,14 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 
 				if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 				{
+					pGameInstance->Stop_Sound(0);
 					CGameObject::Set_Dead();
 					CObj_Manager::GetInstance()->Set_NextLevel(true);
 					CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
 				}
 				else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
 				{
+					pGameInstance->Stop_Sound(0);
 					CGameObject::Set_Dead();
 					CObj_Manager::GetInstance()->Set_NextLevel(true);
 					CObj_Manager::GetInstance()->Set_Loading_Count();

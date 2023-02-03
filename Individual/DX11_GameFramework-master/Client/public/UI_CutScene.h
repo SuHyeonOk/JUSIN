@@ -41,6 +41,7 @@ private:
 	_double			m_Script_TimeAcc = { 0.0 };
 
 	_bool			m_bSound = false;
+	_bool			m_bSoundTwo = false;
 
 public:
 	static CUI_CutScene*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

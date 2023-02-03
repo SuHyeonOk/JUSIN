@@ -31,8 +31,7 @@ HRESULT CMap_Garden::Initialize(void * pArg)
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Stop_Sound(0);
-	pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.1f, true, 0);
+	pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.3f, true, 0);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -41,6 +40,16 @@ HRESULT CMap_Garden::Initialize(void * pArg)
 void CMap_Garden::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	m_dWindSound_TimeAcc += TimeDelta;
+	if (10.0 < m_dWindSound_TimeAcc)	// 10 초 마다 한 번씩 바람이 나오도록 한다.
+		m_dWindSound_TimeAcc = 0.0;
+	if (0.0 == m_dWindSound_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Cine_Death_Death_Vortex.ogg"), 0.3f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 void CMap_Garden::Late_Tick(_double TimeDelta)

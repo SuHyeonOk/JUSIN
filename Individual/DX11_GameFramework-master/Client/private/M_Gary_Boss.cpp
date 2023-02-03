@@ -393,7 +393,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		iRandom = 2;   // Test
+		//iRandom = 2;   // Test
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)

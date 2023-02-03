@@ -243,6 +243,8 @@ void CM_Mimic::Attack_Tick(const _double& TimeDelta)
 
 void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 {
+	CM_Monster::Effect_Hit(_float3(-3.6f, 0.7f, -0.5f));
+
 	if (0 == m_pModelCom->Get_Keyframes())
 	{
 		_vector	vMyPos;
@@ -253,7 +255,7 @@ void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 		CUI_3DTexture::TEXTUREINFO	tTextureInfo;
 		tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
 		tTextureInfo.f2Size = _float2(0.7f, 0.7f);
-		tTextureInfo.f3Pos = _float3(f4MyPos.x - 3.6f, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
+		tTextureInfo.f3Pos = _float3(f4MyPos.x - 3.6f, f4MyPos.y + 1.3f, f4MyPos.z - 1.0f);
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

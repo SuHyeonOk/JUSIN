@@ -99,22 +99,6 @@ void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 		return;
 	}
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	_tchar szSoundName[MAX_PATH];
-
-	if (PLAYERINFO::PLAYER::FINN == m_tPlayerInfo.ePlayer)
-	{
-		wsprintf(szSoundName, TEXT("v_Finn_Hit%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 3));
-		pGameInstance->Play_Sound(szSoundName, 0.7f);
-	}
-	else
-	{
-		wsprintf(szSoundName, TEXT("v_Jake_Hit%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 3));
-		pGameInstance->Play_Sound(szSoundName, 0.7f);
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
 	m_fMonster_Attck = fAttack;
 }
 
@@ -147,6 +131,26 @@ void		CObj_Manager::Tick(_double TimeDelta)
 		{
 			m_tPlayerInfo.fHP -= m_fMonster_Attck;
 			CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
+		}
+
+		if (0 == m_dPlayerAttck_TimeAcc)
+		{
+			// »ç¿îµå
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			_tchar szSoundName[MAX_PATH];
+
+			if (PLAYERINFO::PLAYER::FINN == m_tPlayerInfo.ePlayer)
+			{
+				wsprintf(szSoundName, TEXT("v_Finn_Hit%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 3));
+				pGameInstance->Play_Sound(szSoundName, 0.7f);
+			}
+			else
+			{
+				wsprintf(szSoundName, TEXT("v_Jake_Hit%d.ogg"), CUtilities_Manager::GetInstance()->Get_Random(1, 3));
+				pGameInstance->Play_Sound(szSoundName, 0.7f);
+			}
+
+			RELEASE_INSTANCE(CGameInstance);
 		}
 
 		m_dPlayerAttck_TimeAcc += TimeDelta;

@@ -40,7 +40,7 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_pigs_attack_1.ogg"), 0.7f);
+		pGameInstance->Play_Sound(TEXT("sfx_pigs_attack_1.ogg"), 0.5f);
 
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
@@ -48,7 +48,7 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 	}
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks.ogg"), 0.7f);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks.ogg"), 0.5f);
 
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
@@ -131,7 +131,7 @@ void CB_2DBullet::Late_Tick(_double TimeDelta)
 		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		{
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 0.5f);
 			RELEASE_INSTANCE(CGameInstance);
 
 			if (0 == m_tBulletInfo.iCircle_Color)		// ÆÄ¶õ»ö
@@ -193,7 +193,7 @@ void CB_2DBullet::On_Collision(CGameObject * pOther)
 		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 		{
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 0.5f);
 			RELEASE_INSTANCE(CGameInstance);
 
 			_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);

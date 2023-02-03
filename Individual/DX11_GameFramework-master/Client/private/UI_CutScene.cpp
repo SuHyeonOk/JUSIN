@@ -66,7 +66,7 @@ void CUI_CutScene::Tick(_double TimeDelta)
 
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			pGameInstance->Stop_Sound(0);
-			pGameInstance->Play_Sound(TEXT("Intro2_Loop.ogg"), 0.7f, true, 3);
+			pGameInstance->Play_Sound(TEXT("Intro2_Loop.ogg"), 0.5f, false, 3);
 			RELEASE_INSTANCE(CGameInstance);
 		}
 	}
@@ -76,13 +76,13 @@ void CUI_CutScene::Tick(_double TimeDelta)
 	{
 		CutSceneTwo_Talk(TimeDelta);
 
-		if (false == m_bSound)
+		if (false == m_bSoundTwo)
 		{
-			m_bSound = true;
+			m_bSoundTwo = true;
 
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			pGameInstance->Stop_Sound(0);
-			pGameInstance->Play_Sound(TEXT("sfx_scream.ogg"), 0.7f, true, 3);
+			pGameInstance->Play_Sound(TEXT("Boss1_Intro.ogg"), 0.5f, false, 3);
 			RELEASE_INSTANCE(CGameInstance);
 		}
 	}
@@ -231,14 +231,13 @@ void CUI_CutScene::CutSceneOne_Talk(const _double & TimeDelta)
 		pCameraTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(-36.4833f, 3.69427f, 36.0742f, 1.0f));	// 현재 플레이어의 좌표로 이동 시킨다.
 
 		// 다음 사용을 위한 값 초기화
-		m_bSound = false;
 		m_Script_Count = 0;
 		m_bSize_Change = false;
 		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
 		m_Script_TimeAcc = 0.0;
 
 		pGameInstance->Stop_Sound(3);
-		pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.1f, true, 0);
+		pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.3f, true, 0);
 		RELEASE_INSTANCE(CGameInstance);
 
 		return;
@@ -264,7 +263,6 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 		CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);	// 현재 플레이어를 핀으로 변경
 
 		// 다음 사용을 위한 값 초기화
-		m_bSound = false;
 		m_Script_Count = 0;
 		m_bSize_Change = false;
 		m_fSizeY = 720.f * 1.3f;	// Next CutScene Ready
@@ -276,7 +274,7 @@ void CUI_CutScene::CutSceneTwo_Talk(const _double & TimeDelta)
 		pGameObject->Set_CutScene();
 
 		pGameInstance->Stop_Sound(3);
-		pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.1f, true, 0);
+		pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.3f, true, 0);
 		RELEASE_INSTANCE(CGameInstance);
 
 		return;
