@@ -256,6 +256,8 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Archer::Idle_Tick(const _double& TimeDelta)
 {
+	m_bIdle_Sound = false;
+	
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
@@ -270,6 +272,19 @@ void CM_Skeleton_Archer::Idle_Tick(const _double& TimeDelta)
 void CM_Skeleton_Archer::Move_Tick(const _double& TimeDelta)
 {
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+	
+	if (7.0f > fDistance)
+	{
+		if (false == m_bIdle_Sound)
+		{
+			m_bIdle_Sound = true;
+
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("Skeleton_Idle.mp3"), 0.7f);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+	}
+	
 	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
@@ -295,6 +310,8 @@ void CM_Skeleton_Archer::Move_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Archer::Find_Tick()
 {
+	m_bIdle_Sound = false;
+
 	if (m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 

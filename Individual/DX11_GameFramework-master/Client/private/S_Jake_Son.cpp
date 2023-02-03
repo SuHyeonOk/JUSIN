@@ -118,11 +118,23 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 		CEffect_Manager::GetInstance()->Effect_JakeSon_Create(_float3(f4MyPos.x, f4MyPos.y + 0.7f, f4MyPos.z - 0.5f));
 		CUI_Manager::GetInstance()->Set_JakeSon_Count();
 		
-		// 다섯번째 친구는 JakePage 를 남긴다.
-		if (JAKESONINFO::JAKE_SON_E == m_tJakeSonInfo.eJakeSon)
-		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+		if (JAKESONINFO::JAKE_SON_A == m_tJakeSonInfo.eJakeSon)
+			pGameInstance->Play_Sound(TEXT("JaekSon_JakeJr.mp3"), 1.0f);
+		else if (JAKESONINFO::JAKE_SON_B == m_tJakeSonInfo.eJakeSon)
+			pGameInstance->Play_Sound(TEXT("JaekSon_Viola.mp3"), 1.0f);
+		else if (JAKESONINFO::JAKE_SON_C == m_tJakeSonInfo.eJakeSon)
+			pGameInstance->Play_Sound(TEXT("JaekSon_Charlie.mp3"), 1.0f);
+		else if (JAKESONINFO::JAKE_SON_D == m_tJakeSonInfo.eJakeSon)
+			pGameInstance->Play_Sound(TEXT("JakeSon_TV.mp3"), 1.0f);
+		// 다섯번째 친구는 JakePage 를 남긴다.
+		else if (JAKESONINFO::JAKE_SON_E == m_tJakeSonInfo.eJakeSon)
+		{
+			// 사운드
+			pGameInstance->Play_Sound(TEXT("JakeSon_KimKilWhan.mp3"), 1.0f);
+
+			// 스킬 
 			CPage::PAGEINFO tPageInfo;
 			tPageInfo.fPos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 			tPageInfo.bJemp = true;
@@ -133,9 +145,8 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 				MSG_BOX("Jake Son Page File");
 				return;
 			}
-
-			RELEASE_INSTANCE(CGameInstance);
 		}
+		RELEASE_INSTANCE(CGameInstance);
 
 		CGameObject::Set_Dead();
 	}

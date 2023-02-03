@@ -544,6 +544,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 #pragma region ÀÌµ¿
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
+		pGameInstance->Stop_Sound(1);
 		m_OnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 
@@ -554,6 +555,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
+		pGameInstance->Stop_Sound(1);
 		m_OnMove = true;
 		m_f4NewLook = { 1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -564,6 +566,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
+		pGameInstance->Stop_Sound(1);
 		m_OnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, -1.0f, 0.0f };
 
@@ -574,6 +577,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
+		pGameInstance->Stop_Sound(1);
 		m_OnMove = true;
 		m_f4NewLook = { -1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -591,10 +595,16 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
+	{
+		pGameInstance->Play_Sound(TEXT("sfx_finn_sword_1.ogg"), 0.7f, false, 1);
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::ATTACK);
+	}
 
 	if (pGameInstance->Key_Down(DIK_LCONTROL))
+	{
+		pGameInstance->Play_Sound(TEXT("Fiona_Cat.mp3"), 0.7f, false, 1);
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::CAT);
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 }

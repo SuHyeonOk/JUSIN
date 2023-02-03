@@ -1119,7 +1119,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 		if (false == bSounding)
 		{
 			bSounding = true;
-			pGameInstance->Play_Sound(TEXT("sfx_character_drowning.ogg"), 1.0f, true, 2);
+			pGameInstance->Play_Sound(TEXT("sfx_character_drowning.ogg"), 1.0f, true, 4);
 		}
 
 		m_pModelCom->Set_AnimIndex(52);
@@ -1134,7 +1134,7 @@ void CFinn::Swim_Tick(_double TimeDelta)
 			{
 				bSound = false;
 				bSounding = false;
-				pGameInstance->Stop_Sound(2);
+				pGameInstance->Stop_Sound(4);
 				pGameInstance->Play_Sound(TEXT("sfx_character_splah.ogg"), 1.0f);
 
 				m_bDiving = false;

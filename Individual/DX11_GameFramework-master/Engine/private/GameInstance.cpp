@@ -98,7 +98,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pFrustum->Initialize()))
 		return E_FAIL;
 
-	if (FAILED(m_pSound_Manager->Reserve_Manager("../Bin/Resources/Sound/", 4)))
+	if (FAILED(m_pSound_Manager->Reserve_Manager("../Bin/Resources/Sound/", 5)))
 		return E_FAIL;
 
 	return S_OK;

@@ -58,6 +58,7 @@ private:
 
 	_bool					m_bSword_Sound = false;
 	_bool					m_bShield_Sound = false;
+	_bool					m_bIdle_Sound = false;
 
 public:
 	static	CM_Skeleton_Shield*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

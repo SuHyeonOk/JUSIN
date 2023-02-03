@@ -66,7 +66,7 @@ HRESULT CB_3DBullet::Initialize(void * pArg)
 	}
 	else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_MAGIC)
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_general_healing.ogg"), 0.7f);
+		pGameInstance->Play_Sound(TEXT("sfx_gary_attack.ogg"), 0.7f);
 	}
 	RELEASE_INSTANCE(CGameInstance);
 

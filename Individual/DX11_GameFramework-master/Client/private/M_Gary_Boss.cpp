@@ -708,6 +708,9 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 			return E_FAIL;
 		}
 
+		// »ç¿îµå
+		pGameInstance->Play_Sound(TEXT("Boss_StunFire.mp3"), 0.7f);
+
 		RELEASE_INSTANCE(CGameInstance);
 	}
 

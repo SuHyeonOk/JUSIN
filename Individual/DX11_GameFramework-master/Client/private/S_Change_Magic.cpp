@@ -69,7 +69,7 @@ HRESULT CS_Change_Magic::Initialize(void * pArg)
 	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
 
-	pGameInstance->Play_Sound(TEXT("sfx_gary_attack.ogg"), 0.7f);
+	pGameInstance->Play_Sound(TEXT("Jake_MagicChange.mp3"), 0.7f);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

@@ -54,6 +54,10 @@ HRESULT CBoss_S_Scream::Initialize(void * pArg)
 	m_fSizeX = 1.0f;
 	m_fSizeY = 1.0f;
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("sfx_portal_activate.ogg"), 0.7f);
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
@@ -115,7 +119,6 @@ void CBoss_S_Scream::On_Collision(CGameObject * pOther)
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
 		CObj_Manager::GetInstance()->Set_Interaction(true);
-		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STUN);
 	} 
 }

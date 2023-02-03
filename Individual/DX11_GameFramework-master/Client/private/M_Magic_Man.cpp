@@ -442,6 +442,11 @@ void CM_Magic_Man::Teleporting()
 {
 	// 공격을 받고난 후 생성된 원점을 기준으로 랜덤한 위치로 거리 3이내로 순간이동한다.
 
+	// 사운드
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	pGameInstance->Play_Sound(TEXT("sfx_general_healing.ogg"), 0.7f);
+	RELEASE_INSTANCE(CGameInstance);
+
 	// 좌표 이동
 	_float fRandomRangeX = CUtilities_Manager::GetInstance()->Get_Random(-2.4f, 2.4f);
 	_float fRandomRangeZ = CUtilities_Manager::GetInstance()->Get_Random(-2.4f, 2.4f);

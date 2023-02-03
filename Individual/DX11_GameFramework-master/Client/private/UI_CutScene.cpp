@@ -126,7 +126,7 @@ HRESULT CUI_CutScene::Render()
 			break;
 
 		case 1:
-			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("저기 할머니가 자꾸 날 깔아 뭉개려고해서 여기까지 도망쳤어"), _float2(381.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
+			pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("저기 나무마녀가 자꾸 날 깔아 뭉개려고해서 여기까지 도망쳤어"), _float2(381.0f, g_iWinSizeY * 0.92f), 0.f, _float2(0.5f, 0.47f));
 			break;
 
 		case 2:

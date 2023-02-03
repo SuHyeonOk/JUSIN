@@ -232,7 +232,7 @@ void CM_Tree_Witch::Idle_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 4.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	if (m_bAttack && m_pModelCom->Get_Finished())
+	if (m_bAttack && 10 <= m_pModelCom->Get_Keyframes())
 	{
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 		m_bAttack = false;
@@ -293,6 +293,8 @@ void CM_Tree_Witch::Move_Tick(const _double& TimeDelta)
 	}		
 	else						// ±ò¾Æ ¹¶°³±â	
 	{
+		m_bAttack_Sound = false;
+
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta, 1.f);
 
 		if (1.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
@@ -335,6 +337,16 @@ void CM_Tree_Witch::Attack_Tick(const _double& TimeDelta)
 
 void CM_Tree_Witch::Attack_Tick2(const _double & TimeDelta)
 {
+	// »ç¿îµå
+	if (false == m_bAttack_Sound)
+	{
+		m_bAttack_Sound = true;
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_treewitch_attack.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	switch (m_eSkill_AnimState)
 	{
 	case Client::CM_Tree_Witch::JUMP:

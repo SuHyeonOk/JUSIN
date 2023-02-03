@@ -49,9 +49,10 @@ private:
 	_int				m_iRandomNum = 0;
 
 	SKILLANIMSTATE		m_eSkill_AnimState;
-	//CSkill_Manager::MONSTERSKILL::TREEWITCH		m_eState = CSkill_Manager::MONSTERSKILL::TREEWITCH::JUMP;
-	_bool										m_bAttack = false;
-	_double										m_dBullet_TimeAcc = 0;
+	_bool				m_bAttack = false;
+	_double				m_dBullet_TimeAcc = 0;
+
+	_bool				m_bAttack_Sound = false;
 
 public:
 	static	CM_Tree_Witch*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

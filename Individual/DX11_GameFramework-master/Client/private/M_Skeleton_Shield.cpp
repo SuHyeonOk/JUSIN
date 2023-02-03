@@ -318,6 +318,8 @@ void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Idle_Tick(const _double& TimeDelta)
 {
+	m_bIdle_Sound = false;
+
 	// IDLE 일 때, MOVE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	if (!m_bAttack && 3.5f > fDistance)	// ※ 플레이어 탐색 범위		
@@ -330,6 +332,20 @@ void CM_Skeleton_Shield::Idle_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Move_Tick(const _double& TimeDelta)
 {
+	_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
+	if (7.0f > fDistance)
+	{
+		if (false == m_bIdle_Sound)
+		{
+			m_bIdle_Sound = true;
+
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("Skeleton_Idle.mp3"), 0.7f);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+	}
+
 	// 1 : 플레이어를 찾았을 때의 MOVE
 	// 2 : 플레이어를 찾지 못 하고 랜덤으로 이동하는 MOVE
 
@@ -339,27 +355,26 @@ void CM_Skeleton_Shield::Move_Tick(const _double& TimeDelta)
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
 		// 거리가 4 안 이라면 플레이어를 따라가서 거리가 1이 될 때 공격한다.
-		if (2.f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		if (2.f > fDistance)
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
 		// ※ 플레이어 포기 범위
-		if (4.f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		if (4.f < fDistance)
 			m_bFind = false; // 크흠.. 범위 벗어났을 때 막 뱅글뱅글 돌면서 회전하는 문제 있음..
 
 	}
 	else				// 플레이어를 찾지 못 했을 때 랜덤으로 이동하고 있는다
 	{
 		// MOVE 일 때, IDLE 일 때 똑같이 거리 이내 플레이어가 있는지 확인한다.
-		_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 		if (!m_bAttack && 3.5f > fDistance)	// ※ 플레이어 탐색 범위
 			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
 		// 내 원점 거리와 내 위치가 멀다면! 무조건 원점으로 돌아간다.
 		_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
 		_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
+		_float	fStartDiatance = XMVectorGetX(XMVector3Length(vDistance));
 
-		if (2.1f < fDiatance)
+		if (2.1f < fStartDiatance)
 		{
 			m_pTransformCom->Chase(vCenterPos, TimeDelta);
 			m_pTransformCom->LookAt(vCenterPos);
@@ -377,6 +392,7 @@ void CM_Skeleton_Shield::Move_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Find_Tick()
 {
+	m_bIdle_Sound = false;
 	m_bFind = true;	// 플레이어를 찾았다면 플레이어에게 다가가기 위해서 MOVE로 이동한다.
 
 	if(m_pModelCom->Get_Finished())
@@ -387,6 +403,8 @@ void CM_Skeleton_Shield::Find_Tick()
 
 void CM_Skeleton_Shield::Attack_Tick(const _double& TimeDelta)
 {
+	m_bIdle_Sound = false;
+
 	if (false == m_bSword_Sound)
 	{
 		m_bSword_Sound = true;

@@ -66,7 +66,7 @@ HRESULT CBoss_S_Wind::Initialize(void * pArg)
 	m_fSizeY = 1.0f;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("sfx_portal_activate.ogg"), 0.7f);
+	pGameInstance->Play_Sound(TEXT("Boss_Wind.mp3"), 0.7f);
 	RELEASE_INSTANCE(CGameInstance);
 
 
@@ -133,7 +133,8 @@ void CBoss_S_Wind::On_Collision(CGameObject * pOther)
 	{
 		CObj_Manager::GetInstance()->Set_Interaction(true);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
-	} 
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
+	}
 }
 
 HRESULT CBoss_S_Wind::SetUp_Components()
