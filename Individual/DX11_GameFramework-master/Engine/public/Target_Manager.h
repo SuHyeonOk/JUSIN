@@ -13,6 +13,7 @@ public:
 	virtual ~CTarget_Manager() = default;
 
 public:
+	ID3D11Texture2D* Get_Texture2D(const _tchar* pTargetTag);
 	ID3D11ShaderResourceView* Get_SRV(const _tchar* pTargetTag);
 
 public:

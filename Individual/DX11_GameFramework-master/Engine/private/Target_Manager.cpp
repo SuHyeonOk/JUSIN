@@ -11,6 +11,15 @@ CTarget_Manager::CTarget_Manager()
 
 }
 
+ID3D11Texture2D * CTarget_Manager::Get_Texture2D(const _tchar * pTargetTag)
+{
+	CRenderTarget*		pRenderTarget = Find_RenderTarget(pTargetTag);
+	if (nullptr == pRenderTarget)
+		return nullptr;
+
+	return pRenderTarget->Get_Texture2D();
+}
+
 ID3D11ShaderResourceView * CTarget_Manager::Get_SRV(const _tchar * pTargetTag)
 {
 	CRenderTarget*		pRenderTarget = Find_RenderTarget(pTargetTag);

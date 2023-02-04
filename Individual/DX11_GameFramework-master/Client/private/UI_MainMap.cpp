@@ -87,6 +87,10 @@ HRESULT CUI_MninMap::Render()
 	else if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
 		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("Skeleton Boss"), _float2(1133.f, 22.f), 0.f, _float2(0.33f, 0.29f), XMVectorSet(0.16f, 0.10f, 0.08f, 1.f));
 
+	_tchar szCount[MAX_PATH];
+	wsprintf(szCount, TEXT("Jake Son : %d"), CUI_Manager::GetInstance()->Get_JakeSon_Count());
+	pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(1137.f, 164.f), 0.f, _float2(0.35f, 0.33f));
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

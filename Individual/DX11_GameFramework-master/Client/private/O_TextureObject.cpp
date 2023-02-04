@@ -69,27 +69,13 @@ void CO_TextureObject::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	//// 카메라를 바라본다.
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	//CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	//_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	//RELEASE_INSTANCE(CGameInstance);
-
-	//m_pTransformCom->LookAt(vCameraPos, true);	
-
-	// 	RELEASE_INSTANCE(CGameInstance);
-
-	if (3 <= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
-		m_bTick = true;
-
-	if (false == m_bTick)
+	if (3 >= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
 		return;
 
-	//// 회전한다.
+	// 회전한다.
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
 
 	// 이펙트
-
 	m_bEffect_TimeAcc += TimeDelta;
 	if (1.0 < m_bEffect_TimeAcc)
 	{

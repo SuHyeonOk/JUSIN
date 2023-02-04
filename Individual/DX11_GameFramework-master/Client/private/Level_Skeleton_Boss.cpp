@@ -104,13 +104,12 @@ HRESULT CLevel_Skleton_Boss::Ready_Lights()
 
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 
-	LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	LightDesc.isEnable = true;
-	/*LightDesc.vDirection = _float4(1.f, -1.f, 1.0f, 0.f);*/
-	LightDesc.vPosition = _float4(5.f, 3.f, 5.f, 1.f);
-	LightDesc.fRange = 10.0f;
-	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
-	LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 0.2f);
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;				// 포인트 조명
+	LightDesc.isEnable = true;								
+	LightDesc.vPosition = _float4(5.f, 3.f, 5.f, 1.f);		// 위치
+	LightDesc.fRange = 10.0f;								// 조명 거리
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);		// 색상
+	LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 0.2f);	// 세기
 	LightDesc.vSpecular = LightDesc.vDiffuse;
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
@@ -121,7 +120,6 @@ HRESULT CLevel_Skleton_Boss::Ready_Lights()
 
 	LightDesc.eType = LIGHTDESC::TYPE_POINT;
 	LightDesc.isEnable = true;
-	/*LightDesc.vDirection = _float4(1.f, -1.f, 1.0f, 0.f);*/
 	LightDesc.vPosition = _float4(10.f, 3.f, 5.f, 1.f);
 	LightDesc.fRange = 10.0f;
 	LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);

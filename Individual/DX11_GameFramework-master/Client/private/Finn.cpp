@@ -97,7 +97,10 @@ void CFinn::Late_Tick(_double TimeDelta)
 		if (1 != m_fAlpha)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 		else
+		{
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		}
 	}
 
 	if (m_tPlayerInfo.ePlayer == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
@@ -219,6 +222,12 @@ HRESULT CFinn::SetUp_ShaderResources()
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 			return E_FAIL;
 	}
+
+	_float	fObjectID = 1.0f;
+	if (FAILED(m_pShaderCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
+
+	
 
 	///* For.Lights */
 	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);

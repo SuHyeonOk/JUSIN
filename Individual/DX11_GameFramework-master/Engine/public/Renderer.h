@@ -10,7 +10,17 @@ BEGIN(Engine)
 class ENGINE_DLL CRenderer final : public CComponent
 {
 public:
-	enum RENDERGROUP { RENDER_PRIORITY, RENDER_MAP_NONALPHABLEND, RENDER_NONALPHABLEND, RENDER_NONLIGHT, RENDER_ALPHABLEND, RENDER_UI, RENDER_END };
+	enum RENDERGROUP { 
+		RENDER_PRIORITY, 
+		RENDER_MAP_NONALPHABLEND, 
+		RENDER_NONALPHABLEND,
+		RENDER_XRAYBLEND,
+		RENDER_NONLIGHT, 
+		RENDER_ALPHABLEND, 
+		RENDER_UI, 
+		RENDER_END
+	};
+
 private:
 	CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CRenderer() = default;
@@ -32,7 +42,6 @@ private:
 	list<class CComponent*>				m_DebugObject;
 	typedef list<class CComponent*>		DEBUGOBJECTS;
 
-
 private:
 	class CTarget_Manager*				m_pTarget_Manager = nullptr;
 	class CLight_Manager*				m_pLight_Manager = nullptr;
@@ -44,6 +53,7 @@ private:
 	HRESULT Render_Priority();
 	HRESULT Render_Map_NonAlphaBlend();
 	HRESULT Render_NonAlphaBlend();
+	HRESULT Render_XRayBlend();
 	HRESULT Render_LightAcc();
 	HRESULT Render_Blend();
 	HRESULT Render_NonLight();
@@ -52,7 +62,6 @@ private:
 
 private:
 	HRESULT Render_DebugObject();
-
 
 public:
 	static CRenderer*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

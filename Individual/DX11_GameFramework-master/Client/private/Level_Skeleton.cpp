@@ -30,7 +30,7 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Lights()))
+	if (FAILED(Ready_Lights(TEXT("sdfasdfasdfasdf"))))
 		return E_FAIL;
 
 #ifdef F2_SKELETON
@@ -85,6 +85,7 @@ void CLevel_Skleton::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
+	ImGui_Light();
 }
 
 void CLevel_Skleton::Late_Tick(_double TimeDelta)
@@ -113,7 +114,7 @@ HRESULT CLevel_Skleton::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Lights()
+HRESULT CLevel_Skleton::Ready_Lights(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -123,12 +124,40 @@ HRESULT CLevel_Skleton::Ready_Lights()
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
 	LightDesc.isEnable = true;
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.0f, 0.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vDiffuse = _float4(0.75f, 0.75f, 0.75f, 1.f);
+	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
 		return E_FAIL;
+
+	Load_Light();
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;							// 포인트 조명
+	LightDesc.isEnable = true;
+	LightDesc.vPosition = _float4(-8.0f, 1.f, 5.3f, 1.f);          		// 위치
+	LightDesc.fRange = 3.0f;											// 조명 거리
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);					// 색상
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);				// 세기
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+		return E_FAIL;
+
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;				
+	//LightDesc.isEnable = true;
+	//LightDesc.vPosition = _float4(-7.0f, 1.f, 13.0f, 1.f);
+	//LightDesc.fRange = 2.5f;								
+	//LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 0.0f);
+	//LightDesc.vAmbient = _float4(0.0f, 0.0f, 0.0f, 0.0f);
+	//LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+	//	return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -326,13 +355,89 @@ void CLevel_Skleton::ImGui()
 	return;
 }
 
+void CLevel_Skleton::ImGui_Light()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	static _float					arrfPosition[4] = { 0.0f };
+	//static _float					asdfd[4] = { 0.0f };
+	static _float					Range = { 0.0f };
+	static _float					arrfDiffuse[4] = { 0.0f };
+	static _float					arrfAmbient[4] = { 0.0f };
+
+	ImGui::InputFloat4("Positiont", arrfPosition);
+	//ImGui::InputFloat4("asdfd", asdfd);
+	ImGui::InputFloat("Range", &Range);
+	ImGui::InputFloat4("Diffuse", arrfDiffuse);
+	ImGui::InputFloat4("Ambient", arrfAmbient);
+	
+	if (ImGui::Button("Set_Light"))
+	{
+		LIGHTDESC			LightDesc;
+		ZeroMemory(&LightDesc, sizeof LightDesc);
+
+		//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+		//LightDesc.isEnable = true;
+		//LightDesc.vDirection = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
+		//LightDesc.vDiffuse = _float4(asdfd[0], asdfd[1], asdfd[2], asdfd[3]);
+		//LightDesc.vAmbient = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
+		//LightDesc.vSpecular = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
+
+		LightDesc.eType = LIGHTDESC::TYPE_POINT;
+		LightDesc.isEnable = true;
+		LightDesc.vPosition = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
+		LightDesc.fRange = Range;
+		LightDesc.vDiffuse = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
+		LightDesc.vAmbient = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
+		LightDesc.vSpecular = LightDesc.vDiffuse;
+
+		if (FAILED(pGameInstance->Set_Light(m_pDevice, m_pContext, LightDesc)))
+			return;
+	}
+
+	if (ImGui::Button("Add_Light"))
+	{
+		LIGHTDESC			LightDesc;
+		ZeroMemory(&LightDesc, sizeof LightDesc);
+
+		LightDesc.eType = LIGHTDESC::TYPE_POINT;
+		LightDesc.isEnable = true;
+		LightDesc.vPosition = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
+		LightDesc.fRange = Range;
+		LightDesc.vDiffuse = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
+		LightDesc.vAmbient = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
+		LightDesc.vSpecular = LightDesc.vDiffuse;
+
+		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+			return;
+	}
+
+	if (ImGui::Button("Light Save"))
+	{
+		wofstream fout("../../Data/Skeleton_Light.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << arrfPosition[0] << L"|" << arrfPosition[1] << L"|" << arrfPosition[2] << "\n";
+
+		fout.close();
+	}
+
+	if (ImGui::Button("Light txt"))
+		WinExec("notepad.exe ../../Data/Skeleton_Light.txt", SW_SHOW);
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
 void CLevel_Skleton::ImGui_Food()
 {
 #pragma region Food
 	const _char* szObjName[] = { "Apple_Pie", "Royal_Tart", "Burrito" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_FOOD", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
-
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -1014,6 +1119,62 @@ void CLevel_Skleton::ImGui_Envionment()
 
 	if (ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/Skeleton_Envionment.txt", SW_SHOW);
+}
+
+HRESULT CLevel_Skleton::Load_Light()
+{
+	wifstream		fin("../../Data/Skeleton_Light.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return E_FAIL;
+	}
+
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		m_vecfloat3.push_back(_float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+	for (auto& pLightInfo : m_vecfloat3)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		LIGHTDESC			LightDesc;
+		ZeroMemory(&LightDesc, sizeof LightDesc);
+
+		LightDesc.eType = LIGHTDESC::TYPE_POINT;											// 포인트 조명
+		LightDesc.isEnable = true;
+		LightDesc.vPosition = _float4(pLightInfo.x, pLightInfo.y, pLightInfo.z, 1.f);       // 위치
+		LightDesc.fRange = 2.5f;															// 조명 거리
+		LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 0.0f);								// 색상
+		LightDesc.vAmbient = _float4(0.0f, 0.0f, 0.0f, 0.0f);								// 세기
+		LightDesc.vSpecular = LightDesc.vDiffuse;
+
+		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+			return E_FAIL;
+	}
+
+	return S_OK;
 }
 
 HRESULT CLevel_Skleton::Load_Food()

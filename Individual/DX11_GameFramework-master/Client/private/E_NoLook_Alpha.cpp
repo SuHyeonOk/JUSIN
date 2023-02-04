@@ -45,7 +45,22 @@ HRESULT CE_NoLook_Alpha::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 
-	// Right 을 기준으로 90도 회전
+	// Right 을 기준으로 90도 랜덤으로 회전
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	_vector vUp = XMVector3Cross(vLook, vRight);
+
+	_float3		vScale = m_pTransformCom->Get_Scaled();
+	_float		fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 360.0f);
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vLook, XMConvertToRadians(fAngle));
+
+	vRight = vRight * vScale.x;
+	vUp = vUp * vScale.y;
+	vLook = vLook * vScale.z;
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, XMVector4Transform(vRight, RotationMatrix));
+	m_pTransformCom->Set_State(CTransform::STATE_UP, XMVector4Transform(vUp, RotationMatrix));
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, XMVector4Transform(vLook, RotationMatrix));
 	m_pTransformCom->Rotation(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(90.f));
 
 	m_fAlpha = 1.0f;

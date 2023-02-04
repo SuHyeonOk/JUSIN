@@ -18,7 +18,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	HRESULT Ready_Lights();
+	HRESULT Ready_Lights(const _tchar* pLayerTag);
 	HRESULT Ready_PreviousData();
 	HRESULT Ready_Layer_Penny();
 	HRESULT Ready_Layer_Npc();
@@ -32,6 +32,7 @@ private:
 
 private:
 	void	ImGui();
+	void	ImGui_Light();
 	void	ImGui_Food();
 	void	ImGui_Coin();
 	void	ImGui_Page();
@@ -41,6 +42,7 @@ private:
 	void	ImGui_Envionment();
 
 private:
+	HRESULT	Load_Light();
 	HRESULT	Load_Food();
 	HRESULT	Load_Coin();
 	HRESULT	Load_Page();
@@ -71,6 +73,9 @@ private:
 	_uint			m_iNpc_Count = 0;
 	_uint			m_iObject_Count = 0;
 	_uint			m_iMonster_Count = 0;
+
+	// Light
+	vector<_float3>		m_vecfloat3;
 
 	// ¢º ³¡
 

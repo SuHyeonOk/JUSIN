@@ -185,11 +185,6 @@ HRESULT CW_PigWarrior::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_SocketMatrix", &m_SocketMatrix)))
 		return E_FAIL;
 
-	/* For.Lights */
-	const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (nullptr == pLightDesc)
-		return E_FAIL;	
-
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;

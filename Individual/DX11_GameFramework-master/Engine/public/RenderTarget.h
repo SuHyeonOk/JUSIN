@@ -14,6 +14,10 @@ private:
 	virtual ~CRenderTarget() = default;
 
 public:
+	ID3D11Texture2D*	Get_Texture2D() const {
+		return m_pTexture2D;
+	}
+
 	ID3D11RenderTargetView* Get_RTV() const {	// 매니저에서 가져가서 보기 위해서
 		return m_pRTV;
 	}

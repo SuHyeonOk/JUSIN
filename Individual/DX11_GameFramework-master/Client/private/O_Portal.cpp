@@ -55,9 +55,9 @@ void CO_Portal::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	_vector vStart = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector vEnd = CObj_Manager::GetInstance()->Get_Player_Transform();
-	_float fLength = XMVectorGetX(XMVector4Length(vStart - vEnd));
+	//_vector vStart = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	//_vector vEnd = CObj_Manager::GetInstance()->Get_Player_Transform();
+	//_float fLength = XMVectorGetX(XMVector4Length(vStart - vEnd));
 
 	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 

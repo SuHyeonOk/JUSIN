@@ -46,6 +46,8 @@ HRESULT CE_Look_Alpha::Initialize(void * pArg)
 	_float fRandomSize = 0.0f;
 	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
 		fRandomSize = 2.0f;
+	else if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 0.5f);
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));

@@ -67,46 +67,6 @@ void CFood::Tick(_double TimeDelta)
 		else if (FOODINFO::SOY_PEOPLE == m_tFoodInfo.eFoodKind)
 			Soy_People(TimeDelta);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_B))
-	{
-		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-		_float4 f4Pos;
-		XMStoreFloat4(&f4Pos, vPlayerPos);
-
-		CEffect_Manager::GetInstance()->Effect_Star_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.0f), 3);
-		CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z - 1.1f), _float3(1.0f, 1.0f, 1.0f), 10);
-	}
-
-	if (pGameInstance->Key_Pressing(DIK_V))
-	{
-		m_dKeyDown_TimeAcc += TimeDelta;
-		cout << m_dKeyDown_TimeAcc << endl;
-
-		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
-		_float4 f4Pos;
-		XMStoreFloat4(&f4Pos, vPlayerPos);
-	}
-	else
-		m_dKeyDown_TimeAcc = 0;
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CFood::Late_Tick(_double TimeDelta)

@@ -424,7 +424,7 @@ void CUI_::Tick(_double TimeDelta)
 
 	// 미니맵
 	m_vecUI[21]->Tick(TimeDelta);
-	m_vecUI[22]->Tick(TimeDelta);
+	//m_vecUI[22]->Tick(TimeDelta);
 
 	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())	// Boss 전에서만 유아이를 띄운다.
 	{
@@ -589,7 +589,7 @@ void CUI_::Late_Tick(_double TimeDelta)
 	}
 
 	m_vecUI[21]->Late_Tick(TimeDelta);
-	m_vecUI[22]->Late_Tick(TimeDelta);
+	//m_vecUI[22]->Late_Tick(TimeDelta);
 
 	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
 	{

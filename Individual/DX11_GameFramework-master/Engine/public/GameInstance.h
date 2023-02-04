@@ -84,6 +84,7 @@ public: /* For.Timer_Manager */
 public: /* For.Light_Manager */ 
 	const LIGHTDESC*	Get_LightDesc(_uint iIndex);
 	HRESULT				Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);
+	HRESULT				Set_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);
 
 public: // for imgui manager
 	void		Render_ImGui();
