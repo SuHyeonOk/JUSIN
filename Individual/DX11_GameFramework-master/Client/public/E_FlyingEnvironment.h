@@ -15,10 +15,10 @@ BEGIN(Client)
 class CE_FlyingEnvironment final : public CGameObject
 {
 public:
-
 	enum TYPE {
 		BUTTERFLIES_RED, BUTTERFLIES_BLUE, BUTTERFLIES_YELLOW,
 		CANFIRE_BIG, CANFIRE_MEDIUM, CANFIRE_SMALL,
+		FIRESPARKS, FIRESPARKS_SMALL,
 		TYPE_END
 	};
 	
@@ -56,6 +56,8 @@ private:
 
 	void					Butterflies_Tick(const _double & TimeDelta);
 	void					CanFire_Tick(const _double & TimeDelta);
+	void					FireSparks_Tick(const _double & TimeDelta);
+	void					FireSparksSmall_Tick(const _double & TimeDelta);
 
 private:
 	EFFECTINFO				m_tEffectInfo = {};
@@ -65,6 +67,7 @@ private:
 	_int					m_iTextureDead_Count = 0;
 	_double					m_dChange_TimeAcc = 0.0;
 	_float					m_fAlpha = 1.0f;
+	_float					m_fAlphaSpeed = 1.0f;
 
 	_float					m_bFindDistance = 0.0f;
 	_bool					m_bFindPlayer = false;
@@ -72,9 +75,9 @@ private:
 	_float					m_fRandomAxis = 0.0f;
 
 public:
-	static	CE_FlyingEnvironment*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject*		Clone(void* pArg = nullptr) override;
-	virtual void				Free() override;
+	static	CE_FlyingEnvironment*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject*			Clone(void* pArg = nullptr) override;
+	virtual void					Free() override;
 };
 
 END

@@ -60,6 +60,7 @@ private:
 	_float				m_fMoveSpeed = { 0.0f };
 	_float				m_fAlphaSpeed = { 0.0f };
 	_float3				m_f4StartPosition = { 0.0f, 0.0f, 0.0f };
+	_double				m_dEffect_TimeAcc = { 0.0 };
 
 public:
 	static	CE_Look_Up*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

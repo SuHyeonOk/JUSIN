@@ -1026,7 +1026,7 @@ void CLevel_Skleton::ImGui_Monster()
 
 void CLevel_Skleton::ImGui_Envionment()
 {
-	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small", "Can_Smoke" };
+	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small", "Can_Smoke", "FireSparks", "FireSparks_Small" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Envionmen", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -1082,9 +1082,33 @@ void CLevel_Skleton::ImGui_Envionment()
 		}
 		if (3 == iObjNum)
 		{
-			//m_wstObjName = L"Can_Smoke";
+			m_wstObjName = L"Can_Smoke";
 
-			//CEffect_Manager::GetInstance()->Effect_Can_Smoke(m_f3ClickPos);
+			CEffect_Manager::GetInstance()->Effect_Can_Smoke(m_f3ClickPos);
+		}
+		if (4 == iObjNum)
+		{
+			m_wstObjName = L"FireSparks";
+
+			tEffectInfo.eType = CE_FlyingEnvironment::FIRESPARKS;
+			tEffectInfo.f3Pos = m_f3ClickPos;
+
+			m_szObjName = m_wstObjName.c_str();
+			
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return;
+		}
+		if (5 == iObjNum)
+		{
+			m_wstObjName = L"FireSparks_Small";
+
+			tEffectInfo.eType = CE_FlyingEnvironment::FIRESPARKS_SMALL;
+			tEffectInfo.f3Pos = m_f3ClickPos;
+
+			m_szObjName = m_wstObjName.c_str();
+			
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return;
 		}
 	}
 
@@ -1921,6 +1945,22 @@ HRESULT CLevel_Skleton::Load_Envionment()
 		else if (TEXT("Can_Smoke") == wstObjNameTemp)
 		{
 			CEffect_Manager::GetInstance()->Effect_Can_Smoke(pObjInfo.ObjPos);
+		}
+		else if (TEXT("FireSparks") == wstObjNameTemp)
+		{
+			tEffectInfo.eType = CE_FlyingEnvironment::FIRESPARKS;
+			tEffectInfo.f3Pos = pObjInfo.ObjPos;
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
+		}
+		else if (TEXT("FireSparks_Small") == wstObjNameTemp)
+		{
+			tEffectInfo.eType = CE_FlyingEnvironment::FIRESPARKS_SMALL;
+			tEffectInfo.f3Pos = pObjInfo.ObjPos;
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
 	}
 

@@ -101,18 +101,23 @@ void CE_Look_Up::Late_Tick(_double TimeDelta)
 
 	Compute_CamZ();
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (nullptr != m_pRendererCom &&
+			true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		RELEASE_INSTANCE(CGameInstance)
+	}
+	else
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	}
 }
 
 HRESULT CE_Look_Up::Render()
 {
-	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
-	{
-		if (false == m_bFindPlayer)
-			return S_OK;
-	}
-
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -197,16 +202,6 @@ HRESULT CE_Look_Up::SetUp_ShaderResources()
 
 void CE_Look_Up::CanSmoke(const _double & TimeDelta)
 {
-	// 플레이어가 가까이 있을 때만 실행된다.
-	if (false == m_bFindPlayer)
-	{
-		// 그냥 3보다 크다면 return 하면 되잖아! Late_Tick() 에서도 체크해애야 하기 때문에 여기서 한 번만 확인하는 것이 저렴하다고 생각하기 때문에
-		if (7.0f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-			return;
-		else
-			m_bFindPlayer = true;
-	}
-
 	m_pTransformCom->Go_Up(TimeDelta * m_fMoveSpeed);
 
 	m_fAlpha -= _float(TimeDelta) * m_fAlphaSpeed;
@@ -214,17 +209,17 @@ void CE_Look_Up::CanSmoke(const _double & TimeDelta)
 	if (0 >= m_fAlpha)
 	{
 		// 알파값 초기화
-		m_fAlpha = CUtilities_Manager::GetInstance()->Get_Random(0.7f, 1.1f);
+		m_fAlpha = 1.0f;
 
 		// 랜덤한 속도
-		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.2f);
+		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
 
 		// 랜덤한 알파값 빠지는 속도
-		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.08f, 0.1f);
+		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.05f, 0.1f);
 
 		// 랜덤한 위치
 		_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
-		_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+		_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.5f);
 		_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
 		m_pTransformCom->Set_Pos(_float3(m_f4StartPosition.x + fRendomNumberX, m_f4StartPosition.y + fRendomNumberY, m_f4StartPosition.z + fRendomNumberZ));
 
