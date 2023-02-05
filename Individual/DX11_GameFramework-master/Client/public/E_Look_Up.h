@@ -53,8 +53,13 @@ private:
 private:
 	EFFECTINFO			m_tEffectInfo;
 
-private:	// Shader
+private:	
 	_float				m_fAlpha = 0.0f;
+
+	_bool				m_bFindPlayer = false;
+	_float				m_fMoveSpeed = { 0.0f };
+	_float				m_fAlphaSpeed = { 0.0f };
+	_float3				m_f4StartPosition = { 0.0f, 0.0f, 0.0f };
 
 public:
 	static	CE_Look_Up*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -36,6 +36,7 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = m_tEffectInfo.f3Pos;
+	m_f4StartPosition = m_tEffectInfo.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -51,8 +52,12 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINUSHP_TEXTURE == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
-	else if(CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
+		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.2f);
+		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.08f, 0.1f);
+	}
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
@@ -82,15 +87,7 @@ void CE_Look_Up::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 
 	m_pTransformCom->LookAt(vCameraPos, true);
-
-	_vector	vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	_vector	vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-
-	/* 이렇게 얻어온 VlOOK은 Z축 스케일을 포함하낟. */
-	vPosition += XMVector3Normalize(vUp) * _float(TimeDelta);
-
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPosition);
-
+	m_pTransformCom->Go_Up(TimeDelta);
 
 	m_fAlpha -= _float(TimeDelta) * 0.4f;
 
@@ -110,6 +107,12 @@ void CE_Look_Up::Late_Tick(_double TimeDelta)
 
 HRESULT CE_Look_Up::Render()
 {
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		if (false == m_bFindPlayer)
+			return S_OK;
+	}
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -194,14 +197,40 @@ HRESULT CE_Look_Up::SetUp_ShaderResources()
 
 void CE_Look_Up::CanSmoke(const _double & TimeDelta)
 {
+	// 플레이어가 가까이 있을 때만 실행된다.
+	if (false == m_bFindPlayer)
+	{
+		// 그냥 3보다 크다면 return 하면 되잖아! Late_Tick() 에서도 체크해애야 하기 때문에 여기서 한 번만 확인하는 것이 저렴하다고 생각하기 때문에
+		if (7.0f < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+			return;
+		else
+			m_bFindPlayer = true;
+	}
 
+	m_pTransformCom->Go_Up(TimeDelta * m_fMoveSpeed);
 
-	m_fAlpha -= _float(TimeDelta) * 0.2f;
+	m_fAlpha -= _float(TimeDelta) * m_fAlphaSpeed;
 
 	if (0 >= m_fAlpha)
 	{
-		m_fAlpha = 1.0f;
-		m_pTransformCom->Set_Pos(1.0f);
+		// 알파값 초기화
+		m_fAlpha = CUtilities_Manager::GetInstance()->Get_Random(0.7f, 1.1f);
+
+		// 랜덤한 속도
+		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.2f);
+
+		// 랜덤한 알파값 빠지는 속도
+		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.08f, 0.1f);
+
+		// 랜덤한 위치
+		_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+		_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+		m_pTransformCom->Set_Pos(_float3(m_f4StartPosition.x + fRendomNumberX, m_f4StartPosition.y + fRendomNumberY, m_f4StartPosition.z + fRendomNumberZ));
+
+		// 랜덤한 크기
+		_float fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
+		m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
 	}
 }
 

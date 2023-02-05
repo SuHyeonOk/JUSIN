@@ -24,7 +24,7 @@ HRESULT CEffect_Manager::Effect_Can_Smoke(const _float3 & f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.2f, 0.2f);
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
 	_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
 	_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
 
