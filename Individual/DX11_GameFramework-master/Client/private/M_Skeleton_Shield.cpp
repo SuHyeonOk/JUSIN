@@ -508,6 +508,10 @@ void CM_Skeleton_Shield::Hit_Process(const _double & TimeDelta)
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		if (false == m_bDance)
 			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());				// 플레이어를 바라보면서
 		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// 몬스터 넉백

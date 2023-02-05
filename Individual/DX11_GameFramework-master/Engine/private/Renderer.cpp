@@ -44,11 +44,11 @@ HRESULT CRenderer::Draw_RenderGroup()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
+	if (FAILED(Render_XRayBlend()))
+		return E_FAIL;
 	if (FAILED(Render_Map_NonAlphaBlend()))
 		return E_FAIL;
 	if (FAILED(Render_NonAlphaBlend()))
-		return E_FAIL;
-	if (FAILED(Render_XRayBlend()))
 		return E_FAIL;
 
 	/* 셰이드 타겟을 바인딩 하고,
@@ -111,9 +111,9 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 
 	/* For.Target_Depth */	// 원하면 월드 pos를 넘겨줘도 되는데 Depth 을 넘기는 것이 보다 활용도가 좋다. 그 때는 DXGI_FORMAT_R32G32B32A32_FLOAT 을 사용하면 된다.
-	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R16G16B16A16_UNORM, &_float4(0.f, 1.f, 0.f, 1.f))))
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, &_float4(0.f, 1.f, 0.f, 1.f))))
 		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth_Copy"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R16G16B16A16_UNORM, &_float4(0.f, 1.f, 0.f, 1.f))))
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth_XRay"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, &_float4(0.f, 1.f, 0.f, 1.f))))
 		return E_FAIL;
 
 	/* For.Target_Shade */
@@ -138,6 +138,9 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))	// 조명 후에 값을 더 해주는 것 으로 MRT_LightAcc 에 추가한다.
 		return E_FAIL;
 
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_XRay"), TEXT("Target_Depth_XRay"))))	
+		return E_FAIL;
+
 
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
@@ -153,21 +156,21 @@ HRESULT CRenderer::Initialize_Prototype()
 
 
 
-//#ifdef _DEBUG
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 80.0f, 80.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 380.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth_Copy"), 230.0f, 380.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//#endif
+#ifdef _DEBUG
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 80.0f, 80.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 380.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth_XRay"), 230.0f, 380.0f, 150.f, 150.f)))
+		return E_FAIL;
+
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
+		return E_FAIL;
+#endif
 
 	/*LPDIRECT3DDEVICE9		pDevice = nullptr;
 
@@ -248,7 +251,7 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 
 	m_RenderObjects[RENDER_NONALPHABLEND].clear();
 
-	m_pContext->CopyResource(m_pTarget_Manager->Get_Texture2D(TEXT("Target_Depth_Copy")), m_pTarget_Manager->Get_Texture2D(TEXT("Target_Depth")));
+	//m_pContext->CopyResource(m_pTarget_Manager->Get_Texture2D(TEXT("Target_Depth_Copy")), m_pTarget_Manager->Get_Texture2D(TEXT("Target_Depth")));
 
 	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
 		return E_FAIL;
@@ -258,15 +261,23 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 
 HRESULT CRenderer::Render_XRayBlend()
 {
+	//m_pTarget_Manager->Begin_MRT(m_pContext, L"MRT_XRay");
+	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_XRay"))))
+		return E_FAIL;
+
 	for (auto& pGameObject : m_RenderObjects[RENDER_XRAYBLEND])
 	{
 		if (nullptr != pGameObject)
-			pGameObject->Render();
+			pGameObject->Render_XRay();
 
 		Safe_Release(pGameObject);
 	}
 
 	m_RenderObjects[RENDER_XRAYBLEND].clear();
+
+	//m_pTarget_Manager->End_MRT(m_pContext, L"MRT_XRay");
+	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_XRay"))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -339,7 +350,7 @@ HRESULT CRenderer::Render_Blend()
 	if (FAILED(m_pShader->Set_ShaderResourceView("g_SpecularTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_Specular")))))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->Set_ShaderResourceView("g_DepthTextureCopy", m_pTarget_Manager->Get_SRV(TEXT("Target_Depth_Copy")))))
+	if (FAILED(m_pShader->Set_ShaderResourceView("g_DepthTextureXRay", m_pTarget_Manager->Get_SRV(TEXT("Target_Depth_XRay")))))
 		return E_FAIL;
 
 	m_pShader->Begin(3);

@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Utilities_Manager.h"
+#include "Effect_Manager.h"
 
 CE_FlyingEnvironment::CE_FlyingEnvironment(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -73,15 +74,6 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 void CE_FlyingEnvironment::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_DELETE))
-	{
-		CGameObject::Set_Dead();
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	// 플레이어가 가까이 있을 때만 실행된다.
 	if (false == m_bFindPlayer)

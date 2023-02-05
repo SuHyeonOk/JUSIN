@@ -16,6 +16,7 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
+	HRESULT		Effect_Can_Smoke(const _float3 & f3Pos);
 	HRESULT		Effect_TreeBullet(const _float3 & f3Pos);
 
 	HRESULT		Effect_Potal_StarColor_Create(const _float3 & f3Pos, const _float3 & f3Color = _float3(1.0f, 1.0f, 1.0f));

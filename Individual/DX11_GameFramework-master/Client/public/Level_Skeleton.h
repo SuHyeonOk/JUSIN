@@ -18,7 +18,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	HRESULT Ready_Lights(const _tchar* pLayerTag);
+	HRESULT Ready_Lights();
 	HRESULT Ready_PreviousData();
 	HRESULT Ready_Layer_Penny();
 	HRESULT Ready_Layer_Npc();
@@ -73,11 +73,11 @@ private:
 	_uint			m_iNpc_Count = 0;
 	_uint			m_iObject_Count = 0;
 	_uint			m_iMonster_Count = 0;
+	// ¢º ³¡
 
+private:
 	// Light
 	vector<_float3>		m_vecfloat3;
-
-	// ¢º ³¡
 
 public:
 	static CLevel_Skleton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

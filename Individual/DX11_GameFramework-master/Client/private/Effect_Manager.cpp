@@ -20,6 +20,25 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Effect_Can_Smoke(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.2f, 0.2f);
+	_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+	_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+
+	CE_Look_Up::EFFECTINFO	tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE;
+	tEffectInfo.f3Pos = _float3(f3Pos.x + fRendomNumberX, f3Pos.y + fRendomNumberY, f3Pos.z + fRendomNumberZ);
+	tEffectInfo.f3Color = _float3(0.2f, 0.2f, 0.2f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_TreeBullet(const _float3 & f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

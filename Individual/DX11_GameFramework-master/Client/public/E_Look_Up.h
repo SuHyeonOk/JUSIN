@@ -17,7 +17,7 @@ class CE_Look_Up final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { SKELETON_TEXTURE, BOSS_SOMKE_TEXTURE, HP_TEXTURE, MINUSHP_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { SKELETON_TEXTURE, BOSS_SOMKE_TEXTURE, HP_TEXTURE, MINUSHP_TEXTURE, CAMSOMKE_TEXTURE, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -38,8 +38,11 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	HRESULT					SetUp_Components();
-	HRESULT					SetUp_ShaderResources();
+	HRESULT				SetUp_Components();
+	HRESULT				SetUp_ShaderResources();
+
+private:
+	void				CanSmoke(const _double & TimeDelta);
 
 private:
 	CShader*				m_pShaderCom = nullptr;

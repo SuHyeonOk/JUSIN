@@ -986,5 +986,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPoint_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel_XRay.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

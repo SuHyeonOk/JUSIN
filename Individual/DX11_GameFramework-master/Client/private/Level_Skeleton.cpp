@@ -18,6 +18,7 @@
 #include "Page.h"
 #include "S_Jake_Son.h"
 #include "E_FlyingEnvironment.h"
+#include "Effect_Manager.h"
 
 CLevel_Skleton::CLevel_Skleton(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -30,7 +31,7 @@ HRESULT CLevel_Skleton::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Lights(TEXT("sdfasdfasdfasdf"))))
+	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
 #ifdef F2_SKELETON
@@ -114,7 +115,7 @@ HRESULT CLevel_Skleton::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_Skleton::Ready_Lights(const _tchar * pLayerTag)
+HRESULT CLevel_Skleton::Ready_Lights()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -1025,19 +1026,11 @@ void CLevel_Skleton::ImGui_Monster()
 
 void CLevel_Skleton::ImGui_Envionment()
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_DELETE))
-	{
-		CDataManager::GetInstance()->Clear_Environment();
-		Load_Envionment();
-	}
-
-
-	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small" };
+	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small", "Can_Smoke" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Envionmen", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_float4		f4MousePos;
 	f4MousePos = pGameInstance->Get_MousePos();
@@ -1062,8 +1055,6 @@ void CLevel_Skleton::ImGui_Envionment()
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
-
-			m_iItem_Count++;
 		}
 		if (1 == iObjNum)
 		{
@@ -1076,8 +1067,6 @@ void CLevel_Skleton::ImGui_Envionment()
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
-
-			m_iItem_Count++;
 		}
 		if (2 == iObjNum)
 		{
@@ -1090,8 +1079,12 @@ void CLevel_Skleton::ImGui_Envionment()
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
+		}
+		if (3 == iObjNum)
+		{
+			//m_wstObjName = L"Can_Smoke";
 
-			m_iItem_Count++;
+			//CEffect_Manager::GetInstance()->Effect_Can_Smoke(m_f3ClickPos);
 		}
 	}
 
@@ -1158,9 +1151,9 @@ HRESULT CLevel_Skleton::Load_Light()
 
 		LightDesc.eType = LIGHTDESC::TYPE_POINT;											// 포인트 조명
 		LightDesc.isEnable = true;
-		LightDesc.vPosition = _float4(pLightInfo.x, pLightInfo.y, pLightInfo.z, 0.0f);       // 위치
+		LightDesc.vPosition = _float4(pLightInfo.x, pLightInfo.y, pLightInfo.z, 0.0f);
 		LightDesc.fRange = 2.5f;															// 조명 거리
-		LightDesc.vDiffuse = _float4(0.9f, 0.4f, 0.0f, 0.0f);								// 색상
+		LightDesc.vDiffuse = _float4(0.9f, 0.3f, 0.0f, 0.0f);								// 색상
 		LightDesc.vAmbient = _float4(0.2f, 0.0f, 0.0f, 0.0f);								// 세기
 		LightDesc.vSpecular = LightDesc.vDiffuse;
 
@@ -1925,7 +1918,10 @@ HRESULT CLevel_Skleton::Load_Envionment()
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return E_FAIL;
 		}
-
+		else if (TEXT("Can_Smoke") == wstObjNameTemp)
+		{
+			CEffect_Manager::GetInstance()->Effect_Can_Smoke(pObjInfo.ObjPos);
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

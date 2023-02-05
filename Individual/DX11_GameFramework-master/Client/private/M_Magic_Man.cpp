@@ -420,6 +420,10 @@ void CM_Magic_Man::Hit_Process(const _double & TimeDelta)
 	// 맨 처음 한 번 체력을 깍는다.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		m_tMonsterInfo.eState = m_tMonsterInfo.HIT;														// 몬스터 상태 변경
 
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());					// 플레이어를 바라보면서

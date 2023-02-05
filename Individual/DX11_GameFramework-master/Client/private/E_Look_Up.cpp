@@ -51,6 +51,8 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
 		CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINUSHP_TEXTURE == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
+	else if(CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
@@ -64,6 +66,12 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 void CE_Look_Up::Tick(_double TimeDelta)
 {
 	// 색상 조절, 알파값, 랜덤한 크기
+
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		CanSmoke(TimeDelta);
+		return;
+	}
 
 	__super::Tick(TimeDelta);
 
@@ -84,10 +92,7 @@ void CE_Look_Up::Tick(_double TimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vPosition);
 
 
-	//m_dNoAlpha_TimeAcc += TimeDelta;
-	//if (0.5 < m_dNoAlpha_TimeAcc)
-	//if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
-		m_fAlpha -= _float(TimeDelta) * 0.4f;
+	m_fAlpha -= _float(TimeDelta) * 0.4f;
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
@@ -112,7 +117,8 @@ HRESULT CE_Look_Up::Render()
 		return E_FAIL;
 
 	// 색 조정
-	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pShaderCom->Begin(4);
 	// 이미지색
 	else
@@ -141,7 +147,8 @@ HRESULT CE_Look_Up::SetUp_Components()
 
 	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::SKELETON_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Skeleton"));
-	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_Smoke"));
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_Hp"));
@@ -183,6 +190,19 @@ HRESULT CE_Look_Up::SetUp_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CE_Look_Up::CanSmoke(const _double & TimeDelta)
+{
+
+
+	m_fAlpha -= _float(TimeDelta) * 0.2f;
+
+	if (0 >= m_fAlpha)
+	{
+		m_fAlpha = 1.0f;
+		m_pTransformCom->Set_Pos(1.0f);
+	}
 }
 
 CE_Look_Up * CE_Look_Up::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

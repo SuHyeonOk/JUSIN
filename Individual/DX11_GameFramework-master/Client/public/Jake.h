@@ -35,11 +35,13 @@ public:
 	virtual void	Tick(_double TimeDelta) override;
 	virtual void	Late_Tick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual	HRESULT	Render_XRay() override;
 
 	virtual void	On_Collision(CGameObject* pOther) override;
 
 private:
 	CShader*				m_pShaderCom = nullptr;
+	CShader*				m_pShaderXRayCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
@@ -48,6 +50,7 @@ private:
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_ShaderResources();
+	HRESULT SetUp_ShaderXRayResources();
 
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 

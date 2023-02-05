@@ -154,6 +154,27 @@ HRESULT CFinn::Render()
 	return S_OK;
 }
 
+HRESULT CFinn::Render_XRay()
+{
+	if (FAILED(__super::Render_XRay()))
+		return E_FAIL;
+
+	if (FAILED(SetUp_ShaderXRayResources()))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		if (0 == i)
+			continue;
+
+		m_pModelCom->Bind_Material(m_pShaderXRayCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices", 0);
+	}
+	return S_OK;
+}
+
 void CFinn::On_Collision(CGameObject * pOther)
 {
 
@@ -169,6 +190,11 @@ HRESULT CFinn::SetUp_Components()
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_ShaderXRay */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel_XRay"), TEXT("Com_ShaderXRay"),
+		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
@@ -223,17 +249,32 @@ HRESULT CFinn::SetUp_ShaderResources()
 			return E_FAIL;
 	}
 
-	_float	fObjectID = 1.0f;
-	if (FAILED(m_pShaderCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
-		return E_FAIL;
-
-	
-
 	///* For.Lights */
 	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
 	//if (nullptr == pLightDesc)
 	//	return E_FAIL;
 
+
+	return S_OK;
+}
+
+HRESULT CFinn::SetUp_ShaderXRayResources()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderXRayCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float	fObjectID = 1.0f;
+	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }
