@@ -93,8 +93,7 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 		}
 
 		if (m_iDead_Number <= m_iDead_Count)
-			m_iDead_Number = 0;
-			//CGameObject::Set_Dead();
+			CGameObject::Set_Dead();
 	}
 	else
 	{

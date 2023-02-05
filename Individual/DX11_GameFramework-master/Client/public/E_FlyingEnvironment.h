@@ -15,11 +15,16 @@ BEGIN(Client)
 class CE_FlyingEnvironment final : public CGameObject
 {
 public:
+
+	enum TYPE {
+		BUTTERFLIES_RED, BUTTERFLIES_BLUE, BUTTERFLIES_YELLOW,
+		CANFIRE_BIG, CANFIRE_MEDIUM, CANFIRE_SMALL,
+		TYPE_END
+	};
+	
 	typedef struct tegEffextInfo
 	{
-		enum TYPE { BUTTERFLIES_RED, BUTTERFLIES_BLUE, BUTTERFLIES_YELLOW, TYPE_END	};
 		TYPE		eType = TYPE_END;
-
 		_float3		f3Pos = { 0.0f, 0.0f, 0.0f };
 
 	}EFFECTINFO;
@@ -49,6 +54,9 @@ private:
 private:
 	void					Ready_Butterflies();
 
+	void					Butterflies_Tick(const _double & TimeDelta);
+	void					CanFire_Tick(const _double & TimeDelta);
+
 private:
 	EFFECTINFO				m_tEffectInfo = {};
 
@@ -58,6 +66,7 @@ private:
 	_double					m_dChange_TimeAcc = 0.0;
 	_float					m_fAlpha = 1.0f;
 
+	_float					m_bFindDistance = 0.0f;
 	_bool					m_bFindPlayer = false;
 	_float4					m_f4RandomLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 	_float					m_fRandomAxis = 0.0f;

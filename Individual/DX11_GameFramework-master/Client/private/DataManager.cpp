@@ -7,6 +7,11 @@ CDataManager::CDataManager()
 {
 }
 
+void			CDataManager::Clear_Environment()
+{
+	m_vecEnvironmentInfo.clear();
+}
+
 void			CDataManager::Set_Environment(const _tchar& ObjName, const _float3& ObjPos)
 {
 	OBJINFO		eObjInfo;

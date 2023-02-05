@@ -153,21 +153,21 @@ HRESULT CRenderer::Initialize_Prototype()
 
 
 
-#ifdef _DEBUG
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 80.0f, 80.0f, 150.f, 150.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 380.0f, 150.f, 150.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth_Copy"), 230.0f, 380.0f, 150.f, 150.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
-		return E_FAIL;
-#endif
+//#ifdef _DEBUG
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 80.0f, 80.0f, 150.f, 150.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 380.0f, 150.f, 150.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth_Copy"), 230.0f, 380.0f, 150.f, 150.f)))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
+//		return E_FAIL;
+//#endif
 
 	/*LPDIRECT3DDEVICE9		pDevice = nullptr;
 

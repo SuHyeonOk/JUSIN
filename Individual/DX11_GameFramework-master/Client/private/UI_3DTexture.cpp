@@ -60,11 +60,13 @@ void CUI_3DTexture::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
+	CGameObject::Compute_CamZ();
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom &&
 		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }

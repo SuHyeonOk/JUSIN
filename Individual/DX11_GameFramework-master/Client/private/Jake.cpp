@@ -1035,7 +1035,7 @@ void CJake::Swim_Tick(_double TimeDelta)
 	if (false == bSound)
 	{
 		bSound = true;
-		pGameInstance->Play_Sound(TEXT("sfx_character_outofwater.ogg"), 1.0f);
+		pGameInstance->Play_Sound(TEXT("v_Jake_OutOfWater.ogg"), 1.0f);
 	}
 
 	if (43 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())

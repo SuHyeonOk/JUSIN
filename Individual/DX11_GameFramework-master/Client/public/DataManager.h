@@ -30,6 +30,7 @@ public:
 	vector<OBJINFO>	CDataManager::Get_ObjectInfo() { return m_vecObjectInfo; }
 	vector<OBJINFO>	CDataManager::Get_MonsterInfo() { return m_vecMonsterInfo; }
 
+	void			CDataManager::Clear_Environment();
 	void			CDataManager::Set_Environment(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_FoodInfo(const _tchar& ObjName, const _float3& ObjPos);
 	void			CDataManager::Set_CoinInfo(const _tchar& ObjName, const _float3& ObjPos);

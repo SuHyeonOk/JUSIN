@@ -133,27 +133,14 @@ HRESULT CLevel_Skleton::Ready_Lights(const _tchar * pLayerTag)
 
 	Load_Light();
 
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-
-	LightDesc.eType = LIGHTDESC::TYPE_POINT;							// 포인트 조명
-	LightDesc.isEnable = true;
-	LightDesc.vPosition = _float4(-8.0f, 1.f, 5.3f, 1.f);          		// 위치
-	LightDesc.fRange = 3.0f;											// 조명 거리
-	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);					// 색상
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);				// 세기
-	LightDesc.vSpecular = LightDesc.vDiffuse;
-
-	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-		return E_FAIL;
-
 	//ZeroMemory(&LightDesc, sizeof LightDesc);
 
-	//LightDesc.eType = LIGHTDESC::TYPE_POINT;				
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;							// 포인트 조명
 	//LightDesc.isEnable = true;
-	//LightDesc.vPosition = _float4(-7.0f, 1.f, 13.0f, 1.f);
-	//LightDesc.fRange = 2.5f;								
-	//LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 0.0f);
-	//LightDesc.vAmbient = _float4(0.0f, 0.0f, 0.0f, 0.0f);
+	//LightDesc.vPosition = _float4(-8.0f, 1.f, 5.3f, 1.f);          		// 위치
+	//LightDesc.fRange = 2.5f;											// 조명 거리
+	//LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 0.0f);				// 색상
+	//LightDesc.vAmbient = _float4(0.0f, 0.0f, 0.0f, 0.0f);				// 세기
 	//LightDesc.vSpecular = LightDesc.vDiffuse;
 
 	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
@@ -1038,28 +1025,37 @@ void CLevel_Skleton::ImGui_Monster()
 
 void CLevel_Skleton::ImGui_Envionment()
 {
-	const _char* szObjName[] = { "Butterflies_Bule", "Butterflies_Red", "Butterflies_Yellow" };
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_DELETE))
+	{
+		CDataManager::GetInstance()->Clear_Environment();
+		Load_Envionment();
+	}
+
+
+	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Envionmen", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_float4		f4MousePos;
 	f4MousePos = pGameInstance->Get_MousePos();
 
 	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
 
+	static _float fObjectY;
+	ImGui::InputFloat("Object Y", &fObjectY);
+
 	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
 	{
-		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
+		m_f3ClickPos = { f4MousePos.x, fObjectY, f4MousePos.z };
 
 		if (0 == iObjNum)
 		{
-			m_wstObjName = L"Butterflies_Bule";
-			m_wstObjName += to_wstring(m_iItem_Count);
+			m_wstObjName = L"CnaFire_Big";
 
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE;
+			tEffectInfo.eType = CE_FlyingEnvironment::CANFIRE_BIG;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
@@ -1069,12 +1065,11 @@ void CLevel_Skleton::ImGui_Envionment()
 
 			m_iItem_Count++;
 		}
-		else if (1 == iObjNum)
+		if (1 == iObjNum)
 		{
-			m_wstObjName = L"Butterflies_Red";
-			m_wstObjName += to_wstring(m_iItem_Count);
+			m_wstObjName = L"CanFire_Medium";
 
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED;
+			tEffectInfo.eType = CE_FlyingEnvironment::CANFIRE_MEDIUM;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
@@ -1084,12 +1079,11 @@ void CLevel_Skleton::ImGui_Envionment()
 
 			m_iItem_Count++;
 		}
-		else if (2 == iObjNum)
+		if (2 == iObjNum)
 		{
-			m_wstObjName = L"Butterflies_Yellow";
-			m_wstObjName += to_wstring(m_iItem_Count);
+			m_wstObjName = L"CanFire_Small";
 
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW;
+			tEffectInfo.eType = CE_FlyingEnvironment::CANFIRE_SMALL;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
@@ -1164,10 +1158,10 @@ HRESULT CLevel_Skleton::Load_Light()
 
 		LightDesc.eType = LIGHTDESC::TYPE_POINT;											// 포인트 조명
 		LightDesc.isEnable = true;
-		LightDesc.vPosition = _float4(pLightInfo.x, pLightInfo.y, pLightInfo.z, 1.f);       // 위치
+		LightDesc.vPosition = _float4(pLightInfo.x, pLightInfo.y, pLightInfo.z, 0.0f);       // 위치
 		LightDesc.fRange = 2.5f;															// 조명 거리
-		LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 0.0f);								// 색상
-		LightDesc.vAmbient = _float4(0.0f, 0.0f, 0.0f, 0.0f);								// 세기
+		LightDesc.vDiffuse = _float4(0.9f, 0.4f, 0.0f, 0.0f);								// 색상
+		LightDesc.vAmbient = _float4(0.2f, 0.0f, 0.0f, 0.0f);								// 세기
 		LightDesc.vSpecular = LightDesc.vDiffuse;
 
 		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
@@ -1902,60 +1896,36 @@ HRESULT CLevel_Skleton::Load_Envionment()
 
 	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_EnvironmentInfo();
-	_int iCoinVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
-		for (_int i = 0; i < iCoinVecCount; i++)
+		wstring wstObjNameTemp(pObjInfo.ObjName);
+
+		if (TEXT("CnaFire_Big") == wstObjNameTemp)
 		{
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE;
+			tEffectInfo.eType = CE_FlyingEnvironment::CANFIRE_BIG;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Butterflies_Bule";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
-
-		for (_int i = 0; i < iCoinVecCount; i++)
+		else if (TEXT("CanFire_Medium") == wstObjNameTemp)
 		{
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED;
+			tEffectInfo.eType = CE_FlyingEnvironment::CANFIRE_MEDIUM;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Butterflies_Red";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
-
-		for (_int i = 0; i < iCoinVecCount; i++)
+		else if (TEXT("CanFire_Small") == wstObjNameTemp)
 		{
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW;
+			tEffectInfo.eType = CE_FlyingEnvironment::CANFIRE_SMALL;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Butterflies_Yellow";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
+
 	}
 
 	RELEASE_INSTANCE(CGameInstance);

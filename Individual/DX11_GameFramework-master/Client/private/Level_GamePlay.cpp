@@ -956,7 +956,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 			m_wstObjName = L"Butterflies_Bule";
 			m_wstObjName += to_wstring(m_iItem_Count);
 
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE;
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_BLUE;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
@@ -971,7 +971,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 			m_wstObjName = L"Butterflies_Red";
 			m_wstObjName += to_wstring(m_iItem_Count);
 
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED;
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_RED;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
@@ -986,7 +986,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 			m_wstObjName = L"Butterflies_Yellow";
 			m_wstObjName += to_wstring(m_iItem_Count);
 
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW;
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_YELLOW;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
@@ -1795,7 +1795,7 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 	{
 		for (_int i = 0; i < iCoinVecCount; i++)
 		{
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_BLUE;
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_BLUE;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Butterflies_Bule";
@@ -1812,7 +1812,7 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 
 		for (_int i = 0; i < iCoinVecCount; i++)
 		{
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_RED;
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_RED;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Butterflies_Red";
@@ -1829,7 +1829,7 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 
 		for (_int i = 0; i < iCoinVecCount; i++)
 		{
-			tEffectInfo.eType = CE_FlyingEnvironment::EFFECTINFO::TYPE::BUTTERFLIES_YELLOW;
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_YELLOW;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Butterflies_Yellow";
