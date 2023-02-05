@@ -92,7 +92,9 @@ void CPennyCopy::Late_Tick(_double TimeDelta)
 		if (DIE == m_eState)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 		else
+		{
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		}
 	}
 
 	RELEASE_INSTANCE(CGameInstance)

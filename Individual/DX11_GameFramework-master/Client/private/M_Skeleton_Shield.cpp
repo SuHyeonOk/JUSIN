@@ -86,6 +86,15 @@ void CM_Skeleton_Shield::Late_Tick(_double TimeDelta)
 	m_MonsterParts[1]->Late_Tick(TimeDelta);
 
 	__super::Late_Tick(TimeDelta);
+
+	if (1 == m_fAlpha)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (nullptr != m_pRendererCom &&
+			true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		RELEASE_INSTANCE(CGameInstance)
+	}
 }
 
 HRESULT CM_Skeleton_Shield::Render()
@@ -129,6 +138,32 @@ HRESULT CM_Skeleton_Shield::Render()
 	return S_OK;
 }
 
+HRESULT CM_Skeleton_Shield::Render_XRay()
+{
+	if (FAILED(__super::Render_XRay()))
+		return E_FAIL;
+
+	if (FAILED(SetUp_ShaderXRayResources()))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+
+		if (0 == i || 1 == i)
+			continue;
+
+		if (m_bShader_Hit)
+			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+		else
+			m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices");
+	}
+
+	return S_OK;
+}
+
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
 	// 이 몬스터의 경우에는 방패를 들고 있기 때문에 따로 처리했다.
@@ -158,6 +193,11 @@ HRESULT CM_Skeleton_Shield::SetUp_Components()
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_ShaderXRay */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel_XRay"), TEXT("Com_ShaderXRay"),
+		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
 	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.SKELETON_SHIELD_1)
@@ -211,6 +251,27 @@ HRESULT CM_Skeleton_Shield::SetUp_ShaderResources()
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 			return E_FAIL;
 	}
+
+	return S_OK;
+}
+
+HRESULT CM_Skeleton_Shield::SetUp_ShaderXRayResources()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderXRayCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float	fObjectID = 3.0f;
+	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -577,4 +638,6 @@ void CM_Skeleton_Shield::Free()
 	for (auto& pPart : m_MonsterParts)
 		Safe_Release(pPart);
 	m_MonsterParts.clear();
+
+	Safe_Release(m_pShaderXRayCom);
 }

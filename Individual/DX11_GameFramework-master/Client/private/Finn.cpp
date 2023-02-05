@@ -249,12 +249,6 @@ HRESULT CFinn::SetUp_ShaderResources()
 			return E_FAIL;
 	}
 
-	///* For.Lights */
-	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	//if (nullptr == pLightDesc)
-	//	return E_FAIL;
-
-
 	return S_OK;
 }
 
@@ -1460,6 +1454,7 @@ void CFinn::Free()
 	for (_uint i = 0; i < COLLTYPE_END; ++i)
 		Safe_Release(m_pColliderCom[i]);
 
+	Safe_Release(m_pShaderXRayCom);
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);

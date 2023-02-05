@@ -75,7 +75,7 @@ void CFinn_Weapon::Late_Tick(_double TimeDelta)
 	}
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 }
 
 HRESULT   CFinn_Weapon::Render()

@@ -73,6 +73,15 @@ void CM_Skeleton_Archer::Tick(_double TimeDelta)
 void CM_Skeleton_Archer::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
+
+	if (1 == m_fAlpha)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (nullptr != m_pRendererCom &&
+			true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		RELEASE_INSTANCE(CGameInstance)
+	}
 }
 
 HRESULT CM_Skeleton_Archer::Render()
@@ -118,6 +127,24 @@ HRESULT CM_Skeleton_Archer::Render()
 	return S_OK;
 }
 
+HRESULT CM_Skeleton_Archer::Render_XRay()
+{
+	if (FAILED(__super::Render_XRay()))
+		return E_FAIL;
+
+	if (FAILED(SetUp_ShaderXRayResources()))
+		return E_FAIL;
+
+	m_pModelCom->Bind_Material(m_pShaderXRayCom, 1, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+	
+	if (m_bShader_Hit)
+		m_pModelCom->Render(m_pShaderCom, 1, "g_BoneMatrices", 3);
+	else
+		m_pModelCom->Render(m_pShaderXRayCom, 1, "g_BoneMatrices");
+
+	return S_OK;
+}
+
 void CM_Skeleton_Archer::On_Collision(CGameObject * pOther)
 {
 	__super::On_Collision(pOther);
@@ -133,6 +160,11 @@ HRESULT CM_Skeleton_Archer::SetUp_Components()
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_ShaderXRay */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel_XRay"), TEXT("Com_ShaderXRay"),
+		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
 	if (m_tMonsterDesc.eMonsterKind == m_tMonsterDesc.SKELETON_ARCHER_1)
@@ -194,6 +226,27 @@ HRESULT CM_Skeleton_Archer::SetUp_ShaderResources()
 		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 			return E_FAIL;
 	}
+
+	return S_OK;
+}
+
+HRESULT CM_Skeleton_Archer::SetUp_ShaderXRayResources()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderXRayCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float	fObjectID = 3.0f;
+	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -415,5 +468,5 @@ void CM_Skeleton_Archer::Free()
 {
 	__super::Free();
 
-
+	Safe_Release(m_pShaderXRayCom);
 }

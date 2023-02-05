@@ -261,7 +261,6 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 
 HRESULT CRenderer::Render_XRayBlend()
 {
-	//m_pTarget_Manager->Begin_MRT(m_pContext, L"MRT_XRay");
 	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_XRay"))))
 		return E_FAIL;
 
@@ -275,7 +274,6 @@ HRESULT CRenderer::Render_XRayBlend()
 
 	m_RenderObjects[RENDER_XRAYBLEND].clear();
 
-	//m_pTarget_Manager->End_MRT(m_pContext, L"MRT_XRay");
 	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_XRay"))))
 		return E_FAIL;
 

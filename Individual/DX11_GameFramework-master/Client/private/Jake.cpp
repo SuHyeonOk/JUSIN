@@ -1430,6 +1430,7 @@ void CJake::Free()
 		Safe_Release(pPart);
 	m_PlayerParts.clear();
 
+	Safe_Release(m_pShaderXRayCom);
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);

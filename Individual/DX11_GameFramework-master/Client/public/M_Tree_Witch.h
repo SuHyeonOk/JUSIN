@@ -26,12 +26,17 @@ public:
 	virtual void		Tick(_double TimeDelta)					override;
 	virtual void		Late_Tick(_double TimeDelta)			override;
 	virtual HRESULT		Render()								override;
+	virtual	HRESULT		Render_XRay() override;
 
 	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
 	virtual HRESULT		SetUp_Components()						override;
 	virtual HRESULT		SetUp_ShaderResources()					override;
+	HRESULT				SetUp_ShaderXRayResources();
+
+private:
+	CShader*			m_pShaderXRayCom = nullptr;
 
 private:
 	virtual void		Monster_Tick(const _double& TimeDelta)	override;
