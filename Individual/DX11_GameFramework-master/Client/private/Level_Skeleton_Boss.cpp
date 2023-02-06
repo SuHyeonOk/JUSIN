@@ -391,7 +391,7 @@ HRESULT CLevel_Skleton_Boss::Reay_ChangeLight()
 		if (fin.eof())
 			break;
 
-		iIndex = (_float)_tstof(szIndx);
+		iIndex = (_int)_tstof(szIndx);
 		tLightDesc.vPosition.x = (_float)_tstof(szObjPosX);
 		tLightDesc.vPosition.y = (_float)_tstof(szObjPosY);
 		tLightDesc.vPosition.z = (_float)_tstof(szObjPosZ);

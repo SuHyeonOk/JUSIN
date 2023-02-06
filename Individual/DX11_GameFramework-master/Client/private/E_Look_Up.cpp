@@ -215,6 +215,9 @@ HRESULT CE_Look_Up::SetUp_ShaderResources()
 
 void CE_Look_Up::CanSmoke(const _double & TimeDelta)
 {
+	if (LEVEL_SKELETON != CObj_Manager::GetInstance()->Get_Current_Level())
+		CGameObject::Set_Dead();
+
 	m_pTransformCom->Go_Up(TimeDelta * m_fMoveSpeed);
 
 	m_fAlpha -= _float(TimeDelta) * m_fAlphaSpeed;
@@ -272,7 +275,7 @@ void CE_Look_Up::CutScene_SmallFire(const _double & TimeDelta)
 		m_pTransformCom->Set_Pos(_float3(m_f4StartPosition.x + fRendomNumberX, fRendomNumberY, m_f4StartPosition.z + fRendomNumberZ));
 	}
 
-	if (10 < m_dDead_Count)
+	if (7 < m_dDead_Count)	// TODO : CutSceneTwo
 	{
 		CGameObject::Set_Dead();
 	}

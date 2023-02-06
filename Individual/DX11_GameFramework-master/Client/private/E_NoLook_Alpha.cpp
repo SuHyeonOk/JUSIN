@@ -26,11 +26,11 @@ HRESULT CE_NoLook_Alpha::Initialize_Prototype()
 }
 
 HRESULT CE_NoLook_Alpha::Initialize(void * pArg)
-{	
+{
 	if (nullptr != pArg)
 		memcpy(&m_tEffectInfo, pArg, sizeof(m_tEffectInfo));
 
-	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
+	CGameObject::GAMEOBJECTDESC      GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.f;
@@ -40,7 +40,7 @@ HRESULT CE_NoLook_Alpha::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
- 	if (FAILED(SetUp_Components()))
+	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
@@ -50,9 +50,9 @@ HRESULT CE_NoLook_Alpha::Initialize(void * pArg)
 	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	_vector vUp = XMVector3Cross(vLook, vRight);
 
-	_float3		vScale = m_pTransformCom->Get_Scaled();
-	_float		fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 360.0f);
-	_matrix		RotationMatrix = XMMatrixRotationAxis(vLook, XMConvertToRadians(fAngle));
+	_float3      vScale = m_pTransformCom->Get_Scaled();
+	_float      fAngle = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 360.0f);
+	_matrix      RotationMatrix = XMMatrixRotationAxis(vLook, XMConvertToRadians(fAngle));
 
 	vRight = vRight * vScale.x;
 	vUp = vUp * vScale.y;
@@ -76,7 +76,7 @@ void CE_NoLook_Alpha::Tick(_double TimeDelta)
 
 	m_fAlpha -= _float(TimeDelta) * 0.2f;
 
-	if(0.0f > m_fAlpha)
+	if (0.0f > m_fAlpha)
 		CGameObject::Set_Dead();
 }
 
@@ -137,7 +137,7 @@ HRESULT CE_NoLook_Alpha::SetUp_ShaderResources()
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
@@ -158,7 +158,7 @@ HRESULT CE_NoLook_Alpha::SetUp_ShaderResources()
 
 CE_NoLook_Alpha * CE_NoLook_Alpha::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CE_NoLook_Alpha*		pInstance = new CE_NoLook_Alpha(pDevice, pContext);
+	CE_NoLook_Alpha*      pInstance = new CE_NoLook_Alpha(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -170,7 +170,7 @@ CE_NoLook_Alpha * CE_NoLook_Alpha::Create(ID3D11Device * pDevice, ID3D11DeviceCo
 
 CGameObject * CE_NoLook_Alpha::Clone(void * pArg)
 {
-	CE_NoLook_Alpha*		pInstance = new CE_NoLook_Alpha(*this);
+	CE_NoLook_Alpha*      pInstance = new CE_NoLook_Alpha(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{

@@ -114,10 +114,26 @@ void CN_GooseShop::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		static _bool	bSound;
 		if (true == CObj_Manager::GetInstance()->Get_Interaction())
+		{
+			if (false == bSound)
+			{
+				bSound = true;
+			
+				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+				pGameInstance->Play_Sound(TEXT("Shop_Open.mp3"), 0.7f);
+				RELEASE_INSTANCE(CGameInstance);
+			}
+
 			CUI_Manager::GetInstance()->Set_Shop(true);
+		}
 		else
+		{
+			bSound = false;
 			CUI_Manager::GetInstance()->Set_Shop(false);
+		}
+	
 	}
 }
 

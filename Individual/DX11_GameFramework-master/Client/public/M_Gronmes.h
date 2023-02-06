@@ -18,12 +18,14 @@ public:
 	virtual void		Tick(_double TimeDelta)					override;
 	virtual void		Late_Tick(_double TimeDelta)			override;
 	virtual HRESULT		Render()								override;
+	virtual	HRESULT		Render_XRay()							override;
 
 	virtual void		On_Collision(CGameObject* pOther) override;
 
 private:
 	virtual HRESULT		SetUp_Components()						override;
 	virtual HRESULT		SetUp_ShaderResources()					override;
+	HRESULT				SetUp_ShaderXRayResources();
 
 private:
 	virtual void		Monster_Tick(const _double& TimeDelta)	override;
@@ -33,6 +35,9 @@ private:
 	virtual void		Attack_Tick(const _double& TimeDelta)	override;
 	virtual void		Hit_Tick(const _double& TimeDelta)		override;
 	virtual	void		Die_Tick(const _double& TimeDelta)		override;
+
+private:
+	CShader*			m_pShaderXRayCom = nullptr;
 
 private:
 	_float4				m_f4CenterPos;

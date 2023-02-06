@@ -78,8 +78,7 @@ void CM_Tree_Witch::Late_Tick(_double TimeDelta)
 	if (1 == m_fAlpha)
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (nullptr != m_pRendererCom &&
-			true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
 		RELEASE_INSTANCE(CGameInstance)
 	}
@@ -128,6 +127,9 @@ HRESULT CM_Tree_Witch::Render()
 
 HRESULT CM_Tree_Witch::Render_XRay()
 {
+	if (8.0f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+		return S_OK;
+
 	if (FAILED(__super::Render_XRay()))
 		return E_FAIL;
 
@@ -135,25 +137,7 @@ HRESULT CM_Tree_Witch::Render_XRay()
 		return E_FAIL;
 
 	m_pModelCom->Bind_Material(m_pShaderXRayCom, 1, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-	if (m_bShader_Hit)
-		m_pModelCom->Render(m_pShaderCom, 1, "g_BoneMatrices", 3);
-	else
-		m_pModelCom->Render(m_pShaderXRayCom, 1, "g_BoneMatrices");
-
-	//_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	//for (_uint i = 0; i < iNumMeshes; ++i)
-	//{
-	//	//if (0 == i)
-	//	//	continue;
-
-	//	m_pModelCom->Bind_Material(m_pShaderXRayCom, 1, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-	//	
-	//	if (m_bShader_Hit)
-	//		m_pModelCom->Render(m_pShaderCom, 1, "g_BoneMatrices", 3);
-	//	else
-	//		m_pModelCom->Render(m_pShaderXRayCom, 1, "g_BoneMatrices");
-	//}
+	m_pModelCom->Render(m_pShaderXRayCom, 1, "g_BoneMatrices");
 
 	return S_OK;
 }

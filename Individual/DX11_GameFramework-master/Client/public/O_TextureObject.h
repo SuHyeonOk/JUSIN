@@ -18,7 +18,7 @@ class CO_TextureObject final : public CGameObject
 public:
 	typedef struct tagTextureObjectInfo
 	{
-		enum TEXTURETYPE { PORTAL, MOVE_PORTAL, TEXTURETYPE_END };
+		enum TEXTURETYPE { PORTAL, TEXTURETYPE_END };
 		TEXTURETYPE		eTextureType;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -53,7 +53,7 @@ private:
 private:
 	TEXTUREOBJECT			m_TextureObject;
 
-	_bool					m_bTick = false;
+	_float					m_fAlpha = 1.0f;
 	_double					m_bEffect_TimeAcc = 0;
 
 public:

@@ -386,6 +386,10 @@ void CM_Magic_Man::Die_Tick(const _double& TimeDelta)
 
 		CItemManager::GetInstance()->RandomPage_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 5);
 		CItemManager::GetInstance()->Key_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z));
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("MagicMin_Die.mp3"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 
@@ -401,6 +405,10 @@ void CM_Magic_Man::Appear(const _double& TimeDelta)
 		bPlayerFind = true;
 		SmokeEffect();
 		m_pTransformCom->Set_Pos(0.f);
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("MagicMin_Appear.mp3"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 

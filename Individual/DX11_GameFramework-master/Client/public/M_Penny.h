@@ -19,7 +19,7 @@ public:
 	virtual void		Tick(_double TimeDelta)					override;
 	virtual void		Late_Tick(_double TimeDelta)			override;
 	virtual HRESULT		Render()								override;
-	virtual	HRESULT		Render_XRay() override;
+	virtual	HRESULT		Render_XRay()							override;
 
 	virtual void		On_Collision(CGameObject* pOther) override;
 

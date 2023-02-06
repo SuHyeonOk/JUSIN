@@ -168,11 +168,6 @@ HRESULT CE_Alpha_Rotation::SetUp_ShaderResources()
 
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 		return E_FAIL;
-	
-	//_float3 f3Color = _float3(CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 1.0f));
-
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &f3Color, sizeof _float3)))
-	//	return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;

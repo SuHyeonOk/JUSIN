@@ -165,6 +165,9 @@ HRESULT CJake::Render()
 
 HRESULT CJake::Render_XRay()
 {
+	if (m_bShader_Hit && CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState || 1 != m_fAlpha)
+		return S_OK;
+
 	if (FAILED(__super::Render_XRay()))
 		return E_FAIL;
 
@@ -179,7 +182,7 @@ HRESULT CJake::Render_XRay()
 			continue;
 
 		m_pModelCom->Bind_Material(m_pShaderXRayCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices");
+		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices");	// Æò¼Ò
 	}
 	return S_OK;
 }

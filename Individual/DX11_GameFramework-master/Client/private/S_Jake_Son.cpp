@@ -120,21 +120,20 @@ void CS_Jake_Son::On_Collision(CGameObject * pOther)
 		
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+		// 사운드
 		if (JAKESONINFO::JAKE_SON_A == m_tJakeSonInfo.eJakeSon)
-			pGameInstance->Play_Sound(TEXT("JaekSon_JakeJr.mp3"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("JaekSon_JakeJr.mp3"), 0.7f);
 		else if (JAKESONINFO::JAKE_SON_B == m_tJakeSonInfo.eJakeSon)
-			pGameInstance->Play_Sound(TEXT("JaekSon_Viola.mp3"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("JaekSon_Viola.mp3"), 0.7f);
 		else if (JAKESONINFO::JAKE_SON_C == m_tJakeSonInfo.eJakeSon)
-			pGameInstance->Play_Sound(TEXT("JaekSon_Charlie.mp3"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("JaekSon_Charlie.mp3"), 0.7f);
 		else if (JAKESONINFO::JAKE_SON_D == m_tJakeSonInfo.eJakeSon)
-			pGameInstance->Play_Sound(TEXT("JakeSon_TV.mp3"), 1.0f);
-		// 다섯번째 친구는 JakePage 를 남긴다.
+			pGameInstance->Play_Sound(TEXT("JakeSon_TV.mp3"), 0.7f);
 		else if (JAKESONINFO::JAKE_SON_E == m_tJakeSonInfo.eJakeSon)
 		{
-			// 사운드
-			pGameInstance->Play_Sound(TEXT("JakeSon_KimKilWhan.mp3"), 1.0f);
+			pGameInstance->Play_Sound(TEXT("JakeSon_KimKilWhan.mp3"), 0.7f);
 
-			// 스킬 
+			// 다섯번째 친구는 JakePage 를 남긴다.
 			CPage::PAGEINFO tPageInfo;
 			tPageInfo.fPos = _float3(f4MyPos.x, f4MyPos.y, f4MyPos.z);
 			tPageInfo.bJemp = true;

@@ -61,7 +61,7 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
 		m_iDead_Number = 3;
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE == m_tEffectInfo.eTextureType)
-		m_iDead_Number = 40;
+		m_iDead_Number = 35;	// TODO : CutSceneTwo
 
 	return S_OK;
 }

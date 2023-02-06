@@ -36,18 +36,9 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y + 1.4f, m_TextureObject.f3Pos.z);
-	}
-	else if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_TextureObject.f3Pos.x, m_TextureObject.f3Pos.y, m_TextureObject.f3Pos.z);
-	}
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	GameObjectDesc.TransformDesc.f3Pos = m_TextureObject.f3Pos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -58,9 +49,7 @@ HRESULT CO_TextureObject::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
-		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.f));
-	else if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
-		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
 
 	return S_OK;
 }
@@ -69,8 +58,18 @@ void CO_TextureObject::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (3 >= CObj_Manager::GetInstance()->Get_Current_Player().iKey)
-		return;
+	if (3 > CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+	{
+		m_fAlpha = 0.5f;
+		m_pTransformCom->Set_Pos(0.7f);
+		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
+	}
+	else
+	{
+		m_fAlpha = 1.0f;
+		m_pTransformCom->Set_Pos(1.5f);
+		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+	}
 
 	// 회전한다.
 	m_pTransformCom->Turn(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), TimeDelta);
@@ -90,22 +89,16 @@ void CO_TextureObject::Tick(_double TimeDelta)
 
 void CO_TextureObject::Late_Tick(_double TimeDelta)
 {
-	if (false == m_bTick)
-		return;
-
 	__super::Late_Tick(TimeDelta);
 
 	// 충돌 처리
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
-	{
-		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
-		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
-	}
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 
 	RELEASE_INSTANCE(CGameInstance)
@@ -119,7 +112,7 @@ HRESULT CO_TextureObject::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(0);	// pass
+	m_pShaderCom->Begin(2);	// pass
 
 	m_pVIBufferCom->Render();
 
@@ -136,35 +129,31 @@ HRESULT CO_TextureObject::Render()
 
 void CO_TextureObject::On_Collision(CGameObject * pOther)
 {
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
+	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+		if (pGameInstance->Key_Down(DIK_RETURN))
 		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			CObj_Manager::GetInstance()->Set_Key(-3);
+			pGameInstance->Play_Sound(TEXT("sfx_portal_activate2.ogg"), 1.0f);
 
-			if (pGameInstance->Key_Down(DIK_RETURN))
+			if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 			{
-				pGameInstance->Play_Sound(TEXT("sfx_portal_activate2.ogg"), 1.0f);
-
-				if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
-				{
-					pGameInstance->Stop_Sound(0);
-					CGameObject::Set_Dead();
-					CObj_Manager::GetInstance()->Set_NextLevel(true);
-					CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
-				}
-				else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
-				{
-					pGameInstance->Stop_Sound(0);
-					CGameObject::Set_Dead();
-					CObj_Manager::GetInstance()->Set_NextLevel(true);
-					CObj_Manager::GetInstance()->Set_Loading_Count();
-				}
-
-				CObj_Manager::GetInstance()->Set_Key(-3);
+				pGameInstance->Stop_Sound(0);
+				CGameObject::Set_Dead();
+				CObj_Manager::GetInstance()->Set_NextLevel(true);
+				CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
 			}
-			RELEASE_INSTANCE(CGameInstance);
+			else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+			{
+				pGameInstance->Stop_Sound(0);
+				CGameObject::Set_Dead();
+				CObj_Manager::GetInstance()->Set_NextLevel(true);
+				CObj_Manager::GetInstance()->Set_Loading_Count();
+			}
 		}
+		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 
@@ -182,8 +171,7 @@ HRESULT CO_TextureObject::SetUp_Components()
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL ||
-		m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::MOVE_PORTAL)
+	if (m_TextureObject.eTextureType == TEXTUREOBJECT::TEXTURETYPE::PORTAL)
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_O_TextureObject"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -222,6 +210,9 @@ HRESULT CO_TextureObject::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
 
 	return S_OK;

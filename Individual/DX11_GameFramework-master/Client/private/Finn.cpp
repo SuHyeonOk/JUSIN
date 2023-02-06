@@ -156,6 +156,9 @@ HRESULT CFinn::Render()
 
 HRESULT CFinn::Render_XRay()
 {
+	if (m_bShader_Hit && CObj_Manager::PLAYERINFO::STATE::HIT == m_tPlayerInfo.eState || 1 != m_fAlpha)
+		return S_OK;
+
 	if (FAILED(__super::Render_XRay()))
 		return E_FAIL;
 
