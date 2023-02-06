@@ -46,6 +46,13 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 
 	if (BUTTERFLIES_BLUE == m_tEffectInfo.eType || BUTTERFLIES_RED == m_tEffectInfo.eType || BUTTERFLIES_YELLOW == m_tEffectInfo.eType)
 	{
+		m_bNeat_TextureTime = 0.07f;
+		m_bFindDistance = 3.0f;
+		Ready_Butterflies();
+	}
+	else if (BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
+	{
+		m_bNeat_TextureTime = 0.09f;
 		m_bFindDistance = 3.0f;
 		Ready_Butterflies();
 	}
@@ -84,7 +91,7 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 void CE_FlyingEnvironment::Tick(_double TimeDelta)
 {
 	if (BUTTERFLIES_BLUE == m_tEffectInfo.eType || BUTTERFLIES_RED == m_tEffectInfo.eType || BUTTERFLIES_YELLOW == m_tEffectInfo.eType ||
-		FIRESPARKS == m_tEffectInfo.eType || FIRESPARKS_SMALL == m_tEffectInfo.eType)
+		FIRESPARKS == m_tEffectInfo.eType || FIRESPARKS_SMALL == m_tEffectInfo.eType || BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
 	{
 		// 플레이어가 가까이 있을 때만 실행된다.
 		if (false == m_bFindPlayer)
@@ -100,7 +107,7 @@ void CE_FlyingEnvironment::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	// ★ 객체마다 다르게 주돌아야 하는 Tick
-	if (BUTTERFLIES_BLUE == m_tEffectInfo.eType || BUTTERFLIES_RED == m_tEffectInfo.eType || BUTTERFLIES_YELLOW == m_tEffectInfo.eType)
+	if (BUTTERFLIES_BLUE == m_tEffectInfo.eType || BUTTERFLIES_RED == m_tEffectInfo.eType || BUTTERFLIES_YELLOW == m_tEffectInfo.eType || BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
 		Butterflies_Tick(TimeDelta);
 	else if (CANFIRE_BIG == m_tEffectInfo.eType || CANFIRE_MEDIUM == m_tEffectInfo.eType || CANFIRE_SMALL == m_tEffectInfo.eType)
 		CanFire_Tick(TimeDelta);
@@ -108,12 +115,18 @@ void CE_FlyingEnvironment::Tick(_double TimeDelta)
 		FireSparks_Tick(TimeDelta);
 	else if (FIRESPARKS_SMALL == m_tEffectInfo.eType)
 		FireSparksSmall_Tick(TimeDelta);
+
+	// 추가적으로 하나의 Tick() 을 돌아야 하는 함수
+	if (BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
+	{
+		ButterfliesLuminous_Light();
+	}
 }
 
 void CE_FlyingEnvironment::Late_Tick(_double TimeDelta)
 {
 	if (BUTTERFLIES_BLUE == m_tEffectInfo.eType || BUTTERFLIES_RED == m_tEffectInfo.eType || BUTTERFLIES_YELLOW == m_tEffectInfo.eType ||
-		FIRESPARKS == m_tEffectInfo.eType || FIRESPARKS_SMALL == m_tEffectInfo.eType)
+		FIRESPARKS == m_tEffectInfo.eType || FIRESPARKS_SMALL == m_tEffectInfo.eType || BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
 	{
 		if (false == m_bFindPlayer)
 			return;
@@ -125,7 +138,7 @@ void CE_FlyingEnvironment::Late_Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 	RELEASE_INSTANCE(CGameInstance)
 }
@@ -190,6 +203,8 @@ HRESULT CE_FlyingEnvironment::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_FireSparks"));
 	else if (FIRESPARKS_SMALL == m_tEffectInfo.eType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_FireSparks_Small"));
+	else if (BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Butterflies_Luminous"));
 	
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -247,6 +262,7 @@ void CE_FlyingEnvironment::Butterflies_Tick(const _double & TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 
 	m_pTransformCom->LookAt(vCameraPos, true);
+	//m_pTransformCom->Set_Pos(1.0f);
 
 	// 입력한 Look 방향으로 이동하기
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -255,7 +271,7 @@ void CE_FlyingEnvironment::Butterflies_Tick(const _double & TimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSetW(vMyPos, 1.0f));
 
 	m_dChange_TimeAcc += TimeDelta;
-	if (0.07 < m_dChange_TimeAcc)
+	if (m_bNeat_TextureTime < m_dChange_TimeAcc)
 	{
 		++m_iTexture_Index;
 		m_dChange_TimeAcc = 0;
@@ -268,9 +284,13 @@ void CE_FlyingEnvironment::Butterflies_Tick(const _double & TimeDelta)
 
 	if (10 < m_iTextureDead_Count)
 		m_fAlpha -= _float(TimeDelta) * 0.5f;
-
+	
 	if (0.0f > m_fAlpha)
+	{
+		//m_fAlpha = 1.0f;
+		//m_iTexture_Index = 0;
 		CGameObject::Set_Dead();
+	}
 }
 
 void CE_FlyingEnvironment::CanFire_Tick(const _double & TimeDelta)
@@ -333,6 +353,11 @@ void CE_FlyingEnvironment::FireSparksSmall_Tick(const _double & TimeDelta)
 		_float fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
 		m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
 	}
+}
+
+void CE_FlyingEnvironment::ButterfliesLuminous_Light()
+{
+
 }
 
 CE_FlyingEnvironment * CE_FlyingEnvironment::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

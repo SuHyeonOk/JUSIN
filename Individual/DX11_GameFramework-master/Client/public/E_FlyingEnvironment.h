@@ -18,7 +18,7 @@ public:
 	enum TYPE {
 		BUTTERFLIES_RED, BUTTERFLIES_BLUE, BUTTERFLIES_YELLOW,
 		CANFIRE_BIG, CANFIRE_MEDIUM, CANFIRE_SMALL,
-		FIRESPARKS, FIRESPARKS_SMALL,
+		FIRESPARKS, FIRESPARKS_SMALL, BUTTERFLIES_LUMINOUS,
 		TYPE_END
 	};
 	
@@ -58,6 +58,7 @@ private:
 	void					CanFire_Tick(const _double & TimeDelta);
 	void					FireSparks_Tick(const _double & TimeDelta);
 	void					FireSparksSmall_Tick(const _double & TimeDelta);
+	void					ButterfliesLuminous_Light();
 
 private:
 	EFFECTINFO				m_tEffectInfo = {};
@@ -73,6 +74,8 @@ private:
 	_bool					m_bFindPlayer = false;
 	_float4					m_f4RandomLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 	_float					m_fRandomAxis = 0.0f;
+
+	_double					m_bNeat_TextureTime = { 0.0 };
 
 public:
 	static	CE_FlyingEnvironment*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

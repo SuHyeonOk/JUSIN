@@ -51,6 +51,7 @@ HRESULT CPennyCopy::Initialize(void * pArg)
 
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
+	m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_UP), CUtilities_Manager::GetInstance()->Get_Random(0.f, 360.f));	// 랜덤한 방향으로 Look 을 변경한다.
 
 	m_eState = MOVE;
 

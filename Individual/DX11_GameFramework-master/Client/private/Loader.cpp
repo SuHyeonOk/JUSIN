@@ -1394,9 +1394,9 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_RedL"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_RedL_%d.png"), 4))))
 		return E_FAIL;
-	/* For.Prototype_Component_Texture_Butterflies_YellowL */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_YellowL"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_YellowL_%d.png"), 4))))
+	/* For.Prototype_Component_Texture_Butterflies_Luminous */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Butterflies_Luminous"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Butterflies_Luminous_%d.png"), 4))))
 		return E_FAIL;
 	/* For.Prototype_Component_Texture_FireSparks */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireSparks"),
@@ -1405,6 +1405,10 @@ HRESULT CLoader::Effect_Texture()
 	/* For.Prototype_Component_Texture_FireSparks_Small */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireSparks_Small"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/Fire_1_Sparks_D.png")))))
+		return E_FAIL;
+	/* For.Prototype_Component_Texture_FireSparks */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireSparks"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Environment/FireSparks_%d.png"), 4))))
 		return E_FAIL;
 
 	// TreeMonster
@@ -1497,7 +1501,7 @@ HRESULT CLoader::SkeletonTemp()
 
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
 		return E_FAIL;
 
 	// 2D Bullet

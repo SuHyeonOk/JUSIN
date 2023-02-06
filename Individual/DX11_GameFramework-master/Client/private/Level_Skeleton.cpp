@@ -1026,7 +1026,7 @@ void CLevel_Skleton::ImGui_Monster()
 
 void CLevel_Skleton::ImGui_Envionment()
 {
-	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small", "Can_Smoke", "FireSparks", "FireSparks_Small" };
+	const _char* szObjName[] = { "CnaFire_Big", "CanFire_Medium", "CanFire_Small", "Can_Smoke", "FireSparks", "FireSparks_Small", "Butterflies_Luminous" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Envionmen", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -1101,12 +1101,24 @@ void CLevel_Skleton::ImGui_Envionment()
 		if (5 == iObjNum)
 		{
 			m_wstObjName = L"FireSparks_Small";
-
+			
 			tEffectInfo.eType = CE_FlyingEnvironment::FIRESPARKS_SMALL;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = m_wstObjName.c_str();
 			
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return;
+		}
+		if (6 == iObjNum)
+		{
+			m_wstObjName = L"Butterflies_Luminous";
+			
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_LUMINOUS;
+			tEffectInfo.f3Pos = m_f3ClickPos;
+
+			m_szObjName = m_wstObjName.c_str();
+
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
 		}
@@ -1957,6 +1969,14 @@ HRESULT CLevel_Skleton::Load_Envionment()
 		else if (TEXT("FireSparks_Small") == wstObjNameTemp)
 		{
 			tEffectInfo.eType = CE_FlyingEnvironment::FIRESPARKS_SMALL;
+			tEffectInfo.f3Pos = pObjInfo.ObjPos;
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
+		}
+		else if (TEXT("Butterflies_Luminous") == wstObjNameTemp)
+		{
+			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_LUMINOUS;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
