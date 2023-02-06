@@ -29,6 +29,9 @@ private:
 	HRESULT Ready_Layer_Map(const _tchar* pLayerTag);
 
 private:
+	HRESULT	Reay_ChangeLight();
+
+private:
 	wstring			m_wstObjName;
 	_float3			m_f3ClickPos = _float3(0.f, 0.f, 0.f);
 

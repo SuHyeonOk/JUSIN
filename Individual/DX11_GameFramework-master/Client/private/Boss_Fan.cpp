@@ -52,11 +52,6 @@ HRESULT CBoss_Fan::Initialize(void * pArg)
 	m_fHP		= 30.0f;
 	m_fMaxHP	= 30.0f;
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("sfx_quest_accept.ogg"), 0.7f);
-	RELEASE_INSTANCE(CGameInstance);
-
-
 	return S_OK;
 }
 
@@ -227,8 +222,8 @@ void CBoss_Fan::Monster_Tick(const _double & TimeDelta)
 void CBoss_Fan::Dance_Tick(const _double& TimeDelta)
 {
 	// ¿Ã∆Â∆Æ
-	m_bEffect_TimeAcc += TimeDelta;
-	if (0.3 < m_bEffect_TimeAcc)
+	m_dEffect_TimeAcc += TimeDelta;
+	if (0.3 < m_dEffect_TimeAcc)
 	{
 		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -237,7 +232,7 @@ void CBoss_Fan::Dance_Tick(const _double& TimeDelta)
 		CEffect_Manager::GetInstance()->Effect_Color_Boss_Smoke_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z), _float3(0.87f, 0.56f, 1.0f));
 		CEffect_Manager::GetInstance()->Effect_Color_Skeleeton_Create(_float3(f4Pos.x, f4Pos.y + 1.0f, f4Pos.z));
 
-		m_bEffect_TimeAcc = 0;
+		m_dEffect_TimeAcc = 0;
 	}
 }
 

@@ -82,6 +82,7 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
+
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)
@@ -121,8 +122,8 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	LightDesc.isEnable = true;
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.0f, 0.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vSpecular = _float4(0.2f, 0.2f, 0.2f, 1.f);
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
 		return E_FAIL;

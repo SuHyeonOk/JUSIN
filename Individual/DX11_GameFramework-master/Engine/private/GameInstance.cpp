@@ -400,6 +400,44 @@ HRESULT CGameInstance::Set_Light(ID3D11Device * pDevice, ID3D11DeviceContext * p
 	return m_pLight_Manager->Set_Light(pDevice, pContext, LightDesc);
 }
 
+void CGameInstance::Set_ChangeLight(_bool bChange)
+{
+	if (nullptr == m_pLight_Manager)
+	{
+		MSG_BOX("조명을 변경할 수 없습니다.");
+		return;
+	}
+
+	return m_pLight_Manager->Set_ChangeLight(bChange);
+}
+
+void CGameInstance::Set_ChangeLight_index(_int iIndex)
+{
+	if (nullptr == m_pLight_Manager)
+	{
+		MSG_BOX("조명을 변경할 수 없습니다.");
+		return;
+	}
+
+	return m_pLight_Manager->Set_ChangeLight_index(iIndex);
+}
+
+HRESULT CGameInstance::Add_ChangeLight(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc, const _int iIndex)
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Add_ChangeLight(pDevice, pContext, LightDesc, iIndex);
+}
+
+HRESULT CGameInstance::Set_ChangeLight(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc, const _int iIndex)
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Set_ChangeLight(pDevice, pContext, LightDesc, iIndex);
+}
+
 void CGameInstance::Render_ImGui()
 {
 	if (nullptr == m_pImgui_Manager)

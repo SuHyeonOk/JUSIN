@@ -7,6 +7,31 @@ CLight_Manager::CLight_Manager()
 {
 }
 
+HRESULT CLight_Manager::Add_ChangeLight(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc, const _int iIndex)
+{
+	CLight*			pLight = CLight::Create(pDevice, pContext, LightDesc);
+
+	if (nullptr == pLight)
+		return E_FAIL;
+
+	m_ChangeLights[iIndex].push_back(pLight);
+
+	return S_OK;
+}
+
+HRESULT CLight_Manager::Set_ChangeLight(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc, const _int iIndex)
+{
+	CLight*			pLight = CLight::Create(pDevice, pContext, LightDesc);
+
+	if (nullptr == pLight)
+		return E_FAIL;
+
+	m_ChangeLights[iIndex].pop_back();
+	m_ChangeLights[iIndex].push_back(pLight);
+
+	return S_OK;
+}
+
 const LIGHTDESC * CLight_Manager::Get_LightDesc(_uint iIndex)
 {
 	if (iIndex >= m_Lights.size())
@@ -42,10 +67,21 @@ HRESULT CLight_Manager::Set_Light(ID3D11Device * pDevice, ID3D11DeviceContext * 
 
 void CLight_Manager::Render_Light(CVIBuffer_Rect * pVIBuffer, CShader * pShader)
 {
-	for (auto& pLight : m_Lights)
+	if (false == m_bChangeLight)
 	{
-		if (nullptr != pLight)
-			pLight->Render(pVIBuffer, pShader);
+		for (auto& pLight : m_Lights)
+		{
+			if (nullptr != pLight)
+				pLight->Render(pVIBuffer, pShader);
+		}
+	}
+	else
+	{
+		for (auto& pLight : m_ChangeLights[m_iChangeLight_index])
+		{
+			if (nullptr != pLight)
+				pLight->Render(pVIBuffer, pShader);
+		}
 	}
 }
 

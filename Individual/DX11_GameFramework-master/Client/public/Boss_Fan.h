@@ -59,7 +59,7 @@ private:
 
 	_int			m_iDieEffect_Count = 0;
 
-	_double			m_bEffect_TimeAcc = 0;
+	_double			m_dEffect_TimeAcc = { 0.0 };
 
 public:
 	static	CBoss_Fan*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

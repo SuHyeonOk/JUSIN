@@ -441,12 +441,11 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 		}
 	}
 
-
 	if (5 < m_dSkill_TimeAcc)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		//iRandom = 2;   // Test
+		iRandom = 4;   // Test
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)
@@ -797,9 +796,13 @@ void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 	m_pTransformCom->Set_Pos(_float3(6.2f, 2.0f, 20.5f));
 	m_pTransformCom->LookAt(XMVectorSet(6.2f, 2.0f, 20.0f, 1.0f));
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 	m_dSkill_TimeAcc += TimeDelta;
 	if (0.5 < m_dSkill_TimeAcc)
 	{
+		pGameInstance->Set_ChangeLight_index(CUtilities_Manager::GetInstance()->Get_Random(0, 4));
+
 		m_fHP += 10.0f;
 		m_dSkill_TimeAcc = 0;
 	}
@@ -807,10 +810,14 @@ void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 	Fann_Create();
 	if (true == Fann_Dead_Check())   // 생성한 팬이 모두 삭제 되었다면, 다른 패턴
 	{
+		pGameInstance->Set_ChangeLight(false);	// 조명을 원래대로 변경한다.
+
 		m_bShader_Alpha = true;
 		m_eState = IDLE;
 		m_dSkill_TimeAcc = 0;
 	}
+
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CM_Gary_Boss::Fann_Create()
@@ -819,6 +826,9 @@ HRESULT CM_Gary_Boss::Fann_Create()
 		return S_OK;
 
 	CGameInstance*      pGameInstance = GET_INSTANCE(CGameInstance);
+
+	pGameInstance->Set_ChangeLight(true);	// 조명을 변경한다.
+	pGameInstance->Play_Sound(TEXT("sfx_quest_accept.ogg"), 0.7f);
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON_BOSS, TEXT("Layer_Boss_Fan_0"), TEXT("Prototype_GameObject_Boss_Fan"), &_float3(2.5f, 0.0f, 17.8f))))
 	{

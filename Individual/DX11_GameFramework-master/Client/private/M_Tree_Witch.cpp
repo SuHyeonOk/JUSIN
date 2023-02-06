@@ -134,6 +134,7 @@ HRESULT CM_Tree_Witch::Render_XRay()
 	if (FAILED(SetUp_ShaderXRayResources()))
 		return E_FAIL;
 
+	m_pModelCom->Bind_Material(m_pShaderXRayCom, 1, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 	if (m_bShader_Hit)
 		m_pModelCom->Render(m_pShaderCom, 1, "g_BoneMatrices", 3);
 	else
