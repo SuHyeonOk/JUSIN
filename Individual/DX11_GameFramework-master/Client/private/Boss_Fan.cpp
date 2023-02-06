@@ -28,6 +28,8 @@ HRESULT CBoss_Fan::Initialize_Prototype()
 
 HRESULT CBoss_Fan::Initialize(void * pArg)
 {	
+	m_wsTag = L"Monster__Skeleton_Archer";
+
 	_float3	f3Pos = _float3(0.f, 0.f, 0.f);
 
 	if (nullptr != pArg)

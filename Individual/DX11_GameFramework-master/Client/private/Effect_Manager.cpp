@@ -155,6 +155,22 @@ HRESULT CEffect_Manager::Effect_Boss_CutScene(const _float3 & f3Pos)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Alpha_Change"), &tEffectInfo)))
 		return E_FAIL;
 
+	CE_Look_Up::EFFECTINFO	tEffectInfo2;
+	tEffectInfo2.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE;
+	tEffectInfo2.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo2)))
+		return E_FAIL;
+
+	tEffectInfo2.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE;
+	tEffectInfo2.f3Pos = _float3(f3Pos.x + 0.5f, f3Pos.y, f3Pos.z - 0.5f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo2)))
+		return E_FAIL;
+
+	tEffectInfo2.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE;
+	tEffectInfo2.f3Pos = _float3(f3Pos.x - 0.5f, f3Pos.y, f3Pos.z + 0.3f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo2)))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 	return S_OK;
 }

@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Utilities_Manager.h"
 
 CE_Alpha_Change::CE_Alpha_Change(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -53,7 +54,7 @@ HRESULT CE_Alpha_Change::Initialize(void * pArg)
 		CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::JAKESON_TRANSFORM_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
 	else if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE == m_tEffectInfo.eTextureType)
-		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(CUtilities_Manager::GetInstance()->Get_Random(1.5f, 2.5f), CUtilities_Manager::GetInstance()->Get_Random(1.5f, 2.5f), 1.f));
 	
 	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::BURN_FIRE_TEXTURE == m_tEffectInfo.eTextureType)
 		m_iDead_Number = 10;
@@ -70,12 +71,15 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 	// 카메라를 바라보고, 텍스처를 변경한다.
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-	RELEASE_INSTANCE(CGameInstance);
+	if (CE_Alpha_Change::EFFECTINFO::TEXTURETYPE::CUTSCENE_FIRE != m_tEffectInfo.eTextureType)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+		_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		RELEASE_INSTANCE(CGameInstance);
 
-	m_pTransformCom->LookAt(vCameraPos, true);
+		m_pTransformCom->LookAt(vCameraPos, true);
+	}
 
 	m_dChange_Texture += TimeDelta;
 	if (0.09 < m_dChange_Texture)				// 이미지가 변경되는 시간
@@ -93,7 +97,9 @@ void CE_Alpha_Change::Tick(_double TimeDelta)
 		}
 
 		if (m_iDead_Number <= m_iDead_Count)
+		{
 			CGameObject::Set_Dead();
+		}
 	}
 	else
 	{

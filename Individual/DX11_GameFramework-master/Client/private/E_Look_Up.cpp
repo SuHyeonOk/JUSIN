@@ -58,6 +58,12 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.2f);
 		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.08f, 0.1f);
 	}
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
+		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(1.0f, 2.0f);
+		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.5f, 1.0f);
+	}
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
@@ -75,6 +81,11 @@ void CE_Look_Up::Tick(_double TimeDelta)
 	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
 	{
 		CanSmoke(TimeDelta);
+		return;
+	}
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		CutScene_SmallFire(TimeDelta);
 		return;
 	}
 
@@ -162,6 +173,8 @@ HRESULT CE_Look_Up::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_Hp"));
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINUSHP_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_MinusHp"));
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_CutScene_SmallFire"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -226,6 +239,42 @@ void CE_Look_Up::CanSmoke(const _double & TimeDelta)
 		// 랜덤한 크기
 		_float fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
 		m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
+	}
+}
+
+void CE_Look_Up::CutScene_SmallFire(const _double & TimeDelta)
+{
+	m_pTransformCom->Go_Up(TimeDelta * m_fMoveSpeed);
+
+	m_fAlpha -= _float(TimeDelta) * m_fAlphaSpeed;
+
+	if (0 >= m_fAlpha)
+	{
+		++m_dDead_Count;
+
+		// 알파값 초기화
+		m_fAlpha = 1.0f;
+
+		// 랜덤한 속도
+		m_fMoveSpeed = CUtilities_Manager::GetInstance()->Get_Random(1.0f, 1.5f);
+
+		// 랜덤한 알파값 빠지는 속도
+		m_fAlphaSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.5f, 1.0f);
+	
+		// 랜덤한 크기
+		_float fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
+		m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
+
+		// 랜덤한 위치
+		_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+		_float fRendomNumberY = CUtilities_Manager::GetInstance()->Get_Random(1.8f, 2.5f);
+		_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.5f, 0.5f);
+		m_pTransformCom->Set_Pos(_float3(m_f4StartPosition.x + fRendomNumberX, fRendomNumberY, m_f4StartPosition.z + fRendomNumberZ));
+	}
+
+	if (10 < m_dDead_Count)
+	{
+		CGameObject::Set_Dead();
 	}
 }
 
