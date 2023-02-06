@@ -45,7 +45,7 @@ public:
 	virtual ~CSkill_Manager() = default;
 
 public:
-	_bool						Get_ChangeSKill_Create() { return m_bChangeSkill_Create; }
+	_bool						Get_ChangeSkill_Create() { return m_bChangeSkill_Create; }
 	void						CSkill_Manager::Set_ChangeSkill_Create(_bool bIsCreate);
 
 public:		// 플레이어

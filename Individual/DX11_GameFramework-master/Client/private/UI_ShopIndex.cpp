@@ -253,9 +253,15 @@ _bool CUI_ShopIndex::Calculation()
 		break;
 	case Client::SHOPINDEX::SHOP_SIX:	// "SOWRD"
 	{
-		if (300 <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
+		_int iValue;
+		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+			iValue = 300;
+		else
+			iValue = 999;
+
+		if (iValue <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
 		{
-			CObj_Manager::GetInstance()->Set_Coin(-300);
+			CObj_Manager::GetInstance()->Set_Coin(-iValue);
 			return true;
 		}
 	}

@@ -60,7 +60,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_eState = IDLE;
 	m_eAnimState = IDLE;
-	m_fHP = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1000.0f;
+	m_fHP = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 10.0f;
 	m_fMaxHP = m_fHP;
 	m_fAttack = 50.0f;
 	m_fExp = 1000.0f;
@@ -394,7 +394,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		iRandom = 4;   // Test
+		//iRandom = 3;   // Test
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)

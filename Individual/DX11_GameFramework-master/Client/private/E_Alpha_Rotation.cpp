@@ -93,12 +93,7 @@ HRESULT CE_Alpha_Rotation::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	// 색 조정
-	if (CE_Alpha_Rotation::EFFECTINFO::TEXTURETYPE::POTAL_STARCOLOR_TEXTURE == m_tEffectInfo.eTextureType)
-		m_pShaderCom->Begin(4);
-	// 이미지색
-	else
-		m_pShaderCom->Begin(2);
+	m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 
@@ -132,7 +127,7 @@ HRESULT CE_Alpha_Rotation::SetUp_Components()
 		break;
 
 	case CE_Alpha_Rotation::EFFECTINFO::POTAL_STARCOLOR_TEXTURE:
-		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Potal_Star"));
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Potal_Star_Blue"));
 		break;
 	}
 

@@ -54,7 +54,7 @@ HRESULT CJakeCopy::Initialize(void * pArg)
 
 void CJakeCopy::Tick(_double TimeDelta)
 {
-	if (false == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+	if (false == CSkill_Manager::GetInstance()->Get_ChangeSkill_Create())
 		return;
 
 	__super::Tick(TimeDelta);
@@ -69,7 +69,7 @@ void CJakeCopy::Tick(_double TimeDelta)
 
 void CJakeCopy::Late_Tick(_double TimeDelta)
 {
-	if (false == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+	if (false == CSkill_Manager::GetInstance()->Get_ChangeSkill_Create())
 		return;
 
 	__super::Late_Tick(TimeDelta);

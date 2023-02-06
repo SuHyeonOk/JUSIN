@@ -125,6 +125,9 @@ private:
 	// 대화
 	_double		m_dTalk_TimeAcc = 0.0;
 
+	// 소리
+	_bool		m_bAttack_Sound = false;
+
 public:
 	static CFinn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

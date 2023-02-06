@@ -75,14 +75,15 @@ void CM_Penny::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (1 == m_fAlpha)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (nullptr != m_pRendererCom &&
-			true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
-		RELEASE_INSTANCE(CGameInstance)
-	}
+	// 공격 받고 있을 때, 죽을 때Xray 을 호출하지 않는다.
+	if (true == m_bShader_Hit || 1 != m_fAlpha)
+		return;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CM_Penny::Render()

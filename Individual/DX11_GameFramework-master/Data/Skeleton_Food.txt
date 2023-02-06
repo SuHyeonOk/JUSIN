@@ -4,3 +4,4 @@ Burrito__0|-30.1139|0|23.4222
 Burrito__1|-29.9146|0|68.4798
 Royal_Tart__3|-3.51211|0|5.64073
 
+Layer_Skeleton_Shield_2__6|0|0|0

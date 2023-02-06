@@ -69,7 +69,7 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
  {
-	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSkill_Create())
 		return;
 
 	__super::Tick(TimeDelta);
@@ -83,7 +83,7 @@ void CFinn::Tick(_double TimeDelta)
 
 void CFinn::Late_Tick(_double TimeDelta)
 {
-	if (true == CSkill_Manager::GetInstance()->Get_ChangeSKill_Create())
+	if (true == CSkill_Manager::GetInstance()->Get_ChangeSkill_Create())
 		return;
 
 	__super::Late_Tick(TimeDelta);
@@ -674,6 +674,7 @@ void CFinn::Key_Input(_double TimeDelta)
 #pragma region ÀÌµ¿
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
+		m_bAttack_Sound = false;
 		pGameInstance->Stop_Sound(1);
 		pGameInstance->Stop_Sound(2);
 
@@ -687,6 +688,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
+		m_bAttack_Sound = false;
 		pGameInstance->Stop_Sound(1);
 		pGameInstance->Stop_Sound(2);
 
@@ -700,6 +702,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
+		m_bAttack_Sound = false;
 		pGameInstance->Stop_Sound(1);
 		pGameInstance->Stop_Sound(2);
 
@@ -713,6 +716,7 @@ void CFinn::Key_Input(_double TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
+		m_bAttack_Sound = false;
 		pGameInstance->Stop_Sound(1);
 		pGameInstance->Stop_Sound(2);
 
@@ -866,8 +870,13 @@ void CFinn::Key_Input(_double TimeDelta)
 		}
 		else
 		{
-			pGameInstance->Play_Sound(TEXT("Finn_Attack.mp3"), 0.7f, false, 1);
-			pGameInstance->Play_Sound(TEXT("Finn_Sword.mp3"), 0.7f, false, 2);
+			if (false == m_bAttack_Sound)
+			{
+				m_bAttack_Sound = true;
+
+				pGameInstance->Play_Sound(TEXT("Finn_Attack.mp3"), 0.7f, false, 1);
+				pGameInstance->Play_Sound(TEXT("Finn_Sword.mp3"), 0.7f, false, 2);
+			}
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::ATTACK);
 		}
 	}
@@ -889,6 +898,7 @@ void CFinn::Space_Attack_Tick(_double TimeDelta)
 
 	if (m_pModelCom->Get_Finished())
 	{
+		m_bAttack_Sound = false;
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance); 
 		pGameInstance->Stop_Sound(1);
 		RELEASE_INSTANCE(CGameInstance);

@@ -75,13 +75,22 @@ void CM_Tree_Witch::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	if (1 == m_fAlpha)
+	// CutScene 가 실행 되고 난 이후에는 xray 을 사용하지 않는다.
+	static _bool bXray;
+
+	if (true == bXray)
+		return;
+	else
 	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
-		RELEASE_INSTANCE(CGameInstance)
+		if (true == CSkill_Manager::GetInstance()->Get_ChangeSkill_Create())
+			bXray = true;
 	}
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CM_Tree_Witch::Render()
@@ -127,9 +136,6 @@ HRESULT CM_Tree_Witch::Render()
 
 HRESULT CM_Tree_Witch::Render_XRay()
 {
-	if (8.0f > CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
-		return S_OK;
-
 	if (FAILED(__super::Render_XRay()))
 		return E_FAIL;
 

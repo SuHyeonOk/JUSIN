@@ -91,15 +91,6 @@ HRESULT CUI_MninMap_Player::Render()
 
 	m_pVIBufferCom->Render();
 
-	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//_tchar szCount[MAX_PATH];
-	//wsprintf(szCount, TEXT("Jake Son : %d"), CUI_Manager::GetInstance()->Get_JakeSon_Count());
-
-	//pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(1137.f, 164.f), 0.f, _float2(0.35f, 0.33f));
-
-	//RELEASE_INSTANCE(CGameInstance);
-
 	return S_OK;
 }
 

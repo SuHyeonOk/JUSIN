@@ -258,7 +258,7 @@ void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 		m_tPlayerInfo.fHPMax += 10.0f;					// 공격력 증가
 		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
 		m_tPlayerInfo.fExp = 0.0f;						// 경험치 0 으로 초기화
-		m_tPlayerInfo.fExpMax += 50.0f;					// 최대 경험치 증가
+		m_tPlayerInfo.fExpMax += 100.0f;				// 최대 경험치 증가
 		m_tPlayerInfo.fAttack += 10.0f;					// 공격력 증가
 
 		// UI 초기화

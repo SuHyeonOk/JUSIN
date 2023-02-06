@@ -57,7 +57,7 @@ HRESULT CUI_Icon::Initialize(void * pArg)
 void CUI_Icon::Tick(_double TimeDelta)
 {
 	// Jake Son 
-	if(5 <= CUI_Manager::GetInstance()->Get_JakeSon_Count())
+	if(5 == CUI_Manager::GetInstance()->Get_JakeSon_Count())
 		CUI_Manager::GetInstance()->Set_InventoryIcon(INVENTORYICON::ICON_ONE, CSkill_Manager::PLAYERSKILL::SKILL::JAKESON);
 	else
 		CUI_Manager::GetInstance()->Set_InventoryIcon(INVENTORYICON::ICON_ONE, CSkill_Manager::PLAYERSKILL::SKILL::LOOK_JAKESON);
@@ -83,7 +83,7 @@ HRESULT CUI_Icon::Render()
 
 	if (m_eIconIndex == INVENTORYICON::ICON_ONE)
 	{
-		if (5 <= CUI_Manager::GetInstance()->Get_JakeSon_Count())
+		if (5 == CUI_Manager::GetInstance()->Get_JakeSon_Count())
 			return S_OK;
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

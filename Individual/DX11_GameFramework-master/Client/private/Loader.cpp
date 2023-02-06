@@ -1362,6 +1362,10 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Potal_Star"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Golden_Wings_Stars_D.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Potal_Star_Blue */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Potal_Star_Blue"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Golden_Wings_Stars_Blue.png")))))
+		return E_FAIL;
 	
 	// PlayerTalk
 	/* For.Prototype_Component_Texture_PlayerTalk_Jake */
@@ -1501,7 +1505,7 @@ HRESULT CLoader::SkeletonTemp()
 
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton.txt")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
 		return E_FAIL;
 
 	// 2D Bullet

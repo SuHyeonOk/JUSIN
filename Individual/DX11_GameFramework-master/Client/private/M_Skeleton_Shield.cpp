@@ -53,11 +53,11 @@ HRESULT CM_Skeleton_Shield::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.fHP		= 80.0f;
-	m_tMonsterInfo.fMaxHP	= 80.0f;
+	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
+	m_tMonsterInfo.fHP		= 100.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
 	m_tMonsterInfo.fExp		= 70.0f;
-	m_tMonsterInfo.fAttack	= 25.0f;
+	m_tMonsterInfo.fAttack	= 30.0f;
 
 	if (FAILED(Ready_Parts()))
 		return E_FAIL;
@@ -87,14 +87,15 @@ void CM_Skeleton_Shield::Late_Tick(_double TimeDelta)
 
 	__super::Late_Tick(TimeDelta);
 
-	if (1 == m_fAlpha)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (nullptr != m_pRendererCom &&
-			true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
-		RELEASE_INSTANCE(CGameInstance)
-	}
+	// 공격 받고 있을 때, 죽을 때, 케이지 안에 있을 때 Xray 을 호출하지 않는다.
+	if (true == m_bShader_Hit || 1 != m_fAlpha || true == CObj_Manager::GetInstance()->Get_BossCage())
+		return;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (nullptr != m_pRendererCom &&
+		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 2.f))
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+	RELEASE_INSTANCE(CGameInstance)
 }
 
 HRESULT CM_Skeleton_Shield::Render()
