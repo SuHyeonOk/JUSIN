@@ -217,19 +217,32 @@ HRESULT CRenderer::Render_Priority()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_Cloud()
+HRESULT CRenderer::Render_ShadowDepth()
 {
-	for (auto& pGameObject : m_RenderObjects[RENDER_CLOUD])
+	if (FAILED(m_pTarget_Manager->Begin_MRT(L"MRT_LightDepth")))
+		return E_FAIL;
+
+	m_pGraphic_Device->GetDepthStencilSurface(&m_pOriginal_DS_Surface);
+	m_pGraphic_Device->SetDepthStencilSurface(m_pShadow_DS_Surface);
+
+	m_pGraphic_Device->Clear(0, 0, D3DCLEAR_ZBUFFER, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), 1.f, 0);
+
+	for (auto& pGameObject : m_RenderList[RENDER_SHADOWDEPTH])
 	{
 		if (nullptr != pGameObject)
-			pGameObject->Render();
-
+			pGameObject->Render_ShadowDepth();
 		Safe_Release(pGameObject);
 	}
 
-	m_RenderObjects[RENDER_CLOUD].clear();
+	m_RenderList[RENDER_SHADOWDEPTH].clear();
 
-	return S_OK;
+	if (FAILED(m_pTarget_Manager->End_MRT(L"MRT_LightDepth")))
+		return E_FAIL;
+
+	m_pGraphic_Device->SetDepthStencilSurface(m_pOriginal_DS_Surface);
+	Safe_Release(m_pOriginal_DS_Surface);
+
+	return NOERROR;
 }
 
 HRESULT CRenderer::Render_Map_NonAlphaBlend()

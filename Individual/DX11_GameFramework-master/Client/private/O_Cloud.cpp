@@ -85,7 +85,7 @@ void CO_Cloud::Late_Tick(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_CLOUD, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 
 	RELEASE_INSTANCE(CGameInstance)
 }
