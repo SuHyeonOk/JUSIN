@@ -44,6 +44,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
+	if (FAILED(Render_Cloud()))
+		return E_FAIL;
 
 	if (FAILED(Render_XRayBlend()))
 		return E_FAIL;
@@ -211,6 +213,21 @@ HRESULT CRenderer::Render_Priority()
 	}
 
 	m_RenderObjects[RENDER_PRIORITY].clear();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Cloud()
+{
+	for (auto& pGameObject : m_RenderObjects[RENDER_CLOUD])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+
+	m_RenderObjects[RENDER_CLOUD].clear();
 
 	return S_OK;
 }

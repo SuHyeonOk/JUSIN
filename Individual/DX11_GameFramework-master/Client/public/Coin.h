@@ -34,8 +34,8 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Tick(_double TimeDelta) override;
-	virtual void Late_Tick(_double TimeDelta) override;
+	virtual void	Tick(_double TimeDelta) override;
+	virtual void	Late_Tick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 
 	virtual void On_Collision(CGameObject* pOther) override;
@@ -53,6 +53,7 @@ private:
 private:
 	void		CurrentState(const _double & TimeDelta);
 	void		Random_Jump(const _double & TimeDelta);
+	void		Collision(const _double & TimeDelta);
 
 private:
 	COININFO	m_tinCoinInfo;

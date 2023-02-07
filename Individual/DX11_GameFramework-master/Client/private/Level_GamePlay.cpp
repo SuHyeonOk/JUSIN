@@ -52,6 +52,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Cloud(TEXT("Layer_Cloud"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Npc()))
 		return E_FAIL;
 
@@ -144,6 +147,18 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Cloud(const _tchar* pLayerTag)
+{
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_O_Cloud"), &_float3(-10.f, 2.f, -20.f))))
+	//	return E_FAIL;
+
+	//RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
@@ -936,10 +951,12 @@ void CLevel_GamePlay::ImGui_Monster()
 
 void CLevel_GamePlay::ImGui_Envionment()
 {
-	const _char* szObjName[] = { "Butterflies_Bule", "Butterflies_Red", "Butterflies_Yellow" };
+	const _char* szObjName[] = { "Butterflies_Bule", "Butterflies_Red", "Butterflies_Yellow", "Cloud" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_Envionmen", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
+	static _float fObjectY;
+	ImGui::InputFloat("ObjectY", &fObjectY);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -996,6 +1013,13 @@ void CLevel_GamePlay::ImGui_Envionment()
 				return;
 
 			m_iItem_Count++;
+		}
+		else if (3 == iObjNum)
+		{		
+			m_wstObjName = L"Cloud";
+			
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &_float3(m_f3ClickPos.x, fObjectY, m_f3ClickPos.z))))
+				return;
 		}
 	}
 
@@ -1843,6 +1867,12 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 					return E_FAIL;
 			}
+		}
+		wstring wstObjNameTemp(pObjInfo.ObjName);
+		if (TEXT("Cloud") == wstObjNameTemp)
+		{
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &pObjInfo.ObjPos)))
+				return E_FAIL;
 		}
 	}
 

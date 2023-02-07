@@ -237,6 +237,7 @@
     <ClInclude Include="..\public\Obj_Manager.h" />
     <ClInclude Include="..\public\O_BearTrap.h" />
     <ClInclude Include="..\public\O_Box.h" />
+    <ClInclude Include="..\public\O_Cloud.h" />
     <ClInclude Include="..\public\O_Collider.h" />
     <ClInclude Include="..\public\O_Portal.h" />
     <ClInclude Include="..\public\O_TextureObject.h" />
@@ -363,6 +364,7 @@
     <ClCompile Include="..\private\Obj_Manager.cpp" />
     <ClCompile Include="..\private\O_BearTrap.cpp" />
     <ClCompile Include="..\private\O_Box.cpp" />
+    <ClCompile Include="..\private\O_Cloud.cpp" />
     <ClCompile Include="..\private\O_Collider.cpp" />
     <ClCompile Include="..\private\O_Portal.cpp" />
     <ClCompile Include="..\private\O_TextureObject.cpp" />

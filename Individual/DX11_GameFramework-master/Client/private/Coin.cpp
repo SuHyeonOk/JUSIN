@@ -35,24 +35,9 @@ HRESULT CCoin::Initialize(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&m_tinCoinInfo, pArg, sizeof(m_tinCoinInfo));
 
-	if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
-	}
-	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
-	}
-	else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
-	{
-		GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
-		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tinCoinInfo.fPos.x, m_tinCoinInfo.fPos.y, m_tinCoinInfo.fPos.z);
-	}
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(120.f);
+	GameObjectDesc.TransformDesc.f3Pos = m_tinCoinInfo.fPos;
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -69,66 +54,8 @@ void CCoin::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CurrentState(TimeDelta);
-
-	if (m_bPlayer_Collider)	// 충돌 하면 일정시간 후 삭제
-	{
-		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
-
-		// 시간 지나면 삭제
-		m_dDead_TimeAcc += TimeDelta;
-		if (0.5 < m_dDead_TimeAcc)
-		{
-			// 플레이어와의 거리가 완전 가까우면 무조건 삭제
-			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-			if (0.7 > fDistance)
-			{
-				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-				if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
-				{
-					CObj_Manager::GetInstance()->Set_Coin(1);
-					pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.7f);
-				}
-				else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
-				{
-					CObj_Manager::GetInstance()->Set_Coin(2);
-					pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.7f);
-				}
-				else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
-				{
-					CObj_Manager::GetInstance()->Set_Coin(5);
-					pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.7f);
-				}
-				RELEASE_INSTANCE(CGameInstance);
-
-				CGameObject::Set_Dead();
-			}
-		}
-		else if (1 < m_dDead_TimeAcc)
-		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
-			{
-				CObj_Manager::GetInstance()->Set_Coin(1);
-				pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.7f);
-			}
-			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
-			{
-				CObj_Manager::GetInstance()->Set_Coin(2);
-				pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.7f);
-			}
-			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
-			{
-				CObj_Manager::GetInstance()->Set_Coin(5);
-				pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.7f);
-			}
-			RELEASE_INSTANCE(CGameInstance);
-
-
-			CGameObject::Set_Dead();
-			m_dDead_TimeAcc = 0;
-		}
-	}
+	CurrentState(TimeDelta);	// 동전 상태
+	Collision(TimeDelta);		// 플레이어와 충돌한 뒤 상태
 }
 
 void CCoin::Late_Tick(_double TimeDelta)
@@ -155,18 +82,8 @@ HRESULT CCoin::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
-	{
-		if (1 == i) // 그림자 모델 없앰 (비중이 클 수록 모델 순서가 앞에 위치한다.)
-			continue;
-
-		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
-		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
-
-		m_pModelCom->Render(m_pShaderCom, i);
-	}
+	m_pModelCom->Bind_Material(m_pShaderCom, 0, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+	m_pModelCom->Render(m_pShaderCom, 0);
 
 #ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -260,7 +177,9 @@ void CCoin::CurrentState(const _double & TimeDelta)
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
 	}
 	else											// 동전 튀어나오는
+	{
 		Random_Jump(TimeDelta);
+	}
 }
 
 void CCoin::Random_Jump(const _double & TimeDelta)
@@ -300,6 +219,68 @@ void CCoin::Random_Jump(const _double & TimeDelta)
 	{
 		m_pTransformCom->Set_Pos(0.0f);
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 1.f), TimeDelta);
+	}
+}
+
+void CCoin::Collision(const _double & TimeDelta)
+{
+	if (m_bPlayer_Collider)	// 충돌 하면 일정시간 후 삭제
+	{
+		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
+
+		// 시간 지나면 삭제
+		m_dDead_TimeAcc += TimeDelta;
+		if (0.5 < m_dDead_TimeAcc)
+		{
+			// 플레이어와의 거리가 완전 가까우면 무조건 삭제
+			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+			if (0.7 > fDistance)
+			{
+				CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+				if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
+				{
+					CObj_Manager::GetInstance()->Set_Coin(1);
+					pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.7f);
+				}
+				else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
+				{
+					CObj_Manager::GetInstance()->Set_Coin(2);
+					pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.7f);
+				}
+				else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
+				{
+					CObj_Manager::GetInstance()->Set_Coin(5);
+					pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.7f);
+				}
+				RELEASE_INSTANCE(CGameInstance);
+
+				CGameObject::Set_Dead();
+			}
+		}
+		else if (1 < m_dDead_TimeAcc)
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
+			{
+				CObj_Manager::GetInstance()->Set_Coin(1);
+				pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.7f);
+			}
+			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
+			{
+				CObj_Manager::GetInstance()->Set_Coin(2);
+				pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.7f);
+			}
+			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
+			{
+				CObj_Manager::GetInstance()->Set_Coin(5);
+				pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.7f);
+			}
+			RELEASE_INSTANCE(CGameInstance);
+
+
+			CGameObject::Set_Dead();
+			m_dDead_TimeAcc = 0;
+		}
 	}
 }
 

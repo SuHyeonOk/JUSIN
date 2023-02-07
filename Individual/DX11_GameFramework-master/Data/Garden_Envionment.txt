@@ -25,6 +25,7 @@ Butterflies_Bule21|-1.9937|0|39.2887
 Butterflies_Bule22|-3.25102|0|45.6312
 Butterflies_Bule23|1.67978|0|45.9862
 Butterflies_Bule24|-2.43121|0|47.2485
+Butterflies_Bule25|-8.92123|0|-9.39148
 Butterflies_Red0|-5.54029|0|-4.51471
 Butterflies_Red1|-8.8462|0|5.19436
 Butterflies_Red2|-27.0501|0|8.32587
@@ -78,9 +79,11 @@ Butterflies_Yellow26|-10.7505|0|37.6778
 Butterflies_Yellow27|-1.83898|0|45.0877
 Butterflies_Yellow28|-5.36264|0|48.6108
 Butterflies_Yellow29|1.09567|0|45.9485
-
-
-
-
-
-
+Cloud|0.746101|1|16.8616
+Cloud|-14.5612|-1|24.8334
+Cloud|13.7169|1|73.6407
+Cloud|-46.6413|1|56.3905
+Cloud|-35.2175|-1.5|39.5454
+Cloud|-41.6023|1.5|88.987
+Cloud|-20.7356|1|79.5502
+Cloud|29.6747|-1|43.6658

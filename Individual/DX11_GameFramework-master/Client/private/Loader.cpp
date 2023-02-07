@@ -68,6 +68,7 @@
 #include "FamilySword.h"
 #include "PennyCopy.h"
 #include "JakeCopy.h"
+#include "O_Cloud.h"
 
 // NPC
 #include "N_Bubblegum.h"
@@ -449,6 +450,19 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_JakeCopy"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/JakeCopy/JakeCopy.fbx", PivotMatrix))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Cloud_0*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cloud_0"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Cloud/Cloud_0.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Cloud_1*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cloud_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Cloud/Cloud_1.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Cloud_2*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cloud_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Cloud/Cloud_2.fbx", PivotMatrix))))
+		return E_FAIL;
 	
 #pragma endregion
 
@@ -602,6 +616,13 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Collider"),
 		CO_Collider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Cloud
+	/* For.Prototype_GameObject_O_Cloud */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Cloud"),
+		CO_Cloud::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("·Îµù³¡. "));

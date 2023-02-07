@@ -76,9 +76,6 @@
     <Filter Include="02.GameObjects\Monster\Magic_Man">
       <UniqueIdentifier>{e335d783-7ccf-419c-b0a6-83860d25423f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Sky">
-      <UniqueIdentifier>{8655c6ab-9198-4bdc-aae8-93973bbffeba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\PlayerSkill">
       <UniqueIdentifier>{2b45075f-075f-4884-a753-ab10792ce700}</UniqueIdentifier>
     </Filter>
@@ -196,6 +193,9 @@
     <Filter Include="02.GameObjects\Map\Terrain">
       <UniqueIdentifier>{f3c0df30-d83d-4caf-8604-41033dbb6dda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Map\Sky">
+      <UniqueIdentifier>{8655c6ab-9198-4bdc-aae8-93973bbffeba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -301,7 +301,7 @@
       <Filter>97.ShaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Sky.h">
-      <Filter>02.GameObjects\Sky</Filter>
+      <Filter>02.GameObjects\Map\Sky</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Rect_Instancing.h">
       <Filter>02.GameObjects\Effect</Filter>
@@ -582,6 +582,9 @@
     <ClInclude Include="..\public\E_NoLook_Alpha.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\O_Cloud.h">
+      <Filter>02.GameObjects\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -666,7 +669,7 @@
       <Filter>02.GameObjects\Monster\Magic_Man</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Sky.cpp">
-      <Filter>02.GameObjects\Sky</Filter>
+      <Filter>02.GameObjects\Map\Sky</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Rect_Instancing.cpp">
       <Filter>02.GameObjects\Effect</Filter>
@@ -949,6 +952,9 @@
     </ClCompile>
     <ClCompile Include="..\private\E_NoLook_Alpha.cpp">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\O_Cloud.cpp">
+      <Filter>02.GameObjects\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

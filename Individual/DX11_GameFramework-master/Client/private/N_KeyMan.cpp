@@ -85,7 +85,7 @@ void CN_KeyMan::Tick(_double TimeDelta)
 			break;
 
 		case 4:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n거위 아저씨께서 \n왕국을지키고있다는 증거로 열쇠 3개를 모아오면 \n특별한 물건을 판매하신다고 하셨어요!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n추즈 거위씨가 \n왕국을지키고있다는 증거로 열쇠 3개를 모아오면 \n특별한 물건을 판매하신다고 하셨어요!"));
 			break;
 
 		default:
