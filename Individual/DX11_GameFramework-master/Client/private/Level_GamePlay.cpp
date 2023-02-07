@@ -86,6 +86,14 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_V))
+	{
+		Load_Envionment();
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)

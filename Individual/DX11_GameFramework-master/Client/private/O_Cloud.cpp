@@ -26,16 +26,6 @@ HRESULT CO_Cloud::Initialize_Prototype()
 
 HRESULT CO_Cloud::Initialize(void * pArg)
 {	
-	//if (nullptr != pArg)
-	//	memcpy(&m_tCloud_Desc, pArg, sizeof(CLOUD_DESC));
-
-	//CGameObject::GAMEOBJECTDESC		GameObjectDesc;
-	//ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
-
-	//GameObjectDesc.TransformDesc.fSpeedPerSec = 0.2f;
-	//GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	//GameObjectDesc.TransformDesc.f3Pos = m_tCloud_Desc.f3position;
-
 	_float3	f3Position = { 0.0f, 0.0f, 0.0f };
 
 	if (nullptr != pArg)
@@ -44,7 +34,7 @@ HRESULT CO_Cloud::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.3f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.1f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Position;
 
@@ -57,7 +47,17 @@ HRESULT CO_Cloud::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 0.5f));
+
+	static _int iSizeCount;
+	if (5 > iSizeCount)
+	{
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 0.3f));
+		++iSizeCount;
+	}
+	else
+	{
+		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 0.5f));
+	}
 
 	return S_OK;
 }
@@ -67,6 +67,15 @@ void CO_Cloud::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	Move_Tick(TimeDelta);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_V))
+	{
+		Set_Dead();
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CO_Cloud::Late_Tick(_double TimeDelta)
@@ -159,13 +168,13 @@ void CO_Cloud::Ready_CloudType()
 	case 0:
 	{
 		eCloudType = ONE;
-		iCloudType++;
+		++iCloudType;
 	}
 	break;
 	case 1:
 	{
 		eCloudType = TWO;
-		iCloudType++;
+		++iCloudType;
 	}
 	break;
 	case 2:
@@ -180,10 +189,15 @@ void CO_Cloud::Ready_CloudType()
 void CO_Cloud::Move_Tick(const _double & TimeDelta)
 {
 	m_dMove_TimeAcc += TimeDelta;
-	if (0.5 < m_dMove_TimeAcc)
+	if (10.0 < m_dMove_TimeAcc)
+	{
+		m_bOpposition = !m_bOpposition;
+		m_dMove_TimeAcc = 0.0;
+	}
+
+	if (false == m_bOpposition)
 	{
 		m_pTransformCom->Go_Right(TimeDelta);
-		m_dMove_TimeAcc = 0.0;
 	}
 	else
 	{

@@ -46,6 +46,7 @@ private:
 private:
 	CLOUDTYPE			eCloudType = CLOUDTYPE_END;
 
+	_bool				m_bOpposition = false;
 	_double				m_dMove_TimeAcc = { 0.0 };
 
 public:
