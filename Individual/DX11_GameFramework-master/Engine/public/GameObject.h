@@ -39,6 +39,7 @@ public:
 	virtual void	Late_Tick(_double TimeDelta);
 	virtual HRESULT Render();
 	virtual HRESULT Render_XRay() { return S_OK; }
+	virtual HRESULT Render_ShadowDepth() { return S_OK; }
 
 	virtual void	On_Collision(CGameObject* pOther) {};
 

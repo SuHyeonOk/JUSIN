@@ -12,7 +12,7 @@ class ENGINE_DLL CRenderer final : public CComponent
 public:
 	enum RENDERGROUP { 
 		RENDER_PRIORITY,
-		RENDER_CLOUD,
+		RENDER_SHADOWDEPTH,
 		RENDER_MAP_NONALPHABLEND, 
 		RENDER_NONALPHABLEND,
 		RENDER_XRAYBLEND,
@@ -64,6 +64,28 @@ private:
 
 private:
 	HRESULT Render_DebugObject();
+
+public:
+	typedef struct tagLightDesc
+	{
+		_float fTemp = { 0.1f };
+		_float4 f4LightEye = _float4(-5.0f, 15.0f, -5.0f, 1.0f);
+		_float4 f4LightAt = { 60.0f, 0.0f, 60.0f, 1.0f };
+		_float4 f4LightUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+
+	}LIGHTDESC;
+
+	void Set_LightDesc(LIGHTDESC * LightDesc)
+	{
+		memcpy(&m_LightDesc, LightDesc, sizeof(LIGHTDESC));
+	}
+	LIGHTDESC Get_LightDesc()
+	{
+		return m_LightDesc;
+	}
+
+private:
+	LIGHTDESC m_LightDesc;
 
 public:
 	static CRenderer*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

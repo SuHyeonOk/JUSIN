@@ -86,7 +86,7 @@ void CLevel_Skleton::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
-	ImGui_Light();
+	//ImGui_Light();
 }
 
 void CLevel_Skleton::Late_Tick(_double TimeDelta)

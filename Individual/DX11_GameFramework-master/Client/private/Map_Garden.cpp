@@ -41,25 +41,7 @@ void CMap_Garden::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_dWindSound_TimeAcc += TimeDelta;
-	if (15.0 < m_dWindSound_TimeAcc)	// 10 초 마다 한 번씩 바람이 나오도록 한다.
-		m_dWindSound_TimeAcc = 0.0;
-	if (0.0 == m_dWindSound_TimeAcc)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("Cine_Death_Death_Vortex.ogg"), 0.3f);
-		RELEASE_INSTANCE(CGameInstance);
-	}
-
-	m_dWindSound_TimeAcc += TimeDelta;
-	if (10.0 < m_dWindSound_TimeAcc)	// 10 초 마다 한 번씩 바람이 나오도록 한다.
-		m_dWindSound_TimeAcc = 0.0;
-	if (0.0 == m_dWindSound_TimeAcc)
-	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("sfx_character_fall.ogg"), 0.4f);
-		RELEASE_INSTANCE(CGameInstance);
-	}
+	Sound_Tick(TimeDelta);
 }
 
 void CMap_Garden::Late_Tick(_double TimeDelta)
@@ -67,7 +49,10 @@ void CMap_Garden::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
+	{
+		//m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this);
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_MAP_NONALPHABLEND, this);
+	}
 }
 
 HRESULT CMap_Garden::Render()
@@ -87,6 +72,11 @@ HRESULT CMap_Garden::Render()
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 3);
 	}
 
+	return S_OK;
+}
+
+HRESULT CMap_Garden::Render_ShadowDepth()
+{
 	return S_OK;
 }
 
@@ -125,27 +115,32 @@ HRESULT CMap_Garden::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-
-	/* For.Lights */
-	//const LIGHTDESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	//if (nullptr == pLightDesc)
-	//	return E_FAIL;
-	
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-	//	return E_FAIL;
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Set_RawValue("g_vCamPosition", &pGameInstance->Get_CamPosition(), sizeof(_float4))))
-	//	return E_FAIL;
-
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CMap_Garden::Sound_Tick(const _double & TimeDelta)
+{
+	m_dWindSound_TimeAcc += TimeDelta;
+	if (15.0 < m_dWindSound_TimeAcc)	// 10 초 마다 한 번씩 바람이 나오도록 한다.
+		m_dWindSound_TimeAcc = 0.0;
+	if (0.0 == m_dWindSound_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Cine_Death_Death_Vortex.ogg"), 0.3f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	m_dWindSound_TimeAcc += TimeDelta;
+	if (10.0 < m_dWindSound_TimeAcc)	// 10 초 마다 한 번씩 바람이 나오도록 한다.
+		m_dWindSound_TimeAcc = 0.0;
+	if (0.0 == m_dWindSound_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_character_fall.ogg"), 0.4f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 CMap_Garden * CMap_Garden::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

@@ -43,6 +43,8 @@ HRESULT CRenderTarget::Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixe
 
 	m_vClearColor = *pClearColor;
 
+	// TODO : ±Ì¿Ã ∫‰
+	
 	return S_OK;
 }
 

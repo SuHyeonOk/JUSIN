@@ -24,6 +24,7 @@ public:
 	virtual void			Tick(_double TimeDelta) override;
 	virtual void			Late_Tick(_double TimeDelta) override;
 	virtual HRESULT			Render() override;
+	virtual HRESULT			Render_ShadowDepth() override;
 
 private:
 	CShader*				m_pShaderCom = nullptr;
@@ -33,6 +34,9 @@ private:
 private:
 	HRESULT					SetUp_Components();
 	HRESULT					SetUp_ShaderResources();
+
+private:
+	void					Sound_Tick(const _double & TimeDelta);
 
 private:
 	_double					m_dWindSound_TimeAcc = 0.0f;

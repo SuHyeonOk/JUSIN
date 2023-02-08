@@ -68,88 +68,87 @@ void CLevel_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (pGameInstance->Key_Down(DIK_9))
-		pGameInstance->Set_ChangeLight(true);	// 변경한 데이터 사용
-	if (pGameInstance->Key_Down(DIK_0))
-		pGameInstance->Set_ChangeLight(false);	// 일반 사용
-
-
-	static _float					arrfPosition[4] = { 0.0f };
-	//static _float					asdfd[4] = { 0.0f };
-	static _float					Range = { 0.0f };
-	static _float					arrfDiffuse[4] = { 0.0f };
-	static _float					arrfAmbient[4] = { 0.0f };
-
-	ImGui::InputFloat4("Positiont", arrfPosition);
-	//ImGui::InputFloat4("asdfd", asdfd);
-	ImGui::InputFloat("Range", &Range);
-	ImGui::InputFloat4("Diffuse", arrfDiffuse);
-	ImGui::InputFloat4("Ambient", arrfAmbient);
-
-	if (ImGui::Button("Set_Light"))
-	{
-		LIGHTDESC			LightDesc;
-		ZeroMemory(&LightDesc, sizeof LightDesc);
-
-		//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-		//LightDesc.isEnable = true;
-		//LightDesc.vDirection = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
-		//LightDesc.vDiffuse = _float4(asdfd[0], asdfd[1], asdfd[2], asdfd[3]);
-		//LightDesc.vAmbient = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
-		//LightDesc.vSpecular = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
-
-		LightDesc.eType = LIGHTDESC::TYPE_POINT;
-		LightDesc.isEnable = true;
-		LightDesc.vPosition = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
-		LightDesc.fRange = Range;
-		LightDesc.vDiffuse = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
-		LightDesc.vAmbient = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
-		LightDesc.vSpecular = LightDesc.vDiffuse;
-
-		if (FAILED(pGameInstance->Set_ChangeLight(m_pDevice, m_pContext, LightDesc, 3)))
-			return;
-	}
-
-	if (ImGui::Button("Add_Light"))
-	{
-		LIGHTDESC			LightDesc;
-		ZeroMemory(&LightDesc, sizeof LightDesc);
-
-		LightDesc.eType = LIGHTDESC::TYPE_POINT;
-		LightDesc.isEnable = true;
-		LightDesc.vPosition = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
-		LightDesc.fRange = Range;
-		LightDesc.vDiffuse = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
-		LightDesc.vAmbient = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
-		LightDesc.vSpecular = LightDesc.vDiffuse;
-
-		if (FAILED(pGameInstance->Add_ChangeLight(m_pDevice, m_pContext, LightDesc, 0)))
-			return;
-	}
-
-	if (ImGui::Button("Light Save"))
-	{
-		wofstream fout("../../Data/SkeletonBoss_Light.txt", ios::out | ios::app);
-		if (fout.fail())
-		{
-			MSG_BOX("Failed to Save File");
-			return;
-		}
-
-		fout << arrfPosition[0] << L"|" << arrfPosition[1] << L"|" << arrfPosition[2] << L"|" <<
-			Range << L"|" <<
-			arrfDiffuse[0] << L"|" << arrfDiffuse[1] << L"|" << arrfDiffuse[2] << "\n";
-
-		fout.close();
-	}
-
-	if (ImGui::Button("Light txt"))
-		WinExec("notepad.exe ../../Data/SkeletonBoss_Light.txt", SW_SHOW);
 
 
 
-	RELEASE_INSTANCE(CGameInstance);
+
+	//CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	//static _float					arrfPosition[4] = { 0.0f };
+	////static _float					asdfd[4] = { 0.0f };
+	//static _float					Range = { 0.0f };
+	//static _float					arrfDiffuse[4] = { 0.0f };
+	//static _float					arrfAmbient[4] = { 0.0f };
+
+	//ImGui::InputFloat4("Positiont", arrfPosition);
+	////ImGui::InputFloat4("asdfd", asdfd);
+	//ImGui::InputFloat("Range", &Range);
+	//ImGui::InputFloat4("Diffuse", arrfDiffuse);
+	//ImGui::InputFloat4("Ambient", arrfAmbient);
+
+	//if (ImGui::Button("Set_Light"))
+	//{
+	//	LIGHTDESC			LightDesc;
+	//	ZeroMemory(&LightDesc, sizeof LightDesc);
+
+	//	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	//	//LightDesc.isEnable = true;
+	//	//LightDesc.vDirection = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
+	//	//LightDesc.vDiffuse = _float4(asdfd[0], asdfd[1], asdfd[2], asdfd[3]);
+	//	//LightDesc.vAmbient = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
+	//	//LightDesc.vSpecular = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
+
+	//	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	//	LightDesc.isEnable = true;
+	//	LightDesc.vPosition = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
+	//	LightDesc.fRange = Range;
+	//	LightDesc.vDiffuse = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
+	//	LightDesc.vAmbient = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
+	//	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	//	if (FAILED(pGameInstance->Set_ChangeLight(m_pDevice, m_pContext, LightDesc, 3)))
+	//		return;
+	//}
+
+	//if (ImGui::Button("Add_Light"))
+	//{
+	//	LIGHTDESC			LightDesc;
+	//	ZeroMemory(&LightDesc, sizeof LightDesc);
+
+	//	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	//	LightDesc.isEnable = true;
+	//	LightDesc.vPosition = _float4(arrfPosition[0], arrfPosition[1], arrfPosition[2], arrfPosition[3]);
+	//	LightDesc.fRange = Range;
+	//	LightDesc.vDiffuse = _float4(arrfDiffuse[0], arrfDiffuse[1], arrfDiffuse[2], arrfDiffuse[3]);
+	//	LightDesc.vAmbient = _float4(arrfAmbient[0], arrfAmbient[1], arrfAmbient[2], arrfAmbient[3]);
+	//	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	//	if (FAILED(pGameInstance->Add_ChangeLight(m_pDevice, m_pContext, LightDesc, 0)))
+	//		return;
+	//}
+
+	//if (ImGui::Button("Light Save"))
+	//{
+	//	wofstream fout("../../Data/SkeletonBoss_Light.txt", ios::out | ios::app);
+	//	if (fout.fail())
+	//	{
+	//		MSG_BOX("Failed to Save File");
+	//		return;
+	//	}
+
+	//	fout << arrfPosition[0] << L"|" << arrfPosition[1] << L"|" << arrfPosition[2] << L"|" <<
+	//		Range << L"|" <<
+	//		arrfDiffuse[0] << L"|" << arrfDiffuse[1] << L"|" << arrfDiffuse[2] << "\n";
+
+	//	fout.close();
+	//}
+
+	//if (ImGui::Button("Light txt"))
+	//	WinExec("notepad.exe ../../Data/SkeletonBoss_Light.txt", SW_SHOW);
+
+
+
+	//RELEASE_INSTANCE(CGameInstance);
 }
 
 void CLevel_Skleton_Boss::Late_Tick(_double TimeDelta)

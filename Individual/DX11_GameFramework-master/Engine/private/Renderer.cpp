@@ -44,18 +44,17 @@ HRESULT CRenderer::Draw_RenderGroup()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
-	if (FAILED(Render_Cloud()))
-		return E_FAIL;
-
 	if (FAILED(Render_XRayBlend()))
 		return E_FAIL;
+	//if (FAILED(Render_ShadowDepth()))
+	//	return E_FAIL;
 	if (FAILED(Render_Map_NonAlphaBlend()))
 		return E_FAIL;
 	if (FAILED(Render_NonAlphaBlend()))
 		return E_FAIL;
 
 	/* 셰이드 타겟을 바인딩 하고,
-	셰이드 타겟에다가 명암을 그릴수 있도로 ㄱ처리를 한다. */
+	셰이드 타겟에다가 명암을 그릴수 있도록 처리를 한다. */
 	/* 명암을 그리기위해서는 빛의 정보와 노멀의 정보가 필요하다. */
 	/*노멀벡터의 경우 노멀 렌더타겟으로부터 얻어온다.
 	빛의 정보의 경우 라이트객체로부터 얻어온다. */
@@ -82,6 +81,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 	{
 		m_pTarget_Manager->Render_Debug(TEXT("MRT_Deferred"));
 		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"));
+		m_pTarget_Manager->Render_Debug(TEXT("MRT_LightDepth"));
+		m_pTarget_Manager->Render_Debug(TEXT("MRT_XRay"));
 	}
 #endif
 
@@ -116,8 +117,6 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.Target_Depth */	// 원하면 월드 pos를 넘겨줘도 되는데 Depth 을 넘기는 것이 보다 활용도가 좋다. 그 때는 DXGI_FORMAT_R32G32B32A32_FLOAT 을 사용하면 된다.
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, &_float4(0.f, 1.f, 0.f, 1.f))))
 		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth_XRay"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, &_float4(0.f, 1.f, 0.f, 1.f))))
-		return E_FAIL;
 
 	/* For.Target_Shade */
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Shade"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R16G16B16A16_UNORM, &_float4(0.0f, 0.0f, 0.0f, 1.f))))
@@ -125,6 +124,17 @@ HRESULT CRenderer::Initialize_Prototype()
 
 	/* For.Target_Specular */
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Specular"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R16G16B16A16_UNORM, &_float4(0.0f, 0.0f, 0.0f, 0.f))))
+		return E_FAIL;
+
+	// For.Target_XRay
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Depth_XRay"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, &_float4(0.f, 1.f, 0.f, 1.f))))
+		return E_FAIL;
+
+	_uint		iShadowMapCX = 8000;	// TODO
+	_uint		iShadowMapCY = 6000;
+
+	// For.Target_ShadowDepth // 광원이 바라보는 플레이어의 깊이를 저장한다. (광원이 바라본 상태 에서의 깊이)
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_ShadowDepth"), _int(ViewportDesc.Width), _int(ViewportDesc.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, &_float4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
 	/* For.MRT_Deferred */ /* 디퍼드 렌더링(빛)을 수행하기위해 필요한 데이터들을 저장한 렌더타겟들. */
@@ -141,6 +151,10 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))	// 조명 후에 값을 더 해주는 것 으로 MRT_LightAcc 에 추가한다.
 		return E_FAIL;
 
+	// For.MRT_ShadowDepth(Shadow)
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_LightDepth"), TEXT("Target_ShadowDepth"))))
+		return E_FAIL;
+	/* For.MRT_XRay */
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_XRay"), TEXT("Target_Depth_XRay"))))	
 		return E_FAIL;
 
@@ -159,21 +173,24 @@ HRESULT CRenderer::Initialize_Prototype()
 
 
 
-//#ifdef _DEBUG
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 80.0f, 80.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 380.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth_XRay"), 230.0f, 380.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
-//		return E_FAIL;
-//#endif
+#ifdef _DEBUG
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 80.0f, 80.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Normal"), 80.0f, 230.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth"), 80.0f, 380.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Depth_XRay"), 80.0f, 530.0f, 150.f, 150.f)))
+		return E_FAIL;
+
+
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Shade"), 230.0f, 80.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Specular"), 230.0f, 230.0f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_ShadowDepth"), 230.0f, 380.0f, 150.f, 150.f)))
+		return E_FAIL;
+#endif
 
 	/*LPDIRECT3DDEVICE9		pDevice = nullptr;
 
@@ -219,30 +236,43 @@ HRESULT CRenderer::Render_Priority()
 
 HRESULT CRenderer::Render_ShadowDepth()
 {
-	if (FAILED(m_pTarget_Manager->Begin_MRT(L"MRT_LightDepth")))
+	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_LightDepth"))))
 		return E_FAIL;
 
-	m_pGraphic_Device->GetDepthStencilSurface(&m_pOriginal_DS_Surface);
-	m_pGraphic_Device->SetDepthStencilSurface(m_pShadow_DS_Surface);
-
-	m_pGraphic_Device->Clear(0, 0, D3DCLEAR_ZBUFFER, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), 1.f, 0);
-
-	for (auto& pGameObject : m_RenderList[RENDER_SHADOWDEPTH])
+	for (auto& pGameObject : m_RenderObjects[RENDER_SHADOWDEPTH])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render_ShadowDepth();
 		Safe_Release(pGameObject);
 	}
 
-	m_RenderList[RENDER_SHADOWDEPTH].clear();
+	m_RenderObjects[RENDER_SHADOWDEPTH].clear();
 
-	if (FAILED(m_pTarget_Manager->End_MRT(L"MRT_LightDepth")))
+	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_LightDepth"))))
 		return E_FAIL;
 
-	m_pGraphic_Device->SetDepthStencilSurface(m_pOriginal_DS_Surface);
-	Safe_Release(m_pOriginal_DS_Surface);
+	return S_OK;
+}
 
-	return NOERROR;
+HRESULT CRenderer::Render_XRayBlend()
+{
+	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_XRay"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RENDER_XRAYBLEND])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render_XRay();
+
+		Safe_Release(pGameObject);
+	}
+
+	m_RenderObjects[RENDER_XRAYBLEND].clear();
+
+	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_XRay"))))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CRenderer::Render_Map_NonAlphaBlend()
@@ -285,27 +315,6 @@ HRESULT CRenderer::Render_NonAlphaBlend()
 	//m_pContext->CopyResource(m_pTarget_Manager->Get_Texture2D(TEXT("Target_Depth_Copy")), m_pTarget_Manager->Get_Texture2D(TEXT("Target_Depth")));
 
 	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_Deferred"))))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_XRayBlend()
-{
-	if (FAILED(m_pTarget_Manager->Begin_MRT(m_pContext, TEXT("MRT_XRay"))))
-		return E_FAIL;
-
-	for (auto& pGameObject : m_RenderObjects[RENDER_XRAYBLEND])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render_XRay();
-
-		Safe_Release(pGameObject);
-	}
-
-	m_RenderObjects[RENDER_XRAYBLEND].clear();
-
-	if (FAILED(m_pTarget_Manager->End_MRT(m_pContext, TEXT("MRT_XRay"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -381,6 +390,37 @@ HRESULT CRenderer::Render_Blend()
 
 	if (FAILED(m_pShader->Set_ShaderResourceView("g_DepthTextureXRay", m_pTarget_Manager->Get_SRV(TEXT("Target_Depth_XRay")))))
 		return E_FAIL;
+	//if (FAILED(m_pShader->Set_ShaderResourceView("g_ShadowDepthTexture", m_pTarget_Manager->Get_SRV(TEXT("Target_ShadowDepth")))))
+	//	return E_FAIL;
+
+	////_vector vLightEye = XMVectorSet(-5.0f, 15.0f, -5.0f, 0.0f);
+	////_vector vLightAt = XMVectorSet(60.0f, 0.0f, 60.0f, 0.0f);
+	////_vector vLightUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	//_vector vLightEye = XMLoadFloat4(&m_LightDesc.f4LightEye);
+	//_vector vLightAt = XMLoadFloat4(&m_LightDesc.f4LightAt);
+	//_vector vLightUp = XMLoadFloat4(&m_LightDesc.f4LightUp);
+
+	//_matrix	LightViewMatrix;
+	//LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	//_float4x4	f4LightViewMatrix;
+	//XMStoreFloat4x4(&f4LightViewMatrix, LightViewMatrix);
+
+	//if (FAILED(m_pShader->Set_Matrix("g_LightViewMatrix", &f4LightViewMatrix)))
+	//	return E_FAIL;
+
+	//CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
+
+	//if (FAILED(m_pShader->Set_Matrix("g_ProjMatrixInv", &pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_PROJ))))
+	//	return E_FAIL;
+	//if (FAILED(m_pShader->Set_Matrix("g_ViewMatrixInv", &pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_VIEW))))
+	//	return E_FAIL;
+
+	//RELEASE_INSTANCE(CPipeLine);
+
+	//if (FAILED(m_pShader->Set_RawValue("fTemp", &m_LightDesc.fTemp, sizeof _float)))
+	//	return E_FAIL;
+
 
 	m_pShader->Begin(3);
 	m_pVIBuffer->Render();

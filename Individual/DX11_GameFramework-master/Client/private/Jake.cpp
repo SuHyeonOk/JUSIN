@@ -636,7 +636,7 @@ void CJake::Check_Follow(_double TimeDelta)
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 0.7f, f4Position.z - 0.7f));
 
 			// »ç¿îµå
-			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_splash_pie.ogg"), 0.7f);
+			pGameInstance->Play_Sound(TEXT("Hi_Jake.mp3"), 1.0f);
 
 			m_dNotfollow_TimeAcc = 0;
 		}

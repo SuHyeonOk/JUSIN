@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "..\public\Map_Skeleton_Boss.h"
 #include "GameInstance.h"
+#include "Obj_Manager.h"
+
+#include "Imgui_PropertyEditor.h"	// @
 
 CMap_Skleton_Boss::CMap_Skleton_Boss(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -40,6 +43,28 @@ HRESULT CMap_Skleton_Boss::Initialize(void * pArg)
 void CMap_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	static _float					ffTemp = { 0.0f };
+	static _float					arrLightEye[4] = { 0.0f };
+	static _float					arrLightAt[4] = { 0.0f };
+	static _float					arrLightUp[4] = { 0.0f };
+
+	ImGui::InputFloat("'-'", &ffTemp);
+	ImGui::InputFloat4("LightEye", arrLightEye);
+	ImGui::InputFloat4("LightAt", arrLightAt);
+	ImGui::InputFloat4("LightUp", arrLightUp);
+
+	if (ImGui::Button("Set Light"))
+	{
+		CRenderer::LIGHTDESC	LightDesc;
+
+		LightDesc.fTemp = ffTemp;
+		LightDesc.f4LightEye = _float4(arrLightEye[0], arrLightEye[1], arrLightEye[2], arrLightEye[3]);
+		LightDesc.f4LightAt = _float4(arrLightAt[0], arrLightAt[1], arrLightAt[2], arrLightAt[3]);
+		LightDesc.f4LightUp = _float4(arrLightUp[0], arrLightUp[1], arrLightUp[2], arrLightUp[3]);
+
+		m_pRendererCom->Set_LightDesc(&LightDesc);
+	}
 }
 
 void CMap_Skleton_Boss::Late_Tick(_double TimeDelta)
@@ -47,7 +72,10 @@ void CMap_Skleton_Boss::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	if (nullptr != m_pRendererCom)
+	{
+		//m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this);
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_MAP_NONALPHABLEND, this);
+	}
 }
 
 HRESULT CMap_Skleton_Boss::Render()
@@ -65,6 +93,48 @@ HRESULT CMap_Skleton_Boss::Render()
 		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 3);
+	}
+
+	return S_OK;
+}
+
+HRESULT CMap_Skleton_Boss::Render_ShadowDepth()
+{
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
+
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CRenderer::LIGHTDESC tLightDesc = m_pRendererCom->Get_LightDesc();
+
+	_vector vLightEye = XMLoadFloat4(&tLightDesc.f4LightEye);
+	_vector vLightAt = XMLoadFloat4(&tLightDesc.f4LightAt);
+	_vector vLightUp = XMLoadFloat4(&tLightDesc.f4LightUp);
+
+	_matrix	LightViewMatrix;
+	LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4	f4LightViewMatrix;
+	XMStoreFloat4x4(&f4LightViewMatrix, LightViewMatrix);
+
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &f4LightViewMatrix)))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+	RELEASE_INSTANCE(CGameInstance);
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
+		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		m_pModelCom->Render(m_pShaderCom, i, nullptr, 4);
 	}
 
 	return S_OK;

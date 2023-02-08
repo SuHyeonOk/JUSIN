@@ -42,16 +42,17 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 
 	if (BUTTERFLIES_BLUE == m_tEffectInfo.eType || BUTTERFLIES_RED == m_tEffectInfo.eType || BUTTERFLIES_YELLOW == m_tEffectInfo.eType)
 	{
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 		m_bNeat_TextureTime = 0.07f;
 		m_bFindDistance = 3.0f;
 		Ready_Butterflies();
 	}
 	else if (BUTTERFLIES_LUMINOUS == m_tEffectInfo.eType)
 	{
+		m_pTransformCom->Set_Scaled(_float3(0.2f, 0.2f, 1.f));
 		m_bNeat_TextureTime = 0.09f;
 		m_bFindDistance = 3.0f;
 		Ready_Butterflies();
@@ -78,8 +79,8 @@ HRESULT CE_FlyingEnvironment::Initialize(void * pArg)
 	}
 	else if (FIRESPARKS_SMALL == m_tEffectInfo.eType)
 	{
+		m_pTransformCom->Set_Scaled(_float3(0.3f, 0.3f, 1.f));
 		m_bFindDistance = 5.0f;
-
 	}
 
 	if (FAILED(SetUp_Components()))

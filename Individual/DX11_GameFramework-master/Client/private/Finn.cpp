@@ -98,6 +98,7 @@ void CFinn::Late_Tick(_double TimeDelta)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 		else
 		{
+			//m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this);
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
 		}
@@ -175,6 +176,48 @@ HRESULT CFinn::Render_XRay()
 		m_pModelCom->Bind_Material(m_pShaderXRayCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices", 0);
 	}
+	return S_OK;
+}
+
+HRESULT CFinn::Render_ShadowDepth()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CRenderer::LIGHTDESC tLightDesc = m_pRendererCom->Get_LightDesc();
+
+	_vector vLightEye = XMLoadFloat4(&tLightDesc.f4LightEye);
+	_vector vLightAt = XMLoadFloat4(&tLightDesc.f4LightAt);
+	_vector vLightUp = XMLoadFloat4(&tLightDesc.f4LightUp);
+
+	_matrix	LightViewMatrix;
+	LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4	f4LightViewMatrix;
+	XMStoreFloat4x4(&f4LightViewMatrix, LightViewMatrix);
+
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ViewMatrix", &f4LightViewMatrix)))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+	RELEASE_INSTANCE(CGameInstance);
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		/* 이 모델을 그리기위한 셰이더에 머테리얼 텍스쳐를 전달한다. */
+		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		m_pModelCom->Render(m_pShaderCom, i, nullptr, 4);
+	}
+
 	return S_OK;
 }
 
