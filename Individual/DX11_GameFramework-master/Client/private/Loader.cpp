@@ -75,6 +75,7 @@
 #include "N_KeyMan.h"
 #include "N_Doctor.h"
 #include "N_GooseShop.h"
+#include "N_BMO.h"
 
 // Skill
 #include "S_Change_Magic.h"
@@ -390,6 +391,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_COMMERCE_TEST"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/COMMERCE_TEST/COMMERCE_TEST.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_N_BMO*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_N_BMO"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/NPC/BMO/BMO.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// Obj
 	/* For.Prototype_Component_Model_O_Box*/
@@ -515,6 +520,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_GameObject_N_GooseShop */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_GooseShop"),
 		CN_GooseShop::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_N_BMO */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_N_BMO"),
+		CN_BMO::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Map

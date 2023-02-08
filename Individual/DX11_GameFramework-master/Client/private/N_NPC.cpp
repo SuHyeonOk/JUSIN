@@ -53,8 +53,6 @@ void CN_NPC::Late_Tick(const _double& TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	m_pModelCom->Play_Animation(TimeDelta);
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom &&

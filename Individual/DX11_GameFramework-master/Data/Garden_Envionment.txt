@@ -89,3 +89,13 @@ Cloud|-58|-3|45
 Cloud|-41.6023|-5|88.987
 Cloud|-20.7356|1|85
 Cloud|29.6747|-2|43.6658
+Butterflies_Bule0|-35.9953|2.38419e-07|17.1319
+Butterflies_Red1|-36.9264|0|16.2982
+Butterflies_Red2|-36.9103|-2.38419e-07|12.4115
+Butterflies_Red3|-33.1006|0|12.9214
+Butterflies_Yellow4|-36.1234|0|11.7669
+Butterflies_Yellow5|-32.9407|0|20.6557
+Butterflies_Yellow6|-39.9339|0|21.4761
+Butterflies_Bule7|-40.7417|0|16.4046
+Butterflies_Bule8|-42.3914|-2.38419e-07|13.9406
+Butterflies_Red9|-42.3856|0|15.9075

@@ -186,15 +186,23 @@ HRESULT CLevel_GamePlay::Ready_Layer_Npc()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_KeyMan__0"), TEXT("Prototype_GameObject_N_KeyMan"), &tNpcDesc)))
 		return E_FAIL;
 
+	tNpcDesc.eNpcType = tNpcDesc.BMO;
+	tNpcDesc.TransformDesc.f3Pos = _float3(-41.7723f, 0.0f, 51.0853f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Bmo"), TEXT("Prototype_GameObject_N_BMO"), &tNpcDesc)))
+		return E_FAIL;
+
+	// 전체적인 게임에서 눈에 보이지 않은 콜라이더를 사용하기 위한 객채이다.
 	CO_Collider::COLLIDERINFO		tColliderInfo;
 	tColliderInfo.eType = CO_Collider::COLLIDERINFO::CUTSCENE_ONE;
 	tColliderInfo.f3Pos = _float3(-36.4221f, 0.0f, 42.2799f);
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
 		return E_FAIL;
 
+	// 상점 NPC 이지만, 일반 NPC 와 다르게 행동하기 때문에 NPC를 상속받지 않았다.
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(1.41737f, 0.0f, 44.9208f))))
 		return E_FAIL;
 
+	// 컷씬을 위해서 그냥 껍데기 제이크 이다.
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_JakeCopy"), TEXT("Prototype_GameObject_JakeCopy"), &_float3(-13.5f, 0.2f, 48.0f))))
 		return E_FAIL;
 

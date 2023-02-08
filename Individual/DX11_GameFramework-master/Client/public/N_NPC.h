@@ -17,7 +17,7 @@ class CN_NPC abstract : public CGameObject
 public:
 	typedef struct tagNpcInfo : public CGameObject::GAMEOBJECTDESC
 	{
-		enum NPC { BUBBLEGUM, KEYMAN, DOCTOR, NPC_END };
+		enum NPC { BUBBLEGUM, KEYMAN, DOCTOR, BMO, NPC_END };
 
 		NPC		eNpcType = NPC_END;
 
@@ -42,8 +42,8 @@ protected:	// 자식에게 거의 필수적인 함수
 	virtual HRESULT		SetUp_ShaderResources() { return S_OK; }
 
 protected:
-	virtual void		Help_UI() = 0;
-	virtual HRESULT		UI_Dead() = 0;
+	virtual void		Help_UI() { return; };
+	virtual HRESULT		UI_Dead() { return S_OK; };
 
 protected:
 	CRenderer*			m_pRendererCom = nullptr;

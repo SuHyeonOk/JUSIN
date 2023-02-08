@@ -229,6 +229,7 @@
     <ClInclude Include="..\public\M_Skeleton_Archer.h" />
     <ClInclude Include="..\public\M_Skeleton_Shield.h" />
     <ClInclude Include="..\public\M_Tree_Witch.h" />
+    <ClInclude Include="..\public\N_BMO.h" />
     <ClInclude Include="..\public\N_Bubblegum.h" />
     <ClInclude Include="..\public\N_Doctor.h" />
     <ClInclude Include="..\public\N_GooseShop.h" />
@@ -356,6 +357,7 @@
     <ClCompile Include="..\private\M_Skeleton_Archer.cpp" />
     <ClCompile Include="..\private\M_Skeleton_Shield.cpp" />
     <ClCompile Include="..\private\M_Tree_Witch.cpp" />
+    <ClCompile Include="..\private\N_BMO.cpp" />
     <ClCompile Include="..\private\N_Bubblegum.cpp" />
     <ClCompile Include="..\private\N_Doctor.cpp" />
     <ClCompile Include="..\private\N_GooseShop.cpp" />

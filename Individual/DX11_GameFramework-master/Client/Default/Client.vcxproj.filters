@@ -103,12 +103,6 @@
     <Filter Include="02.GameObjects\Monster\Gonmes">
       <UniqueIdentifier>{739d5a27-9686-45a1-bf45-67009983ed65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\NPC\Bubblegum">
-      <UniqueIdentifier>{5cc1b510-492f-49ae-9980-683e2a1944a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\NPC\KeyMan">
-      <UniqueIdentifier>{34505c58-077b-467d-9b68-a63dad6f7241}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\03.Skeleton">
       <UniqueIdentifier>{cc3e2287-42e1-4d72-b5ed-d07acf538ef3}</UniqueIdentifier>
     </Filter>
@@ -120,9 +114,6 @@
     </Filter>
     <Filter Include="02.GameObjects\Monster\Skeleton_Archer">
       <UniqueIdentifier>{b19ab74e-108f-421b-873e-f66cc82ebc8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\NPC\Doctor">
-      <UniqueIdentifier>{d64680aa-4922-48dc-90fd-50e3d4fcadcb}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Levels\04. Skeleton_Boss">
       <UniqueIdentifier>{c977b577-42fa-42e1-b162-6f240b368d9f}</UniqueIdentifier>
@@ -178,9 +169,6 @@
     <Filter Include="02.GameObjects\Monster\Penny">
       <UniqueIdentifier>{16a22b2a-c103-483b-8075-35a36dd8c4e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\NPC\GooseShop">
-      <UniqueIdentifier>{3bc8562f-d42f-4187-b5a8-957c44d108a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Shop">
       <UniqueIdentifier>{08492fe4-290e-41a0-8c8c-b5f49ed48666}</UniqueIdentifier>
     </Filter>
@@ -195,6 +183,9 @@
     </Filter>
     <Filter Include="02.GameObjects\Map\Sky">
       <UniqueIdentifier>{8655c6ab-9198-4bdc-aae8-93973bbffeba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\NPC">
+      <UniqueIdentifier>{56577a52-e0bf-42fa-8da7-9ea5728bb37d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -288,9 +279,6 @@
     <ClInclude Include="..\public\Jake_Weapon.h">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\N_NPC.h">
-      <Filter>02.GameObjects\NPC</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\B_3DBullet.h">
       <Filter>02.GameObjects\Bullet</Filter>
     </ClInclude>
@@ -336,12 +324,6 @@
     <ClInclude Include="..\public\Heart.h">
       <Filter>02.GameObjects\Item</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\N_Bubblegum.h">
-      <Filter>02.GameObjects\NPC\Bubblegum</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\N_KeyMan.h">
-      <Filter>02.GameObjects\NPC\KeyMan</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\O_TextureObject.h">
       <Filter>02.GameObjects\Object\TextureObject</Filter>
     </ClInclude>
@@ -377,9 +359,6 @@
     </ClInclude>
     <ClInclude Include="..\public\M_Skeleton_Archer.h">
       <Filter>02.GameObjects\Monster\Skeleton_Archer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\N_Doctor.h">
-      <Filter>02.GameObjects\NPC\Doctor</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Skeleton_Boss.h">
       <Filter>01.Levels\04. Skeleton_Boss</Filter>
@@ -552,9 +531,6 @@
     <ClInclude Include="..\public\PennyCopy.h">
       <Filter>02.GameObjects\Monster\Penny</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\N_GooseShop.h">
-      <Filter>02.GameObjects\NPC\GooseShop</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\UI_ShopBase.h">
       <Filter>02.GameObjects\UI\Shop</Filter>
     </ClInclude>
@@ -584,6 +560,24 @@
     </ClInclude>
     <ClInclude Include="..\public\O_Cloud.h">
       <Filter>02.GameObjects\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\N_NPC.h">
+      <Filter>02.GameObjects\NPC\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\N_BMO.h">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\N_KeyMan.h">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\N_GooseShop.h">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\N_Bubblegum.h">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\N_Doctor.h">
+      <Filter>02.GameObjects\NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -659,9 +653,6 @@
     <ClCompile Include="..\private\Jake_Weapon.cpp">
       <Filter>02.GameObjects\Player\Jake</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\N_NPC.cpp">
-      <Filter>02.GameObjects\NPC</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\B_3DBullet.cpp">
       <Filter>02.GameObjects\Bullet</Filter>
     </ClCompile>
@@ -707,12 +698,6 @@
     <ClCompile Include="..\private\Page.cpp">
       <Filter>02.GameObjects\Item</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\N_Bubblegum.cpp">
-      <Filter>02.GameObjects\NPC\Bubblegum</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\N_KeyMan.cpp">
-      <Filter>02.GameObjects\NPC\KeyMan</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\O_TextureObject.cpp">
       <Filter>02.GameObjects\Object\TextureObject</Filter>
     </ClCompile>
@@ -748,9 +733,6 @@
     </ClCompile>
     <ClCompile Include="..\private\M_Skeleton_Archer.cpp">
       <Filter>02.GameObjects\Monster\Skeleton_Archer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\N_Doctor.cpp">
-      <Filter>02.GameObjects\NPC\Doctor</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Skeleton_Boss.cpp">
       <Filter>01.Levels\04. Skeleton_Boss</Filter>
@@ -923,9 +905,6 @@
     <ClCompile Include="..\private\PennyCopy.cpp">
       <Filter>02.GameObjects\Monster\Penny</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\N_GooseShop.cpp">
-      <Filter>02.GameObjects\NPC\GooseShop</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\UI_ShopBase.cpp">
       <Filter>02.GameObjects\UI\Shop</Filter>
     </ClCompile>
@@ -955,6 +934,24 @@
     </ClCompile>
     <ClCompile Include="..\private\O_Cloud.cpp">
       <Filter>02.GameObjects\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_NPC.cpp">
+      <Filter>02.GameObjects\NPC\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_BMO.cpp">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_KeyMan.cpp">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_GooseShop.cpp">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_Doctor.cpp">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\N_Bubblegum.cpp">
+      <Filter>02.GameObjects\NPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

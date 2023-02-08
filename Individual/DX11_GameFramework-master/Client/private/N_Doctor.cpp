@@ -95,6 +95,7 @@ void CN_Doctor::Tick(_double TimeDelta)
 void CN_Doctor::Late_Tick(_double TimeDelta)
 {
 	CN_NPC::Late_Tick(TimeDelta);
+	m_pModelCom->Play_Animation(TimeDelta);
 }
 
 HRESULT CN_Doctor::Render()
