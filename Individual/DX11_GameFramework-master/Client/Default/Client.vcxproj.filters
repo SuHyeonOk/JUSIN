@@ -187,6 +187,9 @@
     <Filter Include="02.GameObjects\NPC\NPC">
       <UniqueIdentifier>{56577a52-e0bf-42fa-8da7-9ea5728bb37d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\PlayerSkill\Finn_and_Jake">
+      <UniqueIdentifier>{be6626db-101b-46e8-a2fd-a9f5b8363fce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -579,6 +582,9 @@
     <ClInclude Include="..\public\N_Doctor.h">
       <Filter>02.GameObjects\NPC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\S_FinnAndJake.h">
+      <Filter>02.GameObjects\PlayerSkill\Finn_and_Jake</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -952,6 +958,9 @@
     </ClCompile>
     <ClCompile Include="..\private\N_Bubblegum.cpp">
       <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\S_FinnAndJake.cpp">
+      <Filter>02.GameObjects\PlayerSkill\Finn_and_Jake</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

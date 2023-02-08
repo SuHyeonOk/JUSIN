@@ -68,6 +68,7 @@ private:
 public:
 	typedef struct tagLightDesc
 	{
+		_float fFar = 300.0f;
 		_float fTemp = { 0.1f };
 		_float4 f4LightEye = _float4(-5.0f, 15.0f, -5.0f, 1.0f);
 		_float4 f4LightAt = { 60.0f, 0.0f, 60.0f, 1.0f };

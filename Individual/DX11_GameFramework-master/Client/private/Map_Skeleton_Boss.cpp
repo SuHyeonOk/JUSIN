@@ -44,12 +44,14 @@ void CMap_Skleton_Boss::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	static _float					ffTemp = { 0.0f };
+	static _float					fShaderVealue[2] = { 0.0f };
 	static _float					arrLightEye[4] = { 0.0f };
 	static _float					arrLightAt[4] = { 0.0f };
 	static _float					arrLightUp[4] = { 0.0f };
 
-	ImGui::InputFloat("'-'", &ffTemp);
+	//ImGui::SliderFloat("Far", &fShaderVealue[0], -50.0f, 50.0f);
+	ImGui::InputFloat("Far", &fShaderVealue[0]);
+	ImGui::InputFloat("0.1f", &fShaderVealue[1]);
 	ImGui::InputFloat4("LightEye", arrLightEye);
 	ImGui::InputFloat4("LightAt", arrLightAt);
 	ImGui::InputFloat4("LightUp", arrLightUp);
@@ -58,7 +60,8 @@ void CMap_Skleton_Boss::Tick(_double TimeDelta)
 	{
 		CRenderer::LIGHTDESC	LightDesc;
 
-		LightDesc.fTemp = ffTemp;
+		LightDesc.fFar = fShaderVealue[0];
+		LightDesc.fTemp = fShaderVealue[1];
 		LightDesc.f4LightEye = _float4(arrLightEye[0], arrLightEye[1], arrLightEye[2], arrLightEye[3]);
 		LightDesc.f4LightAt = _float4(arrLightAt[0], arrLightAt[1], arrLightAt[2], arrLightAt[3]);
 		LightDesc.f4LightUp = _float4(arrLightUp[0], arrLightUp[1], arrLightUp[2], arrLightUp[3]);

@@ -82,6 +82,7 @@
 #include "S_Jake_Son.h"
 #include "S_Jake_Son_Transform.h"
 #include "S_Jake_Son_Twister.h"
+#include "S_FinnAndJake.h"
 
 // Weapon
 #include "W_PigWarrior.h"
@@ -377,6 +378,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
 		return E_FAIL;
+	/* For.Prototype_Component_Model_S_FinnAndJake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_FinnAndJake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/FinnAndJake/FinnAndJake.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	// NPC
 	/* For.Prototype_Component_Model_N_Princess_Bubblegum */
@@ -541,6 +546,10 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_S_FinnAndJake */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_FinnAndJake"),
+		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// Item
 	/* For.Prototype_GameObject_Food */
@@ -643,6 +652,37 @@ HRESULT CLoader::Loading_ForGamePlay()
 	return S_OK;
 }
 
+HRESULT CLoader::Loading_ForMiniGame_One()
+{
+	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("버퍼를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다. "));
+	_matrix			PivotMatrix = XMMatrixIdentity();
+	
+	// Map
+	/* For.Prototype_Component_Model_MiniGame_0 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_MiniGame_0"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/MiniGame_0/MiniGame_0.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+
+	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
+
+	m_isFinished = true;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLoader::Loading_ForSkeleton()
 {
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
@@ -654,7 +694,8 @@ HRESULT CLoader::Loading_ForSkeleton()
 
 #pragma region 텍스쳐
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다. ")); ////////////////////////////////////////////////////////////////// 텍스처
-	 // SktBox
+	
+	// SktBox
 	 /* For.Prototype_Component_Texture_Sky_Garden_Night */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Texture_Sky_Garden_Night"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Garden_Night.dds")))))
@@ -1643,6 +1684,11 @@ HRESULT CLoader::SkeletonTemp()
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
+	/* For.Prototype_Component_Model_S_FinnAndJake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_FinnAndJake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/FinnAndJake/FinnAndJake.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_S_Jake_son_D */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_D"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/Jake_son/Jake_son_D/Jake_son_D.fbx", PivotMatrix))))
@@ -1736,6 +1782,11 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_S_Jake_Son */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_S_FinnAndJake */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_FinnAndJake"),
+		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	UI_Create();

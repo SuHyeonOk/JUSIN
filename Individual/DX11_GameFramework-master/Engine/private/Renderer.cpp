@@ -418,9 +418,11 @@ HRESULT CRenderer::Render_Blend()
 
 	//RELEASE_INSTANCE(CPipeLine);
 
-	//if (FAILED(m_pShader->Set_RawValue("fTemp", &m_LightDesc.fTemp, sizeof _float)))
+	//if (FAILED(m_pShader->Set_RawValue("g_fTemp", &m_LightDesc.fTemp, sizeof _float)))
 	//	return E_FAIL;
 
+	//if (FAILED(m_pShader->Set_RawValue("g_fFar", &m_LightDesc.fFar, sizeof _float)))
+	//	return E_FAIL;
 
 	m_pShader->Begin(3);
 	m_pVIBuffer->Render();
