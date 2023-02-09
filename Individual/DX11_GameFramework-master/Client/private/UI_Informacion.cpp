@@ -125,14 +125,14 @@ HRESULT CUI_Informacion::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->Set_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (CObj_Manager::PLAYERINFO::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	{
-		if (FAILED(m_pTextureCom[TYPE_FINN]->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
-			return E_FAIL;
-	}
-	else if (CObj_Manager::PLAYERINFO::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	if (CObj_Manager::PLAYERINFO::JAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		if (FAILED(m_pTextureCom[TYPE_JAKE]->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pTextureCom[TYPE_FINN]->Bind_ShaderResource(m_pShaderCom, "g_Texture")))
 			return E_FAIL;
 	}
 

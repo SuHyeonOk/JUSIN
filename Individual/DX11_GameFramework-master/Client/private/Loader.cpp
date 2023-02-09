@@ -121,6 +121,10 @@
 #include "Boss_Fan.h"
 #include "Boss_S_Wind.h"
 
+// MiniGame
+#include "MiniGmae_Collider.h"
+#include "Knives_Rain.h"
+
 #include "Obj_Manager.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -667,7 +671,13 @@ HRESULT CLoader::Loading_ForMiniGame()
 	// Map
 	/* For.Prototype_Component_Model_MiniGame */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_MiniGame"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/MiniGame/MiniGame.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	//
+	/* For.Prototype_Component_Model_Knives_Rain */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Knives_Rain"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Knives_Rain/Knives_Rain.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -690,6 +700,17 @@ HRESULT CLoader::Loading_ForMiniGame()
 	/* For.Prototype_GameObject_FinnAndJake */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FinnAndJake"),
 		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_MiniGame_Collider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MiniGame_Collider"),
+		CMiniGame_Collider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// 미니 게임 종류
+	/* For.Prototype_GameObject_Knives_Rain */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Knives_Rain"),
+		CKnives_Rain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	SkeletonTemp();

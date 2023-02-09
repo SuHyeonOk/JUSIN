@@ -66,6 +66,24 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 
 	KeyInput(TimeDelta);
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_V))
+	{
+		//////////////////////////// 디버그용
+		_vector vddMyPos;
+		vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+		_float4	f4ddMyPos;
+		XMStoreFloat4(&f4ddMyPos, vddMyPos);
+
+		cout << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
+		//////////////////////////// 디버그용
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+
 	// [0] 올라가기
 	// [1] 손 점프
 	// [2] 핀 손흔들기

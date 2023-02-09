@@ -74,6 +74,7 @@ public:
 	void Go_Left(_double TimeDelta);
 	void Go_Right(_double TimeDelta);
 	void Go_Up(const _double & TimeDelta);
+	void Go_Down(const _double & TimeDelta);
 
 	// Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
 	void Turn(_fvector vAxis, _double TimeDelta);		/* Dynamic 어느 축을 기준으로 시간만큼 회전하는지*/

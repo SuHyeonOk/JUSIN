@@ -697,9 +697,9 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 		pJake_NavigationCom->Set_CellIndex(400);
 
 		// 플레이어 에게 이펙트
-		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(8.0f, 1.5f, 14.0f - 1.0f));
-		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(8.0f, 1.5f, 14.0f - 1.3f));
-		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(8.0f, 1.5f, 14.0f - 1.2f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potal_Create(_float3(8.0f, 1.2f, 14.0f - 1.0f));
+		CEffect_Manager::GetInstance()->Effect_Potal_Star_Create(_float3(8.0f, 1.2f, 14.0f - 1.3f));
+		CEffect_Manager::GetInstance()->Effect_Boss_Potals_Create(_float3(8.0f, 1.2f, 14.0f - 1.2f));
 
 
 		// Cage 를 생성한다.

@@ -17,6 +17,8 @@
 #include "O_Collider.h"
 #include "E_FlyingEnvironment.h"
 
+#include "MiniGmae_Collider.h"
+
 CLevel_MiniGame::CLevel_MiniGame(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -31,6 +33,9 @@ HRESULT CLevel_MiniGame::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Collider()))
+		return E_FAIL;
+	
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -55,6 +60,7 @@ HRESULT CLevel_MiniGame::Initialize()
 	//Load_Object();
 	//Load_Monster();
 	//Load_Envionment();
+	Load_MiniGame();
 
 	return S_OK;
 }
@@ -129,6 +135,22 @@ HRESULT CLevel_MiniGame::Ready_Lights()
 	return S_OK;
 }
 
+HRESULT CLevel_MiniGame::Ready_Layer_Collider()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CMiniGame_Collider::COLLIDERINFO ColliderIndo;
+	ColliderIndo.eType = CMiniGame_Collider::KNIVESRAIN;
+	ColliderIndo.f3Pos = _float3(4.79107f, 0.0f, 9.38578f);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MiniGame_Collider"), TEXT("Prototype_GameObject_MiniGame_Collider"), &ColliderIndo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_MiniGame::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -160,12 +182,12 @@ HRESULT CLevel_MiniGame::Ready_Layer_Camera(const _tchar * pLayerTag)
 #ifdef F2_SKELETON
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
 	eCameraInfo.eLevel = LEVEL_MINIGAME;
-	eCameraInfo.f3Pos = _float3(-10.f, 0.f, -10.f);
+	eCameraInfo.f3Pos = _float3(-5.0f, 0.0f, -20.0f);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 #else
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
+	pObjTransformCom->Set_Pos(_float3(-5.14104f, 3.7f, -25.711f));
 #endif
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -177,7 +199,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_FinnAndJake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Prototype_GameObject_FinnAndJake"), &_float3(-6.f, 0.f, 6.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Prototype_GameObject_FinnAndJake"), &_float3(-5.0f, 0.0f, -20.0f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -201,7 +223,7 @@ void CLevel_MiniGame::ImGui()
 {
 	ImGui::Begin("GamePlayTool");
 
-	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Item", "Object", "Monster", "Envionmen" };
+	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Item", "Object", "Monster", "Envionmen", "Game" };
 	static int iItemNum = 0;
 	ImGui::Combo("##2", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
@@ -217,6 +239,8 @@ void CLevel_MiniGame::ImGui()
 		ImGui_Monster();
 	else if (6 == iItemNum)
 		ImGui_Envionment();
+	else if (7 == iItemNum)
+		ImGui_MiniGame();
 
 	ImGui::End();
 
@@ -841,6 +865,54 @@ void CLevel_MiniGame::ImGui_Envionment()
 
 	if (ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/MiniGmae_Envionment.txt", SW_SHOW);
+}
+
+void CLevel_MiniGame::ImGui_MiniGame()
+{
+	const _char* szObjName[] = { "Knives_Rain" };
+	static int iObjNum = 0;
+	ImGui::Combo("##2_MiniGame", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
+
+	static _float fObjectY;
+	ImGui::InputFloat("ObjectY", &fObjectY);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float4		f4MousePos;
+	f4MousePos = pGameInstance->Get_MousePos();
+
+	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
+
+	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
+	{
+		m_f3ClickPos = { f4MousePos.x, fObjectY, f4MousePos.z };
+
+		if (0 == iObjNum)
+		{
+			m_wstObjName = L"Knives_Rain";
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Knives_Rain"), TEXT("Prototype_GameObject_Knives_Rain"), &m_f3ClickPos)))
+				return;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Envionmen Save"))
+	{
+		wofstream fout("../../Data/MiniGmae.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+	}
+
+	if (ImGui::Button("Data_txt"))
+		WinExec("notepad.exe ../../Data/MiniGmae.txt", SW_SHOW);
 }
 
 HRESULT CLevel_MiniGame::Load_Food()
@@ -1555,6 +1627,65 @@ HRESULT CLevel_MiniGame::Load_Envionment()
 		if (TEXT("Cloud") == wstObjNameTemp)
 		{
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &pObjInfo.ObjPos)))
+				return E_FAIL;
+		}
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_MiniGame::Load_MiniGame()
+{
+	wifstream		fin("../../Data/MiniGmae.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return E_FAIL;
+	}
+
+	_tchar szObjName[MAX_PATH] = L"";
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.f;
+	_float	fObjPosY = 0.f;
+	_float	fObjPosZ = 0.f;
+
+	while (true)
+	{
+		fin.getline(szObjName, MAX_PATH, '|');
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		CDataManager::GetInstance()->Set_PageInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
+	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
+
+	for (auto& pObjInfo : eVecObjInfo)
+	{
+		wstring wstObjNameTemp(pObjInfo.ObjName);
+
+		if (TEXT("Knives_Rain") == wstObjNameTemp)
+		{
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Knives_Rain"), TEXT("Prototype_GameObject_Knives_Rain"), &pObjInfo.ObjPos)))
 				return E_FAIL;
 		}
 	}

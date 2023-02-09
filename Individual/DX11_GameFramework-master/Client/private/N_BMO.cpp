@@ -182,6 +182,16 @@ void CN_BMO::Talk_Tick()
 			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n성공하면 내가 아~ 주~ 좋은걸 줄게 \n얘들아 화이팅!"));
 			break;
 
+		case 4:
+		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Stop_Sound(0);
+			RELEASE_INSTANCE(CGameInstance);
+			CObj_Manager::GetInstance()->Set_NextLevel(true);
+			CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
+		}
+			break;
+
 		default:
 			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n핀, 제이크 화이팅!"));
 			break;

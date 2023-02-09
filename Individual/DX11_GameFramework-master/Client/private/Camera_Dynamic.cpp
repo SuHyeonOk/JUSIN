@@ -54,16 +54,6 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
-	//////////////////////////// 디버그용
-	_vector vddMyPos;
-	vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-	_float4	f4ddMyPos;
-	XMStoreFloat4(&f4ddMyPos, vddMyPos);
-
-	cout << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
-	//////////////////////////// 디버그용
-
 	CurrentCamera_Tick(TimeDelta);
 
 	__super::Tick(TimeDelta);

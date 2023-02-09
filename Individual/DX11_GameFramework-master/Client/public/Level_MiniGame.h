@@ -19,6 +19,7 @@ public:
 
 private:
 	HRESULT Ready_Lights();
+	HRESULT Ready_Layer_Collider();
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_SkyBox(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
@@ -34,6 +35,8 @@ private:
 	void	ImGui_Monster();
 	void	ImGui_Envionment();
 
+	void	ImGui_MiniGame();
+
 private:
 	HRESULT	Load_Food();
 	HRESULT	Load_Coin();
@@ -41,6 +44,8 @@ private:
 	HRESULT	Load_Object();
 	HRESULT	Load_Monster();
 	HRESULT	Load_Envionment();
+
+	HRESULT	Load_MiniGame();
 
 private:
 	const _tchar*	m_szObjName;

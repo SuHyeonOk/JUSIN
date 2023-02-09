@@ -245,6 +245,16 @@ void CTransform::Go_Up(const _double & TimeDelta)
 	Set_State(CTransform::STATE_TRANSLATION, vPosition);
 }
 
+void CTransform::Go_Down(const _double & TimeDelta)
+{
+	_vector	vPosition = Get_State(CTransform::STATE_TRANSLATION);
+	_vector	vUp = Get_State(CTransform::STATE_UP);
+
+	vPosition -= XMVector3Normalize(vUp) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
+
+	Set_State(CTransform::STATE_TRANSLATION, vPosition);
+}
+
 void CTransform::Turn(_fvector vAxis, _double TimeDelta)
 {
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * _float(TimeDelta));
