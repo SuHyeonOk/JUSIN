@@ -210,11 +210,13 @@
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
+    <ClInclude Include="..\public\Level_MiniGame.h" />
     <ClInclude Include="..\public\Level_Skeleton.h" />
     <ClInclude Include="..\public\Level_Skeleton_Boss.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Map_Garden.h" />
+    <ClInclude Include="..\public\Map_MiniGame.h" />
     <ClInclude Include="..\public\Map_Skeleton.h" />
     <ClInclude Include="..\public\Map_Skeleton_Boss.h" />
     <ClInclude Include="..\public\M_Gary_Boss.h" />
@@ -339,11 +341,13 @@
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
+    <ClCompile Include="..\private\Level_MiniGame.cpp" />
     <ClCompile Include="..\private\Level_Skeleton.cpp" />
     <ClCompile Include="..\private\Level_Skeleton_Boss.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Map_Garden.cpp" />
+    <ClCompile Include="..\private\Map_MiniGame.cpp" />
     <ClCompile Include="..\private\Map_Skeleton.cpp" />
     <ClCompile Include="..\private\Map_Skeleton_Boss.cpp" />
     <ClCompile Include="..\private\M_Gary_Boss.cpp" />

@@ -35,7 +35,7 @@ public:
 
 	HRESULT Loading_ForLogo();
 	HRESULT Loading_ForGamePlay();
-	HRESULT Loading_ForMiniGame_One();
+	HRESULT Loading_ForMiniGame();
 	HRESULT Loading_ForSkeleton();
 	HRESULT Loading_ForSkeleton_Boss();
 

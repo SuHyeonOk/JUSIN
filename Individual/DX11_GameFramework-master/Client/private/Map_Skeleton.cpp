@@ -40,28 +40,7 @@ HRESULT CMap_Skeleton::Initialize(void * pArg)
 void CMap_Skeleton::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	
-	static _float					ffTemp = { 0.0f };
-	static _float					arrLightEye[4] = { 0.0f };
-	static _float					arrLightAt[4] = { 0.0f };
-	static _float					arrLightUp[4] = { 0.0f };
 
-	ImGui::InputFloat("'-'", &ffTemp);
-	ImGui::InputFloat4("LightEye", arrLightEye);
-	ImGui::InputFloat4("LightAt", arrLightAt);
-	ImGui::InputFloat4("LightUp", arrLightUp);
-
-	if (ImGui::Button("Set Light"))
-	{
-		CRenderer::LIGHTDESC	LightDesc;
-
-		LightDesc.fTemp = ffTemp;
-		LightDesc.f4LightEye = _float4(arrLightEye[0], arrLightEye[1], arrLightEye[2], arrLightEye[3]);
-		LightDesc.f4LightAt = _float4(arrLightAt[0], arrLightAt[1], arrLightAt[2], arrLightAt[3]);
-		LightDesc.f4LightUp = _float4(arrLightUp[0], arrLightUp[1], arrLightUp[2], arrLightUp[3]);
-
-		m_pRendererCom->Set_LightDesc(&LightDesc);
-	}
 }
 
 void CMap_Skeleton::Late_Tick(_double TimeDelta)

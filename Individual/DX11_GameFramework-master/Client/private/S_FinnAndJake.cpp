@@ -55,6 +55,8 @@ HRESULT CS_FinnAndJake::Initialize(void * pArg)
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE);
+
 	return S_OK;
 }
 

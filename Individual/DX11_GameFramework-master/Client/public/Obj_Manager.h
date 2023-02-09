@@ -23,7 +23,7 @@ public:
 #ifdef F2_SKELETON 
 			FREE, 
 #endif
-			RESET, CUTSCENE_ONE, CUTSCENE_TWO, PLAYER_END };
+			RESET, FINNANDJAKE, CUTSCENE_ONE, CUTSCENE_TWO, PLAYER_END };
 		PLAYER		ePlayer = PLAYER_END;		// 현재 플레이어
 
 		enum STATE {

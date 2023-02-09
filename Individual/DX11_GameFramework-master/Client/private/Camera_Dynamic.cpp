@@ -54,28 +54,17 @@ HRESULT CCamera_Dynamic::Initialize(void * pArg)
 
 void CCamera_Dynamic::Tick(_double TimeDelta)
 {
-	switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
-	{
-	case CObj_Manager::PLAYERINFO::PLAYER::FINN:
-		ToFollow(TimeDelta);
-		break;
-	case CObj_Manager::PLAYERINFO::PLAYER::JAKE:
-		ToFollow(TimeDelta);
-		break;
-	default:
-	{
-	if(LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
-		Action_Garden(TimeDelta);
-	else
-		Action_SkeletonBoss(TimeDelta);
-	}
-		break;
-#ifdef F2_SKELETON
-	case CObj_Manager::PLAYERINFO::PLAYER::FREE:
-		Key_Input(TimeDelta);
-		break;
-#endif
-	}
+	//////////////////////////// 디버그용
+	_vector vddMyPos;
+	vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4	f4ddMyPos;
+	XMStoreFloat4(&f4ddMyPos, vddMyPos);
+
+	cout << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
+	//////////////////////////// 디버그용
+
+	CurrentCamera_Tick(TimeDelta);
 
 	__super::Tick(TimeDelta);
 }
@@ -84,7 +73,6 @@ void CCamera_Dynamic::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);	
 
-	
 }
 
 HRESULT CCamera_Dynamic::Render()
@@ -303,6 +291,82 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 
 	//	//m_pTransformCom->Speed_Chase(vTargetPos, m_fSpeed, TimeDelta);
 	//}
+}
+
+void CCamera_Dynamic::CurrentCamera_Tick(const _double & TimeDelta)
+{
+	switch (CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+	case CObj_Manager::PLAYERINFO::PLAYER::FINN:
+		ToFollow(TimeDelta);
+		break;
+	case CObj_Manager::PLAYERINFO::PLAYER::JAKE:
+		ToFollow(TimeDelta);
+		break;
+	case CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE:
+		FinnAndJake_Tick(TimeDelta);
+		break;
+	default:
+	{
+		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+			Action_Garden(TimeDelta);
+		else
+			Action_SkeletonBoss(TimeDelta);
+	}
+	break;
+#ifdef F2_SKELETON
+	case CObj_Manager::PLAYERINFO::PLAYER::FREE:
+		Key_Input(TimeDelta);
+		break;
+#endif
+	}
+}
+
+void CCamera_Dynamic::FinnAndJake_Tick(const _double & TimeDelta)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)	// 플레이어가 공격중인 상태에서는 움직이지 않는다.
+	{
+		if (pGameInstance->Key_Pressing(DIK_UP))
+		{
+			if (-12.1f < m_fYZ_Move)
+				m_fYZ_Move -= _float(TimeDelta) * 0.1f;
+
+			m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+		}
+		if (pGameInstance->Key_Pressing(DIK_DOWN))
+		{
+			if (-11.9f > m_fYZ_Move)
+				m_fYZ_Move += _float(TimeDelta) * 0.1f;
+
+			m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), m_fYZ_Move);
+		}
+	}
+
+	CTransform * pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Com_Transform"), 0));
+
+	_vector vPlayerPos, vTargetPos;
+	vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+	_float4 vf4TargetPos;
+	XMStoreFloat4(&vf4TargetPos, vPlayerPos);
+	vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
+	vTargetPos = XMLoadFloat4(&vf4TargetPos);
+
+	// 플레이어와의 거리가 일정거리 이상 멀어지게 되면 카메라는 가속을 받아 빠르게 플레이어에게 다가간다.
+
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vPlayerPos - vMyPos;											// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X 값을 뽑아와 거리 확인
+
+	if (7.f < fDistanceX || 6.f > fDistanceX)	// 빠르게 따라간다.		
+		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45);
+	else										// 그냥 따라간다.
+		m_pTransformCom->Chase(vTargetPos, TimeDelta);
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CCamera_Dynamic::Action_Garden(const _double & TimeDelta)

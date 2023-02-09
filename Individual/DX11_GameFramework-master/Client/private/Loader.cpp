@@ -10,6 +10,7 @@
 #include "Map_Garden.h"
 #include "Map_Skeleton.h"
 #include "Map_Skeleton_Boss.h"
+#include "Map_MiniGame.h"
 
 // UI
 #include "UI_.h"
@@ -146,6 +147,9 @@ _uint APIENTRY LoadingThread(void* pArg)
 		break;
 	case LEVEL_GAMEPLAY:
 		pLoader->Loading_ForGamePlay();
+		break;
+	case LEVEL_MINIGAME:
+		pLoader->Loading_ForMiniGame();
 		break;
 	case LEVEL_SKELETON:
 		pLoader->Loading_ForSkeleton();
@@ -546,10 +550,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_S_FinnAndJake */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_FinnAndJake"),
-		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 
 	// Item
 	/* For.Prototype_GameObject_Food */
@@ -652,7 +652,7 @@ HRESULT CLoader::Loading_ForGamePlay()
 	return S_OK;
 }
 
-HRESULT CLoader::Loading_ForMiniGame_One()
+HRESULT CLoader::Loading_ForMiniGame()
 {
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -665,14 +665,34 @@ HRESULT CLoader::Loading_ForMiniGame_One()
 	_matrix			PivotMatrix = XMMatrixIdentity();
 	
 	// Map
-	/* For.Prototype_Component_Model_MiniGame_0 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_SKELETON, TEXT("Prototype_Component_Model_MiniGame_0"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/MiniGame_0/MiniGame_0.fbx", PivotMatrix))))
+	/* For.Prototype_Component_Model_MiniGame */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_MiniGame"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/Skeleton_Boss/Skeleton_Boss.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	/* For.Prototype_Component_Model_S_FinnAndJake */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_FinnAndJake"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/FinnAndJake/FinnAndJake.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을 생성중입니다. "));
+
+	// Map
+	/* For.Prototype_GameObject_Map_MiniGame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_MiniGame"),
+		CMap_MiniGame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_FinnAndJake */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FinnAndJake"),
+		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	SkeletonTemp();
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 
@@ -1574,6 +1594,12 @@ HRESULT CLoader::SkeletonTemp()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	// SktBox
+	/* For.Prototype_Component_Texture_Sky_Garden */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky_Garden"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Garden.dds")))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/Navi_Skeleton_Boss.txt")))))
@@ -1683,11 +1709,6 @@ HRESULT CLoader::SkeletonTemp()
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-	/* For.Prototype_Component_Model_S_FinnAndJake */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_FinnAndJake"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/FinnAndJake/FinnAndJake.fbx", PivotMatrix))))
-		return E_FAIL;
 
 	/* For.Prototype_Component_Model_S_Jake_son_D */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Jake_son_D"),

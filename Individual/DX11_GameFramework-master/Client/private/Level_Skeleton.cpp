@@ -156,8 +156,6 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	CNavigation * pObjNavigationCom = nullptr;
-
 	CTransform * pObjTransformCom;
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
 	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 6.f));
@@ -168,6 +166,7 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
 
+	CNavigation * pObjNavigationCom = nullptr;
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));	
 	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Skeleton.txt"));
 	pObjNavigationCom->Set_CellIndex(2);
@@ -213,9 +212,6 @@ HRESULT CLevel_Skleton::Ready_Layer_Npc()
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(-16.2501f, 0.0f, 66.1685f))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_SKELETON, TEXT("Laye_FinnAanJake"), TEXT("Prototype_GameObject_S_FinnAndJake"), &_float3(-6.f, 0.f, 6.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

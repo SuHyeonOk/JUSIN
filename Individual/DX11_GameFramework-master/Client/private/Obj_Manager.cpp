@@ -218,7 +218,8 @@ void		CObj_Manager::Current_Player()
 	}
 
 	if (CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_ONE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
-		CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		CObj_Manager::PLAYERINFO::PLAYER::CUTSCENE_TWO == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer ||
+		CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		RELEASE_INSTANCE(CGameInstance);
 		return;

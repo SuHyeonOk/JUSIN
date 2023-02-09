@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\public\Level_GamePlay.h"
+#include "..\public\Level_MiniGame.h"
 
 #include <fstream> // @
 #include "Imgui_PropertyEditor.h"	// @
@@ -12,21 +12,18 @@
 #include "Obj_Manager.h"
 #include "O_TextureObject.h"
 #include "M_Monster.h"
-#include "N_NPC.h"
 #include "Food.h"
 #include "Coin.h"
-#include "Page.h"
-#include "S_Jake_Son.h"
 #include "O_Collider.h"
 #include "E_FlyingEnvironment.h"
 
-CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CLevel_MiniGame::CLevel_MiniGame(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
 {
 
 }
 
-HRESULT CLevel_GamePlay::Initialize()
+HRESULT CLevel_MiniGame::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -40,67 +37,43 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Map(TEXT("Layer_Garden"))))
+	if (FAILED(Ready_Layer_Map(TEXT("Layer_MiniGame"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_FinnAndJake(TEXT("Layer_FinnAndJake"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Finn(TEXT("Layer_Finn"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Jake(TEXT("Layer_Jake"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Npc()))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Jake_Son(TEXT("Layer_Jake_Son"))))
-		return E_FAIL;
-
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	// 파일 읽기
-	Load_Food();
-	Load_Coin();
-	Load_Page();
-	Load_Item();
-	Load_Object();
-	Load_Monster();
-	Load_Envionment();
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_UI"), TEXT("Prototype_GameObject_UI"))))
-		return E_FAIL;
-	RELEASE_INSTANCE(CGameInstance);
+	//Load_Food();
+	//Load_Coin();
+	//Load_Item();
+	//Load_Object();
+	//Load_Monster();
+	//Load_Envionment();
 
 	return S_OK;
 }
 
-void CLevel_GamePlay::Tick(_double TimeDelta)
+void CLevel_MiniGame::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_V))
-	{
-		Load_Envionment();
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CLevel_GamePlay::Late_Tick(_double TimeDelta)
+void CLevel_MiniGame::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
 	if (CObj_Manager::GetInstance()->Get_NextLevel())
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_MINIGAME))))
 		{
 			RELEASE_INSTANCE(CGameInstance);
 			return;
@@ -109,17 +82,17 @@ void CLevel_GamePlay::Late_Tick(_double TimeDelta)
 	}
 }
 
-HRESULT CLevel_GamePlay::Render()
+HRESULT CLevel_MiniGame::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	//SetWindowText(g_hWnd, TEXT("Level : GAMEPLAY"));
+	//SetWindowText(g_hWnd, TEXT("Level : GMAE_MINIGMAE"));
 
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Lights()
+HRESULT CLevel_MiniGame::Ready_Lights()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -156,47 +129,7 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Npc()
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CN_NPC::NPCDESC					tNpcDesc;
-	tNpcDesc.eNpcType = tNpcDesc.BUBBLEGUM;
-	tNpcDesc.TransformDesc.f3Pos = _float3(-9.8105f, 0.f, -5.1134f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Bubblegum__0"), TEXT("Prototype_GameObject_N_Bubblegum"), &tNpcDesc)))
-		return E_FAIL;
-
-	tNpcDesc.eNpcType = tNpcDesc.KEYMAN;
-	tNpcDesc.TransformDesc.f3Pos = _float3(3.53753f, 0.f, 56.2821f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_KeyMan__0"), TEXT("Prototype_GameObject_N_KeyMan"), &tNpcDesc)))
-		return E_FAIL;
-
-	tNpcDesc.eNpcType = tNpcDesc.BMO;
-	tNpcDesc.TransformDesc.f3Pos = _float3(-41.7723f, 0.0f, 51.0853f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Bmo"), TEXT("Prototype_GameObject_N_BMO"), &tNpcDesc)))
-		return E_FAIL;
-
-	// 전체적인 게임에서 눈에 보이지 않은 콜라이더를 사용하기 위한 객채이다.
-	CO_Collider::COLLIDERINFO		tColliderInfo;
-	tColliderInfo.eType = CO_Collider::COLLIDERINFO::CUTSCENE_ONE;
-	tColliderInfo.f3Pos = _float3(-36.4221f, 0.0f, 42.2799f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider_0"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
-		return E_FAIL;
-
-	// 상점 NPC 이지만, 일반 NPC 와 다르게 행동하기 때문에 NPC를 상속받지 않았다.
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(1.41737f, 0.0f, 44.9208f))))
-		return E_FAIL;
-
-	// 컷씬을 위해서 그냥 껍데기 제이크 이다.
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_JakeCopy"), TEXT("Prototype_GameObject_JakeCopy"), &_float3(-13.5f, 0.2f, 48.0f))))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
+HRESULT CLevel_MiniGame::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -208,11 +141,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_SkyBox(const _tchar * pLayerTag)
+HRESULT CLevel_MiniGame::Ready_Layer_SkyBox(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Sky"))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pLayerTag, TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -220,26 +153,31 @@ HRESULT CLevel_GamePlay::Ready_Layer_SkyBox(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
+HRESULT CLevel_MiniGame::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+#ifdef F2_SKELETON
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
-	eCameraInfo.eLevel = LEVEL_GAMEPLAY;
+	eCameraInfo.eLevel = LEVEL_MINIGAME;
 	eCameraInfo.f3Pos = _float3(-10.f, 0.f, -10.f);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
+#else
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
+#endif
 
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Finn(const _tchar * pLayerTag)
+HRESULT CLevel_MiniGame::Ready_Layer_FinnAndJake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Finn"), &_float3(-10.f, 0.f, -10.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Prototype_GameObject_FinnAndJake"), &_float3(-6.f, 0.f, 6.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -247,11 +185,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Finn(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
+HRESULT CLevel_MiniGame::Ready_Layer_Map(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Jake"), &_float3(-13.5f, 0.2f, 48.0f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pLayerTag, TEXT("Prototype_GameObject_Map_MiniGame"))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -259,48 +197,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Jake(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Jake_Son(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CS_Jake_Son::JAKESONINFO tJakeSonInfo;
-	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_A;
-	tJakeSonInfo.fPos = _float3(-16.23f, 0.2f, 7.0f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
-		return E_FAIL;
-
-	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_B;
-	tJakeSonInfo.fPos = _float3(-30.0f, 0.2f, 20.0f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
-		return E_FAIL;
-
-	tJakeSonInfo.eJakeSon = CS_Jake_Son::JAKESONINFO::JAKESON::JAKE_SON_C;
-	tJakeSonInfo.fPos = _float3(-21.5f, 0.2f, 65.0f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_S_Jake_Son"), &tJakeSonInfo)))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_Map(const _tchar * pLayerTag)
-{
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Map_Garden"))))
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-void CLevel_GamePlay::ImGui()
+void CLevel_MiniGame::ImGui()
 {
 	ImGui::Begin("GamePlayTool");
 
-	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Page", "Item", "Object", "Monster", "Envionmen" };
+	const _char* ItmeName[] = { "Empty", "Food", "Coin", "Item", "Object", "Monster", "Envionmen" };
 	static int iItemNum = 0;
 	ImGui::Combo("##2", &iItemNum, ItmeName, IM_ARRAYSIZE(ItmeName));
 
@@ -309,14 +210,12 @@ void CLevel_GamePlay::ImGui()
 	else if (2 == iItemNum)
 		ImGui_Coin();
 	else if (3 == iItemNum)
-		ImGui_Page();
-	else if (4 == iItemNum)
 		ImGui_Item();
-	else if (5 == iItemNum)
+	else if (4 == iItemNum)
 		ImGui_Object();
-	else if (6 == iItemNum)
+	else if (5 == iItemNum)
 		ImGui_Monster();
-	else if (7 == iItemNum)
+	else if (6 == iItemNum)
 		ImGui_Envionment();
 
 	ImGui::End();
@@ -324,7 +223,7 @@ void CLevel_GamePlay::ImGui()
 	return;
 }
 
-void CLevel_GamePlay::ImGui_Food()
+void CLevel_MiniGame::ImGui_Food()
 {
 #pragma region Food
 	const _char* szObjName[] = { "Apple_Pie", "Royal_Tart", "Burrito" };
@@ -353,7 +252,7 @@ void CLevel_GamePlay::ImGui_Food()
 
 			m_szObjName = m_wstObjName.c_str();	// wstring -> conat wchar*
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iRoyal_Tart_Count++;
@@ -369,7 +268,7 @@ void CLevel_GamePlay::ImGui_Food()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iRoyal_Tart_Count++;
@@ -385,7 +284,7 @@ void CLevel_GamePlay::ImGui_Food()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
 				return;
 
 			m_iBurrito_Count++;
@@ -396,7 +295,7 @@ void CLevel_GamePlay::ImGui_Food()
 
 	if (ImGui::Button("Food Save"))
 	{
-		wofstream fout("../../Data/Food.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGmae_Food.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -413,11 +312,11 @@ void CLevel_GamePlay::ImGui_Food()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Food.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/MiniGmae_Food.txt", SW_SHOW);
 #pragma endregion Food
 }
 
-void CLevel_GamePlay::ImGui_Coin()
+void CLevel_MiniGame::ImGui_Coin()
 {
 	const _char* szObjName[] = { "CoinBronze", "CoinSilver", "CoinGold" };
 	static int iObjNum = 0;
@@ -446,7 +345,7 @@ void CLevel_GamePlay::ImGui_Coin()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
 
 			m_iCoinBronze_Count++;
@@ -462,7 +361,7 @@ void CLevel_GamePlay::ImGui_Coin()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
 
 			m_iCoinSilver_Count++;
@@ -478,7 +377,7 @@ void CLevel_GamePlay::ImGui_Coin()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 				return;
 
 			m_iCoinGold_Count++;
@@ -489,7 +388,7 @@ void CLevel_GamePlay::ImGui_Coin()
 
 	if (ImGui::Button("Coin Save"))
 	{
-		wofstream fout("../../Data/Coin.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGmae_Coin.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -502,110 +401,10 @@ void CLevel_GamePlay::ImGui_Coin()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Coin.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/MiniGmae_Coin.txt", SW_SHOW);
 }
 
-void CLevel_GamePlay::ImGui_Page()
-{
-	const _char* szObjName[] = { "Page_Paint","Page_Marcelint", "Page_Coin", "Page_Fiona" };
-	static int iObjNum = 0;
-	ImGui::Combo("##2_PAGE", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
-
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CPage::PAGEINFO		tPageInfo;
-	_float4		f4MousePos;
-	f4MousePos = pGameInstance->Get_MousePos();
-
-
-	if (pGameInstance->Mouse_Down(CInput_Device::DIM_MB))
-	{
-		m_f3ClickPos = { f4MousePos.x, f4MousePos.y, f4MousePos.z };
-
-		if (0 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::PAINT;
-
-			m_wstObjName = L"Page_Paint__";
-			m_wstObjName += to_wstring(m_iPage_1_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-
-			m_iPage_1_Count++;
-		}
-		if (1 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT;
-
-			m_wstObjName = L"Page_Marcelint__";
-			m_wstObjName += to_wstring(m_iPage_1_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-
-			m_iPage_1_Count++;
-		}
-		if (2 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::COIN;
-
-			m_wstObjName = L"Page_Coin__";
-			m_wstObjName += to_wstring(m_iPage_1_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-
-			m_iPage_1_Count++;
-		}
-		if (3 == iObjNum)
-		{
-			tPageInfo.fPos = m_f3ClickPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::FIONA;
-
-			m_wstObjName = L"Page_Fiona__";
-			m_wstObjName += to_wstring(m_iPage_1_Count);
-
-			m_szObjName = m_wstObjName.c_str();
-
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-				return;
-
-			m_iPage_1_Count++;
-		}
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	if (ImGui::Button("Page Save"))
-	{
-		wofstream fout("../../Data/Page.txt", ios::out | ios::app);
-		if (fout.fail())
-		{
-			MSG_BOX("Failed to Save File");
-			return;
-		}
-
-		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
-
-		fout.close();
-	}
-
-	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Page.txt", SW_SHOW);
-}
-
-void CLevel_GamePlay::ImGui_Item()
+void CLevel_MiniGame::ImGui_Item()
 {
 	const _char* szObjName[] = { "Key", "Heart" };
 	static int iObjNum = 0;
@@ -628,7 +427,7 @@ void CLevel_GamePlay::ImGui_Item()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Key"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Key"), &m_f3ClickPos)))
 				return;
 
 			m_iItem_Count++;
@@ -640,7 +439,7 @@ void CLevel_GamePlay::ImGui_Item()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_Heart"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Heart"), &m_f3ClickPos)))
 				return;
 
 			m_iItem_Count++;
@@ -651,7 +450,7 @@ void CLevel_GamePlay::ImGui_Item()
 
 	if (ImGui::Button("Item Save"))
 	{
-		wofstream fout("../../Data/Item.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGame_Item.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -664,10 +463,10 @@ void CLevel_GamePlay::ImGui_Item()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Item.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/MiniGame_Item.txt", SW_SHOW);
 }
 
-void CLevel_GamePlay::ImGui_Object()
+void CLevel_MiniGame::ImGui_Object()
 {
 	const _char* szObjName[] = { "Box", "Portal", "BearTrap", "PortalOff" };
 	static int iObjNum = 0;
@@ -690,7 +489,7 @@ void CLevel_GamePlay::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_O_Box"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -706,7 +505,7 @@ void CLevel_GamePlay::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
 				return;
 
 			m_iObject_Count++;
@@ -718,7 +517,7 @@ void CLevel_GamePlay::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -730,7 +529,7 @@ void CLevel_GamePlay::ImGui_Object()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_O_PortalOff"), &m_f3ClickPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_O_PortalOff"), &m_f3ClickPos)))
 				return;
 
 			m_iObject_Count++;
@@ -741,7 +540,7 @@ void CLevel_GamePlay::ImGui_Object()
 
 	if (ImGui::Button("Object Save"))
 	{
-		wofstream fout("../../Data/Object.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGame_Object.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -754,10 +553,10 @@ void CLevel_GamePlay::ImGui_Object()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Object.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/MiniGame_Object.txt", SW_SHOW);
 }
 
-void CLevel_GamePlay::ImGui_Monster()
+void CLevel_MiniGame::ImGui_Monster()
 {
 	const _char* szObjName[] = { 
 		"PigWarrior_BEE", "PigWarrior_WORKER", 
@@ -788,7 +587,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -803,7 +602,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -818,7 +617,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -833,7 +632,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -848,7 +647,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -863,7 +662,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -878,7 +677,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -893,7 +692,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -908,7 +707,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -923,7 +722,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))
 				return;
 
 			m_iMonster_Count++;
@@ -934,7 +733,7 @@ void CLevel_GamePlay::ImGui_Monster()
 
 	if (ImGui::Button("Monster Save"))
 	{
-		wofstream fout("../../Data/Monster.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGmae_Monster.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -947,10 +746,10 @@ void CLevel_GamePlay::ImGui_Monster()
 	}
 
 	if(ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Monster.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/MiniGmae_Monster.txt", SW_SHOW);
 }
 
-void CLevel_GamePlay::ImGui_Envionment()
+void CLevel_MiniGame::ImGui_Envionment()
 {
 	const _char* szObjName[] = { "Butterflies_Bule", "Butterflies_Red", "Butterflies_Yellow", "Cloud" };
 	static int iObjNum = 0;
@@ -980,7 +779,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
 
 			m_iItem_Count++;
@@ -995,7 +794,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
 
 			m_iItem_Count++;
@@ -1010,7 +809,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 
 			m_szObjName = m_wstObjName.c_str();
 
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
 
 			m_iItem_Count++;
@@ -1019,7 +818,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 		{		
 			m_wstObjName = L"Cloud";
 			
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &_float3(m_f3ClickPos.x, fObjectY, m_f3ClickPos.z))))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &_float3(m_f3ClickPos.x, fObjectY, m_f3ClickPos.z))))
 				return;
 		}
 	}
@@ -1028,7 +827,7 @@ void CLevel_GamePlay::ImGui_Envionment()
 
 	if (ImGui::Button("Envionmen Save"))
 	{
-		wofstream fout("../../Data/Garden_Envionment.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGmae_Envionment.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");
@@ -1041,12 +840,12 @@ void CLevel_GamePlay::ImGui_Envionment()
 	}
 
 	if (ImGui::Button("Data_txt"))
-		WinExec("notepad.exe ../../Data/Garden_Envionment.txt", SW_SHOW);
+		WinExec("notepad.exe ../../Data/MiniGmae_Envionment.txt", SW_SHOW);
 }
 
-HRESULT CLevel_GamePlay::Load_Food()
+HRESULT CLevel_MiniGame::Load_Food()
 {
-	wifstream		fin("../../Data/Food.txt", ios::in);
+	wifstream		fin("../../Data/MiniGmae_Food.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1102,7 +901,7 @@ HRESULT CLevel_GamePlay::Load_Food()
 
 			if (m_wstObjName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1119,7 +918,7 @@ HRESULT CLevel_GamePlay::Load_Food()
 
 			if (m_wstObjName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1136,7 +935,7 @@ HRESULT CLevel_GamePlay::Load_Food()
 
 			if (m_wstObjName == wstFoodNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1147,9 +946,9 @@ HRESULT CLevel_GamePlay::Load_Food()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Load_Coin()
+HRESULT CLevel_MiniGame::Load_Coin()
 {
-	wifstream		fin("../../Data/Coin.txt", ios::in);
+	wifstream		fin("../../Data/MiniGmae_Coin.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1206,7 +1005,7 @@ HRESULT CLevel_GamePlay::Load_Coin()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1224,7 +1023,7 @@ HRESULT CLevel_GamePlay::Load_Coin()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1242,7 +1041,7 @@ HRESULT CLevel_GamePlay::Load_Coin()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Coin"), &tCoinInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1253,126 +1052,9 @@ HRESULT CLevel_GamePlay::Load_Coin()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Load_Page()
+HRESULT CLevel_MiniGame::Load_Item()
 {
-	wifstream		fin("../../Data/Page.txt", ios::in);
-
-	if (fin.fail())
-	{
-		MSG_BOX("Failed to Load File");
-		return E_FAIL;
-	}
-
-	_tchar szObjName[MAX_PATH] = L"";
-	_tchar szObjPosX[MAX_PATH] = L"";
-	_tchar szObjPosY[MAX_PATH] = L"";
-	_tchar szObjPosZ[MAX_PATH] = L"";
-
-	_float	fObjPosX = 0.f;
-	_float	fObjPosY = 0.f;
-	_float	fObjPosZ = 0.f;
-
-	while (true)
-	{
-		fin.getline(szObjName, MAX_PATH, '|');
-		fin.getline(szObjPosX, MAX_PATH, '|');
-		fin.getline(szObjPosY, MAX_PATH, '|');
-		fin.getline(szObjPosZ, MAX_PATH);
-
-		if (fin.eof())
-			break;
-
-		fObjPosX = (_float)_tstof(szObjPosX);
-		fObjPosY = (_float)_tstof(szObjPosY);
-		fObjPosZ = (_float)_tstof(szObjPosZ);
-
-		CDataManager::GetInstance()->Set_PageInfo(*szObjName, _float3(fObjPosX, fObjPosY, fObjPosZ));
-	}
-
-
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	CPage::PAGEINFO					tPageInfo;
-	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_PageInfo();
-	_int iPageVecCount = _int(eVecObjInfo.size());
-
-	for (auto& pObjInfo : eVecObjInfo)
-	{
-		for (_int i = 0; i < iPageVecCount; i++)
-		{
-			tPageInfo.fPos = pObjInfo.ObjPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::PAINT;
-
-			m_wstObjName = L"Page_Paint__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-					return E_FAIL;
-			}
-		}
-		for (_int i = 0; i < iPageVecCount; i++)
-		{
-			tPageInfo.fPos = pObjInfo.ObjPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::MARCELINT;
-
-			m_wstObjName = L"Page_Marcelint__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-					return E_FAIL;
-			}
-		}
-		for (_int i = 0; i < iPageVecCount; i++)
-		{
-			tPageInfo.fPos = pObjInfo.ObjPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::COIN;
-
-			m_wstObjName = L"Page_Coin__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-					return E_FAIL;
-			}
-		}
-		for (_int i = 0; i < iPageVecCount; i++)
-		{
-			tPageInfo.fPos = pObjInfo.ObjPos;
-			tPageInfo.ePlayerSkill = CSkill_Manager::PLAYERSKILL::SKILL::FIONA;
-
-			m_wstObjName = L"Page_Fiona__";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Page"), &tPageInfo)))
-					return E_FAIL;
-			}
-		}
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Load_Item()
-{
-	wifstream		fin("../../Data/Item.txt", ios::in);
+	wifstream		fin("../../Data/MiniGame_Item.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1424,7 +1106,7 @@ HRESULT CLevel_GamePlay::Load_Item()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Key"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Key"), &pObjInfo.ObjPos)))
 					return E_FAIL;
 			}
 		}
@@ -1438,7 +1120,7 @@ HRESULT CLevel_GamePlay::Load_Item()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_Heart"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Heart"), &pObjInfo.ObjPos)))
 					return E_FAIL;
 			}
 		}
@@ -1449,9 +1131,9 @@ HRESULT CLevel_GamePlay::Load_Item()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Load_Object()
+HRESULT CLevel_MiniGame::Load_Object()
 {
-	wifstream		fin("../../Data/Object.txt", ios::in);
+	wifstream		fin("../../Data/MiniGame_Object.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1503,7 +1185,7 @@ HRESULT CLevel_GamePlay::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_Box"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_Box"), &pObjInfo.ObjPos)))
 					return E_FAIL;
 			}
 		}
@@ -1521,7 +1203,7 @@ HRESULT CLevel_GamePlay::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_TextureObject"), &tTextureObject)))
 					return E_FAIL;
 			}
 		}
@@ -1535,7 +1217,7 @@ HRESULT CLevel_GamePlay::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_BearTrap"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_BearTrap"), &pObjInfo.ObjPos)))
 					return E_FAIL;
 			}
 		}
@@ -1549,7 +1231,7 @@ HRESULT CLevel_GamePlay::Load_Object()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_PortalOff"), &pObjInfo.ObjPos)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_O_PortalOff"), &pObjInfo.ObjPos)))
 					return E_FAIL;
 			}
 		}
@@ -1560,9 +1242,9 @@ HRESULT CLevel_GamePlay::Load_Object()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Load_Monster()
+HRESULT CLevel_MiniGame::Load_Monster()
 {
-	wifstream		fin("../../Data/Monster.txt", ios::in);
+	wifstream		fin("../../Data/MiniGmae_Monster.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1618,7 +1300,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1634,7 +1316,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_PigWarrior"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1650,7 +1332,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1666,7 +1348,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Pigs"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1682,7 +1364,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1698,7 +1380,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1714,7 +1396,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Gronmes"), &tMonsterDesc)))
 					return E_FAIL;
 			}
 		}
@@ -1730,7 +1412,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))	// 요기
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Tree_Witch"), &tMonsterDesc)))	// 요기
 					return E_FAIL;
 			}
 		}
@@ -1746,7 +1428,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))	// 요기
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Magic_Man"), &tMonsterDesc)))	// 요기
 					return E_FAIL;
 			}
 		}
@@ -1762,7 +1444,7 @@ HRESULT CLevel_GamePlay::Load_Monster()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))	// 요기
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_M_Mimic"), &tMonsterDesc)))	// 요기
 					return E_FAIL;
 			}
 		}
@@ -1773,9 +1455,9 @@ HRESULT CLevel_GamePlay::Load_Monster()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Load_Envionment()
+HRESULT CLevel_MiniGame::Load_Envionment()
 {
-	wifstream		fin("../../Data/Garden_Envionment.txt", ios::in);
+	wifstream		fin("../../Data/MiniGmae_Envionment.txt", ios::in);
 
 	if (fin.fail())
 	{
@@ -1831,7 +1513,7 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1848,7 +1530,7 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 					return E_FAIL;
 			}
 		}
@@ -1865,14 +1547,14 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 
 			if (m_wstObjName == wstObjNameTemp)
 			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 					return E_FAIL;
 			}
 		}
 		wstring wstObjNameTemp(pObjInfo.ObjName);
 		if (TEXT("Cloud") == wstObjNameTemp)
 		{
-			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &pObjInfo.ObjPos)))
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &pObjInfo.ObjPos)))
 				return E_FAIL;
 		}
 	}
@@ -1882,19 +1564,19 @@ HRESULT CLevel_GamePlay::Load_Envionment()
 	return S_OK;
 }
 
-CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CLevel_MiniGame * CLevel_MiniGame::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CLevel_GamePlay*		pInstance = new CLevel_GamePlay(pDevice, pContext);
+	CLevel_MiniGame*		pInstance = new CLevel_MiniGame(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX("Failed to Created : CLevel_GamePlay");
+		MSG_BOX("Failed to Created : CLevel_MiniGame");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CLevel_GamePlay::Free()
+void CLevel_MiniGame::Free()
 {
 	__super::Free();
 

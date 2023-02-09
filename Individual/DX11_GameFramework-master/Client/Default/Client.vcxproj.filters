@@ -190,6 +190,9 @@
     <Filter Include="02.GameObjects\PlayerSkill\Finn_and_Jake">
       <UniqueIdentifier>{be6626db-101b-46e8-a2fd-a9f5b8363fce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\05. MiniGmae">
+      <UniqueIdentifier>{35d9e01a-da0c-45ab-bac8-370b06c04378}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -585,6 +588,12 @@
     <ClInclude Include="..\public\S_FinnAndJake.h">
       <Filter>02.GameObjects\PlayerSkill\Finn_and_Jake</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Map_MiniGame.h">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_MiniGame.h">
+      <Filter>01.Levels\05. MiniGmae</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -961,6 +970,12 @@
     </ClCompile>
     <ClCompile Include="..\private\S_FinnAndJake.cpp">
       <Filter>02.GameObjects\PlayerSkill\Finn_and_Jake</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Map_MiniGame.cpp">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_MiniGame.cpp">
+      <Filter>01.Levels\05. MiniGmae</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

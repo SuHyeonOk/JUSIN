@@ -48,13 +48,6 @@ HRESULT CBackGround::Initialize(void * pArg)
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));
 
-	return S_OK;
-}
-
-void CBackGround::Tick(_double TimeDelta)
-{
-	__super::Tick(TimeDelta);
-
 	static _bool bOneSound;
 	if (false == bOneSound)
 	{
@@ -64,6 +57,13 @@ void CBackGround::Tick(_double TimeDelta)
 		pGameInstance->Play_Sound(TEXT("v_Finn_Title.ogg"), 1.0f);
 		RELEASE_INSTANCE(CGameInstance);
 	}
+
+	return S_OK;
+}
+
+void CBackGround::Tick(_double TimeDelta)
+{
+	__super::Tick(TimeDelta);
 
 	if (LEVEL_LOGO == CObj_Manager::GetInstance()->Get_Current_Level())
 		m_iLevel_Texture = 0;			// logo ÀÌ¹ÌÁö

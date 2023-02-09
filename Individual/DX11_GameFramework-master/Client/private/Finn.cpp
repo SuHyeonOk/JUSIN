@@ -1287,7 +1287,7 @@ void CFinn::BossCage(const _double & TimeDelta)
 	{
 		m_dBossCage_TimeAcc += TimeDelta;
 		if (0.1 < m_dBossCage_TimeAcc)
-			m_pTransformCom->Go_Backward(TimeDelta, m_pNavigationCom);
+			m_pTransformCom->Go_Backward(TimeDelta * 0.1, m_pNavigationCom);
 	}
 	else
 		m_dBossCage_TimeAcc = 0;

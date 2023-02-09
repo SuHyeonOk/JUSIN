@@ -5,11 +5,11 @@
 
 BEGIN(Client)
 
-class CLevel_GamePlay final : public CLevel
+class CLevel_MiniGame final : public CLevel
 {
 private:
-	CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual ~CLevel_GamePlay() = default;
+	CLevel_MiniGame(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual ~CLevel_MiniGame() = default;
 
 public:
 	virtual HRESULT		Initialize() override;
@@ -19,20 +19,16 @@ public:
 
 private:
 	HRESULT Ready_Lights();
-	HRESULT Ready_Layer_Npc();
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_SkyBox(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
-	HRESULT Ready_Layer_Finn(const _tchar* pLayerTag);
-	HRESULT Ready_Layer_Jake(const _tchar* pLayerTag);
-	HRESULT Ready_Layer_Jake_Son(const _tchar* pLayerTag);
+	HRESULT Ready_Layer_FinnAndJake(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Map(const _tchar* pLayerTag);
 
 private:
 	void	ImGui();
 	void	ImGui_Food();
 	void	ImGui_Coin();
-	void	ImGui_Page();
 	void	ImGui_Item();
 	void	ImGui_Object();
 	void	ImGui_Monster();
@@ -41,7 +37,6 @@ private:
 private:
 	HRESULT	Load_Food();
 	HRESULT	Load_Coin();
-	HRESULT	Load_Page();
 	HRESULT	Load_Item();
 	HRESULT	Load_Object();
 	HRESULT	Load_Monster();
@@ -73,7 +68,7 @@ private:
 	// ¢º ³¡
 
 public:
-	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CLevel_MiniGame* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;
 };
 

@@ -46,6 +46,8 @@ private:
 	void	Key_Input(_double TimeDelta);
 	void	ToFollow(_double TimeDelta);
 	
+	void	CurrentCamera_Tick(const _double & TimeDelta);
+	void	FinnAndJake_Tick(const _double & TimeDelta);
 	void	Action_Garden(const _double & TimeDelta);
 	void	Action_SkeletonBoss(const _double & TimeDelta);
 

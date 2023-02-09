@@ -92,7 +92,6 @@ HRESULT CO_Collider::Render()
 
 void CO_Collider::On_Collision(CGameObject * pOther)
 {
-	return; // test
 	// 충돌 하는 순간 카메라 전환이 되는데 이 때 그냥 두게 되면 플레이어가 찌부 되어서 잠시 없애둔다.
 
 	switch (m_ColliderInfo.eType)

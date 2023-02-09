@@ -82,7 +82,7 @@ HRESULT CSky::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level() || LEVEL_MINIGAME == CObj_Manager::GetInstance()->Get_Current_Level())
 	{
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky_Garden"), TEXT("Com_Texture"),
