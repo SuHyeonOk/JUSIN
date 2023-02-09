@@ -105,10 +105,7 @@ HRESULT CKnives_Rain::Render()
 
 void CKnives_Rain::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
-	{
-		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
-	}
+
 }
 
 HRESULT CKnives_Rain::SetUp_Components()

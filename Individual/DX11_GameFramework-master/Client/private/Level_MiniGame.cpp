@@ -39,7 +39,7 @@ HRESULT CLevel_MiniGame::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_Skeleton"))))
+	if (FAILED(Ready_Layer_SkyBox(TEXT("Layer_SkyBox_MiniGmae"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_MiniGame"))))
@@ -187,7 +187,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_Camera(const _tchar * pLayerTag)
 		return E_FAIL;
 #else
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.14104f, 3.7f, -25.711f));
+	pObjTransformCom->Set_Pos(_float3(-5.0f, 0.0f, -20.0f));
 #endif
 
 	RELEASE_INSTANCE(CGameInstance);

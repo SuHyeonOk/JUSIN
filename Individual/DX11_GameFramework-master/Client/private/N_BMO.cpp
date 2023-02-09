@@ -189,6 +189,7 @@ void CN_BMO::Talk_Tick()
 			RELEASE_INSTANCE(CGameInstance);
 			CObj_Manager::GetInstance()->Set_NextLevel(true);
 			CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
+			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 		}
 			break;
 

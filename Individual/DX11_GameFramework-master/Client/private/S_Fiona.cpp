@@ -478,7 +478,7 @@ void CS_Fiona::Hit_Tick(const _double & TimeDelta)
 	{
 		m_bHurts = false;
 		m_bShader_Hit = false;
-		m_dShader_Hit_TimeAcc = 0;
+		m_dShader_Hit_TimeAcc = 0.0;
 
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);

@@ -14,6 +14,9 @@ BEGIN(Client)
 
 class CS_FinnAndJake final : public CGameObject
 {
+public:
+	enum STATE { IDLE, MOVE, HIT, FINISH, STATE_END	};
+
 private:
 	CS_FinnAndJake(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CS_FinnAndJake(const CS_FinnAndJake& rhs);
@@ -39,13 +42,21 @@ private:
 	HRESULT					SetUp_ShaderResources();
 	
 private:
+	void					AnimatedMovie_Tick();
+	
 	void					KeyInput(const _double & TimeDelta);
+	void					Hit_Tick(const _double & TimeDelta);
+
+	void					Return_Tick();
+	void					End_Tick();
 
 private:
-	_float3					m_f3Pos = _float3(0.f, 0.f, 0.f);
-	_float4					m_f4NewLook = { 0.0f, 0.0f, 0.0f, 0.0f };
+	_float4					m_f4NewLook = {0.0f, 0.0f, 0.0f, 1.0f};
+	_float4					m_f4StartPoition = { 0.0f, 0.0f, 0.0f, 1.0f };
 	
+	STATE					m_eAnim_State = STATE_END;
 	_bool					m_OnMove = false;
+	_bool					m_OnHit = false;
 
 	// ºŒ¿Ã¥ı
 	_bool					m_bShader_Hit = false;

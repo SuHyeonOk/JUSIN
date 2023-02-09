@@ -29,15 +29,18 @@ HRESULT CS_FinnAndJake::Initialize_Prototype()
 
 HRESULT CS_FinnAndJake::Initialize(void * pArg)
 {
+	_float3 fPosition = { 0.0f, 0.0f, 0.0f };
+
 	if (nullptr != pArg)
-		memcpy(&m_f3Pos, pArg, sizeof(_float3));
+		memcpy(&fPosition, pArg, sizeof(_float3));
 
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
 	GameObjectDesc.TransformDesc.fSpeedPerSec = 3.f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	GameObjectDesc.TransformDesc.f3Pos = m_f3Pos;
+	GameObjectDesc.TransformDesc.f3Pos = fPosition;
+	m_f4StartPoition = { fPosition.x, fPosition.y, fPosition.z, 1.0f };
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
@@ -46,13 +49,14 @@ HRESULT CS_FinnAndJake::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_wsTag = L"Finn";
+	m_eAnim_State = STATE_END;
+
 	m_pTransformCom->Set_Pos();
-	m_pModelCom->Set_AnimIndex(7);
+	m_pModelCom->Set_AnimIndex(3);
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	pGameInstance->Stop_Sound(0);
 	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.5f, false, 3);
-
 	RELEASE_INSTANCE(CGameInstance);
 
 	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE);
@@ -64,7 +68,15 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	Return_Tick();
+	Hit_Tick(TimeDelta);
 	KeyInput(TimeDelta);
+	AnimatedMovie_Tick();
+
+
+
+
+
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -84,14 +96,7 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance);
 
 
-	// [0] 올라가기
-	// [1] 손 점프
-	// [2] 핀 손흔들기
-	// [3] 가만히
-	// [4] 점프
-	// [5] 달리기
-	// [6] 내려가기
-	// [7] 똥땅똥땅 걷기
+
 }
 
 void CS_FinnAndJake::Late_Tick(_double TimeDelta)
@@ -143,7 +148,11 @@ HRESULT CS_FinnAndJake::Render()
 
 void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 {
-
+	if (L"Knives_Rain" == pOther->Get_Tag())
+	{
+		m_OnHit = true;
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
+	}
 }
 
 HRESULT CS_FinnAndJake::SetUp_Components()
@@ -196,12 +205,44 @@ HRESULT CS_FinnAndJake::SetUp_ShaderResources()
 	return S_OK;
 }
 
+void CS_FinnAndJake::AnimatedMovie_Tick()
+{
+	// [0] 올라가기
+	// [1] 손 점프
+	// [2] 핀 손흔들기
+	// [3] 가만히
+	// [4] 점프
+	// [5] 달리기
+	// [6] 내려가기
+	// [7] 똥땅똥땅 걷기
+
+	switch (m_eAnim_State)
+	{
+	case Client::CS_FinnAndJake::IDLE:
+		m_pModelCom->Set_AnimIndex(3);
+		break;
+	case Client::CS_FinnAndJake::MOVE:
+		m_pModelCom->Set_AnimIndex(7);
+		break;
+	case Client::CS_FinnAndJake::HIT:
+		m_pModelCom->Set_AnimIndex(1);
+		break;
+	case Client::CS_FinnAndJake::FINISH:
+		m_pModelCom->Set_AnimIndex(2);
+		break;
+	}
+}
+
 void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 {
+	if (true == m_OnHit)
+		return;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (m_OnMove)
 	{
+		m_eAnim_State = MOVE;
 		pGameInstance->Stop_Sound(5);
 		m_pTransformCom->Go_Straight(TimeDelta);
 		m_pTransformCom->PlayerMove(XMVectorSet(m_f4NewLook.x, m_f4NewLook.y, m_f4NewLook.z, m_f4NewLook.w), TimeDelta);
@@ -252,8 +293,9 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
-		pGameInstance->Stop_Sound(7);
+		m_eAnim_State = IDLE;
 		m_OnMove = false;
+		pGameInstance->Stop_Sound(7);
 	}
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
@@ -262,6 +304,48 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+}
+
+void CS_FinnAndJake::Hit_Tick(const _double & TimeDelta)
+{
+	if (false == m_OnHit)
+		return;
+
+	m_eAnim_State = HIT;
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
+
+	if (0.7 < m_dShader_Hit_TimeAcc)
+	{
+		m_OnHit = false;
+		m_eAnim_State = IDLE;
+		m_bShader_Hit = false;
+		m_dShader_Hit_TimeAcc = 0.0;
+	}
+}
+
+void CS_FinnAndJake::Return_Tick()
+{
+	if (0.0f == CObj_Manager::GetInstance()->Get_Current_Player().fHP)
+	{
+		CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+
+		// 플레이어 처음 위치로
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMLoadFloat4(&m_f4StartPoition));
+		// 카메라 처음 위치로
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+		pObjTransformCom->Set_Pos(_float3(-5.0f, 0.0f, -20.0f));
+		RELEASE_INSTANCE(CGameInstance);
+	}
+}
+
+void CS_FinnAndJake::End_Tick()
+{
+	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 }
 
 CS_FinnAndJake * CS_FinnAndJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

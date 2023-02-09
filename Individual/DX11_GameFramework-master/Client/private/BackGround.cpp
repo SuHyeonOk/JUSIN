@@ -72,11 +72,11 @@ void CBackGround::Tick(_double TimeDelta)
 		if (0 == CObj_Manager::GetInstance()->Get_Loading_Count())
 			m_iLevel_Texture = 1;		// 가든
 		else if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
-			m_iLevel_Texture = 0;		// 미니게임
-		else if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
-			m_iLevel_Texture = 2;		// 해골
+			m_iLevel_Texture = 2;		// 미니게임
+		else if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+			m_iLevel_Texture = 3;		// 해골
 		else
-			m_iLevel_Texture = 3;		// 해골 보스
+			m_iLevel_Texture = 4;		// 해골 보스
 	}
 }
 
