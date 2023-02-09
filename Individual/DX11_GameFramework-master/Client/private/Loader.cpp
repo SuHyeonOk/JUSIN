@@ -219,6 +219,9 @@ HRESULT CLoader::Loading_ForLogo()
 /* 게임플레이를 위한 원형을 생성한다. */
 HRESULT CLoader::Loading_ForGamePlay()
 {
+	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+		return S_OK;
+
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -385,10 +388,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 	/* For.Prototype_Component_Model_S_Magic_Man_Jake */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_Magic_Man_Jake"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Player/Magic_Man_Jake/Magic_Man_Jake.fbx", PivotMatrix))))
-		return E_FAIL;
-	/* For.Prototype_Component_Model_S_FinnAndJake */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_FinnAndJake"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/FinnAndJake/FinnAndJake.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	// NPC
@@ -713,7 +712,9 @@ HRESULT CLoader::Loading_ForMiniGame()
 		CKnives_Rain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#ifdef F2_SKELETON
 	SkeletonTemp();
+#endif
 
 	lstrcpy(m_szLoadingText, TEXT("로딩끝. "));
 
@@ -1824,11 +1825,6 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_S_Jake_Son */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_S_FinnAndJake */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_FinnAndJake"),
-		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	UI_Create();

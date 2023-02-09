@@ -179,18 +179,32 @@ void CN_BMO::Talk_Tick()
 			break;
 
 		case 3:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n성공하면 내가 아~ 주~ 좋은걸 줄게 \n얘들아 화이팅!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n성공하면 내가 아~ 주~ 좋은걸 줄게 "));
 			break;
 
 		case 4:
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n기회는 5번 이야 아주 충분하지!? \n얘들아 화이팅!"));
+			break;
+
+		case 5:
 		{
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			pGameInstance->Stop_Sound(0);
 			RELEASE_INSTANCE(CGameInstance);
+
+			CObj_Manager::GetInstance()->Set_Heart(5);
 			CObj_Manager::GetInstance()->Set_NextLevel(true);
 			CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
-			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
+
+			++m_Script_Count;
+			CUI_Manager::GetInstance()->Set_Talk(false); 
+			//CGameObject::Set_Dead();
 		}
+			break;
+
+		case 6:
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n얘들아 고생했어 내 선물을 받아줘! ^-^"));
 			break;
 
 		default:

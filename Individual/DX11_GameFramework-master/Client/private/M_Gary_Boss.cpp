@@ -394,7 +394,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		//iRandom = 3;   // Test
+		iRandom = 4;   // Test
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)
@@ -405,7 +405,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 			m_eState = A_CAGE;
 		else if (4 == iRandom)
 			m_eState = A_DANCE;
-
+		 
 		m_iSkill_Data = iRandom;
 
 		m_dSkill_TimeAcc = 0;

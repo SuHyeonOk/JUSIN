@@ -28,6 +28,9 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * p
 
 HRESULT CLevel_GamePlay::Initialize()
 {
+	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+		return S_OK;
+
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
@@ -82,15 +85,6 @@ void CLevel_GamePlay::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_V))
-	{
-		Load_Envionment();
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CLevel_GamePlay::Late_Tick(_double TimeDelta)
@@ -100,11 +94,29 @@ void CLevel_GamePlay::Late_Tick(_double TimeDelta)
 	if (CObj_Manager::GetInstance()->Get_NextLevel())
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
 		{
 			RELEASE_INSTANCE(CGameInstance);
 			return;
 		}
+
+		//if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
+		//{
+		//	if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_MINIGAME))))
+		//	{
+		//		RELEASE_INSTANCE(CGameInstance);
+		//		return;
+		//	}
+		//}
+		//else
+		//{
+		//	if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
+		//	{
+		//		RELEASE_INSTANCE(CGameInstance);
+		//		return;
+		//	}
+		//}
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
@@ -1896,6 +1908,9 @@ CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceCo
 
 void CLevel_GamePlay::Free()
 {
+	if (LEVEL_MINIGAME == CObj_Manager::GetInstance()->Get_Current_Level())
+		return;
+
 	__super::Free();
 
 	CDataManager::GetInstance()->Free();

@@ -86,7 +86,7 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
 	pGameInstance->Stop_Sound(0);
-	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.5f, false, 3);
+	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.7f, false, 3);
 
 	RELEASE_INSTANCE(CGameInstance);
 

@@ -375,6 +375,9 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[7]->Tick(TimeDelta);
 	m_vecUI[9]->Tick(TimeDelta);
 
+	if (CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		return;
+
 	// ¹«±â
 	m_vecUI[10]->Tick(TimeDelta);
 	m_vecUI[11]->Tick(TimeDelta);
@@ -542,6 +545,9 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[8]->Late_Tick(TimeDelta);
 	m_vecUI[7]->Late_Tick(TimeDelta);
 	m_vecUI[9]->Late_Tick(TimeDelta);
+
+	if (CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+		return;
 
 	m_vecUI[10]->Late_Tick(TimeDelta);
 	m_vecUI[11]->Late_Tick(TimeDelta);

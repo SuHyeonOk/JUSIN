@@ -57,6 +57,7 @@ private:
 	STATE					m_eAnim_State = STATE_END;
 	_bool					m_OnMove = false;
 	_bool					m_OnHit = false;
+	_bool					m_bEnd = false;
 
 	// ºŒ¿Ã¥ı
 	_bool					m_bShader_Hit = false;

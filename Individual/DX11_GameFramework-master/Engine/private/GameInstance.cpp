@@ -392,6 +392,17 @@ HRESULT CGameInstance::Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * p
 	return m_pLight_Manager->Add_Light(pDevice, pContext, LightDesc);
 }
 
+void CGameInstance::Clear()
+{
+	if (nullptr == m_pLight_Manager)
+	{
+		MSG_BOX("조명을 삭제할 수 없습니다.");
+		return;
+	}
+
+	return m_pLight_Manager->Clear();
+}
+
 HRESULT CGameInstance::Set_Light(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc)
 {
 	if (nullptr == m_pLight_Manager)

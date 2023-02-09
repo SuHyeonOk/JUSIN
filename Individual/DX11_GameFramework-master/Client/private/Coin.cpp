@@ -240,17 +240,17 @@ void CCoin::Collision(const _double & TimeDelta)
 				if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 				{
 					CObj_Manager::GetInstance()->Set_Coin(1);
-					pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.7f);
+					pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.9f);
 				}
 				else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
 				{
 					CObj_Manager::GetInstance()->Set_Coin(2);
-					pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.7f);
+					pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.9f);
 				}
 				else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
 				{
 					CObj_Manager::GetInstance()->Set_Coin(5);
-					pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.7f);
+					pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.9f);
 				}
 				RELEASE_INSTANCE(CGameInstance);
 
@@ -263,17 +263,17 @@ void CCoin::Collision(const _double & TimeDelta)
 			if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_BRONZE)
 			{
 				CObj_Manager::GetInstance()->Set_Coin(1);
-				pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.7f);
+				pGameInstance->Play_Sound(TEXT("Coin1.ogg"), 0.9f);
 			}
 			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_SILVER)
 			{
 				CObj_Manager::GetInstance()->Set_Coin(2);
-				pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.7f);
+				pGameInstance->Play_Sound(TEXT("Coin2.ogg"), 0.9f);
 			}
 			else if (m_tinCoinInfo.eCoinKind == m_tCoinInfo.COIN_GOLD)
 			{
 				CObj_Manager::GetInstance()->Set_Coin(5);
-				pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.7f);
+				pGameInstance->Play_Sound(TEXT("Coin3.ogg"), 0.9f);
 			}
 			RELEASE_INSTANCE(CGameInstance);
 

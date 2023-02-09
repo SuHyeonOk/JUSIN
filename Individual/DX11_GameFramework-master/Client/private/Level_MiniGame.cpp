@@ -79,7 +79,7 @@ void CLevel_MiniGame::Late_Tick(_double TimeDelta)
 	if (CObj_Manager::GetInstance()->Get_NextLevel())
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_MINIGAME))))
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
 		{
 			RELEASE_INSTANCE(CGameInstance);
 			return;
@@ -182,12 +182,12 @@ HRESULT CLevel_MiniGame::Ready_Layer_Camera(const _tchar * pLayerTag)
 #ifdef F2_SKELETON
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
 	eCameraInfo.eLevel = LEVEL_MINIGAME;
-	eCameraInfo.f3Pos = _float3(-5.0f, 0.0f, -20.0f);
+	eCameraInfo.f3Pos = _float3(-5.0f, 3.7f, -20.0f);
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 #else
-	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.0f, 0.0f, -20.0f));
+	CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-5.0f, 3.7f, -20.0f));
 #endif
 
 	RELEASE_INSTANCE(CGameInstance);

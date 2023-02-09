@@ -394,7 +394,7 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	// Loading
 	/* For.Prototype_Component_Texture_Loading */
 	if (FAILED(m_pGameInstance->Add_Prototype(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Texture_Loading"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Loading/Loading_%d.png"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Loading/Loading_%d.png"), 6))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_BackGround */
