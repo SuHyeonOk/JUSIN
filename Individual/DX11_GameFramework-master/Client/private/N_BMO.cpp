@@ -91,7 +91,8 @@ void CN_BMO::On_Collision(CGameObject * pOther)
 
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+		if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
 		m_bInteraction = CObj_Manager::GetInstance()->Get_Interaction();
 
@@ -167,7 +168,7 @@ void CN_BMO::Talk_Tick()
 	if (false == m_bInteraction)
 		return;
 
-	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())	// 미니 게임이 끝나고 난 후
 	{
 		if (0 == m_Script_Count)	// 미니 게임이 끝난 후의 보상
 		{

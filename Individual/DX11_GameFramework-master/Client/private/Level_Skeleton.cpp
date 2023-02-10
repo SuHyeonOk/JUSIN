@@ -164,7 +164,7 @@ HRESULT CLevel_Skleton::Ready_PreviousData()
 	pObjTransformCom->Set_Pos(_float3(-6.f, 0.f, 6.f));
 
 	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.f, 0.f, 1.f));
+	pObjTransformCom->Set_Pos(_float3(-5.f, 3.7f, 1.f));
 
 	CNavigation * pObjNavigationCom = nullptr;
 	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));	

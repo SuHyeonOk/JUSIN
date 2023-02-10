@@ -29,6 +29,7 @@ private:
 	virtual void		Help_UI()								override;
 	virtual HRESULT		UI_Dead()								override;
 
+	void	Talk_Tick();
 
 public:
 	_bool		m_bHelp_UI = false;

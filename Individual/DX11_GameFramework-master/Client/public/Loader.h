@@ -25,7 +25,6 @@ public:
 		return m_Critical_Section;
 	}
 
-
 	_bool isFinished() const {
 		return m_isFinished;
 	}

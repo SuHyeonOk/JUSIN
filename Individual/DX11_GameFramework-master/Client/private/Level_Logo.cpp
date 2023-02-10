@@ -60,13 +60,12 @@ void CLevel_Logo::Late_Tick(_double TimeDelta)
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON_BOSS))))
 			return;
 	}
-#endif
-
 	if (pGameInstance->Key_Down(DIK_F4))
 	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_MINIGAME))))
 			return;
 	}
+#endif
 
 	Safe_Release(pGameInstance);
 }

@@ -33,7 +33,7 @@ HRESULT CLevel_MiniGame::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Collider()))
+	if (FAILED(Ready_Layer_Game()))
 		return E_FAIL;
 	
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
@@ -70,6 +70,17 @@ void CLevel_MiniGame::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_N))
+	{
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Lady_Rainicorn"), TEXT("Prototype_GameObject_Lady_Rainicorn"), 
+			&_float3(62.8778f, 0.0f, 27.6776f))))
+			return;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CLevel_MiniGame::Late_Tick(_double TimeDelta)
@@ -131,15 +142,20 @@ HRESULT CLevel_MiniGame::Ready_Lights()
 	return S_OK;
 }
 
-HRESULT CLevel_MiniGame::Ready_Layer_Collider()
+HRESULT CLevel_MiniGame::Ready_Layer_Game()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	// 콜라이더
 	CMiniGame_Collider::COLLIDERINFO ColliderIndo;
 	ColliderIndo.eType = CMiniGame_Collider::KNIVESRAIN;
 	ColliderIndo.f3Pos = _float3(4.79107f, 0.0f, 9.38578f);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MiniGame_Collider"), TEXT("Prototype_GameObject_MiniGame_Collider"), &ColliderIndo)))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_MiniGame_Collider"), TEXT("Prototype_GameObject_MiniGame_Collider"), &ColliderIndo)))
+		return E_FAIL;
+
+	// 무지개콘
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Lady_Rainicorn"), TEXT("Prototype_GameObject_Lady_Rainicorn"), &_float3(62.8778f, 0.0f, 27.6776f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

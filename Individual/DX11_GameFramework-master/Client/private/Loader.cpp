@@ -124,6 +124,7 @@
 // MiniGame
 #include "MiniGmae_Collider.h"
 #include "Knives_Rain.h"
+#include "Lady_Rainicorn.h"
 
 #include "Obj_Manager.h"
 
@@ -678,10 +679,14 @@ HRESULT CLoader::Loading_ForMiniGame()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/map/MiniGame/MiniGame.fbx", PivotMatrix))))
 		return E_FAIL;
 
-	//
+	// Game
 	/* For.Prototype_Component_Model_Knives_Rain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Knives_Rain"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Knives_Rain/Knives_Rain.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Lady_Rainicorn */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Lady_Rainicorn"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Lady_Rainicorn/Lady_Rainicorn.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -701,11 +706,13 @@ HRESULT CLoader::Loading_ForMiniGame()
 		CMap_MiniGame::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Player
 	/* For.Prototype_GameObject_FinnAndJake */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FinnAndJake"),
 		CS_FinnAndJake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Collider
 	/* For.Prototype_GameObject_MiniGame_Collider */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MiniGame_Collider"),
 		CMiniGame_Collider::Create(m_pDevice, m_pContext))))
@@ -716,6 +723,11 @@ HRESULT CLoader::Loading_ForMiniGame()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Knives_Rain"),
 		CKnives_Rain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	/* For.Prototype_GameObject_Lady_Rainicorn */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lady_Rainicorn"),
+		CLady_Rainicorn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 #ifdef F2_SKELETON
 	SkeletonTemp();
