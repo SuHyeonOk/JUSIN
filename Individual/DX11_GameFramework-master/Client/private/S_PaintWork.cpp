@@ -68,6 +68,8 @@ void CS_PaintWork::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	Effect_Tick(TimeDelta);
+
 	if (!m_bMove)
 	{
 		m_pTransformCom->Go_Right(TimeDelta * 0.4);
@@ -281,6 +283,32 @@ HRESULT CS_PaintWork::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+void CS_PaintWork::Effect_Tick(const _double & TimeDelta)
+{
+	m_dEffect_TimeAcc += TimeDelta;
+	if (0.1 < m_dEffect_TimeAcc)
+	{
+		_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Position, vPosition);
+
+		if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::BLUE == m_tBulletInfo.ePaintWork)
+		{
+			CEffect_Manager::GetInstance()->Effect_Paint_Star({ f4Position.x, f4Position.y, f4Position.z }, { 0.3f, 0.8f, 1.0f });
+		}
+		else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::MAGENTA == m_tBulletInfo.ePaintWork)
+		{
+			CEffect_Manager::GetInstance()->Effect_Paint_Star({ f4Position.x, f4Position.y, f4Position.z }, { 0.9f, 0.5f, 1.0f });
+		}
+		else if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::YELLOW == m_tBulletInfo.ePaintWork)
+		{
+			CEffect_Manager::GetInstance()->Effect_Paint_Star({ f4Position.x, f4Position.y, f4Position.z }, { 0.9f, 1.0f, 0.0f });
+		}
+
+		m_dEffect_TimeAcc = 0;
+	}
 }
 
 CS_PaintWork * CS_PaintWork::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

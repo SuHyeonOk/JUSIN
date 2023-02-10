@@ -523,6 +523,25 @@ HRESULT CEffect_Manager::Effect_StarRandom_Create(_float3 f3Pos, const _float3 &
 	return S_OK;
 }
 
+HRESULT CEffect_Manager::Effect_Paint_Star(_float3 f3Pos, const _float3 & f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+	_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+
+	CE_Look_Alpha::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Alpha::EFFECTINFO::PAINT_STAR;
+	tEffectInfo.f3Pos = { f3Pos.x + fRendomNumberX, f3Pos.y, f3Pos.z + fRendomNumberZ };
+	tEffectInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Alpha"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_Paint_Circle_Create(_float3 f3Pos, const _float3 & f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

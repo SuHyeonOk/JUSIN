@@ -17,10 +17,11 @@ class CE_Look_Alpha final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { BIGSKELETON_TEXTURE, PAINT_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { BIGSKELETON_TEXTURE, PAINT_STAR, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
+		_float3			f3Color = { 0.0f, 0.0f, 0.0f };
 
 	}EFFECTINFO;
 
@@ -37,14 +38,14 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	HRESULT					SetUp_Components();
-	HRESULT					SetUp_ShaderResources();
+	HRESULT				SetUp_Components();
+	HRESULT				SetUp_ShaderResources();
 
 private:
-	CShader*				m_pShaderCom = nullptr;
-	CRenderer*				m_pRendererCom = nullptr;
-	CTexture*				m_pTextureCom = nullptr;
-	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+	CShader*			m_pShaderCom = nullptr;
+	CRenderer*			m_pRendererCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
+	CVIBuffer_Rect*		m_pVIBufferCom = nullptr;
 
 private:
 	EFFECTINFO			m_tEffectInfo;

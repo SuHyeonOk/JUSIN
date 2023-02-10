@@ -1415,6 +1415,10 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Star_Random"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Star_Random.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_E_Paint_Star */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_E_Paint_Star"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Paint/Paint_Star.png")))))
+		return E_FAIL;
 
 	// Star
 	/* For.Prototype_Component_Texture_E_Star */

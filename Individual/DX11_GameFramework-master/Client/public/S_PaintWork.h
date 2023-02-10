@@ -52,6 +52,9 @@ private:
 	CCollider*				m_pColliderCom = nullptr;
 
 private:
+	void				Effect_Tick(const _double & TimeDelta);
+
+private:
 	PAINTWORKINFO		m_tBulletInfo;
 	
 	_float4				m_f4Distance;
@@ -59,6 +62,8 @@ private:
 
 	_bool				m_bMove = false;
 	_double				m_dMove_TimeAcc = 0;
+
+	_double				m_dEffect_TimeAcc = { 0.0 };
 
 public:
 	static	CS_PaintWork*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

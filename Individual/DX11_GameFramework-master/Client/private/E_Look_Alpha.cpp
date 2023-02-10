@@ -46,8 +46,8 @@ HRESULT CE_Look_Alpha::Initialize(void * pArg)
 	_float fRandomSize = 0.0f;
 	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
 		fRandomSize = 2.0f;
-	else if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
-		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 0.5f);
+	else if(CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR == m_tEffectInfo.eTextureType)
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
@@ -70,9 +70,16 @@ void CE_Look_Alpha::Tick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(vCameraPos, true);
 
-	m_bStopAlpha_TimeAcc += TimeDelta;
-	if(2.0 < m_bStopAlpha_TimeAcc)
-		m_fAlpha -= _float(TimeDelta) * 0.4f;
+	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
+	{
+		m_bStopAlpha_TimeAcc += TimeDelta;
+		if (2.0 < m_bStopAlpha_TimeAcc)
+			m_fAlpha -= _float(TimeDelta) * 0.4f;
+	}
+	else
+	{
+		m_fAlpha -= _float(TimeDelta) * 0.5f;
+	}
 
 	if (0 >= m_fAlpha)
 		CGameObject::Set_Dead();	// 알파값이 다 사라지면 죽음
@@ -96,7 +103,10 @@ HRESULT CE_Look_Alpha::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);
+	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR == m_tEffectInfo.eTextureType)
+		m_pShaderCom->Begin(4);
+	else
+		m_pShaderCom->Begin(2);
 
 	m_pVIBufferCom->Render();
 
@@ -119,8 +129,15 @@ HRESULT CE_Look_Alpha::SetUp_Components()
 
 	_tchar	m_szTextureName[MAX_PATH] = L"";
 
-	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
+	switch (m_tEffectInfo.eTextureType)
+	{
+	case CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE:
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Boss_SkeletonBig"));
+		break;
+	case CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR:
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Paint_Star"));
+		break;
+	}
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -152,6 +169,12 @@ HRESULT CE_Look_Alpha::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
+
+	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR == m_tEffectInfo.eTextureType)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fColor", &m_tEffectInfo.f3Color, sizeof _float3)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
