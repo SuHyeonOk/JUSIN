@@ -93,6 +93,7 @@ public:
 	/* 추적한다 .*/
 	void Chase(_fvector vTargetPos, _double TimeDelta, _float fLimit = 0.1f, class CNavigation* pNaviCom = nullptr);
 	void Speed_Chase(_fvector vTargetPos, _float fSpeed, _double TimeDelta, _float fLimit = 0.1f);
+	_bool TargetPoint(_fvector vTargetPos, _double TimeDelta);
 
 	_bool	Go_SwinUp(_double TimeDelta, _float fSpeed);
 	void	Go_SwinDown(_double TimeDelta, _float fDeep);

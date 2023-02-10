@@ -156,6 +156,9 @@ HRESULT CS_FinnAndJake::Render()
 
 HRESULT CS_FinnAndJake::Render_XRay()
 {
+	if (HIT == m_eAnim_State)
+		return S_OK;
+
 	if (FAILED(__super::Render_XRay()))
 		return E_FAIL;
 

@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include <fstream>
 
 CSnail::CSnail(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -36,7 +37,7 @@ HRESULT CSnail::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 0.f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 1.0f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 
@@ -45,6 +46,8 @@ HRESULT CSnail::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+
+	Load_Position();
 
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
@@ -56,6 +59,7 @@ void CSnail::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	NextPosition(TimeDelta);
 }
 
 void CSnail::Late_Tick(_double TimeDelta)
@@ -132,28 +136,7 @@ HRESULT CSnail::Render_XRay()
 
 void CSnail::On_Collision(CGameObject * pOther)
 {
--4.64812 | 0 | 3.49418
-3.97606 | 0 | 4.24761
-5.45481 | 0 | 23.5146
-14.3301 | 0 | 23.4078
-14.7366 | 0 | 16.1449
-31.9953 | 0 | 15.7341
-35.3393 | 0 | 23.4559
-48.952 | 0 | 25.2459
-55.516 | 0 | 27.1862
-58.1544 | 0 | 29.5641
-62.5551 | 0 | 33.5457
-70.7792 | 0 | 34.7792
-74.6313 | 0 | 34.0859
-78.1312 | 0 | 34.9891
-83.5461 | 0 | 33.9613
-85.342 | 0 | 31.9937
-85.3581 | 0 | 16.9169
-89.0243 | 0 | 12.9025
-88.4878 | 0 | 9.7265
-87.133 | 0 | 8.60069
-84.669 | 0 | 8.54956
-84.411 | 0 | 12.0978
+
 }
 
 HRESULT CSnail::SetUp_Components()
@@ -210,6 +193,65 @@ HRESULT CSnail::SetUp_ShaderResources()
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
+}
+
+HRESULT CSnail::Load_Position()
+{
+	wifstream		fin("../../Data/Snail_Position.txt", ios::in);
+
+	if (fin.fail())
+	{
+		MSG_BOX("Failed to Load File");
+		return E_FAIL;
+	}
+
+	_tchar szObjPosX[MAX_PATH] = L"";
+	_tchar szObjPosY[MAX_PATH] = L"";
+	_tchar szObjPosZ[MAX_PATH] = L"";
+
+	_float	fObjPosX = 0.0f;
+	_float	fObjPosY = 0.0f;
+	_float	fObjPosZ = 0.0f;
+
+	while (true)
+	{
+		fin.getline(szObjPosX, MAX_PATH, '|');
+		fin.getline(szObjPosY, MAX_PATH, '|');
+		fin.getline(szObjPosZ, MAX_PATH);
+
+		if (fin.eof())
+			break;
+
+		fObjPosX = (_float)_tstof(szObjPosX);
+		fObjPosY = (_float)_tstof(szObjPosY);
+		fObjPosZ = (_float)_tstof(szObjPosZ);
+
+		m_vecNextPosition.push_back(_float3(fObjPosX, fObjPosY, fObjPosZ));
+	}
+
+	return S_OK;
+}
+
+void CSnail::NextPosition(const _double & TimeDelta)
+{
+	if (true == m_bArrive)
+		return;
+
+	_vector vNextPosition = XMVectorSet(m_vecNextPosition[m_iIndex].x, m_vecNextPosition[m_iIndex].y, m_vecNextPosition[m_iIndex].z, 1.0f);
+
+	// 내 거리와 목표 지점의 거리를 구해서 목표지점에 도달하면 그 때 i를 증가 시킨다.
+	if (true == m_pTransformCom->TargetPoint(vNextPosition, TimeDelta))
+	{
+		++m_iIndex;
+		m_pTransformCom->LookAt(vNextPosition);
+
+		cout << m_iIndex << "도착했다." << endl;
+	}
+
+	if (m_iIndex > m_vecNextPosition.size() - 1)
+	{
+		m_bArrive = true;
+	}
 }
 
 CSnail * CSnail::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

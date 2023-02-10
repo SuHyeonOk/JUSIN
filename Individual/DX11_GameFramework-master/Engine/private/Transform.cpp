@@ -360,6 +360,26 @@ void CTransform::Speed_Chase(_fvector vTargetPos, _float fSpeed, _double TimeDel
 	}
 }
 
+_bool CTransform::TargetPoint(_fvector vTargetPos, _double TimeDelta)	// 목표지점에 도달하면 멈추고, true 을 반환해주는 함수
+{
+	_vector		vPosition = Get_State(CTransform::STATE_TRANSLATION);	// 내 좌표
+	_vector		vDir = vTargetPos - vPosition;							// 내 좌표가 객체를 바라보는 방향 벡터
+
+	_float		fDistance = XMVectorGetX(XMVector3Length(vDir));		// 그중 X 값을 뽑아와 거리 확인
+
+	if (0.1f > fDistance)
+	{
+		return true;
+	}
+	else
+	{
+		vPosition += XMVector3Normalize(vDir) * m_TransformDesc.fSpeedPerSec * _float(TimeDelta);
+		Set_State(CTransform::STATE_TRANSLATION, vPosition);
+	}
+
+	return false;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// sh
 
 bool CTransform::Jump(_float fHeight, _float fSpeed, _double TimeDelta)
