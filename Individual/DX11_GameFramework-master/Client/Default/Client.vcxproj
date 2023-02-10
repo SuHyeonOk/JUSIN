@@ -254,6 +254,7 @@
     <ClInclude Include="..\public\Player_Talk.h" />
     <ClInclude Include="..\public\Skill_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
+    <ClInclude Include="..\public\Snail.h" />
     <ClInclude Include="..\public\S_Change_Magic.h" />
     <ClInclude Include="..\public\S_FinnAndJake.h" />
     <ClInclude Include="..\public\S_Fiona.h" />
@@ -388,6 +389,7 @@
     <ClCompile Include="..\private\Player_Talk.cpp" />
     <ClCompile Include="..\private\Skill_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
+    <ClCompile Include="..\private\Snail.cpp" />
     <ClCompile Include="..\private\S_Change_Magic.cpp" />
     <ClCompile Include="..\private\S_FinnAndJake.cpp" />
     <ClCompile Include="..\private\S_Fiona.cpp" />

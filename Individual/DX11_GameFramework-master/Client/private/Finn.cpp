@@ -198,7 +198,7 @@ HRESULT CFinn::Render_XRay()
 
 HRESULT CFinn::Render_ShadowDepth()
 {
-	if (FAILED(__super::Render()))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
 
 	if (nullptr == m_pShaderCom)

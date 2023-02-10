@@ -125,6 +125,7 @@
 #include "MiniGmae_Collider.h"
 #include "Knives_Rain.h"
 #include "Lady_Rainicorn.h"
+#include "Snail.h"
 
 #include "Obj_Manager.h"
 
@@ -688,12 +689,20 @@ HRESULT CLoader::Loading_ForMiniGame()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Lady_Rainicorn"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Lady_Rainicorn/Lady_Rainicorn.fbx", PivotMatrix))))
 		return E_FAIL;
+	
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
+	// 플레이어
 	/* For.Prototype_Component_Model_S_FinnAndJake */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_S_FinnAndJake"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Skill/FinnAndJake/FinnAndJake.fbx", PivotMatrix))))
+		return E_FAIL;
+
+	// 달팽이
+	/* For.Prototype_Component_Model_Snail */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Snail"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/MiniGame/Snail/Snail.fbx", PivotMatrix))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
@@ -728,6 +737,11 @@ HRESULT CLoader::Loading_ForMiniGame()
 		CLady_Rainicorn::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// 달팽이
+	/* For.Prototype_GameObject_Snail */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Snail"),
+		CSnail::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #ifdef F2_SKELETON
 	SkeletonTemp();

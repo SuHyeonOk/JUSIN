@@ -158,6 +158,10 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Lady_Rainicorn"), TEXT("Prototype_GameObject_Lady_Rainicorn"), &_float3(62.8778f, 0.0f, 27.6776f))))
 		return E_FAIL;
 
+	// ´ÞÆØÀÌ
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Snail"), TEXT("Prototype_GameObject_Snail"), &_float3(-6.0f, 0.0f, -20.0f))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -211,7 +215,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_FinnAndJake(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Prototype_GameObject_FinnAndJake"), &_float3(-5.0f, 0.0f, -20.0f))))
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Prototype_GameObject_FinnAndJake"), &_float3(-4.0f, 0.0f, -20.0f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

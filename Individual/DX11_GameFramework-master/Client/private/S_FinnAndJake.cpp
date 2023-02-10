@@ -114,7 +114,10 @@ void CS_FinnAndJake::Late_Tick(_double TimeDelta)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
+	{
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+	}
 }
 
 HRESULT CS_FinnAndJake::Render()
@@ -151,6 +154,43 @@ HRESULT CS_FinnAndJake::Render()
 	return S_OK;
 }
 
+HRESULT CS_FinnAndJake::Render_XRay()
+{
+	if (FAILED(__super::Render_XRay()))
+		return E_FAIL;
+
+	if (nullptr == m_pShaderXRayCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderXRayCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float	fObjectID = 4.0f;
+	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		if (3 == i)
+			return S_OK;
+
+		m_pModelCom->Bind_Material(m_pShaderXRayCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices", 0);
+	}
+	return S_OK;
+}
+
 void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 {
 	if (L"Knives_Rain" == pOther->Get_Tag())
@@ -176,6 +216,11 @@ HRESULT CS_FinnAndJake::SetUp_Components()
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_ShaderXRay */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel_XRay"), TEXT("Com_ShaderXRay"),
+		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
@@ -426,6 +471,7 @@ void CS_FinnAndJake::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pShaderXRayCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
