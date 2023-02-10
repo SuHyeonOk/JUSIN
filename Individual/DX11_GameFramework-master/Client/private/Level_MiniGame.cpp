@@ -75,8 +75,8 @@ void CLevel_MiniGame::Tick(_double TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_N))
 	{
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Lady_Rainicorn"), TEXT("Prototype_GameObject_Lady_Rainicorn"), 
-			&_float3(62.8778f, 0.0f, 27.6776f))))
+		// 무지개콘
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Lady_Rainicorn"), TEXT("Prototype_GameObject_Lady_Rainicorn"), &_float3(62.8778f, 0.0f, 27.6776f))))
 			return;
 	}
 

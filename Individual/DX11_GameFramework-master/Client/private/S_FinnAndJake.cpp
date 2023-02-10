@@ -4,8 +4,8 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "Skill_Manager.h"
-#include "UI_Manager.h"
 #include "Effect_Manager.h"
+#include "Utilities_Manager.h"
 
 CS_FinnAndJake::CS_FinnAndJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -68,13 +68,13 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 	
-	End_Tick();
-	Return_Tick();
-	Hit_Tick(TimeDelta);
-	KeyInput(TimeDelta);
-	AnimatedMovie_Tick();
+	End_Tick();					// 비모를 찾으면서 게임이 종료된다. 종료될 때의 설정
+	Return_Tick();				// 체력이 0이 되는 순간 처음으로 돌아간다.
+	Hit_Tick(TimeDelta);		// 공격 받았을 때
+	AnimatedMovie_Tick();		// 애니메이션 돌아가는 함수
+	KeyInput(TimeDelta);		// 플레이어 키 입력 8방향으로만 이동가능
 
-
+	Rainicorn(TimeDelta);		// 무지개 콘을 만났을 때 실행 될 함수 
 
 
 
@@ -156,8 +156,14 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 	if (L"Knives_Rain" == pOther->Get_Tag())
 	{
 		m_OnHit = true;
-		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(30.0f);
 	}
+
+	if (L"Lady_Rainicorn" == pOther->Get_Tag())
+	{
+		m_bRainicorn = true;
+	}
+	
 }
 
 HRESULT CS_FinnAndJake::SetUp_Components()
@@ -358,6 +364,38 @@ void CS_FinnAndJake::End_Tick()
 	CObj_Manager::GetInstance()->Set_NextLevel(true);
 	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);
+}
+
+void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
+{
+	if (false == m_bRainicorn)
+		return;
+
+	m_dRainicorn_TimeAcc += TimeDelta;
+	if (5.0 < m_dRainicorn_TimeAcc)		// 5초가 지난 후에 서야 키 입력을 할 수 있다.
+	{
+		m_bRainicorn = false; 
+		m_dEffect_TimeAcc = 0.0;
+		m_dRainicorn_TimeAcc = 0;
+	}
+	else
+	{
+		m_eAnim_State = MOVE;
+		if (1.5 < m_dRainicorn_TimeAcc)
+			m_eAnim_State = IDLE;
+
+		m_OnMove = false;
+		m_pTransformCom->Chase(XMVectorSet(62.8778f, 0.0f, 27.6776f, 1.0f), TimeDelta, 2.0f);
+
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.2 < m_dEffect_TimeAcc)
+		{
+			CEffect_Manager::GetInstance()->Effect_MiniGame_Heart({ 61.5f, 0.5f, 26.0f },
+			{ 1.0f, CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.5f) });
+
+			m_dEffect_TimeAcc = 0.0;
+		}
+	}
 }
 
 CS_FinnAndJake * CS_FinnAndJake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

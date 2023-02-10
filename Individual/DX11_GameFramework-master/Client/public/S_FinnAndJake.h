@@ -50,6 +50,8 @@ private:
 	void					Return_Tick();
 	void					End_Tick();
 
+	void					Rainicorn(const _double & TimeDelta);
+
 private:
 	_float4					m_f4NewLook = {0.0f, 0.0f, 0.0f, 1.0f};
 	_float4					m_f4StartPoition = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -59,9 +61,15 @@ private:
 	_bool					m_OnHit = false;
 	_bool					m_bEnd = false;
 
+	_bool					m_bRainicorn = false;
+	_double					m_dRainicorn_TimeAcc = { 0.0 };
+
 	// ºŒ¿Ã¥ı
 	_bool					m_bShader_Hit = false;
 	_double					m_dShader_Hit_TimeAcc = 0;
+
+	// ¿Ã∆Â∆Æ
+	_double					m_dEffect_TimeAcc = { 0.0 };
 
 public:
 	static CS_FinnAndJake* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

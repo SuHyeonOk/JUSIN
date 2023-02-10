@@ -16,6 +16,8 @@ public:
 	virtual ~CEffect_Manager() = default;
 
 public:
+	HRESULT		Effect_MiniGame_Heart(const _float3 & f3Pos, const _float3 & f3Color);
+
 	HRESULT		Effect_Can_Smoke(const _float3 & f3Pos);
 	HRESULT		Effect_TreeBullet(const _float3 & f3Pos);
 

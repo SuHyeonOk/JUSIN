@@ -50,7 +50,8 @@ HRESULT CE_Look_Up::Initialize(void * pArg)
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.7f, 1.1f);
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::HP_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINUSHP_TEXTURE == m_tEffectInfo.eTextureType)
+		CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINUSHP_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINIGAME_HEART == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.2f, 0.5f);
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
 	{
@@ -137,7 +138,8 @@ HRESULT CE_Look_Up::Render()
 
 	// 색 조정
 	if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::BOSS_SOMKE_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType)
+		CE_Look_Up::EFFECTINFO::TEXTURETYPE::CAMSOMKE_TEXTURE == m_tEffectInfo.eTextureType || 
+		CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINIGAME_HEART == m_tEffectInfo.eTextureType)
 		m_pShaderCom->Begin(4);
 	// 이미지색
 	else
@@ -175,6 +177,8 @@ HRESULT CE_Look_Up::SetUp_Components()
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Food_MinusHp"));
 	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::CUTSCENEFIRESMALL_TEXTURE == m_tEffectInfo.eTextureType)
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_CutScene_SmallFire"));
+	else if (CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINIGAME_HEART == m_tEffectInfo.eTextureType)
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_MiniGame_Heart"));
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))

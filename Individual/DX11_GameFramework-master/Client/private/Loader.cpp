@@ -1551,6 +1551,11 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Tree_Witch/tree_witch_pinches_2_D.png")))))
 		return E_FAIL;
 
+	// MiniGame
+	/* For.Prototype_Component_Texture_MiniGame_Heart */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_MiniGame_Heart"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/MiniGame/Heart.png")))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 

@@ -17,7 +17,7 @@ class CE_Look_Up final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { SKELETON_TEXTURE, BOSS_SOMKE_TEXTURE, HP_TEXTURE, MINUSHP_TEXTURE, CAMSOMKE_TEXTURE, CUTSCENEFIRESMALL_TEXTURE, TEXTURE_END };
+		enum TEXTURETYPE { SKELETON_TEXTURE, BOSS_SOMKE_TEXTURE, HP_TEXTURE, MINUSHP_TEXTURE, CAMSOMKE_TEXTURE, CUTSCENEFIRESMALL_TEXTURE, MINIGAME_HEART, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
@@ -46,10 +46,10 @@ private:
 	void				CutScene_SmallFire(const _double & TimeDelta);
 
 private:
-	CShader*				m_pShaderCom = nullptr;
-	CRenderer*				m_pRendererCom = nullptr;
-	CTexture*				m_pTextureCom = nullptr;
-	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+	CShader*			m_pShaderCom = nullptr;
+	CRenderer*			m_pRendererCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
+	CVIBuffer_Rect*		m_pVIBufferCom = nullptr;
 
 private:
 	EFFECTINFO			m_tEffectInfo;

@@ -20,6 +20,23 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Effect_MiniGame_Heart(const _float3 & f3Pos, const _float3 & f3Color)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+	CE_Look_Up::EFFECTINFO	tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Up::EFFECTINFO::TEXTURETYPE::MINIGAME_HEART;
+	tEffectInfo.f3Pos = _float3(f3Pos.x + fRendomNumberX, f3Pos.y, f3Pos.z);
+	tEffectInfo.f3Color = f3Color;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Up"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_Can_Smoke(const _float3 & f3Pos)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

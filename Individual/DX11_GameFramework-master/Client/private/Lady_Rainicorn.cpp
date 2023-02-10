@@ -56,8 +56,6 @@ void CLady_Rainicorn::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-
-
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (pGameInstance->Key_Down(DIK_N))
@@ -66,9 +64,6 @@ void CLady_Rainicorn::Tick(_double TimeDelta)
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
-
-
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(90.0f));
 }
 
 void CLady_Rainicorn::Late_Tick(_double TimeDelta)
@@ -112,7 +107,10 @@ HRESULT CLady_Rainicorn::Render()
 
 void CLady_Rainicorn::On_Collision(CGameObject * pOther)
 {
-
+	if (L"Knives_Rain" == pOther->Get_Tag())
+	{
+		CGameObject::Set_Dead();
+	}
 }
 
 HRESULT CLady_Rainicorn::SetUp_Components()

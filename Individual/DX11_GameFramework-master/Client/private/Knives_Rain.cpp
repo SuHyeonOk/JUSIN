@@ -177,7 +177,7 @@ void CKnives_Rain::Rain_Tick(const _double & TimeDelta)
 		m_pTransformCom->Set_Pos(4.0f);
 	}
 
-	if (5 == m_iRain_Count)
+	if (7 == m_iRain_Count)	// 칼이 떨어지는 개수는 여기서 정해주면 된다.
 	{
 		m_bRain = false;
 		m_iRain_Count = 0;
