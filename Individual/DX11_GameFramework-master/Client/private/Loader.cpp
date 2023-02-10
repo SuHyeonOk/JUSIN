@@ -220,7 +220,12 @@ HRESULT CLoader::Loading_ForLogo()
 HRESULT CLoader::Loading_ForGamePlay()
 {
 	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+	{
+		lstrcpy(m_szLoadingText, TEXT("미니게임을 종료합니다. "));
+
+		m_isFinished = true;
 		return S_OK;
+	}
 
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

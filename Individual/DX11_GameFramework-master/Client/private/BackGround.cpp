@@ -74,9 +74,11 @@ void CBackGround::Tick(_double TimeDelta)
 		else if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
 			m_iLevel_Texture = 2;		// 미니게임
 		else if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
-			m_iLevel_Texture = 3;		// 해골
+			m_iLevel_Texture = 3;	// 미니게임 에서 가든
+		else if (3 == CObj_Manager::GetInstance()->Get_Loading_Count())
+			m_iLevel_Texture = 4;	// 해골
 		else
-			m_iLevel_Texture = 4;		// 해골 보스
+			m_iLevel_Texture = 5;		// 해골 보스
 	}
 }
 
@@ -85,7 +87,7 @@ void CBackGround::Late_Tick(_double TimeDelta)
 	__super::Late_Tick(TimeDelta);
 
 	if(nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
 HRESULT CBackGround::Render()

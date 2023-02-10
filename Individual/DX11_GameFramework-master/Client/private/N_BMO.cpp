@@ -91,6 +91,8 @@ void CN_BMO::On_Collision(CGameObject * pOther)
 
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
+
 		m_bInteraction = CObj_Manager::GetInstance()->Get_Interaction();
 
 		// 플레이어와 충돌하고 있는 상태에서 'G' 를 누르면 대화가 넘어간다.
@@ -162,7 +164,34 @@ HRESULT CN_BMO::SetUp_ShaderResources()
 
 void CN_BMO::Talk_Tick()
 {
-	if (m_bInteraction)
+	if (false == m_bInteraction)
+		return;
+
+	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+	{
+		if (0 == m_Script_Count)	// 미니 게임이 끝난 후의 보상
+		{
+			CObj_Manager::GetInstance()->Set_Heart(5);
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(500.0f);
+			CObj_Manager::GetInstance()->Set_Coin(1000);
+		}
+
+		switch (m_Script_Count)
+		{
+		case 0:
+		{
+			++m_Script_Count;
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n얘들아 고생했어 내 선물을 받아줘! ^-^"));
+		}
+		break;
+		case 1:
+		{
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n얘들아 고생했어 내 선물을 받아줘! ^-^"));
+		}
+		break;
+		}
+	}
+	else
 	{
 		switch (m_Script_Count)
 		{
@@ -197,19 +226,12 @@ void CN_BMO::Talk_Tick()
 			CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
 			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 
-			++m_Script_Count;
-			CUI_Manager::GetInstance()->Set_Talk(false); 
+			m_Script_Count = 0;
+			CUI_Manager::GetInstance()->Set_Talk(false);			// 대화창 끄기
+			CObj_Manager::GetInstance()->Set_Interaction(false);	// 상호작용 끄기
 			//CGameObject::Set_Dead();
 		}
-			break;
-
-		case 6:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n얘들아 고생했어 내 선물을 받아줘! ^-^"));
-			break;
-
-		default:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n핀, 제이크 화이팅!"));
-			break;
+		break;
 		}
 	}
 }

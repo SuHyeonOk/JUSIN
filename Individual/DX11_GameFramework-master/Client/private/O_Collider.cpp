@@ -115,10 +115,6 @@ void CO_Collider::On_Collision(CGameObject * pOther)
 		}
 	}
 	break;
-
-	case COLLIDERINFO::TYPE::BOSS:
-		_int a = 0;
-	break;
 	}
 
 }
@@ -140,16 +136,8 @@ HRESULT CO_Collider::SetUp_Components()
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 
-	if (COLLIDERINFO::TYPE::BOSS == m_ColliderInfo.eType)
-	{
-		ColliderDesc.vSize = _float3(2.0f, 2.0f, 2.0f);
-		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
-	}
-	else
-	{
-		ColliderDesc.vSize = _float3(1.0f, 1.0f, 1.0f);
-		ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
-	}
+	ColliderDesc.vSize = _float3(2.0f, 2.0f, 2.0f);
+	ColliderDesc.vCenter = _float3(0.0f, 0.0f/*ColliderDesc.vSize.y * 0.5f*/, 0.0f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))

@@ -29,6 +29,9 @@ private:
 	HRESULT Ready_Layer_Map(const _tchar* pLayerTag);
 
 private:
+	HRESULT	Reset_MiniGame();
+
+private:
 	void	ImGui();
 	void	ImGui_Food();
 	void	ImGui_Coin();

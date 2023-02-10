@@ -354,11 +354,6 @@ void CS_FinnAndJake::End_Tick()
 	if (false == m_bEnd)
 		return;
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-41.5639f, 3.7f, 43.7056f));
-	RELEASE_INSTANCE(CGameInstance);
-
 	CObj_Manager::GetInstance()->Set_Loading_Count();
 	CObj_Manager::GetInstance()->Set_NextLevel(true);
 	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);

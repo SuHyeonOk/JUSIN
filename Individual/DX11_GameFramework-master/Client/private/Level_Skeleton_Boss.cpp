@@ -235,11 +235,6 @@ HRESULT CLevel_Skleton_Boss::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
 		return E_FAIL;
 
-	tColliderInfo.eType = CO_Collider::COLLIDERINFO::BOSS;
-	tColliderInfo.f3Pos = _float3(2.7f, 0.0f, 13.0f);
-	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Collider"), TEXT("Prototype_GameObject_O_Collider"), &tColliderInfo)))
-		return E_FAIL;
-
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
 		return E_FAIL;
 

@@ -29,7 +29,11 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * p
 HRESULT CLevel_GamePlay::Initialize()
 {
 	if (2 == CObj_Manager::GetInstance()->Get_Loading_Count())
+	{
+		CObj_Manager::GetInstance()->Set_NextLevel(false);
+		Reset_MiniGame();
 		return S_OK;
+	}
 
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -95,28 +99,23 @@ void CLevel_GamePlay::Late_Tick(_double TimeDelta)
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
+		if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
 		{
-			RELEASE_INSTANCE(CGameInstance);
-			return;
+			if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_MINIGAME))))
+			{
+				RELEASE_INSTANCE(CGameInstance);
+				return;
+			}
+		}
+		else if (3 == CObj_Manager::GetInstance()->Get_Loading_Count())
+		{
+			if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
+			{
+				RELEASE_INSTANCE(CGameInstance);
+				return;
+			}
 		}
 
-		//if (1 == CObj_Manager::GetInstance()->Get_Loading_Count())
-		//{
-		//	if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_MINIGAME))))
-		//	{
-		//		RELEASE_INSTANCE(CGameInstance);
-		//		return;
-		//	}
-		//}
-		//else
-		//{
-		//	if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SKELETON))))
-		//	{
-		//		RELEASE_INSTANCE(CGameInstance);
-		//		return;
-		//	}
-		//}
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
@@ -302,6 +301,62 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Map_Garden"))))
 		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Reset_MiniGame()
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	// 좌표 이동
+	CTransform * pObjTransformCom;
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-41.1781f, 0.0f, 50.2633f));
+
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-42.2207f, 0.0f, 50.1877f));
+
+	pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+	pObjTransformCom->Set_Pos(_float3(-42.2539f, 3.6f, 44.2521f));
+
+	CNavigation * pObjNavigationCom = nullptr;
+	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
+	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Garden.txt"));
+	pObjNavigationCom->Set_CellIndex(286);
+
+	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Navigation"), 0));
+	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Garden.txt"));
+	pObjNavigationCom->Set_CellIndex(286);
+
+	pObjNavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_BackGround"), TEXT("Com_Navigation"), 0));
+	pObjNavigationCom->Ready_NextLevel(TEXT("../../Data/Navi_Garden.txt"));
+
+	// 다시 생성
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Garden"), TEXT("Prototype_GameObject_Map_Garden"))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Garden_SkyBox"), TEXT("Prototype_GameObject_Sky"))))
+		return E_FAIL;
+
+	CN_NPC::NPCDESC					tNpcDesc;
+	tNpcDesc.eNpcType = tNpcDesc.KEYMAN;
+	tNpcDesc.TransformDesc.f3Pos = _float3(3.53753f, 0.f, 56.2821f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_KeyMan__0"), TEXT("Prototype_GameObject_N_KeyMan"), &tNpcDesc)))
+		return E_FAIL;
+
+	tNpcDesc.eNpcType = tNpcDesc.BMO;
+	tNpcDesc.TransformDesc.f3Pos = _float3(-41.7723f, 0.0f, 51.0853f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Bmo"), TEXT("Prototype_GameObject_N_BMO"), &tNpcDesc)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_GooseShop"), TEXT("Prototype_GameObject_N_GooseShop"), &_float3(1.41737f, 0.0f, 44.9208f))))
+		return E_FAIL;
+
+	Load_Object();
+	Load_Envionment();
 
 	RELEASE_INSTANCE(CGameInstance);
 

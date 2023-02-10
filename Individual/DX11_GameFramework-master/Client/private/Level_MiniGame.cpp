@@ -78,13 +78,9 @@ void CLevel_MiniGame::Late_Tick(_double TimeDelta)
 
 	if (CObj_Manager::GetInstance()->Get_NextLevel())
 	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
-		{
-			RELEASE_INSTANCE(CGameInstance);
 			return;
-		}
-		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 

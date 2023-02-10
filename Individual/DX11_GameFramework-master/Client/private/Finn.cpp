@@ -69,6 +69,23 @@ HRESULT CFinn::Initialize(void * pArg)
 
 void CFinn::Tick(_double TimeDelta)
  {
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (pGameInstance->Key_Down(DIK_V))
+	{
+		//////////////////////////// 디버그용
+		_vector vddMyPos;
+		vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+
+		_float4	f4ddMyPos;
+		XMStoreFloat4(&f4ddMyPos, vddMyPos);
+
+		cout << "핀" << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << " || " << m_pNavigationCom->Get_CellIndex() << endl;
+		//////////////////////////// 디버그용
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	if (true == CSkill_Manager::GetInstance()->Get_ChangeSkill_Create())
 		return;
 
