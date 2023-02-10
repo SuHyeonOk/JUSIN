@@ -126,6 +126,7 @@
 #include "Knives_Rain.h"
 #include "Lady_Rainicorn.h"
 #include "Snail.h"
+#include "Cake.h"
 
 #include "Obj_Manager.h"
 
@@ -681,15 +682,31 @@ HRESULT CLoader::Loading_ForMiniGame()
 		return E_FAIL;
 
 	// Game
+	// Knives
 	/* For.Prototype_Component_Model_Knives_Rain */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Knives_Rain"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Knives_Rain/Knives_Rain.fbx", PivotMatrix))))
 		return E_FAIL;
+
+	// Lady_Rainicorn
 	/* For.Prototype_Component_Model_Lady_Rainicorn */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Lady_Rainicorn"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Lady_Rainicorn/Lady_Rainicorn.fbx", PivotMatrix))))
 		return E_FAIL;
 	
+	// Ckae
+	/* For.Prototype_Component_Model_Cake_Blue */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Cake_Blue"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Cake/Cake_Blue.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Cake_Magenta */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Cake_Magenta"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Cake/Cake_Magenta.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Cake_Yellow */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Cake_Yellow"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Cake/Cake_Yellow.fbx", PivotMatrix))))
+		return E_FAIL;
 
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
@@ -704,6 +721,7 @@ HRESULT CLoader::Loading_ForMiniGame()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Snail"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/MiniGame/Snail/Snail.fbx", PivotMatrix))))
 		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더를 로딩중입니다. "));
 
@@ -735,6 +753,10 @@ HRESULT CLoader::Loading_ForMiniGame()
 	/* For.Prototype_GameObject_Lady_Rainicorn */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lady_Rainicorn"),
 		CLady_Rainicorn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Ckae */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Ckae"),
+		CCake::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 달팽이

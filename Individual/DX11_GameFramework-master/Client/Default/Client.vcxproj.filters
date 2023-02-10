@@ -609,6 +609,9 @@
     <ClInclude Include="..\public\Snail.h">
       <Filter>02.GameObjects\MiniGame</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Cake.h">
+      <Filter>02.GameObjects\MiniGame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1002,6 +1005,9 @@
       <Filter>02.GameObjects\MiniGame</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Snail.cpp">
+      <Filter>02.GameObjects\MiniGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cake.cpp">
       <Filter>02.GameObjects\MiniGame</Filter>
     </ClCompile>
   </ItemGroup>

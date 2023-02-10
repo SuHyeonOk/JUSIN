@@ -124,7 +124,7 @@ HRESULT CSnail::Render_XRay()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	_float	fObjectID = 2.0f;
+	_float	fObjectID = 3.0f;
 	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
 		return E_FAIL;
 
@@ -238,14 +238,12 @@ void CSnail::NextPosition(const _double & TimeDelta)
 		return;
 
 	_vector vNextPosition = XMVectorSet(m_vecNextPosition[m_iIndex].x, m_vecNextPosition[m_iIndex].y, m_vecNextPosition[m_iIndex].z, 1.0f);
+	m_pTransformCom->LookAt(vNextPosition);
 
 	// 내 거리와 목표 지점의 거리를 구해서 목표지점에 도달하면 그 때 i를 증가 시킨다.
 	if (true == m_pTransformCom->TargetPoint(vNextPosition, TimeDelta))
 	{
 		++m_iIndex;
-		m_pTransformCom->LookAt(vNextPosition);
-
-		cout << m_iIndex << "도착했다." << endl;
 	}
 
 	if (m_iIndex > m_vecNextPosition.size() - 1)

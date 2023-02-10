@@ -18,6 +18,7 @@
 #include "E_FlyingEnvironment.h"
 
 #include "MiniGmae_Collider.h"
+#include "Cake.h"
 
 CLevel_MiniGame::CLevel_MiniGame(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -160,6 +161,25 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 
 	// 달팽이
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Snail"), TEXT("Prototype_GameObject_Snail"), &_float3(-6.0f, 0.0f, -20.0f))))
+		return E_FAIL;
+
+	// 비모 위치 84.6781 | 0 | 12.0082
+
+	// 케이크
+	CCake::OBJECTINFO tObjectInfo;
+	tObjectInfo.eType = CCake::BLUE;
+	tObjectInfo.f3Position = { 23.0f, 0.0f, 16.0f };
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Blue"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
+		return E_FAIL;
+
+	tObjectInfo.eType = CCake::MAGENTA;
+	tObjectInfo.f3Position = { 24.0f, 0.0f, 16.0f };
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Magenta"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
+		return E_FAIL;
+
+	tObjectInfo.eType = CCake::YELLOW;
+	tObjectInfo.f3Position = { 25.0f, 0.0f, 16.0f };
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Yellow"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

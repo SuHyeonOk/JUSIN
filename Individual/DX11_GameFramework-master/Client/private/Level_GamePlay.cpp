@@ -1089,9 +1089,23 @@ void CLevel_GamePlay::ImGui_Envionment()
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &_float3(m_f3ClickPos.x, fObjectY, m_f3ClickPos.z))))
 				return;
 		}
+
+		wofstream fout("../../Data/Garden_Envionment.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
+
+	if (ImGui::Button("Count Reset"))
+		m_iItem_Count = 0;
 
 	if (ImGui::Button("Envionmen Save"))
 	{
