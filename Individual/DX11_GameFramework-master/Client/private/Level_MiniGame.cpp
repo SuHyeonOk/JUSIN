@@ -168,7 +168,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 	// ÄÉÀÌÅ©
 	CCake::OBJECTINFO tObjectInfo;
 	tObjectInfo.eType = CCake::BLUE;
-	tObjectInfo.f3Position = { 23.0f, 0.0f, 16.0f };
+	tObjectInfo.f3Position = { 22.5f, 0.0f, 16.0f };
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Blue"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
 		return E_FAIL;
 
@@ -178,7 +178,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 		return E_FAIL;
 
 	tObjectInfo.eType = CCake::YELLOW;
-	tObjectInfo.f3Position = { 25.0f, 0.0f, 16.0f };
+	tObjectInfo.f3Position = { 25.5f, 0.0f, 16.0f };
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Yellow"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
 		return E_FAIL;
 

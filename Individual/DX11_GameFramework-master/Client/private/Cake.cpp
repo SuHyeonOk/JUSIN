@@ -26,8 +26,6 @@ HRESULT CCake::Initialize_Prototype()
 
 HRESULT CCake::Initialize(void * pArg)
 {	
-	m_wsTag = L"Cake";
-
 	if (nullptr != pArg)
 		memcpy(&m_ObjectInfo, pArg, sizeof(OBJECTINFO));
 
@@ -45,6 +43,19 @@ HRESULT CCake::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
+
+	switch (m_ObjectInfo.eType)
+	{
+	case Client::CCake::BLUE:
+		m_wsTag = L"Cake_Blue";
+		break;
+	case Client::CCake::MAGENTA:
+		m_wsTag = L"Cake_Magenta";
+		break;
+	case Client::CCake::YELLOW:
+		m_wsTag = L"Cake_Yellow";
+		break;
+	}
 
 	return S_OK;
 }
@@ -96,10 +107,10 @@ HRESULT CCake::Render()
 
 void CCake::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag())
-	{
-		CGameObject::Set_Dead();
-	}
+	//if (L"Finn" == pOther->Get_Tag())
+	//{
+	//	CGameObject::Set_Dead();
+	//}
 }
 
 HRESULT CCake::SetUp_Components()

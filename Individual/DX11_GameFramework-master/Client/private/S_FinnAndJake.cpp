@@ -96,6 +96,7 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 
 		cout << "게임 플레이어 위치" << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
 		//////////////////////////// 디버그용
+
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -207,6 +208,55 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 		m_bRainicorn = true;
 	}
 	
+	if(L"Cake_Blue" == pOther->Get_Tag())
+	{
+		// 달팽이가 있는 위치로 순간 이동
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CTransform * pSnail_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_Snail"), TEXT("Com_Transform"), 0));
+		_float4 f4Snail_Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Snail_Position, pSnail_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
+		// 내 위치를 달팽이 위치로 변경
+		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, pSnail_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		
+		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+		
+		// 카메라 위치를 달팽이 위치로 변경
+		pCamra_TransformCom->Set_Pos({ f4Snail_Position.x, f4Snail_Position.y + 3.7f, f4Snail_Position.z - 6.0f});
+		
+		RELEASE_INSTANCE(CGameInstance);
+
+		// 이펙트
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ f4Snail_Position.x, f4Snail_Position.y + 1.0f, f4Snail_Position.z }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
+	}
+
+	if (L"Cake_Magenta" == pOther->Get_Tag())
+	{
+		// 출발점 으로
+		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });		// 내위치
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+		pCamra_TransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f });	// 카메라 위치
+		RELEASE_INSTANCE(CGameInstance);
+	
+		// 이펙트
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ -4.0f, 2.0f, -20.0f }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
+	}
+
+	if (L"Cake_Yellow" == pOther->Get_Tag())
+	{
+		// 도착지점 조금 전 으로
+		m_pTransformCom->Set_Pos({ 85.342f, 0.0f, 31.9937f });		// 내위치
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+		pCamra_TransformCom->Set_Pos({ 85.342f, 3.7f, 26.0f });	// 카메라 위치
+		RELEASE_INSTANCE(CGameInstance);
+	
+		// 이펙트
+		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ 85.342f, 1.0f, 31.9937f }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
+	}
 }
 
 HRESULT CS_FinnAndJake::SetUp_Components()
