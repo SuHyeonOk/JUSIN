@@ -233,11 +233,11 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 	if (L"Cake_Magenta" == pOther->Get_Tag())
 	{
 		// 출발점 으로
-		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });		// 내위치
+		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });			// 내위치
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		pCamra_TransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f });	// 카메라 위치
+		pCamra_TransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f });		// 카메라 위치
 		RELEASE_INSTANCE(CGameInstance);
 	
 		// 이펙트
@@ -251,7 +251,7 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		pCamra_TransformCom->Set_Pos({ 85.342f, 3.7f, 26.0f });	// 카메라 위치
+		pCamra_TransformCom->Set_Pos({ 85.342f, 3.7f, 26.0f });		// 카메라 위치
 		RELEASE_INSTANCE(CGameInstance);
 	
 		// 이펙트
@@ -334,7 +334,7 @@ void CS_FinnAndJake::AnimatedMovie_Tick()
 		m_pModelCom->Set_AnimIndex(7);
 		break;
 	case Client::CS_FinnAndJake::HIT:
-		m_pModelCom->Set_AnimIndex(1);
+		m_pModelCom->Set_AnimIndex(1, false);
 		break;
 	case Client::CS_FinnAndJake::FINISH:
 		m_pModelCom->Set_AnimIndex(2);
@@ -428,7 +428,7 @@ void CS_FinnAndJake::Hit_Tick(const _double & TimeDelta)
 	if (0.1 < m_dShader_Hit_TimeAcc)
 		m_bShader_Hit = false;
 
-	if (0.7 < m_dShader_Hit_TimeAcc)
+	if (1 == m_pModelCom->Get_AnimIndex() && 4 == m_pModelCom->Get_Keyframes())
 	{
 		m_OnHit = false;
 		m_eAnim_State = IDLE;

@@ -181,6 +181,10 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 	tObjectInfo.f3Position = { 25.5f, 0.0f, 16.0f };
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Yellow"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
 		return E_FAIL;
+	
+	// ´Ù¶÷Áã
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Squirrel"), TEXT("Prototype_GameObject_Squirrel"), &_float3(86.0f, 0.0f, 27.0f))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
