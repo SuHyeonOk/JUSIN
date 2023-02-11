@@ -128,6 +128,7 @@
 #include "Snail.h"
 #include "Cake.h"
 #include "Squirrel.h"
+#include "Korean_Food.h"
 
 #include "Obj_Manager.h"
 
@@ -706,6 +707,11 @@ HRESULT CLoader::Loading_ForMiniGame()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Cake/Cake_Yellow.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Korean_Food */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Korean_Food"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/MiniGame/Korean_Food/Korean_Food.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	// 플레이어
@@ -764,6 +770,10 @@ HRESULT CLoader::Loading_ForMiniGame()
 	/* For.Prototype_GameObject_Squirrel */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Squirrel"),
 		CSquirrel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_Korean_Food */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Korean_Food"),
+		CKorean_Food::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 달팽이

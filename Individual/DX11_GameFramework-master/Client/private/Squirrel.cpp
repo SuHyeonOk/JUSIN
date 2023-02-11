@@ -4,6 +4,9 @@
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 
+#include "Korean_Food.h"
+#include "UI_3DTexture.h"
+
 CSquirrel::CSquirrel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -36,7 +39,7 @@ HRESULT CSquirrel::Initialize(void * pArg)
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
 
-	GameObjectDesc.TransformDesc.fSpeedPerSec = 2.5f;
+	GameObjectDesc.TransformDesc.fSpeedPerSec = 1.5f;
 	GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	GameObjectDesc.TransformDesc.f3Pos = f3Pos;
 	m_f4Start_Position = { f3Pos.x, f3Pos.y, f3Pos.z, 1.0f };
@@ -61,6 +64,12 @@ HRESULT CSquirrel::Initialize(void * pArg)
 
 void CSquirrel::Tick(_double TimeDelta)
 {
+	if (true == m_bEat) // 음식을 받았다면 더 이상 움직이지 않고, 음식만 먹는다.
+	{
+		Eat_Tick(TimeDelta);
+		return;
+	}
+
 	__super::Tick(TimeDelta);
 
 	State_Tick(TimeDelta);
@@ -73,8 +82,11 @@ void CSquirrel::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	if (false == m_bEat)
+	{
+		CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_MONSTER, this);
+		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
+	}
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -120,10 +132,10 @@ HRESULT CSquirrel::Render()
 
 void CSquirrel::On_Collision(CGameObject * pOther)
 {
-	//if (L"Finn" == pOther->Get_Tag())
-	//{
-	//	m_eState = ATTACK;
-	//}
+	if (L"Korean_Food_Squirrel" == pOther->Get_Tag())
+	{
+		m_eState = EAT;
+	}
 }
 
 HRESULT CSquirrel::SetUp_Components()
@@ -148,7 +160,7 @@ HRESULT CSquirrel::SetUp_Components()
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.0f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.5f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
@@ -199,10 +211,7 @@ void CSquirrel::AnimatedMovie_Tick()
 		m_pModelCom->Set_AnimIndex(7);
 		break;
 	case Client::CSquirrel::DANCE:
-		m_pModelCom->Set_AnimIndex(1);
-		break;
-	case Client::CSquirrel::EAT:
-		m_pModelCom->Set_AnimIndex(5);
+		m_pModelCom->Set_AnimIndex(1, false);
 		break;
 	}
 }
@@ -241,12 +250,46 @@ void CSquirrel::Idle_Tick()
 	// 거리 안 으로 들어왔다면 공격 상태로 들어간다.
 	if (3.0f > fDistance)
 	{
+		Find_Tick();
 		m_eState = ATTACK;
 	}
 }
 
+void CSquirrel::Find_Tick()
+{
+	if (true == m_bFindUI)
+		return;
+
+	m_bFindUI = true;
+
+	_vector	vMyPos;
+	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	_float4	f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4MyPos, vMyPos);
+
+	CUI_3DTexture::TEXTUREINFO	tTextureInfo;
+	tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
+	tTextureInfo.f2Size = _float2(0.7f, 0.7f);
+	tTextureInfo.f3Pos = _float3(f4MyPos.x, f4MyPos.y + 1.3f, f4MyPos.z - 0.5f);
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_UI_Find_0"), TEXT("Prototype_GameObject_UI_3DTexture"), &tTextureInfo)))
+	{
+		RELEASE_INSTANCE(CGameInstance);
+		return;
+	}
+
+	RELEASE_INSTANCE(CGameInstance);
+}
+
 void CSquirrel::Move_Tick(const _double & TimeDelta)
 {
+	m_dFind_TImeAcc += TimeDelta;
+	if (1.0 > m_dFind_TImeAcc)
+		return;
+
+	m_bFindUI = false;
 	m_eAnimState = MOVE;
 
 	// 시작지점으로 돌아간다.
@@ -261,6 +304,7 @@ void CSquirrel::Move_Tick(const _double & TimeDelta)
 	if (0.1f > fDistance)
 	{
 		m_eState = IDLE;
+		m_dFind_TImeAcc = 0.0;
 	}
 }
 
@@ -292,15 +336,67 @@ void CSquirrel::Attack_Tick(const _double & TimeDelta)
 	}
 	else
 	{
-		// 플레이어에게 다가간다.
 		m_eAnimState = MOVE;
-		m_pTransformCom->Chase(vPlayerPosition, TimeDelta);
+
+		_vector	vStartDistance = XMLoadFloat4(&_float4(m_f4Start_Position.x, m_f4Start_Position.y, m_f4Start_Position.z, m_f4Start_Position.w)) - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float fStartDistance = XMVectorGetX(XMVector3Length(vStartDistance));
+
+		if (3.0f < fStartDistance)											// 시작점에서 몬스터가 멀어지면 다시
+		{
+			m_eState = MOVE;												// 시작 위치로 돌아간다.
+		}
+		else
+			m_pTransformCom->Chase(vPlayerPosition, TimeDelta);				// 플레이어에게 다가간다.
 	}
 }
 
 void CSquirrel::Eat_Tick(const _double & TimeDelta)
 {
+	if (false == m_bEat)
+	{
+		m_bEat = true;
 
+		//_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		//_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		//XMStoreFloat4(&f4Position, vPosition);
+
+		//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		//XMVector3Normalize(vLook * 0.1f);
+		//_float4 f4Look = { 0.0f, 0.0f, 0.0f, 1.0f };
+		//XMStoreFloat4(&f4Look, vLook);
+
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		// 내 Look 을 기준으로 거리 1만큼을 더 한 위치에 생성 시키고 싶다.
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		_float4 f4Look;
+		XMStoreFloat4(&f4Look, XMVector3Normalize(vLook) * 0.3f);
+
+		CKorean_Food::OBJECTINFO	m_Korean_Food;
+		m_Korean_Food.eType = CKorean_Food::SQUIRREL;
+		m_Korean_Food.f3Position = _float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z);
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Korean_Food"), TEXT("Prototype_GameObject_Korean_Food"), &m_Korean_Food)))
+			return;
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
+
+	if (3 > m_iDance_Count)
+	{
+		m_eAnimState = DANCE;
+
+		if (1 == m_pModelCom->Get_AnimIndex() && true == m_pModelCom->Get_Finished())
+		{
+			++m_iDance_Count;
+		}
+	}
+	else
+	{
+		m_pModelCom->Set_AnimIndex(5);
+	}
 }
 
 CSquirrel * CSquirrel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

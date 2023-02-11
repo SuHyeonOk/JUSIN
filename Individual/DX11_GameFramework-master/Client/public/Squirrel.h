@@ -47,6 +47,7 @@ private:
 
 private:
 	void			Idle_Tick();
+	void			Find_Tick();
 	void			Move_Tick(const _double & TimeDelta);
 	void			Attack_Tick(const _double & TimeDelta);
 	void			Eat_Tick(const _double & TimeDelta);
@@ -56,6 +57,12 @@ private:
 	STATE			m_eState = STATE_END;
 
 	_float4			m_f4Start_Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	_bool			m_bEat = false;
+	_int			m_iDance_Count = { 0 };
+
+	_bool			m_bFindUI = false;
+	_double			m_dFind_TImeAcc = { 0.0 };
 
 public:
 	static	CSquirrel*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

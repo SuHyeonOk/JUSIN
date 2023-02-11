@@ -1,22 +1,23 @@
 #include "stdafx.h"
-#include "..\public\Cake.h"
+#include "..\public\Korean_Food.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "Utilities_Manager.h"
 
-CCake::CCake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CKorean_Food::CKorean_Food(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CCake::CCake(const CCake & rhs)
+CKorean_Food::CKorean_Food(const CKorean_Food & rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CCake::Initialize_Prototype()
+HRESULT CKorean_Food::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -24,7 +25,7 @@ HRESULT CCake::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CCake::Initialize(void * pArg)
+HRESULT CKorean_Food::Initialize(void * pArg)
 {	
 	if (nullptr != pArg)
 		memcpy(&m_ObjectInfo, pArg, sizeof(OBJECTINFO));
@@ -43,31 +44,30 @@ HRESULT CCake::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Pos();
-	m_pTransformCom->Set_Scaled({ 2.0f, 2.0f, 2.0f });
 
-	switch (m_ObjectInfo.eType)
+	if (IDLE == m_ObjectInfo.eType)		// 플레이어가 삭제할 객체
 	{
-	case Client::CCake::BLUE:
-		m_wsTag = L"Cake_Blue";
-		break;
-	case Client::CCake::MAGENTA:
-		m_wsTag = L"Cake_Magenta";
-		break;
-	case Client::CCake::YELLOW:
-		m_wsTag = L"Cake_Yellow";
-		break;
+		m_wsTag = L"Korean_Food";
+	}
+	else								// 플레이어를 따라 다니다가 다람쥐에게 줄 객체
+	{
+		m_wsTag = L"Korean_Food_Squirrel";
 	}
 
 	return S_OK;
 }
 
-void CCake::Tick(_double TimeDelta)
+void CKorean_Food::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if (PLAYER == m_ObjectInfo.eType)
+	{
+		Player_Follow(TimeDelta);
+	}
 }
 
-void CCake::Late_Tick(_double TimeDelta)
+void CKorean_Food::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
@@ -84,7 +84,7 @@ void CCake::Late_Tick(_double TimeDelta)
 	RELEASE_INSTANCE(CGameInstance)
 }
 
-HRESULT CCake::Render()
+HRESULT CKorean_Food::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -106,15 +106,25 @@ HRESULT CCake::Render()
 	return S_OK;
 }
 
-void CCake::On_Collision(CGameObject * pOther)
+void CKorean_Food::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag())
+	if (IDLE == m_ObjectInfo.eType)				// 플레이어와 충돌하고 나면 삭제된다. 그리고 플레이어 머리로 가서 플레이어를 따라다닌다.
 	{
-		CGameObject::Set_Dead();
+		if (L"Finn" == pOther->Get_Tag())
+		{
+			CGameObject::Set_Dead();
+		}
+	}
+	else if(PLAYER == m_ObjectInfo.eType)		// 몬스터와 충돌하는 순간 삭제 되면서 몬스터 앞에 음식이 놓이게 된다.
+	{
+		if (L"Squirrel" == pOther->Get_Tag())
+		{
+			CGameObject::Set_Dead();
+		}
 	}
 }
 
-HRESULT CCake::SetUp_Components()
+HRESULT CKorean_Food::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -126,24 +136,8 @@ HRESULT CCake::SetUp_Components()
 		(CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	_tchar	m_szModelName[MAX_PATH] = L"";
-
-
-	switch (m_ObjectInfo.eType)
-	{
-	case Client::CCake::BLUE:
-		wsprintf(m_szModelName, TEXT("Prototype_Component_Model_Cake_Blue"));
-		break;
-	case Client::CCake::MAGENTA:
-		wsprintf(m_szModelName, TEXT("Prototype_Component_Model_Cake_Magenta"));
-		break;
-	case Client::CCake::YELLOW:
-		wsprintf(m_szModelName, TEXT("Prototype_Component_Model_Cake_Yellow"));
-		break;
-	}
-
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_MINIGAME, m_szModelName, TEXT("Com_Model"),
+	if (FAILED(__super::Add_Component(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Korean_Food"), TEXT("Com_Model"),
 		(CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -151,8 +145,17 @@ HRESULT CCake::SetUp_Components()
 
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	
+	if (IDLE == m_ObjectInfo.eType)
+	{
+		ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	}
+	else
+	{
+		ColliderDesc.vSize = _float3(3.0f, 3.0f, 3.0f);
+		ColliderDesc.vCenter = _float3(0.f, -2.5f, 1.0f);
+	}
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))
@@ -161,7 +164,7 @@ HRESULT CCake::SetUp_Components()
 	return S_OK;
 }
 
-HRESULT CCake::SetUp_ShaderResources()
+HRESULT CKorean_Food::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -181,31 +184,43 @@ HRESULT CCake::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CCake * CCake::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+void CKorean_Food::Player_Follow(const _double & TimeDelta)
 {
-	CCake*		pInstance = new CCake(pDevice, pContext);
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+	CTransform * pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Com_Transform"), 0));
+	_vector vPlayerPosition = pPlayer_TransformCom->Get_State(CTransform::STATE_TRANSLATION);
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float4	f4Player_Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+	XMStoreFloat4(&f4Player_Position, vPlayerPosition);
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMLoadFloat4(&_float4(f4Player_Position.x, 2.7f, f4Player_Position.z, 1.0f)));
+}
+
+CKorean_Food * CKorean_Food::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+{
+	CKorean_Food*		pInstance = new CKorean_Food(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CCake");
+		MSG_BOX("Failed to Created : CKorean_Food");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CCake::Clone(void * pArg)
+CGameObject * CKorean_Food::Clone(void * pArg)
 {
-	CCake*		pInstance = new CCake(*this);
+	CKorean_Food*		pInstance = new CKorean_Food(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CCake");
+		MSG_BOX("Failed to Cloned : CKorean_Food");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CCake::Free()
+void CKorean_Food::Free()
 {
 	__super::Free();
 

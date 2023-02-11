@@ -19,6 +19,7 @@
 
 #include "MiniGmae_Collider.h"
 #include "Cake.h"
+#include "Korean_Food.h"
 
 CLevel_MiniGame::CLevel_MiniGame(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel(pDevice, pContext)
@@ -168,7 +169,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 	// ÄÉÀÌÅ©
 	CCake::OBJECTINFO tObjectInfo;
 	tObjectInfo.eType = CCake::BLUE;
-	tObjectInfo.f3Position = { 22.5f, 0.0f, 16.0f };
+	tObjectInfo.f3Position = { 22.0f, 0.0f, 16.0f };
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Blue"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
 		return E_FAIL;
 
@@ -178,12 +179,19 @@ HRESULT CLevel_MiniGame::Ready_Layer_Game()
 		return E_FAIL;
 
 	tObjectInfo.eType = CCake::YELLOW;
-	tObjectInfo.f3Position = { 25.5f, 0.0f, 16.0f };
+	tObjectInfo.f3Position = { 26.0f, 0.0f, 16.0f };
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Ckae_Yellow"), TEXT("Prototype_GameObject_Ckae"), &tObjectInfo)))
 		return E_FAIL;
 	
 	// ´Ù¶÷Áã
 	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Squirrel"), TEXT("Prototype_GameObject_Squirrel"), &_float3(86.0f, 0.0f, 27.0f))))
+		return E_FAIL;
+
+	// ºñºö¹ä
+	CKorean_Food::OBJECTINFO	m_Korean_Food;
+	m_Korean_Food.eType = CKorean_Food::IDLE;
+	m_Korean_Food.f3Position = _float3(57.223f, 0.0f, 36.0828f);
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Korean_Food"), TEXT("Prototype_GameObject_Korean_Food"), &m_Korean_Food)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

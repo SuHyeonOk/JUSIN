@@ -82,12 +82,14 @@ void CModel::Set_AnimIndex(_uint iAnimIndex, _bool bRepetition, _bool bBlending)
 
 _bool CModel::Get_Finished()
 {
-	return m_Animations[m_iCurrentAnimIndex]->Get_Finished();
+	_bool bTemp = m_Animations[m_iCurrentAnimIndex]->Get_Finished();
+	return bTemp;
 }
 
 _int CModel::Get_Keyframes()
 {
-	return m_Animations[m_iCurrentAnimIndex]->Get_Keyframes();
+	_int iTemp = m_Animations[m_iCurrentAnimIndex]->Get_Keyframes();
+	return iTemp;
 }
 
 _bool CModel::Animation_Check(_int iCurrentAnimIndex)

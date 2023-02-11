@@ -7,6 +7,8 @@
 #include "Effect_Manager.h"
 #include "Utilities_Manager.h"
 
+#include "Korean_Food.h"
+
 CS_FinnAndJake::CS_FinnAndJake(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -197,7 +199,7 @@ HRESULT CS_FinnAndJake::Render_XRay()
 
 void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 {
-	if (L"Knives_Rain" == pOther->Get_Tag())
+	if (L"Knives_Rain" == pOther->Get_Tag() || L"Squirrel" == pOther->Get_Tag())
 	{
 		m_OnHit = true;
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(30.0f);
@@ -256,6 +258,21 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 	
 		// ÀÌÆåÆ®
 		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ 85.342f, 1.0f, 31.9937f }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
+	}
+
+	if (L"Korean_Food" == pOther->Get_Tag())
+	{
+		_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Position, vPosition);
+
+		CKorean_Food::OBJECTINFO	m_Korean_Food;
+		m_Korean_Food.eType = CKorean_Food::PLAYER;
+		m_Korean_Food.f3Position = _float3(f4Position.x, f4Position.y, f4Position.z);
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Korean_Food"), TEXT("Prototype_GameObject_Korean_Food"), &m_Korean_Food)))
+			return;
+		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 
@@ -439,7 +456,7 @@ void CS_FinnAndJake::Hit_Tick(const _double & TimeDelta)
 
 void CS_FinnAndJake::Return_Tick()
 {
-	if (0.0f == CObj_Manager::GetInstance()->Get_Current_Player().fHP)
+	if (0.0f >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
 	{
 		CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
 

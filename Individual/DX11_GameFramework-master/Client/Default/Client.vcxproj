@@ -209,6 +209,7 @@
     <ClInclude Include="..\public\Jake_Weapon.h" />
     <ClInclude Include="..\public\Key.h" />
     <ClInclude Include="..\public\Knives_Rain.h" />
+    <ClInclude Include="..\public\Korean_Food.h" />
     <ClInclude Include="..\public\Lady_Rainicorn.h" />
     <ClInclude Include="..\public\Level_GamePlay.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
@@ -346,6 +347,7 @@
     <ClCompile Include="..\private\Jake_Weapon.cpp" />
     <ClCompile Include="..\private\Key.cpp" />
     <ClCompile Include="..\private\Knives_Rain.cpp" />
+    <ClCompile Include="..\private\Korean_Food.cpp" />
     <ClCompile Include="..\private\Lady_Rainicorn.cpp" />
     <ClCompile Include="..\private\Level_GamePlay.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
