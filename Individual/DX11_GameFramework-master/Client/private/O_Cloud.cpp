@@ -70,7 +70,7 @@ void CO_Cloud::Tick(_double TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Down(DIK_V))
+	if (pGameInstance->Key_Down(DIK_Y))
 	{
 		Set_Dead();
 	}
@@ -85,7 +85,12 @@ void CO_Cloud::Late_Tick(_double TimeDelta)
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	{
+		if(LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		else
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	}
 
 	RELEASE_INSTANCE(CGameInstance)
 }

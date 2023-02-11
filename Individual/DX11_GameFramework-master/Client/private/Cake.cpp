@@ -108,7 +108,7 @@ HRESULT CCake::Render()
 
 void CCake::On_Collision(CGameObject * pOther)
 {
-	if (L"Finn" == pOther->Get_Tag())
+	if (L"Jake" == pOther->Get_Tag())
 	{
 		CGameObject::Set_Dead();
 	}

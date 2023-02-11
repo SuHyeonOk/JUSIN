@@ -38,6 +38,7 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CModel*					m_pModelCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
+	CTransform*				m_pPlayer_TransformCom = { nullptr };
 
 private:
 	HRESULT					SetUp_Components();
@@ -48,6 +49,7 @@ private:
 	
 	void					KeyInput(const _double & TimeDelta);
 	void					Hit_Tick(const _double & TimeDelta);
+	void					KnockBack_Tick(const _double & TimeDelta);
 
 	void					Return_Tick();
 	void					End_Tick();
@@ -65,6 +67,9 @@ private:
 
 	_bool					m_bRainicorn = false;
 	_double					m_dRainicorn_TimeAcc = { 0.0 };
+	
+	_bool					m_OnKnockBack = false;
+	_double					m_dKnockBack_TimeAcc = { 0.0 };
 
 	// ºŒ¿Ã¥ı
 	_bool					m_bShader_Hit = false;

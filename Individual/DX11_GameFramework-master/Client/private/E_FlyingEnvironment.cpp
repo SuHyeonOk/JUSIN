@@ -98,7 +98,8 @@ void CE_FlyingEnvironment::Tick(_double TimeDelta)
 		if (false == m_bFindPlayer)
 		{
 			// 그냥 3보다 크다면 return 하면 되잖아! Late_Tick() 에서도 체크해애야 하기 때문에 여기서 한 번만 확인하는 것이 저렴하다고 생각하기 때문에
-			if (m_bFindDistance < CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION)))
+			_float fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+			if (m_bFindDistance < fDistance)
 				return;
 			else
 				m_bFindPlayer = true;
@@ -138,9 +139,8 @@ void CE_FlyingEnvironment::Late_Tick(_double TimeDelta)
 	CGameObject::Compute_CamZ();
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (nullptr != m_pRendererCom &&
-		true == pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION), 1.f))
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	if (nullptr != m_pRendererCom)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 	RELEASE_INSTANCE(CGameInstance)
 }
 

@@ -356,27 +356,15 @@ void CSquirrel::Eat_Tick(const _double & TimeDelta)
 	{
 		m_bEat = true;
 
-		//_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		//_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
-		//XMStoreFloat4(&f4Position, vPosition);
+		_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Position, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
-		//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		//XMVector3Normalize(vLook * 0.1f);
-		//_float4 f4Look = { 0.0f, 0.0f, 0.0f, 1.0f };
-		//XMStoreFloat4(&f4Look, vLook);
-
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-		_float4 f4MyPos;
-		XMStoreFloat4(&f4MyPos, vMyPos);
-
-		// 내 Look 을 기준으로 거리 1만큼을 더 한 위치에 생성 시키고 싶다.
-		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		_float4 f4Look;
-		XMStoreFloat4(&f4Look, XMVector3Normalize(vLook) * 0.3f);
+		_float4 f4Look = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Look, XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 0.3f);
 
 		CKorean_Food::OBJECTINFO	m_Korean_Food;
 		m_Korean_Food.eType = CKorean_Food::SQUIRREL;
-		m_Korean_Food.f3Position = _float3(f4MyPos.x + f4Look.x, f4MyPos.y + f4Look.y, f4MyPos.z + f4Look.z);
+		m_Korean_Food.f3Position = _float3(f4Position.x + f4Look.x, f4Position.y + f4Look.y, f4Position.z + f4Look.z);
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Korean_Food"), TEXT("Prototype_GameObject_Korean_Food"), &m_Korean_Food)))
 			return;
@@ -384,7 +372,7 @@ void CSquirrel::Eat_Tick(const _double & TimeDelta)
 	}
 
 
-	if (3 > m_iDance_Count)
+	if (2 > m_iDance_Count)
 	{
 		m_eAnimState = DANCE;
 

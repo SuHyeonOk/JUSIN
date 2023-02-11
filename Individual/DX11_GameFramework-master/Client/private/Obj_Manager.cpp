@@ -63,6 +63,13 @@ _vector		CObj_Manager::Get_Player_Transform()
 		_vector vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Þ¾Æ¿È
 		return vPlayerPos;
 	}
+	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINNANDJAKE)
+	{
+		CTransform * pTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Com_Transform"), 0));
+
+		_vector vPlayerPos = pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn °ú Jake ÁÂÇ¥ ¹Þ¾Æ¿È
+		return vPlayerPos;
+	}
 
 	RELEASE_INSTANCE(CGameInstance);
 

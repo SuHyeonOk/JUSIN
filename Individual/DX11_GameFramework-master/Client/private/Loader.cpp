@@ -295,7 +295,6 @@ HRESULT CLoader::Loading_ForGamePlay()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Food/Soy_People/Soy_People.fbx", PivotMatrix))))
 		return E_FAIL;
 	
-	
 	// Cyclop
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cyclop_Tears"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Item/Cyclop_Tears/Cyclop_Tears.fbx", PivotMatrix))))
@@ -1836,6 +1835,19 @@ HRESULT CLoader::SkeletonTemp()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Meshes/Object/Portal_Off/Portal_Off.fbx", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Cloud_0*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cloud_0"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Cloud/Cloud_0.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Cloud_1*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cloud_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Cloud/Cloud_1.fbx", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_Cloud_2*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Cloud_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Meshes/Object/Cloud/Cloud_2.fbx", PivotMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
@@ -1904,6 +1916,12 @@ HRESULT CLoader::SkeletonTemp()
 	/* For.Prototype_GameObject_S_Jake_Son */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_S_Jake_Son"),
 		CS_Jake_Son::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Cloud
+	/* For.Prototype_GameObject_O_Cloud */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_O_Cloud"),
+		CO_Cloud::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	UI_Create();

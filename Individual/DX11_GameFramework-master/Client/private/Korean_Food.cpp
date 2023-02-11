@@ -110,7 +110,7 @@ void CKorean_Food::On_Collision(CGameObject * pOther)
 {
 	if (IDLE == m_ObjectInfo.eType)				// 플레이어와 충돌하고 나면 삭제된다. 그리고 플레이어 머리로 가서 플레이어를 따라다닌다.
 	{
-		if (L"Finn" == pOther->Get_Tag())
+		if (L"Jake" == pOther->Get_Tag())
 		{
 			CGameObject::Set_Dead();
 		}

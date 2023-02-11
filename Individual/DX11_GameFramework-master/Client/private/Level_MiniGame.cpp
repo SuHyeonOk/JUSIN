@@ -47,21 +47,21 @@ HRESULT CLevel_MiniGame::Initialize()
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_MiniGame"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_FinnAndJake(TEXT("Layer_FinnAndJake"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-		return E_FAIL;
 
 	CObj_Manager::GetInstance()->Set_NextLevel(false);
 
 	// 파일 읽기
-	//Load_Food();
-	//Load_Coin();
-	//Load_Item();
-	//Load_Object();
-	//Load_Monster();
-	//Load_Envionment();
+	Load_Food();
+	Load_Coin();
+	Load_Item();
+	Load_Object();
+	Load_Envionment();
 	Load_MiniGame();
 
 	return S_OK;
@@ -72,17 +72,6 @@ void CLevel_MiniGame::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	ImGui(); // @ ImGui 를 사용하지 않을 때 주석!
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_N))
-	{
-		// 무지개콘
-		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Lady_Rainicorn"), TEXT("Prototype_GameObject_Lady_Rainicorn"), &_float3(62.8778f, 0.0f, 27.6776f))))
-			return;
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CLevel_MiniGame::Late_Tick(_double TimeDelta)
@@ -230,12 +219,12 @@ HRESULT CLevel_MiniGame::Ready_Layer_Camera(const _tchar * pLayerTag)
 #ifdef F2_SKELETON
 	CCamera_Dynamic::CAMERAINFO eCameraInfo;
 	eCameraInfo.eLevel = LEVEL_MINIGAME;
-	eCameraInfo.f3Pos = _float3(-5.0f, 3.7f, -20.0f);
+	eCameraInfo.f3Pos = { -4.0f, 3.7f, -26.0f, };
 	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Camera_Dynamic"), &eCameraInfo)))
 		return E_FAIL;
 #else
 	CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-	pObjTransformCom->Set_Pos(_float3(-5.0f, 3.7f, -20.0f));
+	pObjTransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f, });
 #endif
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -298,7 +287,7 @@ void CLevel_MiniGame::ImGui()
 void CLevel_MiniGame::ImGui_Food()
 {
 #pragma region Food
-	const _char* szObjName[] = { "Apple_Pie", "Royal_Tart", "Burrito" };
+	const _char* szObjName[] = { "Apple_Pie", "Royal_Tart", "Burrito", "Chewed", "Soy_People" };
 	static int iObjNum = 0;
 	ImGui::Combo("##2_FOOD", &iObjNum, szObjName, IM_ARRAYSIZE(szObjName));
 
@@ -352,6 +341,38 @@ void CLevel_MiniGame::ImGui_Food()
 			fFoodInfo.fPos = m_f3ClickPos;
 
 			m_wstObjName = L"Burrito__";
+			m_wstObjName += to_wstring(m_iBurrito_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+				return;
+
+			m_iBurrito_Count++;
+		}
+
+		if (3 == iObjNum)
+		{
+			fFoodInfo.eFoodKind = fFoodInfo.CHEWED;
+			fFoodInfo.fPos = m_f3ClickPos;
+
+			m_wstObjName = L"Chewed__";
+			m_wstObjName += to_wstring(m_iBurrito_Count);
+
+			m_szObjName = m_wstObjName.c_str();
+
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_Food"), &fFoodInfo)))
+				return;
+
+			m_iBurrito_Count++;
+		}
+
+		if (4 == iObjNum)
+		{
+			fFoodInfo.eFoodKind = fFoodInfo.SOY_PEOPLE;
+			fFoodInfo.fPos = m_f3ClickPos;
+
+			m_wstObjName = L"Soy_People__";
 			m_wstObjName += to_wstring(m_iBurrito_Count);
 
 			m_szObjName = m_wstObjName.c_str();
@@ -454,6 +475,17 @@ void CLevel_MiniGame::ImGui_Coin()
 
 			m_iCoinGold_Count++;
 		}
+
+		wofstream fout("../../Data/MiniGmae_Coin.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -608,7 +640,35 @@ void CLevel_MiniGame::ImGui_Object()
 		}
 	}
 
-	RELEASE_INSTANCE(CGameInstance);
+	if (pGameInstance->Key_Down(DIK_N))
+	{
+		CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Com_Transform"), 0));
+		_float4	f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Position, pObjTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+
+		m_f3ClickPos = { f4Position.x, f4Position.y, f4Position.z };
+
+		m_wstObjName = L"Layer_BearTrap__";
+		m_wstObjName += to_wstring(m_iObject_Count);
+
+		m_szObjName = m_wstObjName.c_str();
+
+		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_O_BearTrap"), &m_f3ClickPos)))
+			return;
+
+		m_iObject_Count++;
+
+		wofstream fout("../../Data/MiniGame_Object.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
+	}
 
 	if (ImGui::Button("Object Save"))
 	{
@@ -626,6 +686,8 @@ void CLevel_MiniGame::ImGui_Object()
 
 	if (ImGui::Button("Data_txt"))
 		WinExec("notepad.exe ../../Data/MiniGame_Object.txt", SW_SHOW);
+
+	RELEASE_INSTANCE(CGameInstance);
 }
 
 void CLevel_MiniGame::ImGui_Monster()
@@ -843,56 +905,52 @@ void CLevel_MiniGame::ImGui_Envionment()
 
 		if (0 == iObjNum)
 		{
-			m_wstObjName = L"Butterflies_Bule";
-			m_wstObjName += to_wstring(m_iItem_Count);
-
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_BLUE;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
-			m_szObjName = m_wstObjName.c_str();
+			m_szObjName = L"Butterflies_Bule";
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
-
-			m_iItem_Count++;
 		}
 		else if (1 == iObjNum)
 		{
-			m_wstObjName = L"Butterflies_Red";
-			m_wstObjName += to_wstring(m_iItem_Count);
-
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_RED;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
-			m_szObjName = m_wstObjName.c_str();
+			m_szObjName = L"Butterflies_Red";
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
-
-			m_iItem_Count++;
 		}
 		else if (2 == iObjNum)
 		{
-			m_wstObjName = L"Butterflies_Yellow";
-			m_wstObjName += to_wstring(m_iItem_Count);
-
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_YELLOW;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
-			m_szObjName = m_wstObjName.c_str();
+			m_szObjName = L"Butterflies_Yellow";
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
-
-			m_iItem_Count++;
 		}
 		else if (3 == iObjNum)
-		{		
+		{
 			m_wstObjName = L"Cloud";
-			
+
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &_float3(m_f3ClickPos.x, fObjectY, m_f3ClickPos.z))))
 				return;
 		}
+
+		wofstream fout("../../Data/Garden_Envionment.txt", ios::out | ios::app);
+		if (fout.fail())
+		{
+			MSG_BOX("Failed to Save File");
+			return;
+		}
+
+		fout << m_wstObjName << "|" << m_f3ClickPos.x << "|" << m_f3ClickPos.y << L"|" << m_f3ClickPos.z << "\n";
+
+		fout.close();
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -1049,6 +1107,40 @@ HRESULT CLevel_MiniGame::Load_Food()
 			tFoodInfo.fPos = pObjInfo.ObjPos;
 
 			m_wstObjName = L"Burrito__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstFoodNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstFoodNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+					return E_FAIL;
+			}
+		}
+
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tFoodInfo.eFoodKind = tFoodInfo.CHEWED;
+			tFoodInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Chewed__";
+			m_wstObjName += to_wstring(i);
+
+			wstring wstFoodNameTemp(pObjInfo.ObjName);
+
+			if (m_wstObjName == wstFoodNameTemp)
+			{
+				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_Food"), &tFoodInfo)))
+					return E_FAIL;
+			}
+		}
+
+		for (_int i = 0; i < iFoodVecCount; i++)
+		{
+			tFoodInfo.eFoodKind = tFoodInfo.SOY_PEOPLE;
+			tFoodInfo.fPos = pObjInfo.ObjPos;
+
+			m_wstObjName = L"Soy_People__";
 			m_wstObjName += to_wstring(i);
 
 			wstring wstFoodNameTemp(pObjInfo.ObjName);
@@ -1617,61 +1709,35 @@ HRESULT CLevel_MiniGame::Load_Envionment()
 
 	CE_FlyingEnvironment::EFFECTINFO tEffectInfo;
 	vector<CDataManager::OBJINFO>	eVecObjInfo = CDataManager::GetInstance()->Get_EnvironmentInfo();
-	_int iCoinVecCount = _int(eVecObjInfo.size());
 
 	for (auto& pObjInfo : eVecObjInfo)
 	{
-		for (_int i = 0; i < iCoinVecCount; i++)
+		wstring wstObjNameTemp(pObjInfo.ObjName);
+
+		if (TEXT("Butterflies_Bule") == wstObjNameTemp)
 		{
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_BLUE;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Butterflies_Bule";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
-
-		for (_int i = 0; i < iCoinVecCount; i++)
+		if (TEXT("Butterflies_Red") == wstObjNameTemp)
 		{
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_RED;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Butterflies_Red";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
-
-		for (_int i = 0; i < iCoinVecCount; i++)
+		if (TEXT("Butterflies_Yellow") == wstObjNameTemp)
 		{
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_YELLOW;
 			tEffectInfo.f3Pos = pObjInfo.ObjPos;
 
-			m_wstObjName = L"Butterflies_Yellow";
-			m_wstObjName += to_wstring(i);
-
-			wstring wstObjNameTemp(pObjInfo.ObjName);
-
-			if (m_wstObjName == wstObjNameTemp)
-			{
-				if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, pObjInfo.ObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
+				return E_FAIL;
 		}
-		wstring wstObjNameTemp(pObjInfo.ObjName);
 		if (TEXT("Cloud") == wstObjNameTemp)
 		{
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Cloud"), TEXT("Prototype_GameObject_O_Cloud"), &pObjInfo.ObjPos)))

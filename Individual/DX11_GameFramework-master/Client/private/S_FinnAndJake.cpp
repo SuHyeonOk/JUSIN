@@ -50,7 +50,7 @@ HRESULT CS_FinnAndJake::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_wsTag = L"Finn";
+	m_wsTag = L"Jake";
 	m_eAnim_State = STATE_END;
 
 	m_pTransformCom->Set_Pos();
@@ -69,7 +69,7 @@ HRESULT CS_FinnAndJake::Initialize(void * pArg)
 void CS_FinnAndJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	
+
 	End_Tick();					// 비모를 찾으면서 게임이 종료된다. 종료될 때의 설정
 	Return_Tick();				// 체력이 0이 되는 순간 처음으로 돌아간다.
 	Hit_Tick(TimeDelta);		// 공격 받았을 때
@@ -77,8 +77,7 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 	KeyInput(TimeDelta);		// 플레이어 키 입력 8방향으로만 이동가능
 
 	Rainicorn(TimeDelta);		// 무지개 콘을 만났을 때 실행 될 함수 
-
-
+	KnockBack_Tick(TimeDelta);	// 트랩을 밟았을 때의 처리
 
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -159,7 +158,7 @@ HRESULT CS_FinnAndJake::Render()
 
 HRESULT CS_FinnAndJake::Render_XRay()
 {
-	if (HIT == m_eAnim_State)
+	if (true == m_bShader_Hit)
 		return S_OK;
 
 	if (FAILED(__super::Render_XRay()))
@@ -273,6 +272,12 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 		if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, TEXT("Layer_Korean_Food"), TEXT("Prototype_GameObject_Korean_Food"), &m_Korean_Food)))
 			return;
 		RELEASE_INSTANCE(CGameInstance);
+	}
+
+	if (L"Object_BeapTrap" == pOther->Get_Tag())
+	{
+		m_OnKnockBack = true;
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
 	}
 }
 
@@ -454,18 +459,43 @@ void CS_FinnAndJake::Hit_Tick(const _double & TimeDelta)
 	}
 }
 
+void CS_FinnAndJake::KnockBack_Tick(const _double & TimeDelta)
+{
+	if (false == m_OnKnockBack)
+		return;
+
+	m_bShader_Hit = true;
+
+	m_dShader_Hit_TimeAcc += TimeDelta;
+	if (0.1 < m_dShader_Hit_TimeAcc)
+		m_bShader_Hit = false;
+	if (0.2 < m_dShader_Hit_TimeAcc)
+		m_dShader_Hit_TimeAcc = 0.0;
+
+	m_dKnockBack_TimeAcc += TimeDelta;
+	if (0.7 < m_dKnockBack_TimeAcc)
+	{
+		m_OnKnockBack = false;
+		m_eAnim_State = IDLE;
+		m_bShader_Hit = false;
+		m_dShader_Hit_TimeAcc = 0.0;
+		m_dKnockBack_TimeAcc = 0.0;
+	}
+}
+
 void CS_FinnAndJake::Return_Tick()
 {
 	if (0.0f >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
 	{
+		m_eAnim_State = IDLE;
 		CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
 
 		// 플레이어 처음 위치로
-		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMLoadFloat4(&m_f4StartPoition));
+		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });
 		// 카메라 처음 위치로
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		pObjTransformCom->Set_Pos(_float3(-5.0f, 3.7f, -20.0f));
+		pObjTransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f, });
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }
@@ -478,7 +508,7 @@ void CS_FinnAndJake::End_Tick()
 	CObj_Manager::GetInstance()->Set_Loading_Count();
 	CObj_Manager::GetInstance()->Set_NextLevel(true);
 	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
-	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINN);
+	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::JAKE);
 }
 
 void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
@@ -500,6 +530,7 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 			m_eAnim_State = IDLE;
 
 		m_OnMove = false;
+		m_pTransformCom->LookAt(XMVectorSet(62.8778f, 0.0f, 27.6776f, 1.0f));
 		m_pTransformCom->Chase(XMVectorSet(62.8778f, 0.0f, 27.6776f, 1.0f), TimeDelta, 2.0f);
 
 		m_dEffect_TimeAcc += TimeDelta;
