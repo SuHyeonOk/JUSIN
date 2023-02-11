@@ -196,6 +196,9 @@
     <Filter Include="02.GameObjects\MiniGame\Finn_and_Jake">
       <UniqueIdentifier>{be6626db-101b-46e8-a2fd-a9f5b8363fce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\MiniGmae">
+      <UniqueIdentifier>{e06d3373-a2a8-4926-8514-fde30566df85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -456,9 +459,6 @@
     <ClInclude Include="..\public\UI_MiniMap.h">
       <Filter>02.GameObjects\UI\MninMap</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\UI_MiniMap_Player.h">
-      <Filter>02.GameObjects\UI\MninMap</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\E_Food_Up.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
@@ -617,6 +617,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Korean_Food.h">
       <Filter>02.GameObjects\MiniGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Snail.h">
+      <Filter>02.GameObjects\UI\MiniGmae</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -860,9 +863,6 @@
     <ClCompile Include="..\private\UI_MainMap.cpp">
       <Filter>02.GameObjects\UI\MninMap</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\UI_MiniMap_Player.cpp">
-      <Filter>02.GameObjects\UI\MninMap</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\E_Food_Up.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
@@ -1021,6 +1021,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Korean_Food.cpp">
       <Filter>02.GameObjects\MiniGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Snail.cpp">
+      <Filter>02.GameObjects\UI\MiniGmae</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

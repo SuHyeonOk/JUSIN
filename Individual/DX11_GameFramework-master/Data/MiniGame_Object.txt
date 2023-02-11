@@ -22,4 +22,4 @@ Layer_BearTrap__20|-5.44255|0|4.20098
 Layer_BearTrap__21|-2.59344|0|4.20066
 Layer_BearTrap__22|-4.01059|0|6.98575
 Layer_PortalOff__0|84.6139|0|11.9314
-Layer_Portal__0|84.6139|0|10.0
+Layer_Portal__0|84.6139|0|11.0

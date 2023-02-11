@@ -45,11 +45,15 @@ private:
 
 	void			NextPosition(const _double & TimeDelta);
 
+	void			UI_Tick(const _double & TimeDelta);
+
 private:
 	vector<_float3>	m_vecNextPosition;
 
 	_int			m_iIndex = { 0 };
 	_bool			m_bArrive = { false };
+
+	_float			m_fPercentage = { 0.0f };
 
 public:
 	static	CSnail*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

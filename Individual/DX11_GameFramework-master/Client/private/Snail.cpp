@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
+#include "UI_Manager.h"
 #include <fstream>
 
 CSnail::CSnail(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -59,6 +60,7 @@ void CSnail::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	UI_Tick(TimeDelta);
 	NextPosition(TimeDelta);
 }
 
@@ -250,6 +252,19 @@ void CSnail::NextPosition(const _double & TimeDelta)
 	{
 		m_bArrive = true;
 	}
+}
+
+void CSnail::UI_Tick(const _double & TimeDelta)
+{
+	static _float iNumber;
+	if (iNumber < m_fPercentage)
+	{
+		iNumber = _float(TimeDelta) * 10.0f;
+	}
+
+	cout << "현재 퍼센트 : " << iNumber << "지점" << m_fPercentage << endl;
+
+	CUI_Manager::GetInstance()->Set_Snail_Distance(_int((_float(m_iIndex) / 21.0f) * 100.0f));
 }
 
 CSnail * CSnail::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

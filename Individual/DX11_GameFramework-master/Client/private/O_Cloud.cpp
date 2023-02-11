@@ -89,7 +89,7 @@ void CO_Cloud::Late_Tick(_double TimeDelta)
 		if(LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 		else
-			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 	}
 
 	RELEASE_INSTANCE(CGameInstance)

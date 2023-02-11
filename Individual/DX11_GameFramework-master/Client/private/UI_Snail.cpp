@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "..\public\UI_MiniMap_Player.h"
+#include "..\public\UI_Snail.h"
 
 #include "GameInstance.h"
 #include "Obj_Manager.h"
 #include "UI_Manager.h"
 
-CUI_MninMap_Player::CUI_MninMap_Player(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CUI_Snail::CUI_Snail(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI_(pDevice, pContext)
 {
 }
 
-CUI_MninMap_Player::CUI_MninMap_Player(const CUI_MninMap_Player & rhs)
+CUI_Snail::CUI_Snail(const CUI_Snail & rhs)
 	: CUI_(rhs)
 {
 }
 
-HRESULT CUI_MninMap_Player::Initialize_Prototype()
+HRESULT CUI_Snail::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -23,7 +23,7 @@ HRESULT CUI_MninMap_Player::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_MninMap_Player::Initialize(void * pArg)
+HRESULT CUI_Snail::Initialize(void * pArg)
 {
 	CGameObject::GAMEOBJECTDESC		GameObjectDesc;
 	ZeroMemory(&GameObjectDesc, sizeof(GameObjectDesc));
@@ -37,18 +37,8 @@ HRESULT CUI_MninMap_Player::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_fSizeX = 14.f / 3.5f;
-	m_fSizeY = 14.f / 3.5f;
-
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-
-	if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
-	{
-		m_fPlayer_X = 547.f;
-		m_fPlayer_Y = 223.f;
-	}
-
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(m_fPlayer_X, m_fPlayer_Y, 0.f, 1.f));
+	m_pTransformCom->Set_Scaled(_float3(150.f, 67.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(550, -300, 0.f, 1.f));
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(_float(g_iWinSizeX), _float(g_iWinSizeY), 0.f, 1.f));
@@ -56,33 +46,19 @@ HRESULT CUI_MninMap_Player::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CUI_MninMap_Player::Tick(_double TimeDelta)
+void CUI_Snail::Tick(_double TimeDelta)
 {
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (pGameInstance->Key_Pressing(DIK_LEFT))
-		m_fPlayer_X -= _float(TimeDelta * 3.5f);
-	if (pGameInstance->Key_Pressing(DIK_RIGHT))
-		m_fPlayer_X += _float(TimeDelta * 3.5f);
-	if (pGameInstance->Key_Pressing(DIK_UP))
-		m_fPlayer_Y += _float(TimeDelta * 3.5f);
-	if (pGameInstance->Key_Pressing(DIK_DOWN))
-		m_fPlayer_Y -= _float(TimeDelta * 3.5f);
 
-	RELEASE_INSTANCE(CGameInstance);
-
-	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, XMVectorSet(m_fPlayer_X, m_fPlayer_Y, 0.f, 1.f));
-
-	RELEASE_INSTANCE(CGameInstance);
 }
 
-void CUI_MninMap_Player::Late_Tick(_double TimeDelta)
+void CUI_Snail::Late_Tick(_double TimeDelta)
 {
 	if(nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
 
-HRESULT CUI_MninMap_Player::Render()
+HRESULT CUI_Snail::Render()
 {
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
@@ -91,10 +67,19 @@ HRESULT CUI_MninMap_Player::Render()
 
 	m_pVIBufferCom->Render();
 
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_tchar szNumber[MAX_PATH];
+	_int iNumber = CUI_Manager::GetInstance()->Get_Snail_Distance();
+	wsprintf(szNumber, TEXT(" %d %% "), iNumber);
+	pGameInstance->Render_Font(TEXT("Font_Comic"), szNumber, _float2(1130.0f, 640.0f), 0.f, _float2(0.5f, 0.5f));
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 
-HRESULT CUI_MninMap_Player::SetUp_Components()
+HRESULT CUI_Snail::SetUp_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"),
@@ -112,14 +97,14 @@ HRESULT CUI_MninMap_Player::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Player"), TEXT("Com_Texture"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_MiniGame_Snail"), TEXT("Com_Texture"),
 		(CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CUI_MninMap_Player::SetUp_ShaderResources()
+HRESULT CUI_Snail::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -137,31 +122,31 @@ HRESULT CUI_MninMap_Player::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CUI_MninMap_Player * CUI_MninMap_Player::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CUI_Snail * CUI_Snail::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
- 	CUI_MninMap_Player*		pInstance = new CUI_MninMap_Player(pDevice, pContext);
+ 	CUI_Snail*		pInstance = new CUI_Snail(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CUI_MninMap_Player");
+		MSG_BOX("Failed to Created : CUI_Snail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject * CUI_MninMap_Player::Clone(void * pArg)
+CGameObject * CUI_Snail::Clone(void * pArg)
 {
-	CUI_MninMap_Player*		pInstance = new CUI_MninMap_Player(*this);
+	CUI_Snail*		pInstance = new CUI_Snail(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CUI_MninMap_Player");
+		MSG_BOX("Failed to Cloned : CUI_Snail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CUI_MninMap_Player::Free()
+void CUI_Snail::Free()
 {
 	__super::Free();
 }

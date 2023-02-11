@@ -285,7 +285,7 @@
     <ClInclude Include="..\public\UI_Level_Number.h" />
     <ClInclude Include="..\public\UI_Manager.h" />
     <ClInclude Include="..\public\UI_MiniMap.h" />
-    <ClInclude Include="..\public\UI_MiniMap_Player.h" />
+    <ClInclude Include="..\public\UI_Snail.h" />
     <ClInclude Include="..\public\UI_Monster.h" />
     <ClInclude Include="..\public\UI_Monster_Bar.h" />
     <ClInclude Include="..\public\UI_Monster_BarBack.h" />
@@ -423,7 +423,7 @@
     <ClCompile Include="..\private\UI_Level_Number.cpp" />
     <ClCompile Include="..\private\UI_MainMap.cpp" />
     <ClCompile Include="..\private\UI_Manager.cpp" />
-    <ClCompile Include="..\private\UI_MiniMap_Player.cpp" />
+    <ClCompile Include="..\private\UI_Snail.cpp" />
     <ClCompile Include="..\private\UI_Monster.cpp" />
     <ClCompile Include="..\private\UI_Monster_Bar.cpp" />
     <ClCompile Include="..\private\UI_Monster_BarBack.cpp" />

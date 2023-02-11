@@ -26,6 +26,14 @@ public:
 	virtual ~CUI_Manager() = default;
 
 public:
+	// 미니게임
+	_int Get_Snail_Distance() {
+		return m_iSnail_Distance;
+	}
+	void	Set_Snail_Distance(_int fDistance) {
+		m_iSnail_Distance = fDistance;
+	}
+
 	// 샵
 	_bool		Get_Shop() {
 		return m_bisShop;
@@ -128,6 +136,8 @@ public:
 	void		Set_Talk(_bool bTalk) { m_bisTalk = bTalk; }
 
 private:
+	_int			m_iSnail_Distance = { 0 };		// 미니게임 에서의 달팽이가 도착지점까지의 남은 거리
+
 	_bool			m_bisShop = false;
 
 	_bool										m_bIsIcon_Index[_int(INVENTORYICON::ICON_END)] = { false };

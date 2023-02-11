@@ -59,7 +59,6 @@ HRESULT CLevel_MiniGame::Initialize()
 	// 파일 읽기
 	Load_Food();
 	Load_Coin();
-	Load_Item();
 	Load_Object();
 	Load_Envionment();
 	Load_MiniGame();
@@ -192,7 +191,7 @@ HRESULT CLevel_MiniGame::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-50.f, 0.f, -20.f))))
+	if (FAILED(pGameInstance->Clone_GameObject(CGameInstance::Get_StaticLevelIndex(), pLayerTag, TEXT("Prototype_GameObject_Terrain"), &_float3(-30.f, 0.f, -20.f))))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -909,16 +908,18 @@ void CLevel_MiniGame::ImGui_Envionment()
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = L"Butterflies_Bule";
+			m_wstObjName = L"Butterflies_Bule";
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
-		}
+	}
 		else if (1 == iObjNum)
 		{
 			tEffectInfo.eType = CE_FlyingEnvironment::BUTTERFLIES_RED;
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = L"Butterflies_Red";
+			m_wstObjName = L"Butterflies_Red";
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
@@ -929,6 +930,7 @@ void CLevel_MiniGame::ImGui_Envionment()
 			tEffectInfo.f3Pos = m_f3ClickPos;
 
 			m_szObjName = L"Butterflies_Yellow";
+			m_wstObjName = L"Butterflies_Yellow";
 
 			if (FAILED(pGameInstance->Clone_GameObject(LEVEL_MINIGAME, m_szObjName, TEXT("Prototype_GameObject_E_FlyingEnvironment"), &tEffectInfo)))
 				return;
@@ -941,7 +943,7 @@ void CLevel_MiniGame::ImGui_Envionment()
 				return;
 		}
 
-		wofstream fout("../../Data/Garden_Envionment.txt", ios::out | ios::app);
+		wofstream fout("../../Data/MiniGmae_Envionment.txt", ios::out | ios::app);
 		if (fout.fail())
 		{
 			MSG_BOX("Failed to Save File");

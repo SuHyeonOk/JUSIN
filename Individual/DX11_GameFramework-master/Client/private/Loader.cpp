@@ -31,7 +31,7 @@
 #include "UI_SkillIcon.h"
 #include "UI_Scroll_Count.h"
 #include "UI_MiniMap.h"
-#include "UI_MiniMap_Player.h"
+#include "UI_Snail.h"
 #include "UI_Boss.h"
 #include "UI_Boss_Bar.h"
 #include "UI_Boss_BarBack.h"
@@ -1190,9 +1190,11 @@ HRESULT CLoader::UI_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Mini_Map_%d.png"), 3))))
 		return E_FAIL;
-	/* For.Prototype_Component_Texture_UI_Mini_Map_Player */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Mini_Map_Player"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Mini_Map/Player.png")))))
+
+	// MiniGmae
+	/* For.Prototype_Component_Texture_UI_MiniGame_Snail */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_MiniGame_Snail"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/MiniGame/Snail.png")))))
 		return E_FAIL;
 
 	// Inventory
@@ -1326,9 +1328,11 @@ HRESULT CLoader::UI_Create()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_MninMap"),
 		CUI_MninMap::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	/* For.Prototype_GameObject_UI_MninMap_Player */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_MninMap_Player"),
-		CUI_MninMap_Player::Create(m_pDevice, m_pContext))))
+
+	// MiniGame
+	/* For.Prototype_GameObject_UI_Snail */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Snail"),
+		CUI_Snail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Inventory

@@ -221,7 +221,7 @@ HRESULT CUI_::Initialize(void * pArg)
 
 	m_vecUI.push_back(pUI);
 	// [22] : MninMap
-	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_MninMap_Player")));
+	pUI = dynamic_cast<CUI_*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_UI_Snail")));
 
 	if (nullptr == pUI)
 		return E_FAIL;
@@ -374,9 +374,13 @@ void CUI_::Tick(_double TimeDelta)
 	m_vecUI[8]->Tick(TimeDelta);
 	m_vecUI[7]->Tick(TimeDelta);
 	m_vecUI[9]->Tick(TimeDelta);
-
+	
 	if (CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		// 미니게임
+		m_vecUI[22]->Tick(TimeDelta);
 		return;
+	}
 
 	// 무기
 	m_vecUI[10]->Tick(TimeDelta);
@@ -427,7 +431,6 @@ void CUI_::Tick(_double TimeDelta)
 
 	// 미니맵
 	m_vecUI[21]->Tick(TimeDelta);
-	//m_vecUI[22]->Tick(TimeDelta);
 
 	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())	// Boss 전에서만 유아이를 띄운다.
 	{
@@ -547,7 +550,10 @@ void CUI_::Late_Tick(_double TimeDelta)
 	m_vecUI[9]->Late_Tick(TimeDelta);
 
 	if (CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
+	{
+		m_vecUI[22]->Late_Tick(TimeDelta);
 		return;
+	}
 
 	m_vecUI[10]->Late_Tick(TimeDelta);
 	m_vecUI[11]->Late_Tick(TimeDelta);
@@ -595,7 +601,6 @@ void CUI_::Late_Tick(_double TimeDelta)
 	}
 
 	m_vecUI[21]->Late_Tick(TimeDelta);
-	//m_vecUI[22]->Late_Tick(TimeDelta);
 
 	if (LEVEL_SKELETON_BOSS == CObj_Manager::GetInstance()->Get_Current_Level())
 	{
