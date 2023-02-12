@@ -5,6 +5,7 @@
 #include "Obj_Manager.h"
 #include "PipeLine.h"
 #include "Effect_Manager.h"
+#include "Skill_Manager.h"
 
 CO_TextureObject::CO_TextureObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -58,17 +59,35 @@ void CO_TextureObject::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (3 > CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+	if (LEVEL_MINIGAME == CObj_Manager::GetInstance()->Get_Current_Level())
 	{
-		m_fAlpha = 0.5f;
-		m_pTransformCom->Set_Pos(0.7f);
-		m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
+		if (false == m_bPortal)
+		{
+			m_fAlpha = 0.5f;
+			m_pTransformCom->Set_Pos(0.7f);
+			m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
+		}
+		else
+		{
+			m_fAlpha = 1.0f;
+			m_pTransformCom->Set_Pos(1.5f);
+			m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+		}
 	}
 	else
 	{
-		m_fAlpha = 1.0f;
-		m_pTransformCom->Set_Pos(1.5f);
-		m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+		if (3 > CObj_Manager::GetInstance()->Get_Current_Player().iKey)
+		{
+			m_fAlpha = 0.5f;
+			m_pTransformCom->Set_Pos(0.7f);
+			m_pTransformCom->Set_Scaled(_float3(0.5f, 0.5f, 1.f));
+		}
+		else
+		{
+			m_fAlpha = 1.0f;
+			m_pTransformCom->Set_Pos(1.5f);
+			m_pTransformCom->Set_Scaled(_float3(2.0f, 2.0f, 1.f));
+		}
 	}
 
 	// 회전한다.
@@ -131,30 +150,44 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
+		if (LEVEL_MINIGAME == CObj_Manager::GetInstance()->Get_Current_Level())
+			m_bPortal = true;
+
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 		if (pGameInstance->Key_Down(DIK_RETURN))
 		{
-			CObj_Manager::GetInstance()->Set_Key(-3);
 			pGameInstance->Play_Sound(TEXT("sfx_portal_activate2.ogg"), 1.0f);
 
 			if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 			{
 				pGameInstance->Clear();
 				pGameInstance->Stop_Sound(0);
+				CObj_Manager::GetInstance()->Set_Key(-3);
 				CGameObject::Set_Dead();
 				CObj_Manager::GetInstance()->Set_NextLevel(true);
 				CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
+			}
+			else if (LEVEL_MINIGAME == CObj_Manager::GetInstance()->Get_Current_Level())
+			{
+				pGameInstance->Stop_Sound(0);
+				CGameObject::Set_Dead();
+				CObj_Manager::GetInstance()->Set_Loading_Count();
+				CObj_Manager::GetInstance()->Set_NextLevel(true);
+				CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
+				CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::JAKE);
 			}
 			else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
 			{
 				pGameInstance->Clear();
 				pGameInstance->Stop_Sound(0);
+				CObj_Manager::GetInstance()->Set_Key(-3);
 				CGameObject::Set_Dead();
 				CObj_Manager::GetInstance()->Set_NextLevel(true);
 				CObj_Manager::GetInstance()->Set_Loading_Count();
 			}
 		}
+
 		RELEASE_INSTANCE(CGameInstance);
 	}
 }

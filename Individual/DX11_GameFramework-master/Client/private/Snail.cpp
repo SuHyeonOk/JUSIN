@@ -158,23 +158,23 @@ HRESULT CSnail::SetUp_Components()
 		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
-	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Snail"), TEXT("Com_Model"),
-		(CComponent**)&m_pModelCom)))
-		return E_FAIL;
+/* For.Com_Model */
+if (FAILED(__super::Add_Component(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Snail"), TEXT("Com_Model"),
+(CComponent**)&m_pModelCom)))
+return E_FAIL;
 
-	CCollider::COLLIDERDESC			ColliderDesc;
+CCollider::COLLIDERDESC			ColliderDesc;
 
-	/* For.Com_SPHERE */
-	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+/* For.Com_SPHERE */
+ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
-		(CComponent**)&m_pColliderCom, &ColliderDesc)))
-		return E_FAIL;
+if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+(CComponent**)&m_pColliderCom, &ColliderDesc)))
+return E_FAIL;
 
-	return S_OK;
+return S_OK;
 }
 
 HRESULT CSnail::SetUp_ShaderResources()
@@ -245,7 +245,7 @@ void CSnail::NextPosition(const _double & TimeDelta)
 	// 내 거리와 목표 지점의 거리를 구해서 목표지점에 도달하면 그 때 i를 증가 시킨다.
 	if (true == m_pTransformCom->TargetPoint(vNextPosition, TimeDelta))
 	{
-		++m_iIndex;
+		++m_iIndex;                 
 	}
 
 	if (m_iIndex > m_vecNextPosition.size() - 1)
@@ -256,15 +256,16 @@ void CSnail::NextPosition(const _double & TimeDelta)
 
 void CSnail::UI_Tick(const _double & TimeDelta)
 {
-	static _float iNumber;
-	if (iNumber < m_fPercentage)
-	{
-		iNumber = _float(TimeDelta) * 10.0f;
-	}
+	// TODO : 달팽이 이동 거리 구하기
+	//_float fTemp = (_float(m_iIndex + 1) / 21.0f) * 100.0f;
+	//if (m_fCurrent_Percentage < fTemp)
+	//{
+	//	m_fCurrent_Percentage = _float(TimeDelta) * 2.0f;
+	//}
 
-	cout << "현재 퍼센트 : " << iNumber << "지점" << m_fPercentage << endl;
+	//cout << m_fCurrent_Percentage << " \ " << (_float(m_iIndex + 1) / 21.0f) * 100.0f << endl;
 
-	CUI_Manager::GetInstance()->Set_Snail_Distance(_int((_float(m_iIndex) / 21.0f) * 100.0f));
+	CUI_Manager::GetInstance()->Set_Snail_Distance((_int(m_iIndex / 21) * 100));
 }
 
 CSnail * CSnail::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

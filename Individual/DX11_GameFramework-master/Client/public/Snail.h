@@ -53,10 +53,11 @@ private:
 	_int			m_iIndex = { 0 };
 	_bool			m_bArrive = { false };
 
-	_float			m_fPercentage = { 0.0f };
+	_float			m_fCurrent_Percentage = { 0.0f };
+	_float			m_fNext_Percentage = { 0.0f };
 
 public:
-	static	CSnail*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CSnail*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;
 	virtual void			Free() override;
 };

@@ -18,12 +18,16 @@ class CO_TextureObject final : public CGameObject
 public:
 	typedef struct tagTextureObjectInfo
 	{
-		enum TEXTURETYPE { PORTAL, TEXTURETYPE_END };
+		enum TEXTURETYPE { PORTAL, MINIGAME, TEXTURETYPE_END };
 		TEXTURETYPE		eTextureType;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
 
 	}TEXTUREOBJECT;
+
+	void	Set_Portal() {
+		m_bPortal = true;
+	}
 
 private:
 	CO_TextureObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -55,6 +59,8 @@ private:
 
 	_float					m_fAlpha = 1.0f;
 	_double					m_bEffect_TimeAcc = 0;
+
+	_bool					m_bPortal = { false };
 
 public:
 	static	CO_TextureObject*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

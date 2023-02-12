@@ -52,7 +52,6 @@ private:
 	void					KnockBack_Tick(const _double & TimeDelta);
 
 	void					Return_Tick(const _double & TimeDelta);
-	void					End_Tick();
 
 	void					Rainicorn(const _double & TimeDelta);
 
@@ -65,7 +64,6 @@ private:
 	STATE					m_eAnim_State = { STATE_END };
 	_bool					m_bOnMove = { false };
 	_bool					m_bOnHit = { false };
-	_bool					m_bEnd = { false };
 
 	_bool					m_bRainicorn = { false };
 	_double					m_dRainicorn_TimeAcc = { 0.0 };

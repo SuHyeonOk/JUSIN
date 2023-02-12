@@ -70,8 +70,7 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	End_Tick();					// 비모를 찾으면서 게임이 종료된다. 종료될 때의 설정
-	Return_Tick(TimeDelta);				// 체력이 0이 되는 순간 처음으로 돌아간다.
+	Return_Tick(TimeDelta);		// 체력이 0이 되는 순간 처음으로 돌아간다.
 	Hit_Tick(TimeDelta);		// 공격 받았을 때
 	AnimatedMovie_Tick();		// 애니메이션 돌아가는 함수
 	KeyInput(TimeDelta);		// 플레이어 키 입력 8방향으로만 이동가능
@@ -82,10 +81,6 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 	Shader_Alpha(TimeDelta);	// 알파값 증가 및 감소
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	if (pGameInstance->Key_Down(DIK_B))
-	{
-		m_bEnd = true;
-	}
 
 	if (pGameInstance->Key_Down(DIK_V))
 	{
@@ -536,17 +531,6 @@ void CS_FinnAndJake::Return_Tick(const _double & TimeDelta)
 			RELEASE_INSTANCE(CGameInstance);
 		}
 	}
-}
-
-void CS_FinnAndJake::End_Tick()
-{
-	if (false == m_bEnd)
-		return;
-
-	CObj_Manager::GetInstance()->Set_Loading_Count();
-	CObj_Manager::GetInstance()->Set_NextLevel(true);
-	CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
-	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::JAKE);
 }
 
 void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)

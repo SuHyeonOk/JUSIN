@@ -194,7 +194,7 @@ void CO_Cloud::Ready_CloudType()
 void CO_Cloud::Move_Tick(const _double & TimeDelta)
 {
 	m_dMove_TimeAcc += TimeDelta;
-	if (10.0 < m_dMove_TimeAcc)
+	if (20.0 < m_dMove_TimeAcc)
 	{
 		m_bOpposition = !m_bOpposition;
 		m_dMove_TimeAcc = 0.0;

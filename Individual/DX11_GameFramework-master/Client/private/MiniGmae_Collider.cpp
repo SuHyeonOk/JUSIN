@@ -5,6 +5,7 @@
 #include "Obj_Manager.h"
 
 #include "Knives_Rain.h"
+#include "O_TextureObject.h"
 
 CMiniGame_Collider::CMiniGame_Collider(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -103,6 +104,7 @@ void CMiniGame_Collider::On_Collision(CGameObject * pOther)
 	{
 		m_bKnivesRain = true;
 	}
+	break;
 	}
 }
 
