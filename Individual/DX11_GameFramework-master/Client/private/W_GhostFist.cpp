@@ -121,7 +121,7 @@ HRESULT CW_GhostFist::SetUp_Components()
 	/* For.Com_SPHERE */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
 	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.0f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.3f);
 
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
 		(CComponent**)&m_pColliderCom, &ColliderDesc)))

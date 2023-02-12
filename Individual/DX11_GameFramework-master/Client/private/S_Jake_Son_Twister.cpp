@@ -44,6 +44,7 @@ HRESULT CS_Jake_Son_Twister::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	m_wsTag = L"Jake_Son_Transform";
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(0);
 

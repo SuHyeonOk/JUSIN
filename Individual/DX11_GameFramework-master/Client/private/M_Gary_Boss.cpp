@@ -311,6 +311,8 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 	// 무조건 적으로 이전에 MovePos 가 true 라면 처음 위치로 이동 시켜야 한다.
 	if (true == m_bMovePos)
 	{
+		m_bShader_Hit = false;
+
 		if (0 == m_dSkill_TimeAcc)
 			m_iEffect_Count = 0;
 		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
@@ -583,6 +585,7 @@ HRESULT CM_Gary_Boss::A_Bullet_Tick(const _double & TimeDelta)
 HRESULT CM_Gary_Boss::A_Stun_Tick(const _double & TimeDelta)
 {
 	m_bHit = false;
+	m_bShader_Hit = false;
 
 	m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 
@@ -669,6 +672,7 @@ HRESULT CM_Gary_Boss::A_Cage_Tick(const _double & TimeDelta)
 	if (false == m_bMovePos)
 		m_iEffect_Count = 0;
 
+	m_bShader_Hit = false;
 	m_bShader_Alpha = false;
 	m_bMovePos = true;
 
@@ -738,6 +742,7 @@ void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 	if (false == m_bMovePos)
 		m_iEffect_Count = 0;
 
+	m_bShader_Hit = false;
 	m_bShader_Alpha = false;
 	m_bMovePos = true;
 

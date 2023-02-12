@@ -239,6 +239,10 @@ void CN_KeyMan::Talk_Tick()
 		case 2:
 			CUI_Manager::GetInstance()->Set_Text(TEXT("열쇠 친구 : \n부탁드려요 꼭 열쇠를 찾아서 저희 왕국을 지켜주세요.!"));
 			break;
+
+		default:
+			m_Script_Count = 0;
+			break;
 		}
 	}
 }

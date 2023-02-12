@@ -289,7 +289,6 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 	if (L"Object_BeapTrap" == pOther->Get_Tag())
 	{
 		m_OnKnockBack = true;
-		//CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
 	}
 }
 
@@ -483,6 +482,13 @@ void CS_FinnAndJake::KnockBack_Tick(const _double & TimeDelta)
 	if (0.2 < m_dShader_Hit_TimeAcc)
 		m_dShader_Hit_TimeAcc = 0.0;
 
+	if (0.0 == m_dKnockBack_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Cine_Witch_Death_Fall_Wood.ogg"), 0.6f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	m_dKnockBack_TimeAcc += TimeDelta;
 	if (0.7 < m_dKnockBack_TimeAcc)
 	{
@@ -533,7 +539,7 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 	if (0.0 == m_dRainicorn_TimeAcc)
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("Lady_Rainicorn.mp3"), 1.0f);
+		pGameInstance->Play_Sound(TEXT("Lady_Rainicorn.mp3"), 0.8f);
 		RELEASE_INSTANCE(CGameInstance);
 	}
 

@@ -56,7 +56,7 @@ HRESULT CM_Skeleton_Shield::Initialize(void * pArg)
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 150.0f;
 	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
-	m_tMonsterInfo.fExp		= 15.0f;
+	m_tMonsterInfo.fExp		= 20.0f;
 	m_tMonsterInfo.fAttack	= 30.0f;
 
 	if (FAILED(Ready_Parts()))

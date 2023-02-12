@@ -221,6 +221,10 @@ void CN_BMO::Talk_Tick()
 
 		case 5:
 		{
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Stop_Sound(0);
+			RELEASE_INSTANCE(CGameInstance);
+
 			CObj_Manager::GetInstance()->Set_Heart(3);
 			CObj_Manager::GetInstance()->Set_NextLevel(true);
 			CObj_Manager::GetInstance()->Set_Loading_Count();		// 로딩 화면을 위해서
