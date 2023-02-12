@@ -115,7 +115,6 @@ void CFinn::Late_Tick(_double TimeDelta)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 		else
 		{
-			//m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this);
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
 		}

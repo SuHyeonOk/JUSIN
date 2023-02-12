@@ -310,6 +310,9 @@ void CSquirrel::Move_Tick(const _double & TimeDelta)
 
 void CSquirrel::Attack_Tick(const _double & TimeDelta)
 {
+	if (0.0f >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)	// 플레이가 체력이 없는 상태에서는 공격 하지 않는다.
+		return;
+
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Com_Transform"), 0));
 	_vector vPlayerPosition = pPlayer_TransformCom->Get_State(CTransform::STATE_TRANSLATION);

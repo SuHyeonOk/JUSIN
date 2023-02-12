@@ -17,7 +17,7 @@ class CE_Look_Alpha final : public CGameObject
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { BIGSKELETON_TEXTURE, PAINT_STAR, TEXTURE_END };
+		enum TEXTURETYPE { BIGSKELETON_TEXTURE, PAINT_STAR, SQUIRREL, TEXTURE_END };
 		TEXTURETYPE		eTextureType = TEXTURE_END;
 
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };

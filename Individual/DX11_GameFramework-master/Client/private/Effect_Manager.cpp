@@ -20,6 +20,21 @@ CEffect_Manager::CEffect_Manager()
 {
 }
 
+HRESULT CEffect_Manager::Efect_MiniGame_Squirrel(const _float3 & f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	CE_Look_Alpha::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Alpha::EFFECTINFO::SQUIRREL;
+	tEffectInfo.f3Pos = f3Pos;
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Alpha"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CEffect_Manager::Effect_MiniGame_Heart(const _float3 & f3Pos, const _float3 & f3Color)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

@@ -48,6 +48,8 @@ HRESULT CE_Look_Alpha::Initialize(void * pArg)
 		fRandomSize = 2.0f;
 	else if(CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
+	else
+		fRandomSize = 1.0f;
 
 	m_pTransformCom->Set_Pos();
 	m_pTransformCom->Set_Scaled(_float3(fRandomSize, fRandomSize, 1.f));
@@ -70,7 +72,8 @@ void CE_Look_Alpha::Tick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(vCameraPos, true);
 
-	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType)
+	if (CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::BIGSKELETON_TEXTURE == m_tEffectInfo.eTextureType ||
+		CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::SQUIRREL == m_tEffectInfo.eTextureType)
 	{
 		m_bStopAlpha_TimeAcc += TimeDelta;
 		if (2.0 < m_bStopAlpha_TimeAcc)
@@ -137,8 +140,11 @@ HRESULT CE_Look_Alpha::SetUp_Components()
 	case CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR:
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_E_Paint_Star"));
 		break;
+	case CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::SQUIRREL:
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Squirrel"));
+		break;
 	}
-
+	
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_szTextureName, TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;

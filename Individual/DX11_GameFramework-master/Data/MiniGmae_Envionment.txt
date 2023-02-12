@@ -76,5 +76,5 @@ Butterflies_Yellow|81.9583|0|31.4199
 Butterflies_Yellow|83.3318|0|14.4735
 Butterflies_Yellow|88.1353|0|13.5708
 Butterflies_Yellow|90.1763|0|9.6939
-Butterflies_Yellow|85.4906|2.38419e-07|8.38767
+Butterflies_Yellow|85.4906|0|8.38767
 Butterflies_Yellow|82.7992|0|6.41366

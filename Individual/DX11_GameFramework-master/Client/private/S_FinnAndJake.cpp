@@ -71,7 +71,7 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	End_Tick();					// 비모를 찾으면서 게임이 종료된다. 종료될 때의 설정
-	Return_Tick();				// 체력이 0이 되는 순간 처음으로 돌아간다.
+	Return_Tick(TimeDelta);				// 체력이 0이 되는 순간 처음으로 돌아간다.
 	Hit_Tick(TimeDelta);		// 공격 받았을 때
 	AnimatedMovie_Tick();		// 애니메이션 돌아가는 함수
 	KeyInput(TimeDelta);		// 플레이어 키 입력 8방향으로만 이동가능
@@ -79,6 +79,7 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 	Rainicorn(TimeDelta);		// 무지개 콘을 만났을 때 실행 될 함수 
 	KnockBack_Tick(TimeDelta);	// 트랩을 밟았을 때의 처리
 
+	Shader_Alpha(TimeDelta);	// 알파값 증가 및 감소
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	if (pGameInstance->Key_Down(DIK_B))
@@ -117,8 +118,13 @@ void CS_FinnAndJake::Late_Tick(_double TimeDelta)
 
 	if (nullptr != m_pRendererCom)
 	{
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		if (1 != m_fAlpha)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		else
+		{
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		}
 	}
 }
 
@@ -139,10 +145,17 @@ HRESULT CS_FinnAndJake::Render()
 		if (3 == i)
 			m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 1);
 		else
-			if (m_bShader_Hit)
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+		{
+			if (1 != m_fAlpha)
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);	// 죽을 때
 			else
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");
+			{
+				if (m_bShader_Hit)
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
+				else
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// 평소
+			}
+		}
 	}
 
 #ifdef _DEBUG
@@ -158,7 +171,7 @@ HRESULT CS_FinnAndJake::Render()
 
 HRESULT CS_FinnAndJake::Render_XRay()
 {
-	if (true == m_bShader_Hit)
+	if (true == m_bShader_Hit || 1 != m_fAlpha)
 		return S_OK;
 
 	if (FAILED(__super::Render_XRay()))
@@ -198,10 +211,19 @@ HRESULT CS_FinnAndJake::Render_XRay()
 
 void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 {
-	if (L"Knives_Rain" == pOther->Get_Tag() || L"Squirrel" == pOther->Get_Tag())
+	if (L"Knives_Rain" == pOther->Get_Tag())
 	{
-		m_OnHit = true;
+		m_bOnHit = true;
+		CObj_Manager::GetInstance()->Set_Player_MinusHP(20.0f);
+	}
+
+	if (L"Squirrel" == pOther->Get_Tag())
+	{
+		m_bOnHit = true;
 		CObj_Manager::GetInstance()->Set_Player_MinusHP(30.0f);
+		_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
+		XMStoreFloat4(&f4Position, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
+		CEffect_Manager::GetInstance()->Efect_MiniGame_Squirrel({ f4Position.x, f4Position.y + 2.0f, f4Position.z - 1.0f });
 	}
 
 	if (L"Lady_Rainicorn" == pOther->Get_Tag())
@@ -333,6 +355,12 @@ HRESULT CS_FinnAndJake::SetUp_ShaderResources()
 
 	RELEASE_INSTANCE(CGameInstance);
 
+	if (1 != m_fAlpha)
+	{
+		if (FAILED(m_pShaderCom->Set_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -366,12 +394,12 @@ void CS_FinnAndJake::AnimatedMovie_Tick()
 
 void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 {
-	if (true == m_OnHit)
+	if (true == m_bOnHit)
 		return;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (m_OnMove)
+	if (m_bOnMove)
 	{
 		m_eAnim_State = MOVE;
 		pGameInstance->Stop_Sound(5);
@@ -382,7 +410,7 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 #pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
-		m_OnMove = true;
+		m_bOnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
@@ -392,7 +420,7 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
-		m_OnMove = true;
+		m_bOnMove = true;
 		m_f4NewLook = { 1.0f, 0.0f, 0.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
@@ -402,7 +430,7 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
-		m_OnMove = true;
+		m_bOnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, -1.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_RIGHT))
@@ -412,7 +440,7 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
-		m_OnMove = true;
+		m_bOnMove = true;
 		m_f4NewLook = { -1.0f, 0.0f, 0.0f, 0.0f };
 
 		if (pGameInstance->Key_Pressing(DIK_UP))
@@ -425,7 +453,7 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	if (pGameInstance->Key_Up(DIK_UP) || pGameInstance->Key_Up(DIK_RIGHT) || pGameInstance->Key_Up(DIK_DOWN) || pGameInstance->Key_Up(DIK_LEFT))
 	{
 		m_eAnim_State = IDLE;
-		m_OnMove = false;
+		m_bOnMove = false;
 		pGameInstance->Stop_Sound(7);
 	}
 
@@ -439,12 +467,12 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 
 void CS_FinnAndJake::Hit_Tick(const _double & TimeDelta)
 {
-	if (false == m_OnHit)
+	if (false == m_bOnHit)
 		return;
 
 	m_eAnim_State = HIT;
 	m_bShader_Hit = true;
-	m_OnMove = false;
+	m_bOnMove = false;
 
 	m_dShader_Hit_TimeAcc += TimeDelta;
 	if (0.1 < m_dShader_Hit_TimeAcc)
@@ -452,7 +480,7 @@ void CS_FinnAndJake::Hit_Tick(const _double & TimeDelta)
 
 	if (1 == m_pModelCom->Get_AnimIndex() && 4 == m_pModelCom->Get_Keyframes())
 	{
-		m_OnHit = false;
+		m_bOnHit = false;
 		m_eAnim_State = IDLE;
 		m_bShader_Hit = false;
 		m_dShader_Hit_TimeAcc = 0.0;
@@ -483,20 +511,30 @@ void CS_FinnAndJake::KnockBack_Tick(const _double & TimeDelta)
 	}
 }
 
-void CS_FinnAndJake::Return_Tick()
+void CS_FinnAndJake::Return_Tick(const _double & TimeDelta)
 {
 	if (0.0f >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
 	{
-		m_eAnim_State = IDLE;
-		CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+		if (1.0f == m_fAlpha)
+		{
+			m_bAlpha_Down = true;
+		}
 
-		// 플레이어 처음 위치로
-		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });
-		// 카메라 처음 위치로
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		pObjTransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f, });
-		RELEASE_INSTANCE(CGameInstance);
+		if (true == m_bAlpha_Change)
+		{
+			m_bAlpha_Change = false;
+
+			m_eAnim_State = IDLE;
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+
+			// 플레이어 처음 위치로
+			m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });
+			// 카메라 처음 위치로
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
+			pObjTransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f, });
+			RELEASE_INSTANCE(CGameInstance);
+		}
 	}
 }
 
@@ -529,7 +567,7 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 		if (1.5 < m_dRainicorn_TimeAcc)
 			m_eAnim_State = IDLE;
 
-		m_OnMove = false;
+		m_bOnMove = false;
 		m_pTransformCom->LookAt(XMVectorSet(62.8778f, 0.0f, 27.6776f, 1.0f));
 		m_pTransformCom->Chase(XMVectorSet(62.8778f, 0.0f, 27.6776f, 1.0f), TimeDelta, 2.0f);
 
@@ -540,6 +578,42 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 			{ 1.0f, CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.3f), CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.5f) });
 
 			m_dEffect_TimeAcc = 0.0;
+		}
+	}
+}
+
+void CS_FinnAndJake::Shader_Alpha(const _double & TimeDelta)
+{
+	// 알파값이 줄어들어서  0.0f 보다 작아디면 그 때 카메라를 이동시키고, 그 다음 알파값이 서서히 증가하기를 원한다.
+
+	if (false == m_bAlpha_Down)
+		return;
+
+	if (true == m_bAlpha_Down)
+	{
+		if (false == m_bAlpha_Up)
+		{
+			if (0.0f < m_fAlpha)
+				m_fAlpha -= _float(TimeDelta);
+
+			if (0.0f > m_fAlpha)
+			{
+				m_bAlpha_Up = true;
+				m_bAlpha_Change = true;	// 외부에서 알파값이 다 줄었을 때가 필요해서 사용한 변수
+			}
+		}
+	}
+
+	if (true == m_bAlpha_Up)
+	{
+		if (1.0f > m_fAlpha)
+			m_fAlpha += _float(TimeDelta);
+
+		if (1.0f < m_fAlpha)
+		{
+			m_fAlpha = 1.0f;
+			m_bAlpha_Up = false;
+			m_bAlpha_Down = false;
 		}
 	}
 }

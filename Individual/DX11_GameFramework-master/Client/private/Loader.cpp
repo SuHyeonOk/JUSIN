@@ -1616,6 +1616,10 @@ HRESULT CLoader::Effect_Texture()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_MiniGame_Heart"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/MiniGame/Heart.png")))))
 		return E_FAIL;
+	/* For.Prototype_Component_Texture_Squirrel */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Squirrel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/MiniGame/Squirrel_Cooldown_FX_1.png")))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 
