@@ -1298,7 +1298,7 @@ void CJake::Current_HP(const _double & TimeDelta)
 			m_fAlpha += _float(TimeDelta) * 1.5f;
 
 		m_dDieSound_TimeAcc += TimeDelta;
-		if (0.5 < m_dDieSound_TimeAcc)
+		if (0.4 < m_dDieSound_TimeAcc)
 		{
 			m_fAlpha = 1;
 			bRevive = false;

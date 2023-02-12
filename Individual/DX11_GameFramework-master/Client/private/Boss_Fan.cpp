@@ -51,7 +51,7 @@ HRESULT CBoss_Fan::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	m_eState	= DANCE;
-	m_fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 3;
+	m_fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 3.0f;
 	m_fMaxHP	= m_fHP;
 
 	return S_OK;
@@ -244,6 +244,10 @@ void CBoss_Fan::Hit_Tick(const _double & TimeDelta)
 
 	if (0 == m_dShader_Hit_TimeAcc)
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 		XMStoreFloat4(&f4MyPos, vMyPos);

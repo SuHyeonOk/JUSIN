@@ -86,7 +86,7 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// 현재 플레이어의 네비를 넣어준다. (한 번)
 
 	pGameInstance->Stop_Sound(0);
-	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.7f, false, 3);
+	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.8f, false, 3);
 
 	RELEASE_INSTANCE(CGameInstance);
 
@@ -127,7 +127,10 @@ void CS_Fiona::Late_Tick(_double TimeDelta)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
+	{
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+	}
 }
 
 HRESULT CS_Fiona::Render()
@@ -166,6 +169,47 @@ HRESULT CS_Fiona::Render()
 	return S_OK;
 }
 
+HRESULT CS_Fiona::Render_XRay()
+{
+	if (true == m_bShader_Hit)
+		return S_OK;
+
+	if (FAILED(__super::Render_XRay()))
+		return E_FAIL;
+
+	if (nullptr == m_pShaderXRayCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderXRayCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float	fObjectID = 5.0f;
+	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		if (4 == i)
+			continue;
+
+		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices", 0);
+	}
+
+	return S_OK;
+}
+
 void CS_Fiona::On_Collision(CGameObject * pOther)
 {
 
@@ -181,6 +225,11 @@ HRESULT CS_Fiona::SetUp_Components()
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_ShaderXRay */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel_XRay"), TEXT("Com_ShaderXRay"),
+		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
@@ -357,9 +406,23 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		CObj_Manager::GetInstance()->Set_Interaction(false);
 
 		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// 원래의 공격력으로 돌려놓는다.
-
+		
 		pGameInstance->Stop_Sound(3);
-		pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+		
+		// 레벨별로 다른 사운드를 재생한다.
+		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+		{
+			pGameInstance->Play_Sound(TEXT("Fire4_Loop.ogg"), 0.1f, true, 0);
+		}
+		else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+		{
+			pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+		}
+		else
+		{
+			pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.1f, true, 0);
+		}
+
 		RELEASE_INSTANCE(CGameInstance);
 
 		CGameObject::Set_Dead();
@@ -544,7 +607,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 #pragma region 이동
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
-		pGameInstance->Stop_Sound(1);
+		pGameInstance->Stop_Sound(4);
 		m_OnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, 1.0f, 0.0f };
 
@@ -555,7 +618,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_RIGHT))
 	{
-		pGameInstance->Stop_Sound(1);
+		pGameInstance->Stop_Sound(4);
 		m_OnMove = true;
 		m_f4NewLook = { 1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -566,7 +629,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_DOWN))
 	{
-		pGameInstance->Stop_Sound(1);
+		pGameInstance->Stop_Sound(4);
 		m_OnMove = true;
 		m_f4NewLook = { 0.0f, 0.0f, -1.0f, 0.0f };
 
@@ -577,7 +640,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 	}
 	if (pGameInstance->Key_Pressing(DIK_LEFT))
 	{
-		pGameInstance->Stop_Sound(1);
+		pGameInstance->Stop_Sound(4);
 		m_OnMove = true;
 		m_f4NewLook = { -1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -596,7 +659,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		pGameInstance->Play_Sound(TEXT("sfx_finn_sword_1.ogg"), 0.7f, false, 1);
+		pGameInstance->Play_Sound(TEXT("sfx_finn_sword_1.ogg"), 0.7f, false, 4);
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::ATTACK);
 	}
 
@@ -641,6 +704,7 @@ void CS_Fiona::Free()
 		Safe_Release(pPart);
 	m_SkillParts.clear();
 
+	Safe_Release(m_pShaderXRayCom);
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);

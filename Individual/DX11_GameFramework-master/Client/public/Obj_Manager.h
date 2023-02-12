@@ -182,6 +182,8 @@ private:
 
 	PLAYERINFO::STATE	m_tPlayerState = PLAYERINFO::STATE::STATE_END;
 
+	_bool			m_bLevelUP = { false };
+
 public:
 	virtual void Free() override;
 };

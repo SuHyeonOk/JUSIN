@@ -57,6 +57,20 @@ void CO_BearTrap::Tick(_double TimeDelta)
 
 	if(1 == m_pModelCom->Get_AnimIndex(), m_pModelCom->Get_Finished())
 		m_pModelCom->Set_AnimIndex(0);
+
+	if (true == m_bSound)
+	{
+		m_dSound_TimeAcc += TimeDelta;
+		if (1.0 < m_dSound_TimeAcc)
+		{
+			m_bSound = false;
+			m_dSound_TimeAcc = 0.0;
+		}
+
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Cine_Witch_Death_Fall_Wood.ogg"), 0.7f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 }
 
 void CO_BearTrap::Late_Tick(_double TimeDelta)
@@ -111,9 +125,7 @@ void CO_BearTrap::On_Collision(CGameObject * pOther)
 {
 	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
 	{
-		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		pGameInstance->Play_Sound(TEXT("Cine_Witch_Death_Fall_Wood.ogg"), 0.7f);
-		RELEASE_INSTANCE(CGameInstance);
+		m_bSound = true;
 
 		m_pModelCom->Set_AnimIndex(1, false);
 		CObj_Manager::GetInstance()->Set_Interaction(true);

@@ -58,7 +58,7 @@ HRESULT CM_Ghost::Initialize(void * pArg)
 		m_wsTag = L"Monster__Ghost_2";
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 7.0f;
+	m_tMonsterInfo.fHP		= 150.0f;
 	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
 	m_tMonsterInfo.fExp		= 20.0f;
 	m_tMonsterInfo.fAttack	= 70.0f;

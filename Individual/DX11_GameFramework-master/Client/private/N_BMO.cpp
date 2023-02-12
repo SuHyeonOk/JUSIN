@@ -50,6 +50,7 @@ HRESULT CN_BMO::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(_float3(0.1f, 0.1f, 0.1f));
+	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(180.f));
 
 	return S_OK;
 }
@@ -98,7 +99,12 @@ void CN_BMO::On_Collision(CGameObject * pOther)
 
 		// 플레이어와 충돌하고 있는 상태에서 'G' 를 누르면 대화가 넘어간다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-		if (pGameInstance->Key_Down(DIK_G)) ++m_Script_Count;
+		
+		if (pGameInstance->Key_Down(DIK_G)) 
+			++m_Script_Count;
+
+		pGameInstance->Play_Sound(TEXT("Intro3_Loop.ogg.ogg"), 0.7f);
+		
 		RELEASE_INSTANCE(CGameInstance);
 
 		// Talk 창 띄우기, 띄위지 않기
@@ -215,10 +221,6 @@ void CN_BMO::Talk_Tick()
 
 		case 5:
 		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			pGameInstance->Stop_Sound(0);
-			RELEASE_INSTANCE(CGameInstance);
-
 			CObj_Manager::GetInstance()->Set_Heart(3);
 			CObj_Manager::GetInstance()->Set_NextLevel(true);
 			CObj_Manager::GetInstance()->Set_Loading_Count();		// 로딩 화면을 위해서
@@ -227,6 +229,7 @@ void CN_BMO::Talk_Tick()
 			m_Script_Count = 0;
 			m_bInteraction = false;
 			CUI_Manager::GetInstance()->Set_Talk(false);			// 대화창 끄기
+			CObj_Manager::GetInstance()->Set_Interaction(false);
 		}
 		break;
 		}

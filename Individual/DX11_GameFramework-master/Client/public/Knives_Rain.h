@@ -53,6 +53,8 @@ private:
 	_double			m_dRain_TimeAcc = { 0.0 };
 	_int			m_iRain_Count = { 0 };
 
+	_bool			m_bSound = { false };
+
 public:
 	static	CKnives_Rain*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

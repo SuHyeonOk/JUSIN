@@ -56,11 +56,6 @@ HRESULT CS_FinnAndJake::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 	m_pModelCom->Set_AnimIndex(3);
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Stop_Sound(0);
-	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.5f, false, 3);
-	RELEASE_INSTANCE(CGameInstance);
-
 	CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::FINNANDJAKE);
 
 	return S_OK;
@@ -294,7 +289,7 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 	if (L"Object_BeapTrap" == pOther->Get_Tag())
 	{
 		m_OnKnockBack = true;
-		CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
+		//CObj_Manager::GetInstance()->Set_Player_MinusHP(10.0f);
 	}
 }
 
@@ -397,7 +392,6 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	if (m_bOnMove)
 	{
 		m_eAnim_State = MOVE;
-		pGameInstance->Stop_Sound(5);
 		m_pTransformCom->Go_Straight(TimeDelta);
 		m_pTransformCom->PlayerMove(XMVectorSet(m_f4NewLook.x, m_f4NewLook.y, m_f4NewLook.z, m_f4NewLook.w), TimeDelta);
 	}
@@ -449,12 +443,6 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 	{
 		m_eAnim_State = IDLE;
 		m_bOnMove = false;
-		pGameInstance->Stop_Sound(7);
-	}
-
-	if (pGameInstance->Key_Down(DIK_SPACE))
-	{
-		pGameInstance->Play_Sound(TEXT("sfx_finn_sword_1.ogg"), 0.7f, false, 1);
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -510,13 +498,18 @@ void CS_FinnAndJake::Return_Tick(const _double & TimeDelta)
 {
 	if (0.0f >= CObj_Manager::GetInstance()->Get_Current_Player().fHP)
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		if (1.0f == m_fAlpha)
 		{
+			pGameInstance->Play_Sound(TEXT("BMO_gameover.ogg"), 1.0f);
+
 			m_bAlpha_Down = true;
 		}
 
 		if (true == m_bAlpha_Change)
 		{
+			pGameInstance->Play_Sound(TEXT("BMO_startover.ogg"), 1.0f);
+			
 			m_bAlpha_Change = false;
 
 			m_eAnim_State = IDLE;
@@ -525,11 +518,10 @@ void CS_FinnAndJake::Return_Tick(const _double & TimeDelta)
 			// 플레이어 처음 위치로
 			m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });
 			// 카메라 처음 위치로
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 			pObjTransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f, });
-			RELEASE_INSTANCE(CGameInstance);
 		}
+		RELEASE_INSTANCE(CGameInstance);
 	}
 }
 
@@ -537,6 +529,13 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 {
 	if (false == m_bRainicorn)
 		return;
+
+	if (0.0 == m_dRainicorn_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("Lady_Rainicorn.mp3"), 1.0f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
 
 	m_dRainicorn_TimeAcc += TimeDelta;
 	if (5.0 < m_dRainicorn_TimeAcc)		// 5초가 지난 후에 서야 키 입력을 할 수 있다.

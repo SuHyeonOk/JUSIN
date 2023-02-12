@@ -138,7 +138,7 @@ HRESULT CS_Jake_Son_Twister::SetUp_Components()
 
 	/* For.Com_AABB */
 	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-	ColliderDesc.vSize = _float3(1.2f, 1.2f, 1.2f);
+	ColliderDesc.vSize = _float3(0.8f, 0.8f, 0.8f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 	
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),

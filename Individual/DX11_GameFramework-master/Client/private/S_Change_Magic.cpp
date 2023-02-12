@@ -114,8 +114,10 @@ void CS_Change_Magic::Late_Tick(_double TimeDelta)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
+	{
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+	}
 
 	if (CSkill_Manager::MAGICSKILL::ATTACK == CSkill_Manager::GetInstance()->Get_Magic_Skill().eSkill)
 	{
@@ -166,6 +168,47 @@ HRESULT CS_Change_Magic::Render()
 	return S_OK;
 }
 
+HRESULT CS_Change_Magic::Render_XRay()
+{
+	if (true == m_bShader_Hit)
+		return S_OK;
+
+	if (FAILED(__super::Render_XRay()))
+		return E_FAIL;
+
+	if (nullptr == m_pShaderXRayCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderXRayCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ViewMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderXRayCom->Set_Matrix("g_ProjMatrix", &pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
+	_float	fObjectID = 2.0f;
+	if (FAILED(m_pShaderXRayCom->Set_RawValue("g_ObjectID", &fObjectID, sizeof _float)))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		if (i == 0)
+			continue;
+
+		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
+		m_pModelCom->Render(m_pShaderXRayCom, i, "g_BoneMatrices", 0);
+	}
+
+	return S_OK;
+}
+
 void CS_Change_Magic::On_Collision(CGameObject * pOther)
 {
 
@@ -181,6 +224,11 @@ HRESULT CS_Change_Magic::SetUp_Components()
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel"), TEXT("Com_Shader"),
 		(CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_ShaderXRay */
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Shader_VtxAnimModel_XRay"), TEXT("Com_ShaderXRay"),
+		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
@@ -371,7 +419,6 @@ void CS_Change_Magic::KeyInput(const _double & TimeDelta)
 
 	if (m_OnMove)
 	{
-		cout << "Á¦ÀÌÅ© RUN ´­·¶¾î" << endl;
   		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::RUN);
 		m_pTransformCom->PlayerMove(XMVectorSet(m_f4NewLook.x, m_f4NewLook.y, m_f4NewLook.z, m_f4NewLook.w), TimeDelta);
 	}
@@ -432,7 +479,6 @@ void CS_Change_Magic::KeyInput(const _double & TimeDelta)
 
 	if (pGameInstance->Key_Down(DIK_SPACE))
 	{
-		cout << "Á¦ÀÌÅ© ATTACK ´­·¶¾î" << endl;
 		CSkill_Manager::GetInstance()->Set_Magic_Skill(CSkill_Manager::MAGICSKILL::ATTACK);
 	}
 
@@ -468,6 +514,7 @@ void CS_Change_Magic::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pShaderXRayCom);
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);

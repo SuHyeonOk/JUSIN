@@ -176,6 +176,7 @@ void CO_TextureObject::On_Collision(CGameObject * pOther)
 				CObj_Manager::GetInstance()->Set_NextLevel(true);
 				CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 				CObj_Manager::GetInstance()->Set_Camera(CObj_Manager::PLAYERINFO::PLAYER::JAKE);
+				CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 			}
 			else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
 			{

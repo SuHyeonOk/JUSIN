@@ -258,15 +258,21 @@ void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 	if (m_tPlayerInfo.fExp >= m_tPlayerInfo.fExpMax)
 	{
 		m_bEffect = true;
+		m_bLevelUP = true;
+	}
+
+	if (true == m_bLevelUP)
+	{
+		m_bLevelUP = false;
 
 		m_tPlayerInfo.iLevel++;							// 레벨 증가
-		m_tPlayerInfo.fHPMax += 5.0f;					// 공격력 증가
+		m_tPlayerInfo.fHPMax += 10.0f;					// 공격력 증가
 		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
 		m_tPlayerInfo.fExp = 0.0f;						// 경험치 0 으로 초기화
 		m_tPlayerInfo.fExpMax += 100.0f;				// 최대 경험치 증가
 		m_tPlayerInfo.fAttack += 10.0f;					// 공격력 증가
 
-		// UI 초기화
+														// UI 초기화
 		CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);
 		CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax);

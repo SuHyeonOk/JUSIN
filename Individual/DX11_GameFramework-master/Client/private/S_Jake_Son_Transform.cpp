@@ -55,12 +55,12 @@ HRESULT CS_Jake_Son_Transform::Initialize(void * pArg)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	m_wsTag = L"Player_Weapon";
+	m_wsTag = L"Jake_Son_Transform";
 	m_pJake_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 	m_pBoss_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_SKELETON_BOSS, TEXT("Layer_Gary_Boss"), TEXT("Com_Transform"), 0));
 
 	// »ç¿îµå
-	pGameInstance->Play_Sound(TEXT("JaekSon_Transform.mp3"), 1.0f);
+	pGameInstance->Play_Sound(TEXT("JaekSon_Transform.mp3"), 0.7f);
 
 	RELEASE_INSTANCE(CGameInstance);
 

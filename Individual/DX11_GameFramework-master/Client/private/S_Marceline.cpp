@@ -210,7 +210,19 @@ void CS_Marceline::State_Tick()
 		if (0 == m_pModelCom->Get_AnimIndex() && m_pModelCom->Get_Finished())
 		{
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+			// 레벨별로 다른 사운드를 재생한다.
+			if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
+			{
+				pGameInstance->Play_Sound(TEXT("Fire4_Loop.ogg"), 0.1f, true, 0);
+			}
+			else if (LEVEL_SKELETON == CObj_Manager::GetInstance()->Get_Current_Level())
+			{
+				pGameInstance->Play_Sound(TEXT("Fire1_Loop.ogg"), 0.1f, true, 0);
+			}
+			else
+			{
+				pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.1f, true, 0);
+			}
 			RELEASE_INSTANCE(CGameInstance);
 
 			CGameObject::Set_Dead();

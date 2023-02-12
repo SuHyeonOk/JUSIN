@@ -257,7 +257,7 @@ _bool CUI_ShopIndex::Calculation()
 		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 			iValue = 300;
 		else
-			iValue = 999;
+			iValue = 9999999;
 
 		if (iValue <= CObj_Manager::GetInstance()->Get_Current_Player().iCoin)
 		{

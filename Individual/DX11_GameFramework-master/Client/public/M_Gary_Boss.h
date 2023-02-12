@@ -121,13 +121,16 @@ private:
 
 	// 셰이더
 	_bool				m_bShader_Alpha = false;
-	_float				m_fAlpha = 1.f;
+	_float				m_fAlpha = 1.0f;
 	_bool				m_bShader_Hit = false;
 	_double				m_dShader_Hit_TimeAcc = 0;
 
 	// CutScene
 	_bool				m_bCutScene = false;
 	_bool				m_bCutSceneEnd = false;
+
+	// 사운드
+	_bool				m_bSound = { false };
 
 public:
 	static	CM_Gary_Boss*	Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -110,6 +110,10 @@ void CCake::On_Collision(CGameObject * pOther)
 {
 	if (L"Jake" == pOther->Get_Tag())
 	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_food_good.ogg"), 1.0f);
+		RELEASE_INSTANCE(CGameInstance);
+
 		CGameObject::Set_Dead();
 	}
 }

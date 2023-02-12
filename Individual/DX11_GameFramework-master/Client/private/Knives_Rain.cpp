@@ -165,11 +165,18 @@ void CKnives_Rain::Rain_Tick(const _double & TimeDelta)
 	if (m_dRain_TimeAcc > m_dTimeAcc)
 		return;
 
+	if (false == m_bSound)
+	{
+		m_bSound = true;
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_knife_rain.ogg"), 0.4f);
+		RELEASE_INSTANCE(CGameInstance);
+	}
+
 	m_pTransformCom->Go_Down(TimeDelta);
 
-	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float4 f4Position = { 0.0f, 0.0f, 0.0f, 0.0f };
-	XMStoreFloat4(&f4Position, vPosition);
+	XMStoreFloat4(&f4Position, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 	if (-1.0f > f4Position.y)
 	{
@@ -179,6 +186,7 @@ void CKnives_Rain::Rain_Tick(const _double & TimeDelta)
 
 	if (7 == m_iRain_Count)	// 칼이 떨어지는 개수는 여기서 정해주면 된다.
 	{
+		m_bSound = false;
 		m_bRain = false;
 		m_iRain_Count = 0;
 		m_dTimeAcc = 0.0;

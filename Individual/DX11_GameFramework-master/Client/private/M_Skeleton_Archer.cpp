@@ -54,7 +54,7 @@ HRESULT CM_Skeleton_Archer::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 5;
+	m_tMonsterInfo.fHP		= 130.0f;
 	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
 	m_tMonsterInfo.fExp		= 15.0f;
 	m_tMonsterInfo.fAttack	= 50.0f;

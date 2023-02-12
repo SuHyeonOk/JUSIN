@@ -60,7 +60,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_eState = IDLE;
 	m_eAnimState = IDLE;
-	m_fHP = 1000.0f;
+	m_fHP = 3000.0f;
 	m_fMaxHP = m_fHP;
 	m_fAttack = 50.0f;
 	m_fExp = 1000.0f;
@@ -159,7 +159,7 @@ void CM_Gary_Boss::On_Collision(CGameObject * pOther)
 		if (L"Player_Weapon" == pOther->Get_Tag())
 			m_bHit = true;
 
-	if (L"Skill_Paint" == pOther->Get_Tag())
+	if (L"Skill_Paint" == pOther->Get_Tag() || L"Jake_Son_Transform" == pOther->Get_Tag())
 		m_bHit = true;
 }
 
@@ -356,7 +356,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 				iMinRandomNumber = 2;
 				iMaxRandomNumber = 4;
 			}
-			else if (0.8f > fHP)
+			else if (0.6f > fHP)
 			{
 				iMinRandomNumber = 1;
 				iMaxRandomNumber = 3;
@@ -747,23 +747,34 @@ void CM_Gary_Boss::A_Dance_Tick(const _double & TimeDelta)
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
+	if (false == m_bSound)
+	{
+		m_bSound = true;
+		pGameInstance->Stop_Sound(0);
+		pGameInstance->Play_Sound(TEXT("A New Dimension.ogg"), 0.7f, true, 4 );
+	}
+
 	m_dSkill_TimeAcc += TimeDelta;
 	if (0.5 < m_dSkill_TimeAcc)
 	{
 		pGameInstance->Set_ChangeLight_index(CUtilities_Manager::GetInstance()->Get_Random(0, 4));
 
-		m_fHP += 10.0f;
-		m_dSkill_TimeAcc = 0;
+		m_fHP += 5.0f;
+		m_dSkill_TimeAcc = 0.0;
 	}
 
 	Fann_Create();
 	if (true == Fann_Dead_Check())   // 생성한 팬이 모두 삭제 되었다면, 다른 패턴
 	{
+		m_bSound = false;
+		pGameInstance->Stop_Sound(4);
+		pGameInstance->Play_Sound(TEXT("Boss1_Loop.ogg"), 0.1f, true, 0);
+
 		pGameInstance->Set_ChangeLight(false);	// 조명을 원래대로 변경한다.
 
 		m_bShader_Alpha = true;
 		m_eState = IDLE;
-		m_dSkill_TimeAcc = 0;
+		m_dSkill_TimeAcc = 0.0;
 	}
 
 	RELEASE_INSTANCE(CGameInstance)
@@ -901,6 +912,10 @@ void CM_Gary_Boss::Die_Tick(const _double & TimeDelta)
 {
 	m_eAnimState = STATE::DIE;
 
+	m_fAlpha -= _float(TimeDelta) * 0.5f;
+
+	if (0.0f > m_fAlpha)
+		CGameObject::Set_Dead();
 }
 
 void CM_Gary_Boss::LookChange(const _double & TimeDelta)

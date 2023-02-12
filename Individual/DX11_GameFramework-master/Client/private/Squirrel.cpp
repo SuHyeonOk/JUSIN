@@ -386,6 +386,14 @@ void CSquirrel::Eat_Tick(const _double & TimeDelta)
 	}
 	else
 	{
+		if (2 == m_iDance_Count)
+		{
+			++m_iDance_Count;
+			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_bubbles.ogg"), 0.8f);
+			RELEASE_INSTANCE(CGameInstance);
+		}
+
 		m_pModelCom->Set_AnimIndex(5);
 	}
 }
