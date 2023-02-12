@@ -65,8 +65,8 @@ HRESULT CM_PigWarrior::Initialize(void * pArg)
 
 	m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 	m_tMonsterInfo.fHP		= 50.0f;
-	m_tMonsterInfo.fMaxHP	= 50.0f;
-	m_tMonsterInfo.fExp		= 25.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
+	m_tMonsterInfo.fExp		= 10.0f;
 	m_tMonsterInfo.fAttack	= 5.0f;
 
 	if (FAILED(Ready_Parts()))

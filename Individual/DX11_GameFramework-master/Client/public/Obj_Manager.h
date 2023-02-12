@@ -112,7 +112,9 @@ public:
 	void				Set_Jake_Weapon(PLAYERINFO::JAKEWEAPON	eWeapon) { m_tPlayerInfo.eJakeWeapon = eWeapon; }
 
 	// 플레이어의 공격력 몬스터에게 주기 위해서
-	_float				Get_Player_Attack() { return m_tPlayerInfo.fAttack; }
+	_float				Get_Player_Attack() { 
+		return m_tPlayerInfo.fAttack;
+	}
 	void				Set_Player_Attack(_float iAttack) { m_tPlayerInfo.fAttack = iAttack; } // 스킬의 경우 잠시 공격력을 올렸다가 내리도록 하기 위해서
 
 	// UI 관련

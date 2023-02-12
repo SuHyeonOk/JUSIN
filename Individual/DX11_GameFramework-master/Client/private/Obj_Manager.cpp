@@ -138,10 +138,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 		{
 			m_tPlayerInfo.fHP -= m_fMonster_Attck;
 			CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
-		}
 
-		if (0 == m_dPlayerAttck_TimeAcc)
-		{
 			// 사운드
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			_tchar szSoundName[MAX_PATH];
@@ -263,7 +260,7 @@ void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 		m_bEffect = true;
 
 		m_tPlayerInfo.iLevel++;							// 레벨 증가
-		m_tPlayerInfo.fHPMax += 10.0f;					// 공격력 증가
+		m_tPlayerInfo.fHPMax += 5.0f;					// 공격력 증가
 		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// 체력 꽉 채워주기
 		m_tPlayerInfo.fExp = 0.0f;						// 경험치 0 으로 초기화
 		m_tPlayerInfo.fExpMax += 100.0f;				// 최대 경험치 증가

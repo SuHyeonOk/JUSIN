@@ -40,17 +40,17 @@ public:
 	virtual void	On_Collision(CGameObject* pOther) override;
 
 private:
-	CShader*				m_pShaderCom = nullptr;
-	CShader*				m_pShaderXRayCom = nullptr;
-	CRenderer*				m_pRendererCom = nullptr;
-	CModel*					m_pModelCom = nullptr;
-	CCollider*				m_pColliderCom = nullptr;
-	CNavigation*			m_pNavigationCom = nullptr;
+	CShader*		m_pShaderCom = nullptr;
+	CShader*		m_pShaderXRayCom = nullptr;
+	CRenderer*		m_pRendererCom = nullptr;
+	CModel*			m_pModelCom = nullptr;
+	CCollider*		m_pColliderCom = nullptr;
+	CNavigation*	m_pNavigationCom = nullptr;
 
 private:
-	HRESULT SetUp_Components();
-	HRESULT SetUp_ShaderResources();
-	HRESULT SetUp_ShaderXRayResources();
+	HRESULT			SetUp_Components();
+	HRESULT			SetUp_ShaderResources();
+	HRESULT			SetUp_ShaderXRayResources();
 
 	HRESULT Ready_Parts();	// 나 에서 생성할 객체들
 
@@ -145,6 +145,7 @@ private:
 
 	// 소리
 	_bool		m_bAttack_Sound = false;
+	_double		m_dDieSound_TimeAcc = { 0.0 };
 
 public:
 	static CJake*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -663,7 +663,7 @@ void CFinn::Check_Follow(_double TimeDelta)
 			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4Position.x, f4Position.y + 1.0f, f4Position.z - 0.8f));
 
 			// »ç¿îµå
-			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_splash_pie.ogg"), 0.7f);
+			pGameInstance->Play_Sound(TEXT("Hi_Finn.mp3"), 0.6f);
 
 			m_dNotfollow_TimeAcc = 0;
 		}

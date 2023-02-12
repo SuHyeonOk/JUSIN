@@ -56,6 +56,8 @@ private:
 	_float			m_fCurrent_Percentage = { 0.0f };
 	_float			m_fNext_Percentage = { 0.0f };
 
+	_double			m_bMove_TimeAcc = { 0.0 };
+
 public:
 	static	CSnail*			Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*	Clone(void* pArg = nullptr) override;

@@ -63,9 +63,9 @@ HRESULT CM_Pigs::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.fHP		= 30.0f;
-	m_tMonsterInfo.fMaxHP	= 30.0f;
-	m_tMonsterInfo.fExp		= 30.0f;
+	m_tMonsterInfo.fHP		= 55.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
+	m_tMonsterInfo.fExp		= 10.0f;
 	m_tMonsterInfo.fAttack	= 20.0f;
 
 	return S_OK;

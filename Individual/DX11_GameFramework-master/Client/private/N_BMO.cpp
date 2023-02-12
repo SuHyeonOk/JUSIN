@@ -98,10 +98,7 @@ void CN_BMO::On_Collision(CGameObject * pOther)
 
 		// 플레이어와 충돌하고 있는 상태에서 'G' 를 누르면 대화가 넘어간다.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-		if (pGameInstance->Key_Down(DIK_G))
-			++m_Script_Count;
-
+		if (pGameInstance->Key_Down(DIK_G)) ++m_Script_Count;
 		RELEASE_INSTANCE(CGameInstance);
 
 		// Talk 창 띄우기, 띄위지 않기
@@ -172,7 +169,7 @@ void CN_BMO::Talk_Tick()
 	{
 		if (0 == m_Script_Count)	// 미니 게임이 끝난 후의 보상
 		{
-			CObj_Manager::GetInstance()->Set_Heart(5);
+			CObj_Manager::GetInstance()->Set_Heart(3);
 			CObj_Manager::GetInstance()->Set_Player_PlusHP(500.0f);
 			CObj_Manager::GetInstance()->Set_Coin(1000);
 		}
@@ -205,7 +202,7 @@ void CN_BMO::Talk_Tick()
 			break;
 
 		case 2:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n게임은 간단해! 시간안에 케이크 5개를 찾으면 돼!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n달팽이 보다 먼저 포탈을 찾아서 돌아오면 되는거야"));
 			break;
 
 		case 3:
@@ -213,7 +210,7 @@ void CN_BMO::Talk_Tick()
 			break;
 
 		case 4:
-			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n기회는 5번 이야 아주 충분하지!? \n얘들아 화이팅!"));
+			CUI_Manager::GetInstance()->Set_Text(TEXT("비모 : \n기회는 3번 이야 아주 충분하지!? \n얘들아 화이팅!"));
 			break;
 
 		case 5:
@@ -222,15 +219,14 @@ void CN_BMO::Talk_Tick()
 			pGameInstance->Stop_Sound(0);
 			RELEASE_INSTANCE(CGameInstance);
 
-			CObj_Manager::GetInstance()->Set_Heart(5);
+			CObj_Manager::GetInstance()->Set_Heart(3);
 			CObj_Manager::GetInstance()->Set_NextLevel(true);
-			CObj_Manager::GetInstance()->Set_Loading_Count();	// 로딩 화면을 위해서
+			CObj_Manager::GetInstance()->Set_Loading_Count();		// 로딩 화면을 위해서
 			CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(true);
 
 			m_Script_Count = 0;
+			m_bInteraction = false;
 			CUI_Manager::GetInstance()->Set_Talk(false);			// 대화창 끄기
-			CObj_Manager::GetInstance()->Set_Interaction(false);	// 상호작용 끄기
-			//CGameObject::Set_Dead();
 		}
 		break;
 		}

@@ -54,9 +54,9 @@ HRESULT CM_Magic_Man::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
-	m_tMonsterInfo.fHP		= 150.0f;
-	m_tMonsterInfo.fMaxHP	= 150.0f;
-	m_tMonsterInfo.fExp		= 70.0f;
+	m_tMonsterInfo.fHP		= 170.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
+	m_tMonsterInfo.fExp		= 30.0f;
 	m_tMonsterInfo.fAttack	= 20.0f;
 
 	m_pTransformCom->Set_Pos(_float3(MonsterDesc.f3Pos.x, 100.f, MonsterDesc.f3Pos.z));	// 처음에는 높이 있어서 보이지 않는다.

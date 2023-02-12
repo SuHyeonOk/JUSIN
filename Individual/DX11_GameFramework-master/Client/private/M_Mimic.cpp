@@ -54,9 +54,9 @@ HRESULT CM_Mimic::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= 50.0f;
-	m_tMonsterInfo.fMaxHP	= 50.0f;
-	m_tMonsterInfo.fExp		= 50.0f;
+	m_tMonsterInfo.fHP		= 100.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
+	m_tMonsterInfo.fExp		= 80.0f;
 	m_tMonsterInfo.fAttack	= 15.0f;
 
 	return S_OK;
@@ -259,10 +259,8 @@ void CM_Mimic::Hit_Tick(const _double& TimeDelta)
 
 	if (0 == m_pModelCom->Get_Keyframes())
 	{
-		_vector	vMyPos;
-		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4	f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
-		XMStoreFloat4(&f4MyPos, vMyPos);
+		XMStoreFloat4(&f4MyPos, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 		CUI_3DTexture::TEXTUREINFO	tTextureInfo;
 		tTextureInfo.eTextureType = tTextureInfo.TYPE_FIND;
@@ -314,7 +312,7 @@ void CM_Mimic::Die_Tick(const _double& TimeDelta)
 	if (!m_OneCoin)														
 	{
 		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
-		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
+		CUI_Manager::GetInstance()->Set_LevelGauge_Player(CObj_Manager::GetInstance()->Get_Current_Player().fExp / CObj_Manager::GetInstance()->Get_Current_Player().fExpMax);
 
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;

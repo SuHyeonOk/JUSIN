@@ -1297,12 +1297,14 @@ void CJake::Current_HP(const _double & TimeDelta)
 		if (1 > m_fAlpha)
 			m_fAlpha += _float(TimeDelta) * 1.5f;
 
-		if (10 <= m_pModelCom->Get_Keyframes())	// TODO : 나중에 릴리즈로 돌리
+		m_dDieSound_TimeAcc += TimeDelta;
+		if (0.5 < m_dDieSound_TimeAcc)
 		{
 			m_fAlpha = 1;
 			bRevive = false;
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+			m_dDieSound_TimeAcc = 0.0;
 			CObj_Manager::GetInstance()->Set_Interaction(false);	// 공격 받다가 죽기 때문에 false 로 변경해 준다.
+			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		}
 	}
 }

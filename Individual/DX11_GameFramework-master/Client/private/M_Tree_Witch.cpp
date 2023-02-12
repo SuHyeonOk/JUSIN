@@ -54,9 +54,9 @@ HRESULT CM_Tree_Witch::Initialize(void * pArg)
 		return E_FAIL;
 	
 	m_tMonsterInfo.eState	= m_tMonsterInfo.IDLE;
-	m_tMonsterInfo.fHP		= 100.0f;
-	m_tMonsterInfo.fMaxHP	= 70.0f;
-	m_tMonsterInfo.fExp		= 50.0f;
+	m_tMonsterInfo.fHP		= 200.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
+	m_tMonsterInfo.fExp		= 30.0f;
 	m_tMonsterInfo.fAttack	= 12.0f;
 
 	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(195.f));
@@ -477,11 +477,10 @@ void CM_Tree_Witch::Die_Tick(const _double& TimeDelta)
 	if (!m_OneCoin)															// 한 번만
 	{
 		CObj_Manager::GetInstance()->Set_Player_PlusExp(m_tMonsterInfo.fExp);
-		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tMonsterInfo.fExp);
+		CUI_Manager::GetInstance()->Set_LevelGauge_Player(CObj_Manager::GetInstance()->Get_Current_Player().fExp / CObj_Manager::GetInstance()->Get_Current_Player().fExpMax);
 
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 vf4MyPos;
-		XMStoreFloat4(&vf4MyPos, vMyPos);
+		XMStoreFloat4(&vf4MyPos, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 		CItemManager::GetInstance()->RandomCoin_Clone(_float3(vf4MyPos.x, vf4MyPos.y, vf4MyPos.z), 13, 5, 6); 	// 동전 생성
 

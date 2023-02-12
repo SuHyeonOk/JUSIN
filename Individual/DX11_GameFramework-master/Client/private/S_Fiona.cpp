@@ -60,8 +60,8 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 
 	// FIONE 일 때는 플레이어의 평소 공격력의 1.5배가 된다.
 	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
-	m_fSword_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f;
-	m_fCat_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 2.f;
+	m_fSword_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.25f;
+	m_fCat_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	

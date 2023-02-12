@@ -54,9 +54,9 @@ HRESULT CM_Skeleton_Shield::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.fHP		= 100.0f;
+	m_tMonsterInfo.fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 5;
 	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
-	m_tMonsterInfo.fExp		= 70.0f;
+	m_tMonsterInfo.fExp		= 15.0f;
 	m_tMonsterInfo.fAttack	= 30.0f;
 
 	if (FAILED(Ready_Parts()))

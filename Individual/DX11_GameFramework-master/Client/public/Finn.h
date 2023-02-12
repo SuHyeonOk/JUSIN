@@ -102,10 +102,10 @@ private:
 
 	// Skill
 	_bool		m_bOneSkillStart = false;
-	_bool		m_bSkillStart = false;				// 스킬이 시작 되었다.
+	_bool		m_bSkillStart = false;		// 스킬이 시작 되었다.
 	_double		m_dSkill_TimeAcc = 0.0;
 
-	_bool		m_bSkill_Clone = false;			// 스킬을 한 번만 생성하기 위해서
+	_bool		m_bSkill_Clone = false;		// 스킬을 한 번만 생성하기 위해서
 
 	//////////////////////////// 플레이어가 아닐 때
 

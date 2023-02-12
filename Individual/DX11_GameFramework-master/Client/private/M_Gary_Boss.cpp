@@ -60,7 +60,7 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_eState = IDLE;
 	m_eAnimState = IDLE;
-	m_fHP = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 10.0f;
+	m_fHP = 1000.0f;
 	m_fMaxHP = m_fHP;
 	m_fAttack = 50.0f;
 	m_fExp = 1000.0f;
@@ -394,7 +394,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 	{
 		bPotalEffect = false;
 		bRandomSuccess = false;
-		iRandom = 4;   // Test
+		//iRandom = 4;   // Test
 		if (0 == iRandom)
 			m_eState = A_MOVE;
 		else if (1 == iRandom)
@@ -863,9 +863,8 @@ void CM_Gary_Boss::Hit_Tick(const _double & TimeDelta)
 		pGameInstance->Play_Sound(TEXT("sfx_character_hit_1.ogg"), 0.7f);
 		RELEASE_INSTANCE(CGameInstance);
 
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4MyPos = { 0.0f, 0.0f, 0.0f, 1.0f };
-		XMStoreFloat4(&f4MyPos, vMyPos);
+		XMStoreFloat4(&f4MyPos, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 		CEffect_Manager::GetInstance()->Effect_Color_Hit_Create(_float3(f4MyPos.x, f4MyPos.y + 1.2f, f4MyPos.z - 0.7f), _float3(0.9f, 0.0f, 0.1f));
 
 		m_fHP -= CObj_Manager::GetInstance()->Get_Current_Player().fAttack;

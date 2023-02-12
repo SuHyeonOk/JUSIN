@@ -71,9 +71,9 @@ HRESULT CM_Gronmes::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.MOVE;
-	m_tMonsterInfo.fHP		= 40.0f;
-	m_tMonsterInfo.fMaxHP	= 40.0f;
-	m_tMonsterInfo.fExp		= 40.0f;
+	m_tMonsterInfo.fHP		= 100.0f;
+	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
+	m_tMonsterInfo.fExp		= 10.0f;
 	m_tMonsterInfo.fAttack	= 10.0f;
 
 	return S_OK;

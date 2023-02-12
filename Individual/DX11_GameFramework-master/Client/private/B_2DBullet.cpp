@@ -186,36 +186,36 @@ HRESULT CB_2DBullet::Render()
 
 void CB_2DBullet::On_Collision(CGameObject * pOther)
 {
+	if (L"Finn" != pOther->Get_Tag() || L"Jake" != pOther->Get_Tag())
+		return;
+
 	CGameObject::Set_Dead();
 
-	if (L"Finn" == pOther->Get_Tag() || L"Jake" == pOther->Get_Tag())
+	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 	{
-		if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
-		{
-			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-			pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 0.5f);
-			RELEASE_INSTANCE(CGameInstance);
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		pGameInstance->Play_Sound(TEXT("sfx_enchiridion_paintworks2.ogg"), 0.5f);
+		RELEASE_INSTANCE(CGameInstance);
 
-			_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-			_float4 f4MyPos;
-			XMStoreFloat4(&f4MyPos, vMyPos);
+		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
 
-			if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
-				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
-			else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
-				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
-			else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
-				CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
+		if (0 == m_tBulletInfo.iCircle_Color)		// 파란색
+			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.09f, 0.46f, 0.76f));
+		else if (1 == m_tBulletInfo.iCircle_Color)	// 빨간색
+			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(0.89f, 0.25f, 0.14f));
+		else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
+			CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
 
 
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STUN);
-		}
-		else
-			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STUN);
+	}
+	else
+		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::HIT);
 
-		CObj_Manager::GetInstance()->Set_Interaction(true);
-		CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
-	} 
+	CObj_Manager::GetInstance()->Set_Interaction(true);
+	CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 }
 
 HRESULT CB_2DBullet::SetUp_Components()

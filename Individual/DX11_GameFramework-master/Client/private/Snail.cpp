@@ -158,23 +158,23 @@ HRESULT CSnail::SetUp_Components()
 		(CComponent**)&m_pShaderXRayCom)))
 		return E_FAIL;
 
-/* For.Com_Model */
-if (FAILED(__super::Add_Component(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Snail"), TEXT("Com_Model"),
-(CComponent**)&m_pModelCom)))
-return E_FAIL;
-
-CCollider::COLLIDERDESC			ColliderDesc;
-
-/* For.Com_SPHERE */
-ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
-ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
-ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-
-if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
-(CComponent**)&m_pColliderCom, &ColliderDesc)))
-return E_FAIL;
-
-return S_OK;
+	/* For.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_MINIGAME, TEXT("Prototype_Component_Model_Snail"), TEXT("Com_Model"),
+	(CComponent**)&m_pModelCom)))
+	return E_FAIL;
+	
+	CCollider::COLLIDERDESC			ColliderDesc;
+	
+	/* For.Com_SPHERE */
+	ZeroMemory(&ColliderDesc, sizeof(CCollider::COLLIDERDESC));
+	ColliderDesc.vSize = _float3(0.5f, 0.5f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	
+	if (FAILED(__super::Add_Component(CGameInstance::Get_StaticLevelIndex(), TEXT("Prototype_Component_Collider_SPHERE"), TEXT("Com_Collider"),
+	(CComponent**)&m_pColliderCom, &ColliderDesc)))
+	return E_FAIL;
+	
+	return S_OK;
 }
 
 HRESULT CSnail::SetUp_ShaderResources()
@@ -256,6 +256,16 @@ void CSnail::NextPosition(const _double & TimeDelta)
 
 void CSnail::UI_Tick(const _double & TimeDelta)
 {
+	if (false == m_bArrive)
+	{
+		m_bMove_TimeAcc += TimeDelta;
+	}
+	else
+	{
+		m_bMove_TimeAcc;
+		_int a = 0;
+	}
+
 	// TODO : 달팽이 이동 거리 구하기
 	//_float fTemp = (_float(m_iIndex + 1) / 21.0f) * 100.0f;
 	//if (m_fCurrent_Percentage < fTemp)

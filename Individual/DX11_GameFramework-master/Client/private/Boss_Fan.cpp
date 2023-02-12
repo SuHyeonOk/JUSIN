@@ -51,8 +51,8 @@ HRESULT CBoss_Fan::Initialize(void * pArg)
 	m_pTransformCom->Set_Pos();
 
 	m_eState	= DANCE;
-	m_fHP		= 30.0f;
-	m_fMaxHP	= 30.0f;
+	m_fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 3;
+	m_fMaxHP	= m_fHP;
 
 	return S_OK;
 }

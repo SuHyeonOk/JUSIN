@@ -56,9 +56,9 @@ HRESULT CM_Penny::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tMonsterInfo.eState	= m_tMonsterInfo.FIND;
-	m_tMonsterInfo.fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 5; // 3번 이상으로 때려야 한다.
+	m_tMonsterInfo.fHP		= CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 6; // 3번 이상으로 때려야 한다.
 	m_tMonsterInfo.fMaxHP	= m_tMonsterInfo.fHP;
-	m_tMonsterInfo.fExp		= 70.0f;
+	m_tMonsterInfo.fExp		= 25.0f;
 	m_tMonsterInfo.fAttack	= 20.0f;
 
 	return S_OK;
