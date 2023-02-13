@@ -14,6 +14,7 @@
 #include "E_Look_Alpha.h"
 #include "E_NoLook_Alpha.h"
 
+
 IMPLEMENT_SINGLETON(CEffect_Manager)
 
 CEffect_Manager::CEffect_Manager()
@@ -535,6 +536,24 @@ HRESULT CEffect_Manager::Effect_StarRandom_Create(_float3 f3Pos, const _float3 &
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
+	return S_OK;
+}
+
+HRESULT CEffect_Manager::Effect_Pigs_Star(_float3 f3Pos)
+{
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	_float fRendomNumberX = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+	_float fRendomNumberZ = CUtilities_Manager::GetInstance()->Get_Random(-0.1f, 0.1f);
+
+	CE_Look_Alpha::EFFECTINFO tEffectInfo;
+	tEffectInfo.eTextureType = CE_Look_Alpha::EFFECTINFO::PIGS;
+	tEffectInfo.f3Pos = { f3Pos.x + fRendomNumberX, f3Pos.y, f3Pos.z + fRendomNumberZ };
+	if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Texture_Effect"), TEXT("Prototype_GameObject_E_Look_Alpha"), &tEffectInfo)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	return S_OK;
 }
 

@@ -199,6 +199,7 @@
     <ClInclude Include="..\public\E_NoLook_Grow.h" />
     <ClInclude Include="..\public\E_Alpha_Rotation.h" />
     <ClInclude Include="..\public\E_Burst.h" />
+    <ClInclude Include="..\public\E_Pigs_Rainbow.h" />
     <ClInclude Include="..\public\Finn.h" />
     <ClInclude Include="..\public\Finn_Weapon.h" />
     <ClInclude Include="..\public\Food.h" />
@@ -337,6 +338,7 @@
     <ClCompile Include="..\private\E_NoLook_Grow.cpp" />
     <ClCompile Include="..\private\E_Alpha_Rotation.cpp" />
     <ClCompile Include="..\private\E_Burst.cpp" />
+    <ClCompile Include="..\private\E_Pigs_Rainbow.cpp" />
     <ClCompile Include="..\private\Finn.cpp" />
     <ClCompile Include="..\private\Finn_Weapon.cpp" />
     <ClCompile Include="..\private\Food.cpp" />

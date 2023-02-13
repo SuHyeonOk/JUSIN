@@ -290,9 +290,8 @@ void CS_PaintWork::Effect_Tick(const _double & TimeDelta)
 	m_dEffect_TimeAcc += TimeDelta;
 	if (0.1 < m_dEffect_TimeAcc)
 	{
-		_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4Position = { 0.0f, 0.0f, 0.0f, 1.0f };
-		XMStoreFloat4(&f4Position, vPosition);
+		XMStoreFloat4(&f4Position, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 		if (CS_PaintWork::PAINTWORKINFO::PAINTWORK::BLUE == m_tBulletInfo.ePaintWork)
 		{

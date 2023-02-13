@@ -12,23 +12,21 @@ END
 
 BEGIN(Client)
 
-class CE_Look_Alpha final : public CGameObject
+class CE_Pigs_Rainbow final : public CGameObject
 {
 public:
 	typedef struct tagEffectlInfo
 	{
-		enum TEXTURETYPE { BIGSKELETON_TEXTURE, PAINT_STAR, SQUIRREL, PIGS, TEXTURE_END };
-		TEXTURETYPE		eTextureType = TEXTURE_END;
-
+		CTransform*		m_pTransformCom = { nullptr };
 		_float3			f3Pos = { 0.0f, 0.0f, 0.0f };
-		_float3			f3Color = { 0.0f, 0.0f, 0.0f };
+		_float4			f4Look = { 0.0f, 0.0f, 1.0f, 0.0f };
 
 	}EFFECTINFO;
 
 private:
-	CE_Look_Alpha(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CE_Look_Alpha(const CE_Look_Alpha& rhs);
-	virtual ~CE_Look_Alpha() = default;
+	CE_Pigs_Rainbow(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CE_Pigs_Rainbow(const CE_Pigs_Rainbow& rhs);
+	virtual ~CE_Pigs_Rainbow() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -50,12 +48,12 @@ private:
 private:
 	EFFECTINFO			m_tEffectInfo;
 
-private:	// Shader
-	_float				m_fAlpha = 0.0f;
-	_double				m_bStopAlpha_TimeAcc = 0.0;
+private:
+	_float				m_fSize_X = { 0.0f };
+	_float				m_fAlpha = { 1.0f };
 
 public:
-	static	CE_Look_Alpha*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static	CE_Pigs_Rainbow*		Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject*		Clone(void* pArg = nullptr) override;
 	virtual void				Free() override;
 };

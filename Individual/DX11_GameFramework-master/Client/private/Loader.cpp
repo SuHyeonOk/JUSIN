@@ -60,6 +60,7 @@
 #include "Player_Talk.h"
 #include "E_FlyingEnvironment.h"
 #include "E_NoLook_Alpha.h"
+#include "E_Pigs_Rainbow.h"
 
 // Obj
 #include "O_Box.h"
@@ -1621,6 +1622,12 @@ HRESULT CLoader::Effect_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/MiniGame/Squirrel_Cooldown_FX_1.png")))))
 		return E_FAIL;
 
+	// Pigs_Rainbow
+	/* For.Prototype_Component_Texture_Pigs_Rainbow */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Pigs_Rainbow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Pigs_Rainbow/Pigs_Rainbow.png")))))
+		return E_FAIL;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -1691,7 +1698,11 @@ HRESULT CLoader::Effect_Create()
 		CE_FlyingEnvironment::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
+	// Pigs_Rainbow
+	/* For.Prototype_GameObject_E_Pigs_Rainbow*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_E_Pigs_Rainbow"),
+		CE_Pigs_Rainbow::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
 

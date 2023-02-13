@@ -48,6 +48,8 @@ HRESULT CE_Look_Alpha::Initialize(void * pArg)
 		fRandomSize = 2.0f;
 	else if(CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PAINT_STAR == m_tEffectInfo.eTextureType)
 		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.3f);
+	else if(CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PIGS == m_tEffectInfo.eTextureType)
+		fRandomSize = CUtilities_Manager::GetInstance()->Get_Random(0.1f, 0.4f);
 	else
 		fRandomSize = 1.0f;
 
@@ -142,6 +144,9 @@ HRESULT CE_Look_Alpha::SetUp_Components()
 		break;
 	case CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::SQUIRREL:
 		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Squirrel"));
+		break;
+	case CE_Look_Alpha::EFFECTINFO::TEXTURETYPE::PIGS:
+		wsprintf(m_szTextureName, TEXT("Prototype_Component_Texture_Pigs_Rainbow"));
 		break;
 	}
 	

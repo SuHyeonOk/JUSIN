@@ -2,9 +2,11 @@
 #include "..\public\B_2DBullet.h"
 
 #include "GameInstance.h"
-#include "Obj_Manager.h"
 #include "PipeLine.h"
+#include "Obj_Manager.h"
 #include "Effect_Manager.h"
+
+#include "E_Pigs_Rainbow.h"
 
 CB_2DBullet::CB_2DBullet(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject(pDevice, pContext)
@@ -40,11 +42,18 @@ HRESULT CB_2DBullet::Initialize(void * pArg)
 
 	if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::STAR_BULLET)
 	{
+		//// Effect
+		//CE_Pigs_Rainbow::EFFECTINFO tEffectInfo;
+		//tEffectInfo.m_pTransformCom = m_pTransformCom;
+		//tEffectInfo.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y - 0.3f, m_tBulletInfo.f3Start_Pos.z); 
+		//if (FAILED(pGameInstance->Clone_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_PigsEffect"), TEXT("Prototype_GameObject_E_Pigs_Rainbow"), &tEffectInfo)))
+		//	return E_FAIL;
+
 		pGameInstance->Play_Sound(TEXT("sfx_pigs_attack_1.ogg"), 0.5f);
 
 		GameObjectDesc.TransformDesc.fSpeedPerSec = 1.f;
 		GameObjectDesc.TransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		GameObjectDesc.TransformDesc.f3Pos = _float3(m_tBulletInfo.f3Start_Pos.x, m_tBulletInfo.f3Start_Pos.y, m_tBulletInfo.f3Start_Pos.z);
+		GameObjectDesc.TransformDesc.f3Pos = m_tBulletInfo.f3Start_Pos;
 	}
 	else if (m_tBulletInfo.eToodyBullet == BULLETINFO::TOODYBULLET::CIRCLE_BULLET)
 	{
@@ -95,7 +104,8 @@ void CB_2DBullet::Tick(_double TimeDelta)
 	vMyPos += XMVector3Normalize(vDistance) * 4.f * _float(TimeDelta);
 
  	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);	// 플레이어의 이전 프레임으로 날라간다.
-																		// 이펙트
+	
+	// 이펙트
 	if (BULLETINFO::TOODYBULLET::CIRCLE_BULLET == m_tBulletInfo.eToodyBullet)
 	{
 		m_dEffect_TimeAcc += TimeDelta;
@@ -111,6 +121,18 @@ void CB_2DBullet::Tick(_double TimeDelta)
 			else if (2 == m_tBulletInfo.iCircle_Color)	// 노란색
 				CEffect_Manager::GetInstance()->Effect_Ink(_float3(f4MyPos.x, f4MyPos.y, f4MyPos.z), _float3(1.0f, 0.67f, 0.0f));
 
+			m_dEffect_TimeAcc = 0;
+		}
+	}
+	else if (BULLETINFO::TOODYBULLET::STAR_BULLET == m_tBulletInfo.eToodyBullet)
+	{
+		_float4 f4MyPos;
+		XMStoreFloat4(&f4MyPos, vMyPos);
+
+		m_dEffect_TimeAcc += TimeDelta;
+		if (0.1 < m_dEffect_TimeAcc)
+		{
+			CEffect_Manager::GetInstance()->Effect_Pigs_Star({ f4MyPos.x, f4MyPos.y, f4MyPos.z });
 			m_dEffect_TimeAcc = 0;
 		}
 	}
