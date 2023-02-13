@@ -82,6 +82,9 @@ private:
 	// ¿Ã∆Â∆Æ
 	_double					m_dEffect_TimeAcc = { 0.0 };
 
+	_int	m_fX = 0;
+	_int	m_fY = 0;
+
 public:
 	static CS_FinnAndJake* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -74,27 +74,6 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 	KnockBack_Tick(TimeDelta);	// 트랩을 밟았을 때의 처리
 
 	Shader_Alpha(TimeDelta);	// 알파값 증가 및 감소
-
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (pGameInstance->Key_Down(DIK_V))
-	{
-		//////////////////////////// 디버그용
-		_vector vddMyPos;
-		vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
-
-		_float4	f4ddMyPos;
-		XMStoreFloat4(&f4ddMyPos, vddMyPos);
-
-		cout << "게임 플레이어 위치" << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
-		//////////////////////////// 디버그용
-
-	}
-
-	RELEASE_INSTANCE(CGameInstance);
-
-
-
 }
 
 void CS_FinnAndJake::Late_Tick(_double TimeDelta)
@@ -147,6 +126,21 @@ HRESULT CS_FinnAndJake::Render()
 			}
 		}
 	}
+
+	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (0.111f < m_fAlpha && true == m_bAlpha_Up)
+	{
+		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("START OVER"), _float2(405.0f, 100.0f), 0.f, _float2(2.0f, 2.0f), XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+
+	if (0.999f > m_fAlpha && true == m_bAlpha_Down && false == m_bAlpha_Up)
+	{
+		pGameInstance->Render_Font(TEXT("Font_Comic"), TEXT("GAME OVER"), _float2(405.0f, 100.0f), 0.f, _float2(2.0f, 2.0f), XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+
+
+	RELEASE_INSTANCE(CGameInstance);
 
 #ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())

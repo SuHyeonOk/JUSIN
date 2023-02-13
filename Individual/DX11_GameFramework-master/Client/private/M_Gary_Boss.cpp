@@ -60,9 +60,9 @@ HRESULT CM_Gary_Boss::Initialize(void * pArg)
 
 	m_eState = IDLE;
 	m_eAnimState = IDLE;
-	m_fHP = 3000.0f;
+	m_fHP = 2000.0f;
 	m_fMaxHP = m_fHP;
-	m_fAttack = 50.0f;
+	m_fAttack = 30.0f;
 	m_fExp = 1000.0f;
 
 	return S_OK;
@@ -315,15 +315,58 @@ void CM_Gary_Boss::Idle_Tick(const _double & TimeDelta)
 
 		if (0 == m_dSkill_TimeAcc)
 			m_iEffect_Count = 0;
-		m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
+
+		if (false == m_bMove)
+		{
+			m_eAnimState = STATE::MOVE;
+
+			// 랜덤한 좌표를 한 번 구한다.
+			_float   fRandomX = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+			_float   fRandomZ = CUtilities_Manager::GetInstance()->Get_Random(-1.0f, 1.0f);
+
+			_vector vTempPos = XMVector3Normalize(XMVectorSet(fRandomX, 0.0f, fRandomZ, 1.0f));
+
+			_float fRandomRange = CUtilities_Manager::GetInstance()->Get_Random(-5.0f, 5.0f);
+
+			if (-1.0 > fRandomRange || 1.0 < fRandomRange)
+			{
+				_vector vRandomPos = vTempPos * fRandomRange;
+				_float4 f4RandomPos;
+				XMStoreFloat4(&f4RandomPos, vRandomPos);
+				m_f4MovemPos = _float4((m_f4CenterPos.x + f4RandomPos.x), m_f4CenterPos.y, (m_f4CenterPos.z + f4RandomPos.z), m_f4CenterPos.w);
+
+				m_bMove = true;
+			}
+			else
+				return;
+		}
+
+		if(true == m_bMove)
+			m_pTransformCom->LookAt(XMVectorSet(m_f4MovemPos.x, m_f4MovemPos.y, m_f4MovemPos.z, m_f4MovemPos.w));
+
 		if (1 < m_dSkill_TimeAcc)   // 너무 바로 이동해서 1초 있다가 이동
 		{
 			m_bShader_Alpha = false;
 
-			m_pTransformCom->Set_Pos(_float3(4.0f, 0.2f, 17.0f));
+			m_pTransformCom->Set_Pos(_float3(m_f4MovemPos.x, m_f4MovemPos.y, m_f4MovemPos.z));
+			m_bMove = false;
 			m_bMovePos = false;
 			m_iEffect_Count = 0;
 		}
+
+		//if (0 == m_dSkill_TimeAcc)
+		//	m_iEffect_Count = 0;
+
+		//m_pTransformCom->LookAt(XMVectorSet(4.0f, 2.0f, 16.0f, 1.0f));
+
+		//if (1 < m_dSkill_TimeAcc)   // 너무 바로 이동해서 1초 있다가 이동
+		//{
+		//	m_bShader_Alpha = false;
+
+		//	m_pTransformCom->Set_Pos(_float3(4.0f, 0.2f, 17.0f));
+		//	m_bMovePos = false;
+		//	m_iEffect_Count = 0;
+		//}
 	}
 
 	m_eAnimState = IDLE;
@@ -358,7 +401,7 @@ void CM_Gary_Boss::Random_Skill(const _double& TimeDelta)
 				iMinRandomNumber = 2;
 				iMaxRandomNumber = 4;
 			}
-			else if (0.6f > fHP)
+			else if (0.5f > fHP)
 			{
 				iMinRandomNumber = 1;
 				iMaxRandomNumber = 3;

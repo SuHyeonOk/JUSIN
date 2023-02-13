@@ -56,6 +56,7 @@ private:
 	_float			m_fCurrent_Percentage = { 0.0f };
 	_float			m_fNext_Percentage = { 0.0f };
 
+	_double			m_bStart_TimeAcc = { 0.0 };
 	_double			m_bMove_TimeAcc = { 0.0 };
 
 public:

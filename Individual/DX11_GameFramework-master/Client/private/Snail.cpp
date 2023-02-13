@@ -59,9 +59,14 @@ HRESULT CSnail::Initialize(void * pArg)
 void CSnail::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
-	UI_Tick(TimeDelta);
-	NextPosition(TimeDelta);
+	
+	if (3.0 < m_bStart_TimeAcc)
+	{
+		UI_Tick(TimeDelta);
+		NextPosition(TimeDelta);
+	}
+	else
+		m_bStart_TimeAcc += TimeDelta;
 }
 
 void CSnail::Late_Tick(_double TimeDelta)
@@ -73,15 +78,18 @@ void CSnail::Late_Tick(_double TimeDelta)
 	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_OBJ, this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
-	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-
-	if (nullptr != m_pRendererCom)
+	if (3.0 > m_bStart_TimeAcc)
 	{
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 	}
-
-	RELEASE_INSTANCE(CGameInstance)
+	else
+	{
+		if (nullptr != m_pRendererCom)
+		{
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_XRAYBLEND, this);
+		}
+	}
 }
 
 HRESULT CSnail::Render()
@@ -94,6 +102,16 @@ HRESULT CSnail::Render()
 
 	m_pModelCom->Bind_Material(m_pShaderCom, 0, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 	m_pModelCom->Render(m_pShaderCom, 0, "g_BoneMatrices", 0);
+
+	if (3.0 > m_bStart_TimeAcc)
+	{
+		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
+		_tchar szCount[10];
+		wsprintf(szCount, TEXT("%d"), 3 - _int(m_bStart_TimeAcc));
+
+		pGameInstance->Render_Font(TEXT("Font_Comic"), szCount, _float2(g_iWinSizeX * 0.5f, 100.0f), 0.f, _float2(3.0f, 3.0f), XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f));
+		RELEASE_INSTANCE(CGameInstance);
+	}
 
 #ifdef _DEBUG
 	if (CObj_Manager::GetInstance()->Get_NavigationRender())
@@ -256,16 +274,6 @@ void CSnail::NextPosition(const _double & TimeDelta)
 
 void CSnail::UI_Tick(const _double & TimeDelta)
 {
-	if (false == m_bArrive)
-	{
-		m_bMove_TimeAcc += TimeDelta;
-	}
-	else
-	{
-		m_bMove_TimeAcc;
-		_int a = 0;
-	}
-
 	// TODO : 달팽이 이동 거리 구하기
 	//_float fTemp = (_float(m_iIndex + 1) / 21.0f) * 100.0f;
 	//if (m_fCurrent_Percentage < fTemp)
@@ -275,7 +283,13 @@ void CSnail::UI_Tick(const _double & TimeDelta)
 
 	//cout << m_fCurrent_Percentage << " \ " << (_float(m_iIndex + 1) / 21.0f) * 100.0f << endl;
 
-	CUI_Manager::GetInstance()->Set_Snail_Distance((_int(m_iIndex / 21) * 100));
+	//CUI_Manager::GetInstance()->Set_Snail_Distance(_int(_float(m_iIndex + 1) / 21.0f) * 100.0f);
+	
+	if (3.0 < m_bStart_TimeAcc)
+	{
+		m_bMove_TimeAcc += TimeDelta;
+		CUI_Manager::GetInstance()->Set_Snail_Distance(min(_int(_float(m_bMove_TimeAcc) / 177.0f * 100.0f), 100));
+	}
 }
 
 CSnail * CSnail::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

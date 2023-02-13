@@ -50,7 +50,6 @@ HRESULT CN_BMO::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(_float3(0.1f, 0.1f, 0.1f));
-	m_pTransformCom->Rotation(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(180.f));
 
 	return S_OK;
 }
@@ -176,8 +175,9 @@ void CN_BMO::Talk_Tick()
 		if (0 == m_Script_Count)	// 미니 게임이 끝난 후의 보상
 		{
 			CObj_Manager::GetInstance()->Set_Heart(3);
-			CObj_Manager::GetInstance()->Set_Player_PlusHP(500.0f);
 			CObj_Manager::GetInstance()->Set_Coin(1000);
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(500.0f);
+			CObj_Manager::GetInstance()->Set_Player_PlusExp(50.0f);
 		}
 
 		switch (m_Script_Count)

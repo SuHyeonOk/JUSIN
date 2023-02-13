@@ -181,9 +181,8 @@ void CB_3DBullet::On_Collision(CGameObject * pOther)
 		}
 		else if (m_tBulletInfo.eBulletType == m_tBulletInfo.TYPE_ROCK)
 		{
-			_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 			_float4 f4MyPos = _float4(0.0f, 0.0f, 0.0f, 1.0f);
-			XMStoreFloat4(&f4MyPos, vMyPos);
+			XMStoreFloat4(&f4MyPos, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
 			CObj_Manager::GetInstance()->Set_Player_MinusHP(m_tBulletInfo.fMonsterAttack);
 			CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::HIT);
