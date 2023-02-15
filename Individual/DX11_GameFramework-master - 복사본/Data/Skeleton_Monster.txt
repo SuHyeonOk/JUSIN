@@ -1,0 +1,7 @@
+Layer_Ghost_1__0|-3.81804|0|15.2783
+Layer_Ghost_2__0|-12.0131|0|19.423
+Layer_Ghost_3__0|-1.47598|0|26.4257
+Layer_Skeleton_Archer_1__0|-2.64104|0|43.8839
+Layer_Skeleton_Archer_2__0|-24.7089|0|53.8957
+Layer_Skeleton_Shield_1__0|-11.3453|0|54.9572
+Layer_Skeleton_Shield_2__0|-33.9599|0|50.8975

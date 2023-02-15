@@ -1,0 +1,12 @@
+Layer_Box__0|-37.931|0|6.28089
+Layer_Portal__0|5.34572|0|56.5199
+Layer_PortalOff__0|5.39309|0|57.2064
+Layer_Box__1|-42.2324|0|25.3208
+Layer_BearTrap__0|-23.5399|0|4.57778
+Layer_BearTrap__1|-31.5787|0|21.4729
+Layer_BearTrap__2|-36.0937|0|36.9064
+Layer_BearTrap__3|-29.9113|0|54.2462
+Layer_BearTrap__4|-3.80544|0|42.158
+Layer_BearTrap__5|-21.5377|0|40.7809
+Layer_BearTrap__6|-33.3288|0|42.9744
+
