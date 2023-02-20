@@ -31,7 +31,7 @@ HRESULT CMap_Garden::Initialize(void * pArg)
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.2f, true, 0);
+	pGameInstance->Play_Sound(TEXT("Garden2_Loop.ogg"), 0.3f, true, 0);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -67,7 +67,7 @@ HRESULT CMap_Garden::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		/* ÀÌ ¸ðµ¨À» ±×¸®±âÀ§ÇÑ ¼ÎÀÌ´õ¿¡ ¸ÓÅ×¸®¾ó ÅØ½ºÃÄ¸¦ Àü´ÞÇÑ´Ù. */
+		/* ì´ ëª¨ë¸ì„ ê·¸ë¦¬ê¸°ìœ„í•œ ì…°ì´ë”ì— ë¨¸í…Œë¦¬ì–¼ í…ìŠ¤ì³ë¥¼ ì „ë‹¬í•œë‹¤. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 3);
 	}
@@ -123,7 +123,7 @@ HRESULT CMap_Garden::SetUp_ShaderResources()
 void CMap_Garden::Sound_Tick(const _double & TimeDelta)
 {
 	m_dWindSound_TimeAcc += TimeDelta;
-	if (15.0 < m_dWindSound_TimeAcc)	// 10 ÃÊ ¸¶´Ù ÇÑ ¹ø¾¿ ¹Ù¶÷ÀÌ ³ª¿Àµµ·Ï ÇÑ´Ù.
+	if (15.0 < m_dWindSound_TimeAcc)	// 10 ì´ˆ ë§ˆë‹¤ í•œ ë²ˆì”© ë°”ëžŒì´ ë‚˜ì˜¤ë„ë¡ í•œë‹¤.
 		m_dWindSound_TimeAcc = 0.0;
 	if (0.0 == m_dWindSound_TimeAcc)
 	{
@@ -133,7 +133,7 @@ void CMap_Garden::Sound_Tick(const _double & TimeDelta)
 	}
 
 	m_dWindSound_TimeAcc += TimeDelta;
-	if (10.0 < m_dWindSound_TimeAcc)	// 10 ÃÊ ¸¶´Ù ÇÑ ¹ø¾¿ ¹Ù¶÷ÀÌ ³ª¿Àµµ·Ï ÇÑ´Ù.
+	if (10.0 < m_dWindSound_TimeAcc)	// 10 ì´ˆ ë§ˆë‹¤ í•œ ë²ˆì”© ë°”ëžŒì´ ë‚˜ì˜¤ë„ë¡ í•œë‹¤.
 		m_dWindSound_TimeAcc = 0.0;
 	if (0.0 == m_dWindSound_TimeAcc)
 	{

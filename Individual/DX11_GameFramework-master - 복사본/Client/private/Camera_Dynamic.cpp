@@ -1,4 +1,4 @@
-	#include "stdafx.h"
+#include "stdafx.h"
 #include "..\public\Camera_Dynamic.h"
 
 #include "GameInstance.h"
@@ -58,15 +58,15 @@ void CCamera_Dynamic::Tick(_double TimeDelta)
 
 	//if (pGameInstance->Key_Down(DIK_V))
 	//{
-	//	//////////////////////////// µğ¹ö±×¿ë
+	//	//////////////////////////// ë””ë²„ê·¸ìš©
 	//	_vector vddMyPos;
 	//	vddMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 
 	//	_float4	f4ddMyPos;
 	//	XMStoreFloat4(&f4ddMyPos, vddMyPos);
 
-	//	cout << "Ä«¸Ş¶ó" << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
-	//	//////////////////////////// µğ¹ö±×¿ë
+	//	cout << "ì¹´ë©”ë¼" << f4ddMyPos.x << " | " << f4ddMyPos.y << " | " << f4ddMyPos.z << endl;
+	//	//////////////////////////// ë””ë²„ê·¸ìš©
 	//}
 
 	//RELEASE_INSTANCE(CGameInstance);
@@ -116,7 +116,7 @@ void CCamera_Dynamic::Shake_Camera(_double TimeDelta)
 		m_bShake = false;
 	}
 
-	// TODO : ÇÃ·¹ÀÌ¾îÀÇ ÁÂÇ¥¸¦ °¡Á®¿À°Ô µÇ¸é ¼öÁ¤ÇÏ±â
+	// TODO : í”Œë ˆì´ì–´ì˜ ì¢Œí‘œë¥¼ ê°€ì ¸ì˜¤ê²Œ ë˜ë©´ ìˆ˜ì •í•˜ê¸°
 
 	_vector vPos, vLook, vEyeResult, vAtResult;
 	vPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
@@ -181,7 +181,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)	// ÇÃ·¹ÀÌ¾î°¡ °ø°İÁßÀÎ »óÅÂ¿¡¼­´Â ¿òÁ÷ÀÌÁö ¾Ê´Â´Ù.
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)	// í”Œë ˆì´ì–´ê°€ ê³µê²©ì¤‘ì¸ ìƒíƒœì—ì„œëŠ” ì›€ì§ì´ì§€ ì•ŠëŠ”ë‹¤.
 	{
 		if (pGameInstance->Key_Pressing(DIK_UP))
 		{
@@ -207,16 +207,16 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
 	vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
-	// ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®°¡ ÀÏÁ¤°Å¸® ÀÌ»ó ¸Ö¾îÁö°Ô µÇ¸é Ä«¸Ş¶ó´Â °¡¼ÓÀ» ¹Ş¾Æ ºü¸£°Ô ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°£´Ù.
+	// í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ê°€ ì¼ì •ê±°ë¦¬ ì´ìƒ ë©€ì–´ì§€ê²Œ ë˜ë©´ ì¹´ë©”ë¼ëŠ” ê°€ì†ì„ ë°›ì•„ ë¹ ë¥´ê²Œ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°„ë‹¤.
 
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ³» ÁÂÇ¥
-	_vector		vDir = vPlayerPos - vMyPos;											// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ë‚´ ì¢Œí‘œ
+	_vector		vDir = vPlayerPos - vMyPos;											// ë‚´ ì¢Œí‘œê°€ ê°ì²´ë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°
 
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X °ªÀ» »Ì¾Æ¿Í °Å¸® È®ÀÎ
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X ê°’ì„ ë½‘ì•„ì™€ ê±°ë¦¬ í™•ì¸
 
-	if (7.f < fDistanceX || 6.f > fDistanceX)	// ºü¸£°Ô µû¶ó°£´Ù.		
+	if (7.f < fDistanceX || 6.f > fDistanceX)	// ë¹ ë¥´ê²Œ ë”°ë¼ê°„ë‹¤.		
 		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45);
-	else										// ±×³É µû¶ó°£´Ù.
+	else										// ê·¸ëƒ¥ ë”°ë¼ê°„ë‹¤.
 		m_pTransformCom->Chase(vTargetPos, TimeDelta);
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -226,7 +226,7 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	//
 	//if (ePlayerInfo.ePlayer == ePlayerInfo.FINN)
 	//{
-	//	// Finn ¿¡°Ô·Î
+	//	// Finn ì—ê²Œë¡œ
 	//	CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), m_pTransformComTag, 0));
 
 	//	_vector vPlayerPos, vTargetPos;
@@ -237,21 +237,21 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	//	vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
 	//	vTargetPos = XMLoadFloat4(&vf4TargetPos);
 	//	
-	//	// ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®°¡ ÀÏÁ¤°Å¸® ÀÌ»ó ¸Ö¾îÁö°Ô µÇ¸é Ä«¸Ş¶ó´Â °¡¼ÓÀ» ¹Ş¾Æ ºü¸£°Ô ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°£´Ù.
+	//	// í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ê°€ ì¼ì •ê±°ë¦¬ ì´ìƒ ë©€ì–´ì§€ê²Œ ë˜ë©´ ì¹´ë©”ë¼ëŠ” ê°€ì†ì„ ë°›ì•„ ë¹ ë¥´ê²Œ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°„ë‹¤.
 
-	//	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ³» ÁÂÇ¥
-	//	_vector		vDir = vPlayerPos - vMyPos;											// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍaaaaaa
+	//	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ë‚´ ì¢Œí‘œ
+	//	_vector		vDir = vPlayerPos - vMyPos;											// ë‚´ ì¢Œí‘œê°€ ê°ì²´ë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°aaaaaa
 
-	//	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X °ªÀ» »Ì¾Æ¿Í °Å¸® È®ÀÎ
+	//	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));						// X ê°’ì„ ë½‘ì•„ì™€ ê±°ë¦¬ í™•ì¸
 	//	
-	//	if (7.f < fDistanceX || 6.f > fDistanceX)		// ºü¸£°Ô µû¶ó°£´Ù. 9.17
-	//		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45); // ¢Ç : 1.4 °¡ ¾Æ´Ñ ÀÚ¿¬½º·´°Ô µû¶ó°¥ ¼ö ÀÖµµ·Ï ¼öÁ¤
-	//	else	// ±×³É µû¶ó°£´Ù.
+	//	if (7.f < fDistanceX || 6.f > fDistanceX)		// ë¹ ë¥´ê²Œ ë”°ë¼ê°„ë‹¤. 9.17
+	//		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45); // â–¤ : 1.4 ê°€ ì•„ë‹Œ ìì—°ìŠ¤ëŸ½ê²Œ ë”°ë¼ê°ˆ ìˆ˜ ìˆë„ë¡ ìˆ˜ì •
+	//	else	// ê·¸ëƒ¥ ë”°ë¼ê°„ë‹¤.
 	//		m_pTransformCom->Chase(vTargetPos, TimeDelta);
 	//}
 	//else if (ePlayerInfo.ePlayer == ePlayerInfo.JAKE)
 	//{
-	//	// Jaek ¿¡°Ô·Î
+	//	// Jaek ì—ê²Œë¡œ
 	//	CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), m_pTransformComTag, 0));
 
 	//	_vector vPlayerPos, vTargetPos;
@@ -262,16 +262,16 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	//	vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
 	//	vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
-	//	// ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®°¡ ÀÏÁ¤°Å¸® ÀÌ»ó ¸Ö¾îÁö°Ô µÇ¸é Ä«¸Ş¶ó´Â °¡¼ÓÀ» ¹Ş¾Æ ºü¸£°Ô ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°£´Ù.
+	//	// í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ê°€ ì¼ì •ê±°ë¦¬ ì´ìƒ ë©€ì–´ì§€ê²Œ ë˜ë©´ ì¹´ë©”ë¼ëŠ” ê°€ì†ì„ ë°›ì•„ ë¹ ë¥´ê²Œ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°„ë‹¤.
 
-	//	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ³» ÁÂÇ¥
-	//	_vector		vDir = vPlayerPos - vMyPos;											// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ
+	//	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ë‚´ ì¢Œí‘œ
+	//	_vector		vDir = vPlayerPos - vMyPos;											// ë‚´ ì¢Œí‘œê°€ ê°ì²´ë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°
 
-	//	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X °ªÀ» »Ì¾Æ¿Í °Å¸® È®ÀÎ
+	//	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X ê°’ì„ ë½‘ì•„ì™€ ê±°ë¦¬ í™•ì¸
 	//	
-	//	if (7.f < fDistanceX || 6.f > fDistanceX)	// ºü¸£°Ô µû¶ó°£´Ù.		
+	//	if (7.f < fDistanceX || 6.f > fDistanceX)	// ë¹ ë¥´ê²Œ ë”°ë¼ê°„ë‹¤.		
 	//		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45);
-	//	else										// ±×³É µû¶ó°£´Ù.
+	//	else										// ê·¸ëƒ¥ ë”°ë¼ê°„ë‹¤.
 	//		m_pTransformCom->Chase(vTargetPos, TimeDelta);
 
 	//	//_vector vPlayerPos, vTargetPos;
@@ -279,13 +279,13 @@ void CCamera_Dynamic::ToFollow(_double TimeDelta)
 	//	//vTargetPos = vPlayerPos + XMLoadFloat4(&m_vMinCamPos);
 	//	//vTargetPos = XMVectorSetW(vTargetPos, 1.f);
 
-	//	//// ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®°¡ ÀÏÁ¤°Å¸® ÀÌ»ó ¸Ö¾îÁö°Ô µÇ¸é Ä«¸Ş¶ó´Â °¡¼ÓÀ» ¹Ş¾Æ ºü¸£°Ô ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°£´Ù.
+	//	//// í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ê°€ ì¼ì •ê±°ë¦¬ ì´ìƒ ë©€ì–´ì§€ê²Œ ë˜ë©´ ì¹´ë©”ë¼ëŠ” ê°€ì†ì„ ë°›ì•„ ë¹ ë¥´ê²Œ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°„ë‹¤.
 
-	//	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// ³» ÁÂÇ¥
-	//	//_vector		vDir =  vPlayerPos - vMyPos;												// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ
-	//	//_vector		vMinDir = XMVectorSet(0.f, 1.f, 0.f, 1.f); // XMLoadFloat4(&m_vMinCamPos);	// ¿©±â¼­´Â ½ÇÁ¦ ³» Ä«¸Ş¶óÀÇ ÁÂÇ¥°¡ ¾Æ´Ñ, ÀÓÀÇÀÇ ÃàÀ» ±âÁØÀ¸·Î °è»êÇÏµµ·Ï ÇÑ´Ù.
+	//	//_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);			// ë‚´ ì¢Œí‘œ
+	//	//_vector		vDir =  vPlayerPos - vMyPos;												// ë‚´ ì¢Œí‘œê°€ ê°ì²´ë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°
+	//	//_vector		vMinDir = XMVectorSet(0.f, 1.f, 0.f, 1.f); // XMLoadFloat4(&m_vMinCamPos);	// ì—¬ê¸°ì„œëŠ” ì‹¤ì œ ë‚´ ì¹´ë©”ë¼ì˜ ì¢Œí‘œê°€ ì•„ë‹Œ, ì„ì˜ì˜ ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ ê³„ì‚°í•˜ë„ë¡ í•œë‹¤.
 
-	//	//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X °ªÀ» »Ì¾Æ¿Í °Å¸® È®ÀÎ
+	//	//_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));							// X ê°’ì„ ë½‘ì•„ì™€ ê±°ë¦¬ í™•ì¸
 	//	//_float		fMinCamPos = XMVectorGetX(XMVector3Length(vMinDir));
 
 	//	//_float		fTemp = (fDistanceX - fMinCamPos) / (10.f - fMinCamPos);
@@ -333,7 +333,7 @@ void CCamera_Dynamic::FinnAndJake_Tick(const _double & TimeDelta)
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)	// ÇÃ·¹ÀÌ¾î°¡ °ø°İÁßÀÎ »óÅÂ¿¡¼­´Â ¿òÁ÷ÀÌÁö ¾Ê´Â´Ù.
+	if (CObj_Manager::PLAYERINFO::STATE::ATTACK != CObj_Manager::GetInstance()->Get_Current_Player().eState)	// í”Œë ˆì´ì–´ê°€ ê³µê²©ì¤‘ì¸ ìƒíƒœì—ì„œëŠ” ì›€ì§ì´ì§€ ì•ŠëŠ”ë‹¤.
 	{
 		if (pGameInstance->Key_Pressing(DIK_UP))
 		{
@@ -361,16 +361,16 @@ void CCamera_Dynamic::FinnAndJake_Tick(const _double & TimeDelta)
 	vf4TargetPos = _float4(vf4TargetPos.x, vf4TargetPos.y + 3.7f, vf4TargetPos.z - 6.f, 1.f);
 	vTargetPos = XMLoadFloat4(&vf4TargetPos);
 
-	// ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®°¡ ÀÏÁ¤°Å¸® ÀÌ»ó ¸Ö¾îÁö°Ô µÇ¸é Ä«¸Ş¶ó´Â °¡¼ÓÀ» ¹Ş¾Æ ºü¸£°Ô ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°£´Ù.
+	// í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ê°€ ì¼ì •ê±°ë¦¬ ì´ìƒ ë©€ì–´ì§€ê²Œ ë˜ë©´ ì¹´ë©”ë¼ëŠ” ê°€ì†ì„ ë°›ì•„ ë¹ ë¥´ê²Œ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°„ë‹¤.
 
-	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ³» ÁÂÇ¥
-	_vector		vDir = vPlayerPos - vMyPos;											// ³» ÁÂÇ¥°¡ °´Ã¼¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ
+	_vector		vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);	// ë‚´ ì¢Œí‘œ
+	_vector		vDir = vPlayerPos - vMyPos;											// ë‚´ ì¢Œí‘œê°€ ê°ì²´ë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°
 
-	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X °ªÀ» »Ì¾Æ¿Í °Å¸® È®ÀÎ
+	_float		fDistanceX = XMVectorGetX(XMVector3Length(vDir));					// X ê°’ì„ ë½‘ì•„ì™€ ê±°ë¦¬ í™•ì¸
 
-	if (7.f < fDistanceX || 6.f > fDistanceX)	// ºü¸£°Ô µû¶ó°£´Ù.		
+	if (7.f < fDistanceX || 6.f > fDistanceX)	// ë¹ ë¥´ê²Œ ë”°ë¼ê°„ë‹¤.		
 		m_pTransformCom->Chase(vTargetPos, TimeDelta * 1.45);
-	else										// ±×³É µû¶ó°£´Ù.
+	else										// ê·¸ëƒ¥ ë”°ë¼ê°„ë‹¤.
 		m_pTransformCom->Chase(vTargetPos, TimeDelta);
 
 	RELEASE_INSTANCE(CGameInstance);

@@ -34,7 +34,7 @@ HRESULT CMap_MiniGame::Initialize(void * pArg)
 		return E_FAIL;
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
-	pGameInstance->Play_Sound(TEXT("Garden4_Loop.ogg"), 0.2f, true, 0);
+	pGameInstance->Play_Sound(TEXT("Garden4_Loop.ogg"), 0.3f, true, 0);
 	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
@@ -92,7 +92,7 @@ HRESULT CMap_MiniGame::Render()
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		/* ÀÌ ¸ðµ¨À» ±×¸®±âÀ§ÇÑ ¼ÎÀÌ´õ¿¡ ¸ÓÅ×¸®¾ó ÅØ½ºÃÄ¸¦ Àü´ÞÇÑ´Ù. */
+		/* ì´ ëª¨ë¸ì„ ê·¸ë¦¬ê¸°ìœ„í•œ ì…°ì´ë”ì— ë¨¸í…Œë¦¬ì–¼ í…ìŠ¤ì³ë¥¼ ì „ë‹¬í•œë‹¤. */
 		m_pModelCom->Bind_Material(m_pShaderCom, i, aiTextureType_DIFFUSE, "g_DiffuseTexture");
 		m_pModelCom->Render(m_pShaderCom, i, nullptr, 3);
 	}

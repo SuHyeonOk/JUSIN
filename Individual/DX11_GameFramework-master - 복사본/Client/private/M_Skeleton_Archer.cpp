@@ -74,7 +74,7 @@ void CM_Skeleton_Archer::Late_Tick(_double TimeDelta)
 {
 	__super::Late_Tick(TimeDelta);
 
-	// °ø°Ý ¹Þ°í ÀÖÀ» ¶§, Á×À» ¶§, ÄÉÀÌÁö ¾È¿¡ ÀÖÀ» ¶§ Xray À» È£ÃâÇÏÁö ¾Ê´Â´Ù.
+	// ê³µê²© ë°›ê³  ìžˆì„ ë•Œ, ì£½ì„ ë•Œ, ì¼€ì´ì§€ ì•ˆì— ìžˆì„ ë•Œ Xray ì„ í˜¸ì¶œí•˜ì§€ ì•ŠëŠ”ë‹¤.
 	if (true == m_bShader_Hit || 1 != m_fAlpha || true == CObj_Manager::GetInstance()->Get_BossCage())
 		return;
 
@@ -107,7 +107,7 @@ HRESULT CM_Skeleton_Archer::Render()
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
 		}
 
-		return S_OK;	// Á×¾ú´Ù¸é, ¿©±â±îÁö ÁøÇàÇÏ°í return
+		return S_OK;	// ì£½ì—ˆë‹¤ë©´, ì—¬ê¸°ê¹Œì§€ ì§„í–‰í•˜ê³  return
 	}
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
@@ -253,17 +253,17 @@ void CM_Skeleton_Archer::Monster_Tick(const _double& TimeDelta)
 	if (0.0f >= m_tMonsterInfo.fHP)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
-	// 0 : ¾È ¿¡¼­ ´øÁö±â
-	// 1 : ¹Û¿¡¼­ ´øÁö±â
-	// 2 : Á×À½
-	// 3 : ³Ñ¾îÁ® ÀÖÀ½
-	// 4 : ÀÏ¾î³²
-	// 5 : Ãã¤¸¤±
-	// 6 : ¸ñµ¹¾Æ°¨
-	// 7 : È÷Æ®
-	// 8 : ÀÌ°Å È÷Æ®
-	// 9 : ¾ÆÀÌµé
-	// 10 : °È±â
+	// 0 : ì•ˆ ì—ì„œ ë˜ì§€ê¸°
+	// 1 : ë°–ì—ì„œ ë˜ì§€ê¸°
+	// 2 : ì£½ìŒ
+	// 3 : ë„˜ì–´ì ¸ ìžˆìŒ
+	// 4 : ì¼ì–´ë‚¨
+	// 5 : ì¶¤ã…ˆã…
+	// 6 : ëª©ëŒì•„ê°
+	// 7 : ížˆíŠ¸
+	// 8 : ì´ê±° ížˆíŠ¸
+	// 9 : ì•„ì´ë“¤
+	// 10 : ê±·ê¸°
 
 	switch (m_tMonsterInfo.eState)
 	{
@@ -338,7 +338,7 @@ void CM_Skeleton_Archer::Move_Tick(const _double& TimeDelta)
 	if (!m_bAttack && 5.f > fDistance)
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	// ³» ¿øÁ¡ °Å¸®¿Í ³» À§Ä¡°¡ ¸Ö´Ù¸é! ¹«Á¶°Ç ¿øÁ¡À¸·Î µ¹¾Æ°£´Ù.
+	// ë‚´ ì›ì  ê±°ë¦¬ì™€ ë‚´ ìœ„ì¹˜ê°€ ë©€ë‹¤ë©´! ë¬´ì¡°ê±´ ì›ì ìœ¼ë¡œ ëŒì•„ê°„ë‹¤.
 	_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
 	_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_float	fDiatance = XMVectorGetX(XMVector3Length(vDistance));
@@ -375,12 +375,12 @@ void CM_Skeleton_Archer::Attack_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.IDLE;
 		m_bAttack = true;
 
-		// ³» ÁÂÇ¥
+		// ë‚´ ì¢Œí‘œ
 		_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4	f4MyPos;
 		XMStoreFloat4(&f4MyPos, vMyPos);
 
-		// ÇÃ·¹ÀÌ¾î ÁÂÇ¥
+		// í”Œë ˆì´ì–´ ì¢Œí‘œ
 		_vector vPlayerPos = CObj_Manager::GetInstance()->Get_Player_Transform();
 		_float4	f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
@@ -417,7 +417,10 @@ void CM_Skeleton_Archer::Hit_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Archer::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 5);
+	if(LEVEL_SKELETON_BOSS != CObj_Manager::GetInstance()->Get_Current_Level())
+		CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 5);
+	else
+		CM_Monster::Die(TimeDelta, 1.1f, 0, 0, 0);
 }
 
 void CM_Skeleton_Archer::BossCage()

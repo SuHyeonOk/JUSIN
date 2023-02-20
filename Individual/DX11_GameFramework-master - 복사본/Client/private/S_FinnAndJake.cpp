@@ -65,15 +65,15 @@ void CS_FinnAndJake::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	Return_Tick(TimeDelta);		// Ã¼·ÂÀÌ 0ÀÌ µÇ´Â ¼ø°£ Ã³À½À¸·Î µ¹¾Æ°£´Ù.
-	Hit_Tick(TimeDelta);		// °ø°İ ¹Ş¾ÒÀ» ¶§
-	AnimatedMovie_Tick();		// ¾Ö´Ï¸ŞÀÌ¼Ç µ¹¾Æ°¡´Â ÇÔ¼ö
-	KeyInput(TimeDelta);		// ÇÃ·¹ÀÌ¾î Å° ÀÔ·Â 8¹æÇâÀ¸·Î¸¸ ÀÌµ¿°¡´É
+	Return_Tick(TimeDelta);		// ì²´ë ¥ì´ 0ì´ ë˜ëŠ” ìˆœê°„ ì²˜ìŒìœ¼ë¡œ ëŒì•„ê°„ë‹¤.
+	Hit_Tick(TimeDelta);		// ê³µê²© ë°›ì•˜ì„ ë•Œ
+	AnimatedMovie_Tick();		// ì• ë‹ˆë©”ì´ì…˜ ëŒì•„ê°€ëŠ” í•¨ìˆ˜
+	KeyInput(TimeDelta);		// í”Œë ˆì´ì–´ í‚¤ ì…ë ¥ 8ë°©í–¥ìœ¼ë¡œë§Œ ì´ë™ê°€ëŠ¥
 
-	Rainicorn(TimeDelta);		// ¹«Áö°³ ÄÜÀ» ¸¸³µÀ» ¶§ ½ÇÇà µÉ ÇÔ¼ö 
-	KnockBack_Tick(TimeDelta);	// Æ®·¦À» ¹â¾ÒÀ» ¶§ÀÇ Ã³¸®
+	Rainicorn(TimeDelta);		// ë¬´ì§€ê°œ ì½˜ì„ ë§Œë‚¬ì„ ë•Œ ì‹¤í–‰ ë  í•¨ìˆ˜ 
+	KnockBack_Tick(TimeDelta);	// íŠ¸ë©ì„ ë°Ÿì•˜ì„ ë•Œì˜ ì²˜ë¦¬
 
-	Shader_Alpha(TimeDelta);	// ¾ËÆÄ°ª Áõ°¡ ¹× °¨¼Ò
+	Shader_Alpha(TimeDelta);	// ì•ŒíŒŒê°’ ì¦ê°€ ë° ê°ì†Œ
 }
 
 void CS_FinnAndJake::Late_Tick(_double TimeDelta)
@@ -82,7 +82,7 @@ void CS_FinnAndJake::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// Ãæµ¹Ã³¸®
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// ì¶©ëŒì²˜ë¦¬
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
@@ -116,13 +116,13 @@ HRESULT CS_FinnAndJake::Render()
 		else
 		{
 			if (1 != m_fAlpha)
-				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);	// Á×À» ¶§
+				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);	// ì£½ì„ ë•Œ
 			else
 			{
 				if (m_bShader_Hit)
 					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 3);
 				else
-					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// Æò¼Ò
+					m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices");		// í‰ì†Œ
 			}
 		}
 	}
@@ -217,51 +217,51 @@ void CS_FinnAndJake::On_Collision(CGameObject * pOther)
 	
 	if(L"Cake_Blue" == pOther->Get_Tag())
 	{
-		// ´ŞÆØÀÌ°¡ ÀÖ´Â À§Ä¡·Î ¼ø°£ ÀÌµ¿
+		// ë‹¬íŒ½ì´ê°€ ìˆëŠ” ìœ„ì¹˜ë¡œ ìˆœê°„ ì´ë™
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CTransform * pSnail_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_Snail"), TEXT("Com_Transform"), 0));
 		_float4 f4Snail_Position = { 0.0f, 0.0f, 0.0f, 1.0f };
 		XMStoreFloat4(&f4Snail_Position, pSnail_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
 
-		// ³» À§Ä¡¸¦ ´ŞÆØÀÌ À§Ä¡·Î º¯°æ
+		// ë‚´ ìœ„ì¹˜ë¥¼ ë‹¬íŒ½ì´ ìœ„ì¹˜ë¡œ ë³€ê²½
 		m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, pSnail_TransformCom->Get_State(CTransform::STATE_TRANSLATION));
 		
 		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 		
-		// Ä«¸Ş¶ó À§Ä¡¸¦ ´ŞÆØÀÌ À§Ä¡·Î º¯°æ
+		// ì¹´ë©”ë¼ ìœ„ì¹˜ë¥¼ ë‹¬íŒ½ì´ ìœ„ì¹˜ë¡œ ë³€ê²½
 		pCamra_TransformCom->Set_Pos({ f4Snail_Position.x, f4Snail_Position.y + 3.7f, f4Snail_Position.z - 6.0f});
 		
 		RELEASE_INSTANCE(CGameInstance);
 
-		// ÀÌÆåÆ®
+		// ì´í™íŠ¸
 		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ f4Snail_Position.x, f4Snail_Position.y + 1.0f, f4Snail_Position.z }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
 	}
 
 	if (L"Cake_Magenta" == pOther->Get_Tag())
 	{
-		// Ãâ¹ßÁ¡ À¸·Î
-		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });			// ³»À§Ä¡
+		// ì¶œë°œì  ìœ¼ë¡œ
+		m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });			// ë‚´ìœ„ì¹˜
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		pCamra_TransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f });		// Ä«¸Ş¶ó À§Ä¡
+		pCamra_TransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f });		// ì¹´ë©”ë¼ ìœ„ì¹˜
 		RELEASE_INSTANCE(CGameInstance);
 	
-		// ÀÌÆåÆ®
+		// ì´í™íŠ¸
 		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ -4.0f, 2.0f, -20.0f }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
 	}
 
 	if (L"Cake_Yellow" == pOther->Get_Tag())
 	{
-		// µµÂøÁöÁ¡ Á¶±İ Àü À¸·Î
-		m_pTransformCom->Set_Pos({ 85.342f, 0.0f, 31.9937f });		// ³»À§Ä¡
+		// ë„ì°©ì§€ì  ì¡°ê¸ˆ ì „ ìœ¼ë¡œ
+		m_pTransformCom->Set_Pos({ 85.342f, 0.0f, 31.9937f });		// ë‚´ìœ„ì¹˜
 
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 		CTransform * pCamra_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
-		pCamra_TransformCom->Set_Pos({ 85.342f, 3.7f, 26.0f });		// Ä«¸Ş¶ó À§Ä¡
+		pCamra_TransformCom->Set_Pos({ 85.342f, 3.7f, 26.0f });		// ì¹´ë©”ë¼ ìœ„ì¹˜
 		RELEASE_INSTANCE(CGameInstance);
 	
-		// ÀÌÆåÆ®
+		// ì´í™íŠ¸
 		CEffect_Manager::GetInstance()->Effect_Smoke_Count({ 85.342f, 1.0f, 31.9937f }, { 0.352f, 0.694f, 0.619f }, { 20 }, { 0.5f, 1.5f });
 	}
 
@@ -349,14 +349,14 @@ HRESULT CS_FinnAndJake::SetUp_ShaderResources()
 
 void CS_FinnAndJake::AnimatedMovie_Tick()
 {
-	// [0] ¿Ã¶ó°¡±â
-	// [1] ¼Õ Á¡ÇÁ
-	// [2] ÇÉ ¼ÕÈçµé±â
-	// [3] °¡¸¸È÷
-	// [4] Á¡ÇÁ
-	// [5] ´Ş¸®±â
-	// [6] ³»·Á°¡±â
-	// [7] ¶Ë¶¥¶Ë¶¥ °È±â
+	// [0] ì˜¬ë¼ê°€ê¸°
+	// [1] ì† ì í”„
+	// [2] í•€ ì†í”ë“¤ê¸°
+	// [3] ê°€ë§Œíˆ
+	// [4] ì í”„
+	// [5] ë‹¬ë¦¬ê¸°
+	// [6] ë‚´ë ¤ê°€ê¸°
+	// [7] ë˜¥ë•…ë˜¥ë•… ê±·ê¸°
 
 	switch (m_eAnim_State)
 	{
@@ -389,7 +389,7 @@ void CS_FinnAndJake::KeyInput(const _double & TimeDelta)
 		m_pTransformCom->PlayerMove(XMVectorSet(m_f4NewLook.x, m_f4NewLook.y, m_f4NewLook.z, m_f4NewLook.w), TimeDelta);
 	}
 		
-#pragma region ÀÌµ¿
+#pragma region ì´ë™
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		m_bOnMove = true;
@@ -513,11 +513,11 @@ void CS_FinnAndJake::Return_Tick(const _double & TimeDelta)
 			m_bAlpha_Change = false;
 
 			m_eAnim_State = IDLE;
-			CObj_Manager::GetInstance()->Set_Player_PlusHP(CObj_Manager::GetInstance()->Get_Current_Player().fHPMax);
+			CObj_Manager::GetInstance()->Set_Player_PlusHP(500.0f);
 
-			// ÇÃ·¹ÀÌ¾î Ã³À½ À§Ä¡·Î
+			// í”Œë ˆì´ì–´ ì²˜ìŒ ìœ„ì¹˜ë¡œ
 			m_pTransformCom->Set_Pos({ -4.0f, 0.0f, -20.0f });
-			// Ä«¸Ş¶ó Ã³À½ À§Ä¡·Î
+			// ì¹´ë©”ë¼ ì²˜ìŒ ìœ„ì¹˜ë¡œ
 			CTransform * pObjTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 			pObjTransformCom->Set_Pos({ -4.0f, 3.7f, -26.0f, });
 		}
@@ -538,7 +538,7 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 	}
 
 	m_dRainicorn_TimeAcc += TimeDelta;
-	if (5.0 < m_dRainicorn_TimeAcc)		// 5ÃÊ°¡ Áö³­ ÈÄ¿¡ ¼­¾ß Å° ÀÔ·ÂÀ» ÇÒ ¼ö ÀÖ´Ù.
+	if (5.0 < m_dRainicorn_TimeAcc)		// 5ì´ˆê°€ ì§€ë‚œ í›„ì— ì„œì•¼ í‚¤ ì…ë ¥ì„ í•  ìˆ˜ ìˆë‹¤.
 	{
 		m_bRainicorn = false; 
 		m_dEffect_TimeAcc = 0.0;
@@ -567,7 +567,7 @@ void CS_FinnAndJake::Rainicorn(const _double & TimeDelta)
 
 void CS_FinnAndJake::Shader_Alpha(const _double & TimeDelta)
 {
-	// ¾ËÆÄ°ªÀÌ ÁÙ¾îµé¾î¼­  0.0f º¸´Ù ÀÛ¾Æµğ¸é ±× ¶§ Ä«¸Ş¶ó¸¦ ÀÌµ¿½ÃÅ°°í, ±× ´ÙÀ½ ¾ËÆÄ°ªÀÌ ¼­¼­È÷ Áõ°¡ÇÏ±â¸¦ ¿øÇÑ´Ù.
+	// ì•ŒíŒŒê°’ì´ ì¤„ì–´ë“¤ì–´ì„œ  0.0f ë³´ë‹¤ ì‘ì•„ë””ë©´ ê·¸ ë•Œ ì¹´ë©”ë¼ë¥¼ ì´ë™ì‹œí‚¤ê³ , ê·¸ ë‹¤ìŒ ì•ŒíŒŒê°’ì´ ì„œì„œíˆ ì¦ê°€í•˜ê¸°ë¥¼ ì›í•œë‹¤.
 
 	if (false == m_bAlpha_Down)
 		return;
@@ -582,7 +582,7 @@ void CS_FinnAndJake::Shader_Alpha(const _double & TimeDelta)
 			if (0.0f > m_fAlpha)
 			{
 				m_bAlpha_Up = true;
-				m_bAlpha_Change = true;	// ¿ÜºÎ¿¡¼­ ¾ËÆÄ°ªÀÌ ´Ù ÁÙ¾úÀ» ¶§°¡ ÇÊ¿äÇØ¼­ »ç¿ëÇÑ º¯¼ö
+				m_bAlpha_Change = true;	// ì™¸ë¶€ì—ì„œ ì•ŒíŒŒê°’ì´ ë‹¤ ì¤„ì—ˆì„ ë•Œê°€ í•„ìš”í•´ì„œ ì‚¬ìš©í•œ ë³€ìˆ˜
 			}
 		}
 	}

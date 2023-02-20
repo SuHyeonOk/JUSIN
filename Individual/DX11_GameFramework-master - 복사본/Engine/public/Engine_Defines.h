@@ -20,7 +20,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <d3dcompiler.h>
-#include <TypeInfo.h>
+//#include <TypeInfo.h>
 #include <DirectXCollision.h>
 
 #define DIRECTINPUT_VERSION 0x0800

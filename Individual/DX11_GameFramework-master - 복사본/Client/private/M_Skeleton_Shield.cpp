@@ -87,7 +87,7 @@ void CM_Skeleton_Shield::Late_Tick(_double TimeDelta)
 
 	__super::Late_Tick(TimeDelta);
 
-	// °ø°İ ¹Ş°í ÀÖÀ» ¶§, Á×À» ¶§, ÄÉÀÌÁö ¾È¿¡ ÀÖÀ» ¶§ Xray À» È£ÃâÇÏÁö ¾Ê´Â´Ù.
+	// ê³µê²© ë°›ê³  ìˆì„ ë•Œ, ì£½ì„ ë•Œ, ì¼€ì´ì§€ ì•ˆì— ìˆì„ ë•Œ Xray ì„ í˜¸ì¶œí•˜ì§€ ì•ŠëŠ”ë‹¤.
 	if (true == m_bShader_Hit || 1 != m_fAlpha || true == CObj_Manager::GetInstance()->Get_BossCage())
 		return;
 
@@ -120,7 +120,7 @@ HRESULT CM_Skeleton_Shield::Render()
 				m_pModelCom->Render(m_pShaderCom, i, "g_BoneMatrices", 2);
 		}
 
-		return S_OK;	// Á×¾ú´Ù¸é, ¿©±â±îÁö ÁøÇàÇÏ°í return
+		return S_OK;	// ì£½ì—ˆë‹¤ë©´, ì—¬ê¸°ê¹Œì§€ ì§„í–‰í•˜ê³  return
 	}
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
@@ -167,7 +167,7 @@ HRESULT CM_Skeleton_Shield::Render_XRay()
 
 void CM_Skeleton_Shield::On_Collision(CGameObject * pOther)
 {
-	// ÀÌ ¸ó½ºÅÍÀÇ °æ¿ì¿¡´Â ¹æÆĞ¸¦ µé°í ÀÖ±â ¶§¹®¿¡ µû·Î Ã³¸®Çß´Ù.
+	// ì´ ëª¬ìŠ¤í„°ì˜ ê²½ìš°ì—ëŠ” ë°©íŒ¨ë¥¼ ë“¤ê³  ìˆê¸° ë•Œë¬¸ì— ë”°ë¡œ ì²˜ë¦¬í–ˆë‹¤.
 	if (CObj_Manager::PLAYERINFO::STATE::ATTACK == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 	{
 		if (L"Player_Weapon" == pOther->Get_Tag())
@@ -327,16 +327,16 @@ void CM_Skeleton_Shield::Monster_Tick(const _double& TimeDelta)
 		m_tMonsterInfo.eState = m_tMonsterInfo.DIE;
 
 	// 0 : ATTACK
-	// 1 : ¹İ´ë·Î °ø°İ
+	// 1 : ë°˜ëŒ€ë¡œ ê³µê²©
 	// 2 : HIT
-	// 3 : ¹æÆĞ¸·±â
+	// 3 : ë°©íŒ¨ë§‰ê¸°
 	// 4 : DIE
-	// 5 : Á×ÀºÃ¤·Î °¡¸¸È÷
-	// 6 : »ì¾Æ³²
-	// 7 : Ãã
-	// 8 : ¸ñ µ¹¾Æ°¨
+	// 5 : ì£½ì€ì±„ë¡œ ê°€ë§Œíˆ
+	// 6 : ì‚´ì•„ë‚¨
+	// 7 : ì¶¤
+	// 8 : ëª© ëŒì•„ê°
 	// 9 : HIT
-	// 10 : ¶È°°Àº È÷Æ®
+	// 10 : ë˜‘ê°™ì€ íˆíŠ¸
 	// 11 : IDLE
 	// 12 : MOVE
 
@@ -382,12 +382,12 @@ void CM_Skeleton_Shield::Idle_Tick(const _double& TimeDelta)
 {
 	m_bIdle_Sound = false;
 
-	// IDLE ÀÏ ¶§, MOVE ÀÏ ¶§ ¶È°°ÀÌ °Å¸® ÀÌ³» ÇÃ·¹ÀÌ¾î°¡ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
+	// IDLE ì¼ ë•Œ, MOVE ì¼ ë•Œ ë˜‘ê°™ì´ ê±°ë¦¬ ì´ë‚´ í”Œë ˆì´ì–´ê°€ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
 	_float	fDistance = CObj_Manager::GetInstance()->Get_Player_Distance(m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
-	if (!m_bAttack && 3.5f > fDistance)	// ¡Ø ÇÃ·¹ÀÌ¾î Å½»ö ¹üÀ§		
+	if (!m_bAttack && 3.5f > fDistance)	// â€» í”Œë ˆì´ì–´ íƒìƒ‰ ë²”ìœ„		
 		m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-	// ¾ø´Ù¸é IDLE °ú MOVE ¸¦ ¹ø°¥¾Æ °¡¸ç ½ÇÇàÇÑ´Ù.
+	// ì—†ë‹¤ë©´ IDLE ê³¼ MOVE ë¥¼ ë²ˆê°ˆì•„ ê°€ë©° ì‹¤í–‰í•œë‹¤.
 	if(m_pModelCom->Animation_Check(11) && m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
 }
@@ -408,30 +408,30 @@ void CM_Skeleton_Shield::Move_Tick(const _double& TimeDelta)
 		}
 	}
 
-	// 1 : ÇÃ·¹ÀÌ¾î¸¦ Ã£¾ÒÀ» ¶§ÀÇ MOVE
-	// 2 : ÇÃ·¹ÀÌ¾î¸¦ Ã£Áö ¸ø ÇÏ°í ·£´ıÀ¸·Î ÀÌµ¿ÇÏ´Â MOVE
+	// 1 : í”Œë ˆì´ì–´ë¥¼ ì°¾ì•˜ì„ ë•Œì˜ MOVE
+	// 2 : í”Œë ˆì´ì–´ë¥¼ ì°¾ì§€ ëª» í•˜ê³  ëœë¤ìœ¼ë¡œ ì´ë™í•˜ëŠ” MOVE
 
-	if (m_bFind)		// ÇÃ·¹ÀÌ¾î¸¦ Ã£¾ÒÀ» ¶§! ÇÃ·¹ÀÌ¾î¿Í °Å¸®°¡ 1ÀÌ µÉ ¶§ ±îÁö ÀÌµ¿ÇÑ´Ù.
+	if (m_bFind)		// í”Œë ˆì´ì–´ë¥¼ ì°¾ì•˜ì„ ë•Œ! í”Œë ˆì´ì–´ì™€ ê±°ë¦¬ê°€ 1ì´ ë  ë•Œ ê¹Œì§€ ì´ë™í•œë‹¤.
 	{
 		m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());
 		m_pTransformCom->Chase(CObj_Manager::GetInstance()->Get_Player_Transform(), TimeDelta);
 
-		// °Å¸®°¡ 4 ¾È ÀÌ¶ó¸é ÇÃ·¹ÀÌ¾î¸¦ µû¶ó°¡¼­ °Å¸®°¡ 1ÀÌ µÉ ¶§ °ø°İÇÑ´Ù.
+		// ê±°ë¦¬ê°€ 4 ì•ˆ ì´ë¼ë©´ í”Œë ˆì´ì–´ë¥¼ ë”°ë¼ê°€ì„œ ê±°ë¦¬ê°€ 1ì´ ë  ë•Œ ê³µê²©í•œë‹¤.
 		if (2.f > fDistance)
 			m_tMonsterInfo.eState = m_tMonsterInfo.ATTACK;
 
-		// ¡Ø ÇÃ·¹ÀÌ¾î Æ÷±â ¹üÀ§
+		// â€» í”Œë ˆì´ì–´ í¬ê¸° ë²”ìœ„
 		if (4.f < fDistance)
-			m_bFind = false; // Å©Èì.. ¹üÀ§ ¹ş¾î³µÀ» ¶§ ¸· ¹ğ±Û¹ğ±Û µ¹¸é¼­ È¸ÀüÇÏ´Â ¹®Á¦ ÀÖÀ½..
+			m_bFind = false; // í¬í .. ë²”ìœ„ ë²—ì–´ë‚¬ì„ ë•Œ ë§‰ ë±…ê¸€ë±…ê¸€ ëŒë©´ì„œ íšŒì „í•˜ëŠ” ë¬¸ì œ ìˆìŒ..
 
 	}
-	else				// ÇÃ·¹ÀÌ¾î¸¦ Ã£Áö ¸ø ÇßÀ» ¶§ ·£´ıÀ¸·Î ÀÌµ¿ÇÏ°í ÀÖ´Â´Ù
+	else				// í”Œë ˆì´ì–´ë¥¼ ì°¾ì§€ ëª» í–ˆì„ ë•Œ ëœë¤ìœ¼ë¡œ ì´ë™í•˜ê³  ìˆëŠ”ë‹¤
 	{
-		// MOVE ÀÏ ¶§, IDLE ÀÏ ¶§ ¶È°°ÀÌ °Å¸® ÀÌ³» ÇÃ·¹ÀÌ¾î°¡ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
-		if (!m_bAttack && 3.5f > fDistance)	// ¡Ø ÇÃ·¹ÀÌ¾î Å½»ö ¹üÀ§
+		// MOVE ì¼ ë•Œ, IDLE ì¼ ë•Œ ë˜‘ê°™ì´ ê±°ë¦¬ ì´ë‚´ í”Œë ˆì´ì–´ê°€ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
+		if (!m_bAttack && 3.5f > fDistance)	// â€» í”Œë ˆì´ì–´ íƒìƒ‰ ë²”ìœ„
 			m_tMonsterInfo.eState = m_tMonsterInfo.FIND;
 
-		// ³» ¿øÁ¡ °Å¸®¿Í ³» À§Ä¡°¡ ¸Ö´Ù¸é! ¹«Á¶°Ç ¿øÁ¡À¸·Î µ¹¾Æ°£´Ù.
+		// ë‚´ ì›ì  ê±°ë¦¬ì™€ ë‚´ ìœ„ì¹˜ê°€ ë©€ë‹¤ë©´! ë¬´ì¡°ê±´ ì›ì ìœ¼ë¡œ ëŒì•„ê°„ë‹¤.
 		_vector	vCenterPos = XMLoadFloat4(&m_f4CenterPos);
 		_vector vDistance = vCenterPos - m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float	fStartDiatance = XMVectorGetX(XMVector3Length(vDistance));
@@ -455,7 +455,7 @@ void CM_Skeleton_Shield::Move_Tick(const _double& TimeDelta)
 void CM_Skeleton_Shield::Find_Tick()
 {
 	m_bIdle_Sound = false;
-	m_bFind = true;	// ÇÃ·¹ÀÌ¾î¸¦ Ã£¾Ò´Ù¸é ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°¡±â À§ÇØ¼­ MOVE·Î ÀÌµ¿ÇÑ´Ù.
+	m_bFind = true;	// í”Œë ˆì´ì–´ë¥¼ ì°¾ì•˜ë‹¤ë©´ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°€ê¸° ìœ„í•´ì„œ MOVEë¡œ ì´ë™í•œë‹¤.
 
 	if(m_pModelCom->Get_Finished())
 		m_tMonsterInfo.eState = m_tMonsterInfo.MOVE;
@@ -490,7 +490,7 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 	if (0 == m_iRandomNum)
 		m_iRandomNum = CUtilities_Manager::GetInstance()->Get_Random(1, 2);
 	
-	if (true == m_bDance)		// ¸¶¸£¼¿¸° ¾ÆÀÌÅÛ »ç¿ëÁß ¿¡´Â ¹«Á¶°Ç °ø°İÀ» ¹Ş´Â´Ù.
+	if (true == m_bDance)		// ë§ˆë¥´ì…€ë¦° ì•„ì´í…œ ì‚¬ìš©ì¤‘ ì—ëŠ” ë¬´ì¡°ê±´ ê³µê²©ì„ ë°›ëŠ”ë‹¤.
 		m_iRandomNum = 1;
 
 	if (1 == m_iRandomNum)
@@ -529,7 +529,7 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 
 		}
 
-		m_pModelCom->Set_AnimIndex(3, false);	// ¹æ¾î
+		m_pModelCom->Set_AnimIndex(3, false);	// ë°©ì–´
 		if (m_pModelCom->Get_Finished())
 		{
 			m_bShield_Sound = false;
@@ -542,7 +542,10 @@ void CM_Skeleton_Shield::Hit_Tick(const _double& TimeDelta)
 
 void CM_Skeleton_Shield::Die_Tick(const _double& TimeDelta)
 {
-	CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 6);
+	if (LEVEL_SKELETON_BOSS != CObj_Manager::GetInstance()->Get_Current_Level())
+		CM_Monster::Die(TimeDelta, 1.1f, 15, 6, 5);
+	else
+		CM_Monster::Die(TimeDelta, 1.1f, 0, 0, 0);
 }
 
 void CM_Skeleton_Shield::Dance_Tick()
@@ -556,18 +559,18 @@ void CM_Skeleton_Shield::Dance_Tick()
 
 void CM_Skeleton_Shield::Hit_Process(const _double & TimeDelta)
 {
-	if (!m_bPlayer_Attack)		// ÇÃ·¹ÀÌ¾î¿Í Ãæµ¹ ÇßÀ» ¶§
+	if (!m_bPlayer_Attack)		// í”Œë ˆì´ì–´ì™€ ì¶©ëŒ í–ˆì„ ë•Œ
 		return;
 
-	// ¸ó½ºÅÍ °ø°İ ¹Ş´Â Áß...
+	// ëª¬ìŠ¤í„° ê³µê²© ë°›ëŠ” ì¤‘...
 
-	// ¸ó½ºÅÍ Hit ¼ÎÀÌ´õ Èò»ö ±ô¹Ú!
+	// ëª¬ìŠ¤í„° Hit ì…°ì´ë” í°ìƒ‰ ê¹œë°•!
 	m_bShader_Hit = true;
 
 	if (0.1 < m_dPlayer_Attack_TimeAcc)
 		m_bShader_Hit = false;
 
-	// ¸Ç Ã³À½ ÇÑ ¹ø Ã¼·ÂÀ» ±ï´Â´Ù.
+	// ë§¨ ì²˜ìŒ í•œ ë²ˆ ì²´ë ¥ì„ ê¹ëŠ”ë‹¤.
 	if (0 == m_dPlayer_Attack_TimeAcc)
 	{
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
@@ -575,13 +578,13 @@ void CM_Skeleton_Shield::Hit_Process(const _double & TimeDelta)
 		RELEASE_INSTANCE(CGameInstance);
 
 		if (false == m_bDance)
-			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());				// ÇÃ·¹ÀÌ¾î¸¦ ¹Ù¶óº¸¸é¼­
-		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// ¸ó½ºÅÍ ³Ë¹é
+			m_pTransformCom->LookAt(CObj_Manager::GetInstance()->Get_Player_Transform());				// í”Œë ˆì´ì–´ë¥¼ ë°”ë¼ë³´ë©´ì„œ
+		m_pTransformCom->Go_Backward(_float(TimeDelta) * 0.05f);										// ëª¬ìŠ¤í„° ë„‰ë°±
 
-		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// ÇÃ·¹ÀÌ¾îÀÇ °ø°İ·Â À¸·Î ¸ó½ºÅÍ Ã¼·Â ±ï±â
-		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI ¿¡ ³» Ã¼·Â ³Ñ°ÜÁÖ±â
+		m_tMonsterInfo.fHP -= CObj_Manager::GetInstance()->Get_Player_Attack();							// í”Œë ˆì´ì–´ì˜ ê³µê²©ë ¥ ìœ¼ë¡œ ëª¬ìŠ¤í„° ì²´ë ¥ ê¹ê¸°
+		CUI_Manager::GetInstance()->Set_HPGauge_Monster(m_tMonsterInfo.fHP / m_tMonsterInfo.fMaxHP);	// UI ì— ë‚´ ì²´ë ¥ ë„˜ê²¨ì£¼ê¸°
 	}
-	// ¸ó½ºÅÍ ¹«Àû »óÅÂ (¾È ÇÏ¸é °è¼Ó °ø°İ ¹ŞÀ½)
+	// ëª¬ìŠ¤í„° ë¬´ì  ìƒíƒœ (ì•ˆ í•˜ë©´ ê³„ì† ê³µê²© ë°›ìŒ)
 	m_dPlayer_Attack_TimeAcc += TimeDelta;
 	if (0.7 < m_dPlayer_Attack_TimeAcc)
 	{

@@ -58,7 +58,7 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 
 	CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
 
-	// FIONE ÀÏ ¶§´Â ÇÃ·¹ÀÌ¾îÀÇ Æò¼Ò °ø°İ·ÂÀÇ 1.5¹è°¡ µÈ´Ù.
+	// FIONE ì¼ ë•ŒëŠ” í”Œë ˆì´ì–´ì˜ í‰ì†Œ ê³µê²©ë ¥ì˜ 1.5ë°°ê°€ ëœë‹¤.
 	m_fOriginal_Player_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack;
 	m_fSword_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.25f;
 	m_fCat_Attack = CObj_Manager::GetInstance()->Get_Current_Player().fAttack * 1.5f;
@@ -68,11 +68,11 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 	if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 	{
 		m_wsTag = L"Finn";
-		// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ³×ºñ ÀÎµ¦½º¸¦ ¹Ş¾Æ¿Â´Ù.
+		// í˜„ì¬ í”Œë ˆì´ì–´ì˜ ë„¤ë¹„ ì¸ë±ìŠ¤ë¥¼ ë°›ì•„ì˜¨ë‹¤.
 		m_pPlayer_NavigationCom = dynamic_cast<CNavigation*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Navigation"), 0));
-		// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ Æ®·£½ºÆûÀ» °¡Á®¿Â´Ù. ±×¸®°í ½ºÅ³ÀÇ ÁÂÇ¥¸¦ °è¼Ó ³Ö¾îÁØ´Ù.
+		// í˜„ì¬ í”Œë ˆì´ì–´ì˜ íŠ¸ëœìŠ¤í¼ì„ ê°€ì ¸ì˜¨ë‹¤. ê·¸ë¦¬ê³  ìŠ¤í‚¬ì˜ ì¢Œí‘œë¥¼ ê³„ì† ë„£ì–´ì¤€ë‹¤.
 		m_pPlayer_TransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
-		// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ Äİ¶óÀÌ´õ¸¦ °¡Á®¿Í¼­ Ãæµ¹ÀÌ °¡´ÉÇÏµµ·Ï ¸¸µç´Ù.
+		// í˜„ì¬ í”Œë ˆì´ì–´ì˜ ì½œë¼ì´ë”ë¥¼ ê°€ì ¸ì™€ì„œ ì¶©ëŒì´ ê°€ëŠ¥í•˜ë„ë¡ ë§Œë“ ë‹¤.
 		m_pPlayer_ColliderCom = dynamic_cast<CCollider*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Collider"), 0));
 	}
 	else	// Jake
@@ -83,7 +83,7 @@ HRESULT CS_Fiona::Initialize(void * pArg)
 		m_pPlayer_ColliderCom = dynamic_cast<CCollider*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Collider"), 0));
 	}
 	
-	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ³×ºñ¸¦ ³Ö¾îÁØ´Ù. (ÇÑ ¹ø)
+	m_pNavigationCom->Set_CellIndex(m_pPlayer_NavigationCom->Get_CellIndex());	// í˜„ì¬ í”Œë ˆì´ì–´ì˜ ë„¤ë¹„ë¥¼ ë„£ì–´ì¤€ë‹¤. (í•œ ë²ˆ)
 
 	pGameInstance->Stop_Sound(0);
 	pGameInstance->Play_Sound(TEXT("Scroll_fiona.mp3"), 0.8f, false, 3);
@@ -97,15 +97,15 @@ void CS_Fiona::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// ¿¹¿Ü Ã³¸®·Î, ½ºÅ³ÀÌ ³¡³ª¸é ¾ø¾Ø´Ù.
+	// ì˜ˆì™¸ ì²˜ë¦¬ë¡œ, ìŠ¤í‚¬ì´ ëë‚˜ë©´ ì—†ì•¤ë‹¤.
 	if(CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 		CGameObject::Set_Dead();
 
-	// Á×À» ¶§ÀÇ Ã³¸®
+	// ì£½ì„ ë•Œì˜ ì²˜ë¦¬
 	Effect_Create(TimeDelta);
 	Death_Set(TimeDelta);
 	
-	// ½ÇÇàÁß ½ÇÁ¦ ÇÃ·¹ÀÌ¾îÀÇ ÁÂÇ¥ ¿Å±â±â
+	// ì‹¤í–‰ì¤‘ ì‹¤ì œ í”Œë ˆì´ì–´ì˜ ì¢Œí‘œ ì˜®ê¸°ê¸°
 	m_pPlayer_TransformCom->Set_State(CTransform::STATE_TRANSLATION, m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION));
 	m_pPlayer_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
@@ -123,7 +123,7 @@ void CS_Fiona::Late_Tick(_double TimeDelta)
 
 	m_pModelCom->Play_Animation(TimeDelta);
 
-	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// Ãæµ¹Ã³¸®
+	CGameInstance::GetInstance()->Add_ColGroup(CCollider_Manager::COL_PLAYER, this);		// ì¶©ëŒì²˜ë¦¬
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 
 	if (nullptr != m_pRendererCom)
@@ -363,14 +363,14 @@ void CS_Fiona::Parts_LateTick(const _double & TimeDelta)
 
 void CS_Fiona::Death_Set(const _double & TimeDelta)
 {
-	// Á×À» ¶§ÀÇ Ã³¸®
+	// ì£½ì„ ë•Œì˜ ì²˜ë¦¬
 	m_bSkillClone_TimeAcc += TimeDelta;
 
 	if (21 < m_bSkillClone_TimeAcc)
 	{
 		m_OnMove = false;
 
-		// µû¶ó¿À´ø ÇÃ·¹ÀÌ¾îÀÇ ÁÂÇ¥¸¦ ¿Å°Ü³õ´Â´Ù.
+		// ë”°ë¼ì˜¤ë˜ í”Œë ˆì´ì–´ì˜ ì¢Œí‘œë¥¼ ì˜®ê²¨ë†“ëŠ”ë‹¤.
 		CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
 		CTransform * pFollow_TransformCom;
@@ -391,7 +391,7 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		pFollow_NavigationCom->Set_CellIndex(m_pNavigationCom->Get_CellIndex());
 
 
-		// À§¿¡¼­ ÁÂÇ¥¸¦ ¿Å°Ü µÎ°í, ÀÌÆåÆ® Ã³¸®
+		// ìœ„ì—ì„œ ì¢Œí‘œë¥¼ ì˜®ê²¨ ë‘ê³ , ì´í™íŠ¸ ì²˜ë¦¬
 		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 		_float4 f4PlayerPos;
 		XMStoreFloat4(&f4PlayerPos, vPlayerPos);
@@ -399,17 +399,17 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 		CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50, { 0.3f, 1.3f });
 		CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(f4PlayerPos.x, f4PlayerPos.y + 1.0f, f4PlayerPos.z - 0.8f));
 	
-		// Á×À¸¸é¼­ ¸ğµç Ã³¸®¸¦ ¿ø·¡ ÇÃ·¹ÀÌ¾î·Î µ¹¾Æ¿Ã ¼ö ÀÖµµ·Ï Ã³¸®ÇÑ´Ù.
+		// ì£½ìœ¼ë©´ì„œ ëª¨ë“  ì²˜ë¦¬ë¥¼ ì›ë˜ í”Œë ˆì´ì–´ë¡œ ëŒì•„ì˜¬ ìˆ˜ ìˆë„ë¡ ì²˜ë¦¬í•œë‹¤.
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CSkill_Manager::GetInstance()->Set_Player_Skill(CSkill_Manager::PLAYERSKILL::SKILL_END);
 		CSkill_Manager::GetInstance()->Set_ChangeSkill_Create(false);
 		CObj_Manager::GetInstance()->Set_Interaction(false);
 
-		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// ¿ø·¡ÀÇ °ø°İ·ÂÀ¸·Î µ¹·Á³õ´Â´Ù.
+		CObj_Manager::GetInstance()->Set_Player_Attack(m_fOriginal_Player_Attack);	// ì›ë˜ì˜ ê³µê²©ë ¥ìœ¼ë¡œ ëŒë ¤ë†“ëŠ”ë‹¤.
 		
 		pGameInstance->Stop_Sound(3);
 		
-		// ·¹º§º°·Î ´Ù¸¥ »ç¿îµå¸¦ Àç»ıÇÑ´Ù.
+		// ë ˆë²¨ë³„ë¡œ ë‹¤ë¥¸ ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•œë‹¤.
 		if (LEVEL_GAMEPLAY == CObj_Manager::GetInstance()->Get_Current_Level())
 		{
 			pGameInstance->Play_Sound(TEXT("Fire4_Loop.ogg"), 0.1f, true, 0);
@@ -433,39 +433,39 @@ void CS_Fiona::Death_Set(const _double & TimeDelta)
 
 void CS_Fiona::Effect_Create(const _double & TimeDelta)
 {
-	// ÀÌÆåÆ®
+	// ì´í™íŠ¸
 	if (0 != m_bSkillClone_TimeAcc)
 		return;
 
 	m_OnMove = false;
 
-	// °è¼Ó »ı¼º
+	// ê³„ì† ìƒì„±
 	CEffect_Manager::GetInstance()->Effect_Smoke_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.7f), _float3(0.8f, 0.7f, 0.8f), 50, { 0.3f, 1.3f });
 	CEffect_Manager::GetInstance()->Effect_Star3_Count(_float3(m_f3Pos.x, m_f3Pos.y + 1.0f, m_f3Pos.z - 0.8f));
 }
 
 void CS_Fiona::Skill_Tick(const _double & TimeDelta)
 {
-	// 0 : °í¾çÀÌ °ø°İ ¿ŞÂÊ
-	// 1 : °í¾çÀÌ °ø°İ ¿À¸¥ÂÊ
-	// 2 : °í¾çÀÌ µ¹¸é¼­ °ø°İ `
+	// 0 : ê³ ì–‘ì´ ê³µê²© ì™¼ìª½
+	// 1 : ê³ ì–‘ì´ ê³µê²© ì˜¤ë¥¸ìª½
+	// 2 : ê³ ì–‘ì´ ëŒë©´ì„œ ê³µê²© `
 	// 3 : IDLE
 	// 4 : MOVE
 	// 5 : STUN
 	// 6 : DANCE
-	// 7 : ³Ñ¾îÁü
-	// 8 : ATTACK ¹İ´ë
-	// 9 : ÁÂ¿ì·Î ÀÌµ¿
-	// 10 : ±ò¾Æ¹¶°³Áü
-	// 11 : µÚ·Î ¶³¾îÁú¶û
-	// 12 : Á¡ÇÁ
-	// 13 : Ä® È¸¿À¸® °ø°İ
+	// 7 : ë„˜ì–´ì§
+	// 8 : ATTACK ë°˜ëŒ€
+	// 9 : ì¢Œìš°ë¡œ ì´ë™
+	// 10 : ê¹”ì•„ë­‰ê°œì§
+	// 11 : ë’¤ë¡œ ë–¨ì–´ì§ˆë‘
+	// 12 : ì í”„
+	// 13 : ì¹¼ íšŒì˜¤ë¦¬ ê³µê²©
 	// 14 : ATTACK `
-	// 17 : ¼ö¿µ Àü
-	// 18 : Àâ°í µé·ÁÁü
-	// 19 : ATTACK ` ºÎµå·¯¿î
+	// 17 : ìˆ˜ì˜ ì „
+	// 18 : ì¡ê³  ë“¤ë ¤ì§
+	// 19 : ATTACK ` ë¶€ë“œëŸ¬ìš´
 	// 21 : HIT
-	// 24 : ¹ß¶û¹ß¶û ´í½º
+	// 24 : ë°œë‘ë°œë‘ ëŒ„ìŠ¤
 
 	if (CObj_Manager::PLAYERINFO::STATE::HIT == CObj_Manager::GetInstance()->Get_Current_Player().eState)
 		CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::HIT);
@@ -569,9 +569,6 @@ void CS_Fiona::Stun_Tick()
 	}
 
 	if (m_pModelCom->Get_Finished())
-		++m_iStun_Count;
-
-	if (2 <= m_iStun_Count)		// ¾Ö´Ï¸ŞÀÌ¼Ç µÎ ¹ø Àç»ı ÈÄ ³¡
 	{
 		m_bHurts = false;
 		m_iStun_Count = 0;
@@ -579,6 +576,18 @@ void CS_Fiona::Stun_Tick()
 		CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
 		CObj_Manager::GetInstance()->Set_Interaction(false);
 	}
+
+	//if (m_pModelCom->Get_Finished())
+	//	++m_iStun_Count;
+
+	//if (2 <= m_iStun_Count)		// ì• ë‹ˆë©”ì´ì…˜ ë‘ ë²ˆ ì¬ìƒ í›„ ë
+	//{
+	//	m_bHurts = false;
+	//	m_iStun_Count = 0;
+	//	CSkill_Manager::GetInstance()->Set_Fiona_Skill(CSkill_Manager::FIONASKILL::IDLE);
+	//	CObj_Manager::GetInstance()->Set_Current_Player_State(CObj_Manager::PLAYERINFO::STATE::IDLE);
+	//	CObj_Manager::GetInstance()->Set_Interaction(false);
+	//}
 }
 
 void CS_Fiona::Dance_Tick()
@@ -604,7 +613,7 @@ void CS_Fiona::KeyInput(const _double & TimeDelta)
 		m_pTransformCom->PlayerMove(XMVectorSet(m_f4NewLook.x, m_f4NewLook.y, m_f4NewLook.z, m_f4NewLook.w), TimeDelta);
 	}
 		
-#pragma region ÀÌµ¿
+#pragma region ì´ë™
 	if (pGameInstance->Key_Pressing(DIK_UP))
 	{
 		pGameInstance->Stop_Sound(4);
