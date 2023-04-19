@@ -45,7 +45,7 @@ _vector		CObj_Manager::Get_Player_Transform()
 	if (m_bNextLevel)
 		return _vector();
 
-	// ÇöÀç Player ¸¦ È®ÀÎÇÏ°í ±× Player ÀÇ Transform À» ³Ñ°ÜÁØ´Ù.
+	// í˜„ì¬ Player ë¥¼ í™•ì¸í•˜ê³  ê·¸ Player ì˜ Transform ì„ ë„˜ê²¨ì¤€ë‹¤.
 
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
@@ -53,27 +53,27 @@ _vector		CObj_Manager::Get_Player_Transform()
 	{
 		CTransform * pFinnTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Finn"), TEXT("Com_Transform"), 0));
 
-		_vector vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn ÁÂÇ¥ ¹Ş¾Æ¿È
+		_vector vPlayerPos = pFinnTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn ì¢Œí‘œ ë°›ì•„ì˜´
 		return vPlayerPos;
 	}
 	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.JAKE)
 	{
 		CTransform * pJakeTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Jake"), TEXT("Com_Transform"), 0));
 
-		_vector vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ÁÂÇ¥ ¹Ş¾Æ¿È
+		_vector vPlayerPos = pJakeTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Jake ì¢Œí‘œ ë°›ì•„ì˜´
 		return vPlayerPos;
 	}
 	else if (m_tPlayerInfo.ePlayer == m_tPlayerInfo.FINNANDJAKE)
 	{
 		CTransform * pTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(LEVEL_MINIGAME, TEXT("Layer_FinnAndJake"), TEXT("Com_Transform"), 0));
 
-		_vector vPlayerPos = pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn °ú Jake ÁÂÇ¥ ¹Ş¾Æ¿È
+		_vector vPlayerPos = pTransformCom->Get_State(CTransform::STATE_TRANSLATION);		// Finn ê³¼ Jake ì¢Œí‘œ ë°›ì•„ì˜´
 		return vPlayerPos;
 	}
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	return _vector();	// ¾ø´Ù¸é ¾²·¹±â °ªÀ» ³Ñ±è
+	return _vector();	// ì—†ë‹¤ë©´ ì“°ë ˆê¸° ê°’ì„ ë„˜ê¹€
 }
 
 _float		CObj_Manager::Get_Player_Distance(_fvector	_MyPos)
@@ -87,12 +87,12 @@ void		CObj_Manager::Set_Player_PlusHP(_float fHP)
 {
 	if (m_tPlayerInfo.fHP <= m_tPlayerInfo.fHPMax)
 	{
-		_float fPlayerHp = m_tPlayerInfo.fHP + fHP;		// ÇöÀç Ã¼·Â + Ãß°¡ÇÒ HP ÀÇ °á°ú°¡
+		_float fPlayerHp = m_tPlayerInfo.fHP + fHP;		// í˜„ì¬ ì²´ë ¥ + ì¶”ê°€í•  HP ì˜ ê²°ê³¼ê°€
 
-		if (m_tPlayerInfo.fHPMax < fPlayerHp)			// ÀüÃ¼ HPMax º¸´Ù Å©´Ù¸é
-			m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;	// ±×³É HPMax °ªÀ¸·Î Ã¤¿ì°í, 
+		if (m_tPlayerInfo.fHPMax < fPlayerHp)			// ì „ì²´ HPMax ë³´ë‹¤ í¬ë‹¤ë©´
+			m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;	// ê·¸ëƒ¥ HPMax ê°’ìœ¼ë¡œ ì±„ìš°ê³ , 
 		else
-			m_tPlayerInfo.fHP += fHP;					// ±× ¿Ü´Â Ãß°¡ÇÑ HP ¸¸Å­ Ã¼·ÂÀÌ Ãß°¡µÈ´Ù.
+			m_tPlayerInfo.fHP += fHP;					// ê·¸ ì™¸ëŠ” ì¶”ê°€í•œ HP ë§Œí¼ ì²´ë ¥ì´ ì¶”ê°€ëœë‹¤.
 	}
 
 	CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
@@ -100,7 +100,7 @@ void		CObj_Manager::Set_Player_PlusHP(_float fHP)
 
 void		CObj_Manager::Set_Player_MinusHP(_float fAttack)
 {
-	if (m_bShield)	// Jake ÀÇ ½¯µå °¡ true ¶ó¸é ÇÃ·¹ÀÌ¾î´Â °ø°İ ¹ŞÁö ¾Ê´Â´Ù.
+	if (m_bShield)	// Jake ì˜ ì‰´ë“œ ê°€ true ë¼ë©´ í”Œë ˆì´ì–´ëŠ” ê³µê²© ë°›ì§€ ì•ŠëŠ”ë‹¤.
 	{
 		m_bShield = false;
 		return;
@@ -119,10 +119,10 @@ void		CObj_Manager::Tick(_double TimeDelta)
 	if (m_bNextLevel)
 		return;
 
-	Current_Player();			// ÇöÀç ÇÃ·¹ÀÌ¾î°¡ ´©±¸ÀÎÁö Tick
-	Player_Exp(TimeDelta);		// ÇÃ·¹ÀÌ¾î °æÇèÄ¡¸¦ °è»êÇÏ¿© ÀÏÁ¤ °æÇèÄ¡ º¸´Ù Ä¿Áö¸é ·¹º§¾÷, ÃÖ´ë °æÇèÄ¡ Áõ°¡, °ø°İ·Â Áõ°¡
-	Key_Input();				// ÀüÃ¼ÀûÀÎ Å° ÀÔ·Â
-	Player_Weapon();			// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ¹«±â¸¦ Ãâ·ÂÇÑ´Ù.
+	Current_Player();			// í˜„ì¬ í”Œë ˆì´ì–´ê°€ ëˆ„êµ¬ì¸ì§€ Tick
+	Player_Exp(TimeDelta);		// í”Œë ˆì´ì–´ ê²½í—˜ì¹˜ë¥¼ ê³„ì‚°í•˜ì—¬ ì¼ì • ê²½í—˜ì¹˜ ë³´ë‹¤ ì»¤ì§€ë©´ ë ˆë²¨ì—…, ìµœëŒ€ ê²½í—˜ì¹˜ ì¦ê°€, ê³µê²©ë ¥ ì¦ê°€
+	Key_Input();				// ì „ì²´ì ì¸ í‚¤ ì…ë ¥
+	Player_Weapon();			// í˜„ì¬ í”Œë ˆì´ì–´ì˜ ë¬´ê¸°ë¥¼ ì¶œë ¥í•œë‹¤.
 
 	//cout << "HP : " << m_tPlayerInfo.fHP << " / " << m_tPlayerInfo.fHPMax << " | HP% : " << m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax <<
 	//	" | ATTACK : " << m_tPlayerInfo.iAttack << " | LEVEL : " << m_tPlayerInfo.iLevel << 
@@ -131,7 +131,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 
 	//cout << CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill << endl;
 
-	// ÇÃ·¹ÀÌ¾î Ã¼·Â °ü¸® ¸ó½ºÅÍ ¿¡°Ô °ø°İ ´çÇßÀ» ¶§
+	// í”Œë ˆì´ì–´ ì²´ë ¥ ê´€ë¦¬ ëª¬ìŠ¤í„° ì—ê²Œ ê³µê²© ë‹¹í–ˆì„ ë•Œ
 	if (0 < m_fMonster_Attck)
 	{
 		if (0 == m_dPlayerAttck_TimeAcc && 0 < m_tPlayerInfo.fHP)
@@ -139,7 +139,7 @@ void		CObj_Manager::Tick(_double TimeDelta)
 			m_tPlayerInfo.fHP -= m_fMonster_Attck;
 			CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 
-			// »ç¿îµå
+			// ì‚¬ìš´ë“œ
 			CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 			_tchar szSoundName[MAX_PATH];
 
@@ -170,8 +170,8 @@ void		CObj_Manager::Key_Input()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 
-	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill && // ¾ÆÀÌÅÛ »ç¿ëÀº SKILL_END ÀÏ ¶§¸¸ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
-		false == m_bInventory) // ÀÎº¥Åä¸®¸¦ ´İ°í ÀÖÀ» ¶§¸¸ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
+	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill && // ì•„ì´í…œ ì‚¬ìš©ì€ SKILL_END ì¼ ë•Œë§Œ ì‚¬ìš©í•  ìˆ˜ ìˆë‹¤.
+		false == m_bInventory) // ì¸ë²¤í† ë¦¬ë¥¼ ë‹«ê³  ìˆì„ ë•Œë§Œ ì‚¬ìš©í•  ìˆ˜ ìˆë‹¤.
 	{
 		if (pGameInstance->Key_Down(DIK_1))
 			CSkill_Manager::GetInstance()->Page_Use(ITEM_ONE);
@@ -183,7 +183,7 @@ void		CObj_Manager::Key_Input()
 			CSkill_Manager::GetInstance()->Page_Use(ITEM_FOUR);
 	}
 
-	// Àü¿ªÀûÀ¸·Î ³×ÀÌ°ÔÀÌ¼Ç, Ãæµ¹Ã¼¸¦ ²°´Ù°¡ ÄÓ ¼ö ÀÖ´Ù.
+	// ì „ì—­ì ìœ¼ë¡œ ë„¤ì´ê²Œì´ì…˜, ì¶©ëŒì²´ë¥¼ ê»ë‹¤ê°€ ì¼¤ ìˆ˜ ìˆë‹¤.
 	if (pGameInstance->Key_Down(DIK_F11))
 		g_bNavigationRender = !g_bNavigationRender;
 
@@ -196,7 +196,7 @@ void		CObj_Manager::Key_Input()
 		m_bInventory = !m_bInventory;
 	}
 
-	// »óÈ£ÀÛ¿ë Å° ¿òÁ÷ÀÌÁö ¸øÇÔ.
+	// ìƒí˜¸ì‘ìš© í‚¤ ì›€ì§ì´ì§€ ëª»í•¨.
 	if (pGameInstance->Key_Down(DIK_F))
 		m_bInteraction = !m_bInteraction;
 
@@ -209,7 +209,7 @@ void		CObj_Manager::Current_Player()
 
 	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
-		if (pGameInstance->Key_Down(DIK_Z))		// ÇÃ·¹ÀÌ¾î°¡ º¯½Å ¶Ç´Â ½ºÅ³ »ç¿ëÁß ÀÏ ¶§´Â º¯°æÇÏÁö ¸ø ÇÑ´Ù.
+		if (pGameInstance->Key_Down(DIK_Z))		// í”Œë ˆì´ì–´ê°€ ë³€ì‹  ë˜ëŠ” ìŠ¤í‚¬ ì‚¬ìš©ì¤‘ ì¼ ë•ŒëŠ” ë³€ê²½í•˜ì§€ ëª» í•œë‹¤.
 		{
 			if (CObj_Manager::PLAYERINFO::PLAYER::FINN == CObj_Manager::GetInstance()->Get_Current_Player().ePlayer)
 				pGameInstance->Play_Sound(TEXT("v_Jake_Swap.ogg"), 1.0f);
@@ -241,12 +241,12 @@ void		CObj_Manager::Current_Player()
 
 #ifdef F2_SKELETON
 	case PLAYERINFO::FREE:
-		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FREE; // ¢Ã Ãß ÈÄ »èÁ¦ ÇØ¾ßÇÔ
+		m_tPlayerInfo.ePlayer = m_tPlayerInfo.FREE; // â–£ ì¶” í›„ ì‚­ì œ í•´ì•¼í•¨
 		break;
 #endif
 
 	case PLAYERINFO::RESET:
-		m_ChangeTarget = 0; // Áï, Finn
+		m_ChangeTarget = 0; // ì¦‰, Finn
 		break;
 	}
 
@@ -265,23 +265,23 @@ void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 	{
 		m_bLevelUP = false;
 
-		m_tPlayerInfo.iLevel++;							// ·¹º§ Áõ°¡
-		m_tPlayerInfo.fHPMax += 10.0f;					// °ø°İ·Â Áõ°¡
-		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// Ã¼·Â ²Ë Ã¤¿öÁÖ±â
-		m_tPlayerInfo.fExp = 0.0f;						// °æÇèÄ¡ 0 À¸·Î ÃÊ±âÈ­
-		m_tPlayerInfo.fExpMax += 100.0f;				// ÃÖ´ë °æÇèÄ¡ Áõ°¡
-		m_tPlayerInfo.fAttack += 10.0f;					// °ø°İ·Â Áõ°¡
+		m_tPlayerInfo.iLevel++;									// ë ˆë²¨ ì¦ê°€
+		m_tPlayerInfo.fHPMax += 10.0f;					// ê³µê²©ë ¥ ì¦ê°€
+		m_tPlayerInfo.fHP = m_tPlayerInfo.fHPMax;		// ì²´ë ¥ ê½‰ ì±„ì›Œì£¼ê¸°
+		m_tPlayerInfo.fExp = 0.0f;								// ê²½í—˜ì¹˜ 0 ìœ¼ë¡œ ì´ˆê¸°í™”
+		m_tPlayerInfo.fExpMax += 100.0f;				// ìµœëŒ€ ê²½í—˜ì¹˜ ì¦ê°€
+		m_tPlayerInfo.fAttack += 10.0f;					// ê³µê²©ë ¥ ì¦ê°€
 
-														// UI ÃÊ±âÈ­
+														// UI ì´ˆê¸°í™”
 		CUI_Manager::GetInstance()->Set_Level_Number(m_tPlayerInfo.iLevel);
 		CUI_Manager::GetInstance()->Set_HPGauge_Player(m_tPlayerInfo.fHP / m_tPlayerInfo.fHPMax);
 		CUI_Manager::GetInstance()->Set_LevelGauge_Player(m_tPlayerInfo.fExp / m_tPlayerInfo.fExpMax);
 	}
 
-	// ÀÌÆåÆ®
+	// ì´í™íŠ¸
 	if (m_bEffect)
 	{
-		// ÇÃ·¹ÀÌ¾î »óÅÂ º¯°æ
+		// í”Œë ˆì´ì–´ ìƒíƒœ ë³€ê²½
 		m_tPlayerInfo.eState = PLAYERINFO::STATE::LEVEL_UP;
 
 		if (0 == m_dEffect_Up_TimeAcc)
@@ -316,16 +316,16 @@ void		CObj_Manager::Player_Exp(const _double & TimeDelta)
 
 void		CObj_Manager::Player_Weapon()
 {
-	// ¿À¸¥ÂÊ ÇÏ´Ü UI
+	// ì˜¤ë¥¸ìª½ í•˜ë‹¨ UI
 	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
-		CUI_Manager::GetInstance()->Set_Weapons(0);		// ±âº» °ø°İ »ç¿ë Áß
+		CUI_Manager::GetInstance()->Set_Weapons(0);		// ê¸°ë³¸ ê³µê²© ì‚¬ìš© ì¤‘
 		CUI_Manager::GetInstance()->Set_Weapon_index(m_iWeapon_Index);
 	}
 	else
-		CUI_Manager::GetInstance()->Set_Weapons(1);		// ½ºÅ³ »ç¿ë Áß					
+		CUI_Manager::GetInstance()->Set_Weapons(1);		// ìŠ¤í‚¬ ì‚¬ìš© ì¤‘					
 
-	// ¹«±â (½ºÅ³À» »ç¿ëÇÏÁö ¾ÊÀ» ¶§¸¸ ³Ñ±ä´Ù.)
+	// ë¬´ê¸° (ìŠ¤í‚¬ì„ ì‚¬ìš©í•˜ì§€ ì•Šì„ ë•Œë§Œ ë„˜ê¸´ë‹¤.)
 	if (CSkill_Manager::PLAYERSKILL::SKILL_END == CSkill_Manager::GetInstance()->Get_Player_Skill().eSkill)
 	{
 		if (CObj_Manager::PLAYERINFO::FINN == m_tPlayerInfo.ePlayer)
@@ -342,7 +342,7 @@ void		CObj_Manager::Player_Weapon()
 			CUI_Manager::GetInstance()->Set_Weapon_index(3);
 		}
 	}
-	else	// ¹İ´ë·Î ½ºÅ³À» »ç¿ëÁß ÀÌ¶ó¸é ½ºÅ³ÀÇ ÀÎµ¦½º¸¦ ³Ñ±ä´Ù.
+	else	// ë°˜ëŒ€ë¡œ ìŠ¤í‚¬ì„ ì‚¬ìš©ì¤‘ ì´ë¼ë©´ ìŠ¤í‚¬ì˜ ì¸ë±ìŠ¤ë¥¼ ë„˜ê¸´ë‹¤.
 	{
 		m_iWeapon_Index = CUI_Manager::GetInstance()->Get_Weapon_index();
 
