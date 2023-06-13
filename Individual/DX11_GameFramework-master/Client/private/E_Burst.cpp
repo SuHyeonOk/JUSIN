@@ -46,32 +46,32 @@ HRESULT CE_Burst::Initialize(void * pArg)
 	
 	m_pTransformCom->Set_Pos();
 	
-	// Å©±â
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)			// ¿ÜºÎ¿¡¼­ ÁöÁ¤ÇÑ ·£´ıÇÑ Å©±â¸¦ °¡Áö´Â ÀÌ¹ÌÁö
+	// í¬ê¸°
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)			// ì™¸ë¶€ì—ì„œ ì§€ì •í•œ ëœë¤í•œ í¬ê¸°ë¥¼ ê°€ì§€ëŠ” ì´ë¯¸ì§€
 	{
 		_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(m_tEffectInfo.f2Size.x, m_tEffectInfo.f2Size.y);
 
 		m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
 	}
 	else if (CE_Burst::EFFECTINFO::TEXTURETYPE::STAR_TEXTURE == m_tEffectInfo.eTextureType ||
-		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)			// ·£´ıÇÑ  Å©±â¸¦ °¡Áö´Â ÀÌ¹ÌÁö
+		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)			// ëœë¤í•œ  í¬ê¸°ë¥¼ ê°€ì§€ëŠ” ì´ë¯¸ì§€
 	{
 		_float fRandomNumber = CUtilities_Manager::GetInstance()->Get_Random(0.3f, 1.0f);
 
 		m_pTransformCom->Set_Scaled(_float3(fRandomNumber, fRandomNumber, 1.f));
 	}
-	else																						// °íÁ¤µÈ Å©±â¸¦ °¡Áö´Â ÀÌ¹ÌÁö
+	else																						// ê³ ì •ëœ í¬ê¸°ë¥¼ ê°€ì§€ëŠ” ì´ë¯¸ì§€
 	{
 		m_pTransformCom->Set_Scaled(_float3(0.2f, 0.2f, 1.f));
 	}
 
-	// ¾ËÆÄ°ª
+	// ì•ŒíŒŒê°’
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)
 		m_fAlpha = 0.5f;
 	else
 		m_fAlpha = 1.0f;
 
-	// ¼Óµµ
+	// ì†ë„
 	m_fSpeed = CUtilities_Manager::GetInstance()->Get_Random(0.0f, 0.4f);
 
 	return S_OK;
@@ -81,37 +81,38 @@ void CE_Burst::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	// ¡Ú Ä«¸Ş¶ó¸¦ ¹Ù¶óº¸°í ·£´ıÇÑ °÷À¸·Î È¸ÀüÇÏ¸é¼­ ÀÌµ¿ÇÏ±â
+	// â˜… ì¹´ë©”ë¼ë¥¼ ë°”ë¼ë³´ê³  ëœë¤í•œ ê³³ìœ¼ë¡œ íšŒì „í•˜ë©´ì„œ ì´ë™í•˜ê¸°
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);
 	CTransform * pCameraTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_ComponentPtr(CGameInstance::Get_StaticLevelIndex(), TEXT("Layer_Camera"), TEXT("Com_Transform"), 0));
 	_vector vCameraPos = pCameraTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	RELEASE_INSTANCE(CGameInstance);
 
+	// Lookì€ ì¹´ë©”ë¼ë¥¼ ë°”ë¼ë´…ë‹ˆë‹¤.
 	m_pTransformCom->LookAt(vCameraPos, true);
 
-	// ÀÔ·ÂÇÑ Look ¹æÇâÀ¸·Î ÀÌµ¿ÇÏ±â
+	// ì…ë ¥í•œ Look ë°©í–¥ìœ¼ë¡œ ì´ë™í•˜ê¸°
 	_vector	vMyPos = m_pTransformCom->Get_State(CTransform::STATE_TRANSLATION);
 	_vector vDistance = XMLoadFloat4(&_float4(m_tEffectInfo.f4Look.x, m_tEffectInfo.f4Look.y, m_tEffectInfo.f4Look.z, 0.0f));
 	vMyPos += XMVector3Normalize(vDistance) * _float(TimeDelta) * m_fSpeed;
 	m_pTransformCom->Set_State(CTransform::STATE_TRANSLATION, vMyPos);
 
-	// ¡Ú ¾ËÆÄ°ª ÁÙ¾îµé±â
-	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)	// ±×³É ¹Ù·Î ¾ËÆÄ°ª ÁÙ¾îµç´Ù.
+	// â˜… ì•ŒíŒŒê°’ ì¤„ì–´ë“¤ê¸°
+	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType)	// ê·¸ëƒ¥ ë°”ë¡œ ì•ŒíŒŒê°’ ì¤„ì–´ë“ ë‹¤.
 	{
 		m_fAlpha -= _float(TimeDelta) * 0.2f;
 	}
-	else																				// ÀÏÁ¤½Ã°£ ÀÖ´Ù°¡ ¾ËÆÄ°ª ÁÙ¾îµç´Ù.
+	else																				// ì¼ì •ì‹œê°„ ìˆë‹¤ê°€ ì•ŒíŒŒê°’ ì¤„ì–´ë“ ë‹¤.
 	{
 		m_dNoAlpha_TimeAcc += TimeDelta;
 		if (1 < m_dNoAlpha_TimeAcc)
 		{
 			m_fAlpha -= _float(TimeDelta) * 0.5f;
-			//m_dNoAlpha_TimeAcc = 0; // ¾îÂ¥ÇÇ Á×±â ¶§¹®¿¡.. '-'
+			//m_dNoAlpha_TimeAcc = 0; // ì–´ì§œí”¼ ì£½ê¸° ë•Œë¬¸ì—.. '-'
 		}
 	}
 
 	if (0 >= m_fAlpha)
-		CGameObject::Set_Dead();	// ¾ËÆÄ°ªÀÌ ´Ù »ç¶óÁö¸é Á×À½
+		CGameObject::Set_Dead();	// ì•ŒíŒŒê°’ì´ ë‹¤ ì‚¬ë¼ì§€ë©´ ì£½ìŒ
 }
 
 void CE_Burst::Late_Tick(_double TimeDelta)
@@ -132,11 +133,11 @@ HRESULT CE_Burst::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	// »ö Á¶Á¤
+	// ìƒ‰ ì¡°ì •
 	if (CE_Burst::EFFECTINFO::TEXTURETYPE::SMOKE_TEXUTRE == m_tEffectInfo.eTextureType ||
 		CE_Burst::EFFECTINFO::TEXTURETYPE::STAR3_TEXTURE == m_tEffectInfo.eTextureType)
 		m_pShaderCom->Begin(4);
-	// ÀÌ¹ÌÁö»ö
+	// ì´ë¯¸ì§€ìƒ‰
 	else
 		m_pShaderCom->Begin(2);
 

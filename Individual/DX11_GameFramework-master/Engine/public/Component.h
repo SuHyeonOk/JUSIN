@@ -2,8 +2,8 @@
 
 #include "Base.h"
 
-/* ¿ì¸®°¡ ¾ÕÀ¸·Î »ç¿ëÇÒ ÄÄÆ÷³ÍÆ®(ÅØ½ºÃÄ, Æ®·£½ºÆû, Á¤Á¡,ÀÎµ¦½º¹öÆÛ, ¸ðµ¨) µéÀÇ ºÎ¸ð°¡ µÇ´Â Å¬·¡½ºÀÌ´Ù. */
-/* Å¬·¡½º ´ÙÇü¼ºÀ» ÀÌ¿ëÇÏ¿© ÇÏ³ªÀÇ ÅÛÇÃ¸´ÄÁÅ×ÀÌ³Ê¾È¿¡ ´ã¾ÆµÎµµ·Ï ÀúÀ¸ÀÌÇÑ´Ù. */
+/* ìš°ë¦¬ê°€ ì•žìœ¼ë¡œ ì‚¬ìš©í•  ì»´í¬ë„ŒíŠ¸(í…ìŠ¤ì³, íŠ¸ëžœìŠ¤í¼, ì •ì ,ì¸ë±ìŠ¤ë²„í¼, ëª¨ë¸) ë“¤ì˜ ë¶€ëª¨ê°€ ë˜ëŠ” í´ëž˜ìŠ¤ì´ë‹¤. */
+/* í´ëž˜ìŠ¤ ë‹¤í˜•ì„±ì„ ì´ìš©í•˜ì—¬ í•˜ë‚˜ì˜ í…œí”Œë¦¿ì»¨í…Œì´ë„ˆì•ˆì— ë‹´ì•„ë‘ë„ë¡ ì •ì˜í•œë‹¤. */
 
 BEGIN(Engine)
 
@@ -24,7 +24,7 @@ public:
 #endif // 
 
 public: /* imgui */
-	// ÀÌ ÄÄÆ÷³ÍÆ®¿¡¼­ º¸¿©ÁÙ µ¥ÀÌÅÍ¸¦ imgui·Î ÀÛ¼ºÇÑ´Ù.
+	// ì´ ì»´í¬ë„ŒíŠ¸ì—ì„œ ë³´ì—¬ì¤„ ë°ì´í„°ë¥¼ imguië¡œ ìž‘ì„±í•œë‹¤.
 	virtual void Imgui_RenderProperty(){}
 
 protected:

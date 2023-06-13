@@ -21,7 +21,7 @@ public:
 	static const _tchar*			m_pTransformComTag;
 
 public:
-	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // ¢Â
+	CComponent*	Get_ComponentPtr(const _tchar* pComponentTag); // â—ˆ
 	_float Get_CamDistance() const { return m_fCamDistance; }
 
 	void		Set_Dead() { m_bDead = true; }
@@ -44,10 +44,10 @@ public:
 	virtual void	On_Collision(CGameObject* pOther) {};
 
 public: /* imgui */
-	// ÀÌ ¿ÀºêÁ§Æ®°¡ °¡Áö°í ÀÖ´Â componentÀÇ Imgui_RenderProtperyÇÔ¼ö¸¦ ½ÇÇàÇÏ´Â ÇÔ¼ö.
+	// ì´ ì˜¤ë¸Œì íŠ¸ê°€ ê°€ì§€ê³  ìˆëŠ” componentì˜ Imgui_RenderProtperyí•¨ìˆ˜ë¥¼ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜.
 	void Imgui_RenderComponentProperties();
 
-	// ÀÌ ¿ÀºêÁ§Æ®¿¡¼­ º¸¿©ÁÙ µ¥ÀÌÅÍ¸¦ imgui·Î ÀÛ¼ºÇÑ´Ù.
+	// ì´ ì˜¤ë¸Œì íŠ¸ì—ì„œ ë³´ì—¬ì¤„ ë°ì´í„°ë¥¼ imguië¡œ ì‘ì„±í•œë‹¤.
 	virtual void Imgui_RenderProperty() {};
 
 protected:
@@ -56,10 +56,10 @@ protected:
 	_bool					m_isCloned = false;
 
 protected:
-	wstring		m_wsTag = L"";		// ÀÚ½ÄÀÇ ObjTag ¸¦ ÀúÀåÇÏ±â À§ÇÑ ¿ëµµ
+	wstring		m_wsTag = L"";		// ìì‹ì˜ ObjTag ë¥¼ ì €ì¥í•˜ê¸° ìœ„í•œ ìš©ë„
 
 protected:
-	/* °´Ã¼µéÀÌ »ç¿ëÇØ¾ß ÇÒ ÄÄÆ÷³ÍÆ®µéÀ» º¸°üÇÑ´Ù. */
+	/* ê°ì²´ë“¤ì´ ì‚¬ìš©í•´ì•¼ í•  ì»´í¬ë„ŒíŠ¸ë“¤ì„ ë³´ê´€í•œë‹¤. */
 	map<const _tchar*, class CComponent*>			m_Components;
 	class CTransform*								m_pTransformCom = nullptr;
 
@@ -69,8 +69,8 @@ protected:
 	HRESULT				Compute_CamZ();
 
 private:
-	_float		m_fCamDistance = 0.0f;	// ¾ËÆÄ ºí·»µå·Î ±×¸®´Â °´Ã¼¸¶´Ù. Ä«¸Ş¶ó¿ÍÀÇ °Å¸®¸£ °¡Áö°í ÀÖ´Â´Ù.
-	_bool		m_bDead = false;		// °´Ã¼°¡ »ç¶óÁ®¾ß ÇÑ´Ù¸é , true
+	_float		m_fCamDistance = 0.0f;	// ì•ŒíŒŒ ë¸”ë Œë“œë¡œ ê·¸ë¦¬ëŠ” ê°ì²´ë§ˆë‹¤. ì¹´ë©”ë¼ì™€ì˜ ê±°ë¦¬ë¥´ ê°€ì§€ê³  ìˆëŠ”ë‹¤.
+	_bool		m_bDead = false;		// ê°ì²´ê°€ ì‚¬ë¼ì ¸ì•¼ í•œë‹¤ë©´ , true
 
 public:	
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
